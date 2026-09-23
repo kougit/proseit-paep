@@ -1,0 +1,132 @@
+{
+  "workPackage": "IB0-WP02",
+  "generatedAt": "2026-09-23T20:44:43.808Z",
+  "commit": "916cb9dde3b1502441c346c06e9aaba9ab097ea7",
+  "trackedChangesAtRun": [],
+  "node": "24.21.0",
+  "npm": "11.19.0",
+  "platform": "linux-x64",
+  "result": "PASS",
+  "checks": [
+    {
+      "id": "V01",
+      "name": ".nvmrc pins an exact Node 24 LTS version",
+      "pass": true,
+      "details": "24.21.0"
+    },
+    {
+      "id": "V02",
+      "name": "devEngines.runtime pins the same Node version with onFail=error",
+      "pass": true,
+      "details": "{\"name\":\"node\",\"version\":\"24.21.0\",\"onFail\":\"error\"}"
+    },
+    {
+      "id": "V03",
+      "name": "Pinned Node is inside the Angular engine ranges recorded in the lockfile",
+      "pass": true,
+      "details": "pinned=24.21.0; @angular/core engines=^22.22.3 || ^24.15.0 || >=26.0.0; @angular/build engines=^22.22.3 || ^24.15.0 || >=26.0.0"
+    },
+    {
+      "id": "V04",
+      "name": "Running Node equals the pinned version",
+      "pass": true,
+      "details": "running=24.21.0; pinned=24.21.0"
+    },
+    {
+      "id": "V05",
+      "name": "npm pinned exactly in packageManager and devEngines.packageManager (onFail=error), and the running npm matches",
+      "pass": true,
+      "details": "packageManager=npm@11.19.0; devEngines.packageManager={\"name\":\"npm\",\"version\":\"11.19.0\",\"onFail\":\"error\"}; running npm=11.19.0"
+    },
+    {
+      "id": "V06",
+      "name": ".npmrc sets engine-strict and strict-allow-scripts and holds no credentials",
+      "pass": true,
+      "details": "settings: engine-strict=true, strict-allow-scripts=true; credential-like entries: 0"
+    },
+    {
+      "id": "V07",
+      "name": "Every direct dependency is exact and matches the lockfile and installed tree",
+      "pass": true,
+      "details": "12 direct dependencies agree"
+    },
+    {
+      "id": "V08",
+      "name": "All @angular/* packages share one exact 22.x version (core aligned with CLI)",
+      "pass": true,
+      "details": "9 packages at 22.1.8"
+    },
+    {
+      "id": "V09",
+      "name": "TypeScript is an exact 6.0.x inside the @angular/compiler-cli peer range",
+      "pass": true,
+      "details": "typescript=6.0.3; peer=>=6.0 <6.1"
+    },
+    {
+      "id": "V10",
+      "name": "RxJS is an exact 7.x inside the @angular/core peer range",
+      "pass": true,
+      "details": "rxjs=7.8.2; peer=^6.5.3 || ^7.4.0"
+    },
+    {
+      "id": "V11",
+      "name": "Version manifest matches .nvmrc, package.json, package-lock.json and the installed tree",
+      "pass": true,
+      "details": "12 direct + 15 build-tool versions agree"
+    },
+    {
+      "id": "V12",
+      "name": "Lockfile v3; every third-party entry resolves from registry.npmjs.org with sha512 integrity",
+      "pass": true,
+      "details": "lockfileVersion=3; third-party entries=434; bad=none"
+    },
+    {
+      "id": "V13",
+      "name": "package.json/package-lock.json match HEAD and package-lock.json is byte-identical to the IB0-WP01 baseline",
+      "pass": true,
+      "details": "working tree vs HEAD: clean; lockfile vs b6b023f: identical"
+    },
+    {
+      "id": "V14",
+      "name": "Every lockfile package with an install script is explicitly denied, and npm reports none unreviewed",
+      "pass": true,
+      "details": "packages with install scripts: @parcel/watcher, esbuild, fsevents, lmdb, msgpackr-extract; not explicitly denied: none; npm install-scripts ls: No packages with unreviewed install scripts."
+    },
+    {
+      "id": "V15",
+      "name": "Every third-party licence is permissive or covered by a recorded build-time review",
+      "pass": true,
+      "details": "434 entries: Apache-2.0 8, MIT 372, ISC 23, CC-BY-4.0 1, BSD-2-Clause 11, BSD-3-Clause 5, MPL-2.0 12, BlueOak-1.0.0 1, 0BSD 1"
+    },
+    {
+      "id": "V16",
+      "name": "Controlled sources (.paep-control/**, .gitignore) match PACK_MANIFEST.json and are unchanged since restore",
+      "pass": true,
+      "details": "13/13 files match sha256 and size"
+    },
+    {
+      "id": "V17",
+      "name": "No dependency-set change, no IB0-WP03/04/05 artefacts, and apps/packages/workspace config and IB0-WP01 records unchanged",
+      "pass": true,
+      "details": "none"
+    },
+    {
+      "id": "V18",
+      "name": "No credential or secret signatures in files added or modified since the baseline",
+      "pass": true,
+      "details": "24 files scanned; findings: none"
+    },
+    {
+      "id": "V19",
+      "name": "reference-app production build passes",
+      "pass": true,
+      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.09 kB\n\nApplication bundle generation complete. [1.540 seconds] - 2026-09-23T20:44:41.567Z\n\nOutput location: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone/dist/reference-app"
+    },
+    {
+      "id": "V20",
+      "name": "ui-lab production build passes",
+      "pass": true,
+      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-RPR4FBCF.js    | main          | 190.65 kB |                52.16 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.16 kB\n\nApplication bundle generation complete. [1.549 seconds] - 2026-09-23T20:44:43.732Z\n\nOutput location: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone/dist/ui-lab"
+    }
+  ]
+}

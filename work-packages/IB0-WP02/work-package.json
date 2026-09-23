@@ -5,7 +5,7 @@
   "milestone": "IB0",
   "wbs": "W1 / IB0",
   "design_classification": "D0",
-  "status": "IN PROGRESS",
+  "status": "PASS",
   "predecessor": { "id": "IB0-WP01", "status": "ACCEPTED", "baseline_commit": "b6b023f" },
   "objective": "Pin and enforce the approved PAEP toolchain (Node, npm, Angular/CLI, TypeScript, RxJS, build tools), commit an in-sync lockfile unchanged by npm ci, record a machine-readable version manifest, and close the IB0-WP01 install-script policy and lightningcss/caniuse-lite licence-review deferrals.",
   "controlled_baseline": {

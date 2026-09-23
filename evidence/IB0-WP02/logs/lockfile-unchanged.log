@@ -1,0 +1,9 @@
+# Lockfile and package.json unchanged after npm ci
+# date: 2026-09-23T20:44:30Z node: v24.21.0 npm: 11.19.0 commit: 916cb9dde3b1502441c346c06e9aaba9ab097ea7
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+$ bash -c sha256sum package-lock.json package.json; git diff --exit-code -- package.json package-lock.json && git diff --exit-code b6b023fea11625360f0bf43cd0bdcba968cda90d -- package-lock.json && echo 'package-lock.json byte-identical to HEAD and to IB0-WP01 baseline'
+be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69  package-lock.json
+bd7e07cc024455bd8e9b5545b2952911d14119efe6ddd6080c3a827b24752b0c  package.json
+package-lock.json byte-identical to HEAD and to IB0-WP01 baseline
+EXIT_CODE=0

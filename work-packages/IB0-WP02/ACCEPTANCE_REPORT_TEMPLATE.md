@@ -18,7 +18,7 @@
 
 | Tool | Controlled family | Pinned version | Where pinned / enforced |
 | --- | --- | --- | --- |
-| Node.js | 24 LTS | [INSERT] | `.nvmrc`, `engines`, `devEngines.runtime` |
+| Node.js | 24 LTS | [INSERT] | `.nvmrc`, `devEngines.runtime` |
 | npm | bundled with pinned Node | [INSERT] | `packageManager`, `devEngines.packageManager` |
 | Angular / CLI / build | 22.x (aligned) | [INSERT] | `package.json`, `package-lock.json` |
 | TypeScript | 6.0.x | [INSERT] | `package.json`, `package-lock.json` |

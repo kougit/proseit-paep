@@ -1,0 +1,141 @@
+# Registry and Node release review
+# date: 2026-09-23T20:42:29Z node: v24.21.0 npm: 11.19.0
+
+$ npm view @angular/core dist-tags --json
+{
+  "v4-lts": "4.4.7",
+  "v5-lts": "5.2.11",
+  "v6-lts": "6.1.10",
+  "v7-lts": "7.2.15",
+  "v8-lts": "8.2.14",
+  "v9-lts": "9.1.13",
+  "v10-lts": "10.2.5",
+  "v11-lts": "11.2.14",
+  "v12-lts": "12.2.17",
+  "v14-lts": "14.3.0",
+  "v13-lts": "13.4.0",
+  "v15-lts": "15.2.10",
+  "v16-lts": "16.2.12",
+  "v17-lts": "17.3.12",
+  "v18-lts": "18.2.14",
+  "v19-lts": "19.2.25",
+  "next": "22.2.0-rc.0",
+  "latest": "22.2.0",
+  "v20-lts": "20.3.32",
+  "v21-lts": "21.2.24"
+}
+EXIT_CODE=0
+$ npm view @angular/cli dist-tags --json
+{
+  "v6-lts": "6.2.9",
+  "v7-lts": "7.3.10",
+  "v8-lts": "8.3.29",
+  "v9-lts": "9.1.15",
+  "v10-lts": "10.2.4",
+  "v11-lts": "11.2.19",
+  "v12-lts": "12.2.18",
+  "v13-lts": "13.3.11",
+  "v14-lts": "14.2.13",
+  "v15-lts": "15.2.11",
+  "v16-lts": "16.2.16",
+  "v17-lts": "17.3.17",
+  "v18-lts": "18.2.21",
+  "v19-lts": "19.2.27",
+  "latest": "22.1.8",
+  "v20-lts": "20.3.37",
+  "v21-lts": "21.2.24",
+  "next": "22.2.0-rc.0"
+}
+EXIT_CODE=0
+$ npm view @angular/build dist-tags --json
+{
+  "v18-lts": "18.2.21",
+  "v19-lts": "19.2.27",
+  "latest": "22.1.8",
+  "v20-lts": "20.3.37",
+  "v21-lts": "21.2.24",
+  "next": "22.2.0-rc.0"
+}
+EXIT_CODE=0
+$ npm view @angular/compiler-cli dist-tags --json
+{
+  "v4-lts": "4.4.7",
+  "v5-lts": "5.2.11",
+  "v6-lts": "6.1.10",
+  "v7-lts": "7.2.15",
+  "v8-lts": "8.2.14",
+  "v9-lts": "9.1.13",
+  "v10-lts": "10.2.5",
+  "v11-lts": "11.2.14",
+  "v12-lts": "12.2.17",
+  "v14-lts": "14.3.0",
+  "v13-lts": "13.4.0",
+  "v15-lts": "15.2.10",
+  "v16-lts": "16.2.12",
+  "v17-lts": "17.3.12",
+  "v18-lts": "18.2.14",
+  "v19-lts": "19.2.25",
+  "next": "22.2.0-rc.0",
+  "latest": "22.2.0",
+  "v20-lts": "20.3.32",
+  "v21-lts": "21.2.24"
+}
+EXIT_CODE=0
+$ npm view typescript dist-tags --json
+{
+  "dev": "3.9.4",
+  "tag-for-publishing-older-releases": "4.1.6",
+  "insiders": "4.6.2-insiders.20220225",
+  "beta": "6.0.0-beta",
+  "rc": "7.0.1-rc",
+  "latest": "7.0.2",
+  "next": "7.1.0-dev.20260923.1"
+}
+EXIT_CODE=0
+$ npm view rxjs dist-tags --json
+{
+  "forward-compat": "5.6.0-forward-compat.5",
+  "next": "9.0.0-beta.0",
+  "latest": "7.8.2"
+}
+EXIT_CODE=0
+$ npm view tslib dist-tags --json
+{
+  "latest": "2.8.1"
+}
+EXIT_CODE=0
+$ npm view npm dist-tags --json
+{
+  "latest-1": "1.4.29",
+  "latest-3": "3.10.10",
+  "next-3": "3.10.10",
+  "next-2": "2.15.12",
+  "latest-2": "2.15.12",
+  "next-4": "4.6.1",
+  "latest-4": "4.6.1",
+  "next-5": "5.10.0",
+  "latest-5": "5.10.0",
+  "next-7": "7.24.2",
+  "latest-7": "7.24.2",
+  "v6.14-next": "6.14.18",
+  "next-6": "6.14.18",
+  "latest-6": "6.14.18",
+  "next-8": "8.19.4",
+  "next-9": "9.9.4",
+  "next-10": "10.9.9",
+  "next-11": "11.20.0",
+  "next-12": "12.1.0",
+  "latest": "12.1.0"
+}
+EXIT_CODE=0
+
+$ npm view typescript versions (6.0.x only)
+6.0.2, 6.0.3
+$ npm view rxjs versions (7.x stable)
+7.6.0, 7.7.0, 7.8.0, 7.8.1, 7.8.2
+
+$ curl https://nodejs.org/dist/index.json (v24 entries, newest 3)
+v24.21.0 2026-09-07 lts=Krypton npm=11.19.0 security=false
+v24.20.0 2026-08-26 lts=Krypton npm=11.19.0 security=false
+v24.19.0 2026-08-03 lts=Krypton npm=11.17.0 security=false
+EXIT_CODE=0

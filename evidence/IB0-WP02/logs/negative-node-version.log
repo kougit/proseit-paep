@@ -1,0 +1,63 @@
+# Negative: wrong Node / wrong npm must fail
+2026-09-23T20:45:01Z
+
+## node22+npm10: node v22.22.2 / npm 10.9.7
+$ npm ci
+npm error EBADDEVENGINES The developer of this package has specified the following through devEngines
+npm error EBADDEVENGINES Invalid devEngines.runtime
+npm error EBADDEVENGINES Invalid semver version "24.21.0" does not match "v22.22.2" for "runtime"
+npm error EBADDEVENGINES {
+npm error EBADDEVENGINES   current: { name: 'node', version: 'v22.22.2' },
+npm error EBADDEVENGINES   required: { name: 'node', version: '24.21.0', onFail: 'error' }
+npm error EBADDEVENGINES }
+npm error A complete log of this run can be found in: /root/.npm/_logs/2026-09-23T20_45_01_648Z-debug-0.log
+EXIT_CODE=1
+$ npm run build:reference-app
+npm error EBADDEVENGINES Invalid semver version "24.21.0" does not match "v22.22.2" for "runtime"
+npm error EBADDEVENGINES {
+npm error EBADDEVENGINES   current: { name: 'node', version: 'v22.22.2' },
+npm error EBADDEVENGINES   required: { name: 'node', version: '24.21.0', onFail: 'error' }
+npm error EBADDEVENGINES }
+npm error A complete log of this run can be found in: /root/.npm/_logs/2026-09-23T20_45_01_900Z-debug-0.log
+EXIT_CODE=1
+
+## node22+npm11: node v22.22.2 / npm 11.19.0
+$ npm ci
+npm error EBADDEVENGINES The developer of this package has specified the following through devEngines
+npm error EBADDEVENGINES Invalid devEngines.runtime
+npm error EBADDEVENGINES Invalid semver version "24.21.0" does not match "v22.22.2" for "runtime"
+npm error EBADDEVENGINES {
+npm error EBADDEVENGINES   current: { name: 'node', version: 'v22.22.2' },
+npm error EBADDEVENGINES   required: { name: 'node', version: '24.21.0', onFail: 'error' }
+npm error EBADDEVENGINES }
+npm error A complete log of this run can be found in: /root/.npm/_logs/2026-09-23T20_45_02_114Z-debug-0.log
+EXIT_CODE=1
+$ npm run build:reference-app
+npm error EBADDEVENGINES Invalid semver version "24.21.0" does not match "v22.22.2" for "runtime"
+npm error EBADDEVENGINES {
+npm error EBADDEVENGINES   current: { name: 'node', version: 'v22.22.2' },
+npm error EBADDEVENGINES   required: { name: 'node', version: '24.21.0', onFail: 'error' }
+npm error EBADDEVENGINES }
+npm error A complete log of this run can be found in: /root/.npm/_logs/2026-09-23T20_45_02_363Z-debug-0.log
+EXIT_CODE=1
+
+## node24+npm10: node v24.21.0 / npm 10.9.7
+$ npm ci
+npm error EBADDEVENGINES The developer of this package has specified the following through devEngines
+npm error EBADDEVENGINES Invalid devEngines.packageManager
+npm error EBADDEVENGINES Invalid semver version "11.19.0" does not match "10.9.7" for "packageManager"
+npm error EBADDEVENGINES {
+npm error EBADDEVENGINES   current: { name: 'npm', version: '10.9.7' },
+npm error EBADDEVENGINES   required: { name: 'npm', version: '11.19.0', onFail: 'error' }
+npm error EBADDEVENGINES }
+npm error A complete log of this run can be found in: /root/.npm/_logs/2026-09-23T20_45_02_548Z-debug-0.log
+EXIT_CODE=1
+$ npm run build:reference-app
+npm error EBADDEVENGINES Invalid semver version "11.19.0" does not match "10.9.7" for "packageManager"
+npm error EBADDEVENGINES {
+npm error EBADDEVENGINES   current: { name: 'npm', version: '10.9.7' },
+npm error EBADDEVENGINES   required: { name: 'npm', version: '11.19.0', onFail: 'error' }
+npm error EBADDEVENGINES }
+npm error A complete log of this run can be found in: /root/.npm/_logs/2026-09-23T20_45_02_788Z-debug-0.log
+EXIT_CODE=1
+?? evidence/IB0-WP02/

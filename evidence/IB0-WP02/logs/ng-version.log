@@ -1,0 +1,36 @@
+# ng version
+# date: 2026-09-23T20:44:37Z node: v24.21.0 npm: 11.19.0 commit: 916cb9dde3b1502441c346c06e9aaba9ab097ea7
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+$ npx ng version
+
+     _                      _                 ____ _     ___
+    / \   _ __   __ _ _   _| | __ _ _ __     / ___| |   |_ _|
+   / △ \ | '_ \ / _` | | | | |/ _` | '__|   | |   | |    | |
+  / ___ \| | | | (_| | |_| | | (_| | |      | |___| |___ | |
+ /_/   \_\_| |_|\__, |\__,_|_|\__,_|_|       \____|_____|___|
+                |___/
+    
+
+Angular CLI       : 22.1.8
+Angular           : 22.1.8
+Node.js           : 24.21.0
+Package Manager   : npm 11.19.0
+Operating System  : linux x64
+
+┌───────────────────────────┬───────────────────┬───────────────────┐
+│ Package                   │ Installed Version │ Requested Version │
+├───────────────────────────┼───────────────────┼───────────────────┤
+│ @angular/build            │ 22.1.8            │ 22.1.8            │
+│ @angular/cli              │ 22.1.8            │ 22.1.8            │
+│ @angular/common           │ 22.1.8            │ 22.1.8            │
+│ @angular/compiler         │ 22.1.8            │ 22.1.8            │
+│ @angular/compiler-cli     │ 22.1.8            │ 22.1.8            │
+│ @angular/core             │ 22.1.8            │ 22.1.8            │
+│ @angular/forms            │ 22.1.8            │ 22.1.8            │
+│ @angular/platform-browser │ 22.1.8            │ 22.1.8            │
+│ @angular/router           │ 22.1.8            │ 22.1.8            │
+│ rxjs                      │ 7.8.2             │ 7.8.2             │
+│ typescript                │ 6.0.3             │ 6.0.3             │
+└───────────────────────────┴───────────────────┴───────────────────┘
+EXIT_CODE=0

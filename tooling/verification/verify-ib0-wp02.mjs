@@ -243,6 +243,7 @@ const inventory = {
   permissiveLicences: [...PERMISSIVE_LICENCES],
   reviewedLicences: Object.fromEntries(Object.entries(REVIEWED_LICENCES).map(([k, v]) => [k, { review: v.review, packages: entries.filter((e) => e.license === k).map((e) => `${e.name}@${e.version}`) }])),
   runtimePackages: entries.filter((e) => e.scope === 'runtime').map((e) => `${e.name}@${e.version} (${e.license})`),
+  workspacePackages: workspaces,
   problems: licenceProblems,
   entries
 };
@@ -261,6 +262,10 @@ const mdLines = [
   '## Runtime-scope packages',
   '',
   ...inventory.runtimePackages.map((p) => `- ${p}`),
+  '',
+  '## Private workspace entries (excluded from the third-party counts)',
+  '',
+  ...workspaces.map((w) => `- ${w}`),
   '',
   '## Reviewed licences',
   '',

@@ -1,0 +1,11 @@
+$ git status --porcelain
+ M evidence/IB0-WP01/reports/ib0-wp01-verification.json
+EXIT_CODE=0
+$ git status --porcelain --ignored
+ M evidence/IB0-WP01/reports/ib0-wp01-verification.json
+!! .angular/
+!! dist/
+!! node_modules/
+$ git diff --stat
+ evidence/IB0-WP01/reports/ib0-wp01-verification.json | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)

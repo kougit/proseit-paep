@@ -1,0 +1,220 @@
+$ npm ls --all | grep -i nx
+grep_exit=1
+$ npm ls
+@proseit/paep-workspace@0.0.0 /tmp/claude-0/-home-claude-proseit-paep/***/scratchpad/qa-clean
++-- @angular/build@22.1.8
++-- @angular/cli@22.1.8
++-- @angular/common@22.1.8
++-- @angular/compiler-cli@22.1.8
++-- @angular/compiler@22.1.8
++-- @angular/core@22.1.8
++-- @angular/forms@22.1.8
++-- @angular/platform-browser@22.1.8
++-- @angular/router@22.1.8
++-- @proseit/frappe-sdk@0.0.0 -> ./packages/frappe-sdk
++-- @proseit/paep-analytics@0.0.0 -> ./packages/analytics
++-- @proseit/paep-components@0.0.0 -> ./packages/components
++-- @proseit/paep-contracts@0.0.0 -> ./packages/contracts
++-- @proseit/paep-domain-ai@0.0.0 -> ./packages/domain-ai
++-- @proseit/paep-domain-commerce@0.0.0 -> ./packages/domain-commerce
++-- @proseit/paep-domain-construction@0.0.0 -> ./packages/domain-construction
++-- @proseit/paep-domain-fiscal@0.0.0 -> ./packages/domain-fiscal
++-- @proseit/paep-domain-iot@0.0.0 -> ./packages/domain-iot
++-- @proseit/paep-domain-maintenance@0.0.0 -> ./packages/domain-maintenance
++-- @proseit/paep-domain-manufacturing@0.0.0 -> ./packages/domain-manufacturing
++-- @proseit/paep-domain-quality@0.0.0 -> ./packages/domain-quality
++-- @proseit/paep-enterprise@0.0.0 -> ./packages/enterprise
++-- @proseit/paep-foundation@0.0.0 -> ./packages/foundation
++-- @proseit/paep-i18n@0.0.0 -> ./packages/i18n
++-- @proseit/paep-observability@0.0.0 -> ./packages/observability
++-- @proseit/paep-offline@0.0.0 -> ./packages/offline
++-- @proseit/paep-platform@0.0.0 -> ./packages/platform
++-- rxjs@7.8.2
++-- tslib@2.8.1
+`-- typescript@6.0.3
+
+EXIT_CODE=0
+$ npm ls --all (invalid/extraneous/missing/UNMET grep)
+| +-- UNMET OPTIONAL DEPENDENCY @angular/localize@^22.0.0
+| +-- UNMET OPTIONAL DEPENDENCY @angular/platform-server@^22.0.0
+| +-- UNMET OPTIONAL DEPENDENCY @angular/service-worker@^22.0.0
+| +-- UNMET OPTIONAL DEPENDENCY @angular/ssr@^22.1.8
+| | | +-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | | `-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | `-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/aix-ppc64@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/android-arm@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/android-arm64@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/android-x64@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/darwin-arm64@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/darwin-x64@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/freebsd-arm64@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/freebsd-x64@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/linux-arm@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/linux-arm64@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/linux-ia32@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/linux-loong64@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/linux-mips64el@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/linux-ppc64@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/linux-riscv64@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/linux-s390x@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/netbsd-arm64@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/netbsd-x64@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/openbsd-arm64@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/openbsd-x64@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/openharmony-arm64@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/sunos-x64@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/win32-arm64@0.28.2
+| | +-- UNMET OPTIONAL DEPENDENCY @esbuild/win32-ia32@0.28.2
+| | `-- UNMET OPTIONAL DEPENDENCY @esbuild/win32-x64@0.28.2
+| |   `-- UNMET OPTIONAL DEPENDENCY kerberos@^2.0.0
+| +-- UNMET OPTIONAL DEPENDENCY istanbul-lib-instrument@^6.0.0
+| +-- UNMET OPTIONAL DEPENDENCY karma@^6.4.0
+| +-- UNMET OPTIONAL DEPENDENCY less@^4.2.0
+| | +-- UNMET OPTIONAL DEPENDENCY @lmdb/lmdb-darwin-arm64@3.5.6
+| | +-- UNMET OPTIONAL DEPENDENCY @lmdb/lmdb-darwin-x64@3.5.6
+| | +-- UNMET OPTIONAL DEPENDENCY @lmdb/lmdb-linux-arm@3.5.6
+| | +-- UNMET OPTIONAL DEPENDENCY @lmdb/lmdb-linux-arm64@3.5.6
+| | +-- UNMET OPTIONAL DEPENDENCY @lmdb/lmdb-win32-arm64@3.5.6
+| | +-- UNMET OPTIONAL DEPENDENCY @lmdb/lmdb-win32-x64@3.5.6
+| | |   +-- UNMET OPTIONAL DEPENDENCY @msgpackr-extract/msgpackr-extract-darwin-arm64@3.0.4
+| | |   +-- UNMET OPTIONAL DEPENDENCY @msgpackr-extract/msgpackr-extract-darwin-x64@3.0.4
+| | |   +-- UNMET OPTIONAL DEPENDENCY @msgpackr-extract/msgpackr-extract-linux-arm@3.0.4
+| | |   +-- UNMET OPTIONAL DEPENDENCY @msgpackr-extract/msgpackr-extract-linux-arm64@3.0.4
+| | |   +-- UNMET OPTIONAL DEPENDENCY @msgpackr-extract/msgpackr-extract-win32-x64@3.0.4
+| +-- UNMET OPTIONAL DEPENDENCY ng-packagr@^22.0.0
+| | +-- UNMET OPTIONAL DEPENDENCY @oxc-parser/binding-android-arm-eabi@0.142.0
+| | +-- UNMET OPTIONAL DEPENDENCY @oxc-parser/binding-android-arm64@0.142.0
+| | +-- UNMET OPTIONAL DEPENDENCY @oxc-parser/binding-darwin-arm64@0.142.0
+| | +-- UNMET OPTIONAL DEPENDENCY @oxc-parser/binding-darwin-x64@0.142.0
+| | +-- UNMET OPTIONAL DEPENDENCY @oxc-parser/binding-freebsd-x64@0.142.0
+| | +-- UNMET OPTIONAL DEPENDENCY @oxc-parser/binding-linux-arm-gnueabihf@0.142.0
+| | +-- UNMET OPTIONAL DEPENDENCY @oxc-parser/binding-linux-arm-musleabihf@0.142.0
+| | +-- UNMET OPTIONAL DEPENDENCY @oxc-parser/binding-linux-arm64-gnu@0.142.0
+| | +-- UNMET OPTIONAL DEPENDENCY @oxc-parser/binding-linux-arm64-musl@0.142.0
+| | +-- UNMET OPTIONAL DEPENDENCY @oxc-parser/binding-linux-ppc64-gnu@0.142.0
+| | +-- UNMET OPTIONAL DEPENDENCY @oxc-parser/binding-linux-riscv64-gnu@0.142.0
+| | +-- UNMET OPTIONAL DEPENDENCY @oxc-parser/binding-linux-riscv64-musl@0.142.0
+| | +-- UNMET OPTIONAL DEPENDENCY @oxc-parser/binding-linux-s390x-gnu@0.142.0
+| | +-- UNMET OPTIONAL DEPENDENCY @oxc-parser/binding-linux-x64-musl@0.142.0
+| | +-- UNMET OPTIONAL DEPENDENCY @oxc-parser/binding-openharmony-arm64@0.142.0
+| | +-- UNMET OPTIONAL DEPENDENCY @oxc-parser/binding-wasm32-wasi@0.142.0
+| | +-- UNMET OPTIONAL DEPENDENCY @oxc-parser/binding-win32-arm64-msvc@0.142.0
+| | +-- UNMET OPTIONAL DEPENDENCY @oxc-parser/binding-win32-ia32-msvc@0.142.0
+| | +-- UNMET OPTIONAL DEPENDENCY @oxc-parser/binding-win32-x64-msvc@0.142.0
+| |   +-- UNMET OPTIONAL DEPENDENCY @napi-rs/nice-android-arm-eabi@1.1.1
+| |   +-- UNMET OPTIONAL DEPENDENCY @napi-rs/nice-android-arm64@1.1.1
+| |   +-- UNMET OPTIONAL DEPENDENCY @napi-rs/nice-darwin-arm64@1.1.1
+| |   +-- UNMET OPTIONAL DEPENDENCY @napi-rs/nice-darwin-x64@1.1.1
+| |   +-- UNMET OPTIONAL DEPENDENCY @napi-rs/nice-freebsd-x64@1.1.1
+| |   +-- UNMET OPTIONAL DEPENDENCY @napi-rs/nice-linux-arm-gnueabihf@1.1.1
+| |   +-- UNMET OPTIONAL DEPENDENCY @napi-rs/nice-linux-arm64-gnu@1.1.1
+| |   +-- UNMET OPTIONAL DEPENDENCY @napi-rs/nice-linux-arm64-musl@1.1.1
+| |   +-- UNMET OPTIONAL DEPENDENCY @napi-rs/nice-linux-ppc64-gnu@1.1.1
+| |   +-- UNMET OPTIONAL DEPENDENCY @napi-rs/nice-linux-riscv64-gnu@1.1.1
+| |   +-- UNMET OPTIONAL DEPENDENCY @napi-rs/nice-linux-s390x-gnu@1.1.1
+| |   +-- UNMET OPTIONAL DEPENDENCY @napi-rs/nice-linux-x64-musl@1.1.1
+| |   +-- UNMET OPTIONAL DEPENDENCY @napi-rs/nice-openharmony-arm64@1.1.1
+| |   +-- UNMET OPTIONAL DEPENDENCY @napi-rs/nice-win32-arm64-msvc@1.1.1
+| |   +-- UNMET OPTIONAL DEPENDENCY @napi-rs/nice-win32-ia32-msvc@1.1.1
+| |   `-- UNMET OPTIONAL DEPENDENCY @napi-rs/nice-win32-x64-msvc@1.1.1
+| | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-android-arm64@1.2.0
+| | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-darwin-arm64@1.2.0
+| | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-darwin-x64@1.2.0
+| | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-freebsd-x64@1.2.0
+| | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-linux-arm-gnueabihf@1.2.0
+| | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-linux-arm64-gnu@1.2.0
+| | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-linux-arm64-musl@1.2.0
+| | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-linux-ppc64-gnu@1.2.0
+| | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-linux-s390x-gnu@1.2.0
+| | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-linux-x64-musl@1.2.0
+| | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-openharmony-arm64@1.2.0
+| | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-wasm32-wasi@1.2.0
+| | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-win32-arm64-msvc@1.2.0
+| | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-win32-x64-msvc@1.2.0
+| +-- UNMET OPTIONAL DEPENDENCY rollup@^4.0.0
+| | | +-- UNMET OPTIONAL DEPENDENCY @parcel/watcher-android-arm64@2.6.0
+| | | +-- UNMET OPTIONAL DEPENDENCY @parcel/watcher-darwin-arm64@2.6.0
+| | | +-- UNMET OPTIONAL DEPENDENCY @parcel/watcher-darwin-x64@2.6.0
+| | | +-- UNMET OPTIONAL DEPENDENCY @parcel/watcher-freebsd-x64@2.6.0
+| | | +-- UNMET OPTIONAL DEPENDENCY @parcel/watcher-linux-arm-glibc@2.6.0
+| | | +-- UNMET OPTIONAL DEPENDENCY @parcel/watcher-linux-arm-musl@2.6.0
+| | | +-- UNMET OPTIONAL DEPENDENCY @parcel/watcher-linux-arm64-glibc@2.6.0
+| | | +-- UNMET OPTIONAL DEPENDENCY @parcel/watcher-linux-arm64-musl@2.6.0
+| | | +-- UNMET OPTIONAL DEPENDENCY @parcel/watcher-linux-x64-musl@2.6.0
+| | | +-- UNMET OPTIONAL DEPENDENCY @parcel/watcher-win32-arm64@2.6.0
+| | | +-- UNMET OPTIONAL DEPENDENCY @parcel/watcher-win32-x64@2.6.0
+| +-- UNMET OPTIONAL DEPENDENCY tailwindcss@^2.0.0 || ^3.0.0 || ^4.0.0
+| | +-- UNMET OPTIONAL DEPENDENCY @types/node@^20.19.0 || >=22.12.0
+| | +-- UNMET OPTIONAL DEPENDENCY @vitejs/devtools@^0.3.0
+| | +-- UNMET OPTIONAL DEPENDENCY fsevents@~2.3.3
+| | +-- UNMET OPTIONAL DEPENDENCY jiti@>=1.21.0
+| | +-- UNMET OPTIONAL DEPENDENCY less@^4.0.0
+| | | +-- UNMET OPTIONAL DEPENDENCY lightningcss-android-arm64@1.33.0
+| | | +-- UNMET OPTIONAL DEPENDENCY lightningcss-darwin-arm64@1.33.0
+| | | +-- UNMET OPTIONAL DEPENDENCY lightningcss-darwin-x64@1.33.0
+| | | +-- UNMET OPTIONAL DEPENDENCY lightningcss-freebsd-x64@1.33.0
+| | | +-- UNMET OPTIONAL DEPENDENCY lightningcss-linux-arm-gnueabihf@1.33.0
+| | | +-- UNMET OPTIONAL DEPENDENCY lightningcss-linux-arm64-gnu@1.33.0
+| | | +-- UNMET OPTIONAL DEPENDENCY lightningcss-linux-arm64-musl@1.33.0
+| | | +-- UNMET OPTIONAL DEPENDENCY lightningcss-linux-x64-musl@1.33.0
+| | | +-- UNMET OPTIONAL DEPENDENCY lightningcss-win32-arm64-msvc@1.33.0
+| | | `-- UNMET OPTIONAL DEPENDENCY lightningcss-win32-x64-msvc@1.33.0
+| | | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-android-arm64@1.1.5
+| | | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-darwin-arm64@1.1.5
+| | | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-darwin-x64@1.1.5
+| | | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-freebsd-x64@1.1.5
+| | | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-linux-arm-gnueabihf@1.1.5
+| | | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-linux-arm64-gnu@1.1.5
+| | | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-linux-arm64-musl@1.1.5
+| | | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-linux-ppc64-gnu@1.1.5
+| | | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-linux-s390x-gnu@1.1.5
+| | | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-linux-x64-musl@1.1.5
+| | | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-openharmony-arm64@1.1.5
+| | | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-wasm32-wasi@1.1.5
+| | | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-win32-arm64-msvc@1.1.5
+| | | +-- UNMET OPTIONAL DEPENDENCY @rolldown/binding-win32-x64-msvc@1.1.5
+| | +-- UNMET OPTIONAL DEPENDENCY sass-embedded@^1.70.0
+| | +-- UNMET OPTIONAL DEPENDENCY stylus@>=0.54.8
+| | +-- UNMET OPTIONAL DEPENDENCY sugarss@^5.0.0
+| | +-- UNMET OPTIONAL DEPENDENCY terser@^5.16.0
+| | +-- UNMET OPTIONAL DEPENDENCY tsx@^4.8.1
+| | `-- UNMET OPTIONAL DEPENDENCY yaml@^2.4.2
+| +-- UNMET OPTIONAL DEPENDENCY vitest@^4.0.8
+| | | | +-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | | `-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | | | +-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | | | +-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | | `-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | | | +-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | | `-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | | | +-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | | `-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | | | +-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | | `-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | | | +-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | | `-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | | | +-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | | `-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | | | +-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | | `-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | | | +-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | | `-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | `-- UNMET OPTIONAL DEPENDENCY @types/node@>=18
+| | +-- UNMET OPTIONAL DEPENDENCY @cfworker/json-schema@^4.1.1
+| | | | +-- http-errors@2.0.1 deduped
+| | | +-- http-errors@2.0.1
+| | | |   +-- es-errors@1.3.0
+| | | |   | +-- es-errors@1.3.0 deduped
+| | | |   | | | +-- es-errors@1.3.0 deduped
+| | | |   | +-- es-errors@1.3.0 deduped
+| | | |   | | +-- es-errors@1.3.0 deduped
+| | | |   | | | `-- es-errors@1.3.0 deduped
+| | | |   | | | | +-- es-errors@1.3.0 deduped
+| | | |     +-- es-errors@1.3.0 deduped
+| | | | +-- http-errors@2.0.1 deduped
+| | | +-- http-errors@2.0.1 deduped
+| `-- UNMET OPTIONAL DEPENDENCY zone.js@~0.15.0 || ~0.16.0
+| +-- UNMET OPTIONAL DEPENDENCY @angular/animations@22.1.8
+grep_exit=0
+npm ls --all EXIT_CODE=0

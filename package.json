@@ -1,0 +1,31 @@
+{
+  "name": "@proseit/paep-workspace",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "npm@11.19.0",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "ng": "ng",
+    "build:reference-app": "ng build reference-app --configuration production",
+    "build:ui-lab": "ng build ui-lab --configuration production",
+    "qa:ib0-wp01": "node tooling/verification/verify-ib0-wp01.mjs"
+  },
+  "dependencies": {
+    "@angular/common": "22.1.8",
+    "@angular/compiler": "22.1.8",
+    "@angular/core": "22.1.8",
+    "@angular/forms": "22.1.8",
+    "@angular/platform-browser": "22.1.8",
+    "@angular/router": "22.1.8",
+    "rxjs": "7.8.2",
+    "tslib": "2.8.1"
+  },
+  "devDependencies": {
+    "@angular/build": "22.1.8",
+    "@angular/cli": "22.1.8",
+    "@angular/compiler-cli": "22.1.8",
+    "typescript": "6.0.3"
+  }
+}

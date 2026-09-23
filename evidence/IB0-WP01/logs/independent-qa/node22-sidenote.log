@@ -1,0 +1,9 @@
+$ (Node 22 side note) /usr/bin/env node -v && npx ng version
+/opt/node22/bin/node
+v22.22.2
+Node.js version v22.22.2 detected.
+The Angular CLI requires a minimum Node.js version of v22.22.3 or v24.15.0 or v26.0.0.
+
+Please update your Node.js version or visit https://nodejs.org/ for additional instructions.
+
+EXIT_CODE=3

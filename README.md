@@ -35,3 +35,30 @@ IB0-WP01 creates the repository and Angular workspace skeleton only. It does **n
 ## Expected end-state
 
 At the end of IB0-WP01, the repository shall have a reproducible Angular workspace, `apps/reference-app`, `apps/ui-lab`, the approved package/tooling/configuration/documentation/evidence topology, a committed npm lockfile, and clean build/start evidence for the two starter applications. Exact toolchain pinning and stronger package-boundary enforcement continue in subsequent IB0 work packages.
+
+## Workspace (IB0-WP01 bootstrap)
+
+The repository root is a plain Angular CLI workspace that uses npm workspaces. It does not use Nx; see `docs/architecture/IB0-WP01-IMPLEMENTATION-PLAN.md`.
+
+| Item | Value |
+| --- | --- |
+| Node.js | 24 LTS (bootstrap used 24.21.0) |
+| npm | 11.19.0 (`packageManager`) |
+| Angular / Angular CLI | 22.1.8 |
+| TypeScript | 6.0.3 |
+
+```bash
+npm ci
+npm run build:reference-app   # production build of apps/reference-app
+npm run build:ui-lab          # production build of apps/ui-lab
+npm run qa:ib0-wp01           # IB0-WP01 verifier; writes evidence/IB0-WP01/reports/ib0-wp01-verification.json
+```
+
+| Area | Contents |
+| --- | --- |
+| `apps/` | Thin applications: `reference-app` and `ui-lab`. Each is a minimal starter only. |
+| `packages/` | `@proseit/*` package placeholders (README and private `package.json`). No implementation yet. |
+| `tooling/` | Development and CI tooling areas, including the IB0-WP01 verifier. |
+| `config/` | Runtime configuration schema and non-secret examples (IB1). |
+| `docs/` | Architecture, ADRs, reporting metrics, provenance, licences and migration. |
+| `evidence/` | Retained test, accessibility, performance, security, SBOM, release, portability, usability and analytics evidence. |

@@ -1,0 +1,23 @@
+# command: npm run build:reference-app
+# date: 2026-09-23T19:22:11Z
+# node: v24.21.0  npm: 11.19.0
+# source commit: b9904d023a5a8a8df6c4d9b9900b48188ff5095f (tracked tree clean: yes); node_modules, dist and .angular removed before npm ci
+
+
+> @proseit/paep-workspace@0.0.0 build:reference-app
+> ng build reference-app --configuration production
+
+❯ Building...
+✔ Building...
+Initial chunk files | Names         |  Raw size | Estimated transfer size
+main-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB
+styles-5INURTSO.css | styles        |   0 bytes |                 0 bytes
+
+                    | Initial total | 190.65 kB |                52.09 kB
+
+Application bundle generation complete. [4.185 seconds] - 2026-09-23T19:22:16.444Z
+
+Output location: /home/claude/proseit-paep/dist/reference-app
+
+
+# exit code: 0

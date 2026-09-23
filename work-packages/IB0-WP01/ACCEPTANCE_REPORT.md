@@ -2,8 +2,19 @@
 
 **Work package:** IB0-WP01 — Repository and Angular Workspace Bootstrap  
 **Commit / revision:** implementation `b9904d023a5a8a8df6c4d9b9900b48188ff5095f`; evidence in the following commit on branch `claude/project-thread-1vn0d9` (draft PR kougit/proseit-paep#1)  
-**Technical reviewer:** Claude Code (implementation session; this is a self-assessment). Independent QA per `prompts/02_INDEPENDENT_QA.md` is pending.  
+**Technical reviewer:** Claude Code implementation session (self-assessment), then an independent Claude Code QA session per `prompts/02_INDEPENDENT_QA.md` on head `1d722c33c3cf5a0571dd2504df9766f9557387f3`  
 **Review date:** 2026-09-23
+
+## Verification and acceptance summary
+
+| Item | Result | Evidence |
+| --- | --- | --- |
+| Technical Verification | PASS | AC01–AC15 below; `evidence/IB0-WP01/` |
+| Independent QA | PASS | `evidence/IB0-WP01/reports/independent-qa.md`; raw logs in `evidence/IB0-WP01/logs/independent-qa/` |
+| Architecture Conformance | PASS | `evidence/IB0-WP01/reports/independent-qa.md` checks (i)–(ix) |
+| Acceptance Status | ACCEPTED | Human acceptance decision below |
+| Acceptance Authority | Product Owner / Solutions Architect | |
+| Acceptance date | 2026-09-23 | |
 
 ## Implemented scope
 
@@ -30,6 +41,7 @@ All gates were run from a clean dependency state (`node_modules`, `dist` and `.a
 | `npm run build:ui-lab` | PASS (exit 0) | `evidence/IB0-WP01/logs/build-ui-lab.log`; `logs/clean-clone-reproduction.log` |
 | `node tooling/verification/verify-ib0-wp01.mjs` | PASS (15/15 checks; exit 0) | `evidence/IB0-WP01/reports/ib0-wp01-verification.json`; `logs/verify-ib0-wp01.log` |
 | Scope and secret scan | PASS (0 scope violations; 0 secret findings after triage) | `evidence/IB0-WP01/logs/scope-and-secret-scan.log` |
+| Independent QA re-run of all gates (fresh clone of `1d722c3`, Node 24.21.0) | PASS (all exit 0; build output identical to the committed logs) | `evidence/IB0-WP01/reports/independent-qa.md`; `evidence/IB0-WP01/logs/independent-qa/` |
 
 ## Acceptance criteria
 
@@ -57,15 +69,26 @@ None open. During execution, the preinstalled Node 22.22.2 was rejected by Angul
 
 ## Exceptions
 
-None.
+(i) **Deletion of `PAEP_CTRL.zip` — approved.** The Product Owner / Solutions Architect approved the deletion on 2026-09-23. The zip was a temporary transport artefact. Its controlled contents were restored to `.paep-control/` and `.gitignore` in commit `8259317`, and all 13 restored files were verified against their `PACK_MANIFEST.json` fingerprints (see `evidence/IB0-WP01/reports/independent-qa.md`, check (v)).
 
 ## Provenance
 
 `docs/provenance/PROVENANCE-REGISTER.md` is updated. All direct dependencies are open source: MIT, Apache-2.0 or 0BSD. No proprietary or commercial template material was used. Two build-time transitive licences are flagged for review in WP02/SBOM: `lightningcss` (MPL-2.0) and `caniuse-lite` (CC-BY-4.0). Dependency approval is pending human review.
 
+## Deferred actions
+
+These actions are recorded here and are not implemented in IB0-WP01.
+
+| Action | Owner work package |
+| --- | --- |
+| Nx-compatible project/dependency graph ownership | IB0-WP04 |
+| Explicit `strict: true` and `strictTemplates: true` | IB0-WP03 |
+| Node/npm version pinning and npm install-script policy | IB0-WP02 |
+| Dependency/licence review for `lightningcss` and `caniuse-lite` | IB0-WP02 |
+
 ## Residual risk
 
-(i) **Orchestration.** A later IB0 work package must decide how to deliver the Nx-compatible project graph and module boundaries expected by PAEP-IB-01 §4.1/§22, and the `nx.json`/`tsconfig.base.json` shown in IR-01 §4.2. This bootstrap intentionally has no Nx (user direction; IB-01 §2.3(ii)).
+(i) **Orchestration.** IB0-WP04 owns how to deliver the Nx-compatible project graph and module boundaries expected by PAEP-IB-01 §4.1/§22, and the `nx.json`/`tsconfig.base.json` shown in IR-01 §4.2. This bootstrap intentionally has no Nx (user direction; IB-01 §2.3(ii)).
 
 (ii) **Pinning (IB0-WP02).** Node is not yet pinned in `.nvmrc`/`engines`. The npm 11 `allowScripts` policy (esbuild, lmdb, msgpackr-extract, @parcel/watcher install scripts) is not yet decided.
 
@@ -75,11 +98,11 @@ None.
 
 ## Technical result
 
-**PASS / FAILED / BLOCKED:** PASS. All 15 mandatory criteria pass with retained evidence. Independent QA is still to be run.
+**PASS / FAILED / BLOCKED:** PASS. All 15 mandatory criteria pass with retained evidence. Independent QA: PASS (`evidence/IB0-WP01/reports/independent-qa.md`).
 
 ## Human acceptance decision
 
-**ACCEPTED / REJECTED / CONDITIONAL:** [INSERT: pending authorised human reviewer]
+**ACCEPTED / REJECTED / CONDITIONAL:** ACCEPTED, on the basis of technical PASS and independent QA PASS.
 
-**Authorised reviewer:** [INSERT]  
-**Date:** [INSERT]
+**Authorised reviewer:** Product Owner / Solutions Architect  
+**Date:** 2026-09-23

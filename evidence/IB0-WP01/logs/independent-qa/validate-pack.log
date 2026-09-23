@@ -1,0 +1,12 @@
+$ node tooling/verification/validate-pack.mjs
+HASH MISMATCH README.md
+HASH MISMATCH docs/architecture/IB0-WP01-IMPLEMENTATION-PLAN.md
+HASH MISMATCH docs/provenance/PROVENANCE-REGISTER.md
+HASH MISMATCH evidence/IB0-WP01/README.md
+HASH MISMATCH evidence/IB0-WP01/notes/implementation-summary.md
+HASH MISMATCH evidence/IB0-WP01/reports/dependency-baseline.md
+HASH MISMATCH evidence/IB0-WP01/reports/toolchain-baseline.md
+HASH MISMATCH work-packages/IB0-WP01/ACCEPTANCE_REPORT.md
+HASH MISMATCH work-packages/IB0-WP01/TRACEABILITY.csv
+FAIL: pack integrity errors found.
+EXIT_CODE=1

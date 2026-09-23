@@ -2,4 +2,8 @@
 
 Third-party licence records and obligations (PAEP v1.1 §19).
 
-**Status:** placeholder created by IB0-WP01.
+| File | Contents |
+| --- | --- |
+| `THIRD-PARTY-LICENCE-REVIEW.md` | IB0-WP02 licence inventory summary, review of `lightningcss` (MPL-2.0) and `caniuse-lite` (CC-BY-4.0), obligations for shipped bundles, and re-review triggers. Dispositions are proposed, pending human approval. |
+
+The machine-readable inventory is regenerated from `package-lock.json` by `node tooling/verification/verify-ib0-wp02.mjs` into `evidence/IB0-WP02/reports/licence-inventory.json`.

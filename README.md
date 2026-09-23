@@ -42,8 +42,8 @@ The repository root is a plain Angular CLI workspace that uses npm workspaces. I
 
 | Item | Value |
 | --- | --- |
-| Node.js | 24 LTS (bootstrap used 24.21.0) |
-| npm | 11.19.0 (`packageManager`) |
+| Node.js | 24.21.0, pinned in `.nvmrc` and enforced by `devEngines` |
+| npm | 11.19.0 (bundled with Node 24.21.0), pinned in `packageManager` and enforced by `devEngines` |
 | Angular / Angular CLI | 22.1.8 |
 | TypeScript | 6.0.3 |
 
@@ -53,6 +53,23 @@ npm run build:reference-app   # production build of apps/reference-app
 npm run build:ui-lab          # production build of apps/ui-lab
 npm run qa:ib0-wp01           # IB0-WP01 verifier; writes evidence/IB0-WP01/reports/ib0-wp01-verification.json
 ```
+
+## Toolchain pinning (IB0-WP02)
+
+Use Node 24.21.0 (`nvm use` or `fnm use` reads `.nvmrc`). npm checks `devEngines` before `install`, `ci` and `run`, so any other Node or npm version fails with `EBADDEVENGINES`. To change a version, update `.nvmrc`, `package.json` and `docs/architecture/toolchain-version-manifest.json` together in one reviewed change.
+
+| Control | Where |
+| --- | --- |
+| Exact versions of Node, npm, Angular, TypeScript, RxJS and material build tools | `docs/architecture/toolchain-version-manifest.json` |
+| Dependency `engines` must match the pinned Node | `.npmrc` `engine-strict=true` |
+| Install scripts: all five current ones denied; any new unreviewed one fails install | `package.json` `allowScripts`; `.npmrc` `strict-allow-scripts=true` |
+| Licence review | `docs/licences/THIRD-PARTY-LICENCE-REVIEW.md` |
+
+```bash
+npm run qa:ib0-wp02           # IB0-WP02 verifier; writes evidence/IB0-WP02/reports/
+```
+
+Do not run `npm install-scripts prune` on Linux or Windows: it removes the macOS-only `fsevents` entry, which then breaks macOS installs under strict mode.
 
 | Area | Contents |
 | --- | --- |

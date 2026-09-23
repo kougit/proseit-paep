@@ -1,0 +1,1 @@
+Read CLAUDE.md and execute work-packages/IB0-WP01/prompts/01_EXECUTE.md exactly. Implement IB0-WP01 only. Fix mandatory failures until PASS, retain evidence, and do not claim human acceptance.

@@ -1,0 +1,23 @@
+{
+  "id": "IB0-WP01",
+  "roadmap_alias": "PAEP-IR-01 IB0-WP1",
+  "title": "Repository and Angular Workspace Bootstrap",
+  "milestone": "IB0",
+  "design_classification": "D0",
+  "status": "READY",
+  "objective": "Create the first buildable governed PAEP repository and Angular workspace skeleton without implementing later milestone capabilities.",
+  "controlled_baseline": {
+    "angular": "22.x",
+    "typescript": "6.0.x",
+    "package_manager": "npm",
+    "workspace": "Angular workspace with Nx-compatible orchestration"
+  },
+  "required_apps": ["apps/reference-app", "apps/ui-lab"],
+  "mandatory_acceptance_ids": [
+    "IB0-WP01-AC01", "IB0-WP01-AC02", "IB0-WP01-AC03", "IB0-WP01-AC04", "IB0-WP01-AC05",
+    "IB0-WP01-AC06", "IB0-WP01-AC07", "IB0-WP01-AC08", "IB0-WP01-AC09", "IB0-WP01-AC10",
+    "IB0-WP01-AC11", "IB0-WP01-AC12", "IB0-WP01-AC13", "IB0-WP01-AC14", "IB0-WP01-AC15"
+  ],
+  "technical_pass_requires_all_mandatory_criteria": true,
+  "human_acceptance_required": true
+}

@@ -1,0 +1,228 @@
+{
+  "pack": "PAEP IB0-WP01 Claude Execution Pack - Windows Short Path Edition",
+  "version": "1.0-short",
+  "work_package": "IB0-WP01",
+  "roadmap_alias": "PAEP-IR-01 IB0-WP1",
+  "files": [
+    {
+      "path": ".gitignore",
+      "sha256": "3646b9d51803eca2cd8e7e5fec090abeab78137ee03e326689e875e29560b8bc",
+      "bytes": 430
+    },
+    {
+      "path": ".paep-control/SOURCE_OF_TRUTH.md",
+      "sha256": "cbae92bae66d58d8ea5ef5e90ae9df127098f6777711179e9d13b685dd8f5262",
+      "bytes": 2397
+    },
+    {
+      "path": ".paep-control/originals/PAEP_DCH_v1.0.pdf",
+      "sha256": "9a6a5efd82e71e7533cf883710b24c61e8b54ba1fe4910b402ba0340391e4996",
+      "bytes": 542033
+    },
+    {
+      "path": ".paep-control/originals/PAEP_EQP_v1.1.pdf",
+      "sha256": "c61d5ace05815a7fbd3272c1587d1b6fa7a32fd6ce280aab6008c3bc70783b04",
+      "bytes": 742463
+    },
+    {
+      "path": ".paep-control/originals/PAEP_IB_v1.0.pdf",
+      "sha256": "cae5f62fbba6dd274ff83be4e3759ebecdafe220cf647b9e1427d6c16ccb623d",
+      "bytes": 937641
+    },
+    {
+      "path": ".paep-control/originals/PAEP_IR_v1.0.docx",
+      "sha256": "1e2d9c3ff2b34ea0675225e226b2444270acefa23c0369a5c2fa5d07096375ba",
+      "bytes": 705705
+    },
+    {
+      "path": ".paep-control/originals/PAEP_v1.1.pdf",
+      "sha256": "a9ae79b4c122e114811b23490ef9710d4921829a389a304e8d3a54c74bda74d9",
+      "bytes": 1576649
+    },
+    {
+      "path": ".paep-control/reference-baseline/PAEP_BASE_v1.0.zip",
+      "sha256": "170945d6422fa46742c7eef6920166ed4b2c69c7130449509f8dc76687cb4ad2",
+      "bytes": 33055
+    },
+    {
+      "path": ".paep-control/text/PAEP_DCH_01_v1.0_text.md",
+      "sha256": "8bc9aee796b07644dedc240cba661c0c1c5b20b2bd99a233a6224a1153f48a75",
+      "bytes": 46181
+    },
+    {
+      "path": ".paep-control/text/PAEP_EQP_01_v1.1_text.md",
+      "sha256": "920d12e28e7cb4e9a96af28ec4803bab892c1032d1d94a0ac0452825b8a4bb09",
+      "bytes": 58649
+    },
+    {
+      "path": ".paep-control/text/PAEP_IB_01_v1.0_text.md",
+      "sha256": "bfdc1dbd1b73bc26f3893b2d8db1a327ec362b628137aa8270aacf2b66bbbf28",
+      "bytes": 68553
+    },
+    {
+      "path": ".paep-control/text/PAEP_IR_01_v1.0_text.md",
+      "sha256": "5cd5f01ab5a036296711a83768757b39338a5b28b5e57e2baed9b87b12731586",
+      "bytes": 38704
+    },
+    {
+      "path": ".paep-control/text/PAEP_v1.1_text.md",
+      "sha256": "7abebe5fa09c6f903423734164f2fdbb7618711267190b10ade1423cd70b2c4f",
+      "bytes": 85725
+    },
+    {
+      "path": "CLAUDE.md",
+      "sha256": "6067a7e98b238975e1f83f5f798a9e9c8671acfea3b77a6da15d60012058cd1f",
+      "bytes": 3218
+    },
+    {
+      "path": "CLAUDE_ENVIRONMENT_GUIDE.md",
+      "sha256": "e29bcb4f845df716e202b41213c78c2eb81db573461223bf724ca292c0045aec",
+      "bytes": 1578
+    },
+    {
+      "path": "NEXT_AFTER_PASS.md",
+      "sha256": "eae4d6264c5c9d3c897c5bf7f3daee4d1ee3c9b23b39f36179005ddbdaf2da13",
+      "bytes": 960
+    },
+    {
+      "path": "PACK_CONTENTS.md",
+      "sha256": "dc4160cdb8bb0515565968ec80e6f0b25c99fa15a1f382b1da2d2a1766a6b590",
+      "bytes": 1799
+    },
+    {
+      "path": "README.md",
+      "sha256": "50be480298b3fa9be5d76fa120b4f81feb9ea7804abfedf8c2c4216cb3cdf5fa",
+      "bytes": 2585
+    },
+    {
+      "path": "RUN_IB0-WP01.txt",
+      "sha256": "eaf33e590a5358eff9157205687e7cdd33798adf7af95b04ad20fc96d5c8273f",
+      "bytes": 193
+    },
+    {
+      "path": "WINDOWS_README.txt",
+      "sha256": "6b24b413b53414e22a5e0357e003d48580f83e8b8501254098303194d2f2b0ae",
+      "bytes": 370
+    },
+    {
+      "path": "docs/adr/ADR-REGISTER.md",
+      "sha256": "2c3550ab8f4e8153729024fb1b34ded48c253dcd2269c7e6fa4f1e99be010c0a",
+      "bytes": 331
+    },
+    {
+      "path": "docs/architecture/IB0-WP01-IMPLEMENTATION-PLAN.md",
+      "sha256": "4cd343de79b5eba9e352fcfb7c6132d23743c65d9f376410cb28c50b72f65ea0",
+      "bytes": 872
+    },
+    {
+      "path": "docs/provenance/PROVENANCE-REGISTER.md",
+      "sha256": "fc343d122883ce23e5069f02e8d07bfd593a96055436d03577b02782d7feb237",
+      "bytes": 896
+    },
+    {
+      "path": "evidence/IB0-WP01/README.md",
+      "sha256": "1796714f85f4bac5cefddcbe7d683740ca969b8fee14de1f21ad60bf6503f8f8",
+      "bytes": 837
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/.gitkeep",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "evidence/IB0-WP01/notes/.gitkeep",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "evidence/IB0-WP01/notes/implementation-summary.md",
+      "sha256": "fa3ef5b3c29bbd81f37a48493f7c164f655f8fbd06fd92347b29e354074b67c4",
+      "bytes": 347
+    },
+    {
+      "path": "evidence/IB0-WP01/reports/.gitkeep",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "evidence/IB0-WP01/reports/dependency-baseline.md",
+      "sha256": "5a9771a64e8d004e68d07e7adf88a2112729223b824d763e8a0ee11e1625c06e",
+      "bytes": 592
+    },
+    {
+      "path": "evidence/IB0-WP01/reports/toolchain-baseline.md",
+      "sha256": "882debe2fb47466bd3c9f6db984a32e0a716e14517567c7bf205d844431108d2",
+      "bytes": 658
+    },
+    {
+      "path": "tooling/verification/validate-pack.mjs",
+      "sha256": "8ab27a490d747521b44f806bf4d04f49072ca7738ef4ce8e762d57ee09def7e5",
+      "bytes": 846
+    },
+    {
+      "path": "tooling/verification/verify-ib0-wp01.mjs",
+      "sha256": "e2a7fa1d1cd4bc0fe1fe4e89cbec915e87d6f344d88e5b00dbd4c7151ef90a51",
+      "bytes": 7174
+    },
+    {
+      "path": "work-packages/IB0-WP01/ACCEPTANCE.md",
+      "sha256": "9e3bc6840570a19b3908f274a11d0b7a583e23312201ec103afb6d78bebcf88e",
+      "bytes": 2742
+    },
+    {
+      "path": "work-packages/IB0-WP01/ACCEPTANCE_REPORT.md",
+      "sha256": "f344e2c4ff3cca64b5d9181b48e246f00a6b73026143a24b5fe740f457d7b1c0",
+      "bytes": 1371
+    },
+    {
+      "path": "work-packages/IB0-WP01/ACCEPTANCE_REPORT_TEMPLATE.md",
+      "sha256": "f344e2c4ff3cca64b5d9181b48e246f00a6b73026143a24b5fe740f457d7b1c0",
+      "bytes": 1371
+    },
+    {
+      "path": "work-packages/IB0-WP01/QUALITY_GATE_RUNBOOK.md",
+      "sha256": "41939d01ace7600857911b1dc113e6681f6f96c10219a4bfce0c671dcd9bbc4f",
+      "bytes": 1518
+    },
+    {
+      "path": "work-packages/IB0-WP01/TRACEABILITY.csv",
+      "sha256": "52e12b10ced022cb35755139cfe869b2f673a3420af4b757310d091879d81c35",
+      "bytes": 1126
+    },
+    {
+      "path": "work-packages/IB0-WP01/WORK_PACKAGE.md",
+      "sha256": "d03f2dafef55d81def3d26cc91d860a443667e6b9d57383a070a1189ddb8b910",
+      "bytes": 7304
+    },
+    {
+      "path": "work-packages/IB0-WP01/prompts/00_QUICK_START.txt",
+      "sha256": "eaf33e590a5358eff9157205687e7cdd33798adf7af95b04ad20fc96d5c8273f",
+      "bytes": 193
+    },
+    {
+      "path": "work-packages/IB0-WP01/prompts/01_EXECUTE.md",
+      "sha256": "1ca81f942b0b74a51f2d9c0f770feaa5f45bc8a794aadcc80a1eab8d89939398",
+      "bytes": 2924
+    },
+    {
+      "path": "work-packages/IB0-WP01/prompts/02_INDEPENDENT_QA.md",
+      "sha256": "c188e3dc9e4f9f779b376d649375062ccf53b1e833f4eff36aa95440f02cb960",
+      "bytes": 1265
+    },
+    {
+      "path": "work-packages/IB0-WP01/prompts/03_DEFECT_REPAIR.md",
+      "sha256": "56b7bdc154359ce442e291eadf7aa13868cb5470d147f8643c1775640e15ade0",
+      "bytes": 813
+    },
+    {
+      "path": "work-packages/IB0-WP01/prompts/04_ACCEPTANCE_SUMMARY.md",
+      "sha256": "ecfb491b0482d5f63f48d907c4dbdec74ccb44ad1e9949cde21ce847ea2a4ab1",
+      "bytes": 687
+    },
+    {
+      "path": "work-packages/IB0-WP01/work-package.json",
+      "sha256": "4043b852b8fba7f5e1bb3a1ad8107dc54869afb854aeca7c545dcbffb4a9a625",
+      "bytes": 987
+    }
+  ]
+}

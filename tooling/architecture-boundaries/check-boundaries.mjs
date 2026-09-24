@@ -306,51 +306,61 @@ export function checkBoundaries(root = process.cwd()) {
   let importsScanned = 0;
   const referenceDirectives = new Map();
   const existsAny = (t) => ['', '.ts', '.d.ts', '.tsx', '.mts', '.cts', '.js', '.mjs', '.cjs', '/index.ts'].some((x) => fs.existsSync(`${t}${x}`));
-  // Maps a package.json "imports" subpath (#name, or a #prefix/* pattern) of the importing
-  // project to its target: a workspace path for "./" targets, otherwise the bare module name,
+  // Maps a package.json "imports" subpath (#name, or a #prefix/* pattern chosen by Node's
+  // longest-prefix rule) of the importing project to every target any condition could
+  // select: an absolute workspace path for "./" targets, otherwise the bare module name,
   // which is then checked like any other import.
-  const subpathTarget = (project, spec) => {
+  const subpathTargets = (project, spec) => {
     const m = `${project.root}/package.json`;
-    if (!exists(m)) return null;
+    if (!exists(m)) return [];
     const map = readJson(m).imports || {};
-    let t = map[spec];
+    let t = Object.hasOwn(map, spec) ? map[spec] : undefined;
+    let hole = null;
     if (t === undefined) {
-      for (const [k, v] of Object.entries(map)) {
+      const matches = Object.keys(map).filter((k) => {
         const star = k.indexOf('*');
-        if (star < 0 || k.indexOf('*', star + 1) >= 0) continue;
+        if (star < 0 || k.indexOf('*', star + 1) >= 0) return false;
         const pre = k.slice(0, star);
         const post = k.slice(star + 1);
-        if (spec.startsWith(pre) && spec.endsWith(post) && spec.length >= pre.length + post.length) {
-          const hole = spec.slice(pre.length, spec.length - post.length);
-          const sub = (x) => (typeof x === 'string' ? x.split('*').join(hole) : x && typeof x === 'object' ? Object.fromEntries(Object.entries(x).map(([kk, vv]) => [kk, sub(vv)])) : x);
-          t = sub(v);
-          break;
-        }
+        return spec.startsWith(pre) && spec.endsWith(post) && spec.length >= pre.length + post.length;
+      }).sort((x, y) => y.indexOf('*') - x.indexOf('*') || y.length - x.length);
+      if (matches.length) {
+        const k = matches[0];
+        t = map[k];
+        hole = spec.slice(k.indexOf('*'), spec.length - (k.length - k.indexOf('*') - 1));
       }
     }
-    while (t && typeof t === 'object') t = t.default ?? t.import ?? t.types ?? Object.values(t)[0];
-    if (typeof t !== 'string') return null;
-    return t.startsWith('./') || t.startsWith('../') ? { path: path.resolve(abs(project.root), t) } : { bare: t };
+    const out = [];
+    const collect = (x) => {
+      if (typeof x === 'string') {
+        const v = hole === null ? x : x.split('*').join(hole);
+        out.push(v.startsWith('./') || v.startsWith('../') ? path.resolve(abs(project.root), v) : v);
+      } else if (Array.isArray(x)) x.forEach(collect);
+      else if (x && typeof x === 'object') Object.values(x).forEach(collect);
+    };
+    collect(t);
+    return out;
   };
   for (const { project, file } of sourceFiles) {
     const { specs, lib } = specifiersOf(file);
     if (lib.length) referenceDirectives.set(file, { project, lib });
+    // A #subpath is checked once per target any of its conditions could select.
+    const expanded = [];
     for (const found of specs) {
+      if (!found.spec.startsWith('#')) { expanded.push(found); continue; }
+      const targets = subpathTargets(project, found.spec);
+      if (!targets.length) { flag('OUTSIDE_PROJECT', `${project.name} imports "${found.spec}", which its package.json imports map does not resolve`, file); continue; }
+      for (const t of targets) expanded.push({ ...found, spec: t, via: found.spec });
+    }
+    for (const found of expanded) {
       const { kind, reexport } = found;
-      let { spec } = found;
+      const spec = found.spec;
       importsScanned += 1;
-      const where = file;
-      let subpath = null;
-      if (spec.startsWith('#')) {
-        subpath = subpathTarget(project, spec);
-        if (!subpath) { flag('OUTSIDE_PROJECT', `${project.name} imports "${spec}", which its package.json imports map does not resolve`, where); continue; }
-        if (subpath.bare) spec = subpath.bare;
-      }
+      const where = found.via ? `${file} (via ${found.via})` : file;
       const isRelative = spec.startsWith('./') || spec.startsWith('../') || spec === '.' || spec === '..' || path.isAbsolute(spec);
       const isRooted = /^(apps|packages|tooling|config|docs|evidence)\//.test(spec) && existsAny(abs(spec));
-      const isSubpath = Boolean(subpath?.path);
-      if (isRelative || isRooted || isSubpath) {
-        const target = isSubpath ? subpath.path : isRooted ? abs(spec) : path.resolve(path.dirname(abs(file)), spec);
+      if (isRelative || isRooted) {
+        const target = isRooted ? abs(spec) : path.resolve(path.dirname(abs(file)), spec);
         const owner = ownerOf(target);
         if (owner === project) continue;
         if (!owner) { flag('OUTSIDE_PROJECT', `${project.name} imports "${spec}", outside every project`, where); continue; }

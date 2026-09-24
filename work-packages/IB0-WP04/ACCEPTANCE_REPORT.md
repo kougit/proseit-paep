@@ -44,7 +44,7 @@ AC01–AC29: **29/29 PASS** (per-criterion evidence in `evidence/IB0-WP04/report
 
 ## Defects
 
-D1 (medium, closed): checker gaps from independent QA round 1 (M1–M3, L2, L3 augmentation and `require.resolve`, L4 relative `imports` targets, L5, L6, L8), fixed in `3ec81fc`; criteria strengthened, none relaxed. D2 (medium, closed): §6.1/Appendix B conflict now reported for PO/SA decision (exception (iii)). D3 (low, closed): evidence-index and status-vocabulary fixes (L7, R2-L4). D4 (low, closed): `package.json` `imports` bare-name bypass and pattern false positive (R2-L1, R2-L2), fixed in `499ae29`. Details: `evidence/IB0-WP04/reports/technical-verification.md`.
+D1 (medium, closed): checker gaps from independent QA round 1 (M1–M3, L2, L3 augmentation and `require.resolve`, L4 relative `imports` targets, L5, L6, L8), fixed in `3ec81fc`; criteria strengthened, none relaxed. D2 (medium, closed): §6.1/Appendix B conflict now reported for PO/SA decision (exception (iii)). D3 (low, closed): evidence-index and status-vocabulary fixes (L7, R2-L4). D4 (low, closed): `package.json` `imports` bare-name bypass and pattern false positive (R2-L1, R2-L2), fixed in `499ae29`. D5 (low, closed): conditional `imports` branches and longest-prefix patterns (R3-L1), fixed after `7fa2462`, N40–N42. Details: `evidence/IB0-WP04/reports/technical-verification.md`.
 
 ## Exceptions (pending PO/SA decision)
 

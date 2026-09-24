@@ -15,7 +15,9 @@ Evidence for IB0-WP04 (project graph, package boundaries and dependency enforcem
 | `reports/negative-tests.json` | Negative runner output, 44/44 |
 | `reports/technical-verification.md` | All gates, negative cases and per-criterion result |
 | `reports/independent-qa-round1.md` | Independent QA round 1 (commit `1c16f80`): FAIL, 4 Medium findings, all closed |
-| `reports/independent-qa.md` | Independent QA summary and round 2 |
+| `reports/independent-qa-round2.md` | Independent QA round 2 (commit `7a8f4e9`): PASS |
+| `reports/independent-qa-round3.md` | Independent QA round 3 (commit `7fa2462`): PASS, one Low finding closed afterwards |
+| `reports/independent-qa.md` | Independent QA summary of all rounds |
 | `reports/acceptance-readiness.md` | Readiness for PO/SA authorisation |
 
 ## Logs
@@ -37,4 +39,4 @@ Evidence for IB0-WP04 (project graph, package boundaries and dependency enforcem
 | `logs/post-run-git-status.log` | No tracked change outside `evidence/IB0-WP04/`; earlier WP records unchanged | Confirmed |
 | `logs/controlled-source-integrity.log` | PACK_MANIFEST SHA-256 check and diff | 13/13 |
 | `logs/scope-and-secret-scan.log` | Changed files, out-of-scope files, Nx, apps/packages diff, entry points, secrets | 0 violations |
-| `logs/independent-qa-round1/`, `logs/independent-qa-round2/` | Independent QA raw logs and scripts | See `reports/independent-qa.md` |
+| `logs/independent-qa-round1/`, `logs/independent-qa-round2/`, `logs/independent-qa-round3/` | Independent QA raw logs and scripts | See `reports/independent-qa.md` |

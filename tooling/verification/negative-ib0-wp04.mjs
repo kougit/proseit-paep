@@ -182,6 +182,11 @@ try {
     ['packages/components/package.json', (t) => { const p = JSON.parse(t); p.imports = { '#ent': '@proseit/paep-enterprise' }; return JSON.stringify(p, null, 2) + '\n'; }],
     [entry('components'), append("import '#ent';")]
   ], 'DIRECTION');
+  const importsMap = (map) => ['packages/components/package.json', (t) => { const p = JSON.parse(t); p.imports = map; return JSON.stringify(p, null, 2) + '\n'; }];
+  const LOCAL_X = ['packages/components/src/lib/x.ts', () => 'export const wp04X = 1;\n'];
+  checkerCase('N40', 'imports condition "import" -> forbidden package, "default" -> local file', [importsMap({ '#ent': { import: '@proseit/paep-enterprise', default: './src/lib/x.ts' } }), LOCAL_X, [entry('components'), append("import '#ent';")]], 'DIRECTION');
+  checkerCase('N41', 'imports condition "browser" -> forbidden package, "default" -> local file', [importsMap({ '#ent': { browser: '@proseit/paep-enterprise', default: './src/lib/x.ts' } }), LOCAL_X, [entry('components'), append("import '#ent';")]], 'DIRECTION');
+  checkerCase('N42', 'longer imports pattern (#a/b/*) -> forbidden package wins over #a/*', [importsMap({ '#a/*': './src/lib/*.ts', '#a/b/*': '@proseit/paep-enterprise' }), [entry('components'), append("import '#a/b/x';")]], 'DIRECTION');
   checkerCase('C4', 'control: package.json imports pattern inside the same package (#lib/* -> ./src/lib/*.ts) passes', [
     ['packages/components/package.json', (t) => { const p = JSON.parse(t); p.imports = { '#lib/*': './src/lib/*.ts' }; return JSON.stringify(p, null, 2) + '\n'; }],
     ['packages/components/src/lib/x.ts', () => 'export const wp04X = 1;\n'],

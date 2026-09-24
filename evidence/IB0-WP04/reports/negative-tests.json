@@ -1,11 +1,11 @@
 {
   "workPackage": "IB0-WP04",
-  "generatedAt": "2026-09-24T11:03:50.831Z",
-  "commit": "be181cfe896c1d1f04026021390aecd502cd4953",
+  "generatedAt": "2026-09-24T11:35:55.183Z",
+  "commit": "dcda855da85ee2ad408aff973b9dd8aa671eac7b",
   "node": "24.21.0",
   "result": "PASS",
   "controls": 5,
-  "negatives": 42,
+  "negatives": 44,
   "cases": [
     {
       "id": "C0",
@@ -484,6 +484,28 @@
       "exit": 1,
       "rules": [
         "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N43",
+      "name": "nested package.json below a package root remaps #z to a forbidden package",
+      "tool": "arch:check",
+      "expected": "exit 1, CLASSIFICATION",
+      "exit": 1,
+      "rules": [
+        "CLASSIFICATION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N44",
+      "name": "imports target that is another #subpath (#x -> #y -> forbidden package)",
+      "tool": "arch:check",
+      "expected": "exit 1, OUTSIDE_PROJECT",
+      "exit": 1,
+      "rules": [
+        "OUTSIDE_PROJECT"
       ],
       "pass": true
     },

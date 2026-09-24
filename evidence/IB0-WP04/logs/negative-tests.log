@@ -1,4 +1,4 @@
-# date: 2026-09-24T11:03:08Z node: v24.21.0 npm: 11.19.0 commit: be181cfe896c1d1f04026021390aecd502cd4953
+# date: 2026-09-24T11:35:07Z node: v24.21.0 npm: 11.19.0 commit: dcda855da85ee2ad408aff973b9dd8aa671eac7b
 $ npm run qa:ib0-wp04:negative
 
 > @proseit/paep-workspace@0.0.0 qa:ib0-wp04:negative
@@ -48,9 +48,11 @@ PASS N39 package.json imports alias to a bare package name (#ent -> @proseit/pae
 PASS N40 imports condition "import" -> forbidden package, "default" -> local file — exit 1; rules: DIRECTION
 PASS N41 imports condition "browser" -> forbidden package, "default" -> local file — exit 1; rules: DIRECTION
 PASS N42 longer imports pattern (#a/b/*) -> forbidden package wins over #a/* — exit 1; rules: DIRECTION
+PASS N43 nested package.json below a package root remaps #z to a forbidden package — exit 1; rules: CLASSIFICATION
+PASS N44 imports target that is another #subpath (#x -> #y -> forbidden package) — exit 1; rules: OUTSIDE_PROJECT
 PASS C4 control: package.json imports pattern inside the same package (#lib/* -> ./src/lib/*.ts) passes — exit 0; rules: none
 PASS N28 nx added to devDependencies — exit 1; failed checks: V15, V16
 PASS N29 nx.json created — exit 1; failed checks: V15, V17
 
-IB0-WP04 negative tests: PASS (47/47)
+IB0-WP04 negative tests: PASS (49/49)
 EXIT_CODE=0

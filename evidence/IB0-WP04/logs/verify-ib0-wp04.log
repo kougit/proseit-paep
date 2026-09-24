@@ -1,4 +1,4 @@
-# date: 2026-09-24T12:31:17Z node: v24.21.0 npm: 11.19.0 commit: 26def758ea0052f05360172f38a52b2b484b0c41
+# date: 2026-09-24T12:37:59Z node: v24.21.0 npm: 11.19.0 commit: d2f142c90c6cdbcc03164c76f93660acfe43c1ce
 $ npm run qa:ib0-wp04
 
 > @proseit/paep-workspace@0.0.0 qa:ib0-wp04
@@ -20,9 +20,9 @@ PASS V13 analytics re-exports no external module; no app file copies package sou
 PASS V14 npm run arch:check exits 0 — exit=0; PAEP architecture check: PASS — 20 projects, 0 edges (0 optional), 0 cycles, 18 imports in 26 files, 0 violations
 PASS V15 No Nx: no nx/@nx/@nrwl dependency, lockfile entry or install, and no nx.json or project.json — none; Nx disposition: NOT REQUIRED FOR IB0-WP04
 PASS V16 package-lock.json is byte-identical to the baseline and package.json differs only by the four WP04 scripts (arch:check and its EQP Appendix B name qa:architecture) — lockfile sha256 be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69
-PASS V17 No WP05/IB1+ or Nx/lint artefacts, apps/packages/angular.json unchanged, and every changed path is within WORK_PACKAGE §4 — 170 changed paths, all permitted
+PASS V17 No WP05/IB1+ or Nx/lint artefacts, apps/packages/angular.json unchanged, and every changed path is within WORK_PACKAGE §4 — 177 changed paths, all permitted
 PASS V18 Controlled sources match PACK_MANIFEST.json; .paep-control, .gitignore, PACK_MANIFEST.json and CLAUDE.md unchanged — 13/13 files match sha256 and size
-PASS V19 No credential or secret signatures in files added or modified since the baseline — 170 files scanned; findings: none
+PASS V19 No credential or secret signatures in files added or modified since the baseline — 177 files scanned; findings: none
 PASS V20 build:reference-app production build passes — exit=0
 PASS V21 build:ui-lab production build passes — exit=0
 PASS V22 IB0-WP03 regression: every WP03 check passes except the bounded V05/V08/V10/V12/V17, each reporting only WP04-authorised change; WP03 records unchanged — WP03 13/18 pass; bounded: V05, V08, V10, V12, V17 (exit 1); restored: evidence/IB0-WP03/logs/ib0-wp01-verification.regression.json, evidence/IB0-WP03/logs/ib0-wp02-verification.regression.json, evidence/IB0-WP03/logs/verify-ib0-wp02-regression.log, evidence/IB0-WP03/reports/ib0-wp03-verification.json

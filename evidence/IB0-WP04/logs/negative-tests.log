@@ -1,4 +1,4 @@
-# date: 2026-09-24T12:31:49Z node: v24.21.0 npm: 11.19.0 commit: 26def758ea0052f05360172f38a52b2b484b0c41
+# date: 2026-09-24T12:38:25Z node: v24.21.0 npm: 11.19.0 commit: d2f142c90c6cdbcc03164c76f93660acfe43c1ce
 $ npm run qa:ib0-wp04:negative
 
 > @proseit/paep-workspace@0.0.0 qa:ib0-wp04:negative
@@ -60,6 +60,8 @@ PASS N49 allowlisted same-category pair in both directions forms a cycle — exi
 PASS N50 allowlist entry crossing categories (components -> enterprise) — exit 1; rules: MODEL
 PASS N53 workspace package aliased in a manifest ("i18n-x": "file:../i18n") and imported by that name — exit 1; rules: UNKNOWN_PACKAGE
 PASS N54 bare import linked by node_modules to a workspace package (frappe-sdk -> i18n via "i18n-x") — exit 1; rules: DIRECTION, UNKNOWN_PACKAGE
+PASS N55 bare import linked by node_modules to a folder outside every project (tooling/) that re-exports i18n — exit 1; rules: OUTSIDE_PROJECT
+PASS N56 manifest dependency given as a plain path ("i18n-x": "../i18n") — exit 1; rules: UNKNOWN_PACKAGE
 PASS N52 allowlist entry linking two applications (reference-app -> ui-lab) — exit 1; rules: MODEL
 PASS N51 allowlist entry without a rationale — exit 1; rules: MODEL
 PASS O1 control: Optional edge platform -> observability alone is permitted — exit 0; rules: none
@@ -89,5 +91,5 @@ PASS S9 // @ts-nocheck added to a package entry point — exit 1; failed checks:
 PASS N28 nx added to devDependencies — exit 1; failed checks: V15, V16
 PASS N29 nx.json created — exit 1; failed checks: V15, V17
 
-IB0-WP04 negative tests: PASS (84/84)
+IB0-WP04 negative tests: PASS (86/86)
 EXIT_CODE=0

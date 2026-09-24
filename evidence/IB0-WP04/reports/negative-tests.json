@@ -1,11 +1,11 @@
 {
   "workPackage": "IB0-WP04",
-  "generatedAt": "2026-09-24T12:33:21.452Z",
-  "commit": "26def758ea0052f05360172f38a52b2b484b0c41",
+  "generatedAt": "2026-09-24T12:40:00.022Z",
+  "commit": "d2f142c90c6cdbcc03164c76f93660acfe43c1ce",
   "node": "24.21.0",
   "result": "PASS",
   "controls": 16,
-  "negatives": 68,
+  "negatives": 70,
   "cases": [
     {
       "id": "C0",
@@ -613,6 +613,28 @@
       "exit": 1,
       "rules": [
         "DIRECTION",
+        "UNKNOWN_PACKAGE"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N55",
+      "name": "bare import linked by node_modules to a folder outside every project (tooling/) that re-exports i18n",
+      "tool": "arch:check",
+      "expected": "exit 1, OUTSIDE_PROJECT",
+      "exit": 1,
+      "rules": [
+        "OUTSIDE_PROJECT"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N56",
+      "name": "manifest dependency given as a plain path (\"i18n-x\": \"../i18n\")",
+      "tool": "arch:check",
+      "expected": "exit 1, UNKNOWN_PACKAGE",
+      "exit": 1,
+      "rules": [
         "UNKNOWN_PACKAGE"
       ],
       "pass": true

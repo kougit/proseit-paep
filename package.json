@@ -27,6 +27,7 @@
     "qa:ib0-wp03": "node tooling/verification/verify-ib0-wp03.mjs",
     "qa:ib0-wp03:negative": "node tooling/verification/negative-ib0-wp03.mjs",
     "arch:check": "node tooling/architecture-boundaries/check-boundaries.mjs",
+    "qa:architecture": "node tooling/architecture-boundaries/check-boundaries.mjs",
     "qa:ib0-wp04": "node tooling/verification/verify-ib0-wp04.mjs",
     "qa:ib0-wp04:negative": "node tooling/verification/negative-ib0-wp04.mjs"
   },

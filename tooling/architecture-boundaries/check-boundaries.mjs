@@ -11,7 +11,9 @@
  *                           or has a nested package.json or a symbolic link below its root
  *   ALIAS                   the alias registry or tsconfig inheritance is inconsistent
  *   ENTRY_POINT             a package has no public entry point
- *   DIRECTION               an edge is not allowed by the matrix (upward, lateral or "No")
+ *   DIRECTION               an edge is not allowed by the matrix (upward, "No", or a same-category
+ *                           edge that the sameCategoryAllowlist does not name), including a same-category
+ *                           pair reached only transitively
  *   CYCLE                   packages depend on each other circularly
  *   DEEP_IMPORT             an import names a path below a package (@proseit/<pkg>/<path>)
  *   UNKNOWN_PACKAGE         an import names an @proseit/* module that is not a workspace package
@@ -418,15 +420,54 @@ export function checkBoundaries(root = process.cwd()) {
   }
 
   // ---- Direction ------------------------------------------------------------------
+  // Same-category edges (domain -> domain, app -> app, ...) are allowed only when the model's
+  // sameCategoryAllowlist names the exact pair (PO/SA decision, IB0-WP04 Decision 2); an
+  // unlisted pair fails closed.
+  const allowlist = new Set();
+  const allowEntries = model.sameCategoryAllowlist?.edges;
+  if (!Array.isArray(allowEntries)) flag('MODEL', 'sameCategoryAllowlist.edges is missing or not an array');
+  for (const a of Array.isArray(allowEntries) ? allowEntries : []) {
+    const from = byName.get(a?.source);
+    const to = byName.get(a?.target);
+    const key = `${a?.source}\u0000${a?.target}`;
+    if (!from || !to) flag('MODEL', `sameCategoryAllowlist entry ${a?.source} -> ${a?.target} names an unknown project`);
+    else if (from === to) flag('MODEL', `sameCategoryAllowlist entry ${a.source} -> ${a.target} is a self edge`);
+    else if (from.category !== to.category) flag('MODEL', `sameCategoryAllowlist entry ${a.source} -> ${a.target} crosses categories (${from.category} -> ${to.category}); the matrix governs those`);
+    else if (typeof a.rationale !== 'string' || !a.rationale.trim() || typeof a.approval !== 'string' || !a.approval.trim()) flag('MODEL', `sameCategoryAllowlist entry ${a.source} -> ${a.target} needs a rationale and an approval reference`);
+    else if (allowlist.has(key)) flag('MODEL', `sameCategoryAllowlist entry ${a.source} -> ${a.target} is duplicated`);
+    else allowlist.add(key);
+  }
   const edgeList = [...edges.values()].map((e) => {
     const from = byName.get(e.source);
     const to = byName.get(e.target);
     const verdict = cell(from.category, to.category) ?? 'unknown';
     const sameCategory = from.category === to.category;
-    const allowed = !sameCategory && ALLOWED_CELLS.has(verdict);
-    return { source: e.source, target: e.target, sourceCategory: from.category, targetCategory: to.category, matrix: sameCategory ? '- (same category)' : verdict, allowed, needsJustification: allowed && verdict === 'Optional', kinds: [...e.kinds].sort(), files: [...e.files].sort() };
+    const listed = sameCategory && allowlist.has(`${e.source}\u0000${e.target}`);
+    const allowed = sameCategory ? listed : ALLOWED_CELLS.has(verdict);
+    return { source: e.source, target: e.target, sourceCategory: from.category, targetCategory: to.category, matrix: sameCategory ? (listed ? 'same category, allowlisted' : '- (same category, not allowlisted)') : verdict, allowed, needsJustification: allowed && verdict === 'Optional', kinds: [...e.kinds].sort(), files: [...e.files].sort() };
   }).sort((a, b) => a.source.localeCompare(b.source) || a.target.localeCompare(b.target));
   for (const e of edgeList) if (!e.allowed) flag('DIRECTION', `${e.source} (${e.sourceCategory}) -> ${e.target} (${e.targetCategory}) is not allowed (Appendix B: ${e.matrix})`, e.files.join(', '));
+  // A chain of edges must not let a project reach another project of its own category that
+  // the allowlist does not name (for example domain-a -> domain-b -> domain-c with only the
+  // two direct pairs listed).
+  const out = new Map(projects.map((p) => [p.name, edgeList.filter((e) => e.source === p.name).map((e) => e.target)]));
+  const transitive = [];
+  for (const p of projects) {
+    const seen = new Set();
+    const queue = [...(out.get(p.name) || [])];
+    while (queue.length) {
+      const n = queue.shift();
+      if (seen.has(n)) continue;
+      seen.add(n);
+      queue.push(...(out.get(n) || []));
+    }
+    for (const n of seen) {
+      const t = byName.get(n);
+      if (n === p.name || t.category !== p.category || edges.has(`${p.name}\u0000${n}`)) continue;
+      if (!allowlist.has(`${p.name}\u0000${n}`)) transitive.push({ source: p.name, target: n, category: p.category });
+    }
+  }
+  for (const t of transitive) flag('DIRECTION', `${t.source} reaches ${t.target} (both ${t.category}) transitively, and the sameCategoryAllowlist does not name the pair`);
 
   // ---- Cycles (Tarjan strongly connected components) -------------------------------
   const adj = new Map(projects.map((p) => [p.name, []]));
@@ -504,6 +545,7 @@ export function checkBoundaries(root = process.cwd()) {
     nodes: Object.fromEntries(projects.map((p) => [p.name, { name: p.name, type: p.category === 'app' ? 'app' : 'lib', data: { root: p.root, projectType: p.projectType, category: p.category, layer: categories[p.category]?.layer ?? null, tags: p.tags } }])),
     dependencies: Object.fromEntries(projects.map((p) => [p.name, edgeList.filter((e) => e.source === p.name).map((e) => ({ source: e.source, target: e.target, type: nxType(e.kinds) }))])),
     edges: edgeList,
+    sameCategoryAllowlist: [...allowlist].map((k) => { const [source, target] = k.split('\u0000'); return { source, target }; }),
     depConstraints: catIds.map((id) => ({ sourceTag: `type:${id}`, onlyDependOnLibsWithTags: columns.filter((to) => to !== id && ALLOWED_CELLS.has(cell(id, to))).map((to) => `type:${to}`) }))
   };
   const counts = {};

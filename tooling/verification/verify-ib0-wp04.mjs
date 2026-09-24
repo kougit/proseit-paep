@@ -44,6 +44,8 @@ const STRICT_FAMILY = ['strict', 'noImplicitAny', 'strictNullChecks', 'strictFun
   'strictPropertyInitialization', 'strictBuiltinIteratorReturn', 'noImplicitThis', 'useUnknownInCatchVariables', 'alwaysStrict'];
 const WP04_SCRIPTS = {
   'arch:check': 'node tooling/architecture-boundaries/check-boundaries.mjs',
+  // PAEP-EQP-01 Appendix B command name for the same architecture gate (PO/SA decision 1).
+  'qa:architecture': 'node tooling/architecture-boundaries/check-boundaries.mjs',
   'qa:ib0-wp04': 'node tooling/verification/verify-ib0-wp04.mjs',
   'qa:ib0-wp04:negative': 'node tooling/verification/negative-ib0-wp04.mjs'
 };
@@ -165,7 +167,15 @@ try {
     effective.push(`${name}: strict=${o.strict} noImplicitAny=${o.noImplicitAny} strictTemplates=${o.strictTemplates} paths=${Object.keys(o.paths || {}).length}`);
   }
 } catch (e) { strictProblems.push(`cannot resolve effective options: ${e.message}`); }
-add('V05', 'WP03 strict controls preserved: literal in tsconfig.json, all other options equal the baseline, app tsconfigs unchanged, effective options strict for both apps',
+// The WP03 no-suppression control (WP03 V07) holds too: no directive in apps/packages source
+// may switch type checking off for a file or a line.
+{
+  const suppression = /@ts-(ignore|nocheck|expect-error)\b|\$any\s*\(/i;
+  const walkSrc = (d, out = []) => { for (const e of fs.readdirSync(abs(d), { withFileTypes: true })) { const p = `${d}/${e.name}`; if (e.name === 'node_modules' || e.isSymbolicLink()) continue; if (e.isDirectory()) walkSrc(p, out); else if (/\.(ts|tsx|mts|cts|js|mjs|cjs|html)$/.test(e.name)) out.push(p); } return out; };
+  const suppressed = [...walkSrc('apps'), ...walkSrc('packages')].filter((f) => suppression.test(read(f)));
+  if (suppressed.length) strictProblems.push(`compiler-suppression directives in ${suppressed.join(', ')}`);
+}
+add('V05', 'WP03 strict controls preserved: literal in tsconfig.json, all other options equal the baseline, app tsconfigs unchanged, effective options strict for both apps, no suppression directives in source',
   strictProblems.length === 0 && effective.length === 2, strictProblems.length ? strictProblems.join('; ') : effective.join('; '));
 
 // V06: alias consistency and resolution (AC07)
@@ -224,9 +234,9 @@ try {
   const { scripts: s1 = {}, ...rest1 } = pkg;
   const { scripts: s0 = {}, ...rest0 } = basePkg;
   if (JSON.stringify(rest1) !== JSON.stringify(rest0)) lockProblems.push('package.json fields other than scripts changed');
-  if (JSON.stringify(s1) !== JSON.stringify({ ...s0, ...WP04_SCRIPTS })) lockProblems.push('package.json scripts differ from baseline + the three WP04 scripts');
+  if (JSON.stringify(s1) !== JSON.stringify({ ...s0, ...WP04_SCRIPTS })) lockProblems.push('package.json scripts differ from baseline + the four WP04 scripts');
 } catch (e) { lockProblems.push(String(e)); }
-add('V16', 'package-lock.json is byte-identical to the baseline and package.json differs only by the three WP04 scripts',
+add('V16', 'package-lock.json is byte-identical to the baseline and package.json differs only by the four WP04 scripts (arch:check and its EQP Appendix B name qa:architecture)',
   lockProblems.length === 0, lockProblems.length ? lockProblems.join('; ') : `lockfile sha256 ${sha256('package-lock.json')}`);
 
 // V17: scope (AC26)

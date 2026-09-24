@@ -81,6 +81,8 @@ const append = (line) => (t) => `${t}${line}\n`;
 const entry = (dir) => `packages/${dir}/src/index.ts`;
 const MODEL = 'tooling/architecture-boundaries/architecture-model.json';
 const APP_TS = 'apps/reference-app/src/app/app.ts';
+const APP_HTML = 'apps/reference-app/src/app/app.html';
+const APP_TSCONFIG = 'apps/reference-app/tsconfig.app.json';
 const COPIED = `// Shared helper body used only to prove that apps may not copy package source (IB0-WP04 negative test).\nexport function wp04SharedFormatter(value: number): string {\n  const rounded = Math.round(value * 100) / 100;\n  return rounded.toFixed(2).padStart(12, ' ');\n}\n`;
 
 const results = [];
@@ -114,13 +116,17 @@ function verifierCase(id, name, edits, expectedCheck) {
   log.push(`## ${id} ${name}\nexpected: ${expected}\n${r.out.split(/\r?\n/).filter((l) => /^FAIL|verification/.test(l)).join('\n')}\nEXIT_CODE=${r.status}\nRESULT=${pass ? 'PASS' : 'FAIL'}\n`);
 }
 
-function buildCase(id, name, edits) {
+// A build case passes when the production build exits 0, or, when `codes` is given, when it
+// fails and reports every one of those TypeScript diagnostic codes.
+function buildCase(id, name, edits, codes = null) {
   const restore = mutate(edits);
   const r = build();
   restore();
-  const pass = r.status === 0;
-  results.push({ id, name, tool: 'ng build reference-app --configuration production', expected: 'exit 0', exit: r.status, pass });
-  log.push(`## ${id} ${name}\nexpected: exit 0\n${r.out.split(/\r?\n/).filter((l) => /ERROR|TS\d{4}|Output location|Application bundle generation/.test(l)).join('\n')}\nEXIT_CODE=${r.status}\nRESULT=${pass ? 'PASS' : 'FAIL'}\n`);
+  const found = (codes || []).filter((c) => r.out.includes(c));
+  const pass = codes ? r.status !== 0 && found.length === codes.length : r.status === 0;
+  const expected = codes ? `non-zero exit with ${codes.join(', ')}` : 'exit 0';
+  results.push({ id, name, tool: 'ng build reference-app --configuration production', expected, exit: r.status, codesFound: found, pass });
+  log.push(`## ${id} ${name}\nexpected: ${expected}\n${r.out.split(/\r?\n/).filter((l) => /ERROR|TS\d{4}|Output location|Application bundle generation/.test(l)).join('\n')}\nEXIT_CODE=${r.status}\nRESULT=${pass ? 'PASS' : 'FAIL'}\n`);
 }
 
 const ALLOWED_EDGES = [
@@ -204,6 +210,34 @@ try {
     ['packages/components/src/lib/x.ts', () => 'export const wp04X = 1;\n'],
     [entry('components'), append("import '#lib/x';")]
   ], null, { edges: 0, optional: 0 });
+
+  // Same-category policy (PO/SA decision 2): only allowlisted pairs, never by category alone.
+  const allow = (...edges) => [MODEL, (t) => { const m = JSON.parse(t); m.sameCategoryAllowlist.edges = edges; return JSON.stringify(m, null, 2) + '\n'; }];
+  const pair = (a, b, extra = {}) => ({ source: `@proseit/paep-${a}`, target: `@proseit/paep-${b}`, rationale: 'IB0-WP04 negative test', approval: 'test only', ...extra });
+  checkerCase('C5', 'control: allowlisted same-category edge domain-quality -> domain-fiscal passes', [allow(pair('domain-quality', 'domain-fiscal')), [entry('domain-quality'), append("import '@proseit/paep-domain-fiscal';")]], null, { edges: 1, optional: 0 });
+  checkerCase('N46', 'same-category edge not on the allowlist (another domain pair is listed)', [allow(pair('domain-quality', 'domain-fiscal')), [entry('domain-iot'), append("import '@proseit/paep-domain-fiscal';")]], 'DIRECTION');
+  checkerCase('N47', 'transitive same-category chain: domain-quality -> domain-fiscal -> domain-iot, only the direct pairs listed', [allow(pair('domain-quality', 'domain-fiscal'), pair('domain-fiscal', 'domain-iot')), [entry('domain-quality'), append("import '@proseit/paep-domain-fiscal';")], [entry('domain-fiscal'), append("import '@proseit/paep-domain-iot';")]], 'DIRECTION');
+  checkerCase('N48', 'allowlisted same-category edge by deep import', [allow(pair('domain-quality', 'domain-fiscal')), [entry('domain-quality'), append("import '@proseit/paep-domain-fiscal/src/index';")]], 'DEEP_IMPORT');
+  checkerCase('N49', 'allowlisted same-category pair in both directions forms a cycle', [allow(pair('domain-quality', 'domain-fiscal'), pair('domain-fiscal', 'domain-quality')), [entry('domain-quality'), append("import '@proseit/paep-domain-fiscal';")], [entry('domain-fiscal'), append("import '@proseit/paep-domain-quality';")]], 'CYCLE');
+  checkerCase('N50', 'allowlist entry crossing categories (components -> enterprise)', [allow(pair('components', 'enterprise'))], 'MODEL');
+  checkerCase('N51', 'allowlist entry without a rationale', [allow(pair('domain-quality', 'domain-fiscal', { rationale: '' }))], 'MODEL');
+
+  // WP03 strictness still holds under the WP04 hierarchy (PO/SA decision 3), proven by builds.
+  const TS_VIOLATION = (t) => `${t}\nexport function wp04NegativeTs(value) { const s: string = null; return s + value; }\n`;
+  const TEMPLATE_METHOD = (t) => t.replace(/\n}\s*$/, '\n  protected wp04Take(value: number): number { return value; }\n}\n');
+  const TEMPLATE_VIOLATION = (t) => t.replace('</main>', '  <button type="button" (click)="wp04Take($event)">x</button>\n</main>');
+  buildCase('S1', 'TypeScript strict violation (implicit any, null to string) fails the reference-app build', [[APP_TS, TS_VIOLATION]], ['TS7006', 'TS2322']);
+  buildCase('S1c', 'control: the same violation builds once strict and noImplicitAny are false', [[APP_TS, TS_VIOLATION], ['tsconfig.json', json((o) => { o.compilerOptions.strict = false; o.compilerOptions.noImplicitAny = false; })]]);
+  buildCase('S2', 'Angular template strict violation ($event passed as number) fails the reference-app build', [[APP_TS, TEMPLATE_METHOD], [APP_HTML, TEMPLATE_VIOLATION]], ['TS2345']);
+  buildCase('S2c', 'control: the same template builds once strictTemplates is false', [[APP_TS, TEMPLATE_METHOD], [APP_HTML, TEMPLATE_VIOLATION], ['tsconfig.json', json((o) => { o.angularCompilerOptions.strictTemplates = false; })]]);
+  // ...and by the verifier, which rejects every way of switching it off.
+  verifierCase('S3', '"strict" removed from tsconfig.json', [['tsconfig.json', json((o) => { delete o.compilerOptions.strict; })]], 'V05');
+  verifierCase('S4', '"noImplicitAny" set to false in tsconfig.json', [['tsconfig.json', json((o) => { o.compilerOptions.noImplicitAny = false; })]], 'V05');
+  verifierCase('S5', '"strictTemplates" set to false in tsconfig.json', [['tsconfig.json', json((o) => { o.angularCompilerOptions.strictTemplates = false; })]], 'V05');
+  verifierCase('S6', 'type checking switched off ("noCheck": true) in tsconfig.json', [['tsconfig.json', json((o) => { o.compilerOptions.noCheck = true; })]], 'V05');
+  verifierCase('S7', 'strictness weakened through inheritance ("strict": false, "noCheck": true in tsconfig.base.json)', [['tsconfig.base.json', json((o) => { o.compilerOptions.strict = false; o.compilerOptions.noCheck = true; })]], 'V04');
+  verifierCase('S8', 'app tsconfig sets strictNullChecks false', [[APP_TSCONFIG, json((o) => { o.compilerOptions.strictNullChecks = false; })]], 'V05');
+  verifierCase('S9', '// @ts-nocheck added to a package entry point', [[entry('contracts'), (t) => `// @ts-nocheck\n${t}`]], 'V05');
 
   // No Nx (AC17).
   verifierCase('N28', 'nx added to devDependencies', [['package.json', (t) => { const p = JSON.parse(t); p.devDependencies.nx = '22.0.0'; return JSON.stringify(p, null, 2) + '\n'; }]], 'V15');

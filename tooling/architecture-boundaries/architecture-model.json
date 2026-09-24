@@ -64,7 +64,7 @@
     }
   },
   "matrix": {
-    "$comment": "Rows = from, columns = to, in matrixColumns order. Yes and Optional allow the edge; No and - do not. - on the diagonal is the same package; for domain-* and apps/* it also covers another project of the same category, which needs an ADR.",
+    "$comment": "Rows = from, columns = to, in matrixColumns order. Yes and Optional allow the edge; No and - do not. - on the diagonal is the same package; for every category it also covers another project of the same category, which is allowed only when sameCategoryAllowlist names the pair.",
     "matrixColumns": [
       "contracts",
       "foundation",
@@ -249,6 +249,10 @@
         "-"
       ]
     }
+  },
+  "sameCategoryAllowlist": {
+    "$comment": "PO/SA decision 2026-09-24 (IB0-WP04 Decision 2): a project may depend on another project of the same category only when this list names the exact pair (source and target project names), with a rationale and an approval reference. Membership of a category alone gives no permission; an unlisted pair, directly or through a chain, fails closed. Listed edges must still use the target's public entry point and stay acyclic.",
+    "edges": []
   },
   "publicEntryPoint": "src/index.ts",
   "aliasRegistry": "tsconfig.base.json",

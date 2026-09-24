@@ -78,3 +78,7 @@ Stored under `evidence/IB0-WP03/` and indexed in its README: verifier JSON and l
 ## 8. Completion rule
 
 Technical PASS requires every criterion in `ACCEPTANCE.md` to pass. Claude reports TECHNICAL PASS, INDEPENDENT QA PASS and READY FOR AUTHORIZATION at most. ACCEPTED and merge are decisions of the Product Owner / Solutions Architect.
+
+## 9. Drafting changes
+
+(i) 2026-09-24, before the first recorded verification run: AC20 was clarified from "writes nothing outside `evidence/IB0-WP03/`" to "no tracked file outside `evidence/IB0-WP03/` is modified after the run", because the WP02 and WP01 verifiers it runs as regression rewrite, and it restores, their own tracked JSON. The check itself is unchanged and is proven by `logs/post-run-git-status.log`.

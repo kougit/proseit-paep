@@ -1,0 +1,114 @@
+# date: 2026-09-24T09:19:34.093Z node: v24.21.0 scratch: /tmp/paep-wp03-negative-KadEpA/repo
+
+## M0 positive control: unmutated copy passes
+expected: exit 0
+IB0-WP03 verification (static-only): PASS (14/14)
+EXIT_CODE=0
+RESULT=PASS
+
+## M1 "strict" removed
+expected: exit 1, V01 FAIL
+FAIL V01 Root tsconfig.json compilerOptions literally sets "strict": true and "noImplicitAny": true — strict=undefined; noImplicitAny=true
+FAIL V03 Every angular.json build tsConfig resolves (extends included) to strict, noImplicitAny and strictTemplates true, with no strict option off — reference-app: effective strict=undefined; ui-lab: effective strict=undefined
+IB0-WP03 verification (static-only): FAIL (12/14)
+EXIT_CODE=1
+RESULT=PASS
+
+## M2 "strict" set to false
+expected: exit 1, V01 FAIL
+FAIL V01 Root tsconfig.json compilerOptions literally sets "strict": true and "noImplicitAny": true — strict=false; noImplicitAny=true
+FAIL V03 Every angular.json build tsConfig resolves (extends included) to strict, noImplicitAny and strictTemplates true, with no strict option off — reference-app: effective strict=false; reference-app: effective strict=false; ui-lab: effective strict=false; ui-lab: effective strict=false
+FAIL V04 No tsconfig*.json in the repository sets a strict-family or template strict option to false — tsconfig.json: compilerOptions.strict=false
+IB0-WP03 verification (static-only): FAIL (11/14)
+EXIT_CODE=1
+RESULT=PASS
+
+## M3 "noImplicitAny" removed
+expected: exit 1, V01 FAIL
+FAIL V01 Root tsconfig.json compilerOptions literally sets "strict": true and "noImplicitAny": true — strict=true; noImplicitAny=undefined
+FAIL V03 Every angular.json build tsConfig resolves (extends included) to strict, noImplicitAny and strictTemplates true, with no strict option off — reference-app: effective noImplicitAny=undefined; ui-lab: effective noImplicitAny=undefined
+IB0-WP03 verification (static-only): FAIL (12/14)
+EXIT_CODE=1
+RESULT=PASS
+
+## M4 "strictTemplates" removed
+expected: exit 1, V02 FAIL
+FAIL V02 Root tsconfig.json angularCompilerOptions literally sets "strictTemplates": true — strictTemplates=undefined
+FAIL V03 Every angular.json build tsConfig resolves (extends included) to strict, noImplicitAny and strictTemplates true, with no strict option off — reference-app: effective strictTemplates=undefined; ui-lab: effective strictTemplates=undefined
+IB0-WP03 verification (static-only): FAIL (12/14)
+EXIT_CODE=1
+RESULT=PASS
+
+## M5 "strictTemplates" set to false
+expected: exit 1, V02 FAIL
+FAIL V02 Root tsconfig.json angularCompilerOptions literally sets "strictTemplates": true — strictTemplates=false
+FAIL V03 Every angular.json build tsConfig resolves (extends included) to strict, noImplicitAny and strictTemplates true, with no strict option off — reference-app: effective strictTemplates=false; reference-app: effective strictTemplates=false; ui-lab: effective strictTemplates=false; ui-lab: effective strictTemplates=false
+FAIL V04 No tsconfig*.json in the repository sets a strict-family or template strict option to false — tsconfig.json: angularCompilerOptions.strictTemplates=false
+IB0-WP03 verification (static-only): FAIL (11/14)
+EXIT_CODE=1
+RESULT=PASS
+
+## M6 app tsconfig sets strictNullChecks false
+expected: exit 1, V04 FAIL
+FAIL V03 Every angular.json build tsConfig resolves (extends included) to strict, noImplicitAny and strictTemplates true, with no strict option off — reference-app: effective strictNullChecks=false
+FAIL V04 No tsconfig*.json in the repository sets a strict-family or template strict option to false — apps/reference-app/tsconfig.app.json: compilerOptions.strictNullChecks=false
+FAIL V05 Every baseline compiler and Angular compiler option keeps its value, and the app tsconfig files are unchanged — changed: apps/reference-app/tsconfig.app.json
+FAIL V12 No WP04/WP05/IB1+ artefacts, apps unchanged, and every changed path is within WORK_PACKAGE §4 — apps changed: apps/reference-app/tsconfig.app.json; changed outside WORK_PACKAGE §4: apps/reference-app/tsconfig.app.json
+IB0-WP03 verification (static-only): FAIL (10/14)
+EXIT_CODE=1
+RESULT=PASS
+
+## M7 app tsconfig sets strictDomEventTypes false
+expected: exit 1, V04 FAIL
+FAIL V03 Every angular.json build tsConfig resolves (extends included) to strict, noImplicitAny and strictTemplates true, with no strict option off — reference-app: effective strictDomEventTypes=false
+FAIL V04 No tsconfig*.json in the repository sets a strict-family or template strict option to false — apps/reference-app/tsconfig.app.json: angularCompilerOptions.strictDomEventTypes=false
+FAIL V05 Every baseline compiler and Angular compiler option keeps its value, and the app tsconfig files are unchanged — changed: apps/reference-app/tsconfig.app.json
+FAIL V12 No WP04/WP05/IB1+ artefacts, apps unchanged, and every changed path is within WORK_PACKAGE §4 — apps changed: apps/reference-app/tsconfig.app.json; changed outside WORK_PACKAGE §4: apps/reference-app/tsconfig.app.json
+IB0-WP03 verification (static-only): FAIL (10/14)
+EXIT_CODE=1
+RESULT=PASS
+
+## M8 baseline option weakened (noImplicitReturns false)
+expected: exit 1, V05 FAIL
+FAIL V05 Every baseline compiler and Angular compiler option keeps its value, and the app tsconfig files are unchanged — compilerOptions.noImplicitReturns: baseline true now false
+IB0-WP03 verification (static-only): FAIL (13/14)
+EXIT_CODE=1
+RESULT=PASS
+
+## M9 aot false in the production configuration
+expected: exit 1, V06 FAIL
+FAIL V06 No build target disables AOT, the application builder is kept, and angular.json is unchanged — reference-app: configurations.production.aot=false; angular.json differs from the baseline
+FAIL V12 No WP04/WP05/IB1+ artefacts, apps unchanged, and every changed path is within WORK_PACKAGE §4 — changed outside WORK_PACKAGE §4: angular.json
+IB0-WP03 verification (static-only): FAIL (12/14)
+EXIT_CODE=1
+RESULT=PASS
+
+## M10 @ts-ignore added to app source
+expected: exit 1, V07 FAIL
+FAIL V07 No @ts-ignore, @ts-nocheck, @ts-expect-error or $any( in apps/** or packages/** source — 30 files scanned; findings: apps/reference-app/src/app/app.ts
+FAIL V12 No WP04/WP05/IB1+ artefacts, apps unchanged, and every changed path is within WORK_PACKAGE §4 — apps changed: apps/reference-app/src/app/app.ts; changed outside WORK_PACKAGE §4: apps/reference-app/src/app/app.ts
+IB0-WP03 verification (static-only): FAIL (12/14)
+EXIT_CODE=1
+RESULT=PASS
+
+## M11 contracts alias removed
+expected: exit 1, V08 FAIL
+FAIL V08 compilerOptions.paths maps each workspace package name to exactly its src/index.ts, with no wildcard or deep alias — @proseit/paep-contracts: no alias
+FAIL V09 Every package has a placeholder public entry point that its alias resolves to, and all entry points compile strictly with 0 diagnostics — @proseit/paep-contracts resolves to nothing
+IB0-WP03 verification (static-only): FAIL (12/14)
+EXIT_CODE=1
+RESULT=PASS
+
+## M12 wildcard deep alias added
+expected: exit 1, V08 FAIL
+FAIL V08 compilerOptions.paths maps each workspace package name to exactly its src/index.ts, with no wildcard or deep alias — wildcard alias @proseit/paep-contracts/*; alias @proseit/paep-contracts/* is not a workspace package name
+IB0-WP03 verification (static-only): FAIL (13/14)
+EXIT_CODE=1
+RESULT=PASS
+
+## M13 contracts entry point deleted
+expected: exit 1, V09 FAIL
+FAIL V09 Every package has a placeholder public entry point that its alias resolves to, and all entry points compile strictly with 0 diagnostics — packages/contracts/src/index.ts missing; @proseit/paep-contracts resolves to nothing
+IB0-WP03 verification (static-only): FAIL (13/14)
+EXIT_CODE=1
+RESULT=PASS

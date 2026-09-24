@@ -1,0 +1,27 @@
+# date: 2026-09-24T09:18:58Z node: v24.21.0 npm: 11.19.0 commit: 15386a95361b7a95c100bebd76d3c0907e5e6554
+$ npm run qa:ib0-wp03
+
+> @proseit/paep-workspace@0.0.0 qa:ib0-wp03
+> node tooling/verification/verify-ib0-wp03.mjs
+
+PASS V01 Root tsconfig.json compilerOptions literally sets "strict": true and "noImplicitAny": true — strict=true; noImplicitAny=true
+PASS V02 Root tsconfig.json angularCompilerOptions literally sets "strictTemplates": true — strictTemplates=true
+PASS V03 Every angular.json build tsConfig resolves (extends included) to strict, noImplicitAny and strictTemplates true, with no strict option off — reference-app (apps/reference-app/tsconfig.app.json): strict=true noImplicitAny=true strictTemplates=true; ui-lab (apps/ui-lab/tsconfig.app.json): strict=true noImplicitAny=true strictTemplates=true
+PASS V04 No tsconfig*.json in the repository sets a strict-family or template strict option to false — 3 tsconfig files: apps/reference-app/tsconfig.app.json, apps/ui-lab/tsconfig.app.json, tsconfig.json
+PASS V05 Every baseline compiler and Angular compiler option keeps its value, and the app tsconfig files are unchanged — 13 baseline options unchanged
+PASS V06 No build target disables AOT, the application builder is kept, and angular.json is unchanged — 2 build targets AOT
+PASS V07 No @ts-ignore, @ts-nocheck, @ts-expect-error or $any( in apps/** or packages/** source — 30 files scanned; findings: none
+PASS V08 compilerOptions.paths maps each workspace package name to exactly its src/index.ts, with no wildcard or deep alias — 18/18 aliases
+PASS V09 Every package has a placeholder public entry point that its alias resolves to, and all entry points compile strictly with 0 diagnostics — 18 entry points; strict=true; diagnostics=0
+PASS V10 package-lock.json is byte-identical to the baseline and package.json differs only by the two WP03 scripts — lockfile sha256 be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69
+PASS V11 No Nx: no nx/@nx/@nrwl dependency or lockfile entry, and no nx.json or project.json — none
+PASS V12 No WP04/WP05/IB1+ artefacts, apps unchanged, and every changed path is within WORK_PACKAGE §4 — 26 changed paths, all permitted
+PASS V13 Controlled sources match PACK_MANIFEST.json; .paep-control, .gitignore, PACK_MANIFEST.json and CLAUDE.md unchanged — 13/13 files match sha256 and size
+PASS V14 No credential or secret signatures in files added or modified since the baseline — 26 files scanned; findings: none
+PASS V15 build:reference-app production build passes — exit=0
+PASS V16 build:ui-lab production build passes — exit=0
+PASS V17 IB0-WP02 regression: every WP02 check passes except V17, whose only finding is WP03-permitted paths; WP02 records unchanged — WP02 19/20 pass; V17 flags only permitted WP03 paths; restored: evidence/IB0-WP02/reports/ib0-wp02-verification.json, evidence/IB0-WP02/reports/licence-inventory.json
+PASS V18 IB0-WP01 regression passes and WP01 records are unchanged — WP01 15/15 pass; restored: evidence/IB0-WP01/reports/ib0-wp01-verification.json
+
+IB0-WP03 verification (full): PASS (18/18)
+EXIT_CODE=0

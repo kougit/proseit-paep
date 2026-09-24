@@ -1,0 +1,123 @@
+{
+  "workPackage": "IB0-WP03",
+  "generatedAt": "2026-09-24T09:19:33.518Z",
+  "mode": "full",
+  "commit": "15386a95361b7a95c100bebd76d3c0907e5e6554",
+  "baseline": "de13629b302e1bbaccc59bb0e93f69c7fed9cdcb",
+  "trackedChangesAtRun": [],
+  "node": "24.21.0",
+  "npm": "11.19.0",
+  "typescript": "6.0.3",
+  "platform": "linux-x64",
+  "result": "PASS",
+  "checks": [
+    {
+      "id": "V01",
+      "name": "Root tsconfig.json compilerOptions literally sets \"strict\": true and \"noImplicitAny\": true",
+      "pass": true,
+      "details": "strict=true; noImplicitAny=true"
+    },
+    {
+      "id": "V02",
+      "name": "Root tsconfig.json angularCompilerOptions literally sets \"strictTemplates\": true",
+      "pass": true,
+      "details": "strictTemplates=true"
+    },
+    {
+      "id": "V03",
+      "name": "Every angular.json build tsConfig resolves (extends included) to strict, noImplicitAny and strictTemplates true, with no strict option off",
+      "pass": true,
+      "details": "reference-app (apps/reference-app/tsconfig.app.json): strict=true noImplicitAny=true strictTemplates=true; ui-lab (apps/ui-lab/tsconfig.app.json): strict=true noImplicitAny=true strictTemplates=true"
+    },
+    {
+      "id": "V04",
+      "name": "No tsconfig*.json in the repository sets a strict-family or template strict option to false",
+      "pass": true,
+      "details": "3 tsconfig files: apps/reference-app/tsconfig.app.json, apps/ui-lab/tsconfig.app.json, tsconfig.json"
+    },
+    {
+      "id": "V05",
+      "name": "Every baseline compiler and Angular compiler option keeps its value, and the app tsconfig files are unchanged",
+      "pass": true,
+      "details": "13 baseline options unchanged"
+    },
+    {
+      "id": "V06",
+      "name": "No build target disables AOT, the application builder is kept, and angular.json is unchanged",
+      "pass": true,
+      "details": "2 build targets AOT"
+    },
+    {
+      "id": "V07",
+      "name": "No @ts-ignore, @ts-nocheck, @ts-expect-error or $any( in apps/** or packages/** source",
+      "pass": true,
+      "details": "30 files scanned; findings: none"
+    },
+    {
+      "id": "V08",
+      "name": "compilerOptions.paths maps each workspace package name to exactly its src/index.ts, with no wildcard or deep alias",
+      "pass": true,
+      "details": "18/18 aliases"
+    },
+    {
+      "id": "V09",
+      "name": "Every package has a placeholder public entry point that its alias resolves to, and all entry points compile strictly with 0 diagnostics",
+      "pass": true,
+      "details": "18 entry points; strict=true; diagnostics=0"
+    },
+    {
+      "id": "V10",
+      "name": "package-lock.json is byte-identical to the baseline and package.json differs only by the two WP03 scripts",
+      "pass": true,
+      "details": "lockfile sha256 be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69"
+    },
+    {
+      "id": "V11",
+      "name": "No Nx: no nx/@nx/@nrwl dependency or lockfile entry, and no nx.json or project.json",
+      "pass": true,
+      "details": "none"
+    },
+    {
+      "id": "V12",
+      "name": "No WP04/WP05/IB1+ artefacts, apps unchanged, and every changed path is within WORK_PACKAGE §4",
+      "pass": true,
+      "details": "26 changed paths, all permitted"
+    },
+    {
+      "id": "V13",
+      "name": "Controlled sources match PACK_MANIFEST.json; .paep-control, .gitignore, PACK_MANIFEST.json and CLAUDE.md unchanged",
+      "pass": true,
+      "details": "13/13 files match sha256 and size"
+    },
+    {
+      "id": "V14",
+      "name": "No credential or secret signatures in files added or modified since the baseline",
+      "pass": true,
+      "details": "26 files scanned; findings: none"
+    },
+    {
+      "id": "V15",
+      "name": "build:reference-app production build passes",
+      "pass": true,
+      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.09 kB\n\nApplication bundle generation complete. [1.811 seconds] - 2026-09-24T09:19:19.674Z\n\nOutput location: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/run1/repo/dist/reference-app"
+    },
+    {
+      "id": "V16",
+      "name": "build:ui-lab production build passes",
+      "pass": true,
+      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-RPR4FBCF.js    | main          | 190.65 kB |                52.16 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.16 kB\n\nApplication bundle generation complete. [1.866 seconds] - 2026-09-24T09:19:22.189Z\n\nOutput location: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/run1/repo/dist/ui-lab"
+    },
+    {
+      "id": "V17",
+      "name": "IB0-WP02 regression: every WP02 check passes except V17, whose only finding is WP03-permitted paths; WP02 records unchanged",
+      "pass": true,
+      "details": "WP02 19/20 pass; V17 flags only permitted WP03 paths; restored: evidence/IB0-WP02/reports/ib0-wp02-verification.json, evidence/IB0-WP02/reports/licence-inventory.json"
+    },
+    {
+      "id": "V18",
+      "name": "IB0-WP01 regression passes and WP01 records are unchanged",
+      "pass": true,
+      "details": "WP01 15/15 pass; restored: evidence/IB0-WP01/reports/ib0-wp01-verification.json"
+    }
+  ]
+}

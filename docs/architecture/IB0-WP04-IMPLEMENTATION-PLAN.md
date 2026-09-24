@@ -48,6 +48,8 @@ Make the PAEP project and package architecture explicit and machine-enforceable:
 
 (viii) **CI.** No CI exists until IB0-WP05. "CI rejection" is demonstrated by the non-zero exit of `npm run arch:check`, the command WP05's architecture stage will run.
 
+(ix) **PO/SA decisions, 2026-09-24** (recorded after the plan; the decisions above are kept as written for the audit trail). (i-a): the eight Optional links are permitted and "No" is also a reachability constraint. (ii): same-category edges only through an explicit `sameCategoryAllowlist` in the model, failing closed. (iv), (vii): approved. PAEP-EQP-01 Appendix B command naming: `qa:architecture` added for the existing gate. Details: `work-packages/IB0-WP04/WORK_PACKAGE.md` §6.
+
 ## Intended file changes
 
 | Path | Change |

@@ -6,7 +6,7 @@
 **Design classification:** D0 — not a UI work package; no design handoff required  
 **Execution agent:** Claude Code  
 **Acceptance authority:** Product Owner / Solutions Architect  
-**Definition status:** **DRAFT — pending PO/SA approval.** Drafted by Claude Code on 2026-09-24 under the PO/SA instruction "IB0-WP04 — PROJECT GRAPH, PACKAGE BOUNDARIES AND DEPENDENCY ENFORCEMENT, EXECUTION + QA + PR READINESS" (project thread, 2026-09-24T09:59Z). The controlled pack supplied no IB0-WP04 definition. Claude may not approve this definition. The definition audit is `evidence/IB0-WP04/reports/definition-audit.md`.
+**Definition status:** **APPROVED** by the Product Owner / Solutions Architect on 2026-09-24 ("IB0-WP04 — FINAL ACCEPTANCE, MERGE AND POST-MERGE CLOSURE", Decision 5), including the refinements from the independent review rounds (§9). Drafted by Claude Code on 2026-09-24 under the PO/SA instruction "IB0-WP04 — PROJECT GRAPH, PACKAGE BOUNDARIES AND DEPENDENCY ENFORCEMENT, EXECUTION + QA + PR READINESS" (project thread, 2026-09-24T09:59Z). The controlled pack supplied no IB0-WP04 definition. Claude may not approve this definition. The definition audit is `evidence/IB0-WP04/reports/definition-audit.md`.
 
 ## 1. Objective
 
@@ -47,7 +47,7 @@ Claude may create or modify:
 
 (ii) `tsconfig.json`: add `"extends": "./tsconfig.base.json"` and remove `paths`. No other key changes.
 
-(iii) Root `package.json`: add the `arch:check`, `qa:ib0-wp04` and `qa:ib0-wp04:negative` scripts only.
+(iii) Root `package.json`: add the `arch:check`, `qa:architecture` (PAEP-EQP-01 Appendix B name for the same command; PO/SA Decision 1), `qa:ib0-wp04` and `qa:ib0-wp04:negative` scripts only.
 
 (iv) `tooling/architecture-boundaries/**` (model, checker, README).
 
@@ -69,17 +69,23 @@ Claude shall **not** modify: `.paep-control/**`, `.gitignore`, `PACK_MANIFEST.js
 
 (iv) **IB1 and later:** any exported contract, type, component or runtime behaviour in a package; package `exports` manifests; product screens; Frappe, analytics, offline or shell work.
 
-## 6. Decisions taken by default (pending PO/SA)
+## 6. Decisions (approved by the PO/SA on 2026-09-24)
 
-(i) Appendix B "-" cells off the diagonal are not allowed; `domain-*` → another `domain-*` and app → app are not allowed without an ADR (plan decision (ii)).
+(i) Appendix B "-" cells off the diagonal are not allowed. A dependency between two projects of the same category is permitted only when the model's `sameCategoryAllowlist` names the exact pair with a rationale and an approval; category membership alone gives no permission; an unlisted pair, direct or transitive, fails closed; applications cannot be listed (PO/SA Decision 2).
 
-(ii) `tsconfig.base.json` holds only the alias registry; strictness stays literal in `tsconfig.json` (plan decision (iv)).
+(ii) `tsconfig.base.json` holds only the alias registry; strictness stays literal and auditable in `tsconfig.json` (PO/SA Decision 4).
 
-(iii) WP03 regression bounded exception: V05, V08, V10, V12 and V17 may report only WP04-authorised changes; every other WP03 check must pass (plan decision (vii), AC23).
+(iii) WP03 regression bounded exception: V05, V08, V10, V12 and V17 may report only WP04-authorised changes; every other WP03 check must pass; the substantive WP03 controls are re-proven by WP04 (AC06, S1–S9) (PO/SA Decision 3).
 
-(iv) "Optional" Appendix B cells are allowed; the generated graph marks every Optional edge for justification at review.
+(iv) "Optional" Appendix B cells are permitted, never required; the generated graph marks every Optional edge for justification at review.
 
-(v) Where IB-01 §6.1 (lower layers only) and Appendix B (eight same-layer Optional cells) differ, Appendix B governs (definition audit §6, C1).
+(v) IB-01 §6.1 states the general layering rule; IB-01 Appendix B is the more specific matrix and qualifies it, so its eight same-layer Optional links are permitted, each subject to every other control (definition audit §6, C1; PO/SA decision "IB-01 Appendix B Optional links").
+
+(vi) Appendix B "No" is a reachability constraint: a chain of individually allowed edges is rejected when its end pair is not allowed (PO/SA decision "Transitive forbidden dependencies").
+
+(vii) PAEP-EQP-01 Appendix B is the QA command-naming standard: `qa:architecture` is exposed for the existing architecture gate; no other QA command is created without its capability (PO/SA Decision 1).
+
+(viii) Nested `package.json`, `#` subpath chains and symlinks below a project root stay permanently rejected (PO/SA security edge-case decisions; N43–N45).
 
 ## 7. Required evidence
 
@@ -100,3 +106,5 @@ Technical PASS requires every criterion in `ACCEPTANCE.md` to pass. Claude repor
 (iv) 2026-09-24, after independent QA round 3 (R3-L1): every target of a conditional or array `imports` entry is checked, and pattern keys follow Node's longest-prefix rule; AC16 gains N40–N42. No criterion was relaxed.
 
 (v) 2026-09-24, after independent QA rounds 4 and 5 (F-1, F-2, R5-M1): a nested `package.json` or a symbolic link below a project root, and an `imports` target that is another `#` subpath, are rejected; AC16 gains N43–N45. No criterion was relaxed.
+
+(vi) 2026-09-24, applying the PO/SA decisions: AC06 also requires no suppression directive and cites S1–S9; AC09 adds the same-category allowlist and the transitive reachability rule; AC15 adds `qa:architecture`; AC16 gains C5, O1–O8, T1–T5, N46–N52 and S1–S9 (82 cases); AC21 counts four scripts; AC23 records the approval. After independent QA round 7, allowlist entries linking two applications are rejected (N52). No criterion was relaxed.

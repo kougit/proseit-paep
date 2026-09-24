@@ -32,7 +32,9 @@ Each project carries the tags `layer:<L>` and `type:<category>`. Every package's
 | `type:domain` | contracts, foundation, *platform*, i18n, *observability*, components, *offline*, *enterprise*, *analytics* |
 | `type:app` | every package category |
 
-Not allowed: every "No" cell (e.g. frappe-sdk → components/foundation/i18n; enterprise/analytics/domain → frappe-sdk; observability → foundation/i18n; offline → foundation/components), every upward cell, and any edge between two projects of the same category (domain → domain, app → app; default D2).
+Not allowed: every "No" cell (e.g. frappe-sdk → components/foundation/i18n; enterprise/analytics/domain → frappe-sdk; observability → foundation/i18n; offline → foundation/components), every upward cell, and any edge between two projects of the same category (domain → domain, app → app) unless `sameCategoryAllowlist` names the pair (PO/SA Decision 2; apps can never be listed).
+
+Same-category edges are allowed only when `sameCategoryAllowlist` in the model names the exact pair (currently empty, so none is allowed). "No" is also a reachability constraint: the checker rejects a chain of allowed edges whose end pair is "No"; the matrix's closure has four such pairs (observability → foundation, offline → foundation, frappe-sdk → foundation, frappe-sdk → i18n), exercised by T1–T5.
 
 ## Graph at the commit under test
 
@@ -46,7 +48,7 @@ Not allowed: every "No" cell (e.g. frappe-sdk → components/foundation/i18n; en
 | CLASSIFICATION | Unclassified package directory, npm workspace or `angular.json` project; unknown category; bad tags; missing root; name mismatch | §6.1; §6.2(viii) |
 | ALIAS | `tsconfig.base.json` not the only alias registry; alias missing, extra, wildcard or not pointing at `src/index.ts`; alias not resolving from an app; app build not inheriting the registry | §5.2(ii), §6.2(ii) |
 | ENTRY_POINT | Package without `src/index.ts` | §5.2(ii) |
-| DIRECTION | Edge not allowed by the matrix, from `import`, `import type`, `export … from`, `import = require()`, `require()`, `import()`, `import('…')` types or a `package.json` dependency | §6.1, App. B, §6.2(iv)-(v); IR-01 §4.3(i)-(iii) |
+| DIRECTION | Edge not allowed by the matrix or the same-category allowlist, or a chain of edges whose end pair is not allowed, from `import`, `import type`, `export … from`, `import = require()`, `require()`, `import()`, `import('…')` types or a `package.json` dependency | §6.1, App. B, §6.2(iv)-(v); IR-01 §4.3(i)-(iii) |
 | CYCLE | Strongly connected component of more than one project (Tarjan) | §6.2(i); IR-01 §4.3(v) |
 | DEEP_IMPORT, UNKNOWN_PACKAGE | `@proseit/<pkg>/<path>`; unknown `@proseit/*` module | §6.2(ii); IR-01 §4.3(iv) |
 | ENTRY_BYPASS, OUTSIDE_PROJECT | Relative/absolute/rooted import into another project, or outside every project | §5.2(i)-(ii), §6.2(ii) |

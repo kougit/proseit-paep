@@ -82,5 +82,10 @@ No criterion adds WP05 (CI, test runner), IB1 (contracts, runtime config) or lin
 - **Default taken (pending PO/SA):** Appendix B governs. It is the per-pair rule set; §6.1's own L2 row adds a per-pair detail ("frappe-sdk may depend on observability/contracts"); and the PO/SA instruction for IB0-WP04 describes the direction as "lower/equal architectural categories". The only allowed cycle this permits is platform ↔ observability, which the CYCLE rule rejects (negative case N05).
 - **Why this is not a stop:** the graph has 0 edges, so no code depends on the choice; both options keep every "No" cell, upward edge, cycle and deep-import rule; the stricter reading is a small checker change the PO/SA can order.
 - **Alternative:** §6.1 governs (strict layering; the eight cells become forbidden, cycles become impossible without a DIRECTION finding).
+- **Resolved by the PO/SA on 2026-09-24:** YES, the eight Optional links are permitted. §6.1 states the general rule and Appendix B, the more specific matrix, qualifies it. Optional means permitted, not required, and subject to every other control. The PO/SA also decided that "No" is a reachability constraint: a chain of allowed edges whose end pair is "No" is rejected. The matrix's transitive closure has exactly four such pairs (observability → foundation, offline → foundation, frappe-sdk → foundation, frappe-sdk → i18n), reached by five two-step chains, each covered by negative cases T1–T5.
+
+## 7. PO/SA decisions (2026-09-24)
+
+D1 is confirmed. D2 is replaced by an explicit, fail-closed `sameCategoryAllowlist` (Decision 2). D3: Optional permitted, not required. D4 approved (Decision 4). D8 approved (Decision 3). D12/C1 resolved as above. PAEP-EQP-01 Appendix B is the QA command-naming standard; `qa:architecture` is exposed for the existing gate (Decision 1). The WP04 definition is approved (Decision 5).
 
 Other areas agree: direction for all cross-layer pairs, cycles, deep imports and contracts neutrality. Nx is optional by IB-01 §2.3(ii). No other CLAUDE.md stop condition applies.

@@ -86,3 +86,7 @@ Stored under `evidence/IB0-WP04/` and indexed in its README: verifier JSON and l
 ## 8. Completion rule
 
 Technical PASS requires every criterion in `ACCEPTANCE.md` to pass. Claude reports technical PASS, independent QA PASS and readiness for authorisation at most. ACCEPTED and merge are decisions of the Product Owner / Solutions Architect.
+
+## 9. Drafting changes
+
+(i) 2026-09-24, before the first recorded verification run: AC16 was made concrete with the case identifiers of the negative runner and extended from 26 to 29 negative cases (adding `import = require()` and the two Nx cases that prove AC17) and 4 controls (adding a production-build control and a verifier control). No criterion was relaxed.

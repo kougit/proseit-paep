@@ -1,0 +1,71 @@
+$ node recompute.mjs clone
+== 1. install-script coverage
+lockfile hasInstallScript entries: node_modules/@parcel/watcher@2.6.0, node_modules/esbuild@0.28.2, node_modules/fsevents@2.3.3, node_modules/lmdb@3.5.6, node_modules/msgpackr-extract@3.0.4
+allowScripts: {"@parcel/watcher":false,"esbuild":false,"fsevents":false,"lmdb":false,"msgpackr-extract":false}
+uncovered: 0 
+allowScripts entries without lockfile install script: none
+== 2. licence inventory
+third-party entries: 434
+counts: {"Apache-2.0":8,"MIT":372,"ISC":23,"CC-BY-4.0":1,"BSD-2-Clause":11,"BSD-3-Clause":5,"MPL-2.0":12,"BlueOak-1.0.0":1,"0BSD":1}
+missing/unknown/UNLICENSED: 0
+workspace entries: node_modules/@proseit/frappe-sdk -> packages/frappe-sdk | node_modules/@proseit/paep-analytics -> packages/analytics | node_modules/@proseit/paep-components -> packages/components | node_modules/@proseit/paep-contracts -> packages/contracts | node_modules/@proseit/paep-domain-ai -> packages/domain-ai | node_modules/@proseit/paep-domain-commerce -> packages/domain-commerce | node_modules/@proseit/paep-domain-construction -> packages/domain-construction | node_modules/@proseit/paep-domain-fiscal -> packages/domain-fiscal | node_modules/@proseit/paep-domain-iot -> packages/domain-iot | node_modules/@proseit/paep-domain-maintenance -> packages/domain-maintenance | node_modules/@proseit/paep-domain-manufacturing -> packages/domain-manufacturing | node_modules/@proseit/paep-domain-quality -> packages/domain-quality | node_modules/@proseit/paep-enterprise -> packages/enterprise | node_modules/@proseit/paep-foundation -> packages/foundation | node_modules/@proseit/paep-i18n -> packages/i18n | node_modules/@proseit/paep-observability -> packages/observability | node_modules/@proseit/paep-offline -> packages/offline | node_modules/@proseit/paep-platform -> packages/platform | packages/analytics | packages/components | packages/contracts | packages/domain-ai | packages/domain-commerce | packages/domain-construction | packages/domain-fiscal | packages/domain-iot | packages/domain-maintenance | packages/domain-manufacturing | packages/domain-quality | packages/enterprise | packages/foundation | packages/frappe-sdk | packages/i18n | packages/observability | packages/offline | packages/platform
+non-permissive:
+   node_modules/caniuse-lite 1.0.30001810 CC-BY-4.0 dev=true optional=false
+   node_modules/lightningcss 1.33.0 MPL-2.0 dev=true optional=false
+   node_modules/lightningcss-android-arm64 1.33.0 MPL-2.0 dev=true optional=true
+   node_modules/lightningcss-darwin-arm64 1.33.0 MPL-2.0 dev=true optional=true
+   node_modules/lightningcss-darwin-x64 1.33.0 MPL-2.0 dev=true optional=true
+   node_modules/lightningcss-freebsd-x64 1.33.0 MPL-2.0 dev=true optional=true
+   node_modules/lightningcss-linux-arm-gnueabihf 1.33.0 MPL-2.0 dev=true optional=true
+   node_modules/lightningcss-linux-arm64-gnu 1.33.0 MPL-2.0 dev=true optional=true
+   node_modules/lightningcss-linux-arm64-musl 1.33.0 MPL-2.0 dev=true optional=true
+   node_modules/lightningcss-linux-x64-gnu 1.33.0 MPL-2.0 dev=true optional=true
+   node_modules/lightningcss-linux-x64-musl 1.33.0 MPL-2.0 dev=true optional=true
+   node_modules/lightningcss-win32-arm64-msvc 1.33.0 MPL-2.0 dev=true optional=true
+   node_modules/lightningcss-win32-x64-msvc 1.33.0 MPL-2.0 dev=true optional=true
+non-permissive outside lightningcss*/caniuse-lite or non-dev: 0 
+   installed node_modules/caniuse-lite 1.0.30001810 CC-BY-4.0 browserslist/caniuse-lite
+   installed node_modules/lightningcss 1.33.0 MPL-2.0 https://github.com/parcel-bundler/lightningcss.git
+   not installed (platform optional): node_modules/lightningcss-android-arm64
+   not installed (platform optional): node_modules/lightningcss-darwin-arm64
+   not installed (platform optional): node_modules/lightningcss-darwin-x64
+   not installed (platform optional): node_modules/lightningcss-freebsd-x64
+   not installed (platform optional): node_modules/lightningcss-linux-arm-gnueabihf
+   not installed (platform optional): node_modules/lightningcss-linux-arm64-gnu
+   not installed (platform optional): node_modules/lightningcss-linux-arm64-musl
+   installed node_modules/lightningcss-linux-x64-gnu 1.33.0 MPL-2.0 https://github.com/parcel-bundler/lightningcss.git
+   not installed (platform optional): node_modules/lightningcss-linux-x64-musl
+   not installed (platform optional): node_modules/lightningcss-win32-arm64-msvc
+   not installed (platform optional): node_modules/lightningcss-win32-x64-msvc
+== 3. manifest vs lockfile/installed
+checked 88 mismatches 0
+  AC08 @angular/build 22.1.8
+  AC08 esbuild 0.28.2
+  AC08 vite 8.1.5
+  AC08 sass 1.101.0
+  AC08 postcss 8.5.28
+  AC08 lightningcss 1.33.0
+  AC08 browserslist 4.29.0
+  AC08 caniuse-lite 1.0.30001810
+non-exact direct pins: 0
+ts peer range compiler-cli: >=6.0 <6.1  rxjs peer core: ^6.5.3 || ^7.4.0
+== 4. controlled sources vs PACK_MANIFEST.json
+  MATCH .paep-control/SOURCE_OF_TRUTH.md cbae92bae66d58d8ea5ef5e90ae9df127098f6777711179e9d13b685dd8f5262 2397
+  MATCH .paep-control/originals/PAEP_DCH_v1.0.pdf 9a6a5efd82e71e7533cf883710b24c61e8b54ba1fe4910b402ba0340391e4996 542033
+  MATCH .paep-control/originals/PAEP_EQP_v1.1.pdf c61d5ace05815a7fbd3272c1587d1b6fa7a32fd6ce280aab6008c3bc70783b04 742463
+  MATCH .paep-control/originals/PAEP_IB_v1.0.pdf cae5f62fbba6dd274ff83be4e3759ebecdafe220cf647b9e1427d6c16ccb623d 937641
+  MATCH .paep-control/originals/PAEP_IR_v1.0.docx 1e2d9c3ff2b34ea0675225e226b2444270acefa23c0369a5c2fa5d07096375ba 705705
+  MATCH .paep-control/originals/PAEP_v1.1.pdf a9ae79b4c122e114811b23490ef9710d4921829a389a304e8d3a54c74bda74d9 1576649
+  MATCH .paep-control/reference-baseline/PAEP_BASE_v1.0.zip 170945d6422fa46742c7eef6920166ed4b2c69c7130449509f8dc76687cb4ad2 33055
+  MATCH .paep-control/text/PAEP_DCH_01_v1.0_text.md 8bc9aee796b07644dedc240cba661c0c1c5b20b2bd99a233a6224a1153f48a75 46181
+  MATCH .paep-control/text/PAEP_EQP_01_v1.1_text.md 920d12e28e7cb4e9a96af28ec4803bab892c1032d1d94a0ac0452825b8a4bb09 58649
+  MATCH .paep-control/text/PAEP_IB_01_v1.0_text.md bfdc1dbd1b73bc26f3893b2d8db1a327ec362b628137aa8270aacf2b66bbbf28 68553
+  MATCH .paep-control/text/PAEP_IR_01_v1.0_text.md 5cd5f01ab5a036296711a83768757b39338a5b28b5e57e2baed9b87b12731586 38704
+  MATCH .paep-control/text/PAEP_v1.1_text.md 7abebe5fa09c6f903423734164f2fdbb7618711267190b10ade1423cd70b2c4f 85725
+  MATCH .gitignore 3646b9d51803eca2cd8e7e5fec090abeab78137ee03e326689e875e29560b8bc 430
+controlled files matching: 13/13
+EXIT_CODE=0
+$ git diff --stat 8259317 HEAD -- .paep-control .gitignore PACK_MANIFEST.json
+diffstat_exit=0 (empty output above = no change)
+quiet_exit=0
+pack_manifest_vs_baseline_exit=0

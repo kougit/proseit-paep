@@ -18,3 +18,1039 @@ EXIT_CODE=0
 == npm audit (all and runtime) -> EXIT_CODE=0
 
 # Negative checks: see negative-*.log (all EXIT_CODE=1 as required)
+
+# Full output of each gate log from this fresh-clone run follows (also kept as the separate named logs).
+
+================================================================
+## logs/toolchain-versions.log
+================================================================
+# Toolchain versions
+# date: 2026-09-24T05:05:11Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+.nvmrc: 24.21.0
+node --version: v24.21.0
+npm --version: 11.19.0
+packageManager: npm@11.19.0
+devEngines: {"runtime":{"name":"node","version":"24.21.0","onFail":"error"},"packageManager":{"name":"npm","version":"11.19.0","onFail":"error"}}
+uname: Linux 6.18.44-fc-v37 x86_64
+npm registry: https://registry.npmjs.org/
+npm effective policy: engine-strict=true strict-allow-scripts=true ignore-scripts=false
+7fde7b8afa198da66257f42ee2001d874c7355631e6d1579a5fb5ef1f246df4c  /opt/node24/bin/node
+EXIT_CODE=0
+
+================================================================
+## logs/npm-ci.log
+================================================================
+# npm ci (fresh clone, pinned toolchain, --loglevel=info)
+# date: 2026-09-24T05:05:13Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+$ npm ci --loglevel=info
+npm info using npm@11.19.0
+npm info using node@v24.21.0
+npm http cache zod-to-json-schema@https://registry.npmjs.org/zod-to-json-schema/-/zod-to-json-schema-3.25.2.tgz 0ms (cache hit)
+npm http cache zod@https://registry.npmjs.org/zod/-/zod-4.4.3.tgz 0ms (cache hit)
+npm http cache yoctocolors@https://registry.npmjs.org/yoctocolors/-/yoctocolors-2.2.0.tgz 0ms (cache hit)
+npm http cache yargs-parser@https://registry.npmjs.org/yargs-parser/-/yargs-parser-22.0.0.tgz 0ms (cache hit)
+npm http cache yargs@https://registry.npmjs.org/yargs/-/yargs-18.1.0.tgz 0ms (cache hit)
+npm http cache y18n@https://registry.npmjs.org/y18n/-/y18n-5.0.8.tgz 0ms (cache hit)
+npm http cache wrappy@https://registry.npmjs.org/wrappy/-/wrappy-1.0.2.tgz 0ms (cache hit)
+npm http cache wrap-ansi@https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-10.0.2.tgz 0ms (cache hit)
+npm http cache weak-lru-cache@https://registry.npmjs.org/weak-lru-cache/-/weak-lru-cache-1.2.2.tgz 0ms (cache hit)
+npm http cache watchpack@https://registry.npmjs.org/watchpack/-/watchpack-2.5.2.tgz 0ms (cache hit)
+npm http cache vite@https://registry.npmjs.org/vite/-/vite-8.1.5.tgz 0ms (cache hit)
+npm http cache verkit@https://registry.npmjs.org/verkit/-/verkit-0.3.2.tgz 0ms (cache hit)
+npm http cache which@https://registry.npmjs.org/which/-/which-2.0.2.tgz 0ms (cache hit)
+npm http cache vary@https://registry.npmjs.org/vary/-/vary-1.1.2.tgz 0ms (cache hit)
+npm http cache validate-npm-package-name@https://registry.npmjs.org/validate-npm-package-name/-/validate-npm-package-name-8.0.0.tgz 0ms (cache hit)
+npm http cache update-browserslist-db@https://registry.npmjs.org/update-browserslist-db/-/update-browserslist-db-1.3.3.tgz 0ms (cache hit)
+npm http cache unpipe@https://registry.npmjs.org/unpipe/-/unpipe-1.0.0.tgz 0ms (cache hit)
+npm http cache typescript@https://registry.npmjs.org/typescript/-/typescript-6.0.3.tgz 0ms (cache hit)
+npm http cache type-is@https://registry.npmjs.org/type-is/-/type-is-2.1.0.tgz 0ms (cache hit)
+npm http cache tslib@https://registry.npmjs.org/tslib/-/tslib-2.8.1.tgz 0ms (cache hit)
+npm http cache toidentifier@https://registry.npmjs.org/toidentifier/-/toidentifier-1.0.1.tgz 0ms (cache hit)
+npm http cache tinyglobby@https://registry.npmjs.org/tinyglobby/-/tinyglobby-0.2.17.tgz 0ms (cache hit)
+npm http cache strip-ansi@https://registry.npmjs.org/strip-ansi/-/strip-ansi-7.2.0.tgz 0ms (cache hit)
+npm http cache string-width@https://registry.npmjs.org/string-width/-/string-width-8.2.2.tgz 0ms (cache hit)
+npm http cache stdin-discarder@https://registry.npmjs.org/stdin-discarder/-/stdin-discarder-0.3.2.tgz 0ms (cache hit)
+npm http cache statuses@https://registry.npmjs.org/statuses/-/statuses-2.0.2.tgz 0ms (cache hit)
+npm http cache source-map-support@https://registry.npmjs.org/source-map-support/-/source-map-support-0.5.21.tgz 0ms (cache hit)
+npm http cache source-map-js@https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.1.tgz 0ms (cache hit)
+npm http cache source-map@https://registry.npmjs.org/source-map/-/source-map-0.7.6.tgz 0ms (cache hit)
+npm http cache slice-ansi@https://registry.npmjs.org/slice-ansi/-/slice-ansi-9.0.1.tgz 0ms (cache hit)
+npm http cache signal-exit@https://registry.npmjs.org/signal-exit/-/signal-exit-4.1.0.tgz 0ms (cache hit)
+npm http cache side-channel-weakmap@https://registry.npmjs.org/side-channel-weakmap/-/side-channel-weakmap-1.0.2.tgz 0ms (cache hit)
+npm http cache side-channel-map@https://registry.npmjs.org/side-channel-map/-/side-channel-map-1.0.1.tgz 0ms (cache hit)
+npm http cache side-channel-list@https://registry.npmjs.org/side-channel-list/-/side-channel-list-1.0.1.tgz 0ms (cache hit)
+npm http cache side-channel@https://registry.npmjs.org/side-channel/-/side-channel-1.1.1.tgz 0ms (cache hit)
+npm http cache shebang-regex@https://registry.npmjs.org/shebang-regex/-/shebang-regex-3.0.0.tgz 0ms (cache hit)
+npm http cache shebang-command@https://registry.npmjs.org/shebang-command/-/shebang-command-2.0.0.tgz 0ms (cache hit)
+npm http cache setprototypeof@https://registry.npmjs.org/setprototypeof/-/setprototypeof-1.2.0.tgz 0ms (cache hit)
+npm http cache send@https://registry.npmjs.org/send/-/send-1.2.1.tgz 0ms (cache hit)
+npm http cache semver@https://registry.npmjs.org/semver/-/semver-7.8.5.tgz 0ms (cache hit)
+npm http cache serve-static@https://registry.npmjs.org/serve-static/-/serve-static-2.2.1.tgz 0ms (cache hit)
+npm http cache safer-buffer@https://registry.npmjs.org/safer-buffer/-/safer-buffer-2.1.2.tgz 0ms (cache hit)
+npm http cache sass@https://registry.npmjs.org/sass/-/sass-1.101.0.tgz 0ms (cache hit)
+npm http cache rxjs@https://registry.npmjs.org/rxjs/-/rxjs-7.8.2.tgz 0ms (cache hit)
+npm http cache router@https://registry.npmjs.org/router/-/router-2.2.0.tgz 0ms (cache hit)
+npm http cache rolldown@https://registry.npmjs.org/rolldown/-/rolldown-1.2.0.tgz 0ms (cache hit)
+npm http cache restore-cursor@https://registry.npmjs.org/restore-cursor/-/restore-cursor-5.1.0.tgz 0ms (cache hit)
+npm http cache require-from-string@https://registry.npmjs.org/require-from-string/-/require-from-string-2.0.2.tgz 0ms (cache hit)
+npm http cache reflect-metadata@https://registry.npmjs.org/reflect-metadata/-/reflect-metadata-0.2.2.tgz 0ms (cache hit)
+npm http cache readdirp@https://registry.npmjs.org/readdirp/-/readdirp-5.1.1.tgz 0ms (cache hit)
+npm http cache raw-body@https://registry.npmjs.org/raw-body/-/raw-body-3.0.2.tgz 0ms (cache hit)
+npm http cache range-parser@https://registry.npmjs.org/range-parser/-/range-parser-1.3.0.tgz 0ms (cache hit)
+npm http cache qs@https://registry.npmjs.org/qs/-/qs-6.16.0.tgz 0ms (cache hit)
+npm http cache proxy-agent-negotiate@https://registry.npmjs.org/proxy-agent-negotiate/-/proxy-agent-negotiate-1.1.0.tgz 0ms (cache hit)
+npm http cache proxy-addr@https://registry.npmjs.org/proxy-addr/-/proxy-addr-2.0.8.tgz 0ms (cache hit)
+npm http cache postcss-safe-parser@https://registry.npmjs.org/postcss-safe-parser/-/postcss-safe-parser-7.1.0.tgz 0ms (cache hit)
+npm http cache proc-log@https://registry.npmjs.org/proc-log/-/proc-log-7.0.0.tgz 0ms (cache hit)
+npm http cache postcss-media-query-parser@https://registry.npmjs.org/postcss-media-query-parser/-/postcss-media-query-parser-0.2.3.tgz 0ms (cache hit)
+npm http cache postcss@https://registry.npmjs.org/postcss/-/postcss-8.5.28.tgz 0ms (cache hit)
+npm http cache pkce-challenge@https://registry.npmjs.org/pkce-challenge/-/pkce-challenge-5.0.1.tgz 0ms (cache hit)
+npm http cache piscina@https://registry.npmjs.org/piscina/-/piscina-5.2.0.tgz 0ms (cache hit)
+npm http cache picomatch@https://registry.npmjs.org/picomatch/-/picomatch-4.0.5.tgz 0ms (cache hit)
+npm http cache picocolors@https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz 0ms (cache hit)
+npm http cache path-key@https://registry.npmjs.org/path-key/-/path-key-3.1.1.tgz 0ms (cache hit)
+npm http cache path-to-regexp@https://registry.npmjs.org/path-to-regexp/-/path-to-regexp-8.4.2.tgz 0ms (cache hit)
+npm http cache parseurl@https://registry.npmjs.org/parseurl/-/parseurl-1.3.3.tgz 0ms (cache hit)
+npm http cache parse5-sax-parser@https://registry.npmjs.org/parse5-sax-parser/-/parse5-sax-parser-8.0.0.tgz 0ms (cache hit)
+npm http cache parse5@https://registry.npmjs.org/parse5/-/parse5-8.0.1.tgz 0ms (cache hit)
+npm http cache oxc-parser@https://registry.npmjs.org/oxc-parser/-/oxc-parser-0.142.0.tgz 0ms (cache hit)
+npm http cache ordered-binary@https://registry.npmjs.org/ordered-binary/-/ordered-binary-1.6.2.tgz 0ms (cache hit)
+npm http cache ora@https://registry.npmjs.org/ora/-/ora-9.4.1.tgz 0ms (cache hit)
+npm http cache onetime@https://registry.npmjs.org/onetime/-/onetime-7.0.0.tgz 0ms (cache hit)
+npm http cache parse5-html-rewriting-stream@https://registry.npmjs.org/parse5-html-rewriting-stream/-/parse5-html-rewriting-stream-8.0.1.tgz 0ms (cache hit)
+npm http cache once@https://registry.npmjs.org/once/-/once-1.4.0.tgz 0ms (cache hit)
+npm http cache on-finished@https://registry.npmjs.org/on-finished/-/on-finished-2.4.1.tgz 0ms (cache hit)
+npm http cache obug@https://registry.npmjs.org/obug/-/obug-2.2.1.tgz 0ms (cache hit)
+npm http cache object-assign@https://registry.npmjs.org/object-assign/-/object-assign-4.1.1.tgz 0ms (cache hit)
+npm http cache object-inspect@https://registry.npmjs.org/object-inspect/-/object-inspect-1.13.4.tgz 0ms (cache hit)
+npm http cache nth-check@https://registry.npmjs.org/nth-check/-/nth-check-2.1.1.tgz 0ms (cache hit)
+npm http cache node-releases@https://registry.npmjs.org/node-releases/-/node-releases-2.0.57.tgz 0ms (cache hit)
+npm http cache npm-package-arg@https://registry.npmjs.org/npm-package-arg/-/npm-package-arg-14.0.0.tgz 0ms (cache hit)
+npm http cache node-addon-api@https://registry.npmjs.org/node-addon-api/-/node-addon-api-6.1.0.tgz 0ms (cache hit)
+npm http cache nanoid@https://registry.npmjs.org/nanoid/-/nanoid-3.3.19.tgz 0ms (cache hit)
+npm http cache mute-stream@https://registry.npmjs.org/mute-stream/-/mute-stream-3.0.0.tgz 0ms (cache hit)
+npm http cache msgpackr-extract@https://registry.npmjs.org/msgpackr-extract/-/msgpackr-extract-3.0.4.tgz 0ms (cache hit)
+npm http cache msgpackr@https://registry.npmjs.org/msgpackr/-/msgpackr-1.12.1.tgz 0ms (cache hit)
+npm http cache ms@https://registry.npmjs.org/ms/-/ms-2.1.3.tgz 0ms (cache hit)
+npm http cache mrmime@https://registry.npmjs.org/mrmime/-/mrmime-2.0.1.tgz 0ms (cache hit)
+npm http cache node-gyp-build-optional-packages@https://registry.npmjs.org/node-gyp-build-optional-packages/-/node-gyp-build-optional-packages-5.2.2.tgz 0ms (cache hit)
+npm http cache mimic-function@https://registry.npmjs.org/mimic-function/-/mimic-function-5.0.1.tgz 0ms (cache hit)
+npm http cache mime-db@https://registry.npmjs.org/mime-db/-/mime-db-1.54.0.tgz 0ms (cache hit)
+npm http cache mime-types@https://registry.npmjs.org/mime-types/-/mime-types-3.0.2.tgz 0ms (cache hit)
+npm http cache merge-descriptors@https://registry.npmjs.org/merge-descriptors/-/merge-descriptors-2.0.0.tgz 0ms (cache hit)
+npm http cache media-typer@https://registry.npmjs.org/media-typer/-/media-typer-1.1.1.tgz 0ms (cache hit)
+npm http cache math-intrinsics@https://registry.npmjs.org/math-intrinsics/-/math-intrinsics-1.1.0.tgz 0ms (cache hit)
+npm http cache magic-string@https://registry.npmjs.org/magic-string/-/magic-string-1.0.0.tgz 0ms (cache hit)
+npm http cache lru-cache@https://registry.npmjs.org/lru-cache/-/lru-cache-11.5.3.tgz 0ms (cache hit)
+npm http cache log-symbols@https://registry.npmjs.org/log-symbols/-/log-symbols-7.0.1.tgz 0ms (cache hit)
+npm http cache log-update@https://registry.npmjs.org/log-update/-/log-update-8.0.0.tgz 0ms (cache hit)
+npm http cache lmdb@https://registry.npmjs.org/lmdb/-/lmdb-3.5.6.tgz 0ms (cache hit)
+npm http cache listr2@https://registry.npmjs.org/listr2/-/listr2-11.0.0.tgz 0ms (cache hit)
+npm http cache lightningcss@https://registry.npmjs.org/lightningcss/-/lightningcss-1.33.0.tgz 0ms (cache hit)
+npm http cache lightningcss-linux-x64-gnu@https://registry.npmjs.org/lightningcss-linux-x64-gnu/-/lightningcss-linux-x64-gnu-1.33.0.tgz 0ms (cache hit)
+npm http cache json5@https://registry.npmjs.org/json5/-/json5-2.2.3.tgz 0ms (cache hit)
+npm http cache json-schema-typed@https://registry.npmjs.org/json-schema-typed/-/json-schema-typed-8.0.2.tgz 0ms (cache hit)
+npm http cache jsonc-parser@https://registry.npmjs.org/jsonc-parser/-/jsonc-parser-3.3.1.tgz 0ms (cache hit)
+npm http cache json-schema-traverse@https://registry.npmjs.org/json-schema-traverse/-/json-schema-traverse-1.0.0.tgz 0ms (cache hit)
+npm http cache jsesc@https://registry.npmjs.org/jsesc/-/jsesc-3.1.0.tgz 0ms (cache hit)
+npm http cache js-tokens@https://registry.npmjs.org/js-tokens/-/js-tokens-10.0.0.tgz 0ms (cache hit)
+npm http cache isexe@https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz 0ms (cache hit)
+npm http cache is-unicode-supported@https://registry.npmjs.org/is-unicode-supported/-/is-unicode-supported-2.1.0.tgz 0ms (cache hit)
+npm http cache is-promise@https://registry.npmjs.org/is-promise/-/is-promise-4.0.0.tgz 0ms (cache hit)
+npm http cache is-interactive@https://registry.npmjs.org/is-interactive/-/is-interactive-2.0.0.tgz 0ms (cache hit)
+npm http cache is-glob@https://registry.npmjs.org/is-glob/-/is-glob-4.0.3.tgz 0ms (cache hit)
+npm http cache is-fullwidth-code-point@https://registry.npmjs.org/is-fullwidth-code-point/-/is-fullwidth-code-point-5.1.0.tgz 0ms (cache hit)
+npm http cache is-extglob@https://registry.npmjs.org/is-extglob/-/is-extglob-2.1.1.tgz 0ms (cache hit)
+npm http cache ipaddr.js@https://registry.npmjs.org/ipaddr.js/-/ipaddr.js-1.9.1.tgz 0ms (cache hit)
+npm http cache ip-address@https://registry.npmjs.org/ip-address/-/ip-address-10.7.2.tgz 0ms (cache hit)
+npm http cache inherits@https://registry.npmjs.org/inherits/-/inherits-2.0.4.tgz 0ms (cache hit)
+npm http cache import-meta-resolve@https://registry.npmjs.org/import-meta-resolve/-/import-meta-resolve-4.2.0.tgz 0ms (cache hit)
+npm http cache immutable@https://registry.npmjs.org/immutable/-/immutable-5.1.9.tgz 0ms (cache hit)
+npm http cache jose@https://registry.npmjs.org/jose/-/jose-6.2.12.tgz 0ms (cache hit)
+npm http cache iconv-lite@https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.7.3.tgz 0ms (cache hit)
+npm http cache https-proxy-agent@https://registry.npmjs.org/https-proxy-agent/-/https-proxy-agent-9.1.0.tgz 0ms (cache hit)
+npm http cache http-errors@https://registry.npmjs.org/http-errors/-/http-errors-2.0.1.tgz 0ms (cache hit)
+npm http cache htmlparser2@https://registry.npmjs.org/htmlparser2/-/htmlparser2-10.1.0.tgz 0ms (cache hit)
+npm http cache negotiator@https://registry.npmjs.org/negotiator/-/negotiator-1.1.0.tgz 0ms (cache hit)
+npm http cache hosted-git-info@https://registry.npmjs.org/hosted-git-info/-/hosted-git-info-10.1.1.tgz 0ms (cache hit)
+npm http cache hono@https://registry.npmjs.org/hono/-/hono-4.13.8.tgz 0ms (cache hit)
+npm http cache has-symbols@https://registry.npmjs.org/has-symbols/-/has-symbols-1.1.0.tgz 0ms (cache hit)
+npm http cache graceful-fs@https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.11.tgz 0ms (cache hit)
+npm http cache hasown@https://registry.npmjs.org/hasown/-/hasown-2.0.4.tgz 0ms (cache hit)
+npm http cache gopd@https://registry.npmjs.org/gopd/-/gopd-1.2.0.tgz 0ms (cache hit)
+npm http cache get-proto@https://registry.npmjs.org/get-proto/-/get-proto-1.0.1.tgz 0ms (cache hit)
+npm http cache get-intrinsic@https://registry.npmjs.org/get-intrinsic/-/get-intrinsic-1.3.0.tgz 0ms (cache hit)
+npm http cache get-east-asian-width@https://registry.npmjs.org/get-east-asian-width/-/get-east-asian-width-1.7.0.tgz 0ms (cache hit)
+npm http cache gensync@https://registry.npmjs.org/gensync/-/gensync-1.0.0-beta.2.tgz 0ms (cache hit)
+npm http cache function-bind@https://registry.npmjs.org/function-bind/-/function-bind-1.1.2.tgz 0ms (cache hit)
+npm http cache fresh@https://registry.npmjs.org/fresh/-/fresh-2.0.0.tgz 0ms (cache hit)
+npm http cache forwarded@https://registry.npmjs.org/forwarded/-/forwarded-0.2.0.tgz 0ms (cache hit)
+npm http cache flru@https://registry.npmjs.org/flru/-/flru-1.0.2.tgz 0ms (cache hit)
+npm http cache finalhandler@https://registry.npmjs.org/finalhandler/-/finalhandler-2.1.1.tgz 0ms (cache hit)
+npm http cache fdir@https://registry.npmjs.org/fdir/-/fdir-6.5.0.tgz 0ms (cache hit)
+npm http cache fast-wrap-ansi@https://registry.npmjs.org/fast-wrap-ansi/-/fast-wrap-ansi-0.2.2.tgz 0ms (cache hit)
+npm http cache fast-uri@https://registry.npmjs.org/fast-uri/-/fast-uri-3.1.8.tgz 0ms (cache hit)
+npm http cache fast-string-width@https://registry.npmjs.org/fast-string-width/-/fast-string-width-3.0.2.tgz 0ms (cache hit)
+npm http cache fast-string-truncated-width@https://registry.npmjs.org/fast-string-truncated-width/-/fast-string-truncated-width-3.0.3.tgz 0ms (cache hit)
+npm http cache get-caller-file@https://registry.npmjs.org/get-caller-file/-/get-caller-file-2.0.5.tgz 0ms (cache hit)
+npm http cache fast-deep-equal@https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz 0ms (cache hit)
+npm http cache express-rate-limit@https://registry.npmjs.org/express-rate-limit/-/express-rate-limit-8.7.0.tgz 0ms (cache hit)
+npm http cache express@https://registry.npmjs.org/express/-/express-5.2.1.tgz 0ms (cache hit)
+npm http cache eventsource-parser@https://registry.npmjs.org/eventsource-parser/-/eventsource-parser-3.1.1.tgz 0ms (cache hit)
+npm http cache eventsource@https://registry.npmjs.org/eventsource/-/eventsource-3.0.7.tgz 0ms (cache hit)
+npm http cache etag@https://registry.npmjs.org/etag/-/etag-1.8.1.tgz 0ms (cache hit)
+npm http cache escalade@https://registry.npmjs.org/escalade/-/escalade-3.2.0.tgz 0ms (cache hit)
+npm http cache escape-html@https://registry.npmjs.org/escape-html/-/escape-html-1.0.3.tgz 0ms (cache hit)
+npm http cache es-object-atoms@https://registry.npmjs.org/es-object-atoms/-/es-object-atoms-1.1.2.tgz 0ms (cache hit)
+npm http cache esbuild@https://registry.npmjs.org/esbuild/-/esbuild-0.28.2.tgz 0ms (cache hit)
+npm http cache es-errors@https://registry.npmjs.org/es-errors/-/es-errors-1.3.0.tgz 0ms (cache hit)
+npm http cache es-define-property@https://registry.npmjs.org/es-define-property/-/es-define-property-1.0.1.tgz 0ms (cache hit)
+npm http cache environment@https://registry.npmjs.org/environment/-/environment-1.1.0.tgz 0ms (cache hit)
+npm http cache entities@https://registry.npmjs.org/entities/-/entities-4.5.0.tgz 0ms (cache hit)
+npm http cache encodeurl@https://registry.npmjs.org/encodeurl/-/encodeurl-2.0.0.tgz 0ms (cache hit)
+npm http cache empathic@https://registry.npmjs.org/empathic/-/empathic-2.1.0.tgz 0ms (cache hit)
+npm http cache emoji-regex@https://registry.npmjs.org/emoji-regex/-/emoji-regex-10.6.0.tgz 0ms (cache hit)
+npm http cache electron-to-chromium@https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.438.tgz 0ms (cache hit)
+npm http cache ee-first@https://registry.npmjs.org/ee-first/-/ee-first-1.1.1.tgz 0ms (cache hit)
+npm http cache dunder-proto@https://registry.npmjs.org/dunder-proto/-/dunder-proto-1.0.1.tgz 0ms (cache hit)
+npm http cache domutils@https://registry.npmjs.org/domutils/-/domutils-3.2.2.tgz 0ms (cache hit)
+npm http cache domelementtype@https://registry.npmjs.org/domelementtype/-/domelementtype-2.3.0.tgz 0ms (cache hit)
+npm http cache domhandler@https://registry.npmjs.org/domhandler/-/domhandler-5.0.3.tgz 0ms (cache hit)
+npm http cache dom-serializer@https://registry.npmjs.org/dom-serializer/-/dom-serializer-2.0.0.tgz 0ms (cache hit)
+npm http cache detect-libc@https://registry.npmjs.org/detect-libc/-/detect-libc-2.1.2.tgz 0ms (cache hit)
+npm http cache depd@https://registry.npmjs.org/depd/-/depd-2.0.0.tgz 0ms (cache hit)
+npm http cache css-what@https://registry.npmjs.org/css-what/-/css-what-7.0.0.tgz 0ms (cache hit)
+npm http cache debug@https://registry.npmjs.org/debug/-/debug-4.4.3.tgz 0ms (cache hit)
+npm http cache cross-spawn@https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.6.tgz 0ms (cache hit)
+npm http cache cors@https://registry.npmjs.org/cors/-/cors-2.8.6.tgz 0ms (cache hit)
+npm http cache css-select@https://registry.npmjs.org/css-select/-/css-select-6.0.0.tgz 0ms (cache hit)
+npm http cache cookie-signature@https://registry.npmjs.org/cookie-signature/-/cookie-signature-1.2.2.tgz 0ms (cache hit)
+npm http cache cookie@https://registry.npmjs.org/cookie/-/cookie-0.7.2.tgz 0ms (cache hit)
+npm http cache convert-source-map@https://registry.npmjs.org/convert-source-map/-/convert-source-map-1.9.0.tgz 0ms (cache hit)
+npm http cache content-type@https://registry.npmjs.org/content-type/-/content-type-1.0.5.tgz 0ms (cache hit)
+npm http cache content-disposition@https://registry.npmjs.org/content-disposition/-/content-disposition-1.1.0.tgz 0ms (cache hit)
+npm http cache cliui@https://registry.npmjs.org/cliui/-/cliui-9.0.1.tgz 0ms (cache hit)
+npm http cache cli-width@https://registry.npmjs.org/cli-width/-/cli-width-4.1.0.tgz 0ms (cache hit)
+npm http cache cli-truncate@https://registry.npmjs.org/cli-truncate/-/cli-truncate-6.1.1.tgz 0ms (cache hit)
+npm http cache cli-cursor@https://registry.npmjs.org/cli-cursor/-/cli-cursor-5.0.0.tgz 0ms (cache hit)
+npm http cache cli-spinners@https://registry.npmjs.org/cli-spinners/-/cli-spinners-3.4.0.tgz 0ms (cache hit)
+npm http cache chardet@https://registry.npmjs.org/chardet/-/chardet-2.2.0.tgz 0ms (cache hit)
+npm http cache caniuse-lite@https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001810.tgz 0ms (cache hit)
+npm http cache chalk@https://registry.npmjs.org/chalk/-/chalk-5.6.2.tgz 0ms (cache hit)
+npm http cache call-bound@https://registry.npmjs.org/call-bound/-/call-bound-1.0.4.tgz 0ms (cache hit)
+npm http cache chokidar@https://registry.npmjs.org/chokidar/-/chokidar-5.0.0.tgz 0ms (cache hit)
+npm http cache call-bind-apply-helpers@https://registry.npmjs.org/call-bind-apply-helpers/-/call-bind-apply-helpers-1.0.2.tgz 0ms (cache hit)
+npm http cache bytes@https://registry.npmjs.org/bytes/-/bytes-3.1.2.tgz 0ms (cache hit)
+npm http cache browserslist@https://registry.npmjs.org/browserslist/-/browserslist-4.29.0.tgz 0ms (cache hit)
+npm http cache buffer-from@https://registry.npmjs.org/buffer-from/-/buffer-from-1.1.2.tgz 0ms (cache hit)
+npm http cache boolbase@https://registry.npmjs.org/boolbase/-/boolbase-1.0.0.tgz 0ms (cache hit)
+npm http cache beasties@https://registry.npmjs.org/beasties/-/beasties-0.4.3.tgz 0ms (cache hit)
+npm http cache baseline-browser-mapping@https://registry.npmjs.org/baseline-browser-mapping/-/baseline-browser-mapping-2.11.25.tgz 0ms (cache hit)
+npm http cache ansi-styles@https://registry.npmjs.org/ansi-styles/-/ansi-styles-6.2.3.tgz 0ms (cache hit)
+npm http cache ansi-regex@https://registry.npmjs.org/ansi-regex/-/ansi-regex-6.3.0.tgz 0ms (cache hit)
+npm http cache ansi-escapes@https://registry.npmjs.org/ansi-escapes/-/ansi-escapes-7.3.0.tgz 0ms (cache hit)
+npm http cache ajv-formats@https://registry.npmjs.org/ajv-formats/-/ajv-formats-3.0.1.tgz 0ms (cache hit)
+npm http cache ajv@https://registry.npmjs.org/ajv/-/ajv-8.20.0.tgz 0ms (cache hit)
+npm http cache agent-base@https://registry.npmjs.org/agent-base/-/agent-base-9.0.0.tgz 0ms (cache hit)
+npm http cache accepts@https://registry.npmjs.org/accepts/-/accepts-2.0.0.tgz 0ms (cache hit)
+npm http cache @vitejs/plugin-basic-ssl@https://registry.npmjs.org/@vitejs/plugin-basic-ssl/-/plugin-basic-ssl-2.3.0.tgz 0ms (cache hit)
+npm http cache @types/jsesc@https://registry.npmjs.org/@types/jsesc/-/jsesc-2.5.1.tgz 0ms (cache hit)
+npm http cache @types/gensync@https://registry.npmjs.org/@types/gensync/-/gensync-1.0.5.tgz 0ms (cache hit)
+npm http cache @standard-schema/spec@https://registry.npmjs.org/@standard-schema/spec/-/spec-1.1.0.tgz 0ms (cache hit)
+npm http cache @schematics/angular@https://registry.npmjs.org/@schematics/angular/-/angular-22.1.8.tgz 0ms (cache hit)
+npm http cache @rolldown/binding-linux-x64-gnu@https://registry.npmjs.org/@rolldown/binding-linux-x64-gnu/-/binding-linux-x64-gnu-1.2.0.tgz 0ms (cache hit)
+npm http cache @rolldown/pluginutils@https://registry.npmjs.org/@rolldown/pluginutils/-/pluginutils-1.0.1.tgz 0ms (cache hit)
+npm http cache @parcel/watcher-linux-x64-glibc@https://registry.npmjs.org/@parcel/watcher-linux-x64-glibc/-/watcher-linux-x64-glibc-2.6.0.tgz 0ms (cache hit)
+npm http cache @parcel/watcher@https://registry.npmjs.org/@parcel/watcher/-/watcher-2.6.0.tgz 0ms (cache hit)
+npm http cache @oxc-project/types@https://registry.npmjs.org/@oxc-project/types/-/types-0.142.0.tgz 0ms (cache hit)
+npm http cache @oxc-parser/binding-linux-x64-gnu@https://registry.npmjs.org/@oxc-parser/binding-linux-x64-gnu/-/binding-linux-x64-gnu-0.142.0.tgz 0ms (cache hit)
+npm http cache @napi-rs/nice-linux-x64-gnu@https://registry.npmjs.org/@napi-rs/nice-linux-x64-gnu/-/nice-linux-x64-gnu-1.1.1.tgz 0ms (cache hit)
+npm http cache @napi-rs/nice@https://registry.npmjs.org/@napi-rs/nice/-/nice-1.1.1.tgz 0ms (cache hit)
+npm http cache @msgpackr-extract/msgpackr-extract-linux-x64@https://registry.npmjs.org/@msgpackr-extract/msgpackr-extract-linux-x64/-/msgpackr-extract-linux-x64-3.0.4.tgz 0ms (cache hit)
+npm http cache @modelcontextprotocol/sdk@https://registry.npmjs.org/@modelcontextprotocol/sdk/-/sdk-1.30.0.tgz 0ms (cache hit)
+npm http cache @lmdb/lmdb-linux-x64@https://registry.npmjs.org/@lmdb/lmdb-linux-x64/-/lmdb-linux-x64-3.5.6.tgz 0ms (cache hit)
+npm http cache @jridgewell/trace-mapping@https://registry.npmjs.org/@jridgewell/trace-mapping/-/trace-mapping-0.3.31.tgz 0ms (cache hit)
+npm http cache @jridgewell/sourcemap-codec@https://registry.npmjs.org/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.6.0.tgz 0ms (cache hit)
+npm http cache @jridgewell/resolve-uri@https://registry.npmjs.org/@jridgewell/resolve-uri/-/resolve-uri-3.1.2.tgz 0ms (cache hit)
+npm http cache @listr2/prompt-adapter-inquirer@https://registry.npmjs.org/@listr2/prompt-adapter-inquirer/-/prompt-adapter-inquirer-4.2.5.tgz 0ms (cache hit)
+npm http cache @jridgewell/gen-mapping@https://registry.npmjs.org/@jridgewell/gen-mapping/-/gen-mapping-0.3.13.tgz 0ms (cache hit)
+npm http cache @inquirer/type@https://registry.npmjs.org/@inquirer/type/-/type-4.1.1.tgz 0ms (cache hit)
+npm http cache @inquirer/search@https://registry.npmjs.org/@inquirer/search/-/search-4.3.3.tgz 0ms (cache hit)
+npm http cache @inquirer/select@https://registry.npmjs.org/@inquirer/select/-/select-5.2.5.tgz 0ms (cache hit)
+npm http cache @inquirer/rawlist@https://registry.npmjs.org/@inquirer/rawlist/-/rawlist-5.3.5.tgz 0ms (cache hit)
+npm http cache @inquirer/password@https://registry.npmjs.org/@inquirer/password/-/password-5.2.2.tgz 0ms (cache hit)
+npm http cache @inquirer/number@https://registry.npmjs.org/@inquirer/number/-/number-4.2.3.tgz 0ms (cache hit)
+npm http cache @inquirer/input@https://registry.npmjs.org/@inquirer/input/-/input-5.1.6.tgz 0ms (cache hit)
+npm http cache @inquirer/figures@https://registry.npmjs.org/@inquirer/figures/-/figures-2.0.9.tgz 0ms (cache hit)
+npm http cache @inquirer/external-editor@https://registry.npmjs.org/@inquirer/external-editor/-/external-editor-3.0.5.tgz 0ms (cache hit)
+npm http cache @inquirer/expand@https://registry.npmjs.org/@inquirer/expand/-/expand-5.1.5.tgz 0ms (cache hit)
+npm http cache @inquirer/editor@https://registry.npmjs.org/@inquirer/editor/-/editor-5.3.3.tgz 0ms (cache hit)
+npm http cache @inquirer/core@https://registry.npmjs.org/@inquirer/core/-/core-11.2.1.tgz 0ms (cache hit)
+npm http cache @inquirer/checkbox@https://registry.npmjs.org/@inquirer/checkbox/-/checkbox-5.2.5.tgz 0ms (cache hit)
+npm http cache @inquirer/confirm@https://registry.npmjs.org/@inquirer/confirm/-/confirm-6.1.1.tgz 0ms (cache hit)
+npm http cache @inquirer/prompts@https://registry.npmjs.org/@inquirer/prompts/-/prompts-8.5.2.tgz 0ms (cache hit)
+npm http cache @hono/node-server@https://registry.npmjs.org/@hono/node-server/-/node-server-2.1.1.tgz 0ms (cache hit)
+npm http cache @inquirer/ansi@https://registry.npmjs.org/@inquirer/ansi/-/ansi-2.0.8.tgz 0ms (cache hit)
+npm http cache body-parser@https://registry.npmjs.org/body-parser/-/body-parser-2.3.0.tgz 0ms (cache hit)
+npm http cache @harperfast/extended-iterable@https://registry.npmjs.org/@harperfast/extended-iterable/-/extended-iterable-1.0.3.tgz 0ms (cache hit)
+npm http cache @esbuild/linux-x64@https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.28.2.tgz 0ms (cache hit)
+npm http cache @babel/types@https://registry.npmjs.org/@babel/types/-/types-8.0.6.tgz 0ms (cache hit)
+npm http cache @babel/traverse@https://registry.npmjs.org/@babel/traverse/-/traverse-8.0.6.tgz 0ms (cache hit)
+npm http cache @babel/template@https://registry.npmjs.org/@babel/template/-/template-8.0.0.tgz 0ms (cache hit)
+npm http cache @babel/parser@https://registry.npmjs.org/@babel/parser/-/parser-8.0.6.tgz 0ms (cache hit)
+npm http cache @babel/helpers@https://registry.npmjs.org/@babel/helpers/-/helpers-8.0.5.tgz 0ms (cache hit)
+npm http cache @babel/helper-validator-option@https://registry.npmjs.org/@babel/helper-validator-option/-/helper-validator-option-8.0.0.tgz 0ms (cache hit)
+npm http cache @babel/helper-validator-identifier@https://registry.npmjs.org/@babel/helper-validator-identifier/-/helper-validator-identifier-8.0.6.tgz 0ms (cache hit)
+npm http cache @babel/helper-string-parser@https://registry.npmjs.org/@babel/helper-string-parser/-/helper-string-parser-8.0.6.tgz 0ms (cache hit)
+npm http cache @babel/helper-split-export-declaration@https://registry.npmjs.org/@babel/helper-split-export-declaration/-/helper-split-export-declaration-7.24.7.tgz 0ms (cache hit)
+npm http cache @babel/helper-compilation-targets@https://registry.npmjs.org/@babel/helper-compilation-targets/-/helper-compilation-targets-8.0.6.tgz 0ms (cache hit)
+npm http cache @babel/helper-globals@https://registry.npmjs.org/@babel/helper-globals/-/helper-globals-8.0.6.tgz 0ms (cache hit)
+npm http cache @babel/generator@https://registry.npmjs.org/@babel/generator/-/generator-8.0.6.tgz 0ms (cache hit)
+npm http cache @babel/helper-annotate-as-pure@https://registry.npmjs.org/@babel/helper-annotate-as-pure/-/helper-annotate-as-pure-8.0.0.tgz 0ms (cache hit)
+npm http cache @babel/core@https://registry.npmjs.org/@babel/core/-/core-8.0.1.tgz 0ms (cache hit)
+npm http cache @babel/compat-data@https://registry.npmjs.org/@babel/compat-data/-/compat-data-8.0.5.tgz 0ms (cache hit)
+npm http cache @angular/platform-browser@https://registry.npmjs.org/@angular/platform-browser/-/platform-browser-22.1.8.tgz 0ms (cache hit)
+npm http cache @angular/router@https://registry.npmjs.org/@angular/router/-/router-22.1.8.tgz 0ms (cache hit)
+npm http cache @angular/forms@https://registry.npmjs.org/@angular/forms/-/forms-22.1.8.tgz 0ms (cache hit)
+npm http cache @angular/core@https://registry.npmjs.org/@angular/core/-/core-22.1.8.tgz 0ms (cache hit)
+npm http cache @angular/compiler-cli@https://registry.npmjs.org/@angular/compiler-cli/-/compiler-cli-22.1.8.tgz 0ms (cache hit)
+npm http cache @babel/code-frame@https://registry.npmjs.org/@babel/code-frame/-/code-frame-8.0.6.tgz 0ms (cache hit)
+npm http cache @angular/compiler@https://registry.npmjs.org/@angular/compiler/-/compiler-22.1.8.tgz 0ms (cache hit)
+npm http cache @angular/common@https://registry.npmjs.org/@angular/common/-/common-22.1.8.tgz 0ms (cache hit)
+npm http cache @angular/cli@https://registry.npmjs.org/@angular/cli/-/cli-22.1.8.tgz 0ms (cache hit)
+npm http cache @angular/build@https://registry.npmjs.org/@angular/build/-/build-22.1.8.tgz 0ms (cache hit)
+npm http cache @angular-devkit/schematics@https://registry.npmjs.org/@angular-devkit/schematics/-/schematics-22.1.8.tgz 0ms (cache hit)
+npm http cache @angular-devkit/core@https://registry.npmjs.org/@angular-devkit/core/-/core-22.1.8.tgz 0ms (cache hit)
+npm http cache @angular-devkit/architect@https://registry.npmjs.org/@angular-devkit/architect/-/architect-0.2201.8.tgz 0ms (cache hit)
+npm http cache @ampproject/remapping@https://registry.npmjs.org/@ampproject/remapping/-/remapping-2.3.0.tgz 0ms (cache hit)
+npm http cache rolldown@https://registry.npmjs.org/rolldown/-/rolldown-1.1.5.tgz 0ms (cache hit)
+npm http cache @oxc-project/types@https://registry.npmjs.org/@oxc-project/types/-/types-0.139.0.tgz 0ms (cache hit)
+npm http cache content-type@https://registry.npmjs.org/content-type/-/content-type-2.1.0.tgz 0ms (cache hit)
+npm http cache source-map@https://registry.npmjs.org/source-map/-/source-map-0.6.1.tgz 0ms (cache hit)
+npm http cache @oxc-project/types@https://registry.npmjs.org/@oxc-project/types/-/types-0.140.0.tgz 0ms (cache hit)
+npm http cache @rolldown/binding-linux-x64-gnu@https://registry.npmjs.org/@rolldown/binding-linux-x64-gnu/-/binding-linux-x64-gnu-1.1.5.tgz 0ms (cache hit)
+npm http cache entities@https://registry.npmjs.org/entities/-/entities-8.1.0.tgz 0ms (cache hit)
+npm http cache content-type@https://registry.npmjs.org/content-type/-/content-type-2.1.0.tgz 0ms (cache hit)
+npm http cache wrap-ansi@https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-9.0.2.tgz 0ms (cache hit)
+npm http cache string-width@https://registry.npmjs.org/string-width/-/string-width-7.2.0.tgz 0ms (cache hit)
+npm http cache entities@https://registry.npmjs.org/entities/-/entities-7.0.1.tgz 0ms (cache hit)
+npm http cache content-type@https://registry.npmjs.org/content-type/-/content-type-2.1.0.tgz 0ms (cache hit)
+npm http cache node-addon-api@https://registry.npmjs.org/node-addon-api/-/node-addon-api-7.1.1.tgz 0ms (cache hit)
+npm http cache entities@https://registry.npmjs.org/entities/-/entities-8.1.0.tgz 0ms (cache hit)
+npm http cache @inquirer/core@https://registry.npmjs.org/@inquirer/core/-/core-12.0.3.tgz 0ms (cache hit)
+npm http cache @inquirer/core@https://registry.npmjs.org/@inquirer/core/-/core-12.0.3.tgz 0ms (cache hit)
+npm http cache @inquirer/core@https://registry.npmjs.org/@inquirer/core/-/core-12.0.3.tgz 0ms (cache hit)
+npm http cache @inquirer/core@https://registry.npmjs.org/@inquirer/core/-/core-12.0.3.tgz 0ms (cache hit)
+npm http cache @inquirer/core@https://registry.npmjs.org/@inquirer/core/-/core-12.0.3.tgz 0ms (cache hit)
+npm http cache @inquirer/core@https://registry.npmjs.org/@inquirer/core/-/core-12.0.3.tgz 0ms (cache hit)
+npm http cache @inquirer/core@https://registry.npmjs.org/@inquirer/core/-/core-12.0.3.tgz 0ms (cache hit)
+npm http cache @inquirer/core@https://registry.npmjs.org/@inquirer/core/-/core-12.0.3.tgz 0ms (cache hit)
+npm http cache @babel/types@https://registry.npmjs.org/@babel/types/-/types-7.29.8.tgz 0ms (cache hit)
+npm http cache @inquirer/core@https://registry.npmjs.org/@inquirer/core/-/core-12.0.3.tgz 0ms (cache hit)
+npm http cache @babel/helper-validator-identifier@https://registry.npmjs.org/@babel/helper-validator-identifier/-/helper-validator-identifier-7.29.7.tgz 0ms (cache hit)
+npm http cache @babel/helper-string-parser@https://registry.npmjs.org/@babel/helper-string-parser/-/helper-string-parser-7.29.7.tgz 0ms (cache hit)
+npm http cache @jridgewell/gen-mapping@https://registry.npmjs.org/@jridgewell/gen-mapping/-/gen-mapping-0.4.0-beta.0.tgz 0ms (cache hit)
+npm http cache convert-source-map@https://registry.npmjs.org/convert-source-map/-/convert-source-map-2.0.0.tgz 0ms (cache hit)
+npm http fetch POST 200 https://registry.npmjs.org/-/npm/v1/security/advisories/bulk 1324ms
+
+added 324 packages, and audited 343 packages in 6s
+
+99 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+npm info ok
+EXIT_CODE=0
+
+================================================================
+## logs/npm-ci-analysis.log
+================================================================
+install scripts executed during npm ci (lines 'npm info run'):
+0
+allowScripts warnings:
+0
+EBADENGINE/EBADDEVENGINES:
+0
+
+================================================================
+## logs/lockfile-unchanged.log
+================================================================
+# Lockfile and package.json unchanged after npm ci
+# date: 2026-09-24T05:05:20Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+$ bash -c sha256sum package-lock.json package.json; git diff --exit-code -- package.json package-lock.json && git diff --exit-code b6b023fea11625360f0bf43cd0bdcba968cda90d -- package-lock.json && echo 'package-lock.json byte-identical to HEAD and to IB0-WP01 baseline'
+be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69  package-lock.json
+bd7e07cc024455bd8e9b5545b2952911d14119efe6ddd6080c3a827b24752b0c  package.json
+package-lock.json byte-identical to HEAD and to IB0-WP01 baseline
+EXIT_CODE=0
+
+================================================================
+## logs/install-scripts-ls.log
+================================================================
+# npm install-scripts ls
+# date: 2026-09-24T05:05:20Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+$ npm install-scripts ls
+No packages with unreviewed install scripts.
+EXIT_CODE=0
+
+================================================================
+## logs/build-reference-app.log
+================================================================
+# Production build: reference-app
+# date: 2026-09-24T05:05:20Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+$ npm run build:reference-app
+
+> @proseit/paep-workspace@0.0.0 build:reference-app
+> ng build reference-app --configuration production
+
+❯ Building...
+✔ Building...
+Initial chunk files | Names         |  Raw size | Estimated transfer size
+main-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB
+styles-5INURTSO.css | styles        |   0 bytes |                 0 bytes
+
+                    | Initial total | 190.65 kB |                52.09 kB
+
+Application bundle generation complete. [4.035 seconds] - 2026-09-24T05:05:25.981Z
+
+Output location: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone/dist/reference-app
+
+EXIT_CODE=0
+
+================================================================
+## logs/build-ui-lab.log
+================================================================
+# Production build: ui-lab
+# date: 2026-09-24T05:05:26Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+$ npm run build:ui-lab
+
+> @proseit/paep-workspace@0.0.0 build:ui-lab
+> ng build ui-lab --configuration production
+
+❯ Building...
+✔ Building...
+Initial chunk files | Names         |  Raw size | Estimated transfer size
+main-RPR4FBCF.js    | main          | 190.65 kB |                52.16 kB
+styles-5INURTSO.css | styles        |   0 bytes |                 0 bytes
+
+                    | Initial total | 190.65 kB |                52.16 kB
+
+Application bundle generation complete. [2.842 seconds] - 2026-09-24T05:05:29.548Z
+
+Output location: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone/dist/ui-lab
+
+EXIT_CODE=0
+
+================================================================
+## logs/dist-hashes.log
+================================================================
+# dist file hashes
+# date: 2026-09-24T05:05:30Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+826d77b6b3f125519073a19783e45c85d96e8daadc3ad87c14439c9398a3f259  ./reference-app/3rdpartylicenses.txt
+f9102be80297c0529207607be5277b4f90bca89d65988fa1771b91c7894e815f  ./reference-app/browser/favicon.ico
+5bca83ac0e6e4bd50f67884e881cefd017b85aacc832c277fcdbf57630719655  ./reference-app/browser/index.html
+8fb68a9133ca3f58ecbcdfadc939dae45ccc5cf348bc1b8b3621ba6a51bae5d6  ./reference-app/browser/main-4FFRGG7I.js
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./reference-app/browser/styles-5INURTSO.css
+a79ddcc8a115190e9c19479ed36914741a7d1db74f0a1153529efc80725505fe  ./reference-app/prerendered-routes.json
+826d77b6b3f125519073a19783e45c85d96e8daadc3ad87c14439c9398a3f259  ./ui-lab/3rdpartylicenses.txt
+f9102be80297c0529207607be5277b4f90bca89d65988fa1771b91c7894e815f  ./ui-lab/browser/favicon.ico
+7f2a13f5a13a0b5cdf924fa253834add39e2ccb5ad11075b8c904f3687074df1  ./ui-lab/browser/index.html
+a15259cb22b08a96c5f822f2b7dfbc6217e4ae5db11ceae945cc7f41d5eb18d3  ./ui-lab/browser/main-RPR4FBCF.js
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./ui-lab/browser/styles-5INURTSO.css
+a79ddcc8a115190e9c19479ed36914741a7d1db74f0a1153529efc80725505fe  ./ui-lab/prerendered-routes.json
+EXIT_CODE=0
+
+================================================================
+## logs/ng-version.log
+================================================================
+# ng version
+# date: 2026-09-24T05:05:29Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+$ npx ng version
+
+     _                      _                 ____ _     ___
+    / \   _ __   __ _ _   _| | __ _ _ __     / ___| |   |_ _|
+   / △ \ | '_ \ / _` | | | | |/ _` | '__|   | |   | |    | |
+  / ___ \| | | | (_| | |_| | | (_| | |      | |___| |___ | |
+ /_/   \_\_| |_|\__, |\__,_|_|\__,_|_|       \____|_____|___|
+                |___/
+    
+
+Angular CLI       : 22.1.8
+Angular           : 22.1.8
+Node.js           : 24.21.0
+Package Manager   : npm 11.19.0
+Operating System  : linux x64
+
+┌───────────────────────────┬───────────────────┬───────────────────┐
+│ Package                   │ Installed Version │ Requested Version │
+├───────────────────────────┼───────────────────┼───────────────────┤
+│ @angular/build            │ 22.1.8            │ 22.1.8            │
+│ @angular/cli              │ 22.1.8            │ 22.1.8            │
+│ @angular/common           │ 22.1.8            │ 22.1.8            │
+│ @angular/compiler         │ 22.1.8            │ 22.1.8            │
+│ @angular/compiler-cli     │ 22.1.8            │ 22.1.8            │
+│ @angular/core             │ 22.1.8            │ 22.1.8            │
+│ @angular/forms            │ 22.1.8            │ 22.1.8            │
+│ @angular/platform-browser │ 22.1.8            │ 22.1.8            │
+│ @angular/router           │ 22.1.8            │ 22.1.8            │
+│ rxjs                      │ 7.8.2             │ 7.8.2             │
+│ typescript                │ 6.0.3             │ 6.0.3             │
+└───────────────────────────┴───────────────────┴───────────────────┘
+EXIT_CODE=0
+
+================================================================
+## logs/verify-ib0-wp02.log
+================================================================
+# IB0-WP02 verifier (npm run qa:ib0-wp02)
+# date: 2026-09-24T05:05:30Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+$ npm run qa:ib0-wp02
+
+> @proseit/paep-workspace@0.0.0 qa:ib0-wp02
+> node tooling/verification/verify-ib0-wp02.mjs
+
+PASS V01 .nvmrc pins an exact Node 24 LTS version — 24.21.0
+PASS V02 devEngines.runtime pins the same Node version with onFail=error — {"name":"node","version":"24.21.0","onFail":"error"}
+PASS V03 Pinned Node is inside the Angular engine ranges recorded in the lockfile — pinned=24.21.0; @angular/core engines=^22.22.3 || ^24.15.0 || >=26.0.0; @angular/build engines=^22.22.3 || ^24.15.0 || >=26.0.0
+PASS V04 Running Node equals the pinned version — running=24.21.0; pinned=24.21.0
+PASS V05 npm pinned exactly in packageManager and devEngines.packageManager (onFail=error), and the running npm matches — packageManager=npm@11.19.0; devEngines.packageManager={"name":"npm","version":"11.19.0","onFail":"error"}; running npm=11.19.0
+PASS V06 .npmrc sets engine-strict and strict-allow-scripts and holds no credentials — settings: engine-strict=true, strict-allow-scripts=true; credential-like entries: 0
+PASS V07 Every direct dependency is exact and matches the lockfile and installed tree — 12 direct dependencies agree
+PASS V08 All @angular/* packages share one exact 22.x version (core aligned with CLI) — 9 packages at 22.1.8
+PASS V09 TypeScript is an exact 6.0.x inside the @angular/compiler-cli peer range — typescript=6.0.3; peer=>=6.0 <6.1
+PASS V10 RxJS is an exact 7.x inside the @angular/core peer range — rxjs=7.8.2; peer=^6.5.3 || ^7.4.0
+PASS V11 Version manifest matches .nvmrc, package.json, package-lock.json and the installed tree — 12 direct + 15 build-tool versions agree
+PASS V12 Lockfile v3; every third-party entry resolves from registry.npmjs.org with sha512 integrity — lockfileVersion=3; third-party entries=434; bad=none
+PASS V13 package.json/package-lock.json match HEAD and package-lock.json is byte-identical to the IB0-WP01 baseline — working tree vs HEAD: clean; lockfile vs b6b023f: identical
+PASS V14 Every lockfile package with an install script is explicitly denied, and npm reports none unreviewed — packages with install scripts: @parcel/watcher, esbuild, fsevents, lmdb, msgpackr-extract; not explicitly denied: none; npm install-scripts ls: No packages with unreviewed install scripts.
+PASS V15 Every third-party licence is permissive or covered by a recorded build-time review — 434 entries: Apache-2.0 8, MIT 372, ISC 23, CC-BY-4.0 1, BSD-2-Clause 11, BSD-3-Clause 5, MPL-2.0 12, BlueOak-1.0.0 1, 0BSD 1
+PASS V16 Controlled sources (.paep-control/**, .gitignore) match PACK_MANIFEST.json and are unchanged since restore — 13/13 files match sha256 and size
+PASS V17 No dependency-set change, no IB0-WP03/04/05 artefacts, and apps/packages/workspace config and IB0-WP01 records unchanged — none
+PASS V18 No credential or secret signatures in files added or modified since the baseline — 65 files scanned; findings: none
+PASS V19 reference-app production build passes — exit=0
+PASS V20 ui-lab production build passes — exit=0
+
+IB0-WP02 verification: PASS (20/20)
+EXIT_CODE=0
+
+================================================================
+## logs/verify-ib0-wp01-regression.log
+================================================================
+# IB0-WP01 verifier regression
+# date: 2026-09-24T05:05:35Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+$ node tooling/verification/verify-ib0-wp01.mjs
+PASS V01 package.json exists
+PASS V02 package-lock.json exists
+PASS V03 Angular/Nx workspace metadata exists
+PASS V04 package.json parses
+PASS V05 npm is declared package manager — npm@11.19.0
+PASS V06 Required PAEP repository topology exists — 42 required directories present
+PASS V07 build:reference-app script exists — ng build reference-app --configuration production
+PASS V08 build:ui-lab script exists — ng build ui-lab --configuration production
+PASS V09 qa:ib0-wp01 script exists — node tooling/verification/verify-ib0-wp01.mjs
+PASS V10 reference-app is registered as workspace project
+PASS V11 ui-lab is registered as workspace project
+PASS V12 No obvious out-of-scope Frappe/reporting/commercial UI dependencies — none
+PASS V13 No obvious committed secrets in apps/packages/config — none
+PASS V14 reference-app build passes — exit=0
+PASS V15 ui-lab build passes — exit=0
+
+IB0-WP01 verifier result: PASS
+Evidence: evidence/IB0-WP01/reports/ib0-wp01-verification.json
+EXIT_CODE=0
+
+================================================================
+## logs/verify-ib0-wp01-restore.log
+================================================================
+# Restore IB0-WP01 evidence and prove it is unchanged
+# date: 2026-09-24T05:05:40Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+$ bash -c git checkout -- evidence/IB0-WP01/reports/ib0-wp01-verification.json && git diff --exit-code b6b023fea11625360f0bf43cd0bdcba968cda90d -- work-packages/IB0-WP01 evidence/IB0-WP01 && echo 'IB0-WP01 work package and evidence byte-identical to baseline'
+IB0-WP01 work package and evidence byte-identical to baseline
+EXIT_CODE=0
+
+================================================================
+## logs/controlled-source-integrity.log
+================================================================
+# Controlled-source integrity
+# date: 2026-09-24T05:05:40Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+$ bash -c git log --oneline -- .paep-control; echo; echo 'git diff --stat 8259317 HEAD -- .paep-control .gitignore PACK_MANIFEST.json:'; git diff --stat --exit-code 8259317 HEAD -- .paep-control .gitignore PACK_MANIFEST.json && echo '(empty)'; echo; node -e 'const fs=require("fs"),c=require("crypto");const m=require("./PACK_MANIFEST.json");let bad=0;for(const f of m.files.filter(f=>f.path===".gitignore"||f.path.startsWith(".paep-control/"))){const b=fs.readFileSync(f.path);const h=c.createHash("sha256").update(b).digest("hex");const ok=h===f.sha256&&b.length===f.bytes;if(!ok)bad++;console.log((ok?"MATCH ":"MISMATCH ")+h+" "+b.length+" "+f.path)}process.exit(bad?1:0)'
+8259317 Restore .paep-control/ and .gitignore from PAEP_CTRL.zip
+
+git diff --stat 8259317 HEAD -- .paep-control .gitignore PACK_MANIFEST.json:
+(empty)
+
+MATCH 3646b9d51803eca2cd8e7e5fec090abeab78137ee03e326689e875e29560b8bc 430 .gitignore
+MATCH cbae92bae66d58d8ea5ef5e90ae9df127098f6777711179e9d13b685dd8f5262 2397 .paep-control/SOURCE_OF_TRUTH.md
+MATCH 9a6a5efd82e71e7533cf883710b24c61e8b54ba1fe4910b402ba0340391e4996 542033 .paep-control/originals/PAEP_DCH_v1.0.pdf
+MATCH c61d5ace05815a7fbd3272c1587d1b6fa7a32fd6ce280aab6008c3bc70783b04 742463 .paep-control/originals/PAEP_EQP_v1.1.pdf
+MATCH cae5f62fbba6dd274ff83be4e3759ebecdafe220cf647b9e1427d6c16ccb623d 937641 .paep-control/originals/PAEP_IB_v1.0.pdf
+MATCH 1e2d9c3ff2b34ea0675225e226b2444270acefa23c0369a5c2fa5d07096375ba 705705 .paep-control/originals/PAEP_IR_v1.0.docx
+MATCH a9ae79b4c122e114811b23490ef9710d4921829a389a304e8d3a54c74bda74d9 1576649 .paep-control/originals/PAEP_v1.1.pdf
+MATCH 170945d6422fa46742c7eef6920166ed4b2c69c7130449509f8dc76687cb4ad2 33055 .paep-control/reference-baseline/PAEP_BASE_v1.0.zip
+MATCH 8bc9aee796b07644dedc240cba661c0c1c5b20b2bd99a233a6224a1153f48a75 46181 .paep-control/text/PAEP_DCH_01_v1.0_text.md
+MATCH 920d12e28e7cb4e9a96af28ec4803bab892c1032d1d94a0ac0452825b8a4bb09 58649 .paep-control/text/PAEP_EQP_01_v1.1_text.md
+MATCH bfdc1dbd1b73bc26f3893b2d8db1a327ec362b628137aa8270aacf2b66bbbf28 68553 .paep-control/text/PAEP_IB_01_v1.0_text.md
+MATCH 5cd5f01ab5a036296711a83768757b39338a5b28b5e57e2baed9b87b12731586 38704 .paep-control/text/PAEP_IR_01_v1.0_text.md
+MATCH 7abebe5fa09c6f903423734164f2fdbb7618711267190b10ade1423cd70b2c4f 85725 .paep-control/text/PAEP_v1.1_text.md
+EXIT_CODE=0
+
+================================================================
+## logs/npm-audit.log
+================================================================
+# npm audit (all and runtime)
+# date: 2026-09-24T05:05:40Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+$ bash -c npm audit; echo '--- --omit=dev'; npm audit --omit=dev
+found 0 vulnerabilities
+--- --omit=dev
+found 0 vulnerabilities
+EXIT_CODE=0
+
+================================================================
+## logs/licence-dist-check.log
+================================================================
+# Licence evidence from build output
+# date: 2026-09-24T05:05:41Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+Positive control (must list files): grep -rIilE 'rxjs|tslib' dist/
+dist/reference-app/3rdpartylicenses.txt
+dist/ui-lab/3rdpartylicenses.txt
+control exit=0 (0 = pattern syntax matches as expected)
+
+Search (must find nothing): grep -rIilE 'lightningcss|caniuse|browserslist|Mozilla Public|MPL-2|creativecommons|CC-BY' dist/
+search exit=1 (1 = no matches)
+
+npm ls lightningcss caniuse-lite --all:
+@proseit/paep-workspace@0.0.0 /tmp/claude-0/-home-claude-proseit-paep/***/scratchpad/qa/clone
+`-- @angular/build@22.1.8
+  +-- browserslist@4.29.0
+  | `-- caniuse-lite@1.0.30001810
+  `-- vite@8.1.5
+    `-- lightningcss@1.33.0
+
+
+npm ls --omit=dev --all (runtime closure):
+@proseit/paep-workspace@0.0.0 /tmp/claude-0/-home-claude-proseit-paep/***/scratchpad/qa/clone
++-- @angular/common@22.1.8
+| +-- @angular/core@22.1.8 deduped
+| +-- rxjs@7.8.2 deduped
+| `-- tslib@2.8.1 deduped
++-- @angular/compiler@22.1.8
+| `-- tslib@2.8.1 deduped
++-- @angular/core@22.1.8
+| +-- @angular/compiler@22.1.8 deduped
+| +-- rxjs@7.8.2 deduped
+| +-- tslib@2.8.1 deduped
+| `-- UNMET OPTIONAL DEPENDENCY zone.js@~0.15.0 || ~0.16.0
++-- @angular/forms@22.1.8
+| +-- @angular/common@22.1.8 deduped
+| +-- @angular/core@22.1.8 deduped
+| +-- @angular/platform-browser@22.1.8 deduped
+| +-- @standard-schema/spec@1.1.0
+| +-- rxjs@7.8.2 deduped
+| +-- tslib@2.8.1 deduped
+| `-- zod@4.4.3
++-- @angular/platform-browser@22.1.8
+| +-- UNMET OPTIONAL DEPENDENCY @angular/animations@22.1.8
+| +-- @angular/common@22.1.8 deduped
+| +-- @angular/core@22.1.8 deduped
+| `-- tslib@2.8.1 deduped
++-- @angular/router@22.1.8
+| +-- @angular/common@22.1.8 deduped
+| +-- @angular/core@22.1.8 deduped
+| +-- @angular/platform-browser@22.1.8 deduped
+| +-- rxjs@7.8.2 deduped
+| `-- tslib@2.8.1 deduped
++-- @proseit/frappe-sdk@0.0.0 -> ./packages/frappe-sdk
++-- @proseit/paep-analytics@0.0.0 -> ./packages/analytics
++-- @proseit/paep-components@0.0.0 -> ./packages/components
++-- @proseit/paep-contracts@0.0.0 -> ./packages/contracts
++-- @proseit/paep-domain-ai@0.0.0 -> ./packages/domain-ai
++-- @proseit/paep-domain-commerce@0.0.0 -> ./packages/domain-commerce
++-- @proseit/paep-domain-construction@0.0.0 -> ./packages/domain-construction
++-- @proseit/paep-domain-fiscal@0.0.0 -> ./packages/domain-fiscal
++-- @proseit/paep-domain-iot@0.0.0 -> ./packages/domain-iot
++-- @proseit/paep-domain-maintenance@0.0.0 -> ./packages/domain-maintenance
++-- @proseit/paep-domain-manufacturing@0.0.0 -> ./packages/domain-manufacturing
++-- @proseit/paep-domain-quality@0.0.0 -> ./packages/domain-quality
++-- @proseit/paep-enterprise@0.0.0 -> ./packages/enterprise
++-- @proseit/paep-foundation@0.0.0 -> ./packages/foundation
++-- @proseit/paep-i18n@0.0.0 -> ./packages/i18n
++-- @proseit/paep-observability@0.0.0 -> ./packages/observability
++-- @proseit/paep-offline@0.0.0 -> ./packages/offline
++-- @proseit/paep-platform@0.0.0 -> ./packages/platform
++-- rxjs@7.8.2
+| `-- tslib@2.8.1 deduped
+`-- tslib@2.8.1
+
+
+Packages named in dist/reference-app/3rdpartylicenses.txt:
+Package: @angular/core
+Package: rxjs
+Package: tslib
+Package: @angular/common
+Package: @angular/platform-browser
+Package: @angular/router
+
+Files under dist/reference-app:
+dist/reference-app/3rdpartylicenses.txt
+dist/reference-app/browser/favicon.ico
+dist/reference-app/browser/index.html
+dist/reference-app/browser/main-4FFRGG7I.js
+dist/reference-app/browser/styles-5INURTSO.css
+dist/reference-app/prerendered-routes.json
+
+lightningcss removal test (production output with lightningcss removed must be identical):
+builds without lightningcss: reference-app exit=0 ui-lab exit=0
+browser output byte-identical with and without lightningcss
+EXIT_CODE=0
+
+================================================================
+## logs/scope-and-secret-scan.log
+================================================================
+# Scope and secret scan
+# date: 2026-09-24T05:05:49Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+git diff --name-status b6b023fea11625360f0bf43cd0bdcba968cda90d..HEAD:
+A	.npmrc
+A	.nvmrc
+M	CLAUDE.md
+M	README.md
+M	docs/adr/ADR-REGISTER.md
+A	docs/architecture/IB0-WP02-IMPLEMENTATION-PLAN.md
+A	docs/architecture/toolchain-version-manifest.json
+M	docs/licences/README.md
+A	docs/licences/THIRD-PARTY-LICENCE-REVIEW.md
+A	docs/licences/THIRD-PARTY-NOTICES.md
+M	docs/provenance/PROVENANCE-REGISTER.md
+A	evidence/IB0-WP02/README.md
+A	evidence/IB0-WP02/logs/build-output-vs-baseline.log
+A	evidence/IB0-WP02/logs/build-reference-app.log
+A	evidence/IB0-WP02/logs/build-ui-lab.log
+A	evidence/IB0-WP02/logs/clean-clone-reproduction.log
+A	evidence/IB0-WP02/logs/closure-audit/lane-b-licence-provenance.md
+A	evidence/IB0-WP02/logs/closure-audit/lane-c-reproducibility.md
+A	evidence/IB0-WP02/logs/closure-audit/lane-d-control-github.md
+A	evidence/IB0-WP02/logs/controlled-source-integrity.log
+A	evidence/IB0-WP02/logs/dist-hashes.log
+A	evidence/IB0-WP02/logs/erratum-baseline-install-scripts.log
+A	evidence/IB0-WP02/logs/ib0-wp01-verification.regression.json
+A	evidence/IB0-WP02/logs/install-scripts-ls.log
+A	evidence/IB0-WP02/logs/licence-dist-check.log
+A	evidence/IB0-WP02/logs/lockfile-regenerate-check.log
+A	evidence/IB0-WP02/logs/lockfile-unchanged.log
+A	evidence/IB0-WP02/logs/negative-install-script.log
+A	evidence/IB0-WP02/logs/negative-lockfile-drift.log
+A	evidence/IB0-WP02/logs/negative-node-version.log
+A	evidence/IB0-WP02/logs/negative-verifier-manifest.log
+A	evidence/IB0-WP02/logs/ng-version.log
+A	evidence/IB0-WP02/logs/npm-audit.log
+A	evidence/IB0-WP02/logs/npm-ci-analysis.log
+A	evidence/IB0-WP02/logs/npm-ci.log
+A	evidence/IB0-WP02/logs/npm10-vs-npm11-installed-tree.log
+A	evidence/IB0-WP02/logs/registry-review.log
+A	evidence/IB0-WP02/logs/scope-and-secret-scan.log
+A	evidence/IB0-WP02/logs/toolchain-versions.log
+A	evidence/IB0-WP02/logs/verify-ib0-wp01-regression.log
+A	evidence/IB0-WP02/logs/verify-ib0-wp01-restore.log
+A	evidence/IB0-WP02/logs/verify-ib0-wp02.log
+A	evidence/IB0-WP02/notes/closure-authorisation.md
+A	evidence/IB0-WP02/notes/implementation-summary.md
+A	evidence/IB0-WP02/reports/definition-audit.md
+A	evidence/IB0-WP02/reports/ib0-wp02-verification.json
+A	evidence/IB0-WP02/reports/install-script-policy.md
+A	evidence/IB0-WP02/reports/licence-inventory.json
+A	evidence/IB0-WP02/reports/licence-inventory.md
+A	evidence/IB0-WP02/reports/lockfile-diff.md
+A	evidence/IB0-WP02/reports/version-manifest.md
+M	package.json
+A	tooling/verification/verify-ib0-wp02.mjs
+A	work-packages/IB0-WP02/ACCEPTANCE.md
+A	work-packages/IB0-WP02/ACCEPTANCE_REPORT.md
+A	work-packages/IB0-WP02/ACCEPTANCE_REPORT_TEMPLATE.md
+A	work-packages/IB0-WP02/QUALITY_GATE_RUNBOOK.md
+A	work-packages/IB0-WP02/TRACEABILITY.csv
+A	work-packages/IB0-WP02/WORK_PACKAGE.md
+A	work-packages/IB0-WP02/prompts/00_QUICK_START.txt
+A	work-packages/IB0-WP02/prompts/01_EXECUTE.md
+A	work-packages/IB0-WP02/prompts/02_INDEPENDENT_QA.md
+A	work-packages/IB0-WP02/prompts/03_DEFECT_REPAIR.md
+A	work-packages/IB0-WP02/prompts/04_ACCEPTANCE_SUMMARY.md
+A	work-packages/IB0-WP02/work-package.json
+
+Out-of-scope files present?
+(check done)
+
+Protected paths changed since baseline (apps packages angular.json tsconfig*.json PACK_MANIFEST.json WP01 records):
+(end of list)
+
+CLAUDE.md (single amendment authorised by the PO/SA on 2026-09-24): commits touching it since baseline:
+0078bb2 IB0-WP02: record PO/SA approvals and amend CLAUDE.md once
+git diff b6b023fea11625360f0bf43cd0bdcba968cda90d HEAD -- CLAUDE.md:
+diff --git a/CLAUDE.md b/CLAUDE.md
+index fb266e2..904ef52 100644
+--- a/CLAUDE.md
++++ b/CLAUDE.md
+@@ -1,4 +1,4 @@
+-# PAEP CLAUDE ENGINEERING CONTRACT — IB0-WP01
++# PAEP CLAUDE ENGINEERING CONTRACT
+ 
+ You are implementing the controlled ProSEIT Angular Experience Platform (PAEP).
+ 
+@@ -9,15 +9,17 @@ You are implementing the controlled ProSEIT Angular Experience Platform (PAEP).
+ 3. `.paep-control/text/PAEP_IR_01_v1.0_text.md`
+ 4. `.paep-control/text/PAEP_EQP_01_v1.1_text.md`
+ 5. Approved ADRs under `docs/adr/`
+-6. `work-packages/IB0-WP01/WORK_PACKAGE.md`
+-7. `work-packages/IB0-WP01/ACCEPTANCE.md`
++6. `work-packages/<authorised work package>/WORK_PACKAGE.md`
++7. `work-packages/<authorised work package>/ACCEPTANCE.md`
+ 8. Executable quality gates
+ 
+ If a lower-priority instruction conflicts with a higher-priority source, stop and report the conflict. Do not silently reinterpret the architecture.
+ 
+-## Current bounded objective
++## Work-package authorisation
+ 
+-Implement **IB0-WP01 only**: create the governed repository and Angular workspace bootstrap, including `apps/reference-app`, `apps/ui-lab`, and the approved top-level package/tooling/configuration/documentation/evidence topology.
++Claude shall execute only the work package explicitly authorised by the Product Owner / Solutions Architect in the current instruction. Claude shall not begin, implement, merge, or otherwise advance a subsequent work package without new explicit authorisation.
++
++The authorised work package is identified by its ID (for example `IB0-WPnn`) in that instruction. Its approved `WORK_PACKAGE.md` and `ACCEPTANCE.md` are source-of-truth items 6 and 7 above, and its evidence and traceability live under `evidence/<authorised work package>/` and `work-packages/<authorised work package>/`. Human acceptance (ACCEPTED) and merge authorisation remain decisions of the Product Owner / Solutions Architect.
+ 
+ The controlled implementation baseline is Angular 22.x with TypeScript 6.0.x and npm workspaces/Nx-compatible orchestration. Select only compatible minor/patch versions within that baseline and record the exact versions used. Do not change the controlled major-version posture without an approved ADR.
+ 
+@@ -30,7 +32,7 @@ The controlled implementation baseline is Angular 22.x with TypeScript 6.0.x and
+ - Do not introduce secrets, credentials, private keys, database credentials, or bearer tokens into source, examples, runtime configuration, logs, or evidence.
+ - Do not delete, weaken, bypass, suppress, or rewrite a mandatory acceptance criterion to obtain PASS.
+ - Do not claim COMPLETE while a mandatory criterion is failing, unexecuted, or unsupported by evidence.
+-- Avoid over-engineering. Implement only what IB0-WP01 requires plus the minimum scaffolding the Angular toolchain itself requires.
++- Avoid over-engineering. Implement only what the authorised work package requires plus the minimum scaffolding the Angular toolchain itself requires.
+ - If temporary helper files are created, remove them before completion unless they are intentional retained project assets.
+ - Before making claims about an existing file, read it.
+ 
+@@ -42,8 +44,8 @@ The controlled implementation baseline is Angular 22.x with TypeScript 6.0.x and
+ 4. Run the mandatory acceptance gates.
+ 5. If a gate fails, diagnose the root cause and fix it without weakening the criterion.
+ 6. Re-run the failed gate and affected regression gates.
+-7. Retain evidence under `evidence/IB0-WP01/`.
+-8. Update `work-packages/IB0-WP01/TRACEABILITY.csv` and the acceptance report.
++7. Retain evidence under `evidence/<authorised work package>/`.
++8. Update `work-packages/<authorised work package>/TRACEABILITY.csv` and the acceptance report.
+ 9. Report status accurately as NOT STARTED, IN PROGRESS, BLOCKED, FAILED, PASS, or ACCEPTED.
+ 10. Technical PASS does not equal human ACCEPTED.
+ 
+
+Dependency names (must equal baseline):
+identical
+
+Secret signatures in added/modified files:
+(no matches)
+
+.npmrc contents:
+engine-strict=true
+strict-allow-scripts=true
+EXIT_CODE=0
+
+================================================================
+## logs/negative-node-version.log
+================================================================
+# Negative: wrong Node / wrong npm must fail
+2026-09-24T05:05:50Z
+
+## node22+npm10: node v22.22.2 / npm 10.9.7
+$ npm ci
+npm error EBADDEVENGINES The developer of this package has specified the following through devEngines
+npm error EBADDEVENGINES Invalid devEngines.runtime
+npm error EBADDEVENGINES Invalid semver version "24.21.0" does not match "v22.22.2" for "runtime"
+npm error EBADDEVENGINES {
+npm error EBADDEVENGINES   current: { name: 'node', version: 'v22.22.2' },
+npm error EBADDEVENGINES   required: { name: 'node', version: '24.21.0', onFail: 'error' }
+npm error EBADDEVENGINES }
+npm error A complete log of this run can be found in: /root/.npm/_logs/2026-09-24T05_05_50_438Z-debug-0.log
+EXIT_CODE=1
+$ npm run build:reference-app
+npm error EBADDEVENGINES Invalid semver version "24.21.0" does not match "v22.22.2" for "runtime"
+npm error EBADDEVENGINES {
+npm error EBADDEVENGINES   current: { name: 'node', version: 'v22.22.2' },
+npm error EBADDEVENGINES   required: { name: 'node', version: '24.21.0', onFail: 'error' }
+npm error EBADDEVENGINES }
+npm error A complete log of this run can be found in: /root/.npm/_logs/2026-09-24T05_05_50_708Z-debug-0.log
+EXIT_CODE=1
+
+## node22+npm11: node v22.22.2 / npm 11.19.0
+$ npm ci
+npm error EBADDEVENGINES The developer of this package has specified the following through devEngines
+npm error EBADDEVENGINES Invalid devEngines.runtime
+npm error EBADDEVENGINES Invalid semver version "24.21.0" does not match "v22.22.2" for "runtime"
+npm error EBADDEVENGINES {
+npm error EBADDEVENGINES   current: { name: 'node', version: 'v22.22.2' },
+npm error EBADDEVENGINES   required: { name: 'node', version: '24.21.0', onFail: 'error' }
+npm error EBADDEVENGINES }
+npm error A complete log of this run can be found in: /root/.npm/_logs/2026-09-24T05_05_51_175Z-debug-0.log
+EXIT_CODE=1
+$ npm run build:reference-app
+npm error EBADDEVENGINES Invalid semver version "24.21.0" does not match "v22.22.2" for "runtime"
+npm error EBADDEVENGINES {
+npm error EBADDEVENGINES   current: { name: 'node', version: 'v22.22.2' },
+npm error EBADDEVENGINES   required: { name: 'node', version: '24.21.0', onFail: 'error' }
+npm error EBADDEVENGINES }
+npm error A complete log of this run can be found in: /root/.npm/_logs/2026-09-24T05_05_51_668Z-debug-0.log
+EXIT_CODE=1
+
+## node24+npm10: node v24.21.0 / npm 10.9.7
+$ npm ci
+npm error EBADDEVENGINES The developer of this package has specified the following through devEngines
+npm error EBADDEVENGINES Invalid devEngines.packageManager
+npm error EBADDEVENGINES Invalid semver version "11.19.0" does not match "10.9.7" for "packageManager"
+npm error EBADDEVENGINES {
+npm error EBADDEVENGINES   current: { name: 'npm', version: '10.9.7' },
+npm error EBADDEVENGINES   required: { name: 'npm', version: '11.19.0', onFail: 'error' }
+npm error EBADDEVENGINES }
+npm error A complete log of this run can be found in: /root/.npm/_logs/2026-09-24T05_05_52_090Z-debug-0.log
+EXIT_CODE=1
+$ npm run build:reference-app
+npm error EBADDEVENGINES Invalid semver version "11.19.0" does not match "10.9.7" for "packageManager"
+npm error EBADDEVENGINES {
+npm error EBADDEVENGINES   current: { name: 'npm', version: '10.9.7' },
+npm error EBADDEVENGINES   required: { name: 'npm', version: '11.19.0', onFail: 'error' }
+npm error EBADDEVENGINES }
+npm error A complete log of this run can be found in: /root/.npm/_logs/2026-09-24T05_05_52_324Z-debug-0.log
+EXIT_CODE=1
+ M evidence/IB0-WP02/reports/ib0-wp02-verification.json
+ M evidence/IB0-WP02/reports/licence-inventory.json
+
+================================================================
+## logs/negative-lockfile-drift.log
+================================================================
+# Negative: package.json edited without lockfile update must fail npm ci
+# lockfile drift
+# date: 2026-09-24T05:05:52Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/neg
+
+diff --git a/package.json b/package.json
+index 7a036ed..7299d86 100644
+--- a/package.json
++++ b/package.json
+@@ -32,7 +32,7 @@
+     "@angular/forms": "22.1.8",
+     "@angular/platform-browser": "22.1.8",
+     "@angular/router": "22.1.8",
+-    "rxjs": "7.8.2",
++    "rxjs": "7.8.1",
+     "tslib": "2.8.1"
+   },
+   "devDependencies": {
+$ npm ci
+npm error code EUSAGE
+npm error Invalid: lock file's rxjs@7.8.2 does not satisfy rxjs@7.8.1
+npm error Missing: rxjs@7.8.2 from lock file
+npm error Missing: rxjs@7.8.2 from lock file
+npm error Missing: rxjs@7.8.2 from lock file
+npm error Clean install a project
+npm error Usage:
+npm error Options:
+EXIT_CODE=1
+package.json restored
+
+================================================================
+## logs/negative-install-script.log
+================================================================
+# Negative: an install script not covered by allowScripts must fail npm ci under strict-allow-scripts
+# unreviewed install script
+# date: 2026-09-24T05:05:53Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/neg
+
+diff --git a/package.json b/package.json
+index 7a036ed..4652fd2 100644
+--- a/package.json
++++ b/package.json
+@@ -43,7 +43,6 @@
+   },
+   "allowScripts": {
+     "@parcel/watcher": false,
+-    "esbuild": false,
+     "fsevents": false,
+     "lmdb": false,
+     "msgpackr-extract": false
+npm error code ESTRICTALLOWSCRIPTS
+npm error --strict-allow-scripts: 1 package(s) have install scripts not covered by allowScripts:
+npm error   esbuild@0.28.2 (install: (install scripts present))
+npm error Approve them with `npm install-scripts approve`, deny them with `npm install-scripts deny`, or bypass this check with `--dangerously-allow-all-scripts`.
+npm error A complete log of this run can be found in: /root/.npm/_logs/2026-09-24T05_05_53_557Z-debug-0.log
+EXIT_CODE=1
+
+================================================================
+## logs/negative-verifier-manifest.log
+================================================================
+# Negative: verifier must fail when the manifest disagrees with the lockfile
+# manifest drift
+# date: 2026-09-24T05:05:54Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/neg
+
+npm ci exit=0
+diff --git a/docs/architecture/toolchain-version-manifest.json b/docs/architecture/toolchain-version-manifest.json
+index 9a46471..08c88e0 100644
+--- a/docs/architecture/toolchain-version-manifest.json
++++ b/docs/architecture/toolchain-version-manifest.json
+@@ -37,7 +37,7 @@
+     "node_modules/@angular-devkit/schematics": "22.1.8",
+     "node_modules/@schematics/angular": "22.1.8",
+     "node_modules/esbuild": "0.28.2",
+-    "node_modules/vite": "8.1.5",
++    "node_modules/vite": "8.1.4",
+     "node_modules/rolldown": "1.2.0",
+     "node_modules/vite/node_modules/rolldown": "1.1.5",
+     "node_modules/sass": "1.101.0",
+FAIL V11 Version manifest matches .nvmrc, package.json, package-lock.json and the installed tree — buildTools node_modules/vite: manifest 8.1.4 != lockfile 8.1.5; buildTools node_modules/vite: manifest 8.1.4 != installed 8.1.5
+IB0-WP02 verification: FAIL (19/20)
+EXIT_CODE=1
+
+================================================================
+## logs/erratum-baseline-install-scripts.log
+================================================================
+# IB0-WP01 baseline b6b023f: npm ci --loglevel=info (no allowScripts policy)
+# date: 2026-09-24T05:06:05Z node: v24.21.0 npm: 11.19.0 commit: b6b023fea11625360f0bf43cd0bdcba968cda90d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/base
+
+npm info run @parcel/watcher@2.6.0 install node_modules/@parcel/watcher node scripts/build-from-source.js
+npm info run lmdb@3.5.6 install node_modules/lmdb node-gyp-build-optional-packages
+npm info run msgpackr-extract@3.0.4 install node_modules/msgpackr-extract node-gyp-build-optional-packages
+npm info run @parcel/watcher@2.6.0 install { code: 0, signal: null }
+npm info run msgpackr-extract@3.0.4 install { code: 0, signal: null }
+npm info run lmdb@3.5.6 install { code: 0, signal: null }
+npm info run esbuild@0.28.2 postinstall node_modules/esbuild node install.js
+npm info run esbuild@0.28.2 postinstall { code: 0, signal: null }
+added 324 packages, and audited 343 packages in 5s
+npm warn install-scripts 4 packages have install scripts not yet covered by allowScripts:
+npm warn install-scripts   @parcel/watcher@2.6.0 (install: node scripts/build-from-source.js)
+npm warn install-scripts   esbuild@0.28.2 (postinstall: node install.js)
+npm warn install-scripts   lmdb@3.5.6 (install: node-gyp-build-optional-packages)
+npm warn install-scripts   msgpackr-extract@3.0.4 (install: node-gyp-build-optional-packages)
+npm warn install-scripts
+npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+EXIT_CODE=0

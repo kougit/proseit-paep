@@ -1,0 +1,20 @@
+# date: 2026-09-24T05:10:25Z commit: fd096c1ab0a92921c1d789fe241bb33299b28da1 cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/iqa/neg-d
+# PATH=/opt/node24/bin:/usr/bin:/bin node: v24.21.0 npm-cli: 11.19.0
+$ mutation: node -e 'const f="package.json",p=JSON.parse(require("fs").readFileSync(f));delete p.allowScripts.esbuild;require("fs").writeFileSync(f,JSON.stringify(p,null,2)+"\n")'; grep -A6 allowScripts package.json
+  "allowScripts": {
+    "@parcel/watcher": false,
+    "fsevents": false,
+    "lmdb": false,
+    "msgpackr-extract": false
+  }
+}
+$ git diff --stat
+ package.json | 1 -
+ 1 file changed, 1 deletion(-)
+$ /opt/node24/bin/node /opt/node24/lib/node_modules/npm/bin/npm-cli.js ci
+npm error code ESTRICTALLOWSCRIPTS
+npm error --strict-allow-scripts: 1 package(s) have install scripts not covered by allowScripts:
+npm error   esbuild@0.28.2 (install: (install scripts present))
+npm error Approve them with `npm install-scripts approve`, deny them with `npm install-scripts deny`, or bypass this check with `--dangerously-allow-all-scripts`.
+npm error A complete log of this run can be found in: /root/.npm/_logs/2026-09-24T05_10_25_374Z-debug-0.log
+EXIT_CODE=1

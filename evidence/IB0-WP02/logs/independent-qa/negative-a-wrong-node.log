@@ -1,0 +1,15 @@
+# date: 2026-09-24T05:10:23Z commit: fd096c1ab0a92921c1d789fe241bb33299b28da1 cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/iqa/neg-a
+# PATH=/opt/node22/bin:/usr/bin:/bin node: v22.22.2 npm-cli: 10.9.7
+$ mutation: true
+$ git diff --stat
+$ /opt/node22/bin/node /opt/node22/lib/node_modules/npm/bin/npm-cli.js ci
+npm error code EBADDEVENGINES
+npm error EBADDEVENGINES The developer of this package has specified the following through devEngines
+npm error EBADDEVENGINES Invalid devEngines.runtime
+npm error EBADDEVENGINES Invalid semver version "24.21.0" does not match "v22.22.2" for "runtime"
+npm error EBADDEVENGINES {
+npm error EBADDEVENGINES   current: { name: 'node', version: 'v22.22.2' },
+npm error EBADDEVENGINES   required: { name: 'node', version: '24.21.0', onFail: 'error' }
+npm error EBADDEVENGINES }
+npm error A complete log of this run can be found in: /root/.npm/_logs/2026-09-24T05_10_23_624Z-debug-0.log
+EXIT_CODE=1

@@ -6,7 +6,7 @@
 **Design classification:** D0 — not a UI work package; no design handoff required (PAEP-DCH-01 §5 applies to UI work packages only)  
 **Execution agent:** Claude Code  
 **Acceptance authority:** Solutions Architect / Main Product Owner or delegated technical reviewer; licence dispositions additionally require the Engineering Governance / IP owner (PAEP v1.1 Approval and Decision Rights)  
-**Definition status:** **APPROVED** on 2026-09-24 by the Product Owner / Solutions Architect (24 acceptance criteria, unchanged). Drafted by Claude Code on 2026-09-23 from PAEP-IR-01 §4.4 (IB0-WP2), PAEP-IB-01 §4 and the IB0-WP01 deferrals, because the controlled pack supplied no IB0-WP02 definition. The approval was conditional on every criterion tracing to IB-01/IR-01 requirements without WP03, WP04 or later scope; the definition audit that confirmed this is `evidence/IB0-WP02/reports/definition-audit.md`. Controlled amendments made at approval are listed in §12.
+**Definition status:** **APPROVED** on 2026-09-24 by the Product Owner / Solutions Architect (24 acceptance criteria, unchanged). Drafted by Claude Code on 2026-09-23 from PAEP-IR-01 §4.4 (IB0-WP2), PAEP-IB-01 §4 and the IB0-WP01 deferrals, because the controlled pack supplied no IB0-WP02 definition. The approval was conditional on every criterion tracing to IB-01/IR-01 requirements without WP03, WP04 or later scope; the definition audit that confirmed this is `evidence/IB0-WP02/reports/definition-audit.md`. Controlled amendments made at approval are listed in §13.
 
 ## 1. Objective
 
@@ -18,7 +18,7 @@ The implementation plan (`docs/architecture/IB0-WP02-IMPLEMENTATION-PLAN.md`) re
 
 (i) **R1: execution authorised.** The Product Owner / Solutions Architect instructed execution of IB0-WP02 in the PAEP project thread on 2026-09-23. Claude drafted this `WORK_PACKAGE.md` and `ACCEPTANCE.md` and may not approve them itself. They are submitted with the implementation for human approval, and the acceptance authority may amend a criterion, in which case the work is re-verified against the amended criterion before ACCEPTED. **Closed 2026-09-24:** the PO/SA approved the definition with all 24 criteria unchanged.
 
-(ii) **R2: execution contract.** The root `CLAUDE.md` still names IB0-WP01 as the current bounded objective, and its items 6–7 point to `work-packages/IB0-WP01/`. Claude does not edit its own execution contract. The Product Owner / Solutions Architect instruction to execute IB0-WP02 is the authority for this run; every mandatory rule and stop condition in `CLAUDE.md` is still applied. **Closed 2026-09-24:** the PO/SA expressly authorised Claude to amend `CLAUDE.md` once, replacing the IB0-WP01-specific objective with a durable, work-package-neutral authorisation rule. See §11(i) and §12.
+(ii) **R2: execution contract.** The root `CLAUDE.md` still names IB0-WP01 as the current bounded objective, and its items 6–7 point to `work-packages/IB0-WP01/`. Claude does not edit its own execution contract. The Product Owner / Solutions Architect instruction to execute IB0-WP02 is the authority for this run; every mandatory rule and stop condition in `CLAUDE.md` is still applied. **Closed 2026-09-24:** the PO/SA expressly authorised Claude to amend `CLAUDE.md` once, replacing the IB0-WP01-specific objective with a durable, work-package-neutral authorisation rule. See §11(i) and §13.
 
 (iii) **R3: Node enforcement strictness.** Default taken: an exact `24.21.0` in both `.nvmrc` and `devEngines.runtime`, with `onFail: "error"`, as PAEP-IB-01 §4.1 requires an exact pin. See §11.
 
@@ -60,7 +60,7 @@ Claude may create or modify:
 
 (vii) `evidence/IB0-WP02/**` (new), `work-packages/IB0-WP02/**` (traceability, acceptance report, and this package's prompts, runbook and report template), and the root `README.md` (toolchain/pinning section).
 
-(viii) `CLAUDE.md`: one amendment only, expressly authorised by the PO/SA on 2026-09-24 (§12). It replaces the work-package-specific scope restriction with a work-package-neutral rule and relaxes no control.
+(viii) `CLAUDE.md`: one amendment only, expressly authorised by the PO/SA on 2026-09-24 (§13). It replaces the work-package-specific scope restriction with a work-package-neutral rule and relaxes no control.
 
 (ix) Nothing else.
 
@@ -205,7 +205,7 @@ Negative checks, run only in a scratch copy:
 
 IB0-WP02 reaches technical PASS only when every mandatory criterion in `ACCEPTANCE.md` passes and the required evidence exists. PASS is not ACCEPTED. Human acceptance, and the separate licence dispositions, are recorded by the authorised reviewers.
 
-## 12. Controlled amendments at approval (2026-09-24)
+## 13. Controlled amendments at approval (2026-09-24)
 
 Authority: Product Owner / Solutions Architect instruction "IB0-WP02 — Product Owner / Solutions Architect authorization, controlled amendment, final QA and merge", 2026-09-24. Record: `evidence/IB0-WP02/notes/closure-authorisation.md`.
 

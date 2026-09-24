@@ -1,0 +1,5 @@
+$ curl upstream LICENSE v1.33.0 and compare
+curl_exit=0
+5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e  up-LICENSE
+5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e  clone/node_modules/lightningcss/LICENSE
+cmp_exit=0

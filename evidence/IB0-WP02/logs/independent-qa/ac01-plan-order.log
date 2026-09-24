@@ -1,0 +1,40 @@
+$ git log --reverse --format="%h %ad %s" --date=iso b6b023f..HEAD --name-status -- docs/architecture/IB0-WP02-IMPLEMENTATION-PLAN.md package.json package-lock.json .nvmrc
+8525598 b6b023f 2026-09-23 20:35:18 +0000 IB0-WP02: add work package definition and implementation plan
+
+A	docs/architecture/IB0-WP02-IMPLEMENTATION-PLAN.md
+591b266 8525598 2026-09-23 20:39:07 +0000 IB0-WP02: pin and enforce the toolchain, set install-script policy
+
+A	.npmrc
+A	.nvmrc
+M	package.json
+0078bb2 39bf00e 2026-09-24 05:05:01 +0000 IB0-WP02: record PO/SA approvals and amend CLAUDE.md once
+
+M	docs/architecture/IB0-WP02-IMPLEMENTATION-PLAN.md
+
+$ git log --graph --oneline b6b023f..HEAD
+* fd096c1 IB0-WP02: evidence re-run at closure commit 0078bb2
+* 0078bb2 IB0-WP02: record PO/SA approvals and amend CLAUDE.md once
+* 39bf00e IB0-WP02: record gate evidence, traceability and acceptance report
+* 916cb9d IB0-WP02: list private workspace entries in the licence inventory
+* 591b266 IB0-WP02: pin and enforce the toolchain, set install-script policy
+* 8525598 IB0-WP02: add work package definition and implementation plan
+* b6b023f Merge pull request #1: IB0-WP01 repository and Angular workspace bootstrap (ACCEPTED)
+* 55a3890 IB0-WP01: record independent QA and human acceptance
+* 1d722c3 IB0-WP01: record gate evidence, traceability and acceptance report
+* b9904d0 IB0-WP01: bootstrap Angular 22 workspace and PAEP topology
+* 8259317 Restore .paep-control/ and .gitignore from PAEP_CTRL.zip
+$ plan headings
+1:# IB0-WP02 Implementation Plan
+5:## Objective
+9:## Controlled inputs read
+25:## Readiness conditions
+35:## Registry and release review (2026-09-23)
+48:## Decisions
+68:## Intended file changes
+88:## Out of scope
+13:| `CLAUDE.md` | Whole contract. Its bounded objective still names IB0-WP01 (see R2). |
+27:(i) **R1.** Execution was instructed by the Product Owner / Solutions Architect on 2026-09-23. No IB0-WP02 definition existed in the controlled pack, so Claude drafted `work-packages/IB0-WP02/` fro
+29:(ii) **R2. Open.** `CLAUDE.md` still names IB0-WP01 as the bounded objective. Claude does not edit its own execution contract; a human updates it. All `CLAUDE.md` rules and stop conditions are appl
+31:*Closure note, 2026-09-24:* R1 and R2 were closed by the Product Owner / Solutions Architect. The definition was approved unchanged, and Claude was expressly authorised to amend `CLAUDE.md` once to
+33:(iii) **R3.** Exact Node pin `24.21.0`, enforced with `onFail: "error"`.
+EXIT_CODE=0 (read-only git/file inspection; all commands completed)

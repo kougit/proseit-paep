@@ -1,0 +1,7 @@
+# date: 2026-09-24T05:13:43Z node: v24.21.0 npm: 11.19.0 commit: fd096c1ab0a92921c1d789fe241bb33299b28da1 cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/iqa/neg-f
+# PATH=/opt/node24/bin:/usr/bin:/bin
+$ rm -rf dist .angular node_modules/lightningcss node_modules/lightningcss-*; ls -d node_modules/lightningcss* 2>&1; npm run build:reference-app >/dev/null 2>&1; a=$?; npm run build:ui-lab >/dev/null 2>&1; b=$?; echo build_exits=$a,$b; (cd dist && find . -type f -exec sha256sum {} + | sort -k2) > /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/iqa/f.sha; (cd ../clone/dist && find . -type f -exec sha256sum {} + | sort -k2) | diff - /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/iqa/f.sha; d=$?; echo dist_diff_vs_candidate_exit=$d; exit $((a||b||d))
+ls: cannot access 'node_modules/lightningcss*': No such file or directory
+build_exits=0,0
+dist_diff_vs_candidate_exit=0
+EXIT_CODE=0

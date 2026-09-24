@@ -1,0 +1,11 @@
+# date: 2026-09-24T05:09:05Z node: v24.21.0 npm: 11.19.0 commit: fd096c1ab0a92921c1d789fe241bb33299b28da1 cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/iqa/clone
+# PATH=/opt/node24/bin:/usr/bin:/bin
+$ which node npm; node --version; npm --version; cat .nvmrc; node -p "process.versions.node" ; node -e "const p=require(\"/opt/node24/lib/node_modules/npm/package.json\");console.log(\"bundled npm\",p.version)"
+/opt/node24/bin/node
+/opt/node24/bin/npm
+v24.21.0
+11.19.0
+24.21.0
+24.21.0
+bundled npm 11.19.0
+EXIT_CODE=0

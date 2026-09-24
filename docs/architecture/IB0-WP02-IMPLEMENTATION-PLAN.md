@@ -28,7 +28,7 @@ The work was split into four read-only review lanes (toolchain, licences, reprod
 
 (ii) **R2. Open.** `CLAUDE.md` still names IB0-WP01 as the bounded objective. Claude does not edit its own execution contract; a human updates it. All `CLAUDE.md` rules and stop conditions are applied to this run.
 
-*Closure note, 2026-09-24:* R1 and R2 were closed by the Product Owner / Solutions Architect. The definition was approved unchanged, and Claude was expressly authorised to amend `CLAUDE.md` once to a work-package-neutral rule (`work-packages/IB0-WP02/WORK_PACKAGE.md` §12).
+*Closure note, 2026-09-24:* R1 and R2 were closed by the Product Owner / Solutions Architect. The definition was approved unchanged, and Claude was expressly authorised to amend `CLAUDE.md` once to a work-package-neutral rule (`work-packages/IB0-WP02/WORK_PACKAGE.md` §13).
 
 (iii) **R3.** Exact Node pin `24.21.0`, enforced with `onFail: "error"`.
 

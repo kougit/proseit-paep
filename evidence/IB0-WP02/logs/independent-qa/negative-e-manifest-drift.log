@@ -1,0 +1,33 @@
+# date: 2026-09-24T05:10:51Z node: v24.21.0 npm: 11.19.0 commit: fd096c1ab0a92921c1d789fe241bb33299b28da1 cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/iqa/neg-e
+# PATH=/opt/node24/bin:/usr/bin:/bin
+$ git diff -U0 docs/architecture/toolchain-version-manifest.json; node tooling/verification/verify-ib0-wp02.mjs
+diff --git a/docs/architecture/toolchain-version-manifest.json b/docs/architecture/toolchain-version-manifest.json
+index 9a46471..08c88e0 100644
+--- a/docs/architecture/toolchain-version-manifest.json
++++ b/docs/architecture/toolchain-version-manifest.json
+@@ -40 +40 @@
+-    "node_modules/vite": "8.1.5",
++    "node_modules/vite": "8.1.4",
+PASS V01 .nvmrc pins an exact Node 24 LTS version — 24.21.0
+PASS V02 devEngines.runtime pins the same Node version with onFail=error — {"name":"node","version":"24.21.0","onFail":"error"}
+PASS V03 Pinned Node is inside the Angular engine ranges recorded in the lockfile — pinned=24.21.0; @angular/core engines=^22.22.3 || ^24.15.0 || >=26.0.0; @angular/build engines=^22.22.3 || ^24.15.0 || >=26.0.0
+PASS V04 Running Node equals the pinned version — running=24.21.0; pinned=24.21.0
+PASS V05 npm pinned exactly in packageManager and devEngines.packageManager (onFail=error), and the running npm matches — packageManager=npm@11.19.0; devEngines.packageManager={"name":"npm","version":"11.19.0","onFail":"error"}; running npm=11.19.0
+PASS V06 .npmrc sets engine-strict and strict-allow-scripts and holds no credentials — settings: engine-strict=true, strict-allow-scripts=true; credential-like entries: 0
+PASS V07 Every direct dependency is exact and matches the lockfile and installed tree — 12 direct dependencies agree
+PASS V08 All @angular/* packages share one exact 22.x version (core aligned with CLI) — 9 packages at 22.1.8
+PASS V09 TypeScript is an exact 6.0.x inside the @angular/compiler-cli peer range — typescript=6.0.3; peer=>=6.0 <6.1
+PASS V10 RxJS is an exact 7.x inside the @angular/core peer range — rxjs=7.8.2; peer=^6.5.3 || ^7.4.0
+FAIL V11 Version manifest matches .nvmrc, package.json, package-lock.json and the installed tree — buildTools node_modules/vite: manifest 8.1.4 != lockfile 8.1.5; buildTools node_modules/vite: manifest 8.1.4 != installed 8.1.5
+PASS V12 Lockfile v3; every third-party entry resolves from registry.npmjs.org with sha512 integrity — lockfileVersion=3; third-party entries=434; bad=none
+PASS V13 package.json/package-lock.json match HEAD and package-lock.json is byte-identical to the IB0-WP01 baseline — working tree vs HEAD: clean; lockfile vs b6b023f: identical
+PASS V14 Every lockfile package with an install script is explicitly denied, and npm reports none unreviewed — packages with install scripts: @parcel/watcher, esbuild, fsevents, lmdb, msgpackr-extract; not explicitly denied: none; npm install-scripts ls: No packages with unreviewed install scripts.
+PASS V15 Every third-party licence is permissive or covered by a recorded build-time review — 434 entries: Apache-2.0 8, MIT 372, ISC 23, CC-BY-4.0 1, BSD-2-Clause 11, BSD-3-Clause 5, MPL-2.0 12, BlueOak-1.0.0 1, 0BSD 1
+PASS V16 Controlled sources (.paep-control/**, .gitignore) match PACK_MANIFEST.json and are unchanged since restore — 13/13 files match sha256 and size
+PASS V17 No dependency-set change, no IB0-WP03/04/05 artefacts, and apps/packages/workspace config and IB0-WP01 records unchanged — none
+PASS V18 No credential or secret signatures in files added or modified since the baseline — 65 files scanned; findings: none
+PASS V19 reference-app production build passes — exit=0
+PASS V20 ui-lab production build passes — exit=0
+
+IB0-WP02 verification: FAIL (19/20)
+EXIT_CODE=1

@@ -3,7 +3,7 @@
 **Work package:** IB0-WP02 — Toolchain/Version Baseline and Lockfile Control  
 **Commit / revision:** implementation `916cb9d` (commits `8525598`, `591b266`, `916cb9d`); evidence `39bf00e`; closure commit `0078bb2b2aaf0c603b932c124ad437a3409d418d` (PO/SA approvals, authorised `CLAUDE.md` amendment, licence approvals and notices), the commit under test; branch `claude/ib0-wp02-c625bb`, PR #2  
 **Baseline:** IB0-WP01 ACCEPTED, merge commit `b6b023f`  
-**Technical reviewer:** Claude Code implementation session (self-assessment). Independent QA per `prompts/02_INDEPENDENT_QA.md`: see the summary table.  
+**Technical reviewer:** Claude Code implementation session (self-assessment); independent QA by a clean-context Claude Code reviewer on a fresh clone of `fd096c1` (`evidence/IB0-WP02/reports/independent-qa.md`).  
 **Review date:** 2026-09-24 (implementation verified 2026-09-23)
 
 ## Verification and acceptance summary
@@ -11,10 +11,10 @@
 | Item | Result | Evidence |
 | --- | --- | --- |
 | Technical verification | PASS | AC01–AC24 below; `evidence/IB0-WP02/` |
-| Independent QA | Not yet run | |
-| Acceptance status | Not accepted | Human decision below is blank |
+| Independent QA | PASS (24/24; 4 low defects corrected) | `evidence/IB0-WP02/reports/independent-qa.md`; `evidence/IB0-WP02/logs/independent-qa/` |
+| Acceptance status | IN PROGRESS | Human decision below |
 | Definition audit | PASS | `evidence/IB0-WP02/reports/definition-audit.md` |
-| Definition approval (R1) | Approved by PO/SA 2026-09-24 | `WORK_PACKAGE.md` §12 |
+| Definition approval (R1) | Approved by PO/SA 2026-09-24 | `WORK_PACKAGE.md` §13 |
 | `CLAUDE.md` governance update (R2) | Done: one authorised amendment to a work-package-neutral rule | `evidence/IB0-WP02/notes/closure-authorisation.md` |
 | Licence dispositions | `lightningcss` and `caniuse-lite` APPROVED BUILD-TIME DEPENDENCY (PO/SA 2026-09-24) | `docs/licences/` |
 
@@ -26,7 +26,7 @@ No dependency was added, removed or re-versioned. `package-lock.json` and the pr
 
 ## Requirement traceability
 
-`TRACEABILITY.csv` maps 18 requirements to implementation artefacts, AC01–AC24, verification and evidence. Every evidence path exists. Material artefacts: `.nvmrc`, `.npmrc`, `package.json`, `docs/architecture/toolchain-version-manifest.json`, `tooling/verification/verify-ib0-wp02.mjs`, `docs/licences/THIRD-PARTY-LICENCE-REVIEW.md`, `docs/provenance/PROVENANCE-REGISTER.md`, `docs/architecture/IB0-WP02-IMPLEMENTATION-PLAN.md`.
+`TRACEABILITY.csv` maps 20 requirements to implementation artefacts, AC01–AC24, verification and evidence. Every evidence path exists. Material artefacts: `.nvmrc`, `.npmrc`, `package.json`, `docs/architecture/toolchain-version-manifest.json`, `tooling/verification/verify-ib0-wp02.mjs`, `docs/licences/THIRD-PARTY-LICENCE-REVIEW.md`, `docs/provenance/PROVENANCE-REGISTER.md`, `docs/architecture/IB0-WP02-IMPLEMENTATION-PLAN.md`.
 
 ## Pinned toolchain
 
@@ -66,6 +66,7 @@ All run from a fresh `git clone` of `0078bb2` from GitHub, Node 24.21.0 / npm 11
 | --- | --- | --- | --- |
 | Licence review (`lightningcss`, `caniuse-lite`) | Claude Code (engineering review; not legal advice) | 2026-09-23 | Recorded; build-time only, not shipped |
 | Licence dispositions | Product Owner / Solutions Architect | 2026-09-24 | Both APPROVED BUILD-TIME DEPENDENCY; caniuse.com attribution retained; re-review triggers recorded |
+| Independent QA (fresh clone of `fd096c1`, clean context) | Claude Code QA sub-agent | 2026-09-24 | PASS: 24/24 criteria, all gates and 5 negatives as required, own recomputation of install scripts, licences, manifest and control hashes; Node binary verified against nodejs.org SHASUMS256 |
 | Closure audit lanes A–D (read-only) | Claude Code sub-agents | 2026-09-24 | Definition PASS; licence/provenance no blocker; reproducibility PASS; controls and PR identity PASS |
 | Scope review | Claude Code | 2026-09-23 | 0 violations (`logs/scope-and-secret-scan.log`) |
 
@@ -100,7 +101,7 @@ All run from a fresh `git clone` of `0078bb2` from GitHub, Node 24.21.0 / npm 11
 
 ## Defects
 
-None open. Closed: (i) the first verifier version counted but did not list the private workspace entries required by AC16 (fixed in `916cb9d`, QA re-run on that commit); (ii) closure lane B found that `logs/licence-dist-check.log` printed the dist search without its `-E` flag, so the log did not show the command actually run; the QA script now prints the exact command and a positive control, and the log was regenerated at `0078bb2`.
+None open. Closed: (i) the first verifier version counted but did not list the private workspace entries required by AC16 (fixed in `916cb9d`, QA re-run on that commit); (ii) closure lane B found that `logs/licence-dist-check.log` printed the dist search without its `-E` flag, so the log did not show the command actually run; the QA script now prints the exact command and a positive control, and the log was regenerated at `0078bb2`; (iii) independent QA low defects D1–D4 (requirement count, summary wording, duplicate section number, clean-clone log holding only a summary) corrected in documentation and evidence; no code, gate or criterion changed.
 
 ## Exceptions
 

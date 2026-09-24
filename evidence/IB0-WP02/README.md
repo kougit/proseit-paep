@@ -19,7 +19,7 @@ Evidence for IB0-WP02 (toolchain pinning and lockfile control).
 
 | Path | Gate | Result |
 | --- | --- | --- |
-| `logs/clean-clone-reproduction.log` | Fresh clone and summary of every gate | All exit 0 |
+| `logs/clean-clone-reproduction.log` | Fresh clone, summary of every gate, then the full output of every gate log | All exit 0 |
 | `logs/toolchain-versions.log` | Node, npm, `.nvmrc`, `devEngines`, effective npm policy | Matches pins |
 | `logs/npm-ci.log`, `logs/npm-ci-analysis.log` | `npm ci --loglevel=info` | Exit 0; 0 install scripts run; 0 warnings |
 | `logs/lockfile-unchanged.log` | Lockfile and `package.json` unchanged after `npm ci`, and lockfile identical to baseline | Exit 0 |
@@ -51,6 +51,14 @@ Evidence for IB0-WP02 (toolchain pinning and lockfile control).
 | Path | Evidence |
 | --- | --- |
 | `logs/erratum-baseline-install-scripts.log` | At baseline `b6b023f`, npm 11.19.0 ran all four warned install scripts. Corrects IB0-WP01 evidence; see `reports/install-script-policy.md`. |
+
+## Independent QA (2026-09-24, clean context, fresh clone of `fd096c1`)
+
+| Path | Evidence | Result |
+| --- | --- | --- |
+| `reports/independent-qa.md` | Independent QA report: gates, negatives, recomputation, governance checks, AC01–AC24 | PASS, 24/24; 4 low defects, corrected |
+| `logs/independent-qa/` | 30 raw logs, including the Node binary check against nodejs.org SHASUMS256, and the recomputation script (`recompute.mjs.txt`) | As reported |
+| `reports/acceptance-readiness.md` | Final acceptance-readiness report against the PO/SA acceptance conditions | See report |
 
 ## Closure audit (2026-09-24, read-only lanes on `39bf00e`)
 

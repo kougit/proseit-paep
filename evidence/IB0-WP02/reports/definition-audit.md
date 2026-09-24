@@ -1,5 +1,5 @@
 > **Record note (2026-09-24).** Read-only definition audit (closure lane A) run on commit `39bf00e` before the closure changes, as required by the PO/SA approval condition for the IB0-WP02 definition. Disposition of findings:
-> F1: `TRACEABILITY.csv` row `IB0-NPM-001` now also cites the IB0-WP01 deferral. F2: disclosed deviation, owned by IB0-WP04, unchanged. F3: closed by the PO/SA approval of the definition and the authorised `CLAUDE.md` amendment (`WORK_PACKAGE.md` §12). F4: justification added to the implementation plan. F5: `WORK_PACKAGE.md` §4(vii) wording clarified. F6: observation only.
+> F1: `TRACEABILITY.csv` row `IB0-NPM-001` now also cites the IB0-WP01 deferral. F2: disclosed deviation, owned by IB0-WP04, unchanged. F3: closed by the PO/SA approval of the definition and the authorised `CLAUDE.md` amendment (`WORK_PACKAGE.md` §13). F4: justification added to the implementation plan. F5: `WORK_PACKAGE.md` §4(vii) wording clarified. F6: observation only.
 
 # LANE A — Requirements / Definition Audit — IB0-WP02
 

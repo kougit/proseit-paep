@@ -1,0 +1,177 @@
+$ git diff --name-status b6b023fea11625360f0bf43cd0bdcba968cda90d HEAD
+A	.npmrc
+A	.nvmrc
+M	CLAUDE.md
+M	README.md
+M	docs/adr/ADR-REGISTER.md
+A	docs/architecture/IB0-WP02-IMPLEMENTATION-PLAN.md
+A	docs/architecture/toolchain-version-manifest.json
+M	docs/licences/README.md
+A	docs/licences/THIRD-PARTY-LICENCE-REVIEW.md
+A	docs/licences/THIRD-PARTY-NOTICES.md
+M	docs/provenance/PROVENANCE-REGISTER.md
+A	evidence/IB0-WP02/README.md
+A	evidence/IB0-WP02/logs/build-output-vs-baseline.log
+A	evidence/IB0-WP02/logs/build-reference-app.log
+A	evidence/IB0-WP02/logs/build-ui-lab.log
+A	evidence/IB0-WP02/logs/clean-clone-reproduction.log
+A	evidence/IB0-WP02/logs/closure-audit/lane-b-licence-provenance.md
+A	evidence/IB0-WP02/logs/closure-audit/lane-c-reproducibility.md
+A	evidence/IB0-WP02/logs/closure-audit/lane-d-control-github.md
+A	evidence/IB0-WP02/logs/controlled-source-integrity.log
+A	evidence/IB0-WP02/logs/dist-hashes.log
+A	evidence/IB0-WP02/logs/erratum-baseline-install-scripts.log
+A	evidence/IB0-WP02/logs/ib0-wp01-verification.regression.json
+A	evidence/IB0-WP02/logs/install-scripts-ls.log
+A	evidence/IB0-WP02/logs/licence-dist-check.log
+A	evidence/IB0-WP02/logs/lockfile-regenerate-check.log
+A	evidence/IB0-WP02/logs/lockfile-unchanged.log
+A	evidence/IB0-WP02/logs/negative-install-script.log
+A	evidence/IB0-WP02/logs/negative-lockfile-drift.log
+A	evidence/IB0-WP02/logs/negative-node-version.log
+A	evidence/IB0-WP02/logs/negative-verifier-manifest.log
+A	evidence/IB0-WP02/logs/ng-version.log
+A	evidence/IB0-WP02/logs/npm-audit.log
+A	evidence/IB0-WP02/logs/npm-ci-analysis.log
+A	evidence/IB0-WP02/logs/npm-ci.log
+A	evidence/IB0-WP02/logs/npm10-vs-npm11-installed-tree.log
+A	evidence/IB0-WP02/logs/registry-review.log
+A	evidence/IB0-WP02/logs/scope-and-secret-scan.log
+A	evidence/IB0-WP02/logs/toolchain-versions.log
+A	evidence/IB0-WP02/logs/verify-ib0-wp01-regression.log
+A	evidence/IB0-WP02/logs/verify-ib0-wp01-restore.log
+A	evidence/IB0-WP02/logs/verify-ib0-wp02.log
+A	evidence/IB0-WP02/notes/closure-authorisation.md
+A	evidence/IB0-WP02/notes/implementation-summary.md
+A	evidence/IB0-WP02/reports/definition-audit.md
+A	evidence/IB0-WP02/reports/ib0-wp02-verification.json
+A	evidence/IB0-WP02/reports/install-script-policy.md
+A	evidence/IB0-WP02/reports/licence-inventory.json
+A	evidence/IB0-WP02/reports/licence-inventory.md
+A	evidence/IB0-WP02/reports/lockfile-diff.md
+A	evidence/IB0-WP02/reports/version-manifest.md
+M	package.json
+A	tooling/verification/verify-ib0-wp02.mjs
+A	work-packages/IB0-WP02/ACCEPTANCE.md
+A	work-packages/IB0-WP02/ACCEPTANCE_REPORT.md
+A	work-packages/IB0-WP02/ACCEPTANCE_REPORT_TEMPLATE.md
+A	work-packages/IB0-WP02/QUALITY_GATE_RUNBOOK.md
+A	work-packages/IB0-WP02/TRACEABILITY.csv
+A	work-packages/IB0-WP02/WORK_PACKAGE.md
+A	work-packages/IB0-WP02/prompts/00_QUICK_START.txt
+A	work-packages/IB0-WP02/prompts/01_EXECUTE.md
+A	work-packages/IB0-WP02/prompts/02_INDEPENDENT_QA.md
+A	work-packages/IB0-WP02/prompts/03_DEFECT_REPAIR.md
+A	work-packages/IB0-WP02/prompts/04_ACCEPTANCE_SUMMARY.md
+A	work-packages/IB0-WP02/work-package.json
+
+$ forbidden files (nx.json project.json tsconfig.base.json eslint prettier vitest .github)
+forbidden_grep_exit=1 (1 = none)
+
+$ Nx in lockfile
+nx_grep_exit=1 (1 = none)
+
+$ git diff --stat b6b023fea11625360f0bf43cd0bdcba968cda90d HEAD -- apps packages angular.json 'tsconfig*.json'
+protected_paths_diff_exit=0
+
+$ dependency names vs baseline
+deps equal: true devDeps equal: true
+top-level keys added: allowScripts,devEngines removed: none
+changed key: scripts {"ng":"ng","build:reference-app":"ng build reference-app --configuration production","build:ui-lab":"ng build ui-lab --configuration production","qa:ib0-wp01":"node tooling/verification/verify-ib0-wp01.mjs"} -> {"ng":"ng","build:reference-app":"ng build reference-app --configuration production","build:ui-lab":"ng build ui-lab --configuration production","qa:ib0-wp01":"node tooling/verification/verify-ib0-wp01.mjs","qa:ib0-wp02":"node tooling/verification/verify-ib0-wp02.mjs"}
+
+$ npm ls --omit=dev --all --parseable (runtime closure, package names)
+  @angular/animations@undefined
+  @angular/common@22.1.8
+  @angular/compiler@22.1.8
+  @angular/core@22.1.8
+  @angular/forms@22.1.8
+  @angular/platform-browser@22.1.8
+  @angular/router@22.1.8
+  @proseit/frappe-sdk (workspace link)
+  @proseit/paep-analytics (workspace link)
+  @proseit/paep-components (workspace link)
+  @proseit/paep-contracts (workspace link)
+  @proseit/paep-domain-ai (workspace link)
+  @proseit/paep-domain-commerce (workspace link)
+  @proseit/paep-domain-construction (workspace link)
+  @proseit/paep-domain-fiscal (workspace link)
+  @proseit/paep-domain-iot (workspace link)
+  @proseit/paep-domain-maintenance (workspace link)
+  @proseit/paep-domain-manufacturing (workspace link)
+  @proseit/paep-domain-quality (workspace link)
+  @proseit/paep-enterprise (workspace link)
+  @proseit/paep-foundation (workspace link)
+  @proseit/paep-i18n (workspace link)
+  @proseit/paep-observability (workspace link)
+  @proseit/paep-offline (workspace link)
+  @proseit/paep-platform (workspace link)
+  @standard-schema/spec@1.1.0
+  rxjs@7.8.2
+  tslib@2.8.1
+  zod@4.4.3
+  zone.js@undefined
+non-workspace runtime packages: 12 outside allowed set: zone.js,@angular/animations
+$ npm ls --omit=dev --all
+@proseit/paep-workspace@0.0.0 /tmp/claude-0/-home-claude-proseit-paep/***/scratchpad/iqa/clone
++-- @angular/common@22.1.8
+| +-- @angular/core@22.1.8 deduped
+| +-- rxjs@7.8.2 deduped
+| `-- tslib@2.8.1 deduped
++-- @angular/compiler@22.1.8
+| `-- tslib@2.8.1 deduped
++-- @angular/core@22.1.8
+| +-- @angular/compiler@22.1.8 deduped
+| +-- rxjs@7.8.2 deduped
+| +-- tslib@2.8.1 deduped
+| `-- UNMET OPTIONAL DEPENDENCY zone.js@~0.15.0 || ~0.16.0
++-- @angular/forms@22.1.8
+| +-- @angular/common@22.1.8 deduped
+| +-- @angular/core@22.1.8 deduped
+| +-- @angular/platform-browser@22.1.8 deduped
+| +-- @standard-schema/spec@1.1.0
+| +-- rxjs@7.8.2 deduped
+| +-- tslib@2.8.1 deduped
+| `-- zod@4.4.3
++-- @angular/platform-browser@22.1.8
+| +-- UNMET OPTIONAL DEPENDENCY @angular/animations@22.1.8
+| +-- @angular/common@22.1.8 deduped
+| +-- @angular/core@22.1.8 deduped
+| `-- tslib@2.8.1 deduped
++-- @angular/router@22.1.8
+| +-- @angular/common@22.1.8 deduped
+| +-- @angular/core@22.1.8 deduped
+| +-- @angular/platform-browser@22.1.8 deduped
+| +-- rxjs@7.8.2 deduped
+| `-- tslib@2.8.1 deduped
++-- @proseit/frappe-sdk@0.0.0 -> ./packages/frappe-sdk
++-- @proseit/paep-analytics@0.0.0 -> ./packages/analytics
++-- @proseit/paep-components@0.0.0 -> ./packages/components
++-- @proseit/paep-contracts@0.0.0 -> ./packages/contracts
++-- @proseit/paep-domain-ai@0.0.0 -> ./packages/domain-ai
++-- @proseit/paep-domain-commerce@0.0.0 -> ./packages/domain-commerce
++-- @proseit/paep-domain-construction@0.0.0 -> ./packages/domain-construction
++-- @proseit/paep-domain-fiscal@0.0.0 -> ./packages/domain-fiscal
++-- @proseit/paep-domain-iot@0.0.0 -> ./packages/domain-iot
++-- @proseit/paep-domain-maintenance@0.0.0 -> ./packages/domain-maintenance
++-- @proseit/paep-domain-manufacturing@0.0.0 -> ./packages/domain-manufacturing
++-- @proseit/paep-domain-quality@0.0.0 -> ./packages/domain-quality
++-- @proseit/paep-enterprise@0.0.0 -> ./packages/enterprise
++-- @proseit/paep-foundation@0.0.0 -> ./packages/foundation
++-- @proseit/paep-i18n@0.0.0 -> ./packages/i18n
++-- @proseit/paep-observability@0.0.0 -> ./packages/observability
++-- @proseit/paep-offline@0.0.0 -> ./packages/offline
++-- @proseit/paep-platform@0.0.0 -> ./packages/platform
++-- rxjs@7.8.2
+| `-- tslib@2.8.1 deduped
+`-- tslib@2.8.1
+
+EXIT_CODE=0
+
+$ ls node_modules/zone.js node_modules/@angular/animations
+ls: cannot access 'node_modules/zone.js': No such file or directory
+ls: cannot access 'node_modules/@angular/animations': No such file or directory
+$ tsconfig files tracked
+apps/reference-app/tsconfig.app.json
+apps/ui-lab/tsconfig.app.json
+tsconfig.json
+tsconfig_diff_exit=0

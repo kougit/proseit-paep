@@ -1,0 +1,151 @@
+{
+  "policyVersion": 1,
+  "workPackage": "IB0-WP05",
+  "note": "Machine-readable CI policy checked by tooling/verification/verify-ib0-wp05.mjs. The human-readable action register is docs/provenance/GITHUB-ACTIONS-REGISTER.md; both must list the same actions, versions and commit SHAs. Change this file only in a reviewed change that also updates the register.",
+  "workflow": {
+    "path": ".github/workflows/paep-ci.yml",
+    "name": "PAEP CI",
+    "setupAction": ".github/actions/paep-setup/action.yml",
+    "runner": "ubuntu-24.04",
+    "triggers": {
+      "pull_request": {
+        "branches": [
+          "main"
+        ]
+      },
+      "push": {
+        "branches": [
+          "main"
+        ]
+      },
+      "workflow_dispatch": null
+    },
+    "forbiddenTriggers": [
+      "pull_request_target",
+      "workflow_run",
+      "issue_comment",
+      "pull_request_review",
+      "pull_request_review_comment",
+      "repository_dispatch",
+      "schedule",
+      "check_run",
+      "check_suite",
+      "discussion_comment"
+    ],
+    "topLevelPermissions": {
+      "contents": "read"
+    },
+    "concurrency": {
+      "group": "paep-ci-${{ github.event.pull_request.number || github.ref }}",
+      "cancelInProgress": "${{ github.event_name == 'pull_request' }}"
+    }
+  },
+  "gate": {
+    "id": "gate",
+    "name": "PAEP / gate",
+    "requiredCheckContext": "PAEP / gate",
+    "if": "${{ always() }}",
+    "permissions": {}
+  },
+  "mandatoryJobs": [
+    {
+      "id": "governance",
+      "name": "PAEP / governance"
+    },
+    {
+      "id": "provenance",
+      "name": "PAEP / security-provenance"
+    },
+    {
+      "id": "architecture",
+      "name": "PAEP / architecture"
+    },
+    {
+      "id": "strictness",
+      "name": "PAEP / strictness"
+    },
+    {
+      "id": "negative-architecture",
+      "name": "PAEP / negative-architecture"
+    },
+    {
+      "id": "negative-ci",
+      "name": "PAEP / negative-ci"
+    },
+    {
+      "id": "regression",
+      "name": "PAEP / regression"
+    },
+    {
+      "id": "build-reference-app",
+      "name": "PAEP / build-reference-app"
+    },
+    {
+      "id": "build-ui-lab",
+      "name": "PAEP / build-ui-lab"
+    }
+  ],
+  "requiredCommands": {
+    "governance": [
+      "node tooling/verification/verify-ib0-wp05.mjs --gate governance"
+    ],
+    "provenance": [
+      "node tooling/verification/verify-ib0-wp05.mjs --gate provenance",
+      "npm audit signatures"
+    ],
+    "architecture": [
+      "npm run qa:architecture"
+    ],
+    "strictness": [
+      "npm run qa:types",
+      "node tooling/verification/verify-ib0-wp05.mjs --gate strictness"
+    ],
+    "negative-architecture": [
+      "node tooling/verification/verify-ib0-wp05.mjs --gate negative-architecture"
+    ],
+    "negative-ci": [
+      "npm run qa:ib0-wp05:negative"
+    ],
+    "regression": [
+      "node tooling/verification/verify-ib0-wp05.mjs --gate regression"
+    ],
+    "build-reference-app": [
+      "npm run build:reference-app",
+      "node tooling/verification/verify-ib0-wp05.mjs --gate build-metadata --app reference-app"
+    ],
+    "build-ui-lab": [
+      "npm run build:ui-lab",
+      "node tooling/verification/verify-ib0-wp05.mjs --gate build-metadata --app ui-lab"
+    ]
+  },
+  "approvedActions": [
+    {
+      "action": "actions/checkout",
+      "version": "v7.0.1",
+      "sha": "3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "licence": "MIT",
+      "publisher": "GitHub (first-party)",
+      "purpose": "Check out the commit under test"
+    },
+    {
+      "action": "actions/setup-node",
+      "version": "v7.0.0",
+      "sha": "820762786026740c76f36085b0efc47a31fe5020",
+      "licence": "MIT",
+      "publisher": "GitHub (first-party)",
+      "purpose": "Install the pinned Node.js from .nvmrc and cache npm downloads"
+    },
+    {
+      "action": "actions/upload-artifact",
+      "version": "v7.0.1",
+      "sha": "043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
+      "licence": "MIT",
+      "publisher": "GitHub (first-party)",
+      "purpose": "Retain per-job CI evidence"
+    }
+  ],
+  "approvedLocalActions": [
+    "./.github/actions/paep-setup"
+  ],
+  "artifactRetentionDays": 30
+}

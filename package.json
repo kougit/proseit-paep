@@ -29,7 +29,10 @@
     "arch:check": "node tooling/architecture-boundaries/check-boundaries.mjs",
     "qa:architecture": "node tooling/architecture-boundaries/check-boundaries.mjs",
     "qa:ib0-wp04": "node tooling/verification/verify-ib0-wp04.mjs",
-    "qa:ib0-wp04:negative": "node tooling/verification/negative-ib0-wp04.mjs"
+    "qa:ib0-wp04:negative": "node tooling/verification/negative-ib0-wp04.mjs",
+    "qa:types": "ngc -p apps/reference-app/tsconfig.app.json --noEmit && ngc -p apps/ui-lab/tsconfig.app.json --noEmit",
+    "qa:ib0-wp05": "node tooling/verification/verify-ib0-wp05.mjs",
+    "qa:ib0-wp05:negative": "node tooling/verification/negative-ib0-wp05.mjs"
   },
   "dependencies": {
     "@angular/common": "22.1.8",

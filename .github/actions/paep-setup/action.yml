@@ -1,0 +1,49 @@
+# PAEP IB0-WP05 shared job setup (local composite action).
+# Installs the pinned Node.js from .nvmrc, checks the controlled toolchain before
+# anything is installed, runs a clean `npm ci` from the committed lockfile and
+# fails if installation changed any tracked file. Callers check out the
+# repository first (actions/checkout, persist-credentials: false).
+name: PAEP setup
+description: Pinned Node.js/npm, toolchain gate, deterministic npm ci and tracked-tree check for PAEP CI jobs.
+runs:
+  using: composite
+  steps:
+    - name: Set up Node.js from .nvmrc
+      uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version-file: .nvmrc
+        check-latest: false
+        cache: npm
+        cache-dependency-path: package-lock.json
+
+    - name: Prepare evidence directory
+      shell: bash
+      run: |
+        set -euo pipefail
+        mkdir -p "$RUNNER_TEMP/paep-evidence"
+        echo "PAEP_EVIDENCE_DIR=$RUNNER_TEMP/paep-evidence" >> "$GITHUB_ENV"
+
+    - name: Toolchain gate (Node/npm against .nvmrc, devEngines, packageManager and the version manifest)
+      shell: bash
+      run: |
+        set -euo pipefail
+        node tooling/verification/verify-ib0-wp05.mjs --gate toolchain 2>&1 | tee "$RUNNER_TEMP/paep-evidence/toolchain.log"
+
+    - name: Clean install from the committed lockfile (npm ci)
+      shell: bash
+      run: |
+        set -euo pipefail
+        npm ci 2>&1 | tee "$RUNNER_TEMP/paep-evidence/npm-ci.log"
+
+    - name: Installation left every tracked file unchanged
+      shell: bash
+      run: |
+        set -euo pipefail
+        git diff --exit-code -- package.json package-lock.json
+        status="$(git status --porcelain)"
+        if [ -n "$status" ]; then
+          echo "::error title=PAEP setup::npm ci changed the working tree"
+          printf '%s\n' "$status"
+          exit 1
+        fi
+        sha256sum package-lock.json | tee "$RUNNER_TEMP/paep-evidence/lockfile.sha256"

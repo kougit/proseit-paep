@@ -1,0 +1,72 @@
+{
+  "id": "IB0-WP05",
+  "roadmap_alias": "PAEP-IR-01 IB0-WP5",
+  "title": "CI/CD, Automated Quality Gates, Security/Provenance and Pull-Request Enforcement Baseline",
+  "milestone": "IB0",
+  "wbs": "W1 / IB0",
+  "design_classification": "D0",
+  "status": "IN PROGRESS",
+  "acceptance": {
+    "status": "NOT ACCEPTED",
+    "authority": "Product Owner / Solutions Architect"
+  },
+  "predecessor": {
+    "id": "IB0-WP04",
+    "status": "ACCEPTED",
+    "baseline_commit": "c5c0eb0"
+  },
+  "objective": "Run the accepted IB0 verification controls as parallel GitHub Actions jobs on every pull request to main, push to main and manual dispatch, with one stable aggregate check (PAEP / gate) that passes only when every mandatory job passes, and prepare the enforcement that makes that check required on main.",
+  "controlled_requirements": [
+    "PAEP-IR-01 §4.4 IB0-WP5, §4.5, §4.6, §7.2(i), App. A",
+    "PAEP-IB-01 §4.1, §18.1",
+    "PAEP-EQP-01 §15, §16, §22, §24, §29.1, App. B, App. C",
+    "PAEP v1.1 §3, §5.3"
+  ],
+  "definition_status": "DRAFT for PO/SA approval",
+  "nx_disposition": "NOT REQUIRED",
+  "workflow": ".github/workflows/paep-ci.yml",
+  "setup_action": ".github/actions/paep-setup/action.yml",
+  "policy": "tooling/verification/ib0-wp05-ci-policy.json",
+  "verifier": "tooling/verification/verify-ib0-wp05.mjs",
+  "negative_runner": "tooling/verification/negative-ib0-wp05.mjs",
+  "aggregate_check": "PAEP / gate",
+  "out_of_scope_owners": {
+    "lint/format stage": "DEFERRED (PO/SA WP03 decision; decision requested in WP05)",
+    "unit-test stage": "DEFERRED (no runner; decision requested in WP05)",
+    "branch protection / ruleset activation": "PO/SA decision after merge; blocked by GitHub plan for private repository",
+    "SBOM, vulnerability gate, release licence approval": "release gate (EG/IP owner)",
+    "IB1 and later": "not started"
+  },
+  "mandatory_acceptance_ids": [
+    "IB0-WP05-AC01",
+    "IB0-WP05-AC02",
+    "IB0-WP05-AC03",
+    "IB0-WP05-AC04",
+    "IB0-WP05-AC05",
+    "IB0-WP05-AC06",
+    "IB0-WP05-AC07",
+    "IB0-WP05-AC08",
+    "IB0-WP05-AC09",
+    "IB0-WP05-AC10",
+    "IB0-WP05-AC11",
+    "IB0-WP05-AC12",
+    "IB0-WP05-AC13",
+    "IB0-WP05-AC14",
+    "IB0-WP05-AC15",
+    "IB0-WP05-AC16",
+    "IB0-WP05-AC17",
+    "IB0-WP05-AC18",
+    "IB0-WP05-AC19",
+    "IB0-WP05-AC20",
+    "IB0-WP05-AC21",
+    "IB0-WP05-AC22",
+    "IB0-WP05-AC23",
+    "IB0-WP05-AC24",
+    "IB0-WP05-AC25",
+    "IB0-WP05-AC26",
+    "IB0-WP05-AC27"
+  ],
+  "evidence_path": "evidence/IB0-WP05/",
+  "technical_pass_requires_all_mandatory_criteria": true,
+  "human_acceptance_required": true
+}

@@ -162,6 +162,9 @@ try {
   caseRun('C03', 'control: qa:types passes unmutated', [], qaTypes);
   caseRun('C04', 'control: qa:architecture passes unmutated', [], archCheck);
   caseRun('C05', 'control: toolchain gate passes unmutated', [], () => verifyGate('toolchain'));
+  // Controls for the gates the S and H cases mutate, so those cases cannot pass on a gate that already fails (QA lane 1).
+  caseRun('C07', 'control: strictness gate passes unmutated', [], () => verifyGate('strictness'));
+  caseRun('C08', 'control: negative-architecture gate passes unmutated', [], () => verifyGate('negative-architecture'));
 
   // ---- (i)/(xii) architecture -----------------------------------------------------------------------
   const entry = (d) => `packages/${d}/src/index.ts`;
@@ -179,7 +182,7 @@ try {
   caseRun('S01', '(ii) TypeScript strict violation (implicit any, null to string) fails qa:types', [[APP_TS, TS_VIOLATION]], qaTypes, [/TS7006/, /TS2322/]);
   caseRun('S02', '(ii) Angular template strict violation ($event as number) fails qa:types', [[APP_TS, TEMPLATE_METHOD], [APP_HTML, TEMPLATE_VIOLATION]], qaTypes, [/TS2345/]);
   caseRun('S03', '(ii) strictTemplates false fails the strictness gate', [['tsconfig.json', replace('"strictTemplates": true', '"strictTemplates": false')]], () => verifyGate('strictness'), [/FAIL W17/, /V05/]);
-  caseRun('S04', '(ii) noCheck true fails the strictness gate', [['tsconfig.json', replace('"strict": true,', '"strict": true,\n    "noCheck": true,')]], () => verifyGate('strictness'), [/FAIL W17/]);
+  caseRun('S04', '(ii) noCheck true fails the strictness gate', [['tsconfig.json', replace('"strict": true,', '"strict": true,\n    "noCheck": true,')]], () => verifyGate('strictness'), [/FAIL W17/, /noCheck/]);
 
   // ---- (iii) build --------------------------------------------------------------------------------------
   caseRun('B01', '(iii) type error fails the reference-app production build', [[APP_TS, TS_VIOLATION]], ngBuild, [/TS7006|TS2322/]);
@@ -228,12 +231,23 @@ try {
   caseRun('I01', '(viii) new lockfile package with an unreviewed install script fails the provenance gate', [['package-lock.json', jsonEdit((o) => { o.packages['node_modules/rxjs'].hasInstallScript = true; })]], () => verifyGate('provenance'), [/FAIL W16/, /V14 failed: .*not explicitly denied: rxjs/]);
   caseRun('I02', '(viii) install script allowed (esbuild: true) fails the provenance gate', [['package.json', jsonEdit((o) => { o.allowScripts.esbuild = true; })]], () => verifyGate('provenance'), [/FAIL W16/, /V14 failed: .*not explicitly denied: esbuild/]);
   caseRun('I03', '(viii) strict-allow-scripts removed from .npmrc fails the toolchain gate', [['.npmrc', (t) => t.replace('strict-allow-scripts=true', '')]], () => verifyGate('toolchain'), [/FAIL W01/, /strict-allow-scripts/]);
-  caseRun('I04', '(viii) npm install with scripts enabled in a workflow step fails the provenance gate', [[WORKFLOW, replace('npm run qa:architecture 2>&1', 'npm install --ignore-scripts=false && npm run qa:architecture 2>&1')]], () => verifyGate('provenance'), [/FAIL W1[15]/]);
+  caseRun('I04', '(viii) npm install with scripts enabled in a workflow step fails the provenance gate', [[WORKFLOW, replace('npm run qa:architecture 2>&1', 'npm install --ignore-scripts=false && npm run qa:architecture 2>&1')]], () => verifyGate('provenance'), [/FAIL W15/, /installs outside npm ci/]);
 
   // ---- (ix) controlled-file fingerprints ------------------------------------------------------------
   caseRun('F01', '(ix) one byte changed in a controlled source fails the governance gate', [['.paep-control/text/PAEP_IR_01_v1.0_text.md', (t) => `${t} `]], () => verifyGate('governance'), [/FAIL W02/, /fingerprint mismatch/]);
   caseRun('F02', '(ix) CLAUDE.md changed fails the governance gate', [['CLAUDE.md', append('- extra rule')]], () => verifyGate('governance'), [/FAIL W02/]);
   caseRun('F03', '(ix) unlisted file under .paep-control fails the governance gate', [['.paep-control/text/extra.md', () => 'x\n']], () => verifyGate('governance'), [/FAIL W02/, /unlisted/]);
+  // Independent QA lane 3 (MEDIUM-1): a committed move of an accepted WP04 record into the WP05 folder must not hide as a rename.
+  {
+    const from = 'work-packages/IB0-WP04/ACCEPTANCE_REPORT.md';
+    caseRun('F04', '(ix) accepted WP04 record moved into work-packages/IB0-WP05 (committed rename) fails the governance gate',
+      [[`work-packages/IB0-WP05/OLD_WP04_REPORT.md`, () => fs.readFileSync(path.join(copy, from), 'utf8')], [from, () => null]],
+      () => {
+        gitc('add', '-A');
+        gitc('-c', 'user.name=paep-negative', '-c', 'user.email=paep-negative@invalid', 'commit', '-q', '--no-verify', '-m', 'move');
+        try { return verifyGate('governance'); } finally { gitc('reset', '-q', '--hard', 'HEAD~1'); }
+      }, [/FAIL W07/, /IB0-WP04\/ACCEPTANCE_REPORT\.md/]);
+  }
 
   // ---- (x) skipped/cancelled: see G10-G18; plus the gate must keep always() and full needs ------------
   caseRun('X01', '(x) gate condition changed from always() to success() fails the provenance gate', [[WORKFLOW, replace("  gate:\n    name: PAEP / gate\n    if: ${{ always() }}", "  gate:\n    name: PAEP / gate\n    if: ${{ success() }}")]], () => verifyGate('provenance'), [/FAIL W12/]);
@@ -250,13 +264,22 @@ try {
   caseRun('P06', '(xi) pull_request_target trigger fails the provenance gate', [[WORKFLOW, replace('  workflow_dispatch:\n', '  workflow_dispatch:\n  pull_request_target:\n    branches:\n      - main\n')]], () => verifyGate('provenance'), [/FAIL W09/]);
   caseRun('P07', '(xi) untrusted PR title interpolated into a run script fails the provenance gate', [[WORKFLOW, replace('          npm run qa:architecture 2>&1', '          echo "${{ github.event.pull_request.title }}"\n          npm run qa:architecture 2>&1')]], () => verifyGate('provenance'), [/FAIL W13/]);
   caseRun('P08', '(xi) secrets reference fails the provenance gate', [[WORKFLOW, replace('      - name: Evaluate every mandatory job result\n        env:\n', '      - name: Evaluate every mandatory job result\n        env:\n          TOKEN: ${{ secrets.NPM_TOKEN }}\n')]], () => verifyGate('provenance'), [/FAIL W13/, /secrets/]);
-  caseRun('P09', '(xi) checkout persisting credentials fails the provenance gate', [[WORKFLOW, replace('persist-credentials: false', 'persist-credentials: true')]], () => verifyGate('provenance'), [/FAIL W1[13]/]);
-  caseRun('P10', '(xi) node_modules cached with actions/cache fails the provenance gate', [[SETUP, replace('    - name: Prepare evidence directory\n', '    - name: cache\n      uses: actions/cache@0123456789abcdef0123456789abcdef01234567 # v5.0.0\n      with:\n        path: node_modules\n        key: x\n\n    - name: Prepare evidence directory\n')]], () => verifyGate('provenance'), [/FAIL W1[45]/]);
+  caseRun('P09', '(xi) checkout persisting credentials fails the provenance gate', [[WORKFLOW, replace('persist-credentials: false', 'persist-credentials: true')]], () => verifyGate('provenance'), [/FAIL W13/, /persists credentials/]);
+  caseRun('P10', '(xi) node_modules cached with actions/cache fails the provenance gate', [[SETUP, replace('    - name: Prepare evidence directory\n', '    - name: cache\n      uses: actions/cache@0123456789abcdef0123456789abcdef01234567 # v5.0.0\n      with:\n        path: node_modules\n        key: x\n\n    - name: Prepare evidence directory\n')]], () => verifyGate('provenance'), [/FAIL W15/, /actions\/cache/]);
   caseRun('P11', '(xi) new unapproved dependency fails the governance gate', [['package.json', jsonEdit((o) => { o.dependencies['left-pad'] = '1.3.0'; })]], () => verifyGate('governance'), [/FAIL W06/]);
   caseRun('P12', '(xi) floating Node version in setup-node fails the provenance gate', [[SETUP, replace('node-version-file: .nvmrc', "node-version: '24.x'")]], () => verifyGate('provenance'), [/FAIL W15/]);
   caseRun('P13', '(xi) second, unreviewed workflow file fails the provenance gate', [['.github/workflows/other.yml', () => 'name: other\non: push\njobs: {}\n']], () => verifyGate('provenance'), [/FAIL W09/]);
 
   caseRun('P14', '(xi) invalid workflow YAML (unquoted ": " in a step name, which GitHub rejects) fails the provenance gate', [[WORKFLOW, replace('- name: Production build (reference-app)', '- name: Production build: reference-app')]], () => verifyGate('provenance'), [/FAIL W09/, /plain scalar contains/]);
+  // Independent QA lane 2 mutations (F1-F5): each weakens CI in a way GitHub would run.
+  caseRun('P15', '(x) early "exit 0" in the gate script fails the provenance gate', [[WORKFLOW, replace('          set -euo pipefail\n          fail=0\n', '          set -euo pipefail\n          exit 0\n          fail=0\n')]], () => verifyGate('provenance'), [/FAIL W12/, /gate script differs/]);
+  caseRun('P16', '(xi) top-level defaults replacing the run shell fails the provenance gate', [[WORKFLOW, replace('concurrency:\n', 'defaults:\n  run:\n    shell: true {0}\n\nconcurrency:\n')]], () => verifyGate('provenance'), [/FAIL W09/, /top-level keys/]);
+  caseRun('P17', '(xi) escaped "${{" (\\x24) in a double-quoted value fails the provenance gate', [[WORKFLOW, replace('      - name: Evaluate every mandatory job result\n', '      - name: "Evaluate every mandatory job result \\x24{{ github.event.pull_request.title }}"\n')]], () => verifyGate('provenance'), [/FAIL W09/, /escape sequence/]);
+  caseRun('P18', '(xi) env re-enabling install scripts on the setup npm ci step fails the provenance gate', [[SETUP, replace('    - name: Clean install from the committed lockfile (npm ci)\n      shell: bash\n', '    - name: Clean install from the committed lockfile (npm ci)\n      shell: bash\n      env:\n        npm_config_strict_allow_scripts: false\n')]], () => verifyGate('provenance'), [/FAIL W15/, /differs from the reviewed step/]);
+  caseRun('P19', '(xi) extra install line in the setup action ("npm  install", two spaces) fails the provenance gate', [[SETUP, replace('        npm ci 2>&1', '        npm  install\n        npm ci 2>&1')]], () => verifyGate('provenance'), [/FAIL W15/, /installs outside npm ci/]);
+  caseRun('P21', '(viii) "|| true" on the setup toolchain gate fails the provenance gate', [[SETUP, replace('--gate toolchain 2>&1', '--gate toolchain || true 2>&1')]], () => verifyGate('provenance'), [/FAIL W15/, /differs from the reviewed step/]);
+  caseRun('P22', '(viii) continue-on-error on the setup npm ci step fails the provenance gate', [[SETUP, replace('    - name: Clean install from the committed lockfile (npm ci)\n', '    - name: Clean install from the committed lockfile (npm ci)\n      continue-on-error: true\n')]], () => verifyGate('provenance'), [/FAIL W15/, /differs from the reviewed step/]);
+  caseRun('P20', '(xi) evidence upload widened with include-hidden-files fails the provenance gate', [[WORKFLOW, replace('          retention-days: 30\n', '          retention-days: 30\n          include-hidden-files: true\n')]], () => verifyGate('provenance'), [/FAIL W11/, /evidence upload/]);
 
   // ---- scope: Nx and IB1 --------------------------------------------------------------------------------
   caseRun('N01', 'Nx introduced (nx.json) fails the governance gate', [['nx.json', () => '{}\n']], () => verifyGate('governance'), [/FAIL W04/]);

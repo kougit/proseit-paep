@@ -36,16 +36,24 @@
       "contents": "read"
     },
     "concurrency": {
-      "group": "paep-ci-${{ github.event.pull_request.number || github.ref }}",
+      "group": "paep-ci-${{ github.event.pull_request.number || github.sha }}",
       "cancelInProgress": "${{ github.event_name == 'pull_request' }}"
-    }
+    },
+    "topLevelKeys": [
+      "name",
+      "on",
+      "permissions",
+      "concurrency",
+      "jobs"
+    ]
   },
   "gate": {
     "id": "gate",
     "name": "PAEP / gate",
     "requiredCheckContext": "PAEP / gate",
     "if": "${{ always() }}",
-    "permissions": {}
+    "permissions": {},
+    "run": "set -euo pipefail\nfail=0\nactual=\"$(jq -r 'keys[]' <<<\"$NEEDS_JSON\" | sort | tr '\\n' ' ')\"\nexpected=\"$(tr ' ' '\\n' <<<\"$MANDATORY_JOBS\" | sed '/^$/d' | sort | tr '\\n' ' ')\"\nif [ \"$actual\" != \"$expected\" ]; then\n  echo \"::error title=PAEP gate::needs [$actual] differ from the mandatory jobs [$expected]\"\n  fail=1\nfi\nfor job in $MANDATORY_JOBS; do\n  result=\"$(jq -r --arg job \"$job\" '.[$job].result // \"missing\"' <<<\"$NEEDS_JSON\")\"\n  echo \"$job: $result\"\n  echo \"| $job | $result |\" >> \"${GITHUB_STEP_SUMMARY:-/dev/null}\"\n  if [ \"$result\" != \"success\" ]; then\n    echo \"::error title=PAEP gate::mandatory job $job finished with result '$result'\"\n    fail=1\n  fi\ndone\nif [ \"$fail\" -ne 0 ]; then\n  echo \"PAEP gate: FAIL\"\n  exit 1\nfi\necho \"PAEP gate: PASS\"\n"
   },
   "mandatoryJobs": [
     {
@@ -147,5 +155,37 @@
   "approvedLocalActions": [
     "./.github/actions/paep-setup"
   ],
-  "artifactRetentionDays": 30
+  "artifactRetentionDays": 30,
+  "setupSteps": [
+    {
+      "name": "Set up Node.js from .nvmrc",
+      "uses": "actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+      "with": {
+        "node-version-file": ".nvmrc",
+        "check-latest": false,
+        "cache": "npm",
+        "cache-dependency-path": "package-lock.json"
+      }
+    },
+    {
+      "name": "Prepare evidence directory",
+      "shell": "bash",
+      "run": "set -euo pipefail\nmkdir -p \"$RUNNER_TEMP/paep-evidence\"\necho \"PAEP_EVIDENCE_DIR=$RUNNER_TEMP/paep-evidence\" >> \"$GITHUB_ENV\"\n"
+    },
+    {
+      "name": "Toolchain gate (Node/npm against .nvmrc, devEngines, packageManager and the version manifest)",
+      "shell": "bash",
+      "run": "set -euo pipefail\nnode tooling/verification/verify-ib0-wp05.mjs --gate toolchain 2>&1 | tee \"$RUNNER_TEMP/paep-evidence/toolchain.log\"\n"
+    },
+    {
+      "name": "Clean install from the committed lockfile (npm ci)",
+      "shell": "bash",
+      "run": "set -euo pipefail\nnpm ci 2>&1 | tee \"$RUNNER_TEMP/paep-evidence/npm-ci.log\"\n"
+    },
+    {
+      "name": "Installation left every tracked file unchanged",
+      "shell": "bash",
+      "run": "set -euo pipefail\ngit diff --exit-code -- package.json package-lock.json\nstatus=\"$(git status --porcelain)\"\nif [ -n \"$status\" ]; then\n  echo \"::error title=PAEP setup::npm ci changed the working tree\"\n  printf '%s\\n' \"$status\"\n  exit 1\nfi\nsha256sum package-lock.json | tee \"$RUNNER_TEMP/paep-evidence/lockfile.sha256\"\n"
+    }
+  ]
 }

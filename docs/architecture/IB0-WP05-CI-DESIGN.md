@@ -43,7 +43,7 @@ The gate receives `needs` as JSON through `env` (never interpolated into the scr
 - any mandatory job's result is not exactly `success` (`failure`, `cancelled`, `skipped`, timeout — GitHub reports a timeout as `failure` — or any unknown value);
 - the JSON cannot be parsed (`set -e` with `jq`).
 
-`if: always()` makes the gate run, and so report a result, even when an upstream job failed or the run was cancelled; a cancelled run therefore ends with a failing gate rather than a missing one. The verifier (W12) also checks that `needs`, `MANDATORY_JOBS` and the policy list agree. The negative suite runs the script text read from the workflow with 20 synthetic `needs` contexts (G00–G18, C06 aside).
+`if: always()` makes the gate run, and so report a result, even when an upstream job failed or the run was cancelled; a cancelled run therefore ends with a failing gate rather than a missing one. The verifier (W12) also checks that `needs`, `MANDATORY_JOBS` and the policy list agree. The negative suite runs the script text read from the workflow with 19 synthetic `needs` contexts (G00–G18).
 
 ## 3. Toolchain, installation and cache
 
@@ -62,12 +62,13 @@ Cache: `setup-node` `cache: npm` stores `~/.npm` (downloaded tarballs) keyed on 
 | Token permissions | Top-level `contents: read`; no job overrides; gate `permissions: {}`. No job writes to the repository, PRs, checks or packages. | W10; P04, P05 |
 | Secrets | None used. No `secrets.*`, no credential-like inputs, no `registry-url`/token on setup-node. | W13; P08 |
 | Credential persistence | `persist-credentials: false` on every checkout, so later steps (including `npm ci` lifecycle code, were any enabled) cannot read the token from `.git/config`. | W11, W13; P09 |
-| Script injection | No `${{ }}` inside any `run:`. The only expressions are six allowlisted forms (concurrency group/cancel, `always()`, artifact name with `run_attempt`, artifact path from `runner.temp`, `toJSON(needs)`); none carries PR title, body, branch name or other attacker-controlled text into a shell. The concurrency group uses the PR number (an integer) or `github.ref`. | W13; P07 |
+| Script injection | No `${{ }}` inside any `run:`. The only expressions are six allowlisted forms (concurrency group/cancel, `always()`, artifact name with `run_attempt`, artifact path from `runner.temp`, `toJSON(needs)`); none carries PR title, body, branch name or other attacker-controlled text into a shell. The concurrency group uses the PR number (an integer) or the commit SHA. | W13; P07 |
 | Action supply chain | Three GitHub first-party actions, each pinned to a verified full commit SHA with the release tag as a comment; no third-party action; one local composite action. | W14; P01–P03 |
 | Dependency installation | `npm ci` only; no `npm install`, `--ignore-scripts=false`, `--force` or `--legacy-peer-deps` in any step. | W15; I04 |
 | Artifacts | Only `$RUNNER_TEMP/paep-evidence/` (logs, JSON reports, build file manifests, licence notices). No `node_modules`, `.git`, environment dumps or tokens. 30-day retention. The gate uploads nothing and downloads nothing. | W11 |
 | Shell safety | Every `run:` starts `set -euo pipefail`; output goes through `tee` with `pipefail`, so a failing command fails its step. | W11 |
-| Workflow edits in a PR | A pull request runs its own version of the workflow, so a PR could weaken CI in the same change. Mitigations: W09–W15 fail on any policy drift unless the policy file changes too; changes to `.github/**` or the policy are visible in review; the required-check design (enforcement document) plus review is the residual control. | residual risk R2 |
+| Exact reviewed text | The gate script and every setup-action step (keys, inputs, `env`, `shell`, `run`) must equal the reviewed copies in the policy (`gate.run`, `setupSteps`); the workflow may have only the top-level keys `name`, `on`, `permissions`, `concurrency`, `jobs` (no `defaults` or `env`); each job's checkout and upload steps may carry only their reviewed inputs. The YAML reader rejects double-quoted escapes (`\x24`, `\u0024`, ...) rather than decode them differently from GitHub. Added after independent QA lane 2 (F1–F5). | W09, W11, W12, W15; P15–P20 |
+| Workflow edits in a PR | A pull request runs its own version of the workflow, policy and verifier, so a PR can change all three together. W09–W15 make any such change explicit (it must also edit the policy), which helps review, but they are not a security boundary against the PR author. The residual controls are human review of `.github/**`, `tooling/verification/**` and the policy, and the required-check design (enforcement document); CODEOWNERS for those paths is recommended once a second reviewer exists. | residual risk R2 |
 
 ## 5. Historical verifiers
 

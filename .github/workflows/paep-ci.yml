@@ -19,7 +19,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: paep-ci-${{ github.event.pull_request.number || github.ref }}
+  group: paep-ci-${{ github.event.pull_request.number || github.sha }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:

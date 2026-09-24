@@ -5,7 +5,7 @@
  * .github/actions/paep-setup/action.yml: mappings, sequences (including
  * "- key: value" items), plain and quoted scalars, [a, b] and {} flow values,
  * "|" block scalars and comments. Anything else (tabs, anchors, aliases, tags,
- * folded scalars, flow mappings, duplicate keys) throws, so the policy checks in
+ * folded scalars, flow mappings, duplicate keys, backslash escapes) throws, so the policy checks in
  * verify-ib0-wp05.mjs fail closed instead of misreading a workflow.
  * Node.js built-ins only; no YAML dependency is added.
  */
@@ -27,7 +27,9 @@ export function parseYaml(text) {
       for (; j < s.length; j++) {
         const c = s[j];
         if (q === "'" && c === "'" && s[j + 1] === "'") { v += "'"; j++; continue; }
-        if (q === '"' && c === '\\') { const n = s[++j]; v += n === 'n' ? '\n' : n; continue; }
+        // Escape sequences (\x24, \u0024, \t, ...) are not decoded; reject them so a value can never
+        // read differently here than on GitHub.
+        if (q === '"' && c === '\\') throw new Error(`escape sequence in double-quoted scalar is not supported: ${s}`);
         if (c === q) break;
         v += c;
       }

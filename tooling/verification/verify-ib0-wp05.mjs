@@ -149,7 +149,8 @@ if (want('W01')) {
 // Changed paths since the WP04 baseline (tracked + untracked).
 let changedPaths = [];
 if (['W05', 'W06', 'W07', 'W08'].some(want)) {
-  const d = git('diff', '--name-only', BASELINE_COMMIT);
+  // --no-renames: a moved file must show under both paths, so moving an accepted record into a WP05 folder is caught.
+  const d = git('diff', '--name-only', '--no-renames', BASELINE_COMMIT);
   const u = git('ls-files', '--others', '--exclude-standard');
   if (d.status !== 0) add('W07', 'git diff against the baseline', false, `git diff ${BASELINE_COMMIT} failed (full history required): ${d.out}`);
   changedPaths = [...new Set([...lines(d.out), ...lines(u.out)])].sort();
@@ -291,6 +292,7 @@ if (want('W09') && wf && setup) {
   const ghFiles = walk('.github');
   const expectedGh = [policy.workflow.setupAction, policy.workflow.path].sort();
   if (JSON.stringify(ghFiles.sort()) !== JSON.stringify(expectedGh)) p.push(`.github holds ${ghFiles.join(', ')}; expected ${expectedGh.join(', ')}`);
+  if (JSON.stringify(Object.keys(wf)) !== JSON.stringify(policy.workflow.topLevelKeys)) p.push(`workflow top-level keys ${Object.keys(wf).join(', ')} != ${policy.workflow.topLevelKeys.join(', ')} (no defaults, env or other key)`);
   if (wf.name !== policy.workflow.name) p.push(`workflow name "${wf.name}"`);
   const on = wf.on;
   if (!on || typeof on !== 'object' || Array.isArray(on)) p.push('"on" is not a mapping');
@@ -336,10 +338,11 @@ if (want('W11') && wf) {
     const steps = Array.isArray(j.steps) ? j.steps : [];
     const [co, su, ...rest] = steps;
     const up = rest.pop();
-    if (!co || !/^actions\/checkout@/.test(co.uses || '') || co.with?.['fetch-depth'] !== 0 || co.with?.['persist-credentials'] !== false || Object.keys(co).some((k) => !['name', 'uses', 'with'].includes(k))) p.push(`${mj.id}: step 1 is not checkout with fetch-depth 0 and persist-credentials false`);
+    if (!co || !/^actions\/checkout@/.test(co.uses || '') || co.with?.['fetch-depth'] !== 0 || co.with?.['persist-credentials'] !== false || Object.keys(co).some((k) => !['name', 'uses', 'with'].includes(k)) || !sameSet(Object.keys(co.with || {}), ['fetch-depth', 'persist-credentials'])) p.push(`${mj.id}: step 1 is not checkout with fetch-depth 0 and persist-credentials false`);
     if (!su || su.uses !== './.github/actions/paep-setup' || Object.keys(su).some((k) => !['name', 'uses'].includes(k))) p.push(`${mj.id}: step 2 is not the PAEP setup action`);
     if (!up || !/^actions\/upload-artifact@/.test(up.uses || '') || up.if !== '${{ always() }}' || up.with?.path !== '${{ runner.temp }}/paep-evidence/'
-      || up.with?.['retention-days'] !== policy.artifactRetentionDays || up.with?.name !== `paep-${mj.id}-attempt-\${{ github.run_attempt }}`) p.push(`${mj.id}: last step is not the evidence upload (always, runner.temp/paep-evidence, ${policy.artifactRetentionDays} days)`);
+      || up.with?.['retention-days'] !== policy.artifactRetentionDays || up.with?.name !== `paep-${mj.id}-attempt-\${{ github.run_attempt }}`
+      || !sameSet(Object.keys(up), ['name', 'uses', 'if', 'with']) || !sameSet(Object.keys(up.with || {}), ['name', 'path', 'if-no-files-found', 'retention-days']) || up.with['if-no-files-found'] !== 'warn') p.push(`${mj.id}: last step is not the evidence upload (always, runner.temp/paep-evidence, ${policy.artifactRetentionDays} days)`);
     const runs = rest.map((s) => s.run || '');
     for (const s of rest) if (Object.keys(s).some((k) => !['name', 'run'].includes(k))) p.push(`${mj.id}: step "${s.name}" has ${Object.keys(s).join(', ')}`);
     for (const r of runs) if (!/^set -euo pipefail\n/.test(r)) p.push(`${mj.id}: run step without set -euo pipefail`);
@@ -365,11 +368,13 @@ if (want('W12') && wf) {
     if (steps.length !== 1) p.push(`gate has ${steps.length} steps`);
     const s = steps[0] || {};
     if (Object.keys(s).some((k) => !['name', 'env', 'run'].includes(k))) p.push(`gate step keys ${Object.keys(s).join(', ')}`);
+    if (!sameSet(Object.keys(s.env || {}), ['NEEDS_JSON', 'MANDATORY_JOBS'])) p.push(`gate step env keys ${Object.keys(s.env || {}).join(', ')}`);
     if (s.env?.NEEDS_JSON !== '${{ toJSON(needs) }}') p.push('gate NEEDS_JSON is not toJSON(needs)');
     const listed = String(s.env?.MANDATORY_JOBS || '').split(/\s+/).filter(Boolean);
     if (!sameSet(listed, mandatoryIds)) p.push(`gate MANDATORY_JOBS ${listed.join(' ')}`);
     const r = s.run || '';
-    for (const need of ['set -euo pipefail', `[ "$actual" != "$expected" ]`, `.[$job].result // "missing"`, `[ "$result" != "success" ]`, 'exit 1']) if (!r.includes(need)) p.push(`gate script lacks ${need}`);
+    // The script must equal the reviewed text in the policy exactly: a substring check would accept an early "exit 0".
+    if (r !== policy.gate.run) p.push('gate script differs from the reviewed script in the policy (gate.run)');
   }
   add('W12', 'Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success',
     p.length === 0, p.length ? p.join('; ') : `needs ${mandatoryIds.length}/${mandatoryIds.length}; if always(); permissions {}`);
@@ -430,6 +435,12 @@ if (want('W14') && wf && setup) {
 if (want('W15') && setup) {
   const p = [];
   if (setup.runs?.using !== 'composite') p.push('setup action is not composite');
+  if (Object.keys(setup).some((k) => !['name', 'description', 'runs'].includes(k)) || !sameSet(Object.keys(setup.runs || {}), ['using', 'steps'])) p.push(`setup action keys ${Object.keys(setup).join(', ')} / runs ${Object.keys(setup.runs || {}).join(', ')}`);
+  // Every setup step (keys, inputs, env, shell and run text) must equal the reviewed steps in the policy.
+  const reviewed = policy.setupSteps;
+  const got = setup.runs?.steps || [];
+  if (got.length !== reviewed.length) p.push(`setup has ${got.length} steps; the policy has ${reviewed.length}`);
+  for (const [k, st] of got.entries()) if (JSON.stringify(st) !== JSON.stringify(reviewed[k])) p.push(`setup step ${k + 1} ("${st?.name}") differs from the reviewed step in the policy (setupSteps)`);
   const steps = setup.runs?.steps || [];
   const sn = steps.find((s) => /^actions\/setup-node@/.test(s.uses || ''));
   const w = sn?.with || {};
@@ -445,7 +456,7 @@ if (want('W15') && setup) {
   for (const r of runs) if (r && !r.startsWith('set -euo pipefail\n')) p.push('setup run step without set -euo pipefail');
   if (steps.some((s) => s.run && s.shell !== 'bash')) p.push('setup run step without shell: bash');
   const everyRun = allSteps().map(({ s }) => s.run || '').join('\n');
-  if (/\bnpm (install|i|add|update)\b|--ignore-scripts=false|--foreground-scripts|--no-package-lock|--force\b|--legacy-peer-deps/.test(everyRun)) p.push('a run step installs outside npm ci or changes install-script/lockfile behaviour');
+  if (/\bnpm\s+(install|i|add|update|rebuild)\b|--ignore-scripts=false|--foreground-scripts|--no-package-lock|--force\b|--legacy-peer-deps/.test(everyRun)) p.push('a run step installs outside npm ci or changes install-script/lockfile behaviour');
   for (const { s, where } of allSteps()) {
     if (/^actions\/cache@/.test(s.uses || '')) p.push(`${where}: actions/cache`);
     if (typeof s.with?.path === 'string' && s.with.path.includes('node_modules')) p.push(`${where}: path includes node_modules`);
@@ -603,7 +614,8 @@ if (['W20', 'W21', 'W22', 'W23'].some(want)) {
     for (const [n, j] of [['ib0-wp04-verification.full.json', wp04], ['ib0-wp03-verification.regression.json', wp03], ['ib0-wp02-verification.regression.json', wp02], ['ib0-wp01-verification.regression.json', wp01]]) if (j) keep(n, JSON.stringify(j, null, 2) + '\n');
     for (const f of ['verify-ib0-wp03-regression.log', 'verify-ib0-wp02-regression.log', 'verify-ib0-wp01-regression.log']) if (exists(`evidence/IB0-WP04/logs/${f}`)) keep(f, read(`evidence/IB0-WP04/logs/${f}`));
     restoreRecords();
-    residual = [...lines(git('diff', '--name-only', WP03_BASELINE, '--', 'evidence/IB0-WP03', 'work-packages/IB0-WP03', 'evidence/IB0-WP02', 'work-packages/IB0-WP02', 'evidence/IB0-WP01', 'work-packages/IB0-WP01').out)];
+    residual = [...lines(git('diff', '--name-only', '--no-renames', WP03_BASELINE, '--', 'evidence/IB0-WP03', 'work-packages/IB0-WP03', 'evidence/IB0-WP02', 'work-packages/IB0-WP02', 'evidence/IB0-WP01', 'work-packages/IB0-WP01').out),
+      ...lines(git('diff', '--name-only', '--no-renames', BASELINE_COMMIT, '--', 'evidence/IB0-WP04', 'work-packages/IB0-WP04').out)];
   }
   // WP02 (run by WP03).
   if (!wp02) p22.push('no WP02 report');
@@ -636,7 +648,7 @@ if (['W20', 'W21', 'W22', 'W23'].some(want)) {
       else if (!bounded[c.id](c.details)) p21.push(`${c.id} outside the WP04+WP05 bound: ${c.details.slice(0, 300)}`);
     }
   }
-  if (residual.length) p21.push(`earlier records differ from ${WP03_BASELINE.slice(0, 7)} after restore: ${residual.join(', ')}`);
+  if (residual.length) p21.push(`earlier records differ from their accepted baselines (${WP03_BASELINE.slice(0, 7)} for WP01-WP03, ${BASELINE_COMMIT.slice(0, 7)} for WP04) after restore: ${residual.join(', ')}`);
   // WP01.
   if (!(wp01 && wp01.result === 'PASS' && wp01.checks.every((c) => c.pass))) p23.push(wp01 ? `WP01 ${wp01.checks.filter((c) => c.pass).length}/${wp01.checks.length}` : 'no WP01 report');
   // WP04: all pass except V16, V17 (static bound), V22 (re-evaluated as W21), V23 (re-evaluated as W22).

@@ -1,6 +1,6 @@
 # IB0-WP04 Technical Verification Report
 
-**Commit under test:** `f74fb78ac871b0a302a7819a5c1d7752544f2409` (branch `claude/ib0-wp04-011ntv`), run from a fresh `git clone` of GitHub on Node 24.21.0 / npm 11.19.0 (linux-x64), 2026-09-24. **Baseline:** `ac6b786` (IB0-WP03 merge). **Result:** technical **PASS**, AC01–AC29.
+**Commit under test:** `bbe3deec1b896399fc8f31dbd1ff9bd2443884be` (branch `claude/ib0-wp04-011ntv`), run from a fresh `git clone` of GitHub on Node 24.21.0 / npm 11.19.0 (linux-x64), 2026-09-24. **Baseline:** `ac6b786` (IB0-WP03 merge). **Result:** technical **PASS**, AC01–AC29.
 
 ## Positive gates
 
@@ -23,12 +23,13 @@
 
 ## Negative architecture tests
 
-`npm run qa:ib0-wp04:negative`: **PASS 33/33** (`logs/negative-architecture-tests.log`, `logs/negative-tests.log`, `reports/negative-tests.json`).
+`npm run qa:ib0-wp04:negative`: **PASS 42/42** (`logs/negative-architecture-tests.log`, `logs/negative-tests.log`, `reports/negative-tests.json`).
 
 | Cases | Result |
 | --- | --- |
 | C0 unmutated; C1 allowed edges (3 edges, 1 Optional); C2 production build via `tsconfig.base.json` alias; C3 verifier static | 4/4 PASS |
 | N01–N27 checker mutations (upward, contracts → Angular, foundation → enterprise, deep import, cycle, bypass, unknown/unclassified project, app → app, package → app, DOM global, frappe-sdk → UI, analytics → frappe-sdk, domain → domain, manifest, dynamic/type-only/re-export/require forms, vendor re-export, copied code, matrix tamper, wildcard/retargeted/second alias registry, unknown package, tooling import) | 27/27 exit 1 with the expected rule |
+| N30–N38 (added after QA round 1): nested `dist/` folder, `.d.ts` edge, contracts `/// <reference lib="dom">`, `/// <reference path>` bypass, category/directory mismatch, analytics import-then-export of a vendor binding, module augmentation, `package.json` `imports` alias, contracts `.js` DOM use | 9/9 exit 1 with the expected rule |
 | N28 `nx` devDependency, N29 `nx.json` | 2/2 verifier V15 FAIL |
 
 N05 is the key cycle proof: platform → observability and observability → platform are each allowed ("Optional"), so only the CYCLE rule rejects the pair, and the run shows no DIRECTION finding.
@@ -52,7 +53,7 @@ N05 is the key cycle proof: platform → observability and observability → pla
 | AC13 | PASS | V12: 0 findings, 0 diagnostics |
 | AC14 | PASS | V13 |
 | AC15 | PASS | V14; `logs/arch-check-cli.log` exit 0 |
-| AC16 | PASS | 4/4 controls; 29/29 rejected |
+| AC16 | PASS | 4/4 controls; 38/38 rejected |
 | AC17 | PASS | V15; N28, N29. Nx disposition: NOT REQUIRED FOR IB0-WP04 |
 | AC18 | PASS | `npm ci` exit 0 |
 | AC19 | PASS | exit 0 |
@@ -67,6 +68,6 @@ N05 is the key cycle proof: platform → observability and observability → pla
 | AC28 | PASS | `evidence/IB0-WP04/README.md` |
 | AC29 | PASS | `work-packages/IB0-WP04/TRACEABILITY.csv`, `ACCEPTANCE_REPORT.md` |
 
-## Defects found during execution
+## Defects
 
-None. Every gate passed on its first recorded run. Later branch commits change documentation and evidence only.
+D1 (medium, checker, closed): independent QA round 1 (`reports/independent-qa-round1.md`) showed the checker missed violations in nested `dist/`/`node_modules/`/`.angular/` folders (M1), in `.d.ts` files (M2) and DOM globals pulled into contracts by `/// <reference lib>` (M3), plus Low gaps L2–L6 and L8. Fixed in `3ec81fc`; AC03, AC09, AC13, AC14 and AC16 strengthened; N30–N38 added. D2 (medium, documentation, closed): the IB-01 §6.1 versus Appendix B conflict (M4) was not reported; now in `reports/definition-audit.md` §6 for PO/SA decision. D3 (low, evidence, closed): L7 evidence-index and status-vocabulary inconsistencies corrected. Later branch commits after `bbe3dee` change documentation and evidence only.

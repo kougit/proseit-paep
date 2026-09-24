@@ -1,7 +1,7 @@
 # IB0-WP04 Acceptance Report
 
 **Work package:** IB0-WP04 — Project Graph, Package Boundaries and Dependency Enforcement (PAEP-IR-01 IB0-WP4)  
-**Commit / revision:** implementation `9347807` and `f74fb78` (commit under test); PR head recorded in `evidence/IB0-WP04/reports/acceptance-readiness.md`  
+**Commit / revision:** implementation `9347807`, `f74fb78`, QA round 1 fixes `3ec81fc`, `bbe3dee` (commit under test); PR head recorded in `evidence/IB0-WP04/reports/acceptance-readiness.md`  
 **Baseline:** IB0-WP03 ACCEPTED and CLOSED, merge commit `ac6b786`  
 **Technical reviewer:** Claude Code (execution); independent QA by a separate clean-context Claude review  
 **Review date:** 2026-09-24
@@ -23,7 +23,7 @@ The PAEP architecture is now machine-readable and enforced. `tooling/architectur
 | `npm run build:reference-app` / `build:ui-lab` | Exit 0 / exit 0 | `logs/build-reference-app.log`, `logs/build-ui-lab.log` |
 | `npm run arch:check` | PASS, 0 violations | `logs/arch-check-cli.log` |
 | `npm run qa:ib0-wp04` | PASS 24/24 | `logs/verify-ib0-wp04.log`; `reports/ib0-wp04-verification.json` |
-| `npm run qa:ib0-wp04:negative` | PASS 33/33 | `logs/negative-architecture-tests.log`; `reports/negative-tests.json` |
+| `npm run qa:ib0-wp04:negative` | PASS 42/42 | `logs/negative-architecture-tests.log`; `reports/negative-tests.json` |
 | WP03 regression | 13/18 + bounded V05/V08/V10/V12/V17 | `logs/verify-ib0-wp03-regression.log` |
 | WP02 regression | 19/20 + bounded V17 | `logs/verify-ib0-wp02-regression.log` |
 | WP01 regression | PASS 15/15 | `logs/verify-ib0-wp01-regression.log` |
@@ -44,13 +44,15 @@ AC01–AC29: **29/29 PASS** (per-criterion evidence in `evidence/IB0-WP04/report
 
 ## Defects
 
-None found during execution.
+D1 (medium, closed): checker gaps M1–M3 and L2–L8 from independent QA round 1, fixed in `3ec81fc`; criteria strengthened, none relaxed. D2 (medium, closed): §6.1/Appendix B conflict now reported for PO/SA decision (exception (iii)). D3 (low, closed): evidence-index and status-vocabulary fixes (L7). Details: `evidence/IB0-WP04/reports/technical-verification.md`.
 
 ## Exceptions (pending PO/SA decision)
 
 (i) **WP03 bounded exception.** The accepted WP03 verifier is not edited. Its scope checks were written for the WP03 window: V05 reports `extends` added, V08 reports the aliases moved to `tsconfig.base.json`, V10 reports the WP04 scripts, V12 reports WP04 paths and `tsconfig.base.json`, and V17 reports the WP02 V17 finding below. The WP04 verifier accepts each only when its finding is exactly that authorised change, and re-checks the substance of V05 and V08 itself (V04–V06). All other WP03 checks pass.
 
 (ii) **WP02 V17.** Adds `out-of-scope file present: tsconfig.base.json` to the WP03 exception the PO/SA already accepted.
+
+(iii) **Source conflict C1.** IB-01 §6.1 allows only lower-layer dependencies; Appendix B allows eight same-layer Optional edges. Default: Appendix B governs. No current edge depends on it (`evidence/IB0-WP04/reports/definition-audit.md` §6).
 
 ## Provenance and licences
 
@@ -62,7 +64,7 @@ No dependency was added, removed or re-versioned; `package-lock.json` is byte-id
 
 (ii) No CI exists until IB0-WP05, which should run `npm run arch:check` as its architecture stage. Until then enforcement is by the command and the verifier.
 
-(iii) Rules not mechanically checked: analytics "arbitrary transport calls" (§6.2(v)) and domain business validation (§6.2(vii)); analytics vendor exposure is checked only as "no external re-export". They become checkable when those packages gain code (definition audit D9–D10).
+(iii) Rules not mechanically checked: analytics "arbitrary transport calls" (§6.2(v)) and domain business validation (§6.2(vii)); analytics vendor exposure is checked as "no external module or imported vendor binding exported", not by type analysis. Computed dynamic import specifiers, JSDoc `import()` types and near-duplicate (non-identical) copied code are not detected (QA round 1 L1, L3, O1). They become checkable when those packages gain code (definition audit D9–D10).
 
 (iv) Deep imports are blocked by the checker, not by the compiler: npm workspace links would let TypeScript resolve `@proseit/<pkg>/src/...`. Package `exports` manifests are a later packaging decision.
 

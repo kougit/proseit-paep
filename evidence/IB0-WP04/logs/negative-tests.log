@@ -1,4 +1,4 @@
-# date: 2026-09-24T10:14:27Z node: v24.21.0 npm: 11.19.0 commit: f74fb78ac871b0a302a7819a5c1d7752544f2409
+# date: 2026-09-24T10:38:31Z node: v24.21.0 npm: 11.19.0 commit: bbe3deec1b896399fc8f31dbd1ff9bd2443884be
 $ npm run qa:ib0-wp04:negative
 
 > @proseit/paep-workspace@0.0.0 qa:ib0-wp04:negative
@@ -35,8 +35,17 @@ PASS N24 paths re-added to tsconfig.json (second alias registry) — exit 1; rul
 PASS N25 unknown @proseit/* package imported — exit 1; rules: UNKNOWN_PACKAGE
 PASS N26 import from tooling/ (outside every project) — exit 1; rules: OUTSIDE_PROJECT
 PASS N27 forbidden edge by import = require(): foundation -> enterprise — exit 1; rules: DIRECTION
+PASS N30 forbidden import hidden in a nested dist/ folder: components -> enterprise — exit 1; rules: DIRECTION
+PASS N31 forbidden edge in a .d.ts file: components -> enterprise — exit 1; rules: DIRECTION
+PASS N32 contracts pulls DOM globals with /// <reference lib="dom" /> — exit 1; rules: CONTRACTS_NEUTRAL
+PASS N33 /// <reference path> into another package: components -> enterprise source — exit 1; rules: DIRECTION, ENTRY_BYPASS
+PASS N34 project category reassigned in the model: domain-ai classified as enterprise — exit 1; rules: CLASSIFICATION
+PASS N35 analytics imports a vendor module and exports its binding — exit 1; rules: ANALYTICS_VENDOR_EXPORT
+PASS N36 forbidden edge by module augmentation: foundation declares module '@proseit/paep-enterprise' — exit 1; rules: DIRECTION
+PASS N37 package.json imports alias (#ent) into another package: components -> enterprise source — exit 1; rules: DIRECTION, ENTRY_BYPASS
+PASS N38 contracts .js file uses a DOM global — exit 1; rules: CONTRACTS_NEUTRAL
 PASS N28 nx added to devDependencies — exit 1; failed checks: V15, V16
 PASS N29 nx.json created — exit 1; failed checks: V15, V17
 
-IB0-WP04 negative tests: PASS (33/33)
+IB0-WP04 negative tests: PASS (42/42)
 EXIT_CODE=0

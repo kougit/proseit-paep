@@ -1,10 +1,16 @@
 {
   "workPackage": "IB0-WP04",
-  "generatedAt": "2026-09-24T10:14:27.921Z",
+  "generatedAt": "2026-09-24T10:38:31.717Z",
   "mode": "full",
-  "commit": "f74fb78ac871b0a302a7819a5c1d7752544f2409",
+  "commit": "bbe3deec1b896399fc8f31dbd1ff9bd2443884be",
   "baseline": "ac6b786caf3485ce2b45724be2b437c28f04b66b",
-  "trackedChangesAtRun": [],
+  "trackedChangesAtRun": [
+    "M evidence/IB0-WP04/logs/ib0-wp01-verification.regression.json",
+    " M evidence/IB0-WP04/logs/ib0-wp02-verification.regression.json",
+    " M evidence/IB0-WP04/logs/ib0-wp03-verification.regression.json",
+    " M evidence/IB0-WP04/logs/verify-ib0-wp02-regression.log",
+    " M evidence/IB0-WP04/logs/verify-ib0-wp03-regression.log"
+  ],
   "node": "24.21.0",
   "npm": "11.19.0",
   "typescript": "6.0.3",
@@ -128,7 +134,7 @@
       "id": "V17",
       "name": "No WP05/IB1+ or Nx/lint artefacts, apps/packages/angular.json unchanged, and every changed path is within WORK_PACKAGE §4",
       "pass": true,
-      "details": "15 changed paths, all permitted"
+      "details": "78 changed paths, all permitted"
     },
     {
       "id": "V18",
@@ -140,19 +146,19 @@
       "id": "V19",
       "name": "No credential or secret signatures in files added or modified since the baseline",
       "pass": true,
-      "details": "15 files scanned; findings: none"
+      "details": "78 files scanned; findings: none"
     },
     {
       "id": "V20",
       "name": "build:reference-app production build passes",
       "pass": true,
-      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.09 kB\n\nApplication bundle generation complete. [1.792 seconds] - 2026-09-24T10:14:08.374Z\n\nOutput location: /tmp/paep-wp04-clone-Gg2F/repo/dist/reference-app"
+      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.09 kB\n\nApplication bundle generation complete. [1.727 seconds] - 2026-09-24T10:38:12.774Z\n\nOutput location: /tmp/paep-wp04-clone-bJwD/repo/dist/reference-app"
     },
     {
       "id": "V21",
       "name": "build:ui-lab production build passes",
       "pass": true,
-      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-RPR4FBCF.js    | main          | 190.65 kB |                52.16 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.16 kB\n\nApplication bundle generation complete. [1.748 seconds] - 2026-09-24T10:14:10.776Z\n\nOutput location: /tmp/paep-wp04-clone-Gg2F/repo/dist/ui-lab"
+      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-RPR4FBCF.js    | main          | 190.65 kB |                52.16 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.16 kB\n\nApplication bundle generation complete. [1.657 seconds] - 2026-09-24T10:38:15.100Z\n\nOutput location: /tmp/paep-wp04-clone-bJwD/repo/dist/ui-lab"
     },
     {
       "id": "V22",

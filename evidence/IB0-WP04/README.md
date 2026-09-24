@@ -2,7 +2,7 @@
 
 Evidence for IB0-WP04 (project graph, package boundaries and dependency enforcement).
 
-**Commit under test:** `f74fb78ac871b0a302a7819a5c1d7752544f2409`, run from a fresh `git clone` of GitHub on Node 24.21.0 / npm 11.19.0 (linux-x64), 2026-09-24. Later branch commits change documentation and evidence only. **Baseline:** IB0-WP03 merge commit `ac6b786`. **Status:** technical PASS; independent QA recorded in `reports/independent-qa.md`; not ACCEPTED (PO/SA decision).
+**Commit under test:** `bbe3deec1b896399fc8f31dbd1ff9bd2443884be`, run from a fresh `git clone` of GitHub on Node 24.21.0 / npm 11.19.0 (linux-x64), 2026-09-24. Later branch commits change documentation and evidence only. **Baseline:** IB0-WP03 merge commit `ac6b786`. **Status:** technical PASS; independent QA recorded in `reports/independent-qa.md`; not ACCEPTED (PO/SA decision).
 
 ## Reports
 
@@ -12,9 +12,10 @@ Evidence for IB0-WP04 (project graph, package boundaries and dependency enforcem
 | `reports/architecture-boundaries.md` | Classification, allowed dependencies, rules and tsconfig inheritance |
 | `reports/project-graph.json` | Generated project graph (Nx ProjectGraph shape, edges, depConstraints) |
 | `reports/ib0-wp04-verification.json` | Verifier output, 24/24 PASS, with commit, Node, npm and TypeScript versions |
-| `reports/negative-tests.json` | Negative runner output, 33/33 |
+| `reports/negative-tests.json` | Negative runner output, 42/42 |
 | `reports/technical-verification.md` | All gates, negative cases and per-criterion result |
-| `reports/independent-qa.md` | Independent clean-context QA |
+| `reports/independent-qa-round1.md` | Independent QA round 1 (commit `1c16f80`): FAIL, 4 Medium findings, all closed |
+| `reports/independent-qa.md` | Independent QA summary and round 2 |
 | `reports/acceptance-readiness.md` | Readiness for PO/SA authorisation |
 
 ## Logs
@@ -32,8 +33,8 @@ Evidence for IB0-WP04 (project graph, package boundaries and dependency enforcem
 | `logs/verify-ib0-wp03-regression.log`, `logs/ib0-wp03-verification.regression.json` | WP03 regression | 13/18 + 5 bounded |
 | `logs/verify-ib0-wp02-regression.log`, `logs/ib0-wp02-verification.regression.json` | WP02 regression | 19/20 + V17 bounded |
 | `logs/verify-ib0-wp01-regression.log`, `logs/ib0-wp01-verification.regression.json` | WP01 regression | 15/15 |
-| `logs/negative-tests.log`, `logs/negative-architecture-tests.log` | `npm run qa:ib0-wp04:negative` | 33/33 |
+| `logs/negative-tests.log`, `logs/negative-architecture-tests.log` | `npm run qa:ib0-wp04:negative` | 42/42 |
 | `logs/post-run-git-status.log` | No tracked change outside `evidence/IB0-WP04/`; earlier WP records unchanged | Confirmed |
 | `logs/controlled-source-integrity.log` | PACK_MANIFEST SHA-256 check and diff | 13/13 |
 | `logs/scope-and-secret-scan.log` | Changed files, out-of-scope files, Nx, apps/packages diff, entry points, secrets | 0 violations |
-| `logs/independent-qa/` | Independent QA raw logs | See `reports/independent-qa.md` |
+| `logs/independent-qa-round1/`, `logs/independent-qa-round2/` | Independent QA raw logs and scripts | See `reports/independent-qa.md` |

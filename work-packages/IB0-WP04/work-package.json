@@ -16,7 +16,8 @@
     "same_category_edges": "domain-* to another domain-*, and app to app, not allowed without an ADR",
     "tsconfig_base_json": "IMPLEMENTED as the alias registry only; strictness stays literal in tsconfig.json",
     "wp03_regression": "Bounded exception: WP03 V05, V08, V10, V12, V17 may report only WP04-authorised change",
-    "optional_cells": "Allowed; graph flags each Optional edge for justification"
+    "optional_cells": "Allowed; graph flags each Optional edge for justification",
+    "section_6_1_vs_appendix_b": "Appendix B governs where IB-01 §6.1 limits layers to lower layers (eight same-layer Optional cells)"
   },
   "nx_disposition": "NOT REQUIRED FOR IB0-WP04",
   "out_of_scope_owners": { "ESLint boundary rules, lint/format": "deferred (PO/SA, WP03 closure)", "CI workflows and stages": "IB0-WP05", "package contents, contracts, exports manifests": "IB1 and later" },

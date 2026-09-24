@@ -2,7 +2,7 @@
 
 Evidence for IB0-WP02 (toolchain pinning and lockfile control).
 
-**Commit under test:** `0078bb2b2aaf0c603b932c124ad437a3409d418d` (closure commit carrying the PO/SA approvals and the authorised `CLAUDE.md` amendment), run from a fresh `git clone` of GitHub on Node 24.21.0 / npm 11.19.0 (linux-x64), 2026-09-24. The implementation was first verified at `916cb9d` on 2026-09-23; no toolchain, dependency, verifier or application file changed after it. **Baseline:** IB0-WP01 merge commit `b6b023f`. **Status:** technical PASS; see `work-packages/IB0-WP02/ACCEPTANCE_REPORT.md` for QA and acceptance.
+**Commit under test:** `0078bb2b2aaf0c603b932c124ad437a3409d418d` (closure commit carrying the PO/SA approvals and the authorised `CLAUDE.md` amendment), run from a fresh `git clone` of GitHub on Node 24.21.0 / npm 11.19.0 (linux-x64), 2026-09-24. The implementation was first verified at `916cb9d` on 2026-09-23; no toolchain, dependency, verifier or application file changed after it. **Baseline:** IB0-WP01 merge commit `b6b023f`. **Status:** technical verification PASS; independent QA PASS (on `fd096c1`); **ACCEPTED** 2026-09-24 by the Product Owner / Solutions Architect (`work-packages/IB0-WP02/ACCEPTANCE_REPORT.md`).
 
 ## Reports
 

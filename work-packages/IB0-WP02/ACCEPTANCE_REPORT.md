@@ -10,9 +10,12 @@
 
 | Item | Result | Evidence |
 | --- | --- | --- |
-| Technical verification | PASS | AC01–AC24 below; `evidence/IB0-WP02/` |
+| Technical Verification | PASS | AC01–AC24 below; `evidence/IB0-WP02/` |
 | Independent QA | PASS (24/24; 4 low defects corrected) | `evidence/IB0-WP02/reports/independent-qa.md`; `evidence/IB0-WP02/logs/independent-qa/` |
-| Acceptance status | IN PROGRESS | Human decision below |
+| Architecture Conformance | PASS | Controlled Angular 22.x / TypeScript 6.0.x / Node 24 LTS / npm-workspaces baseline kept; no ADR needed; no WP03/WP04 work; `evidence/IB0-WP02/reports/acceptance-readiness.md` |
+| Acceptance Status | ACCEPTED | Human acceptance decision below |
+| Acceptance Authority | Product Owner / Solutions Architect | |
+| Acceptance Date | 2026-09-24 | |
 | Definition audit | PASS | `evidence/IB0-WP02/reports/definition-audit.md` |
 | Definition approval (R1) | Approved by PO/SA 2026-09-24 | `WORK_PACKAGE.md` §13 |
 | `CLAUDE.md` governance update (R2) | Done: one authorised amendment to a work-package-neutral rule | `evidence/IB0-WP02/notes/closure-authorisation.md` |
@@ -133,9 +136,9 @@ All 434 third-party lockfile entries come from registry.npmjs.org with sha512 in
 
 ## Human acceptance decision
 
-**ACCEPTED / REJECTED / CONDITIONAL:** [INSERT]
+**ACCEPTED / REJECTED / CONDITIONAL:** ACCEPTED. The Product Owner / Solutions Architect instruction of 2026-09-24 authorised acceptance if every listed condition held after final revalidation, and directed that ACCEPTED then be recorded. All conditions held (`evidence/IB0-WP02/reports/acceptance-readiness.md`); Claude Code recorded the decision.
 
-**Licence dispositions (Engineering Governance / IP owner):** [INSERT: accepted / rejected / conditional, with date]
+**Licence dispositions:** `lightningcss` (MPL-2.0) and `caniuse-lite` (CC-BY-4.0) APPROVED BUILD-TIME DEPENDENCIES, `caniuse-lite` with attribution. Issued by the Product Owner / Solutions Architect on 2026-09-24; no separate Engineering Governance / IP owner decision is recorded.
 
-**Authorised reviewer:** [INSERT]  
-**Date:** [INSERT]
+**Authorised reviewer:** Product Owner / Solutions Architect  
+**Date:** 2026-09-24

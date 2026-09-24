@@ -125,6 +125,10 @@ try {
   verifierCase('M11', 'contracts alias removed', [root_((o) => { delete o.compilerOptions.paths['@proseit/paep-contracts']; })], 'V08');
   verifierCase('M12', 'wildcard deep alias added', [root_((o) => { o.compilerOptions.paths['@proseit/paep-contracts/*'] = ['./packages/contracts/src/*']; })], 'V08');
   verifierCase('M13', 'contracts entry point deleted', [['packages/contracts/src/index.ts', () => null]], 'V09');
+  verifierCase('M14', 'type checking switched off ("noCheck": true added)', [root_((o) => { o.compilerOptions.noCheck = true; })], 'V04');
+  verifierCase('M15', 'unlisted option added ("allowUnreachableCode": true)', [root_((o) => { o.compilerOptions.allowUnreachableCode = true; })], 'V05');
+  verifierCase('M16', 'Angular extended diagnostics suppressed', [root_((o) => { o.angularCompilerOptions.extendedDiagnostics = { defaultCategory: 'suppress' }; })], 'V04');
+  verifierCase('M17', 'uppercase // @TS-NOCHECK in an entry point', [['packages/contracts/src/index.ts', (t) => `// @TS-NOCHECK\n${t}`]], 'V07');
 } finally {
   fs.rmSync(scratch, { recursive: true, force: true });
 }

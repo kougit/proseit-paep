@@ -39,6 +39,10 @@ const STRICT_FAMILY = ['strict', 'noImplicitAny', 'strictNullChecks', 'strictFun
 const TEMPLATE_STRICT = ['strictTemplates', 'fullTemplateTypeCheck', 'strictInputTypes', 'strictInputAccessModifiers',
   'strictNullInputTypes', 'strictAttributeTypes', 'strictSafeNavigationTypes', 'strictDomLocalRefTypes',
   'strictOutputEventTypes', 'strictDomEventTypes', 'strictContextGenerics', 'strictLiteralTypes'];
+// Options that switch type checking off or let errors through when set to true.
+const CHECK_DISABLING = ['noCheck', 'allowUnreachableCode', 'allowUnusedLabels', 'checkJs', 'suppressExcessPropertyErrors', 'suppressImplicitAnyIndexErrors'];
+// Keys IB0-WP03 adds to the root tsconfig; every other key must be a baseline key with its baseline value.
+const WP03_ADDED = { compilerOptions: ['strict', 'noImplicitAny', 'paths'], angularCompilerOptions: ['strictTemplates'] };
 const WP03_SCRIPTS = {
   'qa:ib0-wp03': 'node tooling/verification/verify-ib0-wp03.mjs',
   'qa:ib0-wp03:negative': 'node tooling/verification/negative-ib0-wp03.mjs'
@@ -132,8 +136,11 @@ for (const f of tsconfigFiles) {
   try { raw = rawConfig(read(f), f); } catch (e) { disabling.push(String(e)); continue; }
   for (const k of STRICT_FAMILY) if (raw.compilerOptions?.[k] === false) disabling.push(`${f}: compilerOptions.${k}=false`);
   for (const k of TEMPLATE_STRICT) if (raw.angularCompilerOptions?.[k] === false) disabling.push(`${f}: angularCompilerOptions.${k}=false`);
+  for (const k of CHECK_DISABLING) if (raw.compilerOptions?.[k] === true) disabling.push(`${f}: compilerOptions.${k}=true`);
+  const ext = raw.angularCompilerOptions?.extendedDiagnostics;
+  if (ext && JSON.stringify(ext).includes('"suppress"')) disabling.push(`${f}: angularCompilerOptions.extendedDiagnostics suppresses diagnostics`);
 }
-add('V04', 'No tsconfig*.json in the repository sets a strict-family or template strict option to false',
+add('V04', 'No tsconfig*.json in the repository turns a strict-family or template strict option off, or disables or suppresses type checking',
   tsconfigFiles.length > 0 && disabling.length === 0, disabling.length ? disabling.join('; ') : `${tsconfigFiles.length} tsconfig files: ${tsconfigFiles.join(', ')}`);
 
 // V05: baseline compiler options kept; app tsconfigs unchanged (AC05)
@@ -143,12 +150,18 @@ for (const section of ['compilerOptions', 'angularCompilerOptions']) {
     if (JSON.stringify(rootRaw[section]?.[k]) !== JSON.stringify(v)) weakened.push(`${section}.${k}: baseline ${JSON.stringify(v)} now ${JSON.stringify(rootRaw[section]?.[k])}`);
   }
 }
+for (const section of ['compilerOptions', 'angularCompilerOptions']) {
+  for (const k of Object.keys(rootRaw[section] || {})) {
+    if (!(k in (baselineRaw[section] || {})) && !WP03_ADDED[section].includes(k)) weakened.push(`${section}.${k} added (not a baseline or WP03 key)`);
+  }
+}
+for (const k of Object.keys(rootRaw)) if (!(k in baselineRaw)) weakened.push(`top-level ${k} added`);
 for (const k of ['extends', 'files', 'references', 'compileOnSave']) {
   if (JSON.stringify(rootRaw[k]) !== JSON.stringify(baselineRaw[k])) weakened.push(`${k} changed`);
 }
 const appTs = git('diff', '--name-only', BASELINE_COMMIT, '--', 'apps/reference-app/tsconfig.app.json', 'apps/ui-lab/tsconfig.app.json');
 if (appTs.status !== 0) weakened.push(`git diff failed: ${appTs.out || appTs.error}`); else if (appTs.out) weakened.push(`changed: ${appTs.out}`);
-add('V05', 'Every baseline compiler and Angular compiler option keeps its value, and the app tsconfig files are unchanged',
+add('V05', 'Root tsconfig holds exactly the baseline options with their values plus the WP03 keys, and the app tsconfig files are unchanged',
   weakened.length === 0 && Object.keys(baselineRaw.compilerOptions || {}).length > 0,
   weakened.length ? weakened.join('; ') : `${Object.keys(baselineRaw.compilerOptions || {}).length + Object.keys(baselineRaw.angularCompilerOptions || {}).length} baseline options unchanged`);
 
@@ -165,7 +178,7 @@ add('V06', 'No build target disables AOT, the application builder is kept, and a
   buildTargets.length > 0 && aotProblems.length === 0, aotProblems.length ? aotProblems.join('; ') : `${buildTargets.length} build targets AOT`);
 
 // V07: no compiler-suppression directives in apps/packages source (AC06)
-const suppression = /@ts-(ignore|nocheck|expect-error)\b|\$any\s*\(/;
+const suppression = /@ts-(ignore|nocheck|expect-error)\b|\$any\s*\(/i;
 const sourceFiles = allFiles.filter((f) => /^(apps|packages)\//.test(f) && /\.(ts|mts|cts|html)$/.test(f));
 const suppressed = sourceFiles.filter((f) => suppression.test(read(f)));
 add('V07', 'No @ts-ignore, @ts-nocheck, @ts-expect-error or $any( in apps/** or packages/** source',

@@ -5,16 +5,17 @@
   "milestone": "IB0",
   "wbs": "W1 / IB0",
   "design_classification": "D0",
-  "status": "PASS",
-  "acceptance": { "status": null, "note": "awaiting Product Owner / Solutions Architect decision", "authority": "Product Owner / Solutions Architect", "technical_verification": "PASS", "independent_qa": "PASS" },
+  "status": "ACCEPTED",
+  "acceptance": { "status": "ACCEPTED", "authority": "Product Owner / Solutions Architect", "date": "2026-09-24", "technical_verification": "PASS", "independent_qa": "PASS", "architecture_conformance": "PASS", "criteria": "24/24 PASS" },
   "predecessor": { "id": "IB0-WP02", "status": "ACCEPTED", "baseline_commit": "de13629" },
   "objective": "Make TypeScript strict, noImplicitAny and Angular strictTemplates explicit, configure one path alias and one placeholder public entry point per workspace package, and verify that removing or weakening any of these controls is detected.",
   "controlled_requirements": ["PAEP-IB-01 §4.1 TypeScript row", "PAEP-IR-01 §4.4 IB0-WP3", "PAEP-IR-01 §4.3(iv), §4.5", "PAEP-IB-01 §5.2(ii), §6.2(ii)", "PAEP v1.1 §5.4", "PAEP-EQP-01 §8.2(vi), §13(iii), §15, §16(v), §23"],
-  "definition_status": "Drafted 2026-09-24 by Claude Code under PO/SA authorisation; awaiting PO/SA approval",
-  "defaults_pending_decision": {
-    "lint_format": "Deferred (no new dependencies); PO/SA decision requested 2026-09-24",
-    "wp02_v17": "Bounded exception, WP02 verifier untouched; PO/SA decision requested 2026-09-24",
-    "tsconfig_base_json": "Deferred to IB0-WP04 with nx.json (IB0-WP01 acceptance record)"
+  "definition_status": "APPROVED 2026-09-24 by Product Owner / Solutions Architect (24 criteria incl. revised AC20 and tightened AC04-AC06, AC11)",
+  "po_sa_decisions": {
+    "lint_format": "DEFERRED 2026-09-24; needs controlled WP ownership, dependency review, licence/provenance review and acceptance criteria before introduction",
+    "wp02_v17": "Bounded exception ACCEPTED 2026-09-24; WP02 verifier and history untouched; substantive WP02 controls must pass",
+    "tsconfig_base_json": "DEFERRED to IB0-WP04 2026-09-24",
+    "nx": "Nx-compatible does not imply Nx installation; nx.json not created"
   },
   "out_of_scope_owners": { "Nx/project graph, nx.json, tsconfig.base.json, tags, boundaries, cycles, deep-import enforcement": "IB0-WP04", "CI workflows, unit-test runner, qa stages": "IB0-WP05", "package contents and behaviour": "IB1 and later" },
   "mandatory_acceptance_ids": [

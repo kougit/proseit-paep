@@ -1,0 +1,19 @@
+# date: 2026-09-24T09:50:59Z node: v24.21.0 npm: 11.19.0 commit: 3ae5588205a610cfea38e2d548ac93c595f0c025
+$ bash -c node -e "const fs=require(\"fs\"),c=require(\"crypto\");const m=require(\"./PACK_MANIFEST.json\").files.filter(f=>f.path===\".gitignore\"||f.path.startsWith(\".paep-control/\"));let ok=0;for(const f of m){const h=c.createHash(\"sha256\").update(fs.readFileSync(f.path)).digest(\"hex\");const s=fs.statSync(f.path).size;const g=h===f.sha256&&s===f.bytes;ok+=g;console.log((g?\"MATCH \":\"MISMATCH \")+f.path)}console.log(ok+\"/\"+m.length+\" match\");process.exit(ok===m.length?0:1)" && echo "git diff --stat de13629 HEAD -- .paep-control .gitignore PACK_MANIFEST.json CLAUDE.md:" && git diff --exit-code --stat de13629 HEAD -- .paep-control .gitignore PACK_MANIFEST.json CLAUDE.md && echo "(empty)"
+MATCH .gitignore
+MATCH .paep-control/SOURCE_OF_TRUTH.md
+MATCH .paep-control/originals/PAEP_DCH_v1.0.pdf
+MATCH .paep-control/originals/PAEP_EQP_v1.1.pdf
+MATCH .paep-control/originals/PAEP_IB_v1.0.pdf
+MATCH .paep-control/originals/PAEP_IR_v1.0.docx
+MATCH .paep-control/originals/PAEP_v1.1.pdf
+MATCH .paep-control/reference-baseline/PAEP_BASE_v1.0.zip
+MATCH .paep-control/text/PAEP_DCH_01_v1.0_text.md
+MATCH .paep-control/text/PAEP_EQP_01_v1.1_text.md
+MATCH .paep-control/text/PAEP_IB_01_v1.0_text.md
+MATCH .paep-control/text/PAEP_IR_01_v1.0_text.md
+MATCH .paep-control/text/PAEP_v1.1_text.md
+13/13 match
+git diff --stat de13629 HEAD -- .paep-control .gitignore PACK_MANIFEST.json CLAUDE.md:
+(empty)
+EXIT_CODE=0

@@ -2,7 +2,7 @@
 
 Evidence for IB0-WP03 (compiler, type-safety and static-quality baseline).
 
-**Commit under test:** `0f2d38174d57dda229e62a545477e8d8288e8a00` (implementation `15386a9` plus the verifier hardening from independent QA round 1), run from a fresh `git clone` of GitHub on Node 24.21.0 / npm 11.19.0 (linux-x64), 2026-09-24. Later branch commits change documentation and evidence only; independent QA re-ran every gate on the PR head (`reports/independent-qa.md`). **Baseline:** IB0-WP02 merge commit `de13629`. **Status:** technical PASS; see `reports/acceptance-readiness.md` for QA and readiness. ACCEPTED is a PO/SA decision.
+**Commit under test:** `0f2d38174d57dda229e62a545477e8d8288e8a00` (implementation `15386a9` plus the verifier hardening from independent QA round 1), run from a fresh `git clone` of GitHub on Node 24.21.0 / npm 11.19.0 (linux-x64), 2026-09-24. Later branch commits change documentation and evidence only; independent QA re-ran every gate on the PR head (`reports/independent-qa.md`). **Baseline:** IB0-WP02 merge commit `de13629`. **Status:** technical PASS; independent QA PASS; **ACCEPTED** 2026-09-24 by the Product Owner / Solutions Architect (`work-packages/IB0-WP03/ACCEPTANCE_REPORT.md`). Pre-merge revalidation of PR head `3ae5588` passed (`logs/pre-merge-revalidation/`).
 
 ## Reports
 
@@ -41,6 +41,8 @@ Evidence for IB0-WP03 (compiler, type-safety and static-quality baseline).
 | --- | --- | --- |
 | `logs/negative-strictness.log` | B0–B2c: TypeScript and template violations with flag-off controls | 5/5 as expected |
 | `logs/negative-verifier-mutations.log` | M0–M17: verifier positive control and 17 weakening mutations | 18/18 as expected |
+| `logs/independent-qa-round2/` | Independent QA round 2 raw logs and helper scripts (at `813b7ca`) | QA PASS; F1, F3, F5, F6 closed |
+| `logs/pre-merge-revalidation/` | All positive and negative gates re-run on a fresh clone of PR head `3ae5588` before acceptance | All exit 0; verifier 18/18; negative 23/23 |
 | `logs/independent-qa-round1/` | Independent QA round 1 raw logs and helper scripts (at `f19a422`) | QA PASS with findings F1–F8 |
 | `logs/negative-tests.log` | Runner console output | PASS 23/23 |
 
@@ -48,4 +50,5 @@ Evidence for IB0-WP03 (compiler, type-safety and static-quality baseline).
 
 | Path | Content |
 | --- | --- |
-| `notes/implementation-summary.md` | Changes, commits, defaults pending PO/SA decision, notes for later work packages |
+| `notes/implementation-summary.md` | Changes, commits, defaults (since decided, see `notes/closure-authorisation.md`), notes for later work packages |
+| `notes/closure-authorisation.md` | PO/SA acceptance and decisions of 2026-09-24 |

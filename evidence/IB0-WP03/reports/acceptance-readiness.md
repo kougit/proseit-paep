@@ -9,7 +9,7 @@
 | Technical verification | PASS, 24/24 criteria (`technical-verification.md`) |
 | Independent QA | PASS, round 1 (`f19a422`) and round 2 (`813b7ca`) (`independent-qa.md`) |
 | Architecture conformance | PASS: Angular 22.1.8 / TypeScript 6.0.3 / Node 24.21.0 / npm 11.19.0, plain Angular CLI + npm workspaces, no Nx; no ADR needed |
-| Readiness | READY FOR AUTHORIZATION. ACCEPTED and merge remain PO/SA decisions. |
+| Readiness | READY FOR AUTHORIZATION (2026-09-24). The PO/SA then APPROVED the definition, decided items 1–4 below and ACCEPTED the work package; see `notes/closure-authorisation.md`. |
 
 ## Decisions for the Product Owner / Solutions Architect
 

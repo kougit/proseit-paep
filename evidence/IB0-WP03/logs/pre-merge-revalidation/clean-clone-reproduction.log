@@ -1,0 +1,15 @@
+# date: 2026-09-24T09:50:59Z node: v24.21.0 npm: 11.19.0 commit: 3ae5588205a610cfea38e2d548ac93c595f0c025
+Fresh git clone of origin/claude/ib0-wp03-7s51em into an empty directory (no node_modules, dist or .angular).
+pre-clone-state: EXIT_CODE=0
+toolchain-versions: EXIT_CODE=0
+npm-ci: EXIT_CODE=0
+lockfile-unchanged: EXIT_CODE=0
+build-reference-app: EXIT_CODE=0
+build-ui-lab: EXIT_CODE=0
+build-output-vs-baseline: EXIT_CODE=0
+ng-version: EXIT_CODE=0
+controlled-source-integrity: EXIT_CODE=0
+scope-and-secret-scan: EXIT_CODE=0
+verify-ib0-wp03: EXIT_CODE=0
+negative-tests: EXIT_CODE=0
+post-run-git-status: EXIT_CODE=0

@@ -36,7 +36,8 @@ TypeScript `strict` and `noImplicitAny` and Angular `strictTemplates` are now se
 | --- | --- | --- | --- |
 | Definition audit (scope traced to controlled sources) | Claude Code | 2026-09-24 | PASS |
 | Independent QA round 1 (`f19a422`) and round 2 (`813b7ca`), fresh clones | Independent Claude reviewer | 2026-09-24 | PASS both rounds; F1, F3, F5, F6 fixed; `evidence/IB0-WP03/reports/independent-qa.md` |
-| Definition approval; decisions on lint/format and WP02 V17 | Product Owner / Solutions Architect | Pending | Pending |
+| Definition approval; decisions on lint/format, WP02 V17 and `tsconfig.base.json` | Product Owner / Solutions Architect | 2026-09-24 | APPROVED; decisions in WORK_PACKAGE §10 |
+| Pre-merge revalidation (fresh clone of PR head `3ae5588`) | Claude Code | 2026-09-24 | All gates PASS; `evidence/IB0-WP03/logs/pre-merge-revalidation/` |
 
 ## Acceptance criteria
 
@@ -73,7 +74,7 @@ D1 (low, tooling, closed): negative runner's scratch copy exposed its symlinked 
 
 ## Exceptions
 
-None approved. One proposed bounded exception awaits PO/SA decision: WP02 verifier check V17 flags the WP03-permitted paths `tsconfig.json` and `packages/*/src/index.ts` (AC21; WORK_PACKAGE §6(ii)).
+WP02 V17 bounded exception, ACCEPTED by the PO/SA on 2026-09-24: WP02 check V17 reports the authorised WP03 changes to `tsconfig.json` and `packages/*/src/index.ts`. This is an expected authorised later change, not a regression; every substantive WP02 control passes (AC21; WORK_PACKAGE §6(ii), §10(iii)).
 
 ## Provenance and licences
 
@@ -81,9 +82,9 @@ No dependency was added, removed or re-versioned; `package-lock.json` is byte-id
 
 ## Residual risk
 
-(i) Lint and format tooling (EQP §29.1(iii)) is not in place; deferred pending the PO/SA decision. It remains an open IB0 item, most naturally with CI in IB0-WP05.
+(i) Lint and format tooling (EQP §29.1(iii)) is DEFERRED by PO/SA decision. Before introduction it needs a controlled work-package owner, dependency review, licence/provenance review and acceptance criteria (WORK_PACKAGE §10(ii)).
 
-(ii) Deep-import enforcement, the project graph, `nx.json` and `tsconfig.base.json` remain with IB0-WP04.
+(ii) Deep-import enforcement, the project graph and `tsconfig.base.json` remain with IB0-WP04. "Nx-compatible" does not imply installing Nx; `nx.json` is not created (WORK_PACKAGE §10(iv)).
 
 (iii) QA observations left as they are: F8, no `qa:types` script yet (fits IB0-WP05 CI); G1, `checkJs` sits in the verifier's type-check-disabling list although it enables checking of JavaScript (harmless: no project uses JS).
 
@@ -95,7 +96,14 @@ No dependency was added, removed or re-versioned; `package-lock.json` is byte-id
 
 ## Human acceptance decision
 
-**ACCEPTED / REJECTED / CONDITIONAL:** Pending Product Owner / Solutions Architect decision.
+| Field | Value |
+| --- | --- |
+| Technical Verification | PASS |
+| Independent QA | PASS |
+| Architecture Conformance | PASS |
+| Acceptance Criteria | 24/24 PASS |
+| Acceptance Status | **ACCEPTED** |
+| Acceptance Authority | Product Owner / Solutions Architect |
+| Acceptance Date | 2026-09-24 |
 
-**Authorised reviewer:** —  
-**Date:** —
+Recorded under the PO/SA instruction "IB0-WP03 — FINAL ACCEPTANCE, MERGE AND POST-MERGE CLOSURE" (project thread, 2026-09-24T09:50Z), after the pre-merge revalidation passed. Approved decisions: lint/format tooling deferred; WP02 V17 bounded exception accepted; `tsconfig.base.json` deferred to IB0-WP04; "Nx-compatible" does not imply Nx installation (WORK_PACKAGE §10).

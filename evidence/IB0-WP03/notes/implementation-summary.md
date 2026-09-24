@@ -24,7 +24,7 @@ Not changed: `package-lock.json` and every dependency, `angular.json`, `apps/**`
 | `0f2d381` | Verifier hardening after independent QA round 1 (F1, F3, F5, F6) |
 | later | Re-recorded evidence and QA reports (docs only) |
 
-## Defaults taken (pending PO/SA decisions requested on 2026-09-24)
+## Defaults taken (all four confirmed by the PO/SA on 2026-09-24; see `closure-authorisation.md`)
 
 | Topic | Default | Alternative |
 | --- | --- | --- |

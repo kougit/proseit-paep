@@ -6,7 +6,7 @@
 **Design classification:** D0 — not a UI work package; no design handoff required  
 **Execution agent:** Claude Code  
 **Acceptance authority:** Product Owner / Solutions Architect  
-**Definition status:** Drafted by Claude Code on 2026-09-24 under the PO/SA instruction of 2026-09-24 that authorised execution of IB0-WP03 and creation of its definition "only for requirements actually supported by the controlled sources". The controlled pack supplied no IB0-WP03 definition. Claude may not approve this definition; the PO/SA approves or amends it at acceptance. The definition audit is `evidence/IB0-WP03/reports/definition-audit.md`.
+**Definition status:** **APPROVED** on 2026-09-24 by the Product Owner / Solutions Architect (24 criteria, including the §9 changes; decisions in §10). Drafted by Claude Code on 2026-09-24 under the PO/SA instruction of 2026-09-24 that authorised execution of IB0-WP03 and creation of its definition "only for requirements actually supported by the controlled sources". The controlled pack supplied no IB0-WP03 definition. Claude may not approve this definition; the PO/SA approves or amends it at acceptance. The definition audit is `evidence/IB0-WP03/reports/definition-audit.md`.
 
 ## 1. Objective
 
@@ -84,3 +84,15 @@ Technical PASS requires every criterion in `ACCEPTANCE.md` to pass. Claude repor
 (i) 2026-09-24, before the first recorded verification run: AC20 was clarified from "writes nothing outside `evidence/IB0-WP03/`" to "no tracked file outside `evidence/IB0-WP03/` is modified after the run", because the WP02 and WP01 verifiers it runs as regression rewrite, and it restores, their own tracked JSON. The check itself is unchanged and is proven by `logs/post-run-git-status.log`.
 
 (ii) 2026-09-24, after independent QA round 1 (finding F1, medium; F3, low; F5, observation): AC04, AC05, AC06 and AC11 were **strengthened**. The verifier missed three weakenings: adding `"noCheck": true` (which lets both negative violations build), adding other unlisted options, and suppressing Angular extended diagnostics; and V07 was case-sensitive although TypeScript honours `// @TS-NOCHECK`. V04 now rejects type-check-disabling options and suppressed extended diagnostics, V05 is an allow-list, V07 is case-insensitive, and the negative runner adds mutations M14–M17. No criterion was relaxed. The AC20 clarification in (i) was made by Claude after the plan commit and, like this change, needs explicit PO/SA approval with the definition.
+
+## 10. Product Owner / Solutions Architect decisions (2026-09-24)
+
+Recorded from the PO/SA instruction "IB0-WP03 — FINAL ACCEPTANCE, MERGE AND POST-MERGE CLOSURE" (project thread, 2026-09-24T09:50Z).
+
+(i) **Definition APPROVED**, including the revised AC20 and the tightened AC04, AC05, AC06 and AC11 (24 criteria).
+
+(ii) **Lint/format tooling DEFERRED.** No lint/format dependency is introduced in WP03. It is a deferred quality-tooling item that needs, before introduction: a controlled work-package owner, dependency review, licence/provenance review, and acceptance criteria. Not a WP03 blocker.
+
+(iii) **WP02 V17 bounded exception ACCEPTED.** WP03 is authorised to change `tsconfig.json` and `packages/**`, which WP02 V17 flags as later changes. V17 may report that expected, authorised change; it is not a regression. The accepted WP02 verifier and WP02 acceptance history are not modified. All substantive WP02 controls (V01–V16, V18–V20: toolchain, lockfile, install scripts, licences/provenance, controlled sources, secrets, builds) must pass, and V17 must list only WP03-permitted paths (WP03 AC21, verifier V17).
+
+(iv) **`tsconfig.base.json` DEFERRED to IB0-WP04**, which owns the Nx-compatible project/dependency graph and package-boundary work. "Nx-compatible" does not mean "Nx required": Nx is not installed, and `nx.json` (absent from the baseline) is not created for compatibility. WP04 derives its graph/boundary implementation from the controlled sources.

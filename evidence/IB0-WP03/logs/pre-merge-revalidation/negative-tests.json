@@ -1,0 +1,251 @@
+{
+  "workPackage": "IB0-WP03",
+  "generatedAt": "2026-09-24T09:52:21.652Z",
+  "commit": "3ae5588205a610cfea38e2d548ac93c595f0c025",
+  "node": "24.21.0",
+  "result": "PASS",
+  "cases": [
+    {
+      "id": "B0",
+      "name": "positive control: unmodified reference-app builds",
+      "expected": "exit 0",
+      "exit": 0,
+      "codesFound": [],
+      "pass": true
+    },
+    {
+      "id": "B1",
+      "name": "TypeScript strict violation fails the build",
+      "expected": "non-zero exit with TS7006, TS2322",
+      "exit": 1,
+      "codesFound": [
+        "TS7006",
+        "TS2322"
+      ],
+      "pass": true
+    },
+    {
+      "id": "B1c",
+      "name": "control: same violation builds with strict and noImplicitAny false",
+      "expected": "exit 0",
+      "exit": 0,
+      "codesFound": [],
+      "pass": true
+    },
+    {
+      "id": "B2",
+      "name": "Angular template strict violation fails the build",
+      "expected": "non-zero exit with TS2345",
+      "exit": 1,
+      "codesFound": [
+        "TS2345"
+      ],
+      "pass": true
+    },
+    {
+      "id": "B2c",
+      "name": "control: same violation builds with strictTemplates false",
+      "expected": "exit 0",
+      "exit": 0,
+      "codesFound": [],
+      "pass": true
+    },
+    {
+      "id": "M0",
+      "name": "positive control: unmutated copy passes",
+      "expected": "exit 0, all PASS",
+      "exit": 0,
+      "failedChecks": [],
+      "pass": true
+    },
+    {
+      "id": "M1",
+      "name": "\"strict\" removed",
+      "expected": "exit 1, V01 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V01",
+        "V03"
+      ],
+      "pass": true
+    },
+    {
+      "id": "M2",
+      "name": "\"strict\" set to false",
+      "expected": "exit 1, V01 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V01",
+        "V03",
+        "V04"
+      ],
+      "pass": true
+    },
+    {
+      "id": "M3",
+      "name": "\"noImplicitAny\" removed",
+      "expected": "exit 1, V01 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V01",
+        "V03"
+      ],
+      "pass": true
+    },
+    {
+      "id": "M4",
+      "name": "\"strictTemplates\" removed",
+      "expected": "exit 1, V02 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V02",
+        "V03"
+      ],
+      "pass": true
+    },
+    {
+      "id": "M5",
+      "name": "\"strictTemplates\" set to false",
+      "expected": "exit 1, V02 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V02",
+        "V03",
+        "V04"
+      ],
+      "pass": true
+    },
+    {
+      "id": "M6",
+      "name": "app tsconfig sets strictNullChecks false",
+      "expected": "exit 1, V04 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V03",
+        "V04",
+        "V05",
+        "V12"
+      ],
+      "pass": true
+    },
+    {
+      "id": "M7",
+      "name": "app tsconfig sets strictDomEventTypes false",
+      "expected": "exit 1, V04 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V03",
+        "V04",
+        "V05",
+        "V12"
+      ],
+      "pass": true
+    },
+    {
+      "id": "M8",
+      "name": "baseline option weakened (noImplicitReturns false)",
+      "expected": "exit 1, V05 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V05"
+      ],
+      "pass": true
+    },
+    {
+      "id": "M9",
+      "name": "aot false in the production configuration",
+      "expected": "exit 1, V06 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V06",
+        "V12"
+      ],
+      "pass": true
+    },
+    {
+      "id": "M10",
+      "name": "@ts-ignore added to app source",
+      "expected": "exit 1, V07 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V07",
+        "V12"
+      ],
+      "pass": true
+    },
+    {
+      "id": "M11",
+      "name": "contracts alias removed",
+      "expected": "exit 1, V08 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V08",
+        "V09"
+      ],
+      "pass": true
+    },
+    {
+      "id": "M12",
+      "name": "wildcard deep alias added",
+      "expected": "exit 1, V08 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V08"
+      ],
+      "pass": true
+    },
+    {
+      "id": "M13",
+      "name": "contracts entry point deleted",
+      "expected": "exit 1, V09 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V09"
+      ],
+      "pass": true
+    },
+    {
+      "id": "M14",
+      "name": "type checking switched off (\"noCheck\": true added)",
+      "expected": "exit 1, V04 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V04",
+        "V05"
+      ],
+      "pass": true
+    },
+    {
+      "id": "M15",
+      "name": "unlisted option added (\"allowUnreachableCode\": true)",
+      "expected": "exit 1, V05 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V04",
+        "V05"
+      ],
+      "pass": true
+    },
+    {
+      "id": "M16",
+      "name": "Angular extended diagnostics suppressed",
+      "expected": "exit 1, V04 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V04",
+        "V05"
+      ],
+      "pass": true
+    },
+    {
+      "id": "M17",
+      "name": "uppercase // @TS-NOCHECK in an entry point",
+      "expected": "exit 1, V07 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V07"
+      ],
+      "pass": true
+    }
+  ]
+}

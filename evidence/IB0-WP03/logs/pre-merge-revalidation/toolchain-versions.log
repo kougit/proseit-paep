@@ -1,0 +1,9 @@
+# date: 2026-09-24T09:50:59Z node: v24.21.0 npm: 11.19.0 commit: 3ae5588205a610cfea38e2d548ac93c595f0c025
+$ bash -c node --version; npm --version; echo ".nvmrc: $(cat .nvmrc)"; node -p "JSON.stringify(require(\"./package.json\").devEngines)"; npm config get engine-strict; npm config get strict-allow-scripts
+v24.21.0
+11.19.0
+.nvmrc: 24.21.0
+{"runtime":{"name":"node","version":"24.21.0","onFail":"error"},"packageManager":{"name":"npm","version":"11.19.0","onFail":"error"}}
+true
+true
+EXIT_CODE=0

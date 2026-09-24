@@ -24,7 +24,7 @@ Run from the root of a **fresh `git clone`** of the commit under test, on the pi
 npm run qa:ib0-wp04:negative
 ```
 
-Evidence: `negative-tests.log`, `negative-architecture-tests.log`, `reports/negative-tests.json`. Pass: 33/33 — C0–C3 pass; N01–N27 each make the checker exit 1 with the expected rule; N28–N29 each fail verifier check V15.
+Evidence: `negative-tests.log`, `negative-architecture-tests.log`, `reports/negative-tests.json`. Pass: 42/42 — C0–C3 pass; N01–N27 and N30–N38 each make the checker exit 1 with the expected rule; N28–N29 each fail verifier check V15.
 
 ## Failure rule
 

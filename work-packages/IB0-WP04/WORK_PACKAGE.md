@@ -79,6 +79,8 @@ Claude shall **not** modify: `.paep-control/**`, `.gitignore`, `PACK_MANIFEST.js
 
 (iv) "Optional" Appendix B cells are allowed; the generated graph marks every Optional edge for justification at review.
 
+(v) Where IB-01 §6.1 (lower layers only) and Appendix B (eight same-layer Optional cells) differ, Appendix B governs (definition audit §6, C1).
+
 ## 7. Required evidence
 
 Stored under `evidence/IB0-WP04/` and indexed in its README: verifier JSON and log, project graph, clean-clone reproduction, `npm ci`, lockfile unchanged, both production builds, negative architecture tests, WP03/WP02/WP01 regression logs with evidence-restore proof, controlled-source integrity, scope and secret scan, definition audit, independent QA report, technical verification report and acceptance-readiness report.
@@ -90,3 +92,5 @@ Technical PASS requires every criterion in `ACCEPTANCE.md` to pass. Claude repor
 ## 9. Drafting changes
 
 (i) 2026-09-24, before the first recorded verification run: AC16 was made concrete with the case identifiers of the negative runner and extended from 26 to 29 negative cases (adding `import = require()` and the two Nx cases that prove AC17) and 4 controls (adding a production-build control and a verifier control). No criterion was relaxed.
+
+(ii) 2026-09-24, after independent QA round 1 (findings M1–M3, L2–L8): the checker missed violations placed in nested `dist/`, `node_modules/` or `.angular/` folders (M1), in `.d.ts` files (M2), DOM globals pulled into contracts by `/// <reference lib>` (M3), `/// <reference path>`, module augmentation, `require.resolve` and `package.json` `imports` aliases (L2–L4), non-TypeScript contracts files (L5), a project category inconsistent with its directory (L6) and analytics exporting an imported vendor binding (L8). The checker was fixed and AC03, AC09, AC13, AC14 and AC16 were **strengthened** (negative cases N30–N38 added). The §6.1/Appendix B conflict (M4) is now reported (§6(v)). No criterion was relaxed.

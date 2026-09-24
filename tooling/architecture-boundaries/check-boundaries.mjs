@@ -7,7 +7,8 @@
  * registry (tsconfig.base.json), every import in apps/** and packages/**, and
  * workspace-package dependencies in package.json files. It fails when:
  *   MODEL                   the model is malformed or its layers/matrix differ from PAEP-IB-01 §6.1 / Appendix B
- *   CLASSIFICATION          a project is unclassified, unknown, missing, duplicated or mis-tagged
+ *   CLASSIFICATION          a project is unclassified, unknown, missing, duplicated or mis-tagged,
+ *                           or has a nested package.json below its root
  *   ALIAS                   the alias registry or tsconfig inheritance is inconsistent
  *   ENTRY_POINT             a package has no public entry point
  *   DIRECTION               an edge is not allowed by the matrix (upward, lateral or "No")
@@ -15,7 +16,8 @@
  *   DEEP_IMPORT             an import names a path below a package (@proseit/<pkg>/<path>)
  *   UNKNOWN_PACKAGE         an import names an @proseit/* module that is not a workspace package
  *   ENTRY_BYPASS            a relative/rooted import reaches into another project
- *   OUTSIDE_PROJECT         a relative/rooted import reaches workspace files outside any project
+ *   OUTSIDE_PROJECT         a relative/rooted import reaches workspace files outside any project, or a
+ *                           #subpath import is unresolved or maps to another #subpath
  *   CONTRACTS_NEUTRAL       contracts imports an external module or uses non-ES2022 globals
  *   ANALYTICS_VENDOR_EXPORT analytics re-exports an external module
  *   COPIED_CODE             an app file duplicates a package source file
@@ -256,7 +258,14 @@ export function checkBoundaries(root = process.cwd()) {
   };
   const sourceFiles = [];
   const externalByProject = new Map();
-  for (const p of projects) for (const f of walk(p.root)) if (SOURCE_EXT.test(f)) sourceFiles.push({ project: p, file: f });
+  for (const p of projects) {
+    for (const f of walk(p.root)) {
+      if (SOURCE_EXT.test(f)) sourceFiles.push({ project: p, file: f });
+      // Node and TypeScript read "imports" from the nearest package.json, so a nested one
+      // could remap #subpaths out of sight of the project's own manifest.
+      else if (path.basename(f) === 'package.json' && f !== `${p.root}/package.json`) flag('CLASSIFICATION', `${p.name} has a nested package.json at ${f}; a project has at most one manifest, at its root`, f);
+    }
+  }
 
   // Returns every module reference in a file. `reexport` marks an external module whose
   // bindings the file exports (export … from, or import then export). `lib` lists
@@ -350,12 +359,18 @@ export function checkBoundaries(root = process.cwd()) {
       if (!found.spec.startsWith('#')) { expanded.push(found); continue; }
       const targets = subpathTargets(project, found.spec);
       if (!targets.length) { flag('OUTSIDE_PROJECT', `${project.name} imports "${found.spec}", which its package.json imports map does not resolve`, file); continue; }
-      for (const t of targets) expanded.push({ ...found, spec: t, via: found.spec });
+      targets.forEach((t, i) => {
+        // Node rejects a target that is itself a #subpath; TypeScript follows it, which would
+        // hide the final target, so it is reported instead of resolved.
+        if (t.startsWith('#')) flag('OUTSIDE_PROJECT', `${project.name} imports "${found.spec}", whose imports map target "${t}" is another #subpath`, file);
+        else expanded.push({ ...found, spec: t, via: found.spec, repeat: i > 0 });
+      });
     }
     for (const found of expanded) {
       const { kind, reexport } = found;
       const spec = found.spec;
-      importsScanned += 1;
+      const shown = path.isAbsolute(spec) ? rel(spec) : spec;
+      if (!found.repeat) importsScanned += 1;
       const where = found.via ? `${file} (via ${found.via})` : file;
       const isRelative = spec.startsWith('./') || spec.startsWith('../') || spec === '.' || spec === '..' || path.isAbsolute(spec);
       const isRooted = /^(apps|packages|tooling|config|docs|evidence)\//.test(spec) && existsAny(abs(spec));
@@ -363,8 +378,8 @@ export function checkBoundaries(root = process.cwd()) {
         const target = isRooted ? abs(spec) : path.resolve(path.dirname(abs(file)), spec);
         const owner = ownerOf(target);
         if (owner === project) continue;
-        if (!owner) { flag('OUTSIDE_PROJECT', `${project.name} imports "${spec}", outside every project`, where); continue; }
-        flag('ENTRY_BYPASS', `${project.name} imports "${spec}" inside ${owner.name}; use its public entry point`, where);
+        if (!owner) { flag('OUTSIDE_PROJECT', `${project.name} imports "${shown}", outside every project`, where); continue; }
+        flag('ENTRY_BYPASS', `${project.name} imports "${shown}" inside ${owner.name}; use its public entry point`, where);
         addEdge(project, owner, kind, where);
         continue;
       }

@@ -1,11 +1,11 @@
 {
   "workPackage": "IB0-WP04",
-  "generatedAt": "2026-09-24T11:41:39.295Z",
-  "commit": "9c74dbe9235ed34df3ee465a4bb2d0b9e9a8fe94",
+  "generatedAt": "2026-09-24T12:33:21.452Z",
+  "commit": "26def758ea0052f05360172f38a52b2b484b0c41",
   "node": "24.21.0",
   "result": "PASS",
-  "controls": 5,
-  "negatives": 45,
+  "controls": 16,
+  "negatives": 68,
   "cases": [
     {
       "id": "C0",
@@ -31,6 +31,7 @@
       "tool": "ng build reference-app --configuration production",
       "expected": "exit 0",
       "exit": 0,
+      "codesFound": [],
       "pass": true
     },
     {
@@ -527,6 +528,364 @@
       "expected": "exit 0, no violations, 0 edges (0 optional)",
       "exit": 0,
       "rules": [],
+      "pass": true
+    },
+    {
+      "id": "C5",
+      "name": "control: allowlisted same-category edge domain-quality -> domain-fiscal passes",
+      "tool": "arch:check",
+      "expected": "exit 0, no violations, 1 edges (0 optional)",
+      "exit": 0,
+      "rules": [],
+      "pass": true
+    },
+    {
+      "id": "N46",
+      "name": "same-category edge not on the allowlist (another domain pair is listed)",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N47",
+      "name": "transitive same-category chain: domain-quality -> domain-fiscal -> domain-iot, only the direct pairs listed",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N48",
+      "name": "allowlisted same-category edge by deep import",
+      "tool": "arch:check",
+      "expected": "exit 1, DEEP_IMPORT",
+      "exit": 1,
+      "rules": [
+        "DEEP_IMPORT"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N49",
+      "name": "allowlisted same-category pair in both directions forms a cycle",
+      "tool": "arch:check",
+      "expected": "exit 1, CYCLE",
+      "exit": 1,
+      "rules": [
+        "CYCLE"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N50",
+      "name": "allowlist entry crossing categories (components -> enterprise)",
+      "tool": "arch:check",
+      "expected": "exit 1, MODEL",
+      "exit": 1,
+      "rules": [
+        "MODEL"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N53",
+      "name": "workspace package aliased in a manifest (\"i18n-x\": \"file:../i18n\") and imported by that name",
+      "tool": "arch:check",
+      "expected": "exit 1, UNKNOWN_PACKAGE",
+      "exit": 1,
+      "rules": [
+        "UNKNOWN_PACKAGE"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N54",
+      "name": "bare import linked by node_modules to a workspace package (frappe-sdk -> i18n via \"i18n-x\")",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION",
+        "UNKNOWN_PACKAGE"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N52",
+      "name": "allowlist entry linking two applications (reference-app -> ui-lab)",
+      "tool": "arch:check",
+      "expected": "exit 1, MODEL",
+      "exit": 1,
+      "rules": [
+        "MODEL"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N51",
+      "name": "allowlist entry without a rationale",
+      "tool": "arch:check",
+      "expected": "exit 1, MODEL",
+      "exit": 1,
+      "rules": [
+        "MODEL"
+      ],
+      "pass": true
+    },
+    {
+      "id": "O1",
+      "name": "control: Optional edge platform -> observability alone is permitted",
+      "tool": "arch:check",
+      "expected": "exit 0, no violations, 1 edges (1 optional)",
+      "exit": 0,
+      "rules": [],
+      "pass": true
+    },
+    {
+      "id": "O2",
+      "name": "control: Optional edge observability -> platform alone is permitted",
+      "tool": "arch:check",
+      "expected": "exit 0, no violations, 1 edges (1 optional)",
+      "exit": 0,
+      "rules": [],
+      "pass": true
+    },
+    {
+      "id": "O3",
+      "name": "control: Optional edge i18n -> platform alone is permitted",
+      "tool": "arch:check",
+      "expected": "exit 0, no violations, 1 edges (1 optional)",
+      "exit": 0,
+      "rules": [],
+      "pass": true
+    },
+    {
+      "id": "O4",
+      "name": "control: Optional edge i18n -> observability alone is permitted",
+      "tool": "arch:check",
+      "expected": "exit 0, no violations, 1 edges (1 optional)",
+      "exit": 0,
+      "rules": [],
+      "pass": true
+    },
+    {
+      "id": "O5",
+      "name": "control: Optional edge frappe-sdk -> offline alone is permitted",
+      "tool": "arch:check",
+      "expected": "exit 0, no violations, 1 edges (1 optional)",
+      "exit": 0,
+      "rules": [],
+      "pass": true
+    },
+    {
+      "id": "O6",
+      "name": "control: Optional edge analytics -> enterprise alone is permitted",
+      "tool": "arch:check",
+      "expected": "exit 0, no violations, 1 edges (1 optional)",
+      "exit": 0,
+      "rules": [],
+      "pass": true
+    },
+    {
+      "id": "O7",
+      "name": "control: Optional edge domain-quality -> enterprise alone is permitted",
+      "tool": "arch:check",
+      "expected": "exit 0, no violations, 1 edges (1 optional)",
+      "exit": 0,
+      "rules": [],
+      "pass": true
+    },
+    {
+      "id": "O8",
+      "name": "control: Optional edge domain-quality -> analytics alone is permitted",
+      "tool": "arch:check",
+      "expected": "exit 0, no violations, 1 edges (1 optional)",
+      "exit": 0,
+      "rules": [],
+      "pass": true
+    },
+    {
+      "id": "T1",
+      "name": "transitive forbidden chain observability -> platform -> foundation (observability -> foundation is \"No\")",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "T2",
+      "name": "transitive forbidden chain offline -> platform -> foundation (offline -> foundation is \"No\")",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "T3",
+      "name": "transitive forbidden chain offline -> i18n -> foundation (offline -> foundation is \"No\")",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "T4",
+      "name": "transitive forbidden chain frappe-sdk -> platform -> foundation (frappe-sdk -> foundation is \"No\")",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "T5",
+      "name": "transitive forbidden chain frappe-sdk -> offline -> i18n (frappe-sdk -> i18n is \"No\")",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "S1",
+      "name": "TypeScript strict violation (implicit any, null to string) fails the reference-app build",
+      "tool": "ng build reference-app --configuration production",
+      "expected": "non-zero exit with TS7006, TS2322",
+      "exit": 1,
+      "codesFound": [
+        "TS7006",
+        "TS2322"
+      ],
+      "pass": true
+    },
+    {
+      "id": "S1c",
+      "name": "control: the same violation builds once strict and noImplicitAny are false",
+      "tool": "ng build reference-app --configuration production",
+      "expected": "exit 0",
+      "exit": 0,
+      "codesFound": [],
+      "pass": true
+    },
+    {
+      "id": "S2",
+      "name": "Angular template strict violation ($event passed as number) fails the reference-app build",
+      "tool": "ng build reference-app --configuration production",
+      "expected": "non-zero exit with TS2345",
+      "exit": 1,
+      "codesFound": [
+        "TS2345"
+      ],
+      "pass": true
+    },
+    {
+      "id": "S2c",
+      "name": "control: the same template builds once strictTemplates is false",
+      "tool": "ng build reference-app --configuration production",
+      "expected": "exit 0",
+      "exit": 0,
+      "codesFound": [],
+      "pass": true
+    },
+    {
+      "id": "S3",
+      "name": "\"strict\" removed from tsconfig.json",
+      "tool": "qa:ib0-wp04 --static-only",
+      "expected": "exit 1, V05 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V05"
+      ],
+      "pass": true
+    },
+    {
+      "id": "S4",
+      "name": "\"noImplicitAny\" set to false in tsconfig.json",
+      "tool": "qa:ib0-wp04 --static-only",
+      "expected": "exit 1, V05 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V05"
+      ],
+      "pass": true
+    },
+    {
+      "id": "S5",
+      "name": "\"strictTemplates\" set to false in tsconfig.json",
+      "tool": "qa:ib0-wp04 --static-only",
+      "expected": "exit 1, V05 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V05"
+      ],
+      "pass": true
+    },
+    {
+      "id": "S6",
+      "name": "type checking switched off (\"noCheck\": true) in tsconfig.json",
+      "tool": "qa:ib0-wp04 --static-only",
+      "expected": "exit 1, V05 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V05"
+      ],
+      "pass": true
+    },
+    {
+      "id": "S7",
+      "name": "strictness weakened through inheritance (\"strict\": false, \"noCheck\": true in tsconfig.base.json)",
+      "tool": "qa:ib0-wp04 --static-only",
+      "expected": "exit 1, V04 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V04",
+        "V05",
+        "V14"
+      ],
+      "pass": true
+    },
+    {
+      "id": "S8",
+      "name": "app tsconfig sets strictNullChecks false",
+      "tool": "qa:ib0-wp04 --static-only",
+      "expected": "exit 1, V05 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V05",
+        "V17"
+      ],
+      "pass": true
+    },
+    {
+      "id": "S9",
+      "name": "// @ts-nocheck added to a package entry point",
+      "tool": "qa:ib0-wp04 --static-only",
+      "expected": "exit 1, V05 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V05",
+        "V17"
+      ],
       "pass": true
     },
     {

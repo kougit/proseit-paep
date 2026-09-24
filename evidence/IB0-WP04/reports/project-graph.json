@@ -305,6 +305,7 @@
     "ui-lab": []
   },
   "edges": [],
+  "sameCategoryAllowlist": [],
   "depConstraints": [
     {
       "sourceTag": "type:contracts",

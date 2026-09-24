@@ -1,15 +1,16 @@
 {
   "workPackage": "IB0-WP04",
-  "generatedAt": "2026-09-24T11:40:50.803Z",
+  "generatedAt": "2026-09-24T12:31:49.252Z",
   "mode": "full",
-  "commit": "9c74dbe9235ed34df3ee465a4bb2d0b9e9a8fe94",
+  "commit": "26def758ea0052f05360172f38a52b2b484b0c41",
   "baseline": "ac6b786caf3485ce2b45724be2b437c28f04b66b",
   "trackedChangesAtRun": [
     "M evidence/IB0-WP04/logs/ib0-wp01-verification.regression.json",
     " M evidence/IB0-WP04/logs/ib0-wp02-verification.regression.json",
     " M evidence/IB0-WP04/logs/ib0-wp03-verification.regression.json",
     " M evidence/IB0-WP04/logs/verify-ib0-wp02-regression.log",
-    " M evidence/IB0-WP04/logs/verify-ib0-wp03-regression.log"
+    " M evidence/IB0-WP04/logs/verify-ib0-wp03-regression.log",
+    " M evidence/IB0-WP04/reports/project-graph.json"
   ],
   "node": "24.21.0",
   "npm": "11.19.0",
@@ -60,7 +61,7 @@
     },
     {
       "id": "V05",
-      "name": "WP03 strict controls preserved: literal in tsconfig.json, all other options equal the baseline, app tsconfigs unchanged, effective options strict for both apps",
+      "name": "WP03 strict controls preserved: literal in tsconfig.json, all other options equal the baseline, app tsconfigs unchanged, effective options strict for both apps, no suppression directives in source",
       "pass": true,
       "details": "reference-app: strict=true noImplicitAny=true strictTemplates=true paths=18; ui-lab: strict=true noImplicitAny=true strictTemplates=true paths=18"
     },
@@ -78,7 +79,7 @@
     },
     {
       "id": "V08",
-      "name": "Dependency direction: every edge allowed by Appendix B; no same-category edge",
+      "name": "Dependency direction: every edge allowed by Appendix B; same-category edges only when allowlisted, directly and transitively",
       "pass": true,
       "details": "0 findings; 18 imports in 26 files, 0 edges; 0 optional"
     },
@@ -126,7 +127,7 @@
     },
     {
       "id": "V16",
-      "name": "package-lock.json is byte-identical to the baseline and package.json differs only by the three WP04 scripts",
+      "name": "package-lock.json is byte-identical to the baseline and package.json differs only by the four WP04 scripts (arch:check and its EQP Appendix B name qa:architecture)",
       "pass": true,
       "details": "lockfile sha256 be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69"
     },
@@ -134,7 +135,7 @@
       "id": "V17",
       "name": "No WP05/IB1+ or Nx/lint artefacts, apps/packages/angular.json unchanged, and every changed path is within WORK_PACKAGE §4",
       "pass": true,
-      "details": "154 changed paths, all permitted"
+      "details": "170 changed paths, all permitted"
     },
     {
       "id": "V18",
@@ -146,19 +147,19 @@
       "id": "V19",
       "name": "No credential or secret signatures in files added or modified since the baseline",
       "pass": true,
-      "details": "154 files scanned; findings: none"
+      "details": "170 files scanned; findings: none"
     },
     {
       "id": "V20",
       "name": "build:reference-app production build passes",
       "pass": true,
-      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.09 kB\n\nApplication bundle generation complete. [1.775 seconds] - 2026-09-24T11:40:30.381Z\n\nOutput location: /tmp/paep-wp04-clone-iNv9/repo/dist/reference-app"
+      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.09 kB\n\nApplication bundle generation complete. [2.245 seconds] - 2026-09-24T12:31:22.706Z\n\nOutput location: /tmp/paep-wp04-clone-PtiX/repo/dist/reference-app"
     },
     {
       "id": "V21",
       "name": "build:ui-lab production build passes",
       "pass": true,
-      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-RPR4FBCF.js    | main          | 190.65 kB |                52.16 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.16 kB\n\nApplication bundle generation complete. [1.901 seconds] - 2026-09-24T11:40:32.910Z\n\nOutput location: /tmp/paep-wp04-clone-iNv9/repo/dist/ui-lab"
+      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-RPR4FBCF.js    | main          | 190.65 kB |                52.16 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.16 kB\n\nApplication bundle generation complete. [2.528 seconds] - 2026-09-24T12:31:26.096Z\n\nOutput location: /tmp/paep-wp04-clone-PtiX/repo/dist/ui-lab"
     },
     {
       "id": "V22",

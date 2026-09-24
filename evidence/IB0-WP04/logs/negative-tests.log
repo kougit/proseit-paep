@@ -1,4 +1,4 @@
-# date: 2026-09-24T11:40:50Z node: v24.21.0 npm: 11.19.0 commit: 9c74dbe9235ed34df3ee465a4bb2d0b9e9a8fe94
+# date: 2026-09-24T12:31:49Z node: v24.21.0 npm: 11.19.0 commit: 26def758ea0052f05360172f38a52b2b484b0c41
 $ npm run qa:ib0-wp04:negative
 
 > @proseit/paep-workspace@0.0.0 qa:ib0-wp04:negative
@@ -52,8 +52,42 @@ PASS N43 nested package.json below a package root remaps #z to a forbidden packa
 PASS N44 imports target that is another #subpath (#x -> #y -> forbidden package) — exit 1; rules: OUTSIDE_PROJECT
 PASS N45 symlinked directory inside a package pulls in a file outside every project that imports a forbidden package — exit 1; rules: CLASSIFICATION
 PASS C4 control: package.json imports pattern inside the same package (#lib/* -> ./src/lib/*.ts) passes — exit 0; rules: none
+PASS C5 control: allowlisted same-category edge domain-quality -> domain-fiscal passes — exit 0; rules: none
+PASS N46 same-category edge not on the allowlist (another domain pair is listed) — exit 1; rules: DIRECTION
+PASS N47 transitive same-category chain: domain-quality -> domain-fiscal -> domain-iot, only the direct pairs listed — exit 1; rules: DIRECTION
+PASS N48 allowlisted same-category edge by deep import — exit 1; rules: DEEP_IMPORT
+PASS N49 allowlisted same-category pair in both directions forms a cycle — exit 1; rules: CYCLE
+PASS N50 allowlist entry crossing categories (components -> enterprise) — exit 1; rules: MODEL
+PASS N53 workspace package aliased in a manifest ("i18n-x": "file:../i18n") and imported by that name — exit 1; rules: UNKNOWN_PACKAGE
+PASS N54 bare import linked by node_modules to a workspace package (frappe-sdk -> i18n via "i18n-x") — exit 1; rules: DIRECTION, UNKNOWN_PACKAGE
+PASS N52 allowlist entry linking two applications (reference-app -> ui-lab) — exit 1; rules: MODEL
+PASS N51 allowlist entry without a rationale — exit 1; rules: MODEL
+PASS O1 control: Optional edge platform -> observability alone is permitted — exit 0; rules: none
+PASS O2 control: Optional edge observability -> platform alone is permitted — exit 0; rules: none
+PASS O3 control: Optional edge i18n -> platform alone is permitted — exit 0; rules: none
+PASS O4 control: Optional edge i18n -> observability alone is permitted — exit 0; rules: none
+PASS O5 control: Optional edge frappe-sdk -> offline alone is permitted — exit 0; rules: none
+PASS O6 control: Optional edge analytics -> enterprise alone is permitted — exit 0; rules: none
+PASS O7 control: Optional edge domain-quality -> enterprise alone is permitted — exit 0; rules: none
+PASS O8 control: Optional edge domain-quality -> analytics alone is permitted — exit 0; rules: none
+PASS T1 transitive forbidden chain observability -> platform -> foundation (observability -> foundation is "No") — exit 1; rules: DIRECTION
+PASS T2 transitive forbidden chain offline -> platform -> foundation (offline -> foundation is "No") — exit 1; rules: DIRECTION
+PASS T3 transitive forbidden chain offline -> i18n -> foundation (offline -> foundation is "No") — exit 1; rules: DIRECTION
+PASS T4 transitive forbidden chain frappe-sdk -> platform -> foundation (frappe-sdk -> foundation is "No") — exit 1; rules: DIRECTION
+PASS T5 transitive forbidden chain frappe-sdk -> offline -> i18n (frappe-sdk -> i18n is "No") — exit 1; rules: DIRECTION
+PASS S1 TypeScript strict violation (implicit any, null to string) fails the reference-app build — exit 1
+PASS S1c control: the same violation builds once strict and noImplicitAny are false — exit 0
+PASS S2 Angular template strict violation ($event passed as number) fails the reference-app build — exit 1
+PASS S2c control: the same template builds once strictTemplates is false — exit 0
+PASS S3 "strict" removed from tsconfig.json — exit 1; failed checks: V05
+PASS S4 "noImplicitAny" set to false in tsconfig.json — exit 1; failed checks: V05
+PASS S5 "strictTemplates" set to false in tsconfig.json — exit 1; failed checks: V05
+PASS S6 type checking switched off ("noCheck": true) in tsconfig.json — exit 1; failed checks: V05
+PASS S7 strictness weakened through inheritance ("strict": false, "noCheck": true in tsconfig.base.json) — exit 1; failed checks: V04, V05, V14
+PASS S8 app tsconfig sets strictNullChecks false — exit 1; failed checks: V05, V17
+PASS S9 // @ts-nocheck added to a package entry point — exit 1; failed checks: V05, V17
 PASS N28 nx added to devDependencies — exit 1; failed checks: V15, V16
 PASS N29 nx.json created — exit 1; failed checks: V15, V17
 
-IB0-WP04 negative tests: PASS (50/50)
+IB0-WP04 negative tests: PASS (84/84)
 EXIT_CODE=0

@@ -1,4 +1,4 @@
-# date: 2026-09-24T11:40:51.458Z node: v24.21.0 scratch: /tmp/paep-wp04-negative-JksIvW/repo
+# date: 2026-09-24T12:31:50.163Z node: v24.21.0 scratch: /tmp/paep-wp04-negative-Pu6EuS/repo
 # checker: node tooling/architecture-boundaries/check-boundaries.mjs --json (the command behind npm run arch:check)
 
 ## C0 positive control: unmutated workspace passes
@@ -17,8 +17,8 @@ RESULT=PASS
 
 ## C2 allowed-edge control: reference-app production build resolves @proseit/paep-enterprise through tsconfig.base.json
 expected: exit 0
-Application bundle generation complete. [3.781 seconds] - 2026-09-24T11:40:57.226Z
-Output location: /tmp/paep-wp04-negative-JksIvW/repo/dist/reference-app
+Application bundle generation complete. [5.576 seconds] - 2026-09-24T12:31:58.468Z
+Output location: /tmp/paep-wp04-negative-Pu6EuS/repo/dist/reference-app
 EXIT_CODE=0
 RESULT=PASS
 
@@ -39,89 +39,89 @@ RESULT=PASS
 expected: exit 1, CONTRACTS_NEUTRAL
 summary: {"edges":0,"optionalEdges":0,"cycles":0,"violations":84}
   CONTRACTS_NEUTRAL @proseit/paep-contracts (contracts) depends on external module "@angular/core", which is not approved [packages/contracts/src/index.ts]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AbortSignal'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_api-chunk.d.ts:240]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2552 Cannot find name 'VoidFunction'. Did you mean 'Function'? [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:54]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2552 Cannot find name 'VoidFunction'. Did you mean 'Function'? [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:76]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2552 Cannot find name 'VoidFunction'. Did you mean 'Function'? [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:79]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2552 Cannot find name 'VoidFunction'. Did you mean 'Function'? [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:83]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2552 Cannot find name 'VoidFunction'. Did you mean 'Function'? [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:87]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2552 Cannot find name 'VoidFunction'. Did you mean 'Function'? [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:93]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'HTMLElement'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:147]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListener'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:613]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListener'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:614]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:1101]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:1101]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:1116]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:1121]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'HTMLElement'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:2449]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'IntersectionObserverInit'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:3113]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventTarget'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:4023]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5936]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'ErrorEvent'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5954]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventTarget'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5961]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'ErrorEvent'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5975]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AddEventListenerOptions'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5977]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOrEventListenerObject'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5978]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AddEventListenerOptions'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5978]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOptions'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5979]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOrEventListenerObject'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5980]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOptions'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5980]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventTarget'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5992]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AddEventListenerOptions'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6000]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOrEventListenerObject'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6001]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AddEventListenerOptions'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6001]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOptions'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6002]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOrEventListenerObject'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6003]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOptions'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6003]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2689 Cannot extend an interface 'Event'. Did you mean 'implements'? [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6019]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventInit'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6024]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2689 Cannot extend an interface 'Event'. Did you mean 'implements'? [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6028]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AbortSignal'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6036]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'FormData'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6037]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventInit'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6043]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AbortSignal'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6050]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'FormData'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6051]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:7389]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'HTMLElement'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/_event_dispatcher-chunk.d.ts:142]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:2639]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:2779]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Request'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:3023]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2694 Namespace 'globalThis' has no exported member 'ResponseInit'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:3030]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2694 Namespace 'globalThis' has no exported member 'ResponseInit'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:3030]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:3677]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:3837]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:3838]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:3839]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:3840]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Document'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:4176]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:4228]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:4682]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'IntersectionObserverInit'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:5198]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'IntersectionObserverInit'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:5205]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'IntersectionObserverInit'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:5210]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Document'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:7069]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventTarget'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:7070]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Document'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:7076]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventTarget'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:7077]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Document'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:7083]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventTarget'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:7084]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:7143]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'HTMLElement'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:7143]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Document'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:7385]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Document'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:7392]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:7416]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:7423]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:7662]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:8689]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:8691]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:8785]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:8796]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'IdleDeadline'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:8962]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'IdleRequestOptions'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:8962]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Document'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:8989]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:9447]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AbortSignal'. [../../paep-wp04-clone-iNv9/repo/node_modules/@angular/core/types/core.d.ts:9608]
-  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'setTimeout'. [../../paep-wp04-clone-iNv9/repo/node_modules/rxjs/dist/types/internal/scheduler/timerHandle.d.ts:1]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AbortSignal'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_api-chunk.d.ts:240]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2552 Cannot find name 'VoidFunction'. Did you mean 'Function'? [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:54]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2552 Cannot find name 'VoidFunction'. Did you mean 'Function'? [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:76]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2552 Cannot find name 'VoidFunction'. Did you mean 'Function'? [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:79]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2552 Cannot find name 'VoidFunction'. Did you mean 'Function'? [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:83]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2552 Cannot find name 'VoidFunction'. Did you mean 'Function'? [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:87]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2552 Cannot find name 'VoidFunction'. Did you mean 'Function'? [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:93]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'HTMLElement'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:147]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListener'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:613]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListener'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:614]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:1101]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:1101]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:1116]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:1121]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'HTMLElement'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:2449]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'IntersectionObserverInit'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:3113]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventTarget'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:4023]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5936]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'ErrorEvent'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5954]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventTarget'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5961]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'ErrorEvent'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5975]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AddEventListenerOptions'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5977]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOrEventListenerObject'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5978]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AddEventListenerOptions'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5978]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOptions'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5979]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOrEventListenerObject'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5980]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOptions'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5980]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventTarget'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:5992]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AddEventListenerOptions'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6000]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOrEventListenerObject'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6001]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AddEventListenerOptions'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6001]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOptions'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6002]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOrEventListenerObject'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6003]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOptions'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6003]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2689 Cannot extend an interface 'Event'. Did you mean 'implements'? [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6019]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventInit'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6024]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2689 Cannot extend an interface 'Event'. Did you mean 'implements'? [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6028]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AbortSignal'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6036]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'FormData'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6037]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventInit'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6043]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AbortSignal'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6050]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'FormData'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:6051]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_debug_node-chunk.d.ts:7389]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'HTMLElement'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/_event_dispatcher-chunk.d.ts:142]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:2639]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:2779]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Request'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:3023]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2694 Namespace 'globalThis' has no exported member 'ResponseInit'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:3030]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2694 Namespace 'globalThis' has no exported member 'ResponseInit'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:3030]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:3677]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:3837]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:3838]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:3839]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:3840]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Document'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:4176]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:4228]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:4682]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'IntersectionObserverInit'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:5198]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'IntersectionObserverInit'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:5205]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'IntersectionObserverInit'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:5210]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Document'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:7069]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventTarget'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:7070]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Document'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:7076]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventTarget'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:7077]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Document'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:7083]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventTarget'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:7084]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:7143]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'HTMLElement'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:7143]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Document'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:7385]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Document'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:7392]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:7416]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:7423]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:7662]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:8689]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:8691]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:8785]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:8796]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'IdleDeadline'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:8962]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'IdleRequestOptions'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:8962]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Document'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:8989]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:9447]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AbortSignal'. [../../paep-wp04-clone-PtiX/repo/node_modules/@angular/core/types/core.d.ts:9608]
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'setTimeout'. [../../paep-wp04-clone-PtiX/repo/node_modules/rxjs/dist/types/internal/scheduler/timerHandle.d.ts:1]
 EXIT_CODE=1
 RESULT=PASS
 
@@ -172,7 +172,7 @@ RESULT=PASS
 expected: exit 1, ENTRY_BYPASS
 summary: {"edges":1,"optionalEdges":0,"cycles":0,"violations":2}
   ENTRY_BYPASS reference-app imports "../../../ui-lab/src/app/app" inside ui-lab; use its public entry point [apps/reference-app/src/app/app.ts]
-  DIRECTION reference-app (app) -> ui-lab (app) is not allowed (Appendix B: - (same category)) [apps/reference-app/src/app/app.ts]
+  DIRECTION reference-app (app) -> ui-lab (app) is not allowed (Appendix B: - (same category, not allowlisted)) [apps/reference-app/src/app/app.ts]
 EXIT_CODE=1
 RESULT=PASS
 
@@ -208,7 +208,7 @@ RESULT=PASS
 ## N14 domain -> domain: domain-quality -> domain-fiscal
 expected: exit 1, DIRECTION
 summary: {"edges":1,"optionalEdges":0,"cycles":0,"violations":1}
-  DIRECTION @proseit/paep-domain-quality (domain) -> @proseit/paep-domain-fiscal (domain) is not allowed (Appendix B: - (same category)) [packages/domain-quality/src/index.ts]
+  DIRECTION @proseit/paep-domain-quality (domain) -> @proseit/paep-domain-fiscal (domain) is not allowed (Appendix B: - (same category, not allowlisted)) [packages/domain-quality/src/index.ts]
 EXIT_CODE=1
 RESULT=PASS
 
@@ -461,10 +461,254 @@ summary: {"edges":0,"optionalEdges":0,"cycles":0,"violations":0}
 EXIT_CODE=0
 RESULT=PASS
 
+## C5 control: allowlisted same-category edge domain-quality -> domain-fiscal passes
+expected: exit 0, no violations, 1 edges (0 optional)
+summary: {"edges":1,"optionalEdges":0,"cycles":0,"violations":0}
+
+EXIT_CODE=0
+RESULT=PASS
+
+## N46 same-category edge not on the allowlist (another domain pair is listed)
+expected: exit 1, DIRECTION
+summary: {"edges":1,"optionalEdges":0,"cycles":0,"violations":1}
+  DIRECTION @proseit/paep-domain-iot (domain) -> @proseit/paep-domain-fiscal (domain) is not allowed (Appendix B: - (same category, not allowlisted)) [packages/domain-iot/src/index.ts]
+EXIT_CODE=1
+RESULT=PASS
+
+## N47 transitive same-category chain: domain-quality -> domain-fiscal -> domain-iot, only the direct pairs listed
+expected: exit 1, DIRECTION
+summary: {"edges":2,"optionalEdges":0,"cycles":0,"violations":1}
+  DIRECTION @proseit/paep-domain-quality reaches @proseit/paep-domain-iot transitively, which is not allowed (both domain, and the sameCategoryAllowlist does not name the pair)
+EXIT_CODE=1
+RESULT=PASS
+
+## N48 allowlisted same-category edge by deep import
+expected: exit 1, DEEP_IMPORT
+summary: {"edges":1,"optionalEdges":0,"cycles":0,"violations":1}
+  DEEP_IMPORT @proseit/paep-domain-quality imports "@proseit/paep-domain-fiscal/src/index" below the @proseit/paep-domain-fiscal entry point [packages/domain-quality/src/index.ts]
+EXIT_CODE=1
+RESULT=PASS
+
+## N49 allowlisted same-category pair in both directions forms a cycle
+expected: exit 1, CYCLE
+summary: {"edges":2,"optionalEdges":0,"cycles":1,"violations":1}
+  CYCLE circular package dependency: @proseit/paep-domain-fiscal <-> @proseit/paep-domain-quality
+EXIT_CODE=1
+RESULT=PASS
+
+## N50 allowlist entry crossing categories (components -> enterprise)
+expected: exit 1, MODEL
+summary: {"edges":0,"optionalEdges":0,"cycles":0,"violations":1}
+  MODEL sameCategoryAllowlist entry @proseit/paep-components -> @proseit/paep-enterprise crosses categories (components -> enterprise); the matrix governs those
+EXIT_CODE=1
+RESULT=PASS
+
+## N53 workspace package aliased in a manifest ("i18n-x": "file:../i18n") and imported by that name
+expected: exit 1, UNKNOWN_PACKAGE
+summary: {"edges":0,"optionalEdges":0,"cycles":0,"violations":1}
+  UNKNOWN_PACKAGE @proseit/frappe-sdk declares i18n-x as "file:../i18n" (dependencies), a local or aliased reference; depend on a workspace package by its own name [packages/frappe-sdk/package.json]
+EXIT_CODE=1
+RESULT=PASS
+
+## N54 bare import linked by node_modules to a workspace package (frappe-sdk -> i18n via "i18n-x")
+expected: exit 1, DIRECTION
+summary: {"edges":1,"optionalEdges":0,"cycles":0,"violations":2}
+  UNKNOWN_PACKAGE @proseit/frappe-sdk imports "i18n-x", which resolves to @proseit/paep-i18n under another name; import it by its own name [packages/frappe-sdk/src/index.ts]
+  DIRECTION @proseit/frappe-sdk (frappe-sdk) -> @proseit/paep-i18n (i18n) is not allowed (Appendix B: No) [packages/frappe-sdk/src/index.ts]
+EXIT_CODE=1
+RESULT=PASS
+
+## N52 allowlist entry linking two applications (reference-app -> ui-lab)
+expected: exit 1, MODEL
+summary: {"edges":0,"optionalEdges":0,"cycles":0,"violations":1}
+  MODEL sameCategoryAllowlist entry reference-app -> ui-lab links two applications; apps expose no public entry point (PAEP-IB-01 §5.2(i)-(ii))
+EXIT_CODE=1
+RESULT=PASS
+
+## N51 allowlist entry without a rationale
+expected: exit 1, MODEL
+summary: {"edges":0,"optionalEdges":0,"cycles":0,"violations":1}
+  MODEL sameCategoryAllowlist entry @proseit/paep-domain-quality -> @proseit/paep-domain-fiscal needs a rationale and an approval reference
+EXIT_CODE=1
+RESULT=PASS
+
+## O1 control: Optional edge platform -> observability alone is permitted
+expected: exit 0, no violations, 1 edges (1 optional)
+summary: {"edges":1,"optionalEdges":1,"cycles":0,"violations":0}
+
+EXIT_CODE=0
+RESULT=PASS
+
+## O2 control: Optional edge observability -> platform alone is permitted
+expected: exit 0, no violations, 1 edges (1 optional)
+summary: {"edges":1,"optionalEdges":1,"cycles":0,"violations":0}
+
+EXIT_CODE=0
+RESULT=PASS
+
+## O3 control: Optional edge i18n -> platform alone is permitted
+expected: exit 0, no violations, 1 edges (1 optional)
+summary: {"edges":1,"optionalEdges":1,"cycles":0,"violations":0}
+
+EXIT_CODE=0
+RESULT=PASS
+
+## O4 control: Optional edge i18n -> observability alone is permitted
+expected: exit 0, no violations, 1 edges (1 optional)
+summary: {"edges":1,"optionalEdges":1,"cycles":0,"violations":0}
+
+EXIT_CODE=0
+RESULT=PASS
+
+## O5 control: Optional edge frappe-sdk -> offline alone is permitted
+expected: exit 0, no violations, 1 edges (1 optional)
+summary: {"edges":1,"optionalEdges":1,"cycles":0,"violations":0}
+
+EXIT_CODE=0
+RESULT=PASS
+
+## O6 control: Optional edge analytics -> enterprise alone is permitted
+expected: exit 0, no violations, 1 edges (1 optional)
+summary: {"edges":1,"optionalEdges":1,"cycles":0,"violations":0}
+
+EXIT_CODE=0
+RESULT=PASS
+
+## O7 control: Optional edge domain-quality -> enterprise alone is permitted
+expected: exit 0, no violations, 1 edges (1 optional)
+summary: {"edges":1,"optionalEdges":1,"cycles":0,"violations":0}
+
+EXIT_CODE=0
+RESULT=PASS
+
+## O8 control: Optional edge domain-quality -> analytics alone is permitted
+expected: exit 0, no violations, 1 edges (1 optional)
+summary: {"edges":1,"optionalEdges":1,"cycles":0,"violations":0}
+
+EXIT_CODE=0
+RESULT=PASS
+
+## T1 transitive forbidden chain observability -> platform -> foundation (observability -> foundation is "No")
+expected: exit 1, DIRECTION
+summary: {"edges":2,"optionalEdges":2,"cycles":0,"violations":1}
+  DIRECTION @proseit/paep-observability reaches @proseit/paep-foundation transitively, which is not allowed (Appendix B observability -> foundation: No)
+EXIT_CODE=1
+RESULT=PASS
+
+## T2 transitive forbidden chain offline -> platform -> foundation (offline -> foundation is "No")
+expected: exit 1, DIRECTION
+summary: {"edges":2,"optionalEdges":1,"cycles":0,"violations":1}
+  DIRECTION @proseit/paep-offline reaches @proseit/paep-foundation transitively, which is not allowed (Appendix B offline -> foundation: No)
+EXIT_CODE=1
+RESULT=PASS
+
+## T3 transitive forbidden chain offline -> i18n -> foundation (offline -> foundation is "No")
+expected: exit 1, DIRECTION
+summary: {"edges":2,"optionalEdges":2,"cycles":0,"violations":1}
+  DIRECTION @proseit/paep-offline reaches @proseit/paep-foundation transitively, which is not allowed (Appendix B offline -> foundation: No)
+EXIT_CODE=1
+RESULT=PASS
+
+## T4 transitive forbidden chain frappe-sdk -> platform -> foundation (frappe-sdk -> foundation is "No")
+expected: exit 1, DIRECTION
+summary: {"edges":2,"optionalEdges":2,"cycles":0,"violations":1}
+  DIRECTION @proseit/frappe-sdk reaches @proseit/paep-foundation transitively, which is not allowed (Appendix B frappe-sdk -> foundation: No)
+EXIT_CODE=1
+RESULT=PASS
+
+## T5 transitive forbidden chain frappe-sdk -> offline -> i18n (frappe-sdk -> i18n is "No")
+expected: exit 1, DIRECTION
+summary: {"edges":2,"optionalEdges":2,"cycles":0,"violations":1}
+  DIRECTION @proseit/frappe-sdk reaches @proseit/paep-i18n transitively, which is not allowed (Appendix B frappe-sdk -> i18n: No)
+EXIT_CODE=1
+RESULT=PASS
+
+## S1 TypeScript strict violation (implicit any, null to string) fails the reference-app build
+expected: non-zero exit with TS7006, TS2322
+Application bundle generation failed. [1.518 seconds] - 2026-09-24T12:32:56.777Z
+✘ [ERROR] TS7006: Parameter 'value' implicitly has an 'any' type. [plugin angular-compiler]
+✘ [ERROR] TS2322: Type 'null' is not assignable to type 'string'. [plugin angular-compiler]
+EXIT_CODE=1
+RESULT=PASS
+
+## S1c control: the same violation builds once strict and noImplicitAny are false
+expected: exit 0
+Application bundle generation complete. [1.716 seconds] - 2026-09-24T12:32:59.061Z
+Output location: /tmp/paep-wp04-negative-Pu6EuS/repo/dist/reference-app
+EXIT_CODE=0
+RESULT=PASS
+
+## S2 Angular template strict violation ($event passed as number) fails the reference-app build
+expected: non-zero exit with TS2345
+Application bundle generation failed. [1.462 seconds] - 2026-09-24T12:33:01.030Z
+✘ [ERROR] TS2345: Argument of type 'PointerEvent' is not assignable to parameter of type 'number'. [plugin angular-compiler]
+EXIT_CODE=1
+RESULT=PASS
+
+## S2c control: the same template builds once strictTemplates is false
+expected: exit 0
+Application bundle generation complete. [1.793 seconds] - 2026-09-24T12:33:03.441Z
+Output location: /tmp/paep-wp04-negative-Pu6EuS/repo/dist/reference-app
+EXIT_CODE=0
+RESULT=PASS
+
+## S3 "strict" removed from tsconfig.json
+expected: exit 1, V05 FAIL
+FAIL V05 WP03 strict controls preserved: literal in tsconfig.json, all other options equal the baseline, app tsconfigs unchanged, effective options strict for both apps, no suppression directives in source — literal strict=undefined noImplicitAny=true; tsconfig.json differs from the baseline other than extends added and paths removed; reference-app: effective strict=undefined noImplicitAny=true strictTemplates=true; ui-lab: effective strict=undefined noImplicitAny=true strictTemplates=true
+IB0-WP04 verification (static-only): FAIL (18/19)
+EXIT_CODE=1
+RESULT=PASS
+
+## S4 "noImplicitAny" set to false in tsconfig.json
+expected: exit 1, V05 FAIL
+FAIL V05 WP03 strict controls preserved: literal in tsconfig.json, all other options equal the baseline, app tsconfigs unchanged, effective options strict for both apps, no suppression directives in source — literal strict=true noImplicitAny=false; tsconfig.json differs from the baseline other than extends added and paths removed; reference-app: effective strict=true noImplicitAny=false strictTemplates=true; reference-app: effective noImplicitAny=false; ui-lab: effective strict=true noImplicitAny=false strictTemplates=true; ui-lab: effective noImplicitAny=false
+IB0-WP04 verification (static-only): FAIL (18/19)
+EXIT_CODE=1
+RESULT=PASS
+
+## S5 "strictTemplates" set to false in tsconfig.json
+expected: exit 1, V05 FAIL
+FAIL V05 WP03 strict controls preserved: literal in tsconfig.json, all other options equal the baseline, app tsconfigs unchanged, effective options strict for both apps, no suppression directives in source — literal strictTemplates=false; tsconfig.json differs from the baseline other than extends added and paths removed; reference-app: effective strict=true noImplicitAny=true strictTemplates=false; ui-lab: effective strict=true noImplicitAny=true strictTemplates=false
+IB0-WP04 verification (static-only): FAIL (18/19)
+EXIT_CODE=1
+RESULT=PASS
+
+## S6 type checking switched off ("noCheck": true) in tsconfig.json
+expected: exit 1, V05 FAIL
+FAIL V05 WP03 strict controls preserved: literal in tsconfig.json, all other options equal the baseline, app tsconfigs unchanged, effective options strict for both apps, no suppression directives in source — tsconfig.json differs from the baseline other than extends added and paths removed; reference-app: effective noCheck=true; ui-lab: effective noCheck=true
+IB0-WP04 verification (static-only): FAIL (18/19)
+EXIT_CODE=1
+RESULT=PASS
+
+## S7 strictness weakened through inheritance ("strict": false, "noCheck": true in tsconfig.base.json)
+expected: exit 1, V04 FAIL
+FAIL V04 tsconfig.base.json holds only the alias registry; tsconfig.json extends it without paths; no other paths/baseUrl; every app build inherits it — tsconfig.base.json keys: {"compilerOptions":{"paths":{"@proseit/paep-analytics":["./packages/analytics/src/index.ts"],"@proseit/paep-components":; tsconfig.base.json holds more than compilerOptions.paths: strict, noCheck
+FAIL V05 WP03 strict controls preserved: literal in tsconfig.json, all other options equal the baseline, app tsconfigs unchanged, effective options strict for both apps, no suppression directives in source — reference-app: effective noCheck=true; ui-lab: effective noCheck=true
+FAIL V14 npm run arch:check exits 0 — exit=1; PAEP architecture check: FAIL — 20 projects, 0 edges (0 optional), 0 cycles, 18 imports in 26 files, 1 violations
+IB0-WP04 verification (static-only): FAIL (16/19)
+EXIT_CODE=1
+RESULT=PASS
+
+## S8 app tsconfig sets strictNullChecks false
+expected: exit 1, V05 FAIL
+FAIL V05 WP03 strict controls preserved: literal in tsconfig.json, all other options equal the baseline, app tsconfigs unchanged, effective options strict for both apps, no suppression directives in source — app tsconfig changed: apps/reference-app/tsconfig.app.json; reference-app: effective strictNullChecks=false
+FAIL V17 No WP05/IB1+ or Nx/lint artefacts, apps/packages/angular.json unchanged, and every changed path is within WORK_PACKAGE §4 — apps/packages/angular.json changed: apps/reference-app/tsconfig.app.json; changed outside WORK_PACKAGE §4: apps/reference-app/tsconfig.app.json
+IB0-WP04 verification (static-only): FAIL (17/19)
+EXIT_CODE=1
+RESULT=PASS
+
+## S9 // @ts-nocheck added to a package entry point
+expected: exit 1, V05 FAIL
+FAIL V05 WP03 strict controls preserved: literal in tsconfig.json, all other options equal the baseline, app tsconfigs unchanged, effective options strict for both apps, no suppression directives in source — compiler-suppression directives in packages/contracts/src/index.ts
+FAIL V17 No WP05/IB1+ or Nx/lint artefacts, apps/packages/angular.json unchanged, and every changed path is within WORK_PACKAGE §4 — apps/packages/angular.json changed: packages/contracts/src/index.ts; changed outside WORK_PACKAGE §4: packages/contracts/src/index.ts
+IB0-WP04 verification (static-only): FAIL (17/19)
+EXIT_CODE=1
+RESULT=PASS
+
 ## N28 nx added to devDependencies
 expected: exit 1, V15 FAIL
 FAIL V15 No Nx: no nx/@nx/@nrwl dependency, lockfile entry or install, and no nx.json or project.json — package.json: nx
-FAIL V16 package-lock.json is byte-identical to the baseline and package.json differs only by the three WP04 scripts — package.json fields other than scripts changed
+FAIL V16 package-lock.json is byte-identical to the baseline and package.json differs only by the four WP04 scripts (arch:check and its EQP Appendix B name qa:architecture) — package.json fields other than scripts changed
 IB0-WP04 verification (static-only): FAIL (17/19)
 EXIT_CODE=1
 RESULT=PASS

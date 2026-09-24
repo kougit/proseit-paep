@@ -18,7 +18,7 @@ PASS V14 Every lockfile package with an install script is explicitly denied, and
 PASS V15 Every third-party licence is permissive or covered by a recorded build-time review — 434 entries: Apache-2.0 8, MIT 372, ISC 23, CC-BY-4.0 1, BSD-2-Clause 11, BSD-3-Clause 5, MPL-2.0 12, BlueOak-1.0.0 1, 0BSD 1
 PASS V16 Controlled sources (.paep-control/**, .gitignore) match PACK_MANIFEST.json and are unchanged since restore — 13/13 files match sha256 and size
 FAIL V17 No dependency-set change, no IB0-WP03/04/05 artefacts, and apps/packages/workspace config and IB0-WP01 records unchanged — out-of-scope file present: tsconfig.base.json; protected paths changed: packages/analytics/src/index.ts, packages/components/src/index.ts, packages/contracts/src/index.ts, packages/domain-ai/src/index.ts, packages/domain-commerce/src/index.ts, packages/domain-construction/src/index.ts, packages/domain-fiscal/src/index.ts, packages/domain-iot/src/index.ts, packages/domain-maintenance/src/index.ts, packages/domain-manufacturing/src/index.ts, packages/domain-quality/src/index.ts, packages/enterprise/src/index.ts, packages/foundation/src/index.ts, packages/frappe-sdk/src/index.ts, packages/i18n/src/index.ts, packages/observability/src/index.ts, packages/offline/src/index.ts, packages/platform/src/index.ts, tsconfig.json
-PASS V18 No credential or secret signatures in files added or modified since the baseline — 359 files scanned; findings: none
+PASS V18 No credential or secret signatures in files added or modified since the baseline — 363 files scanned; findings: none
 PASS V19 reference-app production build passes — exit=0
 PASS V20 ui-lab production build passes — exit=0
 

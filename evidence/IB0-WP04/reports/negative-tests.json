@@ -1,11 +1,11 @@
 {
   "workPackage": "IB0-WP04",
-  "generatedAt": "2026-09-24T11:35:55.183Z",
-  "commit": "dcda855da85ee2ad408aff973b9dd8aa671eac7b",
+  "generatedAt": "2026-09-24T11:41:39.295Z",
+  "commit": "9c74dbe9235ed34df3ee465a4bb2d0b9e9a8fe94",
   "node": "24.21.0",
   "result": "PASS",
   "controls": 5,
-  "negatives": 44,
+  "negatives": 45,
   "cases": [
     {
       "id": "C0",
@@ -506,6 +506,17 @@
       "exit": 1,
       "rules": [
         "OUTSIDE_PROJECT"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N45",
+      "name": "symlinked directory inside a package pulls in a file outside every project that imports a forbidden package",
+      "tool": "arch:check",
+      "expected": "exit 1, CLASSIFICATION",
+      "exit": 1,
+      "rules": [
+        "CLASSIFICATION"
       ],
       "pass": true
     },

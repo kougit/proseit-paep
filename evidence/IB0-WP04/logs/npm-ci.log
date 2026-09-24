@@ -1,7 +1,7 @@
-# date: 2026-09-24T11:34:19Z node: v24.21.0 npm: 11.19.0 commit: dcda855da85ee2ad408aff973b9dd8aa671eac7b
+# date: 2026-09-24T11:40:08Z node: v24.21.0 npm: 11.19.0 commit: 9c74dbe9235ed34df3ee465a4bb2d0b9e9a8fe94
 $ npm ci
 
-added 324 packages, and audited 343 packages in 11s
+added 324 packages, and audited 343 packages in 8s
 
 99 packages are looking for funding
   run `npm fund` for details

@@ -1,10 +1,10 @@
 # IB0-WP02 Acceptance Report
 
 **Work package:** IB0-WP02 — Toolchain/Version Baseline and Lockfile Control  
-**Commit / revision:** implementation `916cb9dde3b1502441c346c06e9aaba9ab097ea7` (commits `8525598`, `591b266`, `916cb9d`); evidence in the following commit on branch `claude/ib0-wp02-c625bb`  
+**Commit / revision:** implementation `916cb9d` (commits `8525598`, `591b266`, `916cb9d`); evidence `39bf00e`; closure commit `0078bb2b2aaf0c603b932c124ad437a3409d418d` (PO/SA approvals, authorised `CLAUDE.md` amendment, licence approvals and notices), the commit under test; branch `claude/ib0-wp02-c625bb`, PR #2  
 **Baseline:** IB0-WP01 ACCEPTED, merge commit `b6b023f`  
-**Technical reviewer:** Claude Code implementation session (self-assessment). Independent QA per `prompts/02_INDEPENDENT_QA.md` has not yet run.  
-**Review date:** 2026-09-23
+**Technical reviewer:** Claude Code implementation session (self-assessment). Independent QA per `prompts/02_INDEPENDENT_QA.md`: see the summary table.  
+**Review date:** 2026-09-24 (implementation verified 2026-09-23)
 
 ## Verification and acceptance summary
 
@@ -13,7 +13,10 @@
 | Technical verification | PASS | AC01–AC24 below; `evidence/IB0-WP02/` |
 | Independent QA | Not yet run | |
 | Acceptance status | Not accepted | Human decision below is blank |
-| Open human actions | 3 | Approve the work-package definition (R1); update `CLAUDE.md` to IB0-WP02 (R2); decide the licence dispositions |
+| Definition audit | PASS | `evidence/IB0-WP02/reports/definition-audit.md` |
+| Definition approval (R1) | Approved by PO/SA 2026-09-24 | `WORK_PACKAGE.md` §12 |
+| `CLAUDE.md` governance update (R2) | Done: one authorised amendment to a work-package-neutral rule | `evidence/IB0-WP02/notes/closure-authorisation.md` |
+| Licence dispositions | `lightningcss` and `caniuse-lite` APPROVED BUILD-TIME DEPENDENCY (PO/SA 2026-09-24) | `docs/licences/` |
 
 ## Implemented scope
 
@@ -38,7 +41,7 @@ No dependency was added, removed or re-versioned. `package-lock.json` and the pr
 
 ## Automated gates
 
-All run from a fresh `git clone` of `916cb9d` from GitHub, Node 24.21.0 / npm 11.19.0, linux-x64.
+All run from a fresh `git clone` of `0078bb2` from GitHub, Node 24.21.0 / npm 11.19.0, linux-x64, 2026-09-24 (first run at `916cb9d` on 2026-09-23 with the same results).
 
 | Command / check | Result | Evidence location |
 | --- | --- | --- |
@@ -61,7 +64,9 @@ All run from a fresh `git clone` of `916cb9d` from GitHub, Node 24.21.0 / npm 11
 
 | Check | Reviewer | Date | Result |
 | --- | --- | --- | --- |
-| Licence review (`lightningcss`, `caniuse-lite`) | Claude Code (engineering review; not legal advice) | 2026-09-23 | Recorded; build-time only, not shipped; dispositions proposed, pending human approval |
+| Licence review (`lightningcss`, `caniuse-lite`) | Claude Code (engineering review; not legal advice) | 2026-09-23 | Recorded; build-time only, not shipped |
+| Licence dispositions | Product Owner / Solutions Architect | 2026-09-24 | Both APPROVED BUILD-TIME DEPENDENCY; caniuse.com attribution retained; re-review triggers recorded |
+| Closure audit lanes A–D (read-only) | Claude Code sub-agents | 2026-09-24 | Definition PASS; licence/provenance no blocker; reproducibility PASS; controls and PR identity PASS |
 | Scope review | Claude Code | 2026-09-23 | 0 violations (`logs/scope-and-secret-scan.log`) |
 
 ## Acceptance criteria
@@ -82,10 +87,10 @@ All run from a fresh `git clone` of `916cb9d` from GitHub, Node 24.21.0 / npm 11
 | AC12 | PASS | `logs/build-reference-app.log` exit 0. |
 | AC13 | PASS | `logs/build-ui-lab.log` exit 0. |
 | AC14 | PASS | `allowScripts` has explicit `false` for all five `hasInstallScript` packages; name-only entries (recorded in `reports/install-script-policy.md`); no warning in `npm ci`; `npm install-scripts ls` clean; builds pass. Verifier V14. |
-| AC15 | PASS | `docs/licences/THIRD-PARTY-LICENCE-REVIEW.md` L1/L2: versions, paths, build-time use, not in `dist/` (`logs/licence-dist-check.log`, including an identical build with `lightningcss` removed), obligations, proposed disposition, status "pending human approval". |
+| AC15 | PASS | `docs/licences/THIRD-PARTY-LICENCE-REVIEW.md` L1/L2: versions, paths, build-time use, not in `dist/` (`logs/licence-dist-check.log`, with a positive control and an identical build with `lightningcss` removed), obligations, disposition. Approval status explicit: approved by the PO/SA on 2026-09-24. |
 | AC16 | PASS | `reports/licence-inventory.json` and `.md`: 434 entries, all SPDX, all permissive or covered by L1/L2; 0 unreviewed; 36 workspace entries listed separately. Verifier V15. |
-| AC17 | PASS | `docs/provenance/PROVENANCE-REGISTER.md` has rows for all direct dependencies, Node, npm, build tools, `lightningcss`, `caniuse-lite` and the install-script policy; no row marked approved. |
-| AC18 | PASS | Dependency names unchanged; no Nx/tsconfig.base/lint/test/CI files; `apps/**`, `packages/**`, `angular.json`, `tsconfig.json` unchanged; every changed path within WORK_PACKAGE §4. Verifier V17; `logs/scope-and-secret-scan.log`. |
+| AC17 | PASS | `docs/provenance/PROVENANCE-REGISTER.md` has rows for all direct dependencies, Node, npm, build tools, `lightningcss`, `caniuse-lite` and the install-script policy. Only the `lightningcss` and `caniuse-lite` rows are marked approved, with the named authority and date. |
+| AC18 | PASS | Dependency names unchanged; no Nx/tsconfig.base/lint/test/CI files; `apps/**`, `packages/**`, `angular.json`, `tsconfig*.json` unchanged; every changed path within WORK_PACKAGE §4, including the single authorised `CLAUDE.md` amendment (§4(viii)). Verifier V17; `logs/scope-and-secret-scan.log`. |
 | AC19 | PASS | 0 secret findings in added or modified files; `.npmrc` holds only two policy settings. Verifier V06, V18. |
 | AC20 | PASS | 13/13 controlled files match `PACK_MANIFEST.json` sha256 and size; no diff since `8259317`; `PACK_MANIFEST.json` unchanged. Verifier V16. |
 | AC21 | PASS | IB0-WP01 verifier 15/15; `git diff --exit-code b6b023f -- work-packages/IB0-WP01 evidence/IB0-WP01` exit 0 after restore. |
@@ -95,7 +100,7 @@ All run from a fresh `git clone` of `916cb9d` from GitHub, Node 24.21.0 / npm 11
 
 ## Defects
 
-None open. Closed during execution: the first verifier version counted but did not list the private workspace entries required by AC16 (fixed in `916cb9d`, QA re-run on that commit).
+None open. Closed: (i) the first verifier version counted but did not list the private workspace entries required by AC16 (fixed in `916cb9d`, QA re-run on that commit); (ii) closure lane B found that `logs/licence-dist-check.log` printed the dist search without its `-E` flag, so the log did not show the command actually run; the QA script now prints the exact command and a positive control, and the log was regenerated at `0078bb2`.
 
 ## Exceptions
 
@@ -103,15 +108,15 @@ None.
 
 ## Provenance and licences
 
-All 434 third-party lockfile entries come from registry.npmjs.org with sha512 integrity. Licences: MIT 372, ISC 23, MPL-2.0 12, BSD-2-Clause 11, Apache-2.0 8, BSD-3-Clause 5, CC-BY-4.0 1, BlueOak-1.0.0 1, 0BSD 1. `lightningcss` (MPL-2.0) and `caniuse-lite` (CC-BY-4.0) are build-time only and nothing from them is shipped; proposed disposition: accept under the recorded conditions, **pending Engineering Governance / IP owner approval**. `zod` and `@standard-schema/spec` (MIT, runtime scope through `@angular/forms`) are newly recorded.
+All 434 third-party lockfile entries come from registry.npmjs.org with sha512 integrity. Licences: MIT 372, ISC 23, MPL-2.0 12, BSD-2-Clause 11, Apache-2.0 8, BSD-3-Clause 5, CC-BY-4.0 1, BlueOak-1.0.0 1, 0BSD 1. `lightningcss` (MPL-2.0) and `caniuse-lite` (CC-BY-4.0) are build-time only and nothing from them is shipped. Both are **APPROVED BUILD-TIME DEPENDENCIES** (Product Owner / Solutions Architect, 2026-09-24), with the re-review triggers the PO/SA set; the notice and caniuse.com attribution record is `docs/licences/THIRD-PARTY-NOTICES.md`. PAEP v1.1 names the Engineering Governance / IP owner as primary authority for licences; no separate decision by that role is recorded. `zod` and `@standard-schema/spec` (MIT, runtime scope through `@angular/forms`) are newly recorded.
 
 **Erratum to IB0-WP01 evidence:** the IB0-WP01 reports say npm 11.19.0 did not run the four warned install scripts; it did (`evidence/IB0-WP02/logs/erratum-baseline-install-scripts.log`). The IB0-WP01 result is unaffected because the build output is identical either way. See `evidence/IB0-WP02/reports/install-script-policy.md`.
 
 ## Residual risk
 
-(i) `CLAUDE.md` still names IB0-WP01 as the bounded objective (R2); a human should update it.
+(i) Closed: `CLAUDE.md` amended once to a work-package-neutral rule (R2).
 
-(ii) The IB0-WP02 work-package definition was drafted by Claude and needs human approval (R1).
+(ii) Closed: the IB0-WP02 definition was approved by the PO/SA (R1).
 
 (iii) `npm audit signatures` was not run (proxy blocked Sigstore). Owner: IB0-WP05 CI.
 
@@ -123,7 +128,7 @@ All 434 third-party lockfile entries come from registry.npmjs.org with sha512 in
 
 ## Technical result
 
-**PASS / FAILED / BLOCKED:** PASS (technical, self-assessed; independent QA pending)
+**PASS / FAILED / BLOCKED:** PASS (technical, at `0078bb2`)
 
 ## Human acceptance decision
 

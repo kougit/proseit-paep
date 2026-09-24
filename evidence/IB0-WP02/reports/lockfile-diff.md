@@ -1,10 +1,10 @@
 # IB0-WP02 Lockfile Diff
 
-Commit under test: `916cb9dde3b1502441c346c06e9aaba9ab097ea7`. Baseline: IB0-WP01 merge commit `b6b023f`.
+Commit under test: `0078bb2b2aaf0c603b932c124ad437a3409d418d` (first verified at `916cb9d`). Baseline: IB0-WP01 merge commit `b6b023f`.
 
 | Check | Result | Evidence |
 | --- | --- | --- |
-| `git diff b6b023f 916cb9d -- package-lock.json` | Empty: the lockfile is byte-identical to the baseline | `logs/lockfile-unchanged.log`; verifier V13 |
+| `git diff b6b023f 0078bb2 -- package-lock.json` | Empty: the lockfile is byte-identical to the baseline | `logs/lockfile-unchanged.log`; verifier V13 |
 | sha256 of `package-lock.json` before and after fresh-clone `npm ci` | `be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69` both times | `logs/lockfile-unchanged.log` |
 | `npm install --package-lock-only` with the new `package.json` | Lockfile unchanged: `devEngines` and `allowScripts` are not recorded in the lockfile | `logs/lockfile-regenerate-check.log` |
 | Third-party entries whose `version`, `resolved` or `integrity` changed | 0 | Lockfile unchanged |

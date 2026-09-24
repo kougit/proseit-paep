@@ -1,6 +1,6 @@
 # IB0-WP02 npm Install-Script Policy
 
-Commit under test: `916cb9dde3b1502441c346c06e9aaba9ab097ea7` (Node 24.21.0, npm 11.19.0). Status: proposed, pending human approval.
+Commit under test: `0078bb2b2aaf0c603b932c124ad437a3409d418d` (Node 24.21.0, npm 11.19.0); first verified at `916cb9d`, and `package.json`, `.npmrc` and the lockfile are unchanged since. Status: implemented under IB0-WP02-AC14; submitted with IB0-WP02 for acceptance.
 
 ## How npm 11.19.0 decides
 

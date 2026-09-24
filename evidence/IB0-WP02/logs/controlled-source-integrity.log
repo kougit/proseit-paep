@@ -1,5 +1,5 @@
 # Controlled-source integrity
-# date: 2026-09-23T20:44:48Z node: v24.21.0 npm: 11.19.0 commit: 916cb9dde3b1502441c346c06e9aaba9ab097ea7
+# date: 2026-09-24T05:05:40Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
 # cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
 
 $ bash -c git log --oneline -- .paep-control; echo; echo 'git diff --stat 8259317 HEAD -- .paep-control .gitignore PACK_MANIFEST.json:'; git diff --stat --exit-code 8259317 HEAD -- .paep-control .gitignore PACK_MANIFEST.json && echo '(empty)'; echo; node -e 'const fs=require("fs"),c=require("crypto");const m=require("./PACK_MANIFEST.json");let bad=0;for(const f of m.files.filter(f=>f.path===".gitignore"||f.path.startsWith(".paep-control/"))){const b=fs.readFileSync(f.path);const h=c.createHash("sha256").update(b).digest("hex");const ok=h===f.sha256&&b.length===f.bytes;if(!ok)bad++;console.log((ok?"MATCH ":"MISMATCH ")+h+" "+b.length+" "+f.path)}process.exit(bad?1:0)'

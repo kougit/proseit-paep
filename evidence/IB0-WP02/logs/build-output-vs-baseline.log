@@ -19,3 +19,8 @@ a79ddcc8a115190e9c19479ed36914741a7d1db74f0a1153529efc80725505fe  dist/ui-lab/pr
 ## diff (baseline vs 916cb9d)
 (no differences: all 12 output files byte-identical)
 EXIT_CODE=0
+
+## Re-check at closure commit 0078bb2 (2026-09-24)
+Fresh clone of 0078bb2, Node 24.21.0 / npm 11.19.0; logs/dist-hashes.log compared with the 916cb9d hashes above:
+12/12 files byte-identical to 916cb9d, and therefore to the b6b023f baseline
+EXIT_CODE=0

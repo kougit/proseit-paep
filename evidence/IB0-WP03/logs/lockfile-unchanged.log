@@ -1,0 +1,6 @@
+# date: 2026-09-24T09:35:41Z node: v24.21.0 npm: 11.19.0 commit: 0f2d38174d57dda229e62a545477e8d8288e8a00
+$ bash -c git diff --exit-code -- package.json package-lock.json && echo "package.json/package-lock.json unchanged after npm ci" && git diff --exit-code de13629 -- package-lock.json && echo "package-lock.json byte-identical to baseline de13629" && sha256sum package-lock.json
+package.json/package-lock.json unchanged after npm ci
+package-lock.json byte-identical to baseline de13629
+be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69  package-lock.json
+EXIT_CODE=0

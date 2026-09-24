@@ -1,0 +1,32 @@
+# date: 2026-09-24T09:50:59Z node: v24.21.0 npm: 11.19.0 commit: 3ae5588205a610cfea38e2d548ac93c595f0c025
+$ npm run qa:ib0-wp03:negative
+
+> @proseit/paep-workspace@0.0.0 qa:ib0-wp03:negative
+> node tooling/verification/negative-ib0-wp03.mjs
+
+PASS B0 positive control: unmodified reference-app builds — exit 0
+PASS B1 TypeScript strict violation fails the build — exit 1; TS7006, TS2322
+PASS B1c control: same violation builds with strict and noImplicitAny false — exit 0
+PASS B2 Angular template strict violation fails the build — exit 1; TS2345
+PASS B2c control: same violation builds with strictTemplates false — exit 0
+PASS M0 positive control: unmutated copy passes — exit 0; failed checks: none
+PASS M1 "strict" removed — exit 1; failed checks: V01, V03
+PASS M2 "strict" set to false — exit 1; failed checks: V01, V03, V04
+PASS M3 "noImplicitAny" removed — exit 1; failed checks: V01, V03
+PASS M4 "strictTemplates" removed — exit 1; failed checks: V02, V03
+PASS M5 "strictTemplates" set to false — exit 1; failed checks: V02, V03, V04
+PASS M6 app tsconfig sets strictNullChecks false — exit 1; failed checks: V03, V04, V05, V12
+PASS M7 app tsconfig sets strictDomEventTypes false — exit 1; failed checks: V03, V04, V05, V12
+PASS M8 baseline option weakened (noImplicitReturns false) — exit 1; failed checks: V05
+PASS M9 aot false in the production configuration — exit 1; failed checks: V06, V12
+PASS M10 @ts-ignore added to app source — exit 1; failed checks: V07, V12
+PASS M11 contracts alias removed — exit 1; failed checks: V08, V09
+PASS M12 wildcard deep alias added — exit 1; failed checks: V08
+PASS M13 contracts entry point deleted — exit 1; failed checks: V09
+PASS M14 type checking switched off ("noCheck": true added) — exit 1; failed checks: V04, V05
+PASS M15 unlisted option added ("allowUnreachableCode": true) — exit 1; failed checks: V04, V05
+PASS M16 Angular extended diagnostics suppressed — exit 1; failed checks: V04, V05
+PASS M17 uppercase // @TS-NOCHECK in an entry point — exit 1; failed checks: V07
+
+IB0-WP03 negative tests: PASS (23/23)
+EXIT_CODE=0

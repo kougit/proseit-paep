@@ -1,0 +1,9 @@
+# date: 2026-09-24T09:38:41Z
+# node: v24.21.0 npm: 11.19.0
+# dir: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/qa2/repo commit: 813b7ca0359763a75ca445343ef586c5122f5a67
+# cmd: git diff --quiet de13629 -- package-lock.json && echo LOCKFILE_IDENTICAL_de13629; git status --porcelain; node -e "const fs=require(\"fs\"),c=require(\"crypto\");const m=JSON.parse(fs.readFileSync(\"PACK_MANIFEST.json\"));const f=m.files.filter(x=>x.path===\".gitignore\"||x.path.startsWith(\".paep-control/\"));let ok=0;for(const x of f){const b=fs.readFileSync(x.path);ok+=(c.createHash(\"sha256\").update(b).digest(\"hex\")===x.sha256&&b.length===x.bytes)}console.log(ok+\"/\"+f.length+\" controlled files match\")"; git diff --quiet de13629 -- .paep-control .gitignore PACK_MANIFEST.json CLAUDE.md apps angular.json tsconfig.json package.json packages && echo "controlled/app/config files: no change since f19a422 scope" ; git diff --quiet f19a422 -- .paep-control .gitignore PACK_MANIFEST.json CLAUDE.md apps angular.json tsconfig.json package.json packages package-lock.json && echo "no config/source change since f19a422"
+
+LOCKFILE_IDENTICAL_de13629
+13/13 controlled files match
+no config/source change since f19a422
+EXIT_CODE=0

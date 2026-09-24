@@ -1,0 +1,91 @@
+# date: 2026-09-24T09:30:30Z
+# node: v24.21.0 npm: 11.19.0
+# dir: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/qa/repo commit: f19a4223748be90d98b99e3c47c6477910c5a17f
+# cmd: 
+echo "## changed paths vs de13629"; git diff --name-status de13629..HEAD | awk "{print \$2}" > /tmp/cp.$$; wc -l < /tmp/cp.$$
+echo "## paths outside WORK_PACKAGE §4:"; grep -v -E "^(tsconfig\.json|package\.json|packages/[^/]+/src/index\.ts|tooling/verification/(verify|negative)-ib0-wp03\.mjs|docs/architecture/IB0-WP03-IMPLEMENTATION-PLAN\.md|docs/adr/ADR-REGISTER\.md|work-packages/IB0-WP03/.*|evidence/IB0-WP03/.*)$" /tmp/cp.$$ || echo "(none)"; rm /tmp/cp.$$
+echo "## tsconfig.json diff: removed lines (should be none except module line comma change)"; git diff de13629 -- tsconfig.json | grep "^-[^-]" 
+echo "## package.json: non-script diffs"; node -e "const cp=require(\"child_process\");const a=JSON.parse(cp.execSync(\"git show de13629:package.json\"));const b=require(\"./package.json\");const {scripts:s0,...r0}=a,{scripts:s1,...r1}=b;console.log(\"non-script fields equal:\",JSON.stringify(r0)===JSON.stringify(r1));console.log(\"added scripts:\",Object.keys(s1).filter(k=>!(k in s0)).map(k=>k+\"=\"+s1[k]));console.log(\"changed/removed scripts:\",Object.keys(s0).filter(k=>s0[k]!==s1[k]))"
+echo "## lockfile"; git diff --quiet de13629 -- package-lock.json && echo "package-lock.json identical to de13629"; sha256sum package-lock.json; git show de13629:package-lock.json | sha256sum
+echo "## Nx"; grep -n -E "\"(node_modules/)?(nx|@nx/[^\"]+|@nrwl/[^\"]+)\"" package-lock.json package.json || echo "no nx/@nx/@nrwl entries"; find . -path ./node_modules -prune -o \( -name nx.json -o -name project.json \) -print | grep . || echo "no nx.json/project.json"
+echo "## WP04/WP05 artefacts"; find . -path ./node_modules -prune -o -path ./.git -prune -o \( -name "tsconfig.base.json" -o -name ".eslintrc*" -o -name "eslint.config.*" -o -name ".prettierrc*" -o -name "prettier.config.*" -o -name "vitest.config.*" -o -name "jest.config.*" -o -name ".dependency-cruiser*" -o -name ".madgerc" -o -name ".github" \) -print | grep . || echo "none"; ls -A tooling/architecture-boundaries/; ls tooling/*
+echo "## apps and angular.json vs de13629"; git diff --stat de13629 -- apps angular.json; git diff --quiet de13629 -- apps angular.json && echo "apps/** and angular.json UNCHANGED"
+echo "## entry points"; for f in packages/*/src/index.ts; do c=$(sed -e "s#//.*##" "$f" | tr -d " \n\t"); echo "$f => [$c]"; done; ls packages | wc -l; ls packages/*/package.json | wc -l
+echo "## grep for any import of aliases in apps (none expected)"; grep -rn "@proseit/" apps --include=*.ts || echo none
+
+## changed paths vs de13629
+57
+## paths outside WORK_PACKAGE §4:
+(none)
+## tsconfig.json diff: removed lines (should be none except module line comma change)
+-    "module": "preserve"
+## package.json: non-script diffs
+non-script fields equal: true
+added scripts: [
+  'qa:ib0-wp03=node tooling/verification/verify-ib0-wp03.mjs',
+  'qa:ib0-wp03:negative=node tooling/verification/negative-ib0-wp03.mjs'
+]
+changed/removed scripts: []
+## lockfile
+package-lock.json identical to de13629
+be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69  package-lock.json
+be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69  -
+## Nx
+no nx/@nx/@nrwl entries
+no nx.json/project.json
+## WP04/WP05 artefacts
+none
+README.md
+tooling/a11y:
+README.md
+
+tooling/analytics-test:
+README.md
+
+tooling/architecture-boundaries:
+README.md
+
+tooling/build-release:
+README.md
+
+tooling/config-validation:
+README.md
+
+tooling/test-utils:
+README.md
+
+tooling/verification:
+negative-ib0-wp03.mjs
+validate-pack.mjs
+verify-ib0-wp01.mjs
+verify-ib0-wp02.mjs
+verify-ib0-wp03.mjs
+
+tooling/visual-regression:
+README.md
+## apps and angular.json vs de13629
+apps/** and angular.json UNCHANGED
+## entry points
+packages/analytics/src/index.ts => [export{};]
+packages/components/src/index.ts => [export{};]
+packages/contracts/src/index.ts => [export{};]
+packages/domain-ai/src/index.ts => [export{};]
+packages/domain-commerce/src/index.ts => [export{};]
+packages/domain-construction/src/index.ts => [export{};]
+packages/domain-fiscal/src/index.ts => [export{};]
+packages/domain-iot/src/index.ts => [export{};]
+packages/domain-maintenance/src/index.ts => [export{};]
+packages/domain-manufacturing/src/index.ts => [export{};]
+packages/domain-quality/src/index.ts => [export{};]
+packages/enterprise/src/index.ts => [export{};]
+packages/foundation/src/index.ts => [export{};]
+packages/frappe-sdk/src/index.ts => [export{};]
+packages/i18n/src/index.ts => [export{};]
+packages/observability/src/index.ts => [export{};]
+packages/offline/src/index.ts => [export{};]
+packages/platform/src/index.ts => [export{};]
+18
+18
+## grep for any import of aliases in apps (none expected)
+none
+EXIT_CODE=0

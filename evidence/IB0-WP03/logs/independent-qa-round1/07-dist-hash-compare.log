@@ -1,0 +1,38 @@
+# date: 2026-09-24T09:25:37Z
+# node: v24.21.0 npm: 11.19.0
+# dir: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/qa commit: 
+# cmd: for a in reference-app ui-lab; do echo "== $a"; (cd base/dist/$a && find . -type f | sort | xargs sha256sum) > /tmp/b.$$; (cd repo/dist/$a && find . -type f | sort | xargs sha256sum) > /tmp/h.$$; echo "baseline:"; cat /tmp/b.$$; echo "head:"; cat /tmp/h.$$; diff /tmp/b.$$ /tmp/h.$$ && echo IDENTICAL; done
+
+== reference-app
+baseline:
+826d77b6b3f125519073a19783e45c85d96e8daadc3ad87c14439c9398a3f259  ./3rdpartylicenses.txt
+f9102be80297c0529207607be5277b4f90bca89d65988fa1771b91c7894e815f  ./browser/favicon.ico
+5bca83ac0e6e4bd50f67884e881cefd017b85aacc832c277fcdbf57630719655  ./browser/index.html
+8fb68a9133ca3f58ecbcdfadc939dae45ccc5cf348bc1b8b3621ba6a51bae5d6  ./browser/main-4FFRGG7I.js
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./browser/styles-5INURTSO.css
+a79ddcc8a115190e9c19479ed36914741a7d1db74f0a1153529efc80725505fe  ./prerendered-routes.json
+head:
+826d77b6b3f125519073a19783e45c85d96e8daadc3ad87c14439c9398a3f259  ./3rdpartylicenses.txt
+f9102be80297c0529207607be5277b4f90bca89d65988fa1771b91c7894e815f  ./browser/favicon.ico
+5bca83ac0e6e4bd50f67884e881cefd017b85aacc832c277fcdbf57630719655  ./browser/index.html
+8fb68a9133ca3f58ecbcdfadc939dae45ccc5cf348bc1b8b3621ba6a51bae5d6  ./browser/main-4FFRGG7I.js
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./browser/styles-5INURTSO.css
+a79ddcc8a115190e9c19479ed36914741a7d1db74f0a1153529efc80725505fe  ./prerendered-routes.json
+IDENTICAL
+== ui-lab
+baseline:
+826d77b6b3f125519073a19783e45c85d96e8daadc3ad87c14439c9398a3f259  ./3rdpartylicenses.txt
+f9102be80297c0529207607be5277b4f90bca89d65988fa1771b91c7894e815f  ./browser/favicon.ico
+7f2a13f5a13a0b5cdf924fa253834add39e2ccb5ad11075b8c904f3687074df1  ./browser/index.html
+a15259cb22b08a96c5f822f2b7dfbc6217e4ae5db11ceae945cc7f41d5eb18d3  ./browser/main-RPR4FBCF.js
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./browser/styles-5INURTSO.css
+a79ddcc8a115190e9c19479ed36914741a7d1db74f0a1153529efc80725505fe  ./prerendered-routes.json
+head:
+826d77b6b3f125519073a19783e45c85d96e8daadc3ad87c14439c9398a3f259  ./3rdpartylicenses.txt
+f9102be80297c0529207607be5277b4f90bca89d65988fa1771b91c7894e815f  ./browser/favicon.ico
+7f2a13f5a13a0b5cdf924fa253834add39e2ccb5ad11075b8c904f3687074df1  ./browser/index.html
+a15259cb22b08a96c5f822f2b7dfbc6217e4ae5db11ceae945cc7f41d5eb18d3  ./browser/main-RPR4FBCF.js
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./browser/styles-5INURTSO.css
+a79ddcc8a115190e9c19479ed36914741a7d1db74f0a1153529efc80725505fe  ./prerendered-routes.json
+IDENTICAL
+EXIT_CODE=0

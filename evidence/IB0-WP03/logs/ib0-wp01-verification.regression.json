@@ -1,0 +1,98 @@
+{
+  "workPackage": "IB0-WP01",
+  "generatedAt": "2026-09-24T09:36:14.978Z",
+  "cwd": "/tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/run2/repo",
+  "result": "PASS",
+  "checks": [
+    {
+      "id": "V01",
+      "name": "package.json exists",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "id": "V02",
+      "name": "package-lock.json exists",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "id": "V03",
+      "name": "Angular/Nx workspace metadata exists",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "id": "V04",
+      "name": "package.json parses",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "id": "V05",
+      "name": "npm is declared package manager",
+      "pass": true,
+      "details": "npm@11.19.0"
+    },
+    {
+      "id": "V06",
+      "name": "Required PAEP repository topology exists",
+      "pass": true,
+      "details": "42 required directories present"
+    },
+    {
+      "id": "V07",
+      "name": "build:reference-app script exists",
+      "pass": true,
+      "details": "ng build reference-app --configuration production"
+    },
+    {
+      "id": "V08",
+      "name": "build:ui-lab script exists",
+      "pass": true,
+      "details": "ng build ui-lab --configuration production"
+    },
+    {
+      "id": "V09",
+      "name": "qa:ib0-wp01 script exists",
+      "pass": true,
+      "details": "node tooling/verification/verify-ib0-wp01.mjs"
+    },
+    {
+      "id": "V10",
+      "name": "reference-app is registered as workspace project",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "id": "V11",
+      "name": "ui-lab is registered as workspace project",
+      "pass": true,
+      "details": ""
+    },
+    {
+      "id": "V12",
+      "name": "No obvious out-of-scope Frappe/reporting/commercial UI dependencies",
+      "pass": true,
+      "details": "none"
+    },
+    {
+      "id": "V13",
+      "name": "No obvious committed secrets in apps/packages/config",
+      "pass": true,
+      "details": "none"
+    },
+    {
+      "id": "V14",
+      "name": "reference-app build passes",
+      "pass": true,
+      "details": "exit=0\n> @proseit/paep-workspace@0.0.0 build:reference-app\n> ng build reference-app --configuration production\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.09 kB\n\nApplication bundle generation complete. [1.781 seconds] - 2026-09-24T09:36:12.478Z\n\nOutput location: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/run2/repo/dist/reference-app"
+    },
+    {
+      "id": "V15",
+      "name": "ui-lab build passes",
+      "pass": true,
+      "details": "exit=0\n> @proseit/paep-workspace@0.0.0 build:ui-lab\n> ng build ui-lab --configuration production\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-RPR4FBCF.js    | main          | 190.65 kB |                52.16 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.16 kB\n\nApplication bundle generation complete. [1.781 seconds] - 2026-09-24T09:36:14.925Z\n\nOutput location: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/run2/repo/dist/ui-lab"
+    }
+  ]
+}

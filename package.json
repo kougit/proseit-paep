@@ -23,7 +23,9 @@
     "build:reference-app": "ng build reference-app --configuration production",
     "build:ui-lab": "ng build ui-lab --configuration production",
     "qa:ib0-wp01": "node tooling/verification/verify-ib0-wp01.mjs",
-    "qa:ib0-wp02": "node tooling/verification/verify-ib0-wp02.mjs"
+    "qa:ib0-wp02": "node tooling/verification/verify-ib0-wp02.mjs",
+    "qa:ib0-wp03": "node tooling/verification/verify-ib0-wp03.mjs",
+    "qa:ib0-wp03:negative": "node tooling/verification/negative-ib0-wp03.mjs"
   },
   "dependencies": {
     "@angular/common": "22.1.8",

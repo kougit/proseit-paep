@@ -1,0 +1,58 @@
+# date: 2026-09-24T09:28:31Z
+# node: v24.21.0 npm: 11.19.0
+# dir: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/qa/mut commit: f19a4223748be90d98b99e3c47c6477910c5a17f
+# cmd: bash /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/mut.sh
+
+=== P0 positive control (unmutated)
+IB0-WP03 verification (static-only): PASS (14/14)
+VERIFIER_EXIT=0
+=== P0b build unmutated + TS violation (expect build fail)
+✘ [ERROR] TS7006: Parameter 'v' implicitly has an 'any' type. [plugin angular-compiler]
+✘ [ERROR] TS2322: Type 'null' is not assignable to type 'string'. [plugin angular-compiler]
+BUILD_EXIT=1
+=== M1 root compilerOptions adds "noCheck": true (new weakening key; WP §4(i) says no other key changes)
+IB0-WP03 verification (static-only): PASS (14/14)
+VERIFIER_EXIT=0
+--- M1 effect on build with TS violation:
+BUILD_EXIT=0
+=== M2 uppercase '// @TS-NOCHECK' at top of app.ts
+FAIL V12 No WP04/WP05/IB1+ artefacts, apps unchanged, and every changed path is within WORK_PACKAGE §4 — apps changed: apps/reference-app/src/app/app.ts; changed outside WORK_PACKAGE §4: apps/reference-app/src/app/app.ts
+IB0-WP03 verification (static-only): FAIL (13/14)
+VERIFIER_EXIT=1
+--- M2 effect on build with TS violation:
+BUILD_EXIT=0
+=== M3 noImplicitAny moved from root to apps/reference-app/tsconfig.app.json
+FAIL V01 Root tsconfig.json compilerOptions literally sets "strict": true and "noImplicitAny": true — strict=true; noImplicitAny=undefined
+FAIL V03 Every angular.json build tsConfig resolves (extends included) to strict, noImplicitAny and strictTemplates true, with no strict option off — ui-lab: effective noImplicitAny=undefined
+FAIL V05 Every baseline compiler and Angular compiler option keeps its value, and the app tsconfig files are unchanged — changed: apps/reference-app/tsconfig.app.json
+FAIL V12 No WP04/WP05/IB1+ artefacts, apps unchanged, and every changed path is within WORK_PACKAGE §4 — apps changed: apps/reference-app/tsconfig.app.json; changed outside WORK_PACKAGE §4: apps/reference-app/tsconfig.app.json
+IB0-WP03 verification (static-only): FAIL (10/14)
+VERIFIER_EXIT=1
+=== M4 duplicate key: textual "strict": false appended after existing "strict": true
+6:    "strict": true,
+8:    "strict": false,
+FAIL V01 Root tsconfig.json compilerOptions literally sets "strict": true and "noImplicitAny": true — strict=false; noImplicitAny=true
+FAIL V03 Every angular.json build tsConfig resolves (extends included) to strict, noImplicitAny and strictTemplates true, with no strict option off — reference-app: effective strict=false; reference-app: effective strict=false; ui-lab: ef
+FAIL V04 No tsconfig*.json in the repository sets a strict-family or template strict option to false — tsconfig.json: compilerOptions.strict=false
+IB0-WP03 verification (static-only): FAIL (11/14)
+VERIFIER_EXIT=1
+=== M5 entry point re-exports: packages/foundation/src/index.ts = 'export {} from "./impl";' + impl.ts
+FAIL V09 Every package has a placeholder public entry point that its alias resolves to, and all entry points compile strictly with 0 diagnostics — packages/foundation/src/index.ts is not a placeholder (export {} only)
+FAIL V12 No WP04/WP05/IB1+ artefacts, apps unchanged, and every changed path is within WORK_PACKAGE §4 — changed outside WORK_PACKAGE §4: packages/foundation/src/impl.ts
+IB0-WP03 verification (static-only): FAIL (12/14)
+VERIFIER_EXIT=1
+=== M6 angularCompilerOptions.extendedDiagnostics.defaultCategory = suppress
+IB0-WP03 verification (static-only): PASS (14/14)
+VERIFIER_EXIT=0
+=== M7 root compilerOptions adds allowUnreachableCode:true, allowUnusedLabels:true
+IB0-WP03 verification (static-only): PASS (14/14)
+VERIFIER_EXIT=0
+=== M8 alias target with sub-path but no wildcard: '@proseit/paep-foundation/internal' -> packages/foundation/src/internal.ts
+FAIL V08 compilerOptions.paths maps each workspace package name to exactly its src/index.ts, with no wildcard or deep alias — alias @proseit/paep-foundation/internal is not a workspace package name
+IB0-WP03 verification (static-only): FAIL (13/14)
+VERIFIER_EXIT=1
+=== M9 '// @ts-ignore' in a .js file under apps (allowJs not set)
+FAIL V12 No WP04/WP05/IB1+ artefacts, apps unchanged, and every changed path is within WORK_PACKAGE §4 — apps changed: apps/reference-app/src/qa.js; changed outside WORK_PACKAGE §4: apps/reference-app/src/qa.js
+IB0-WP03 verification (static-only): FAIL (13/14)
+VERIFIER_EXIT=1
+EXIT_CODE=0

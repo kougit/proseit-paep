@@ -1,0 +1,27 @@
+# date: 2026-09-24T09:30:16Z
+# node: v24.21.0 npm: 11.19.0
+# dir: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/qa/repo commit: f19a4223748be90d98b99e3c47c6477910c5a17f
+# cmd: node -e "
+const fs=require(\"fs\"),c=require(\"crypto\");const m=JSON.parse(fs.readFileSync(\"PACK_MANIFEST.json\"));
+const f=m.files.filter(x=>x.path===\".gitignore\"||x.path.startsWith(\".paep-control/\"));let ok=0;
+for(const x of f){const b=fs.readFileSync(x.path);const h=c.createHash(\"sha256\").update(b).digest(\"hex\");const g=h===x.sha256&&b.length===x.bytes;ok+=g;console.log((g?\"MATCH \":\"MISMATCH \")+x.path+\" \"+b.length);}
+console.log(ok+\"/\"+f.length+\" match\");"; echo "files on disk under .paep-control:"; find .paep-control -type f | wc -l; git diff --stat de13629 -- .paep-control .gitignore PACK_MANIFEST.json CLAUDE.md; git diff --quiet de13629 -- .paep-control .gitignore PACK_MANIFEST.json CLAUDE.md && echo "UNCHANGED_vs_de13629"
+
+MATCH .gitignore 430
+MATCH .paep-control/SOURCE_OF_TRUTH.md 2397
+MATCH .paep-control/originals/PAEP_DCH_v1.0.pdf 542033
+MATCH .paep-control/originals/PAEP_EQP_v1.1.pdf 742463
+MATCH .paep-control/originals/PAEP_IB_v1.0.pdf 937641
+MATCH .paep-control/originals/PAEP_IR_v1.0.docx 705705
+MATCH .paep-control/originals/PAEP_v1.1.pdf 1576649
+MATCH .paep-control/reference-baseline/PAEP_BASE_v1.0.zip 33055
+MATCH .paep-control/text/PAEP_DCH_01_v1.0_text.md 46181
+MATCH .paep-control/text/PAEP_EQP_01_v1.1_text.md 58649
+MATCH .paep-control/text/PAEP_IB_01_v1.0_text.md 68553
+MATCH .paep-control/text/PAEP_IR_01_v1.0_text.md 38704
+MATCH .paep-control/text/PAEP_v1.1_text.md 85725
+13/13 match
+files on disk under .paep-control:
+12
+UNCHANGED_vs_de13629
+EXIT_CODE=0

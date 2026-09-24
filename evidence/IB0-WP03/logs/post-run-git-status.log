@@ -1,0 +1,12 @@
+# date: 2026-09-24T09:35:41Z node: v24.21.0 npm: 11.19.0 commit: 0f2d38174d57dda229e62a545477e8d8288e8a00
+$ bash -c git status --porcelain --untracked-files=no; echo "## WP01/WP02 records vs baseline (expect empty)"; git diff --exit-code --stat de13629 -- evidence/IB0-WP01 evidence/IB0-WP02 work-packages/IB0-WP01 work-packages/IB0-WP02 && echo "(empty)"
+ M evidence/IB0-WP03/logs/ib0-wp01-verification.regression.json
+ M evidence/IB0-WP03/logs/ib0-wp02-verification.regression.json
+ M evidence/IB0-WP03/logs/negative-strictness.log
+ M evidence/IB0-WP03/logs/negative-verifier-mutations.log
+ M evidence/IB0-WP03/logs/verify-ib0-wp02-regression.log
+ M evidence/IB0-WP03/reports/ib0-wp03-verification.json
+ M evidence/IB0-WP03/reports/negative-tests.json
+## WP01/WP02 records vs baseline (expect empty)
+(empty)
+EXIT_CODE=0

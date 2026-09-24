@@ -1,0 +1,21 @@
+# date: 2026-09-24T09:29:15Z
+# node: v24.21.0 npm: 11.19.0
+# dir: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/qa/mut commit: f19a4223748be90d98b99e3c47c6477910c5a17f
+# cmd: bash /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/mut2.sh
+
+=== M10 '// @TS-NOCHECK' (uppercase) added to packages/foundation/src/index.ts (a WP03-permitted path)
+// @TS-NOCHECK
+// Public entry point of @proseit/paep-foundation (IB0-WP03 placeholder).
+// Consumers import this package only through this entry point. It exports nothing until its implementation milestone.
+IB0-WP03 verification (static-only): PASS (14/14)
+VERIFIER_EXIT=0
+=== M10b same with lowercase '// @ts-nocheck' (control: should be caught by V07)
+FAIL V07 No @ts-ignore, @ts-nocheck, @ts-expect-error or $any( in apps/** or packages/** source — 30 files scanned; findings: packages/foundation/src/index.ts
+IB0-WP03 verification (static-only): FAIL (13/14)
+VERIFIER_EXIT=1
+=== M1b noCheck:true + Angular template strict violation (repo runner's wp03Take mutation)
+BUILD_EXIT=0
+--- M1b control: same template mutation WITHOUT noCheck (expect fail)
+✘ [ERROR] TS2345: Argument of type 'PointerEvent' is not assignable to parameter of type 'number'. [plugin angular-compiler]
+BUILD_EXIT=1
+EXIT_CODE=0

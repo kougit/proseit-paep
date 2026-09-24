@@ -35,7 +35,7 @@ The PAEP architecture is now machine-readable and enforced. `tooling/architectur
 | Check | Reviewer | Date | Result |
 | --- | --- | --- | --- |
 | Definition audit (scope traced to controlled sources) | Claude Code | 2026-09-24 | PASS |
-| Independent QA, fresh clone | Independent Claude reviewer | 2026-09-24 | See `evidence/IB0-WP04/reports/independent-qa.md` |
+| Independent QA, fresh clones (3 rounds) | Independent Claude reviewer | 2026-09-24 | Round 1 FAIL (4 Medium, closed); rounds 2 and 3 PASS; `evidence/IB0-WP04/reports/independent-qa.md` |
 | Definition approval; defaults D1–D4 and the WP03 bounded exception | Product Owner / Solutions Architect | — | Pending |
 
 ## Acceptance criteria
@@ -81,7 +81,7 @@ No dependency was added, removed or re-versioned; `package-lock.json` is byte-id
 | Field | Value |
 | --- | --- |
 | Technical Verification | PASS |
-| Independent QA | Pending |
+| Independent QA | PASS |
 | Architecture Conformance | PASS |
 | Acceptance Criteria | 29/29 PASS |
 | Acceptance Status | NOT ACCEPTED (awaiting PO/SA) |

@@ -400,7 +400,15 @@ export function checkBoundaries(root = process.cwd()) {
       // alias) would hide the edge behind another name; judge it by its real path.
       const bare = spec.startsWith('@') ? spec.split('/').slice(0, 2).join('/') : spec.split('/')[0];
       const linked = [`${project.root}/node_modules/${bare}`, `node_modules/${bare}`].find((d) => fs.existsSync(abs(d)));
-      const linkedOwner = linked ? ownerOf(fs.realpathSync(abs(linked))) : null;
+      const linkedReal = linked ? fs.realpathSync(abs(linked)) : null;
+      const linkedOwner = linkedReal ? ownerOf(linkedReal) : null;
+      // A link into the workspace but outside every project and outside node_modules (for
+      // example tooling/) would hide unscanned code, so it is rejected like a relative import.
+      const linkedRel = linkedReal ? rel(linkedReal) : '';
+      if (linkedReal && !linkedOwner && !linkedRel.startsWith('..') && !path.isAbsolute(linkedRel) && !linkedRel.split('/').includes('node_modules')) {
+        flag('OUTSIDE_PROJECT', `${project.name} imports "${spec}", which node_modules links to ${linkedRel}, outside every project`, where);
+        continue;
+      }
       if (linkedOwner) {
         flag('UNKNOWN_PACKAGE', `${project.name} imports "${spec}", which resolves to ${linkedOwner.name} under another name; import it by its own name`, where);
         if (linkedOwner !== project) addEdge(project, linkedOwner, kind, where);
@@ -421,7 +429,7 @@ export function checkBoundaries(root = process.cwd()) {
         const target = packageNames.get(dep);
         if (target) addEdge(p, target, 'implicit', `${m} ${field}`);
         else if (dep.startsWith('@proseit/')) flag('UNKNOWN_PACKAGE', `${p.name} declares ${dep} (${field}), which is not a workspace package`, m);
-        else if (/^(file|link|workspace|portal):|^npm:@proseit\//.test(String(pkg[field][dep]))) flag('UNKNOWN_PACKAGE', `${p.name} declares ${dep} as "${pkg[field][dep]}" (${field}), a local or aliased reference; depend on a workspace package by its own name`, m);
+        else if (/^(file|link|workspace|portal|git\+file):|^npm:@proseit\/|^[./~]|\.(tgz|tar\.gz|tar)$/i.test(String(pkg[field][dep]))) flag('UNKNOWN_PACKAGE', `${p.name} declares ${dep} as "${pkg[field][dep]}" (${field}), a local or aliased reference; depend on a workspace package by its own name`, m);
         else {
           if (!externalByProject.has(p.name)) externalByProject.set(p.name, []);
           externalByProject.get(p.name).push({ spec: dep, where: `${m} ${field}`, reexport: false });

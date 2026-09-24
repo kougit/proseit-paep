@@ -227,6 +227,8 @@ try {
   // A workspace package reached under another name (PO/SA: fail closed; QA final round M1).
   checkerCase('N53', 'workspace package aliased in a manifest ("i18n-x": "file:../i18n") and imported by that name', [['packages/frappe-sdk/package.json', (t) => { const p = JSON.parse(t); p.dependencies = { 'i18n-x': 'file:../i18n' }; return JSON.stringify(p, null, 2) + '\n'; }], [entry('frappe-sdk'), append("import 'i18n-x';")]], 'UNKNOWN_PACKAGE');
   checkerCase('N54', 'bare import linked by node_modules to a workspace package (frappe-sdk -> i18n via "i18n-x")', [['packages/frappe-sdk/node_modules/i18n-x', 'symlink:../../i18n'], [entry('frappe-sdk'), append("import 'i18n-x';")]], 'DIRECTION');
+  checkerCase('N55', 'bare import linked by node_modules to a folder outside every project (tooling/) that re-exports i18n', [['tooling/wp04-outside/index.ts', () => "export * from '../../packages/i18n/src/index';\n"], ['packages/frappe-sdk/node_modules/i18n-x', 'symlink:../../../tooling/wp04-outside'], [entry('frappe-sdk'), append("import 'i18n-x';")]], 'OUTSIDE_PROJECT');
+  checkerCase('N56', 'manifest dependency given as a plain path ("i18n-x": "../i18n")', [['packages/frappe-sdk/package.json', (t) => { const p = JSON.parse(t); p.dependencies = { 'i18n-x': '../i18n' }; return JSON.stringify(p, null, 2) + '\n'; }]], 'UNKNOWN_PACKAGE');
   checkerCase('N52', 'allowlist entry linking two applications (reference-app -> ui-lab)', [allow({ source: 'reference-app', target: 'ui-lab', rationale: 'IB0-WP04 negative test', approval: 'test only' })], 'MODEL');
   checkerCase('N51', 'allowlist entry without a rationale', [allow(pair('domain-quality', 'domain-fiscal', { rationale: '' }))], 'MODEL');
 

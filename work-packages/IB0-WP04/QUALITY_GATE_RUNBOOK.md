@@ -24,7 +24,7 @@ Run from the root of a **fresh `git clone`** of the commit under test, on the pi
 npm run qa:ib0-wp04:negative
 ```
 
-Evidence: `negative-tests.log`, `negative-architecture-tests.log`, `reports/negative-tests.json`. Pass: 84/84 — controls C0–C5, O1–O8, S1c and S2c pass; N01–N27, N30–N54 and T1–T5 each make the checker exit 1 with the expected rule (T1–T5 by the transitive rule alone); S1 and S2 builds fail with the expected TypeScript codes; S3–S9 fail verifier check V05 or V04; N28–N29 each fail verifier check V15.
+Evidence: `negative-tests.log`, `negative-architecture-tests.log`, `reports/negative-tests.json`. Pass: 86/86 — controls C0–C5, O1–O8, S1c and S2c pass; N01–N27, N30–N56 and T1–T5 each make the checker exit 1 with the expected rule (T1–T5 by the transitive rule alone); S1 and S2 builds fail with the expected TypeScript codes; S3–S9 fail verifier check V05 or V04; N28–N29 each fail verifier check V15.
 
 ## Failure rule
 

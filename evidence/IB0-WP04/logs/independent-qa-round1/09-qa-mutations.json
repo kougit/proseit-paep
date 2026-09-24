@@ -1,0 +1,1220 @@
+[
+  {
+    "id": "D01",
+    "name": "offline -> foundation (\"No\")",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-offline (offline) -> @proseit/paep-foundation (foundation) is not allowed (Appendix B: No) [packages/offline/src/index.ts]"
+    ]
+  },
+  {
+    "id": "D02",
+    "name": "observability -> i18n (\"No\")",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-observability (observability) -> @proseit/paep-i18n (i18n) is not allowed (Appendix B: No) [packages/observability/src/index.ts]"
+    ]
+  },
+  {
+    "id": "D03",
+    "name": "i18n -> platform (Optional, allowed)",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "D04",
+    "name": "analytics -> enterprise (Optional, allowed)",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "D05",
+    "name": "enterprise -> frappe-sdk (\"No\")",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-enterprise (enterprise) -> @proseit/frappe-sdk (frappe-sdk) is not allowed (Appendix B: No) [packages/enterprise/src/index.ts]"
+    ]
+  },
+  {
+    "id": "D06",
+    "name": "domain-ai -> analytics (Optional, allowed)",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "D07",
+    "name": "platform -> components (upward \"-\")",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-platform (platform) -> @proseit/paep-components (components) is not allowed (Appendix B: -) [packages/platform/src/index.ts]"
+    ]
+  },
+  {
+    "id": "D08",
+    "name": "foundation -> contracts (\"No\")",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-foundation (foundation) -> @proseit/paep-contracts (contracts) is not allowed (Appendix B: No) [packages/foundation/src/index.ts]"
+    ]
+  },
+  {
+    "id": "D09",
+    "name": "components -> contracts (Optional, allowed)",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "D10",
+    "name": "ui-lab -> frappe-sdk (Yes, allowed)",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "D11",
+    "name": "contracts -> foundation (upward \"-\")",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CONTRACTS_NEUTRAL",
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-contracts (contracts) -> @proseit/paep-foundation (foundation) is not allowed (Appendix B: -) [packages/contracts/src/index.ts]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2882 Cannot find module or type declarations for side-effect import of '@proseit/paep-foundation'. [packages/contracts/src/index.ts:4]"
+    ]
+  },
+  {
+    "id": "D12",
+    "name": "domain-iot -> frappe-sdk (\"No\")",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-domain-iot (domain) -> @proseit/frappe-sdk (frappe-sdk) is not allowed (Appendix B: No) [packages/domain-iot/src/index.ts]"
+    ]
+  },
+  {
+    "id": "D13",
+    "name": "offline -> components (\"No\")",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-offline (offline) -> @proseit/paep-components (components) is not allowed (Appendix B: No) [packages/offline/src/index.ts]"
+    ]
+  },
+  {
+    "id": "D14",
+    "name": "frappe-sdk peerDependencies -> i18n (\"No\") via manifest",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/frappe-sdk (frappe-sdk) -> @proseit/paep-i18n (i18n) is not allowed (Appendix B: No) [packages/frappe-sdk/package.json peerDependencies]"
+    ]
+  },
+  {
+    "id": "D15",
+    "name": "offline optionalDependencies -> platform (Yes) via manifest",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "F01",
+    "name": "export { x } from (nested folder)",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/a/b/c/reexp.ts]"
+    ]
+  },
+  {
+    "id": "F02",
+    "name": "export * as ns from",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/ns.ts]"
+    ]
+  },
+  {
+    "id": "F03",
+    "name": "import x = require() in .cts",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/req.cts]"
+    ]
+  },
+  {
+    "id": "F04",
+    "name": "import('...') type in type alias",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/t.ts]"
+    ]
+  },
+  {
+    "id": "F05",
+    "name": "dynamic import with no-substitution template literal",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/dyn.ts]"
+    ]
+  },
+  {
+    "id": "F06",
+    "name": "dynamic import with computed specifier (string concat)",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "F07",
+    "name": "dynamic import with substitution template literal",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "F08",
+    "name": ".mts file static import",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/m.mts]"
+    ]
+  },
+  {
+    "id": "F09",
+    "name": ".js file require()",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/legacy.js]"
+    ]
+  },
+  {
+    "id": "F10",
+    "name": ".mjs file import",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/x.mjs]"
+    ]
+  },
+  {
+    "id": "F11",
+    "name": ".cjs file require()",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/x.cjs]"
+    ]
+  },
+  {
+    "id": "F12",
+    "name": ".tsx file import",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/x.tsx]"
+    ]
+  },
+  {
+    "id": "F13",
+    "name": "hand-written .d.ts with import type",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "F14",
+    "name": "source under a nested directory named dist",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "F15",
+    "name": "triple-slash reference path into another package",
+    "wantExit": 1,
+    "wantRules": [
+      "ENTRY_BYPASS"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "F16",
+    "name": "module augmentation declare module of another package",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "F17",
+    "name": "JSDoc import() type in a .js file",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "F18",
+    "name": "require.resolve()",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "F19",
+    "name": "package.json \"imports\" subpath alias #ent -> enterprise",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "P01",
+    "name": "deep import via dynamic import()",
+    "wantExit": 1,
+    "wantRules": [
+      "DEEP_IMPORT"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DEEP_IMPORT"
+    ],
+    "ok": true,
+    "violations": [
+      "DEEP_IMPORT: @proseit/paep-enterprise imports \"@proseit/paep-components/src/lib/x\" below the @proseit/paep-components entry point [packages/enterprise/src/index.ts]"
+    ]
+  },
+  {
+    "id": "P02",
+    "name": "deep import via import('...') type",
+    "wantExit": 1,
+    "wantRules": [
+      "DEEP_IMPORT"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DEEP_IMPORT"
+    ],
+    "ok": true,
+    "violations": [
+      "DEEP_IMPORT: @proseit/paep-enterprise imports \"@proseit/paep-components/src/index\" below the @proseit/paep-components entry point [packages/enterprise/src/index.ts]"
+    ]
+  },
+  {
+    "id": "P03",
+    "name": "deep import of package.json",
+    "wantExit": 1,
+    "wantRules": [
+      "DEEP_IMPORT"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DEEP_IMPORT"
+    ],
+    "ok": true,
+    "violations": [
+      "DEEP_IMPORT: @proseit/paep-enterprise imports \"@proseit/paep-components/package.json\" below the @proseit/paep-components entry point [packages/enterprise/src/index.ts]"
+    ]
+  },
+  {
+    "id": "P04",
+    "name": "deep import in app file",
+    "wantExit": 1,
+    "wantRules": [
+      "DEEP_IMPORT"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DEEP_IMPORT"
+    ],
+    "ok": true,
+    "violations": [
+      "DEEP_IMPORT: ui-lab imports \"@proseit/paep-components/src/index\" below the @proseit/paep-components entry point [apps/ui-lab/src/app/app.ts]"
+    ]
+  },
+  {
+    "id": "P05",
+    "name": "relative directory import of another package (no /index)",
+    "wantExit": 1,
+    "wantRules": [
+      "ENTRY_BYPASS"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "ENTRY_BYPASS"
+    ],
+    "ok": true,
+    "violations": [
+      "ENTRY_BYPASS: @proseit/paep-enterprise imports \"../../components/src\" inside @proseit/paep-components; use its public entry point [packages/enterprise/src/index.ts]"
+    ]
+  },
+  {
+    "id": "P06",
+    "name": "rooted packages/... import",
+    "wantExit": 1,
+    "wantRules": [
+      "ENTRY_BYPASS"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "ENTRY_BYPASS"
+    ],
+    "ok": true,
+    "violations": [
+      "ENTRY_BYPASS: @proseit/paep-enterprise imports \"packages/components/src/index\" inside @proseit/paep-components; use its public entry point [packages/enterprise/src/index.ts]"
+    ]
+  },
+  {
+    "id": "P07",
+    "name": "absolute path import",
+    "wantExit": 1,
+    "wantRules": [
+      "ENTRY_BYPASS"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "ENTRY_BYPASS"
+    ],
+    "ok": true,
+    "violations": [
+      "ENTRY_BYPASS: @proseit/paep-enterprise imports \"/tmp/paep-wp04-qa-580y7m/scratch/packages/components/src/index\" inside @proseit/paep-components; use its public entry point [packages/enterprise/src/index.ts]"
+    ]
+  },
+  {
+    "id": "P08",
+    "name": "app relative import of package source",
+    "wantExit": 1,
+    "wantRules": [
+      "ENTRY_BYPASS"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "ENTRY_BYPASS"
+    ],
+    "ok": true,
+    "violations": [
+      "ENTRY_BYPASS: reference-app imports \"../../../../packages/components/src/index\" inside @proseit/paep-components; use its public entry point [apps/reference-app/src/app/app.ts]"
+    ]
+  },
+  {
+    "id": "P09",
+    "name": "relative import via node_modules workspace symlink",
+    "wantExit": 1,
+    "wantRules": [
+      "OUTSIDE_PROJECT"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "OUTSIDE_PROJECT"
+    ],
+    "ok": true,
+    "violations": [
+      "OUTSIDE_PROJECT: @proseit/paep-enterprise imports \"../../../node_modules/@proseit/paep-components\", outside every project [packages/enterprise/src/index.ts]"
+    ]
+  },
+  {
+    "id": "P10",
+    "name": "relative import of config/",
+    "wantExit": 1,
+    "wantRules": [
+      "OUTSIDE_PROJECT"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "OUTSIDE_PROJECT"
+    ],
+    "ok": true,
+    "violations": [
+      "OUTSIDE_PROJECT: @proseit/paep-enterprise imports \"../../../config/runtime-config.schema.json\", outside every project [packages/enterprise/src/index.ts]"
+    ]
+  },
+  {
+    "id": "P11",
+    "name": "unknown @proseit/* via require()",
+    "wantExit": 1,
+    "wantRules": [
+      "UNKNOWN_PACKAGE"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "UNKNOWN_PACKAGE"
+    ],
+    "ok": true,
+    "violations": [
+      "UNKNOWN_PACKAGE: @proseit/paep-components imports \"@proseit/paep-nope\", which is not a workspace package [packages/components/src/lib/u.cjs]"
+    ]
+  },
+  {
+    "id": "P12",
+    "name": "public entry point deleted (offline)",
+    "wantExit": 1,
+    "wantRules": [
+      "ENTRY_POINT"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "ALIAS",
+      "ENTRY_POINT"
+    ],
+    "ok": true,
+    "violations": [
+      "ENTRY_POINT: @proseit/paep-offline: packages/offline/src/index.ts missing",
+      "ALIAS: reference-app: @proseit/paep-offline resolves to nothing",
+      "ALIAS: ui-lab: @proseit/paep-offline resolves to nothing"
+    ]
+  },
+  {
+    "id": "P13",
+    "name": "alias with two targets",
+    "wantExit": 1,
+    "wantRules": [
+      "ALIAS"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "ALIAS"
+    ],
+    "ok": true,
+    "violations": [
+      "ALIAS: @proseit/paep-offline: alias maps to [\"./packages/offline/src/index.ts\",\"./packages/offline/src/internal.ts\"], expected [\"./packages/offline/src/index.ts\"]"
+    ]
+  },
+  {
+    "id": "P14",
+    "name": "baseUrl added to tsconfig.base.json",
+    "wantExit": 1,
+    "wantRules": [
+      "ALIAS"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "ALIAS"
+    ],
+    "ok": true,
+    "violations": [
+      "ALIAS: tsconfig.base.json holds more than compilerOptions.paths: baseUrl"
+    ]
+  },
+  {
+    "id": "P15",
+    "name": "alias for an app added",
+    "wantExit": 1,
+    "wantRules": [
+      "ALIAS"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "ALIAS"
+    ],
+    "ok": true,
+    "violations": [
+      "ALIAS: alias reference-app is not a classified package"
+    ]
+  },
+  {
+    "id": "P16",
+    "name": "non-@proseit alias to package internals in a non-tsconfig-named file in the app extends chain",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "Y01",
+    "name": "3-package cycle i18n->platform (Opt) -> observability (Opt) -> i18n (\"No\")",
+    "wantExit": 1,
+    "wantRules": [
+      "CYCLE",
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CYCLE",
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-observability (observability) -> @proseit/paep-i18n (i18n) is not allowed (Appendix B: No) [packages/observability/src/index.ts]",
+      "CYCLE: circular package dependency: @proseit/paep-i18n <-> @proseit/paep-observability <-> @proseit/paep-platform"
+    ]
+  },
+  {
+    "id": "Y02",
+    "name": "3-package domain cycle ai -> iot -> fiscal -> ai",
+    "wantExit": 1,
+    "wantRules": [
+      "CYCLE",
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CYCLE",
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-domain-ai (domain) -> @proseit/paep-domain-iot (domain) is not allowed (Appendix B: - (same category)) [packages/domain-ai/src/index.ts]",
+      "DIRECTION: @proseit/paep-domain-fiscal (domain) -> @proseit/paep-domain-ai (domain) is not allowed (Appendix B: - (same category)) [packages/domain-fiscal/src/index.ts]",
+      "DIRECTION: @proseit/paep-domain-iot (domain) -> @proseit/paep-domain-fiscal (domain) is not allowed (Appendix B: - (same category)) [packages/domain-iot/src/index.ts]",
+      "CYCLE: circular package dependency: @proseit/paep-domain-ai <-> @proseit/paep-domain-fiscal <-> @proseit/paep-domain-iot"
+    ]
+  },
+  {
+    "id": "Y03",
+    "name": "2-cycle platform <-> observability mixing manifest dependency and type import",
+    "wantExit": 1,
+    "wantRules": [
+      "CYCLE"
+    ],
+    "absent": [
+      "DIRECTION"
+    ],
+    "exit": 1,
+    "rules": [
+      "CYCLE"
+    ],
+    "ok": true,
+    "violations": [
+      "CYCLE: circular package dependency: @proseit/paep-observability <-> @proseit/paep-platform"
+    ]
+  },
+  {
+    "id": "Y04",
+    "name": "allowed chain i18n->platform->observability (no cycle)",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "Y05",
+    "name": "4-node cycle through app edge: components -> ... -> app (package -> app bypass) ",
+    "wantExit": 1,
+    "wantRules": [
+      "CYCLE",
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CYCLE",
+      "DIRECTION",
+      "ENTRY_BYPASS"
+    ],
+    "ok": true,
+    "violations": [
+      "ENTRY_BYPASS: @proseit/paep-components imports \"../../../apps/reference-app/src/app/app\" inside reference-app; use its public entry point [packages/components/src/index.ts]",
+      "DIRECTION: @proseit/paep-components (components) -> reference-app (app) is not allowed (Appendix B: -) [packages/components/src/index.ts]",
+      "CYCLE: circular package dependency: @proseit/paep-components <-> reference-app"
+    ]
+  },
+  {
+    "id": "C01",
+    "name": "contracts: /// <reference lib=\"dom\" /> then document",
+    "wantExit": 1,
+    "wantRules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "ok": true,
+    "violations": [
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2584 Cannot find name 'document'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'. [packages/contracts/src/index.ts:5]"
+    ]
+  },
+  {
+    "id": "C02",
+    "name": "contracts: DOM global in a separate file under lib/",
+    "wantExit": 1,
+    "wantRules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "ok": true,
+    "violations": [
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'window'. [packages/contracts/src/lib/core/w.ts:1]"
+    ]
+  },
+  {
+    "id": "C03",
+    "name": "contracts: DOM global in .tsx file",
+    "wantExit": 1,
+    "wantRules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "C04",
+    "name": "contracts: DOM global in .js file",
+    "wantExit": 1,
+    "wantRules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "C05",
+    "name": "contracts: import type from rxjs",
+    "wantExit": 1,
+    "wantRules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "ok": true,
+    "violations": [
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts (contracts) depends on external module \"rxjs\", which is not approved [packages/contracts/src/index.ts]"
+    ]
+  },
+  {
+    "id": "C06",
+    "name": "contracts: manifest dependency on @angular/core",
+    "wantExit": 1,
+    "wantRules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "ok": true,
+    "violations": [
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts (contracts) depends on external module \"@angular/core\", which is not approved [packages/contracts/package.json dependencies]"
+    ]
+  },
+  {
+    "id": "C07",
+    "name": "contracts: node: builtin import",
+    "wantExit": 1,
+    "wantRules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "ok": true,
+    "violations": [
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts (contracts) depends on external module \"node:fs\", which is not approved [packages/contracts/src/index.ts]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2882 Cannot find module or type declarations for side-effect import of 'node:fs'. [packages/contracts/src/index.ts:4]"
+    ]
+  },
+  {
+    "id": "C08",
+    "name": "contracts: import of frappe (external)",
+    "wantExit": 1,
+    "wantRules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "ok": true,
+    "violations": [
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts (contracts) depends on external module \"frappe-js-sdk\", which is not approved [packages/contracts/src/index.ts]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2882 Cannot find module or type declarations for side-effect import of 'frappe-js-sdk'. [packages/contracts/src/index.ts:4]"
+    ]
+  },
+  {
+    "id": "V01",
+    "name": "analytics: export type {} from vendor",
+    "wantExit": 1,
+    "wantRules": [
+      "ANALYTICS_VENDOR_EXPORT"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "ANALYTICS_VENDOR_EXPORT"
+    ],
+    "ok": true,
+    "violations": [
+      "ANALYTICS_VENDOR_EXPORT: @proseit/paep-analytics re-exports external module \"echarts\" [packages/analytics/src/index.ts]"
+    ]
+  },
+  {
+    "id": "V02",
+    "name": "analytics: import-then-export of vendor namespace",
+    "wantExit": 1,
+    "wantRules": [
+      "ANALYTICS_VENDOR_EXPORT"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "V03",
+    "name": "app copies package source with changed comment only",
+    "wantExit": 1,
+    "wantRules": [
+      "COPIED_CODE"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "V04",
+    "name": "app copies package source with reformatted whitespace",
+    "wantExit": 1,
+    "wantRules": [
+      "COPIED_CODE"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "K01",
+    "name": "package directory without package.json",
+    "wantExit": 1,
+    "wantRules": [
+      "CLASSIFICATION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CLASSIFICATION"
+    ],
+    "ok": true,
+    "violations": [
+      "CLASSIFICATION: packages/stray is not classified in the model"
+    ]
+  },
+  {
+    "id": "K02",
+    "name": "extra angular.json project",
+    "wantExit": 1,
+    "wantRules": [
+      "CLASSIFICATION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CLASSIFICATION"
+    ],
+    "ok": true,
+    "violations": [
+      "CLASSIFICATION: angular.json project admin-app is not classified in the model",
+      "CLASSIFICATION: apps/admin-app is not classified in the model"
+    ]
+  },
+  {
+    "id": "K03",
+    "name": "extra directory under apps/",
+    "wantExit": 1,
+    "wantRules": [
+      "CLASSIFICATION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CLASSIFICATION"
+    ],
+    "ok": true,
+    "violations": [
+      "CLASSIFICATION: apps/scratch-app is not classified in the model"
+    ]
+  },
+  {
+    "id": "K04",
+    "name": "tags reordered",
+    "wantExit": 1,
+    "wantRules": [
+      "CLASSIFICATION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CLASSIFICATION"
+    ],
+    "ok": true,
+    "violations": [
+      "CLASSIFICATION: @proseit/paep-analytics: tags [\"type:analytics\",\"layer:L3\"], expected [\"layer:L3\",\"type:analytics\"]"
+    ]
+  },
+  {
+    "id": "K05",
+    "name": "layer of observability changed to L2 in model",
+    "wantExit": 1,
+    "wantRules": [
+      "MODEL"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CLASSIFICATION",
+      "MODEL"
+    ],
+    "ok": true,
+    "violations": [
+      "MODEL: layer of observability: controlled §6.1 L1, model L2",
+      "CLASSIFICATION: @proseit/paep-observability: tags [\"layer:L1\",\"type:observability\"], expected [\"layer:L2\",\"type:observability\"]"
+    ]
+  },
+  {
+    "id": "K06",
+    "name": "model matrix: observability -> i18n flipped to Optional",
+    "wantExit": 1,
+    "wantRules": [
+      "MODEL"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "MODEL"
+    ],
+    "ok": true,
+    "violations": [
+      "MODEL: matrix observability -> i18n: controlled \"No\", model \"Optional\""
+    ]
+  },
+  {
+    "id": "K07",
+    "name": "model: domain package recategorised as enterprise",
+    "wantExit": 1,
+    "wantRules": [
+      "CLASSIFICATION"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "K08",
+    "name": "extra workspace pattern tooling/*",
+    "wantExit": 1,
+    "wantRules": [
+      "CLASSIFICATION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CLASSIFICATION"
+    ],
+    "ok": true,
+    "violations": [
+      "CLASSIFICATION: tooling/a11y is not classified in the model",
+      "CLASSIFICATION: tooling/analytics-test is not classified in the model",
+      "CLASSIFICATION: tooling/architecture-boundaries is not classified in the model",
+      "CLASSIFICATION: tooling/build-release is not classified in the model",
+      "CLASSIFICATION: tooling/config-validation is not classified in the model",
+      "CLASSIFICATION: tooling/test-utils is not classified in the model",
+      "CLASSIFICATION: tooling/verification is not classified in the model",
+      "CLASSIFICATION: tooling/visual-regression is not classified in the model"
+    ]
+  },
+  {
+    "id": "K09",
+    "name": "package.json name differs from model",
+    "wantExit": 1,
+    "wantRules": [
+      "CLASSIFICATION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CLASSIFICATION"
+    ],
+    "ok": true,
+    "violations": [
+      "CLASSIFICATION: packages/i18n: package.json name @proseit/paep-i18n-x, model @proseit/paep-i18n"
+    ]
+  }
+]

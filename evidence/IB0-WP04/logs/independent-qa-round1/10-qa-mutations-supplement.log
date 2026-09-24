@@ -1,0 +1,18 @@
+# date: 2026-09-24T10:26:16Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 1c16f80539b17c9797a6b194fac63c1fbdb3f8a2
+# cwd: /tmp/paep-wp04-qa-580y7m/scratch
+# cmd: QA_JSON=/tmp/claude-0/-home-claude-proseit-paep/baa00b7b-0d6c-562c-abda-fc0d973cf425/scratchpad/qa/10-qa-mutations-supplement.json node /tmp/claude-0/-home-claude-proseit-paep/baa00b7b-0d6c-562c-abda-fc0d973cf425/scratchpad/qa/scripts/qa-mutations-2.mjs
+
+UNEXPECTED  C01b contracts: new file starting with /// <reference lib="dom" /> then document — expected exit 1 with CONTRACTS_NEUTRAL; got exit 0 rules []
+AS-EXPECTED C01c contracts: new file starting with /// <reference types="node" /> — expected exit 1 with CONTRACTS_NEUTRAL; got exit 1 rules [CONTRACTS_NEUTRAL]
+      CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2688 Cannot find type definition file for 'node'. [packages/contracts/src/lib/nodey.ts:1]
+      CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2591 Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig. [packages/contracts/src/lib/nodey.ts:2]
+UNEXPECTED  C09 contracts: declare const window then use it — expected exit 1 with CONTRACTS_NEUTRAL; got exit 0 rules []
+UNEXPECTED  V03b app copies package source (>=200 chars) with only a comment changed — expected exit 1 with COPIED_CODE; got exit 0 rules []
+AS-EXPECTED V04b app copies package source (>=200 chars) identical up to whitespace — expected exit 1 with COPIED_CODE; got exit 1 rules [COPIED_CODE]
+      COPIED_CODE: apps/reference-app/src/app/fmt.ts duplicates packages/components/src/lib/fmt.ts [apps/reference-app/src/app/fmt.ts]
+UNEXPECTED  V05 app copies package source (>=200 chars) with one identifier renamed — expected exit 1 with COPIED_CODE; got exit 0 rules []
+
+QA mutations: 6 cases; as expected 2; unexpected: C01b, C09, V03b, V05
+EXIT_CODE=0

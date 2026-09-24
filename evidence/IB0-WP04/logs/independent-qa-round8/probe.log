@@ -1,0 +1,32 @@
+OK  P1 3-step chain frappe-sdk>offline>platform>foundation (only frappe-sdk->platform/offline direct) -> exit 1 rules=[DIRECTION]
+     DIRECTION @proseit/frappe-sdk reaches @proseit/paep-foundation transitively, which is not allowed (Appendix B frappe-sdk -> foundation: No)
+     DIRECTION @proseit/paep-offline reaches @proseit/paep-foundation transitively, which is not allowed (Appendix B offline -> foundation: No)
+OK  P1b 3-step chain domain>analytics>enterprise>components... allowed endpoints (control) -> exit 0 rules=[]
+OK  P1c 3-step i18n>observability? i18n>platform>observability>... (i18n->platform->observability, platform->foundation) control -> exit 0 rules=[]
+OK  P2 chain via manifest deps only: offline pkg.json -> platform, platform pkg.json -> foundation -> exit 1 rules=[DIRECTION]
+     DIRECTION @proseit/paep-offline reaches @proseit/paep-foundation transitively, which is not allowed (Appendix B offline -> foundation: No)
+OK  P3 chain via #import: frappe-sdk #o -> @proseit/paep-offline; offline imports i18n -> exit 1 rules=[DIRECTION]
+     DIRECTION @proseit/frappe-sdk reaches @proseit/paep-i18n transitively, which is not allowed (Appendix B frappe-sdk -> i18n: No)
+OK  P3b chain via relative #import: frappe-sdk #o -> ../offline/src/index.ts; offline -> i18n -> exit 1 rules=[ENTRY_BYPASS,DIRECTION]
+     ENTRY_BYPASS @proseit/frappe-sdk imports "packages/offline/src/index.ts" inside @proseit/paep-offline; use its public entry point
+     DIRECTION @proseit/frappe-sdk reaches @proseit/paep-i18n transitively, which is not allowed (Appendix B frappe-sdk -> i18n: No)
+OK  P4 symlink with real path inside same package (components/src/alias -> ./lib) -> exit 1 rules=[CLASSIFICATION]
+     CLASSIFICATION @proseit/paep-components contains a symbolic link at packages/components/src/alias; projects contain no symlinks
+OK  P4b file symlink inside same package (src/y.ts -> lib/x.ts) -> exit 1 rules=[CLASSIFICATION]
+     CLASSIFICATION @proseit/paep-components contains a symbolic link at packages/components/src/y.ts; projects contain no symlinks
+OK  P4c symlink at workspace root to another package, reached by relative import from frappe-sdk -> exit 1 rules=[OUTSIDE_PROJECT]
+     OUTSIDE_PROJECT @proseit/frappe-sdk imports "../../../shortcut/index", outside every project
+UNEXPECTED P4d symlinked package dir: packages/i18n replaced? (packages/zzz -> packages/i18n) -> exit 0 rules=[]
+OK  P5 Optional domain-quality->enterprise + allowlisted domain-quality->domain-fiscal + domain-fiscal->analytics (Optional) -> exit 0 rules=[]
+OK  P5b allowlisted dq->df + df->enterprise(Optional) + dq ->? transitive dq->enterprise Optional (control) -> exit 0 rules=[]
+OK  P5c allowlisted dq->df, df->analytics(Opt), analytics->enterprise(Opt), enterprise imports domain-iot (upward) -> exit 1 rules=[DIRECTION]
+     DIRECTION @proseit/paep-enterprise (enterprise) -> @proseit/paep-domain-iot (domain) is not allowed (Appendix B: -)
+     DIRECTION @proseit/paep-analytics reaches @proseit/paep-domain-iot transitively, which is not allowed (Appendix B analytics -> domain: -)
+     DIRECTION @proseit/paep-domain-fiscal reaches @proseit/paep-domain-iot transitively, which is not allowed (both domain, and the sameCategoryAllowlist does not name the pair)
+     DIRECTION @proseit/paep-domain-quality reaches @proseit/paep-domain-iot transitively, which is not allowed (both domain, and the sameCategoryAllowlist does not name the pair)
+UNEXPECTED P6 npm-alias manifest dep in frappe-sdk: "i18n-x": "file:../i18n" + import i18n-x -> exit 0 rules=[]
+UNEXPECTED P6b npm alias "i18n-x": "npm:@proseit/paep-i18n@0.0.0" -> exit 0 rules=[]
+OK  P7 #import pattern with condition to relative path in other pkg via pattern -> exit 1 rules=[ENTRY_BYPASS,DIRECTION]
+     ENTRY_BYPASS @proseit/frappe-sdk imports "packages/i18n/src/index.ts" inside @proseit/paep-i18n; use its public entry point
+     DIRECTION @proseit/frappe-sdk (frappe-sdk) -> @proseit/paep-i18n (i18n) is not allowed (Appendix B: No)
+OK  P8 app -> frappe-sdk -> offline -> i18n (app reaches all; control) -> exit 0 rules=[]

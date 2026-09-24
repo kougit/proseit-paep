@@ -1,0 +1,33 @@
+# date: 2026-09-24T10:21:41Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 1c16f80539b17c9797a6b194fac63c1fbdb3f8a2
+# cwd: /tmp/paep-wp04-qa-580y7m/repo
+# cmd: npm run arch:check; echo; node tooling/architecture-boundaries/check-boundaries.mjs --json | head -40
+
+
+> @proseit/paep-workspace@0.0.0 arch:check
+> node tooling/architecture-boundaries/check-boundaries.mjs
+
+PAEP architecture check: PASS — 20 projects, 0 edges (0 optional), 0 cycles, 18 imports in 26 files, 0 violations
+
+{
+  "ok": true,
+  "summary": {
+    "projects": 20,
+    "libraries": 18,
+    "applications": 2,
+    "sourceFiles": 26,
+    "importsScanned": 18,
+    "edges": 0,
+    "optionalEdges": 0,
+    "cycles": 0,
+    "aliases": 18,
+    "aliasResolutions": 36,
+    "matrixCellsCompared": 144,
+    "contractsDiagnostics": 0,
+    "violations": 0,
+    "violationsByRule": {}
+  },
+  "violations": []
+}
+EXIT_CODE=0

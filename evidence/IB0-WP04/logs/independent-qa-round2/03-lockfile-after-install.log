@@ -1,0 +1,26 @@
+# date: 2026-09-24T10:41:07Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 7a8f4e918edbd56fa0b42d050363e109f733dab9
+# cwd: /tmp/paep-wp04-qa2-m9oPQt/repo
+# cmd: sha256sum package-lock.json; git diff --quiet ac6b786 -- package-lock.json && echo "lockfile identical to ac6b786 after npm ci"; echo "git status:"; git status --porcelain; npx ng version | tail -16
+
+be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69  package-lock.json
+lockfile identical to ac6b786 after npm ci
+git status:
+
+┌───────────────────────────┬───────────────────┬───────────────────┐
+│ Package                   │ Installed Version │ Requested Version │
+├───────────────────────────┼───────────────────┼───────────────────┤
+│ @angular/build            │ 22.1.8            │ 22.1.8            │
+│ @angular/cli              │ 22.1.8            │ 22.1.8            │
+│ @angular/common           │ 22.1.8            │ 22.1.8            │
+│ @angular/compiler         │ 22.1.8            │ 22.1.8            │
+│ @angular/compiler-cli     │ 22.1.8            │ 22.1.8            │
+│ @angular/core             │ 22.1.8            │ 22.1.8            │
+│ @angular/forms            │ 22.1.8            │ 22.1.8            │
+│ @angular/platform-browser │ 22.1.8            │ 22.1.8            │
+│ @angular/router           │ 22.1.8            │ 22.1.8            │
+│ rxjs                      │ 7.8.2             │ 7.8.2             │
+│ typescript                │ 6.0.3             │ 6.0.3             │
+└───────────────────────────┴───────────────────┴───────────────────┘
+EXIT_CODE=0

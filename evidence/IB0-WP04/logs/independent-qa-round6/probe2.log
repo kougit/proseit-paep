@@ -1,0 +1,40 @@
+== P6 project-root node_modules symlink, not imported (false-positive control)
+exit=0
+ok=true
+== P6b project-root node_modules symlink, bare import
+exit=0
+ok=true
+== P6c project-root node_modules symlink, relative import
+exit=0
+ok=true
+== P7 dir symlink in apps/reference-app/src
+exit=1
+ok=false
+  CLASSIFICATION | reference-app contains a symbolic link at apps/reference-app/src/evil; projects contain no symlinks
+== P7b apps/rogue-app is a symlink
+exit=0
+ok=true
+== P8 hard link in src
+exit=1
+ok=false
+  DIRECTION | @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -)
+== P9 package.json is a directory (R5-L1)
+exit=2
+NOJSON
+architecture check error: Error: EISDIR: illegal operation on a directory, read
+    at Object.readFileSync (node:fs:483:20)
+    at readJson (file://<scratch>/qa6/repo/tooling/architecture-boundaries/check-boundaries.mjs:52
+== P9b package.json directory + #x import
+exit=2
+NOJSON
+architecture check error: Error: EISDIR: illegal operation on a directory, read
+    at Object.readFileSync (node:fs:483:20)
+    at readJson (file://<scratch>/qa6/repo/tooling/architecture-boundaries/check-boundaries.mjs:52
+== P10 apps/reference-app/package.json is a directory + #x import (R5-L1)
+exit=1
+ok=false
+  OUTSIDE_PROJECT | reference-app imports "#x", which its package.json imports map does not resolve
+== P10b apps/reference-app/package.json directory, no # import
+exit=0
+ok=true
+?? node_modules

@@ -1,0 +1,41 @@
+# date: 2026-09-24T10:46:02Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 7a8f4e918edbd56fa0b42d050363e109f733dab9
+# cwd: /tmp/paep-wp04-qa2-m9oPQt/scratch
+# cmd: bash /tmp/claude-0/-home-claude-proseit-paep/baa00b7b-0d6c-562c-abda-fc0d973cf425/scratchpad/qa2/scripts/qa2-builds.sh
+
+=================== R1 (./src/lib/*): legitimate intra-package #lib/* subpath pattern, import '#lib/x' (expect arch:check 0)
+ M apps/reference-app/src/main.ts
+ M packages/components/package.json
+ M packages/components/src/index.ts
+?? packages/components/src/lib/
+VIOLATION OUTSIDE_PROJECT @proseit/paep-components imports "#lib/x", which its package.json imports map does not resolve [packages/components/src/index.ts]
+PAEP architecture check: FAIL — 20 projects, 1 edges (0 optional), 0 cycles, 20 imports in 27 files, 1 violations
+arch:check EXIT=1
+Application bundle generation failed. [2.631 seconds] - 2026-09-24T10:46:06.700Z
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "#lib/x"[0m
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '#lib/x' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+ng build EXIT=1
+=================== R1 (./src/lib/*.ts): legitimate intra-package #lib/* subpath pattern, import '#lib/x' (expect arch:check 0)
+ M apps/reference-app/src/main.ts
+ M packages/components/package.json
+ M packages/components/src/index.ts
+?? packages/components/src/lib/
+VIOLATION OUTSIDE_PROJECT @proseit/paep-components imports "#lib/x", which its package.json imports map does not resolve [packages/components/src/index.ts]
+PAEP architecture check: FAIL — 20 projects, 1 edges (0 optional), 0 cycles, 20 imports in 27 files, 1 violations
+arch:check EXIT=1
+Application bundle generation complete. [2.891 seconds] - 2026-09-24T10:46:11.306Z
+Output location: /tmp/paep-wp04-qa2-m9oPQt/scratch/dist/reference-app
+ng build EXIT=0
+=================== R2: #ent -> bare '@proseit/paep-enterprise' (checker misses; does the build accept it?)
+ M apps/reference-app/src/main.ts
+ M packages/components/package.json
+ M packages/components/src/index.ts
+ M packages/enterprise/src/index.ts
+PAEP architecture check: PASS — 20 projects, 1 edges (0 optional), 0 cycles, 20 imports in 26 files, 0 violations
+arch:check EXIT=0
+Application bundle generation complete. [3.198 seconds] - 2026-09-24T10:46:16.179Z
+Output location: /tmp/paep-wp04-qa2-m9oPQt/scratch/dist/reference-app
+ng build EXIT=0
+--- final status
+EXIT_CODE=0

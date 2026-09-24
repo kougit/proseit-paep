@@ -1,0 +1,23 @@
+# date: 2026-09-24T10:21:27Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 1c16f80539b17c9797a6b194fac63c1fbdb3f8a2
+# cwd: /tmp/paep-wp04-qa-580y7m/repo
+# cmd: npm run build:reference-app
+
+
+> @proseit/paep-workspace@0.0.0 build:reference-app
+> ng build reference-app --configuration production
+
+❯ Building...
+✔ Building...
+Initial chunk files | Names         |  Raw size | Estimated transfer size
+main-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB
+styles-5INURTSO.css | styles        |   0 bytes |                 0 bytes
+
+                    | Initial total | 190.65 kB |                52.09 kB
+
+Application bundle generation complete. [3.698 seconds] - 2026-09-24T10:21:31.811Z
+
+Output location: /tmp/paep-wp04-qa-580y7m/repo/dist/reference-app
+
+EXIT_CODE=0

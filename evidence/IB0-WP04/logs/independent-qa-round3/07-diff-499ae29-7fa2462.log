@@ -1,0 +1,70 @@
+# date: 2026-09-24T10:55:06Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 7fa24627a6ea7998a73dec5e713b12b64fe5274d
+# cwd: /tmp/paep-wp04-qa3-DMSYc4/repo
+# cmd: git diff --name-status 499ae29 7fa2462; echo "== outside evidence/IB0-WP04, work-packages/IB0-WP04, docs/:"; git diff --name-only 499ae29 7fa2462 | grep -vE "^(evidence/IB0-WP04/|work-packages/IB0-WP04/|docs/)" || echo none; echo "== code/config diff 499ae29..7fa2462 (expect empty):"; git diff --stat 499ae29 7fa2462 -- tooling apps packages angular.json package.json package-lock.json tsconfig.json tsconfig.base.json config .paep-control; echo "(end)"; echo "== full scope vs ac6b786 outside WORK_PACKAGE §4:"; git diff --name-only ac6b786 HEAD | grep -vE "^(tsconfig\.base\.json|tsconfig\.json|package\.json|tooling/architecture-boundaries/.*|tooling/verification/(verify|negative)-ib0-wp04\.mjs|docs/architecture/IB0-WP04-IMPLEMENTATION-PLAN\.md|docs/adr/ADR-REGISTER\.md|docs/provenance/PROVENANCE-REGISTER\.md|work-packages/IB0-WP04/.*|evidence/IB0-WP04/.*)$" || echo none; git diff --stat ac6b786 HEAD -- apps packages angular.json config package-lock.json .paep-control .gitignore PACK_MANIFEST.json CLAUDE.md; echo "(end)"
+
+M	evidence/IB0-WP04/README.md
+M	evidence/IB0-WP04/logs/arch-check-cli.log
+M	evidence/IB0-WP04/logs/build-reference-app.log
+M	evidence/IB0-WP04/logs/build-ui-lab.log
+M	evidence/IB0-WP04/logs/clean-clone-reproduction.log
+M	evidence/IB0-WP04/logs/controlled-source-integrity.log
+M	evidence/IB0-WP04/logs/ib0-wp01-verification.regression.json
+M	evidence/IB0-WP04/logs/ib0-wp02-verification.regression.json
+M	evidence/IB0-WP04/logs/ib0-wp03-verification.regression.json
+A	evidence/IB0-WP04/logs/independent-qa-round2/01-pre-clone-state.log
+A	evidence/IB0-WP04/logs/independent-qa-round2/02-npm-ci.log
+A	evidence/IB0-WP04/logs/independent-qa-round2/03-lockfile-after-install.log
+A	evidence/IB0-WP04/logs/independent-qa-round2/04-build-reference-app.log
+A	evidence/IB0-WP04/logs/independent-qa-round2/05-build-ui-lab.log
+A	evidence/IB0-WP04/logs/independent-qa-round2/06-arch-check.log
+A	evidence/IB0-WP04/logs/independent-qa-round2/07-diff-bbe3dee-7a8f4e9.log
+A	evidence/IB0-WP04/logs/independent-qa-round2/08-qa-mutations-82-part1.json
+A	evidence/IB0-WP04/logs/independent-qa-round2/08-qa-mutations-82-part1.log
+A	evidence/IB0-WP04/logs/independent-qa-round2/09-qa-mutations-82-part2.json
+A	evidence/IB0-WP04/logs/independent-qa-round2/09-qa-mutations-82-part2.log
+A	evidence/IB0-WP04/logs/independent-qa-round2/10-round2-probes.json
+A	evidence/IB0-WP04/logs/independent-qa-round2/10-round2-probes.log
+A	evidence/IB0-WP04/logs/independent-qa-round2/11-round2-build-probes.log
+A	evidence/IB0-WP04/logs/independent-qa-round2/12-round1-build-demos-rerun.log
+A	evidence/IB0-WP04/logs/independent-qa-round2/13-negative-ib0-wp04.log
+A	evidence/IB0-WP04/logs/independent-qa-round2/14-verify-ib0-wp04-full.log
+A	evidence/IB0-WP04/logs/independent-qa-round2/15-post-run-git-status.log
+A	evidence/IB0-WP04/logs/independent-qa-round2/16-controlled-source-integrity.log
+A	evidence/IB0-WP04/logs/independent-qa-round2/17-matrix-and-classification.log
+A	evidence/IB0-WP04/logs/independent-qa-round2/18-no-nx.log
+A	evidence/IB0-WP04/logs/independent-qa-round2/scripts/allowed_cycles.py
+A	evidence/IB0-WP04/logs/independent-qa-round2/scripts/effective-config.mjs
+A	evidence/IB0-WP04/logs/independent-qa-round2/scripts/integrity.py
+A	evidence/IB0-WP04/logs/independent-qa-round2/scripts/matrix_compare.py
+A	evidence/IB0-WP04/logs/independent-qa-round2/scripts/qa-builds.sh
+A	evidence/IB0-WP04/logs/independent-qa-round2/scripts/qa-mutations-2.mjs
+A	evidence/IB0-WP04/logs/independent-qa-round2/scripts/qa-mutations.mjs
+A	evidence/IB0-WP04/logs/independent-qa-round2/scripts/qa-round2-probes.mjs
+A	evidence/IB0-WP04/logs/independent-qa-round2/scripts/qa2-builds.sh
+A	evidence/IB0-WP04/logs/independent-qa-round2/scripts/runlog.sh
+M	evidence/IB0-WP04/logs/lockfile-unchanged.log
+M	evidence/IB0-WP04/logs/negative-architecture-tests.log
+M	evidence/IB0-WP04/logs/negative-tests.log
+M	evidence/IB0-WP04/logs/ng-version.log
+M	evidence/IB0-WP04/logs/npm-ci.log
+M	evidence/IB0-WP04/logs/post-run-git-status.log
+M	evidence/IB0-WP04/logs/pre-clone-state.log
+M	evidence/IB0-WP04/logs/scope-and-secret-scan.log
+M	evidence/IB0-WP04/logs/toolchain-versions.log
+M	evidence/IB0-WP04/logs/verify-ib0-wp04.log
+M	evidence/IB0-WP04/reports/ib0-wp04-verification.json
+A	evidence/IB0-WP04/reports/independent-qa-round2.md
+A	evidence/IB0-WP04/reports/independent-qa.md
+M	evidence/IB0-WP04/reports/negative-tests.json
+M	evidence/IB0-WP04/reports/technical-verification.md
+M	work-packages/IB0-WP04/ACCEPTANCE_REPORT.md
+== outside evidence/IB0-WP04, work-packages/IB0-WP04, docs/:
+none
+== code/config diff 499ae29..7fa2462 (expect empty):
+(end)
+== full scope vs ac6b786 outside WORK_PACKAGE §4:
+none
+(end)
+EXIT_CODE=0

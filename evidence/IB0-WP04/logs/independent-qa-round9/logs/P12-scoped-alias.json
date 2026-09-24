@@ -1,0 +1,34 @@
+{
+  "ok": false,
+  "summary": {
+    "projects": 20,
+    "libraries": 18,
+    "applications": 2,
+    "sourceFiles": 26,
+    "importsScanned": 19,
+    "edges": 1,
+    "optionalEdges": 0,
+    "cycles": 0,
+    "aliases": 18,
+    "aliasResolutions": 36,
+    "matrixCellsCompared": 144,
+    "contractsDiagnostics": 0,
+    "violations": 2,
+    "violationsByRule": {
+      "UNKNOWN_PACKAGE": 1,
+      "DIRECTION": 1
+    }
+  },
+  "violations": [
+    {
+      "rule": "UNKNOWN_PACKAGE",
+      "message": "@proseit/frappe-sdk imports \"@x/i18n\", which resolves to @proseit/paep-i18n under another name; import it by its own name",
+      "where": "packages/frappe-sdk/src/index.ts"
+    },
+    {
+      "rule": "DIRECTION",
+      "message": "@proseit/frappe-sdk (frappe-sdk) -> @proseit/paep-i18n (i18n) is not allowed (Appendix B: No)",
+      "where": "packages/frappe-sdk/src/index.ts"
+    }
+  ]
+}

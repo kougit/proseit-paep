@@ -1,0 +1,12 @@
+# date: 2026-09-24T10:54:50Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 7fa24627a6ea7998a73dec5e713b12b64fe5274d
+# cwd: /tmp/paep-wp04-qa3-DMSYc4/repo
+# cmd: git status --porcelain; for d in node_modules dist .angular; do test -e $d && echo "$d present" || echo "no $d"; done; git diff --quiet ac6b786 HEAD -- package-lock.json && echo "lockfile identical to ac6b786"; sha256sum package-lock.json
+
+no node_modules
+no dist
+no .angular
+lockfile identical to ac6b786
+be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69  package-lock.json
+EXIT_CODE=0

@@ -1,0 +1,53 @@
+OK A01 allowlist names the same pair twice: exit 1 (FAIL) rules=[MODEL]
+    MODEL: sameCategoryAllowlist entry @proseit/paep-domain-quality -> @proseit/paep-domain-fiscal is duplicated
+OK A02 self edge in allowlist: exit 1 (FAIL) rules=[MODEL]
+    MODEL: sameCategoryAllowlist entry @proseit/paep-domain-quality -> @proseit/paep-domain-quality is a self edge
+OK A03 unknown project names in allowlist: exit 1 (FAIL) rules=[MODEL]
+    MODEL: sameCategoryAllowlist entry @proseit/paep-domain-nope -> @proseit/paep-domain-fiscal names an unknown project
+OK A03b name with trailing space: exit 1 (FAIL) rules=[MODEL,DIRECTION]
+    MODEL: sameCategoryAllowlist entry @proseit/paep-domain-quality  -> @proseit/paep-domain-fiscal names an unknown project
+    DIRECTION: @proseit/paep-domain-quality (domain) -> @proseit/paep-domain-fiscal (domain) is not allowed (Appendix B: - (same category, not allowlisted))
+OK A03c entry is null / edges not array: exit 1 (FAIL) rules=[MODEL,DIRECTION]
+    MODEL: sameCategoryAllowlist.edges is missing or not an array
+    DIRECTION: @proseit/paep-domain-quality (domain) -> @proseit/paep-domain-fiscal (domain) is not allowed (Appendix B: - (same category, not allowlisted))
+OK A03d allowlist removed entirely: exit 1 (FAIL) rules=[MODEL]
+    MODEL: sameCategoryAllowlist.edges is missing or not an array
+OK A03e approval is whitespace: exit 1 (FAIL) rules=[MODEL]
+    MODEL: sameCategoryAllowlist entry @proseit/paep-domain-quality -> @proseit/paep-domain-fiscal needs a rationale and an approval reference
+OK A04 chain via other category back to same: domain-quality -> enterprise(Optional) -> domain-fiscal: exit 1 (FAIL) rules=[DIRECTION]
+    DIRECTION: @proseit/paep-enterprise (enterprise) -> @proseit/paep-domain-fiscal (domain) is not allowed (Appendix B: -)
+    DIRECTION: @proseit/paep-domain-quality reaches @proseit/paep-domain-fiscal (both domain) transitively, and the sameCategoryAllowlist does not name the pair
+OK A04b same chain with domain-quality->domain-fiscal NOT listed but enterprise edge only transitive: exit 1 (FAIL) rules=[DIRECTION]
+    DIRECTION: @proseit/paep-enterprise (enterprise) -> @proseit/paep-domain-fiscal (domain) is not allowed (Appendix B: -)
+    DIRECTION: @proseit/paep-domain-quality reaches @proseit/paep-domain-fiscal (both domain) transitively, and the sameCategoryAllowlist does not name the pair
+OK A04c chain listed pairs A->B, B->C, and A->C listed: passes (expected): exit 0 (PASS) rules=[]
+
+OK A04d reversed direction of listed pair: exit 1 (FAIL) rules=[DIRECTION]
+    DIRECTION: @proseit/paep-domain-fiscal (domain) -> @proseit/paep-domain-quality (domain) is not allowed (Appendix B: - (same category, not allowlisted))
+OK A05 app -> app unlisted, relative: exit 1 (FAIL) rules=[ENTRY_BYPASS,DIRECTION]
+    ENTRY_BYPASS: reference-app imports "../../../ui-lab/src/app/app" inside ui-lab; use its public entry point
+    DIRECTION: reference-app (app) -> ui-lab (app) is not allowed (Appendix B: - (same category, not allowlisted))
+OK A05b app -> app allowlisted, relative: exit 1 (FAIL) rules=[ENTRY_BYPASS]
+    ENTRY_BYPASS: reference-app imports "../../../ui-lab/src/app/app" inside ui-lab; use its public entry point
+OK A05c app -> app allowlisted, rooted import: exit 1 (FAIL) rules=[ENTRY_BYPASS]
+    ENTRY_BYPASS: reference-app imports "apps/ui-lab/src/app/app" inside ui-lab; use its public entry point
+INFO A05d app allowlist entry alone (no edge): exit 0 (PASS) rules=[]
+
+OK A06 allowlisted edge via relative path into other package: exit 1 (FAIL) rules=[ENTRY_BYPASS]
+    ENTRY_BYPASS: @proseit/paep-domain-quality imports "../../domain-fiscal/src/index" inside @proseit/paep-domain-fiscal; use its public entry point
+INFO A07 allowlisted edge via manifest dependency: exit 0 (PASS) rules=[]
+
+OK A07b unlisted edge via manifest peerDependency: exit 1 (FAIL) rules=[DIRECTION]
+    DIRECTION: @proseit/paep-domain-quality (domain) -> @proseit/paep-domain-fiscal (domain) is not allowed (Appendix B: - (same category, not allowlisted))
+OK A08 allowlisted edge via # import to relative file in other package: exit 1 (FAIL) rules=[ENTRY_BYPASS]
+    ENTRY_BYPASS: @proseit/paep-domain-quality imports "packages/domain-fiscal/src/index.ts" inside @proseit/paep-domain-fiscal; use its public entry point
+INFO A08b allowlisted edge via # import to bare public name: exit 0 (PASS) rules=[]
+
+OK A08c unlisted edge via # import to bare name: exit 1 (FAIL) rules=[DIRECTION]
+    DIRECTION: @proseit/paep-domain-quality (domain) -> @proseit/paep-domain-fiscal (domain) is not allowed (Appendix B: - (same category, not allowlisted))
+OK A09 allowlisted edge + target forbidden downstream (domain-fiscal -> frappe-sdk No): exit 1 (FAIL) rules=[DIRECTION]
+    DIRECTION: @proseit/paep-domain-fiscal (domain) -> @proseit/frappe-sdk (frappe-sdk) is not allowed (Appendix B: No)
+OK A10 allowlisted edge by /// reference path: exit 1 (FAIL) rules=[ENTRY_BYPASS]
+    ENTRY_BYPASS: @proseit/paep-domain-quality imports "../../domain-fiscal/src/index.ts" inside @proseit/paep-domain-fiscal; use its public entry point
+OK A11 duplicate sameCategoryAllowlist key in raw JSON (last wins): exit 1 (FAIL) rules=[DIRECTION]
+    DIRECTION: @proseit/paep-domain-quality (domain) -> @proseit/paep-domain-fiscal (domain) is not allowed (Appendix B: - (same category, not allowlisted))

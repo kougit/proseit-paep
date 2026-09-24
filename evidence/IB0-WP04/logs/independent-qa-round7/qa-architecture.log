@@ -1,0 +1,6 @@
+
+> @proseit/paep-workspace@0.0.0 qa:architecture
+> node tooling/architecture-boundaries/check-boundaries.mjs
+
+PAEP architecture check: PASS — 20 projects, 0 edges (0 optional), 0 cycles, 18 imports in 26 files, 0 violations
+EXIT=0

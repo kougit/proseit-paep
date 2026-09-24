@@ -1,0 +1,38 @@
+# date: 2026-09-24T10:41:17Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 7a8f4e918edbd56fa0b42d050363e109f733dab9
+# cwd: /tmp/paep-wp04-qa2-m9oPQt/repo
+# cmd: git diff --name-status bbe3dee 7a8f4e9; echo "== paths outside evidence/IB0-WP04, work-packages/IB0-WP04, docs/:"; git diff --name-only bbe3dee 7a8f4e9 | grep -vE "^(evidence/IB0-WP04/|work-packages/IB0-WP04/|docs/)" || echo none; echo "== full scope vs ac6b786 outside WORK_PACKAGE §4:"; git diff --name-only ac6b786 HEAD | grep -vE "^(tsconfig\.base\.json|tsconfig\.json|package\.json|tooling/architecture-boundaries/.*|tooling/verification/(verify|negative)-ib0-wp04\.mjs|docs/architecture/IB0-WP04-IMPLEMENTATION-PLAN\.md|docs/adr/ADR-REGISTER\.md|docs/provenance/PROVENANCE-REGISTER\.md|work-packages/IB0-WP04/.*|evidence/IB0-WP04/.*)$" || echo none; git diff --stat ac6b786 HEAD -- apps packages angular.json config package-lock.json .paep-control .gitignore PACK_MANIFEST.json CLAUDE.md; echo "(end)"
+
+M	evidence/IB0-WP04/README.md
+M	evidence/IB0-WP04/logs/arch-check-cli.log
+M	evidence/IB0-WP04/logs/build-reference-app.log
+M	evidence/IB0-WP04/logs/build-ui-lab.log
+M	evidence/IB0-WP04/logs/clean-clone-reproduction.log
+M	evidence/IB0-WP04/logs/controlled-source-integrity.log
+M	evidence/IB0-WP04/logs/ib0-wp01-verification.regression.json
+M	evidence/IB0-WP04/logs/ib0-wp02-verification.regression.json
+M	evidence/IB0-WP04/logs/ib0-wp03-verification.regression.json
+M	evidence/IB0-WP04/logs/lockfile-unchanged.log
+M	evidence/IB0-WP04/logs/negative-architecture-tests.log
+M	evidence/IB0-WP04/logs/negative-tests.log
+M	evidence/IB0-WP04/logs/ng-version.log
+M	evidence/IB0-WP04/logs/npm-ci.log
+M	evidence/IB0-WP04/logs/post-run-git-status.log
+M	evidence/IB0-WP04/logs/pre-clone-state.log
+M	evidence/IB0-WP04/logs/scope-and-secret-scan.log
+M	evidence/IB0-WP04/logs/toolchain-versions.log
+M	evidence/IB0-WP04/logs/verify-ib0-wp02-regression.log
+M	evidence/IB0-WP04/logs/verify-ib0-wp03-regression.log
+M	evidence/IB0-WP04/logs/verify-ib0-wp04.log
+M	evidence/IB0-WP04/reports/ib0-wp04-verification.json
+M	evidence/IB0-WP04/reports/negative-tests.json
+M	evidence/IB0-WP04/reports/technical-verification.md
+M	work-packages/IB0-WP04/ACCEPTANCE_REPORT.md
+M	work-packages/IB0-WP04/work-package.json
+== paths outside evidence/IB0-WP04, work-packages/IB0-WP04, docs/:
+none
+== full scope vs ac6b786 outside WORK_PACKAGE §4:
+none
+(end)
+EXIT_CODE=0

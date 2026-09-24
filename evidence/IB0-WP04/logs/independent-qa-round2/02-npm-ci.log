@@ -1,0 +1,14 @@
+# date: 2026-09-24T10:41:01Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 7a8f4e918edbd56fa0b42d050363e109f733dab9
+# cwd: /tmp/paep-wp04-qa2-m9oPQt/repo
+# cmd: npm ci
+
+
+added 324 packages, and audited 343 packages in 6s
+
+99 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+EXIT_CODE=0

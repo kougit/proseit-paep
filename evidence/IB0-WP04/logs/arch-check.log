@@ -1,0 +1,3 @@
+$ npm run arch:check  (node tooling/architecture-boundaries/check-boundaries.mjs)
+PAEP architecture check: PASS — 20 projects, 0 edges (0 optional), 0 cycles, 18 imports in 26 files, 0 violations
+EXIT_CODE=0

@@ -1,0 +1,127 @@
+{
+  "workPackage": "IB0-WP03",
+  "generatedAt": "2026-09-24T12:38:25.515Z",
+  "mode": "full",
+  "commit": "d2f142c90c6cdbcc03164c76f93660acfe43c1ce",
+  "baseline": "de13629b302e1bbaccc59bb0e93f69c7fed9cdcb",
+  "trackedChangesAtRun": [
+    "M evidence/IB0-WP03/logs/ib0-wp01-verification.regression.json",
+    " M evidence/IB0-WP03/logs/ib0-wp02-verification.regression.json",
+    " M evidence/IB0-WP03/logs/verify-ib0-wp02-regression.log"
+  ],
+  "node": "24.21.0",
+  "npm": "11.19.0",
+  "typescript": "6.0.3",
+  "platform": "linux-x64",
+  "result": "FAIL",
+  "checks": [
+    {
+      "id": "V01",
+      "name": "Root tsconfig.json compilerOptions literally sets \"strict\": true and \"noImplicitAny\": true",
+      "pass": true,
+      "details": "strict=true; noImplicitAny=true"
+    },
+    {
+      "id": "V02",
+      "name": "Root tsconfig.json angularCompilerOptions literally sets \"strictTemplates\": true",
+      "pass": true,
+      "details": "strictTemplates=true"
+    },
+    {
+      "id": "V03",
+      "name": "Every angular.json build tsConfig resolves (extends included) to strict, noImplicitAny and strictTemplates true, with no strict option off",
+      "pass": true,
+      "details": "reference-app (apps/reference-app/tsconfig.app.json): strict=true noImplicitAny=true strictTemplates=true; ui-lab (apps/ui-lab/tsconfig.app.json): strict=true noImplicitAny=true strictTemplates=true"
+    },
+    {
+      "id": "V04",
+      "name": "No tsconfig*.json in the repository turns a strict-family or template strict option off, or disables or suppresses type checking",
+      "pass": true,
+      "details": "4 tsconfig files: apps/reference-app/tsconfig.app.json, apps/ui-lab/tsconfig.app.json, tsconfig.base.json, tsconfig.json"
+    },
+    {
+      "id": "V05",
+      "name": "Root tsconfig holds exactly the baseline options with their values plus the WP03 keys, and the app tsconfig files are unchanged",
+      "pass": false,
+      "details": "top-level extends added; extends changed"
+    },
+    {
+      "id": "V06",
+      "name": "No build target disables AOT, the application builder is kept, and angular.json is unchanged",
+      "pass": true,
+      "details": "2 build targets AOT"
+    },
+    {
+      "id": "V07",
+      "name": "No @ts-ignore, @ts-nocheck, @ts-expect-error or $any( in apps/** or packages/** source",
+      "pass": true,
+      "details": "30 files scanned; findings: none"
+    },
+    {
+      "id": "V08",
+      "name": "compilerOptions.paths maps each workspace package name to exactly its src/index.ts, with no wildcard or deep alias",
+      "pass": false,
+      "details": "@proseit/paep-analytics: no alias; @proseit/paep-components: no alias; @proseit/paep-contracts: no alias; @proseit/paep-domain-ai: no alias; @proseit/paep-domain-commerce: no alias; @proseit/paep-domain-construction: no alias; @proseit/paep-domain-fiscal: no alias; @proseit/paep-domain-iot: no alias; @proseit/paep-domain-maintenance: no alias; @proseit/paep-domain-manufacturing: no alias; @proseit/paep-domain-quality: no alias; @proseit/paep-enterprise: no alias; @proseit/paep-foundation: no alias; @proseit/frappe-sdk: no alias; @proseit/paep-i18n: no alias; @proseit/paep-observability: no alias; @proseit/paep-offline: no alias; @proseit/paep-platform: no alias"
+    },
+    {
+      "id": "V09",
+      "name": "Every package has a placeholder public entry point that its alias resolves to, and all entry points compile strictly with 0 diagnostics",
+      "pass": true,
+      "details": "18 entry points; strict=true; diagnostics=0"
+    },
+    {
+      "id": "V10",
+      "name": "package-lock.json is byte-identical to the baseline and package.json differs only by the two WP03 scripts",
+      "pass": false,
+      "details": "package.json scripts differ from baseline + the two WP03 scripts"
+    },
+    {
+      "id": "V11",
+      "name": "No Nx: no nx/@nx/@nrwl dependency or lockfile entry, and no nx.json or project.json",
+      "pass": true,
+      "details": "none"
+    },
+    {
+      "id": "V12",
+      "name": "No WP04/WP05/IB1+ artefacts, apps unchanged, and every changed path is within WORK_PACKAGE §4",
+      "pass": false,
+      "details": "out-of-scope files: tsconfig.base.json; boundary tooling (IB0-WP04): tooling/architecture-boundaries/architecture-model.json, tooling/architecture-boundaries/check-boundaries.mjs; changed outside WORK_PACKAGE §4: docs/architecture/IB0-WP04-IMPLEMENTATION-PLAN.md, docs/provenance/PROVENANCE-REGISTER.md, evidence/IB0-WP04/README.md, evidence/IB0-WP04/logs/arch-check-cli.log, evidence/IB0-WP04/logs/arch-check.log, evidence/IB0-WP04/logs/build-reference-app.log, evidence/IB0-WP04/logs/build-ui-lab.log, evidence/IB0-WP04/logs/clean-clone-reproduction.log, evidence/IB0-WP04/logs/controlled-source-integrity.log, evidence/IB0-WP04/logs/ib0-wp01-verification.regression.json, evidence/IB0-WP04/logs/ib0-wp02-verification.regression.json, evidence/IB0-WP04/logs/ib0-wp03-verification.regression.json, evidence/IB0-WP04/logs/independent-qa-round1/01-pre-clone-state.log, evidence/IB0-WP04/logs/independent-qa-round1/02-npm-ci.log, evidence/IB0-WP04/logs/independent-qa-round1/03-lockfile-after-install.log, evidence/IB0-WP04/logs/independent-qa-round1/04-build-reference-app.log, evidence/IB0-WP04/logs/independent-qa-round1/05-build-ui-lab.log, evidence/IB0-WP04/logs/independent-qa-round1/06-arch-check.log, evidence/IB0-WP04/logs/independent-qa-round1/07-matrix-and-classification.log, evidence/IB0-WP04/logs/independent-qa-round1/08-tsconfig-effective.log, evidence/IB0-WP04/logs/independent-qa-round1/08a-showconfig-reference-app.json, evidence/IB0-WP04/logs/independent-qa-round1/08b-showconfig-ui-lab.json, evidence/IB0-WP04/logs/independent-qa-round1/09-qa-mutations.json, evidence/IB0-WP04/logs/independent-qa-round1/09-qa-mutations.log, evidence/IB0-WP04/logs/independent-qa-round1/10-qa-mutations-supplement.json, evidence/IB0-WP04/logs/independent-qa-round1/10-qa-mutations-supplement.log, evidence/IB0-WP04/logs/independent-qa-round1/11-qa-build-demonstrations.log, evidence/IB0-WP04/logs/independent-qa-round1/12-allowed-cycle-enumeration.log, evidence/IB0-WP04/logs/independent-qa-round1/13-negative-ib0-wp04.log, evidence/IB0-WP04/logs/independent-qa-round1/14-verify-ib0-wp04-full.log, evidence/IB0-WP04/logs/independent-qa-round1/15-post-run-git-status.log, evidence/IB0-WP04/logs/independent-qa-round1/16-controlled-source-integrity.log, evidence/IB0-WP04/logs/independent-qa-round1/17-no-nx.log, evidence/IB0-WP04/logs/independent-qa-round1/18-scope-diff.log, evidence/IB0-WP04/logs/independent-qa-round1/19-false-positive-rooted-specifier.log, evidence/IB0-WP04/logs/independent-qa-round1/scripts/allowed_cycles.py, evidence/IB0-WP04/logs/independent-qa-round1/scripts/effective-config.mjs, evidence/IB0-WP04/logs/independent-qa-round1/scripts/integrity.py, evidence/IB0-WP04/logs/independent-qa-round1/scripts/matrix_compare.py, evidence/IB0-WP04/logs/independent-qa-round1/scripts/qa-builds.sh, evidence/IB0-WP04/logs/independent-qa-round1/scripts/qa-mutations-2.mjs, evidence/IB0-WP04/logs/independent-qa-round1/scripts/qa-mutations.mjs, evidence/IB0-WP04/logs/independent-qa-round1/scripts/runlog.sh, evidence/IB0-WP04/logs/independent-qa-round2/01-pre-clone-state.log, evidence/IB0-WP04/logs/independent-qa-round2/02-npm-ci.log, evidence/IB0-WP04/logs/independent-qa-round2/03-lockfile-after-install.log, evidence/IB0-WP04/logs/independent-qa-round2/04-build-reference-app.log, evidence/IB0-WP04/logs/independent-qa-round2/05-build-ui-lab.log, evidence/IB0-WP04/logs/independent-qa-round2/06-arch-check.log, evidence/IB0-WP04/logs/independent-qa-round2/07-diff-bbe3dee-7a8f4e9.log, evidence/IB0-WP04/logs/independent-qa-round2/08-qa-mutations-82-part1.json, evidence/IB0-WP04/logs/independent-qa-round2/08-qa-mutations-82-part1.log, evidence/IB0-WP04/logs/independent-qa-round2/09-qa-mutations-82-part2.json, evidence/IB0-WP04/logs/independent-qa-round2/09-qa-mutations-82-part2.log, evidence/IB0-WP04/logs/independent-qa-round2/10-round2-probes.json, evidence/IB0-WP04/logs/independent-qa-round2/10-round2-probes.log, evidence/IB0-WP04/logs/independent-qa-round2/11-round2-build-probes.log, evidence/IB0-WP04/logs/independent-qa-round2/12-round1-build-demos-rerun.log, evidence/IB0-WP04/logs/independent-qa-round2/13-negative-ib0-wp04.log, evidence/IB0-WP04/logs/independent-qa-round2/14-verify-ib0-wp04-full.log, evidence/IB0-WP04/logs/independent-qa-round2/15-post-run-git-status.log, evidence/IB0-WP04/logs/independent-qa-round2/16-controlled-source-integrity.log, evidence/IB0-WP04/logs/independent-qa-round2/17-matrix-and-classification.log, evidence/IB0-WP04/logs/independent-qa-round2/18-no-nx.log, evidence/IB0-WP04/logs/independent-qa-round2/scripts/allowed_cycles.py, evidence/IB0-WP04/logs/independent-qa-round2/scripts/effective-config.mjs, evidence/IB0-WP04/logs/independent-qa-round2/scripts/integrity.py, evidence/IB0-WP04/logs/independent-qa-round2/scripts/matrix_compare.py, evidence/IB0-WP04/logs/independent-qa-round2/scripts/qa-builds.sh, evidence/IB0-WP04/logs/independent-qa-round2/scripts/qa-mutations-2.mjs, evidence/IB0-WP04/logs/independent-qa-round2/scripts/qa-mutations.mjs, evidence/IB0-WP04/logs/independent-qa-round2/scripts/qa-round2-probes.mjs, evidence/IB0-WP04/logs/independent-qa-round2/scripts/qa2-builds.sh, evidence/IB0-WP04/logs/independent-qa-round2/scripts/runlog.sh, evidence/IB0-WP04/logs/independent-qa-round3/01-pre-clone-state.log, evidence/IB0-WP04/logs/independent-qa-round3/02-npm-ci.log, evidence/IB0-WP04/logs/independent-qa-round3/03-lockfile-after-install.log, evidence/IB0-WP04/logs/independent-qa-round3/04-build-reference-app.log, evidence/IB0-WP04/logs/independent-qa-round3/05-build-ui-lab.log, evidence/IB0-WP04/logs/independent-qa-round3/06-arch-check.log, evidence/IB0-WP04/logs/independent-qa-round3/07-diff-499ae29-7fa2462.log, evidence/IB0-WP04/logs/independent-qa-round3/08-qa-mutations-82-part1.json, evidence/IB0-WP04/logs/independent-qa-round3/08-qa-mutations-82-part1.log, evidence/IB0-WP04/logs/independent-qa-round3/09-qa-mutations-82-part2.json, evidence/IB0-WP04/logs/independent-qa-round3/09-qa-mutations-82-part2.log, evidence/IB0-WP04/logs/independent-qa-round3/10-round2-probes.json, evidence/IB0-WP04/logs/independent-qa-round3/10-round2-probes.log, evidence/IB0-WP04/logs/independent-qa-round3/11-imports-map-variants.json, evidence/IB0-WP04/logs/independent-qa-round3/11-imports-map-variants.log, evidence/IB0-WP04/logs/independent-qa-round3/12-imports-build-probes.log, evidence/IB0-WP04/logs/independent-qa-round3/13-negative-ib0-wp04.log, evidence/IB0-WP04/logs/independent-qa-round3/14-verify-ib0-wp04-full.log, evidence/IB0-WP04/logs/independent-qa-round3/15-post-run-git-status.log, evidence/IB0-WP04/logs/independent-qa-round3/16-controlled-source-integrity.log, evidence/IB0-WP04/logs/independent-qa-round3/17-evidence-consistency.log, evidence/IB0-WP04/logs/independent-qa-round3/scripts/allowed_cycles.py, evidence/IB0-WP04/logs/independent-qa-round3/scripts/effective-config.mjs, evidence/IB0-WP04/logs/independent-qa-round3/scripts/evidence-check.sh, evidence/IB0-WP04/logs/independent-qa-round3/scripts/integrity.py, evidence/IB0-WP04/logs/independent-qa-round3/scripts/matrix_compare.py, evidence/IB0-WP04/logs/independent-qa-round3/scripts/qa-builds.sh, evidence/IB0-WP04/logs/independent-qa-round3/scripts/qa-mutations-2.mjs, evidence/IB0-WP04/logs/independent-qa-round3/scripts/qa-mutations.mjs, evidence/IB0-WP04/logs/independent-qa-round3/scripts/qa-round2-probes.mjs, evidence/IB0-WP04/logs/independent-qa-round3/scripts/qa-round3-imports-variants.mjs, evidence/IB0-WP04/logs/independent-qa-round3/scripts/qa2-builds.sh, evidence/IB0-WP04/logs/independent-qa-round3/scripts/qa3-builds.sh, evidence/IB0-WP04/logs/independent-qa-round3/scripts/runlog.sh, evidence/IB0-WP04/logs/independent-qa-round4/cases.json, evidence/IB0-WP04/logs/independent-qa-round4/run.mjs, evidence/IB0-WP04/logs/independent-qa-round5/neg-run.log, evidence/IB0-WP04/logs/independent-qa-round5/probe.log, evidence/IB0-WP04/logs/independent-qa-round5/probe.mjs, evidence/IB0-WP04/logs/independent-qa-round6/neg-run.log, evidence/IB0-WP04/logs/independent-qa-round6/probe.log, evidence/IB0-WP04/logs/independent-qa-round6/probe.sh, evidence/IB0-WP04/logs/independent-qa-round6/probe2.log, evidence/IB0-WP04/logs/independent-qa-round6/probe2.sh, evidence/IB0-WP04/logs/independent-qa-round6/probe3.log, evidence/IB0-WP04/logs/independent-qa-round6/probe3.sh, evidence/IB0-WP04/logs/independent-qa-round7/probe-allowlist.log, evidence/IB0-WP04/logs/independent-qa-round7/probe-allowlist.mjs, evidence/IB0-WP04/logs/independent-qa-round7/probe-strict.log, evidence/IB0-WP04/logs/independent-qa-round7/probe-strict.mjs, evidence/IB0-WP04/logs/independent-qa-round7/qa-architecture-negative.log, evidence/IB0-WP04/logs/independent-qa-round7/qa-architecture.log, evidence/IB0-WP04/logs/independent-qa-round7/qa-negative.log, evidence/IB0-WP04/logs/independent-qa-round8/closure.log, evidence/IB0-WP04/logs/independent-qa-round8/closure.mjs, evidence/IB0-WP04/logs/independent-qa-round8/effopts.mjs, evidence/IB0-WP04/logs/independent-qa-round8/neg.log, evidence/IB0-WP04/logs/independent-qa-round8/probe.log, evidence/IB0-WP04/logs/independent-qa-round8/probe.mjs, evidence/IB0-WP04/logs/lockfile-unchanged.log, evidence/IB0-WP04/logs/negative-architecture-tests.log, evidence/IB0-WP04/logs/negative-tests.log, evidence/IB0-WP04/logs/ng-version.log, evidence/IB0-WP04/logs/npm-ci.log, evidence/IB0-WP04/logs/post-run-git-status.log, evidence/IB0-WP04/logs/pre-clone-state.log, evidence/IB0-WP04/logs/scope-and-secret-scan.log, evidence/IB0-WP04/logs/toolchain-versions.log, evidence/IB0-WP04/logs/verify-ib0-wp01-regression.log, evidence/IB0-WP04/logs/verify-ib0-wp02-regression.log, evidence/IB0-WP04/logs/verify-ib0-wp03-regression.log, evidence/IB0-WP04/logs/verify-ib0-wp04.log, evidence/IB0-WP04/reports/acceptance-readiness.md, evidence/IB0-WP04/reports/architecture-boundaries.md, evidence/IB0-WP04/reports/definition-audit.md, evidence/IB0-WP04/reports/ib0-wp04-verification.json, evidence/IB0-WP04/reports/independent-qa-round1.md, evidence/IB0-WP04/reports/independent-qa-round2.md, evidence/IB0-WP04/reports/independent-qa-round3.md, evidence/IB0-WP04/reports/independent-qa-round4.md, evidence/IB0-WP04/reports/independent-qa-round5.md, evidence/IB0-WP04/reports/independent-qa-round6.md, evidence/IB0-WP04/reports/independent-qa-round7.md, evidence/IB0-WP04/reports/independent-qa-round8.md, evidence/IB0-WP04/reports/independent-qa.md, evidence/IB0-WP04/reports/negative-tests.json, evidence/IB0-WP04/reports/project-graph.json, evidence/IB0-WP04/reports/technical-verification.md, tooling/architecture-boundaries/README.md, tooling/architecture-boundaries/architecture-model.json, tooling/architecture-boundaries/check-boundaries.mjs, tooling/verification/negative-ib0-wp04.mjs, tooling/verification/verify-ib0-wp04.mjs, tsconfig.base.json, work-packages/IB0-WP04/ACCEPTANCE.md, work-packages/IB0-WP04/ACCEPTANCE_REPORT.md, work-packages/IB0-WP04/QUALITY_GATE_RUNBOOK.md, work-packages/IB0-WP04/TRACEABILITY.csv, work-packages/IB0-WP04/WORK_PACKAGE.md, work-packages/IB0-WP04/work-package.json"
+    },
+    {
+      "id": "V13",
+      "name": "Controlled sources match PACK_MANIFEST.json; .paep-control, .gitignore, PACK_MANIFEST.json and CLAUDE.md unchanged",
+      "pass": true,
+      "details": "13/13 files match sha256 and size"
+    },
+    {
+      "id": "V14",
+      "name": "No credential or secret signatures in files added or modified since the baseline",
+      "pass": true,
+      "details": "291 files scanned; findings: none"
+    },
+    {
+      "id": "V15",
+      "name": "build:reference-app production build passes",
+      "pass": true,
+      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.09 kB\n\nApplication bundle generation complete. [1.723 seconds] - 2026-09-24T12:38:10.084Z\n\nOutput location: /tmp/paep-wp04-clone-crOZ/repo/dist/reference-app"
+    },
+    {
+      "id": "V16",
+      "name": "build:ui-lab production build passes",
+      "pass": true,
+      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-RPR4FBCF.js    | main          | 190.65 kB |                52.16 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.16 kB\n\nApplication bundle generation complete. [1.820 seconds] - 2026-09-24T12:38:12.541Z\n\nOutput location: /tmp/paep-wp04-clone-crOZ/repo/dist/ui-lab"
+    },
+    {
+      "id": "V17",
+      "name": "IB0-WP02 regression: every WP02 check passes except V17, whose only finding is WP03-permitted paths; WP02 records unchanged",
+      "pass": false,
+      "details": "V17 finding outside the bounded exception: out-of-scope file present: tsconfig.base.json; protected paths changed: packages/analytics/src/index.ts, packages/components/src/index.ts, packages/contracts/src/index.ts, packages/domain-ai/src/index.ts, packages/domain-commerce/src/index.ts, packages/domain-construction/src/index.ts, packages/domain-fiscal/src/index.ts, packages/domain-iot/src/index.ts, packages/domain-maintenance/src/index.ts, packages/domain-manufacturing/src/index.ts, packages/domain-quality/src/index.ts, packages/enterprise/src/index.ts, packages/foundation/src/index.ts, packages/frappe-sdk/src/index.ts, packages/i18n/src/index.ts, packages/observability/src/index.ts, packages/offline/src/index.ts, packages/platform/src/index.ts, tsconfig.json"
+    },
+    {
+      "id": "V18",
+      "name": "IB0-WP01 regression passes and WP01 records are unchanged",
+      "pass": true,
+      "details": "WP01 15/15 pass; restored: evidence/IB0-WP01/reports/ib0-wp01-verification.json"
+    }
+  ]
+}

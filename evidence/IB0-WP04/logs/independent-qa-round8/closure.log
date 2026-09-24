@@ -1,0 +1,15 @@
+cols contracts,foundation,platform,i18n,observability,components,offline,frappe-sdk,enterprise,analytics,domain-*,apps/*
+Optional cells: 19 platform->foundation platform->observability i18n->foundation i18n->platform i18n->observability observability->platform components->contracts components->platform components->observability offline->i18n frappe-sdk->platform frappe-sdk->offline analytics->offline analytics->enterprise domain-*->platform domain-*->observability domain-*->offline domain-*->enterprise domain-*->analytics
+forbidden reachable pairs: 4
+  observability->foundation [No] via observability>platform>foundation
+  offline->foundation [No] via offline>platform>foundation
+  frappe-sdk->foundation [No] via frappe-sdk>platform>foundation
+  frappe-sdk->i18n [No] via frappe-sdk>offline>i18n
+2-step chains: 5
+  observability>platform>foundation [No]
+  offline>platform>foundation [No]
+  offline>i18n>foundation [No]
+  frappe-sdk>platform>foundation [No]
+  frappe-sdk>offline>i18n [No]
+cycle-capable: platform
+cycle-capable: observability

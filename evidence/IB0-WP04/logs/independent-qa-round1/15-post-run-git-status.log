@@ -1,0 +1,27 @@
+# date: 2026-09-24T10:29:35Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 1c16f80539b17c9797a6b194fac63c1fbdb3f8a2
+# cwd: /tmp/paep-wp04-qa-580y7m/repo
+# cmd: echo "== git status --porcelain (untracked included)"; git status --porcelain --untracked-files=all; echo "== tracked changes outside evidence/IB0-WP04 (expect none)"; git status --porcelain --untracked-files=all | grep -v " evidence/IB0-WP04/" || echo none; echo "== diff vs ac6b786 for earlier WP records (expect empty)"; git diff --stat ac6b786 -- evidence/IB0-WP01 evidence/IB0-WP02 evidence/IB0-WP03 work-packages/IB0-WP01 work-packages/IB0-WP02 work-packages/IB0-WP03; echo "(end)"; echo "== tree hashes"; for d in evidence/IB0-WP01 evidence/IB0-WP02 evidence/IB0-WP03 work-packages/IB0-WP01 work-packages/IB0-WP02 work-packages/IB0-WP03; do echo "$d base=$(git rev-parse ac6b786:$d) head=$(git rev-parse HEAD:$d) worktree_hash=$(git ls-files -s $d | git hash-object --stdin | cut -c1-12) diff_worktree=$(git diff --name-only -- $d | wc -l)"; done
+
+== git status --porcelain (untracked included)
+ M evidence/IB0-WP04/logs/ib0-wp01-verification.regression.json
+ M evidence/IB0-WP04/logs/ib0-wp02-verification.regression.json
+ M evidence/IB0-WP04/logs/ib0-wp03-verification.regression.json
+ M evidence/IB0-WP04/logs/negative-architecture-tests.log
+ M evidence/IB0-WP04/logs/verify-ib0-wp02-regression.log
+ M evidence/IB0-WP04/logs/verify-ib0-wp03-regression.log
+ M evidence/IB0-WP04/reports/ib0-wp04-verification.json
+ M evidence/IB0-WP04/reports/negative-tests.json
+== tracked changes outside evidence/IB0-WP04 (expect none)
+none
+== diff vs ac6b786 for earlier WP records (expect empty)
+(end)
+== tree hashes
+evidence/IB0-WP01 base=3b342fdb9852c66a846708c73316e115b394a254 head=3b342fdb9852c66a846708c73316e115b394a254 worktree_hash=0536b7b833dd diff_worktree=0
+evidence/IB0-WP02 base=21c6962a0f915237df004981ffbfced2995084b4 head=21c6962a0f915237df004981ffbfced2995084b4 worktree_hash=d635828806ff diff_worktree=0
+evidence/IB0-WP03 base=661ef0ccbe502e93d531a9f23410925f0af21db0 head=661ef0ccbe502e93d531a9f23410925f0af21db0 worktree_hash=f029c437adfa diff_worktree=0
+work-packages/IB0-WP01 base=23f7c97039b3ca54726a7bbf5a58973f164e4425 head=23f7c97039b3ca54726a7bbf5a58973f164e4425 worktree_hash=82861332c347 diff_worktree=0
+work-packages/IB0-WP02 base=0406de4b1aa5a0eff61bd79a88bd35b21d34588b head=0406de4b1aa5a0eff61bd79a88bd35b21d34588b worktree_hash=a5605d0d6178 diff_worktree=0
+work-packages/IB0-WP03 base=a5b7eb28cdadcdf00946a313303d313a27b7fc59 head=a5b7eb28cdadcdf00946a313303d313a27b7fc59 worktree_hash=75899c07804a diff_worktree=0
+EXIT_CODE=0

@@ -1,0 +1,75 @@
+== P1 dir symlink in src (R5-M1)
+exit=1
+ok=false
+  CLASSIFICATION | @proseit/paep-components contains a symbolic link at packages/components/src/evil; projects contain no symlinks
+== P2 file symlink in src
+exit=1
+ok=false
+  CLASSIFICATION | @proseit/paep-components contains a symbolic link at packages/components/src/evil.ts; projects contain no symlinks
+== P2b dangling symlink
+exit=1
+ok=false
+  CLASSIFICATION | @proseit/paep-components contains a symbolic link at packages/components/src/dangling; projects contain no symlinks
+== P3 project root packages/components is a symlink (target has forbidden import)
+exit=1
+ok=false
+  CLASSIFICATION | @proseit/paep-components: library not an npm workspace
+  DIRECTION | @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -)
+== P3b project root symlink, clean content
+exit=1
+ok=false
+  CLASSIFICATION | @proseit/paep-components: library not an npm workspace
+== P4 unclassified packages/rogue symlink
+exit=0
+ok=true
+== P4b components imports symlinked unclassified @proseit/rogue
+exit=1
+ok=false
+  UNKNOWN_PACKAGE | @proseit/paep-components imports "@proseit/rogue", which is not a workspace package
+== P5 symlink in src/node_modules (relative import)
+exit=1
+ok=false
+  CLASSIFICATION | @proseit/paep-components contains a symbolic link at packages/components/src/node_modules/evil; projects contain no symlinks
+== P5b symlink in src/node_modules (bare import)
+exit=1
+ok=false
+  CLASSIFICATION | @proseit/paep-components contains a symbolic link at packages/components/src/node_modules/evil; projects contain no symlinks
+== P6 project-root node_modules symlink, not imported (false-positive control)
+exit=1
+ok=false
+  CLASSIFICATION | @proseit/paep-components contains a symbolic link at packages/components/src/node_modules/evil; projects contain no symlinks
+== P6b project-root node_modules symlink, bare import
+exit=1
+ok=false
+  CLASSIFICATION | @proseit/paep-components contains a symbolic link at packages/components/src/node_modules/evil; projects contain no symlinks
+== P6c project-root node_modules symlink, relative import
+exit=1
+ok=false
+  CLASSIFICATION | @proseit/paep-components contains a symbolic link at packages/components/src/node_modules/evil; projects contain no symlinks
+== P7 dir symlink in apps/reference-app/src
+exit=1
+ok=false
+  CLASSIFICATION | @proseit/paep-components contains a symbolic link at packages/components/src/node_modules/evil; projects contain no symlinks
+  CLASSIFICATION | reference-app contains a symbolic link at apps/reference-app/src/evil; projects contain no symlinks
+== P7b apps/rogue-app is a symlink
+exit=1
+ok=false
+  CLASSIFICATION | @proseit/paep-components contains a symbolic link at packages/components/src/node_modules/evil; projects contain no symlinks
+== P8 hard link in src
+exit=1
+ok=false
+  CLASSIFICATION | @proseit/paep-components contains a symbolic link at packages/components/src/node_modules/evil; projects contain no symlinks
+  DIRECTION | @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -)
+== P9 package.json is a directory (R5-L1)
+exit=2
+NOJSON
+architecture check error: Error: EISDIR: illegal operation on a directory, read
+    at Object.readFileSync (node:fs:483:20)
+    at readJson (file://<scratch>/qa6/repo/tooling/architecture-boundaries/check-boundaries.mjs:52
+== P9b package.json directory + #x import
+exit=2
+NOJSON
+architecture check error: Error: EISDIR: illegal operation on a directory, read
+    at Object.readFileSync (node:fs:483:20)
+    at readJson (file://<scratch>/qa6/repo/tooling/architecture-boundaries/check-boundaries.mjs:52
+?? node_modules

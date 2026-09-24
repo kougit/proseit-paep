@@ -1,0 +1,22 @@
+# date: 2026-09-24T10:48:18Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 7a8f4e918edbd56fa0b42d050363e109f733dab9
+# cwd: /tmp/paep-wp04-qa2-m9oPQt/repo
+# cmd: python3 /tmp/claude-0/-home-claude-proseit-paep/baa00b7b-0d6c-562c-abda-fc0d973cf425/scratchpad/qa2/scripts/integrity.py /tmp/paep-wp04-qa2-m9oPQt/repo; git diff --stat ac6b786 HEAD -- .paep-control .gitignore PACK_MANIFEST.json CLAUDE.md; echo '(end)'
+
+OK  .gitignore 430
+OK  .paep-control/SOURCE_OF_TRUTH.md 2397
+OK  .paep-control/originals/PAEP_DCH_v1.0.pdf 542033
+OK  .paep-control/originals/PAEP_EQP_v1.1.pdf 742463
+OK  .paep-control/originals/PAEP_IB_v1.0.pdf 937641
+OK  .paep-control/originals/PAEP_IR_v1.0.docx 705705
+OK  .paep-control/originals/PAEP_v1.1.pdf 1576649
+OK  .paep-control/reference-baseline/PAEP_BASE_v1.0.zip 33055
+OK  .paep-control/text/PAEP_DCH_01_v1.0_text.md 46181
+OK  .paep-control/text/PAEP_EQP_01_v1.1_text.md 58649
+OK  .paep-control/text/PAEP_IB_01_v1.0_text.md 68553
+OK  .paep-control/text/PAEP_IR_01_v1.0_text.md 38704
+OK  .paep-control/text/PAEP_v1.1_text.md 85725
+13/13 listed; problems: 0
+(end)
+EXIT_CODE=0

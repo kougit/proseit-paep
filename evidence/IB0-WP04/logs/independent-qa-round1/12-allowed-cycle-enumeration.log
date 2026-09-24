@@ -1,0 +1,9 @@
+# date: 2026-09-24T10:28:05Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 1c16f80539b17c9797a6b194fac63c1fbdb3f8a2
+# cwd: /tmp/paep-wp04-qa-580y7m/repo
+# cmd: python3 /tmp/claude-0/-home-claude-proseit-paep/baa00b7b-0d6c-562c-abda-fc0d973cf425/scratchpad/qa/scripts/allowed_cycles.py /tmp/paep-wp04-qa-580y7m/repo
+
+elementary cycles over allowed category edges: [('platform', 'observability')]
+3+-category cycles: none
+EXIT_CODE=0

@@ -1,0 +1,47 @@
+# date: 2026-09-24T10:22:06Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 1c16f80539b17c9797a6b194fac63c1fbdb3f8a2
+# cwd: /tmp/paep-wp04-qa-580y7m/repo
+# cmd: python3 /tmp/claude-0/-home-claude-proseit-paep/baa00b7b-0d6c-562c-abda-fc0d973cf425/scratchpad/qa/scripts/matrix_compare.py /tmp/paep-wp04-qa-580y7m/repo
+
+Appendix B header: ['contracts', 'foundation', 'platform', 'i18n', 'observability', 'components', 'offline', 'frappe-sdk', 'enterprise', 'analytics', 'domain-*', 'apps/*']
+Appendix B rows: 12 cols: 12
+cells compared: 144; mismatches: 0
+upper-triangle (rightward) non-dash cells: ['platform->observability=Optional', 'i18n->observability=Optional']
+§6.1 raw: {'@proseit/paep-contracts': 'L0', '@proseit/paep-foundation': 'L0', 'paep-platform': 'L1', 'paep-i18n': 'L1', 'paep-observability': 'L1', 'paep-components': 'L2', 'paep-offline': 'L2', 'frappe-sdk': 'L2', 'paep-enterprise': 'L3', 'paep-analytics': 'L3', 'paep-domain-*': 'L3', 'apps/*': 'L4'}
+  contracts: §6.1 L0 model L0 OK
+  foundation: §6.1 L0 model L0 OK
+  platform: §6.1 L1 model L1 OK
+  i18n: §6.1 L1 model L1 OK
+  observability: §6.1 L1 model L1 OK
+  components: §6.1 L2 model L2 OK
+  offline: §6.1 L2 model L2 OK
+  frappe-sdk: §6.1 L2 model L2 OK
+  enterprise: §6.1 L3 model L3 OK
+  analytics: §6.1 L3 model L3 OK
+  domain: §6.1 L3 model L3 OK
+  app: §6.1 L4 model L4 OK
+Appendix B allowed edges that §6.1 "May depend on" does not allow: ['platform(L1)->observability(L1)=Optional', 'i18n(L1)->platform(L1)=Optional', 'i18n(L1)->observability(L1)=Optional', 'observability(L1)->platform(L1)=Optional', 'frappe-sdk(L2)->offline(L2)=Optional', 'analytics(L3)->enterprise(L3)=Optional', 'domain(L3)->enterprise(L3)=Optional', 'domain(L3)->analytics(L3)=Optional']
+packages dirs: 18 angular projects: 2 model projects: 20
+  packages/analytics: @proseit/paep-analytics -> analytics ['layer:L3', 'type:analytics'] OK
+  packages/components: @proseit/paep-components -> components ['layer:L2', 'type:components'] OK
+  packages/contracts: @proseit/paep-contracts -> contracts ['layer:L0', 'type:contracts'] OK
+  packages/domain-ai: @proseit/paep-domain-ai -> domain ['layer:L3', 'type:domain'] OK
+  packages/domain-commerce: @proseit/paep-domain-commerce -> domain ['layer:L3', 'type:domain'] OK
+  packages/domain-construction: @proseit/paep-domain-construction -> domain ['layer:L3', 'type:domain'] OK
+  packages/domain-fiscal: @proseit/paep-domain-fiscal -> domain ['layer:L3', 'type:domain'] OK
+  packages/domain-iot: @proseit/paep-domain-iot -> domain ['layer:L3', 'type:domain'] OK
+  packages/domain-maintenance: @proseit/paep-domain-maintenance -> domain ['layer:L3', 'type:domain'] OK
+  packages/domain-manufacturing: @proseit/paep-domain-manufacturing -> domain ['layer:L3', 'type:domain'] OK
+  packages/domain-quality: @proseit/paep-domain-quality -> domain ['layer:L3', 'type:domain'] OK
+  packages/enterprise: @proseit/paep-enterprise -> enterprise ['layer:L3', 'type:enterprise'] OK
+  packages/foundation: @proseit/paep-foundation -> foundation ['layer:L0', 'type:foundation'] OK
+  packages/frappe-sdk: @proseit/frappe-sdk -> frappe-sdk ['layer:L2', 'type:frappe-sdk'] OK
+  packages/i18n: @proseit/paep-i18n -> i18n ['layer:L1', 'type:i18n'] OK
+  packages/observability: @proseit/paep-observability -> observability ['layer:L1', 'type:observability'] OK
+  packages/offline: @proseit/paep-offline -> offline ['layer:L2', 'type:offline'] OK
+  packages/platform: @proseit/paep-platform -> platform ['layer:L1', 'type:platform'] OK
+  app reference-app: root apps/reference-app OK
+  app ui-lab: root apps/ui-lab OK
+RESULT PASS
+EXIT_CODE=0

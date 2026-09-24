@@ -1,0 +1,169 @@
+# date: 2026-09-24T10:42:59Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 7a8f4e918edbd56fa0b42d050363e109f733dab9
+# cwd: /tmp/paep-wp04-qa2-m9oPQt/scratch
+# cmd: QA_JSON=/tmp/claude-0/-home-claude-proseit-paep/baa00b7b-0d6c-562c-abda-fc0d973cf425/scratchpad/qa2/08-qa-mutations-82-part1.json node /tmp/claude-0/-home-claude-proseit-paep/baa00b7b-0d6c-562c-abda-fc0d973cf425/scratchpad/qa2/scripts/qa-mutations.mjs
+
+AS-EXPECTED D01 offline -> foundation ("No") — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-offline (offline) -> @proseit/paep-foundation (foundation) is not allowed (Appendix B: No) [packages/offline/src/index.ts]
+AS-EXPECTED D02 observability -> i18n ("No") — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-observability (observability) -> @proseit/paep-i18n (i18n) is not allowed (Appendix B: No) [packages/observability/src/index.ts]
+AS-EXPECTED D03 i18n -> platform (Optional, allowed) — expected exit 0; got exit 0 rules []
+AS-EXPECTED D04 analytics -> enterprise (Optional, allowed) — expected exit 0; got exit 0 rules []
+AS-EXPECTED D05 enterprise -> frappe-sdk ("No") — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-enterprise (enterprise) -> @proseit/frappe-sdk (frappe-sdk) is not allowed (Appendix B: No) [packages/enterprise/src/index.ts]
+AS-EXPECTED D06 domain-ai -> analytics (Optional, allowed) — expected exit 0; got exit 0 rules []
+AS-EXPECTED D07 platform -> components (upward "-") — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-platform (platform) -> @proseit/paep-components (components) is not allowed (Appendix B: -) [packages/platform/src/index.ts]
+AS-EXPECTED D08 foundation -> contracts ("No") — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-foundation (foundation) -> @proseit/paep-contracts (contracts) is not allowed (Appendix B: No) [packages/foundation/src/index.ts]
+AS-EXPECTED D09 components -> contracts (Optional, allowed) — expected exit 0; got exit 0 rules []
+AS-EXPECTED D10 ui-lab -> frappe-sdk (Yes, allowed) — expected exit 0; got exit 0 rules []
+AS-EXPECTED D11 contracts -> foundation (upward "-") — expected exit 1 with DIRECTION; got exit 1 rules [CONTRACTS_NEUTRAL, DIRECTION]
+      DIRECTION: @proseit/paep-contracts (contracts) -> @proseit/paep-foundation (foundation) is not allowed (Appendix B: -) [packages/contracts/src/index.ts]
+      CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2882 Cannot find module or type declarations for side-effect import of '@proseit/paep-foundation'. [packages/contracts/src/index.ts:4]
+AS-EXPECTED D12 domain-iot -> frappe-sdk ("No") — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-domain-iot (domain) -> @proseit/frappe-sdk (frappe-sdk) is not allowed (Appendix B: No) [packages/domain-iot/src/index.ts]
+AS-EXPECTED D13 offline -> components ("No") — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-offline (offline) -> @proseit/paep-components (components) is not allowed (Appendix B: No) [packages/offline/src/index.ts]
+AS-EXPECTED D14 frappe-sdk peerDependencies -> i18n ("No") via manifest — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/frappe-sdk (frappe-sdk) -> @proseit/paep-i18n (i18n) is not allowed (Appendix B: No) [packages/frappe-sdk/package.json peerDependencies]
+AS-EXPECTED D15 offline optionalDependencies -> platform (Yes) via manifest — expected exit 0; got exit 0 rules []
+AS-EXPECTED F01 export { x } from (nested folder) — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/a/b/c/reexp.ts]
+AS-EXPECTED F02 export * as ns from — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/ns.ts]
+AS-EXPECTED F03 import x = require() in .cts — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/req.cts]
+AS-EXPECTED F04 import('...') type in type alias — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/t.ts]
+AS-EXPECTED F05 dynamic import with no-substitution template literal — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/dyn.ts]
+UNEXPECTED  F06 dynamic import with computed specifier (string concat) — expected exit 1 with DIRECTION; got exit 0 rules []
+UNEXPECTED  F07 dynamic import with substitution template literal — expected exit 1 with DIRECTION; got exit 0 rules []
+AS-EXPECTED F08 .mts file static import — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/m.mts]
+AS-EXPECTED F09 .js file require() — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/legacy.js]
+AS-EXPECTED F10 .mjs file import — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/x.mjs]
+AS-EXPECTED F11 .cjs file require() — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/x.cjs]
+AS-EXPECTED F12 .tsx file import — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/x.tsx]
+AS-EXPECTED F13 hand-written .d.ts with import type — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/ambient.d.ts]
+AS-EXPECTED F14 source under a nested directory named dist — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/dist/impl.ts]
+AS-EXPECTED F15 triple-slash reference path into another package — expected exit 1 with ENTRY_BYPASS; got exit 1 rules [DIRECTION, ENTRY_BYPASS]
+      ENTRY_BYPASS: @proseit/paep-components imports "../../../enterprise/src/index.ts" inside @proseit/paep-enterprise; use its public entry point [packages/components/src/lib/ref.ts]
+      DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/ref.ts]
+AS-EXPECTED F16 module augmentation declare module of another package — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/aug.ts]
+UNEXPECTED  F17 JSDoc import() type in a .js file — expected exit 1 with DIRECTION; got exit 0 rules []
+AS-EXPECTED F18 require.resolve() — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/rr.js]
+UNEXPECTED  F19 package.json "imports" subpath alias #ent -> enterprise — expected exit 1 with DIRECTION; got exit 0 rules []
+AS-EXPECTED P01 deep import via dynamic import() — expected exit 1 with DEEP_IMPORT; got exit 1 rules [DEEP_IMPORT]
+      DEEP_IMPORT: @proseit/paep-enterprise imports "@proseit/paep-components/src/lib/x" below the @proseit/paep-components entry point [packages/enterprise/src/index.ts]
+AS-EXPECTED P02 deep import via import('...') type — expected exit 1 with DEEP_IMPORT; got exit 1 rules [DEEP_IMPORT]
+      DEEP_IMPORT: @proseit/paep-enterprise imports "@proseit/paep-components/src/index" below the @proseit/paep-components entry point [packages/enterprise/src/index.ts]
+AS-EXPECTED P03 deep import of package.json — expected exit 1 with DEEP_IMPORT; got exit 1 rules [DEEP_IMPORT]
+      DEEP_IMPORT: @proseit/paep-enterprise imports "@proseit/paep-components/package.json" below the @proseit/paep-components entry point [packages/enterprise/src/index.ts]
+AS-EXPECTED P04 deep import in app file — expected exit 1 with DEEP_IMPORT; got exit 1 rules [DEEP_IMPORT]
+      DEEP_IMPORT: ui-lab imports "@proseit/paep-components/src/index" below the @proseit/paep-components entry point [apps/ui-lab/src/app/app.ts]
+AS-EXPECTED P05 relative directory import of another package (no /index) — expected exit 1 with ENTRY_BYPASS; got exit 1 rules [ENTRY_BYPASS]
+      ENTRY_BYPASS: @proseit/paep-enterprise imports "../../components/src" inside @proseit/paep-components; use its public entry point [packages/enterprise/src/index.ts]
+AS-EXPECTED P06 rooted packages/... import — expected exit 1 with ENTRY_BYPASS; got exit 1 rules [ENTRY_BYPASS]
+      ENTRY_BYPASS: @proseit/paep-enterprise imports "packages/components/src/index" inside @proseit/paep-components; use its public entry point [packages/enterprise/src/index.ts]
+AS-EXPECTED P07 absolute path import — expected exit 1 with ENTRY_BYPASS; got exit 1 rules [ENTRY_BYPASS]
+      ENTRY_BYPASS: @proseit/paep-enterprise imports "/tmp/paep-wp04-qa2-m9oPQt/scratch/packages/components/src/index" inside @proseit/paep-components; use its public entry point [packages/enterprise/src/index.ts]
+AS-EXPECTED P08 app relative import of package source — expected exit 1 with ENTRY_BYPASS; got exit 1 rules [ENTRY_BYPASS]
+      ENTRY_BYPASS: reference-app imports "../../../../packages/components/src/index" inside @proseit/paep-components; use its public entry point [apps/reference-app/src/app/app.ts]
+AS-EXPECTED P09 relative import via node_modules workspace symlink — expected exit 1 with OUTSIDE_PROJECT; got exit 1 rules [OUTSIDE_PROJECT]
+      OUTSIDE_PROJECT: @proseit/paep-enterprise imports "../../../node_modules/@proseit/paep-components", outside every project [packages/enterprise/src/index.ts]
+AS-EXPECTED P10 relative import of config/ — expected exit 1 with OUTSIDE_PROJECT; got exit 1 rules [OUTSIDE_PROJECT]
+      OUTSIDE_PROJECT: @proseit/paep-enterprise imports "../../../config/runtime-config.schema.json", outside every project [packages/enterprise/src/index.ts]
+AS-EXPECTED P11 unknown @proseit/* via require() — expected exit 1 with UNKNOWN_PACKAGE; got exit 1 rules [UNKNOWN_PACKAGE]
+      UNKNOWN_PACKAGE: @proseit/paep-components imports "@proseit/paep-nope", which is not a workspace package [packages/components/src/lib/u.cjs]
+AS-EXPECTED P12 public entry point deleted (offline) — expected exit 1 with ENTRY_POINT; got exit 1 rules [ALIAS, ENTRY_POINT]
+      ENTRY_POINT: @proseit/paep-offline: packages/offline/src/index.ts missing
+      ALIAS: reference-app: @proseit/paep-offline resolves to nothing
+      ALIAS: ui-lab: @proseit/paep-offline resolves to nothing
+AS-EXPECTED P13 alias with two targets — expected exit 1 with ALIAS; got exit 1 rules [ALIAS]
+      ALIAS: @proseit/paep-offline: alias maps to ["./packages/offline/src/index.ts","./packages/offline/src/internal.ts"], expected ["./packages/offline/src/index.ts"]
+AS-EXPECTED P14 baseUrl added to tsconfig.base.json — expected exit 1 with ALIAS; got exit 1 rules [ALIAS]
+      ALIAS: tsconfig.base.json holds more than compilerOptions.paths: baseUrl
+AS-EXPECTED P15 alias for an app added — expected exit 1 with ALIAS; got exit 1 rules [ALIAS]
+      ALIAS: alias reference-app is not a classified package
+UNEXPECTED  P16 non-@proseit alias to package internals in a non-tsconfig-named file in the app extends chain — expected exit 1 with DIRECTION; got exit 0 rules []
+AS-EXPECTED Y01 3-package cycle i18n->platform (Opt) -> observability (Opt) -> i18n ("No") — expected exit 1 with CYCLE+DIRECTION; got exit 1 rules [CYCLE, DIRECTION]
+      DIRECTION: @proseit/paep-observability (observability) -> @proseit/paep-i18n (i18n) is not allowed (Appendix B: No) [packages/observability/src/index.ts]
+      CYCLE: circular package dependency: @proseit/paep-i18n <-> @proseit/paep-observability <-> @proseit/paep-platform
+AS-EXPECTED Y02 3-package domain cycle ai -> iot -> fiscal -> ai — expected exit 1 with CYCLE+DIRECTION; got exit 1 rules [CYCLE, DIRECTION]
+      DIRECTION: @proseit/paep-domain-ai (domain) -> @proseit/paep-domain-iot (domain) is not allowed (Appendix B: - (same category)) [packages/domain-ai/src/index.ts]
+      DIRECTION: @proseit/paep-domain-fiscal (domain) -> @proseit/paep-domain-ai (domain) is not allowed (Appendix B: - (same category)) [packages/domain-fiscal/src/index.ts]
+      DIRECTION: @proseit/paep-domain-iot (domain) -> @proseit/paep-domain-fiscal (domain) is not allowed (Appendix B: - (same category)) [packages/domain-iot/src/index.ts]
+      CYCLE: circular package dependency: @proseit/paep-domain-ai <-> @proseit/paep-domain-fiscal <-> @proseit/paep-domain-iot
+AS-EXPECTED Y03 2-cycle platform <-> observability mixing manifest dependency and type import — expected exit 1 with CYCLE without DIRECTION; got exit 1 rules [CYCLE]
+      CYCLE: circular package dependency: @proseit/paep-observability <-> @proseit/paep-platform
+AS-EXPECTED Y04 allowed chain i18n->platform->observability (no cycle) — expected exit 0; got exit 0 rules []
+AS-EXPECTED Y05 4-node cycle through app edge: components -> ... -> app (package -> app bypass)  — expected exit 1 with CYCLE+DIRECTION; got exit 1 rules [CYCLE, DIRECTION, ENTRY_BYPASS]
+      ENTRY_BYPASS: @proseit/paep-components imports "../../../apps/reference-app/src/app/app" inside reference-app; use its public entry point [packages/components/src/index.ts]
+      DIRECTION: @proseit/paep-components (components) -> reference-app (app) is not allowed (Appendix B: -) [packages/components/src/index.ts]
+      CYCLE: circular package dependency: @proseit/paep-components <-> reference-app
+AS-EXPECTED C01 contracts: /// <reference lib="dom" /> then document — expected exit 1 with CONTRACTS_NEUTRAL; got exit 1 rules [CONTRACTS_NEUTRAL]
+      CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2584 Cannot find name 'document'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'. [packages/contracts/src/index.ts:5]
+AS-EXPECTED C02 contracts: DOM global in a separate file under lib/ — expected exit 1 with CONTRACTS_NEUTRAL; got exit 1 rules [CONTRACTS_NEUTRAL]
+      CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'window'. [packages/contracts/src/lib/core/w.ts:1]
+AS-EXPECTED C03 contracts: DOM global in .tsx file — expected exit 1 with CONTRACTS_NEUTRAL; got exit 1 rules [CONTRACTS_NEUTRAL]
+      CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'window'. [packages/contracts/src/lib/w.tsx:1]
+AS-EXPECTED C04 contracts: DOM global in .js file — expected exit 1 with CONTRACTS_NEUTRAL; got exit 1 rules [CONTRACTS_NEUTRAL]
+      CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'window'. [packages/contracts/src/lib/w.js:1]
+AS-EXPECTED C05 contracts: import type from rxjs — expected exit 1 with CONTRACTS_NEUTRAL; got exit 1 rules [CONTRACTS_NEUTRAL]
+      CONTRACTS_NEUTRAL: @proseit/paep-contracts (contracts) depends on external module "rxjs", which is not approved [packages/contracts/src/index.ts]
+      CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'setTimeout'. [node_modules/rxjs/dist/types/internal/scheduler/timerHandle.d.ts:1]
+AS-EXPECTED C06 contracts: manifest dependency on @angular/core — expected exit 1 with CONTRACTS_NEUTRAL; got exit 1 rules [CONTRACTS_NEUTRAL]
+      CONTRACTS_NEUTRAL: @proseit/paep-contracts (contracts) depends on external module "@angular/core", which is not approved [packages/contracts/package.json dependencies]
+AS-EXPECTED C07 contracts: node: builtin import — expected exit 1 with CONTRACTS_NEUTRAL; got exit 1 rules [CONTRACTS_NEUTRAL]
+      CONTRACTS_NEUTRAL: @proseit/paep-contracts (contracts) depends on external module "node:fs", which is not approved [packages/contracts/src/index.ts]
+      CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2882 Cannot find module or type declarations for side-effect import of 'node:fs'. [packages/contracts/src/index.ts:4]
+AS-EXPECTED C08 contracts: import of frappe (external) — expected exit 1 with CONTRACTS_NEUTRAL; got exit 1 rules [CONTRACTS_NEUTRAL]
+      CONTRACTS_NEUTRAL: @proseit/paep-contracts (contracts) depends on external module "frappe-js-sdk", which is not approved [packages/contracts/src/index.ts]
+      CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2882 Cannot find module or type declarations for side-effect import of 'frappe-js-sdk'. [packages/contracts/src/index.ts:4]
+AS-EXPECTED V01 analytics: export type {} from vendor — expected exit 1 with ANALYTICS_VENDOR_EXPORT; got exit 1 rules [ANALYTICS_VENDOR_EXPORT]
+      ANALYTICS_VENDOR_EXPORT: @proseit/paep-analytics re-exports external module "echarts" [packages/analytics/src/index.ts]
+AS-EXPECTED V02 analytics: import-then-export of vendor namespace — expected exit 1 with ANALYTICS_VENDOR_EXPORT; got exit 1 rules [ANALYTICS_VENDOR_EXPORT]
+      ANALYTICS_VENDOR_EXPORT: @proseit/paep-analytics re-exports external module "echarts" [packages/analytics/src/index.ts]
+UNEXPECTED  V03 app copies package source with changed comment only — expected exit 1 with COPIED_CODE; got exit 0 rules []
+UNEXPECTED  V04 app copies package source with reformatted whitespace — expected exit 1 with COPIED_CODE; got exit 0 rules []
+AS-EXPECTED K01 package directory without package.json — expected exit 1 with CLASSIFICATION; got exit 1 rules [CLASSIFICATION]
+      CLASSIFICATION: packages/stray is not classified in the model
+AS-EXPECTED K02 extra angular.json project — expected exit 1 with CLASSIFICATION; got exit 1 rules [CLASSIFICATION]
+      CLASSIFICATION: angular.json project admin-app is not classified in the model
+      CLASSIFICATION: apps/admin-app is not classified in the model
+AS-EXPECTED K03 extra directory under apps/ — expected exit 1 with CLASSIFICATION; got exit 1 rules [CLASSIFICATION]
+      CLASSIFICATION: apps/scratch-app is not classified in the model
+AS-EXPECTED K04 tags reordered — expected exit 1 with CLASSIFICATION; got exit 1 rules [CLASSIFICATION]
+      CLASSIFICATION: @proseit/paep-analytics: tags ["type:analytics","layer:L3"], expected ["layer:L3","type:analytics"]
+AS-EXPECTED K05 layer of observability changed to L2 in model — expected exit 1 with MODEL; got exit 1 rules [CLASSIFICATION, MODEL]
+      MODEL: layer of observability: controlled §6.1 L1, model L2
+      CLASSIFICATION: @proseit/paep-observability: tags ["layer:L1","type:observability"], expected ["layer:L2","type:observability"]
+AS-EXPECTED K06 model matrix: observability -> i18n flipped to Optional — expected exit 1 with MODEL; got exit 1 rules [MODEL]
+      MODEL: matrix observability -> i18n: controlled "No", model "Optional"
+AS-EXPECTED K07 model: domain package recategorised as enterprise — expected exit 1 with CLASSIFICATION; got exit 1 rules [CLASSIFICATION]
+      CLASSIFICATION: @proseit/paep-domain-ai: category enterprise does not match directory packages/domain-ai
+AS-EXPECTED K08 extra workspace pattern tooling/* — expected exit 1 with CLASSIFICATION; got exit 1 rules [CLASSIFICATION]
+      CLASSIFICATION: tooling/a11y is not classified in the model
+      CLASSIFICATION: tooling/analytics-test is not classified in the model
+      CLASSIFICATION: tooling/architecture-boundaries is not classified in the model
+      CLASSIFICATION: tooling/build-release is not classified in the model
+      CLASSIFICATION: tooling/config-validation is not classified in the model
+      CLASSIFICATION: tooling/test-utils is not classified in the model
+      CLASSIFICATION: tooling/verification is not classified in the model
+      CLASSIFICATION: tooling/visual-regression is not classified in the model
+AS-EXPECTED K09 package.json name differs from model — expected exit 1 with CLASSIFICATION; got exit 1 rules [CLASSIFICATION]
+      CLASSIFICATION: packages/i18n: package.json name @proseit/paep-i18n-x, model @proseit/paep-i18n
+
+QA mutations: 76 cases; as expected 69; unexpected: F06, F07, F17, F19, P16, V03, V04
+EXIT_CODE=0

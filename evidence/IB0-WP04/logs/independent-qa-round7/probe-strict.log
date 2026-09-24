@@ -1,0 +1,42 @@
+caught B01 extends chain inserted into app tsconfig (evil middle config strict:false): exit 1
+    FAIL V05 WP03 strict controls preserved: literal in tsconfig.json, all other options equal the baseline, app tsconfigs unchanged, effective options strict for both apps, no suppression directives in source — app tsconfig changed: apps/reference-app/tsconfig.ap
+    FAIL V17 No WP05/IB1+ or Nx/lint artefacts, apps/packages/angular.json unchanged, and every changed path is within WORK_PACKAGE §4 — apps/packages/angular.json changed: apps/reference-app/tsconfig.app.json, apps/reference-app/tsconfig.mid.json; changed outside
+caught B01b extends chain via permitted dir: tsconfig.json extends array [base, tooling/architecture-boundaries/x.json]: exit 1
+    FAIL V04 tsconfig.base.json holds only the alias registry; tsconfig.json extends it without paths; no other paths/baseUrl; every app build inherits it — tsconfig.json extends ["./tsconfig.base.json","./tooling/architecture-boundaries/x.json"]; tsconfig.json do
+    FAIL V14 npm run arch:check exits 0 — exit=1; PAEP architecture check: FAIL — 20 projects, 0 edges (0 optional), 0 cycles, 18 imports in 26 files, 3 violations
+caught B01c tsconfig.base.json gains "extends" to a permitted-dir config: exit 1
+    FAIL V04 tsconfig.base.json holds only the alias registry; tsconfig.json extends it without paths; no other paths/baseUrl; every app build inherits it — tsconfig.base.json keys: {"extends":"./tooling/architecture-boundaries/x.json","compilerOptions":{"paths":{
+    FAIL V14 npm run arch:check exits 0 — exit=1; PAEP architecture check: FAIL — 20 projects, 0 edges (0 optional), 0 cycles, 18 imports in 26 files, 1 violations
+caught B02 tsconfig.base.json option noCheck: exit 1
+    FAIL V04 tsconfig.base.json holds only the alias registry; tsconfig.json extends it without paths; no other paths/baseUrl; every app build inherits it — tsconfig.base.json keys: {"compilerOptions":{"noCheck":true,"paths":{"@proseit/paep-analytics":["./packages
+    FAIL V14 npm run arch:check exits 0 — exit=1; PAEP architecture check: FAIL — 20 projects, 0 edges (0 optional), 0 cycles, 18 imports in 26 files, 1 violations
+caught B02b tsconfig.base.json angularCompilerOptions.strictInputTypes false: exit 1
+    FAIL V04 tsconfig.base.json holds only the alias registry; tsconfig.json extends it without paths; no other paths/baseUrl; every app build inherits it — tsconfig.base.json keys: {"angularCompilerOptions":{"strictInputTypes":false},"compilerOptions":{"paths":{"
+    FAIL V14 npm run arch:check exits 0 — exit=1; PAEP architecture check: FAIL — 20 projects, 0 edges (0 optional), 0 cycles, 18 imports in 26 files, 1 violations
+NOT CAUGHT B02c tsconfig.base.json duplicate compilerOptions key (first has strict:false): exit 0
+
+caught B02d tsconfig.base.json unicode-escaped key "no\u0043heck": exit 1
+    FAIL V04 tsconfig.base.json holds only the alias registry; tsconfig.json extends it without paths; no other paths/baseUrl; every app build inherits it — tsconfig.base.json keys: {"compilerOptions":{"noCheck":true,"paths":{"@proseit/paep-analytics":["./packages
+    FAIL V14 npm run arch:check exits 0 — exit=1; PAEP architecture check: FAIL — 20 projects, 0 edges (0 optional), 0 cycles, 18 imports in 26 files, 1 violations
+caught B02e alias chained: paths value with two targets (entry + other package): exit 1
+    FAIL V06 tsconfig.base.json maps each package name to exactly its src/index.ts (no wildcard, no app alias) and every alias resolves from every app — ALIAS: @proseit/paep-components: alias maps to ["./packages/components/src/index.ts","./packages/enterprise/src
+    FAIL V14 npm run arch:check exits 0 — exit=1; PAEP architecture check: FAIL — 20 projects, 0 edges (0 optional), 0 cycles, 18 imports in 26 files, 1 violations
+caught B03 // @ts-expect-error in app: exit 1
+    FAIL V05 WP03 strict controls preserved: literal in tsconfig.json, all other options equal the baseline, app tsconfigs unchanged, effective options strict for both apps, no suppression directives in source — compiler-suppression directives in apps/reference-ap
+    FAIL V17 No WP05/IB1+ or Nx/lint artefacts, apps/packages/angular.json unchanged, and every changed path is within WORK_PACKAGE §4 — apps/packages/angular.json changed: apps/reference-app/src/app/app.ts; changed outside WORK_PACKAGE §4: apps/reference-app/src/
+caught B04 template $any( in app.html: exit 1
+    FAIL V05 WP03 strict controls preserved: literal in tsconfig.json, all other options equal the baseline, app tsconfigs unchanged, effective options strict for both apps, no suppression directives in source — compiler-suppression directives in apps/reference-ap
+    FAIL V17 No WP05/IB1+ or Nx/lint artefacts, apps/packages/angular.json unchanged, and every changed path is within WORK_PACKAGE §4 — apps/packages/angular.json changed: apps/reference-app/src/app/app.html; changed outside WORK_PACKAGE §4: apps/reference-app/sr
+caught B04b template $any via unicode escape in an inline ts template: exit 1
+    FAIL V17 No WP05/IB1+ or Nx/lint artefacts, apps/packages/angular.json unchanged, and every changed path is within WORK_PACKAGE §4 — apps/packages/angular.json changed: apps/reference-app/src/app/qa7.ts; changed outside WORK_PACKAGE §4: apps/reference-app/src/
+caught B05 per-file // @ts-nocheck in app: exit 1
+    FAIL V05 WP03 strict controls preserved: literal in tsconfig.json, all other options equal the baseline, app tsconfigs unchanged, effective options strict for both apps, no suppression directives in source — compiler-suppression directives in apps/reference-ap
+    FAIL V17 No WP05/IB1+ or Nx/lint artefacts, apps/packages/angular.json unchanged, and every changed path is within WORK_PACKAGE §4 — apps/packages/angular.json changed: apps/reference-app/src/app/app.ts; changed outside WORK_PACKAGE §4: apps/reference-app/src/
+caught B05b @Component jit:true (skips AOT template checking) in app: exit 1
+    FAIL V17 No WP05/IB1+ or Nx/lint artefacts, apps/packages/angular.json unchanged, and every changed path is within WORK_PACKAGE §4 — apps/packages/angular.json changed: apps/reference-app/src/app/qa7.ts; changed outside WORK_PACKAGE §4: apps/reference-app/src/
+caught B05c @ts-nocheck in a gitignored file under apps (src/tmp/): exit 1
+    FAIL V05 WP03 strict controls preserved: literal in tsconfig.json, all other options equal the baseline, app tsconfigs unchanged, effective options strict for both apps, no suppression directives in source — compiler-suppression directives in apps/reference-ap
+NOT CAUGHT B05d gitignored file under apps without directive (V17 blind spot): exit 0
+
+caught B05e @ts-nocheck in a .htm templateUrl-style file under apps: exit 1
+    FAIL V17 No WP05/IB1+ or Nx/lint artefacts, apps/packages/angular.json unchanged, and every changed path is within WORK_PACKAGE §4 — apps/packages/angular.json changed: apps/reference-app/src/app/qa7.tpl; changed outside WORK_PACKAGE §4: apps/reference-app/src

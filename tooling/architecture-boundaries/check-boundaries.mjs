@@ -432,6 +432,7 @@ export function checkBoundaries(root = process.cwd()) {
     const key = `${a?.source}\u0000${a?.target}`;
     if (!from || !to) flag('MODEL', `sameCategoryAllowlist entry ${a?.source} -> ${a?.target} names an unknown project`);
     else if (from === to) flag('MODEL', `sameCategoryAllowlist entry ${a.source} -> ${a.target} is a self edge`);
+    else if (from.category === 'app') flag('MODEL', `sameCategoryAllowlist entry ${a.source} -> ${a.target} links two applications; apps expose no public entry point (PAEP-IB-01 §5.2(i)-(ii))`);
     else if (from.category !== to.category) flag('MODEL', `sameCategoryAllowlist entry ${a.source} -> ${a.target} crosses categories (${from.category} -> ${to.category}); the matrix governs those`);
     else if (typeof a.rationale !== 'string' || !a.rationale.trim() || typeof a.approval !== 'string' || !a.approval.trim()) flag('MODEL', `sameCategoryAllowlist entry ${a.source} -> ${a.target} needs a rationale and an approval reference`);
     else if (allowlist.has(key)) flag('MODEL', `sameCategoryAllowlist entry ${a.source} -> ${a.target} is duplicated`);

@@ -220,6 +220,7 @@ try {
   checkerCase('N48', 'allowlisted same-category edge by deep import', [allow(pair('domain-quality', 'domain-fiscal')), [entry('domain-quality'), append("import '@proseit/paep-domain-fiscal/src/index';")]], 'DEEP_IMPORT');
   checkerCase('N49', 'allowlisted same-category pair in both directions forms a cycle', [allow(pair('domain-quality', 'domain-fiscal'), pair('domain-fiscal', 'domain-quality')), [entry('domain-quality'), append("import '@proseit/paep-domain-fiscal';")], [entry('domain-fiscal'), append("import '@proseit/paep-domain-quality';")]], 'CYCLE');
   checkerCase('N50', 'allowlist entry crossing categories (components -> enterprise)', [allow(pair('components', 'enterprise'))], 'MODEL');
+  checkerCase('N52', 'allowlist entry linking two applications (reference-app -> ui-lab)', [allow({ source: 'reference-app', target: 'ui-lab', rationale: 'IB0-WP04 negative test', approval: 'test only' })], 'MODEL');
   checkerCase('N51', 'allowlist entry without a rationale', [allow(pair('domain-quality', 'domain-fiscal', { rationale: '' }))], 'MODEL');
 
   // WP03 strictness still holds under the WP04 hierarchy (PO/SA decision 3), proven by builds.

@@ -200,7 +200,7 @@ const ruleCheck = (id, name, rules, extra = '') => {
   const vs = byRule(...rules);
   add(id, name, vs.length === 0 && s.projects > 0, vs.length ? show(vs) : `0 findings; ${s.importsScanned} imports in ${s.sourceFiles} files, ${s.edges} edges${extra}`);
 };
-ruleCheck('V08', 'Dependency direction: every edge allowed by Appendix B; no same-category edge', ['DIRECTION'], `; ${s.optionalEdges} optional`);
+ruleCheck('V08', 'Dependency direction: every edge allowed by Appendix B; same-category edges only when allowlisted, directly and transitively', ['DIRECTION'], `; ${s.optionalEdges} optional`);
 ruleCheck('V09', 'No deep @proseit/<pkg>/<path> import and no unknown @proseit/* import', ['DEEP_IMPORT', 'UNKNOWN_PACKAGE']);
 ruleCheck('V10', 'No relative/rooted import leaves its project (public-entry-point bypass or ownership violation)', ['ENTRY_BYPASS', 'OUTSIDE_PROJECT']);
 ruleCheck('V11', 'No circular package dependency', ['CYCLE'], `; ${s.cycles} cycles`);

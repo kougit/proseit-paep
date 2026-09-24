@@ -1,0 +1,7 @@
+
+> @proseit/paep-workspace@0.0.0 qa:architecture
+> node tooling/architecture-boundaries/check-boundaries.mjs
+
+VIOLATION DIRECTION @proseit/paep-domain-quality (domain) -> @proseit/paep-domain-fiscal (domain) is not allowed (Appendix B: - (same category, not allowlisted)) [packages/domain-quality/src/index.ts]
+PAEP architecture check: FAIL — 20 projects, 1 edges (0 optional), 0 cycles, 19 imports in 26 files, 1 violations
+EXIT=1

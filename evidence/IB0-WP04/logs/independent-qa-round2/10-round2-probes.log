@@ -1,0 +1,57 @@
+# date: 2026-09-24T10:44:56Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 7a8f4e918edbd56fa0b42d050363e109f733dab9
+# cwd: /tmp/paep-wp04-qa2-m9oPQt/scratch
+# cmd: QA_JSON=/tmp/claude-0/-home-claude-proseit-paep/baa00b7b-0d6c-562c-abda-fc0d973cf425/scratchpad/qa2/10-round2-probes.json node /tmp/claude-0/-home-claude-proseit-paep/baa00b7b-0d6c-562c-abda-fc0d973cf425/scratchpad/qa2/scripts/qa-round2-probes.mjs
+
+AS-EXPECTED FP01 components: nested intra-project relative imports — expected exit 0; got exit 0 rules []
+AS-EXPECTED FP02 app imports its own nested files — expected exit 0; got exit 0 rules []
+AS-EXPECTED FP03 app main.ts /// <reference types="@angular/localize" /> — expected exit 0; got exit 0 rules []
+AS-EXPECTED FP04 app typings.d.ts declare module '*.svg' — expected exit 0; got exit 0 rules []
+AS-EXPECTED FP05 components /// <reference path="./local.d.ts" /> within own project — expected exit 0; got exit 0 rules []
+UNEXPECTED  FP06 components package.json imports pattern "#lib/*" -> ./src/lib/* — expected exit 0; got exit 1 rules [OUTSIDE_PROJECT]
+      OUTSIDE_PROJECT: @proseit/paep-components imports "#lib/x", which its package.json imports map does not resolve [packages/components/src/lib/u.ts]
+AS-EXPECTED FP07 components package.json imports exact "#lib" -> ./src/lib/index.ts — expected exit 0; got exit 0 rules []
+AS-EXPECTED FP08 components package.json imports conditional "#lib" -> {default: ./src/lib/index.ts} — expected exit 0; got exit 0 rules []
+AS-EXPECTED FP09 analytics uses Angular (Injectable, signal) without re-exporting — expected exit 0; got exit 0 rules []
+AS-EXPECTED FP10 analytics: parameter shadows an imported vendor name; exported function — expected exit 0; got exit 0 rules []
+AS-EXPECTED FP11 app imports Angular/rxjs subpaths — expected exit 0; got exit 0 rules []
+AS-EXPECTED FP12 contracts: plain types incl. Promise, .d.ts interface, declare global, and checked .js — expected exit 0; got exit 0 rules []
+AS-EXPECTED FP13 components declare module '*.html' ambient — expected exit 0; got exit 0 rules []
+AS-EXPECTED FP14 nested dist/ and .angular/ folders with legitimate intra-project code (app) — expected exit 0; got exit 0 rules []
+AS-EXPECTED FP15 bare specifiers that look rooted but are npm subpaths: 'config/raw', 'docs/x' — expected exit 0; got exit 0 rules []
+AS-EXPECTED FP16 require.resolve with a non-literal argument — expected exit 0; got exit 0 rules []
+AS-EXPECTED FP17 package-root node_modules with foreign code is skipped (legit install folder) — expected exit 0; got exit 0 rules []
+UNEXPECTED  NN01 #ent imports alias to a bare workspace package name — expected exit 1 with DIRECTION; got exit 0 rules []
+AS-EXPECTED NN02 #ent conditional imports object into another package — expected exit 1 with ENTRY_BYPASS; got exit 1 rules [DIRECTION, ENTRY_BYPASS]
+      ENTRY_BYPASS: @proseit/paep-components imports "#ent" inside @proseit/paep-enterprise; use its public entry point [packages/components/src/lib/sub.ts]
+      DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/sub.ts]
+UNEXPECTED  NN03 #ent/* pattern imports into another package — expected exit 1 with ENTRY_BYPASS; got exit 1 rules [OUTSIDE_PROJECT]
+      OUTSIDE_PROJECT: @proseit/paep-components imports "#ent/index", which its package.json imports map does not resolve [packages/components/src/lib/sub.ts]
+AS-EXPECTED NN04 /// <reference types="@proseit/paep-enterprise" /> in components — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/t.ts]
+AS-EXPECTED NN05 analytics: import then export default — expected exit 1 with ANALYTICS_VENDOR_EXPORT; got exit 1 rules [ANALYTICS_VENDOR_EXPORT]
+      ANALYTICS_VENDOR_EXPORT: @proseit/paep-analytics re-exports external module "echarts" [packages/analytics/src/index.ts]
+AS-EXPECTED NN06 analytics: export import x = require() — expected exit 1 with ANALYTICS_VENDOR_EXPORT; got exit 1 rules [ANALYTICS_VENDOR_EXPORT]
+      ANALYTICS_VENDOR_EXPORT: @proseit/paep-analytics re-exports external module "echarts" [packages/analytics/src/lib/v.cts]
+UNEXPECTED  NN07 analytics: exported const aliasing an imported vendor binding — expected exit 1 with ANALYTICS_VENDOR_EXPORT; got exit 0 rules []
+AS-EXPECTED NN08 forbidden import in a nested .angular/ folder in a package — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/.angular/x.ts]
+AS-EXPECTED NN09 forbidden import in a nested node_modules/ folder below src — expected exit 1 with DIRECTION; got exit 1 rules [DIRECTION]
+      DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/node_modules/x.ts]
+AS-EXPECTED NN10 contracts: /// <reference lib="dom" /> in a .d.ts — expected exit 1 with CONTRACTS_NEUTRAL; got exit 1 rules [CONTRACTS_NEUTRAL]
+      CONTRACTS_NEUTRAL: @proseit/paep-contracts declares /// <reference lib=dom> [packages/contracts/src/lib/g.d.ts]
+AS-EXPECTED NN11 contracts: .tsx using window — expected exit 1 with CONTRACTS_NEUTRAL; got exit 1 rules [CONTRACTS_NEUTRAL]
+      CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'window'. [packages/contracts/src/lib/w.tsx:1]
+AS-EXPECTED NN12 contracts: .mjs using document — expected exit 1 with CONTRACTS_NEUTRAL; got exit 1 rules [CONTRACTS_NEUTRAL]
+      CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2584 Cannot find name 'document'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'. [packages/contracts/src/lib/w.mjs:1]
+AS-EXPECTED NN13 contracts: /// <reference path> to typescript lib.dom.d.ts in node_modules — expected exit 1 with OUTSIDE_PROJECT; got exit 1 rules [OUTSIDE_PROJECT]
+      OUTSIDE_PROJECT: @proseit/paep-contracts imports "../../../../node_modules/typescript/lib/lib.dom.d.ts", outside every project [packages/contracts/src/lib/p.ts]
+AS-EXPECTED NN14 category check: packages/i18n model entry recategorised as platform — expected exit 1 with CLASSIFICATION; got exit 1 rules [CLASSIFICATION]
+      CLASSIFICATION: @proseit/paep-i18n: category platform does not match directory packages/i18n
+AS-EXPECTED NN15 rooted specifier to an existing file in another package — expected exit 1 with ENTRY_BYPASS; got exit 1 rules [ENTRY_BYPASS]
+      ENTRY_BYPASS: @proseit/paep-enterprise imports "packages/components/src/index.ts" inside @proseit/paep-components; use its public entry point [packages/enterprise/src/index.ts]
+UNEXPECTED  NN16 components: reference path to its own nested node_modules code that imports enterprise — expected exit 1 with DIRECTION; got exit 0 rules []
+
+QA mutations: 33 cases; as expected 28; unexpected: FP06, NN01, NN03, NN07, NN16
+EXIT_CODE=0

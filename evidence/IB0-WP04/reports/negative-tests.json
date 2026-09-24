@@ -1,11 +1,11 @@
 {
   "workPackage": "IB0-WP04",
-  "generatedAt": "2026-09-24T10:39:08.496Z",
-  "commit": "bbe3deec1b896399fc8f31dbd1ff9bd2443884be",
+  "generatedAt": "2026-09-24T10:53:30.381Z",
+  "commit": "499ae29c27a51fd75eb4a19464b89a339dd1b35f",
   "node": "24.21.0",
   "result": "PASS",
-  "controls": 4,
-  "negatives": 38,
+  "controls": 5,
+  "negatives": 39,
   "cases": [
     {
       "id": "C0",
@@ -441,6 +441,26 @@
       "rules": [
         "CONTRACTS_NEUTRAL"
       ],
+      "pass": true
+    },
+    {
+      "id": "N39",
+      "name": "package.json imports alias to a bare package name (#ent -> @proseit/paep-enterprise): components -> enterprise",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "C4",
+      "name": "control: package.json imports pattern inside the same package (#lib/* -> ./src/lib/*.ts) passes",
+      "tool": "arch:check",
+      "expected": "exit 0, no violations, 0 edges (0 optional)",
+      "exit": 0,
+      "rules": [],
       "pass": true
     },
     {

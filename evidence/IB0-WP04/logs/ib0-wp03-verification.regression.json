@@ -1,8 +1,8 @@
 {
   "workPackage": "IB0-WP03",
-  "generatedAt": "2026-09-24T10:38:31.569Z",
+  "generatedAt": "2026-09-24T10:52:49.677Z",
   "mode": "full",
-  "commit": "bbe3deec1b896399fc8f31dbd1ff9bd2443884be",
+  "commit": "499ae29c27a51fd75eb4a19464b89a339dd1b35f",
   "baseline": "de13629b302e1bbaccc59bb0e93f69c7fed9cdcb",
   "trackedChangesAtRun": [
     "M evidence/IB0-WP03/logs/ib0-wp01-verification.regression.json",
@@ -103,13 +103,13 @@
       "id": "V15",
       "name": "build:reference-app production build passes",
       "pass": true,
-      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.09 kB\n\nApplication bundle generation complete. [1.659 seconds] - 2026-09-24T10:38:18.504Z\n\nOutput location: /tmp/paep-wp04-clone-bJwD/repo/dist/reference-app"
+      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.09 kB\n\nApplication bundle generation complete. [1.706 seconds] - 2026-09-24T10:52:35.849Z\n\nOutput location: /tmp/paep-wp04-clone-Csg8/repo/dist/reference-app"
     },
     {
       "id": "V16",
       "name": "build:ui-lab production build passes",
       "pass": true,
-      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-RPR4FBCF.js    | main          | 190.65 kB |                52.16 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.16 kB\n\nApplication bundle generation complete. [1.727 seconds] - 2026-09-24T10:38:20.858Z\n\nOutput location: /tmp/paep-wp04-clone-bJwD/repo/dist/ui-lab"
+      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-RPR4FBCF.js    | main          | 190.65 kB |                52.16 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.16 kB\n\nApplication bundle generation complete. [1.689 seconds] - 2026-09-24T10:52:38.181Z\n\nOutput location: /tmp/paep-wp04-clone-Csg8/repo/dist/ui-lab"
     },
     {
       "id": "V17",

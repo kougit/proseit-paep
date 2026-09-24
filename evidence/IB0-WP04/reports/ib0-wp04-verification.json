@@ -1,15 +1,13 @@
 {
   "workPackage": "IB0-WP04",
-  "generatedAt": "2026-09-24T10:38:31.717Z",
+  "generatedAt": "2026-09-24T10:52:49.839Z",
   "mode": "full",
-  "commit": "bbe3deec1b896399fc8f31dbd1ff9bd2443884be",
+  "commit": "499ae29c27a51fd75eb4a19464b89a339dd1b35f",
   "baseline": "ac6b786caf3485ce2b45724be2b437c28f04b66b",
   "trackedChangesAtRun": [
     "M evidence/IB0-WP04/logs/ib0-wp01-verification.regression.json",
     " M evidence/IB0-WP04/logs/ib0-wp02-verification.regression.json",
-    " M evidence/IB0-WP04/logs/ib0-wp03-verification.regression.json",
-    " M evidence/IB0-WP04/logs/verify-ib0-wp02-regression.log",
-    " M evidence/IB0-WP04/logs/verify-ib0-wp03-regression.log"
+    " M evidence/IB0-WP04/logs/ib0-wp03-verification.regression.json"
   ],
   "node": "24.21.0",
   "npm": "11.19.0",
@@ -152,13 +150,13 @@
       "id": "V20",
       "name": "build:reference-app production build passes",
       "pass": true,
-      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.09 kB\n\nApplication bundle generation complete. [1.727 seconds] - 2026-09-24T10:38:12.774Z\n\nOutput location: /tmp/paep-wp04-clone-bJwD/repo/dist/reference-app"
+      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.09 kB\n\nApplication bundle generation complete. [1.833 seconds] - 2026-09-24T10:52:29.939Z\n\nOutput location: /tmp/paep-wp04-clone-Csg8/repo/dist/reference-app"
     },
     {
       "id": "V21",
       "name": "build:ui-lab production build passes",
       "pass": true,
-      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-RPR4FBCF.js    | main          | 190.65 kB |                52.16 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.16 kB\n\nApplication bundle generation complete. [1.657 seconds] - 2026-09-24T10:38:15.100Z\n\nOutput location: /tmp/paep-wp04-clone-bJwD/repo/dist/ui-lab"
+      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-RPR4FBCF.js    | main          | 190.65 kB |                52.16 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.16 kB\n\nApplication bundle generation complete. [1.805 seconds] - 2026-09-24T10:52:32.402Z\n\nOutput location: /tmp/paep-wp04-clone-Csg8/repo/dist/ui-lab"
     },
     {
       "id": "V22",

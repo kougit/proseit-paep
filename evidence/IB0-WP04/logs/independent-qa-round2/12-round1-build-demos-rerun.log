@@ -1,0 +1,91 @@
+# date: 2026-09-24T10:46:23Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 7a8f4e918edbd56fa0b42d050363e109f733dab9
+# cwd: /tmp/paep-wp04-qa2-m9oPQt/scratch
+# cmd: bash /tmp/claude-0/-home-claude-proseit-paep/baa00b7b-0d6c-562c-abda-fc0d973cf425/scratchpad/qa2/scripts/qa-builds.sh
+
+=================== S1: implicit any parameter in apps/reference-app/src/app/app.ts (expect build exit 1, TS7006)
+--- git status
+ M apps/reference-app/src/app/app.ts
+--- arch:check
+PAEP architecture check: PASS — 20 projects, 0 edges (0 optional), 0 cycles, 18 imports in 26 files, 0 violations
+arch:check EXIT=0
+--- ng build reference-app --configuration production
+Application bundle generation failed. [2.612 seconds] - 2026-09-24T10:46:27.856Z
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'x' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+ng build EXIT=1
+=================== S2: strictNullChecks violation in packages/components reached via alias (expect build exit 1, TS2322)
+--- git status
+ M apps/reference-app/src/app/app.ts
+ M packages/components/src/index.ts
+--- arch:check
+PAEP architecture check: PASS — 20 projects, 1 edges (0 optional), 0 cycles, 19 imports in 26 files, 0 violations
+arch:check EXIT=0
+--- ng build reference-app --configuration production
+Application bundle generation failed. [2.385 seconds] - 2026-09-24T10:46:31.806Z
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2322: Type 'null' is not assignable to type 'string'.[0m [1m[35m[plugin angular-compiler][0m
+ng build EXIT=1
+=================== S3: template type error (expect build exit 1)
+--- git status
+ M apps/reference-app/src/app/app.html
+--- arch:check
+PAEP architecture check: PASS — 20 projects, 0 edges (0 optional), 0 cycles, 18 imports in 26 files, 0 violations
+arch:check EXIT=0
+--- ng build reference-app --configuration production
+Application bundle generation failed. [2.390 seconds] - 2026-09-24T10:46:35.761Z
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'noSuchMember' does not exist on type 'string'.[0m [1m[35m[plugin angular-compiler][0m
+ng build EXIT=1
+=================== B1: components -> enterprise edge placed in a nested 'dist' folder (checker should exit 1)
+--- git status
+ M apps/reference-app/src/main.ts
+ M packages/components/src/index.ts
+ M packages/enterprise/src/index.ts
+--- arch:check
+VIOLATION DIRECTION @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/dist/impl.ts]
+PAEP architecture check: FAIL — 20 projects, 2 edges (0 optional), 0 cycles, 21 imports in 27 files, 1 violations
+arch:check EXIT=1
+--- ng build reference-app --configuration production
+Application bundle generation complete. [3.015 seconds] - 2026-09-24T10:46:40.373Z
+Output location: /tmp/paep-wp04-qa2-m9oPQt/scratch/dist/reference-app
+ng build EXIT=0
+=================== B2: components -> enterprise type edge in a .d.ts file (checker should exit 1)
+--- git status
+ M apps/reference-app/src/app/app.ts
+ M packages/components/src/index.ts
+ M packages/enterprise/src/index.ts
+?? packages/components/src/lib/
+--- arch:check
+VIOLATION DIRECTION @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/types.d.ts]
+PAEP architecture check: FAIL — 20 projects, 2 edges (0 optional), 0 cycles, 21 imports in 27 files, 1 violations
+arch:check EXIT=1
+--- ng build reference-app --configuration production
+Application bundle generation complete. [3.473 seconds] - 2026-09-24T10:46:45.591Z
+Output location: /tmp/paep-wp04-qa2-m9oPQt/scratch/dist/reference-app
+ng build EXIT=0
+=================== B3: contracts uses document via /// <reference lib="dom" /> (checker should exit 1)
+--- git status
+ M apps/reference-app/src/main.ts
+ M packages/contracts/src/index.ts
+?? packages/contracts/src/lib/
+--- arch:check
+VIOLATION CONTRACTS_NEUTRAL @proseit/paep-contracts declares /// <reference lib=dom> [packages/contracts/src/lib/dom.ts]
+PAEP architecture check: FAIL — 20 projects, 1 edges (0 optional), 0 cycles, 20 imports in 27 files, 1 violations
+arch:check EXIT=1
+--- ng build reference-app --configuration production
+Application bundle generation complete. [2.933 seconds] - 2026-09-24T10:46:50.984Z
+Output location: /tmp/paep-wp04-qa2-m9oPQt/scratch/dist/reference-app
+ng build EXIT=0
+=================== B4: components pulls enterprise source by /// <reference path> (checker should exit 1)
+--- git status
+ M packages/components/src/index.ts
+--- arch:check
+VIOLATION ENTRY_BYPASS @proseit/paep-components imports "../../enterprise/src/index.ts" inside @proseit/paep-enterprise; use its public entry point [packages/components/src/index.ts]
+VIOLATION DIRECTION @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/index.ts]
+PAEP architecture check: FAIL — 20 projects, 1 edges (0 optional), 0 cycles, 19 imports in 26 files, 2 violations
+arch:check EXIT=1
+--- ng build reference-app --configuration production
+Application bundle generation complete. [3.152 seconds] - 2026-09-24T10:46:55.690Z
+Output location: /tmp/paep-wp04-qa2-m9oPQt/scratch/dist/reference-app
+ng build EXIT=0
+--- final git status
+EXIT_CODE=0

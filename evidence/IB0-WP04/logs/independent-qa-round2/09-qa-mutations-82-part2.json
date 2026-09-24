@@ -1,0 +1,95 @@
+[
+  {
+    "id": "C01b",
+    "name": "contracts: new file starting with /// <reference lib=\"dom\" /> then document",
+    "wantExit": 1,
+    "wantRules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "ok": true,
+    "violations": [
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts declares /// <reference lib=dom> [packages/contracts/src/lib/dom.ts]"
+    ]
+  },
+  {
+    "id": "C01c",
+    "name": "contracts: new file starting with /// <reference types=\"node\" />",
+    "wantExit": 1,
+    "wantRules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "ok": true,
+    "violations": [
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts (contracts) depends on external module \"node\", which is not approved [packages/contracts/src/lib/nodey.ts]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts declares /// <reference types=node> [packages/contracts/src/lib/nodey.ts]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2688 Cannot find type definition file for 'node'. [packages/contracts/src/lib/nodey.ts:1]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2591 Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig. [packages/contracts/src/lib/nodey.ts:2]"
+    ]
+  },
+  {
+    "id": "C09",
+    "name": "contracts: declare const window then use it",
+    "wantExit": 1,
+    "wantRules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "V03b",
+    "name": "app copies package source (>=200 chars) with only a comment changed",
+    "wantExit": 1,
+    "wantRules": [
+      "COPIED_CODE"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "V04b",
+    "name": "app copies package source (>=200 chars) identical up to whitespace",
+    "wantExit": 1,
+    "wantRules": [
+      "COPIED_CODE"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "COPIED_CODE"
+    ],
+    "ok": true,
+    "violations": [
+      "COPIED_CODE: apps/reference-app/src/app/fmt.ts duplicates packages/components/src/lib/fmt.ts [apps/reference-app/src/app/fmt.ts]"
+    ]
+  },
+  {
+    "id": "V05",
+    "name": "app copies package source (>=200 chars) with one identifier renamed",
+    "wantExit": 1,
+    "wantRules": [
+      "COPIED_CODE"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  }
+]

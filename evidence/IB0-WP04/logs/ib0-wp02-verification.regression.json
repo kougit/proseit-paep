@@ -1,7 +1,7 @@
 {
   "workPackage": "IB0-WP02",
-  "generatedAt": "2026-09-24T10:38:26.583Z",
-  "commit": "bbe3deec1b896399fc8f31dbd1ff9bd2443884be",
+  "generatedAt": "2026-09-24T10:52:44.393Z",
+  "commit": "499ae29c27a51fd75eb4a19464b89a339dd1b35f",
   "trackedChangesAtRun": [
     "M evidence/IB0-WP02/reports/licence-inventory.json"
   ],
@@ -122,13 +122,13 @@
       "id": "V19",
       "name": "reference-app production build passes",
       "pass": true,
-      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.09 kB\n\nApplication bundle generation complete. [1.662 seconds] - 2026-09-24T10:38:24.141Z\n\nOutput location: /tmp/paep-wp04-clone-bJwD/repo/dist/reference-app"
+      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.09 kB\n\nApplication bundle generation complete. [1.755 seconds] - 2026-09-24T10:52:41.628Z\n\nOutput location: /tmp/paep-wp04-clone-Csg8/repo/dist/reference-app"
     },
     {
       "id": "V20",
       "name": "ui-lab production build passes",
       "pass": true,
-      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-RPR4FBCF.js    | main          | 190.65 kB |                52.16 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.16 kB\n\nApplication bundle generation complete. [1.770 seconds] - 2026-09-24T10:38:26.528Z\n\nOutput location: /tmp/paep-wp04-clone-bJwD/repo/dist/ui-lab"
+      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-RPR4FBCF.js    | main          | 190.65 kB |                52.16 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.16 kB\n\nApplication bundle generation complete. [1.892 seconds] - 2026-09-24T10:52:44.328Z\n\nOutput location: /tmp/paep-wp04-clone-Csg8/repo/dist/ui-lab"
     }
   ]
 }

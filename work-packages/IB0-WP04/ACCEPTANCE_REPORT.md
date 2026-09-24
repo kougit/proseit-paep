@@ -1,7 +1,7 @@
 # IB0-WP04 Acceptance Report
 
 **Work package:** IB0-WP04 — Project Graph, Package Boundaries and Dependency Enforcement (PAEP-IR-01 IB0-WP4)  
-**Commit / revision:** implementation `9347807`, `f74fb78`, QA round 1 fixes `3ec81fc`, QA round 2 fix `499ae29`, QA round 3 fix `be181cf` (commit under test); PR head recorded in `evidence/IB0-WP04/reports/acceptance-readiness.md`  
+**Commit / revision:** implementation `9347807`, `f74fb78`, QA round 1 fixes `3ec81fc`, QA round 2 fix `499ae29`, QA round 3 fix `be181cf`, QA round 4 fix `dcda855`, QA round 5 fix `9c74dbe` (commit under test); PR head recorded in `evidence/IB0-WP04/reports/acceptance-readiness.md`  
 **Baseline:** IB0-WP03 ACCEPTED and CLOSED, merge commit `ac6b786`  
 **Technical reviewer:** Claude Code (execution); independent QA by a separate clean-context Claude review  
 **Review date:** 2026-09-24
@@ -23,7 +23,7 @@ The PAEP architecture is now machine-readable and enforced. `tooling/architectur
 | `npm run build:reference-app` / `build:ui-lab` | Exit 0 / exit 0 | `logs/build-reference-app.log`, `logs/build-ui-lab.log` |
 | `npm run arch:check` | PASS, 0 violations | `logs/arch-check-cli.log` |
 | `npm run qa:ib0-wp04` | PASS 24/24 | `logs/verify-ib0-wp04.log`; `reports/ib0-wp04-verification.json` |
-| `npm run qa:ib0-wp04:negative` | PASS 47/47 | `logs/negative-architecture-tests.log`; `reports/negative-tests.json` |
+| `npm run qa:ib0-wp04:negative` | PASS 50/50 | `logs/negative-architecture-tests.log`; `reports/negative-tests.json` |
 | WP03 regression | 13/18 + bounded V05/V08/V10/V12/V17 | `logs/verify-ib0-wp03-regression.log` |
 | WP02 regression | 19/20 + bounded V17 | `logs/verify-ib0-wp02-regression.log` |
 | WP01 regression | PASS 15/15 | `logs/verify-ib0-wp01-regression.log` |
@@ -35,7 +35,7 @@ The PAEP architecture is now machine-readable and enforced. `tooling/architectur
 | Check | Reviewer | Date | Result |
 | --- | --- | --- | --- |
 | Definition audit (scope traced to controlled sources) | Claude Code | 2026-09-24 | PASS |
-| Independent QA, fresh clones (3 rounds) | Independent Claude reviewer | 2026-09-24 | Round 1 FAIL (4 Medium, closed); rounds 2 and 3 PASS; `evidence/IB0-WP04/reports/independent-qa.md` |
+| Independent QA, fresh clones and copies (6 rounds) | Independent Claude reviewer | 2026-09-24 | Round 1 FAIL (4 Medium, closed); rounds 2 and 3 PASS; round 4 FAIL (1 High, 1 Medium, closed); rounds 5 and 6 PASS for their deltas (round 5's older Medium closed); `evidence/IB0-WP04/reports/independent-qa.md` |
 | Definition approval; defaults D1–D4 and the WP03 bounded exception | Product Owner / Solutions Architect | — | Pending |
 
 ## Acceptance criteria
@@ -44,7 +44,7 @@ AC01–AC29: **29/29 PASS** (per-criterion evidence in `evidence/IB0-WP04/report
 
 ## Defects
 
-D1 (medium, closed): checker gaps from independent QA round 1 (M1–M3, L2, L3 augmentation and `require.resolve`, L4 relative `imports` targets, L5, L6, L8), fixed in `3ec81fc`; criteria strengthened, none relaxed. D2 (medium, closed): §6.1/Appendix B conflict now reported for PO/SA decision (exception (iii)). D3 (low, closed): evidence-index and status-vocabulary fixes (L7, R2-L4). D4 (low, closed): `package.json` `imports` bare-name bypass and pattern false positive (R2-L1, R2-L2), fixed in `499ae29`. D5 (low, closed): conditional `imports` branches and longest-prefix patterns (R3-L1), fixed in `be181cf`, N40–N42. Details: `evidence/IB0-WP04/reports/technical-verification.md`.
+D1 (medium, closed): checker gaps from independent QA round 1 (M1–M3, L2, L3 augmentation and `require.resolve`, L4 relative `imports` targets, L5, L6, L8), fixed in `3ec81fc`; criteria strengthened, none relaxed. D2 (medium, closed): §6.1/Appendix B conflict now reported for PO/SA decision (exception (iii)). D3 (low, closed): evidence-index and status-vocabulary fixes (L7, R2-L4). D4 (low, closed): `package.json` `imports` bare-name bypass and pattern false positive (R2-L1, R2-L2), fixed in `499ae29`. D5 (low, closed): conditional `imports` branches and longest-prefix patterns (R3-L1), fixed in `be181cf`, N40–N42. D6 (high, closed): nested `package.json` and chained `#` targets (round 4 F-1, F-2), fixed in `dcda855`, N43–N44. D7 (medium, closed): symlinks inside projects (round 5 R5-M1), fixed in `9c74dbe`, N45. Details: `evidence/IB0-WP04/reports/technical-verification.md`.
 
 ## Exceptions (pending PO/SA decision)
 
@@ -64,7 +64,7 @@ No dependency was added, removed or re-versioned; `package-lock.json` is byte-id
 
 (ii) No CI exists until IB0-WP05, which should run `npm run arch:check` as its architecture stage. Until then enforcement is by the command and the verifier.
 
-(iii) Rules not mechanically checked: analytics "arbitrary transport calls" (§6.2(v)) and domain business validation (§6.2(vii)); analytics vendor exposure is checked as "no external module or imported vendor binding exported", not by type analysis. Not detected: computed dynamic import specifiers, JSDoc `import()` types, near-duplicate (non-identical) copied code, analytics exporting a vendor object through a new variable (`export const x = vendor`), path aliases defined in config files not named `tsconfig*.json`, and imports reaching into a package's own `node_modules` (QA L1, L3, O1, R2-L3, R2-L5, R2-O1). They become checkable when those packages gain code (definition audit D9–D10).
+(iii) Rules not mechanically checked: analytics "arbitrary transport calls" (§6.2(v)) and domain business validation (§6.2(vii)); analytics vendor exposure is checked as "no external module or imported vendor binding exported", not by type analysis. Not detected: computed dynamic import specifiers, JSDoc `import()` types, near-duplicate (non-identical) copied code, analytics exporting a vendor object through a new variable (`export const x = vendor`), path aliases defined in config files not named `tsconfig*.json`, and imports reaching into a package's own `node_modules` (QA L1, L3, O1, R2-L3, R2-L5, R2-O1). Also, fail-closed or informational only (round 6): a library `package.json` that is a directory stops the checker with exit 2 and no named rule (R6-L1); a symlinked or unclassified directory directly under `packages/` or `apps/` that nothing imports is not flagged, though any import of it is (R6-L2, R6-I1). They become checkable when those packages gain code (definition audit D9–D10).
 
 (iv) Deep imports are blocked by the checker, not by the compiler: npm workspace links would let TypeScript resolve `@proseit/<pkg>/src/...`. Package `exports` manifests are a later packaging decision.
 

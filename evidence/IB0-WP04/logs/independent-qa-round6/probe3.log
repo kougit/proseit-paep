@@ -1,0 +1,17 @@
+== P11 apps/reference-app root is a symlink, clean content
+exit=0
+ok=true
+== P11b symlinked app root, target imports ui-lab internals
+exit=1
+ok=false
+  ENTRY_BYPASS | reference-app imports "../../ui-lab/src/main" inside ui-lab; use its public entry point
+  DIRECTION | reference-app (app) -> ui-lab (app) is not allowed (Appendix B: - (same category))
+== P11c symlinked app root containing a nested symlink
+exit=1
+ok=false
+  CLASSIFICATION | reference-app contains a symbolic link at apps/reference-app/src/inner; projects contain no symlinks
+== P12 components imports into unclassified symlinked apps/rogue-app
+exit=1
+ok=false
+  OUTSIDE_PROJECT | @proseit/paep-components imports "../../../apps/rogue-app/x", outside every project
+?? node_modules

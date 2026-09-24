@@ -1,6 +1,6 @@
 # IB0-WP04 Technical Verification Report
 
-**Commit under test:** `be181cfe896c1d1f04026021390aecd502cd4953` (branch `claude/ib0-wp04-011ntv`), run from a fresh `git clone` of GitHub on Node 24.21.0 / npm 11.19.0 (linux-x64), 2026-09-24. **Baseline:** `ac6b786` (IB0-WP03 merge). **Result:** technical **PASS**, AC01–AC29.
+**Commit under test:** `9c74dbe9235ed34df3ee465a4bb2d0b9e9a8fe94` (branch `claude/ib0-wp04-011ntv`), run from a fresh `git clone` of GitHub on Node 24.21.0 / npm 11.19.0 (linux-x64), 2026-09-24. **Baseline:** `ac6b786` (IB0-WP03 merge). **Result:** technical **PASS**, AC01–AC29.
 
 ## Positive gates
 
@@ -23,7 +23,7 @@
 
 ## Negative architecture tests
 
-`npm run qa:ib0-wp04:negative`: **PASS 47/47** (`logs/negative-architecture-tests.log`, `logs/negative-tests.log`, `reports/negative-tests.json`).
+`npm run qa:ib0-wp04:negative`: **PASS 50/50** (`logs/negative-architecture-tests.log`, `logs/negative-tests.log`, `reports/negative-tests.json`).
 
 | Cases | Result |
 | --- | --- |
@@ -32,6 +32,7 @@
 | N30–N38 (added after QA round 1): nested `dist/` folder, `.d.ts` edge, contracts `/// <reference lib="dom">`, `/// <reference path>` bypass, category/directory mismatch, analytics import-then-export of a vendor binding, module augmentation, `package.json` `imports` alias, contracts `.js` DOM use | 9/9 exit 1 with the expected rule |
 | N39 (added after QA round 2): `package.json` `imports` alias to a bare forbidden package name; control C4: `#lib/*` pattern inside the same package | exit 1 DIRECTION; C4 exit 0 |
 | N40–N42 (added after QA round 3): conditional `imports` branches (`import`, `browser`) and a longer pattern naming a forbidden package | 3/3 exit 1 DIRECTION |
+| N43–N45 (added after QA rounds 4 and 5): nested `package.json` remapping `#z`, `#x` → `#y` chain, symlinked directory pulling in outside code | 3/3 exit 1 (CLASSIFICATION, OUTSIDE_PROJECT, CLASSIFICATION) |
 | N28 `nx` devDependency, N29 `nx.json` | 2/2 verifier V15 FAIL |
 
 N05 is the key cycle proof: platform → observability and observability → platform are each allowed ("Optional"), so only the CYCLE rule rejects the pair, and the run shows no DIRECTION finding.
@@ -55,7 +56,7 @@ N05 is the key cycle proof: platform → observability and observability → pla
 | AC13 | PASS | V12: 0 findings, 0 diagnostics |
 | AC14 | PASS | V13 |
 | AC15 | PASS | V14; `logs/arch-check-cli.log` exit 0 |
-| AC16 | PASS | 5/5 controls; 42/42 rejected |
+| AC16 | PASS | 5/5 controls; 45/45 rejected |
 | AC17 | PASS | V15; N28, N29. Nx disposition: NOT REQUIRED FOR IB0-WP04 |
 | AC18 | PASS | `npm ci` exit 0 |
 | AC19 | PASS | exit 0 |
@@ -72,4 +73,4 @@ N05 is the key cycle proof: platform → observability and observability → pla
 
 ## Defects
 
-D1 (medium, checker, closed): independent QA round 1 (`reports/independent-qa-round1.md`) showed the checker missed violations in nested `dist/`/`node_modules/`/`.angular/` folders (M1), in `.d.ts` files (M2) and DOM globals pulled into contracts by `/// <reference lib>` (M3), plus Low gaps L2, L3 (augmentation, `require.resolve`), L4 (relative `imports` targets only), L5, L6 and L8. Fixed in `3ec81fc`; AC03, AC09, AC13, AC14 and AC16 strengthened; N30–N38 added. D2 (medium, documentation, closed): the IB-01 §6.1 versus Appendix B conflict (M4) was not reported; now in `reports/definition-audit.md` §6 for PO/SA decision. D3 (low, evidence, closed): L7 and R2-L4 evidence-index and status-vocabulary inconsistencies corrected. D4 (low, checker, closed): independent QA round 2 R2-L1 (bare-name `imports` target bypass) and R2-L2 (false positive on `#prefix/*` patterns), fixed in `499ae29`. D5 (low, checker, closed): independent QA round 3 R3-L1 (conditional `imports` branches and longest-prefix patterns), fixed in `be181cf`; N40–N42 added. Later branch commits after `be181cf` change documentation and evidence only.
+D1 (medium, checker, closed): independent QA round 1 (`reports/independent-qa-round1.md`) showed the checker missed violations in nested `dist/`/`node_modules/`/`.angular/` folders (M1), in `.d.ts` files (M2) and DOM globals pulled into contracts by `/// <reference lib>` (M3), plus Low gaps L2, L3 (augmentation, `require.resolve`), L4 (relative `imports` targets only), L5, L6 and L8. Fixed in `3ec81fc`; AC03, AC09, AC13, AC14 and AC16 strengthened; N30–N38 added. D2 (medium, documentation, closed): the IB-01 §6.1 versus Appendix B conflict (M4) was not reported; now in `reports/definition-audit.md` §6 for PO/SA decision. D3 (low, evidence, closed): L7 and R2-L4 evidence-index and status-vocabulary inconsistencies corrected. D4 (low, checker, closed): independent QA round 2 R2-L1 (bare-name `imports` target bypass) and R2-L2 (false positive on `#prefix/*` patterns), fixed in `499ae29`. D5 (low, checker, closed): independent QA round 3 R3-L1 (conditional `imports` branches and longest-prefix patterns), fixed in `be181cf`; N40–N42 added. D6 (high, checker, closed): independent QA round 4 F-1, a nested `package.json` below a project root could remap `#` imports unseen, and F-2 (medium), an `imports` target naming another `#` subpath was not checked; fixed in `dcda855`; N43, N44 added. D7 (medium, checker, closed): independent QA round 5 R5-M1, the file walk did not follow or flag a symlinked directory inside a project; fixed in `9c74dbe` (any symlink below a project root is rejected); N45 added. Later branch commits after `9c74dbe` change documentation and evidence only.

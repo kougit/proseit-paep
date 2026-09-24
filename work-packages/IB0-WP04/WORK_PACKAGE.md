@@ -98,3 +98,5 @@ Technical PASS requires every criterion in `ACCEPTANCE.md` to pass. Claude repor
 (iii) 2026-09-24, after independent QA round 2 (R2-L1, R2-L2): `package.json` `imports` targets that are bare package names are now checked like any import, and `#prefix/*` patterns resolve; AC16 gains N39 and control C4. No criterion was relaxed.
 
 (iv) 2026-09-24, after independent QA round 3 (R3-L1): every target of a conditional or array `imports` entry is checked, and pattern keys follow Node's longest-prefix rule; AC16 gains N40–N42. No criterion was relaxed.
+
+(v) 2026-09-24, after independent QA rounds 4 and 5 (F-1, F-2, R5-M1): a nested `package.json` or a symbolic link below a project root, and an `imports` target that is another `#` subpath, are rejected; AC16 gains N43–N45. No criterion was relaxed.

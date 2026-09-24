@@ -1,0 +1,74 @@
+import fs from 'node:fs'; import path from 'node:path'; import crypto from 'node:crypto';
+const R = process.argv[2]; const rd = p => fs.readFileSync(path.join(R, p));
+const lock = JSON.parse(rd('package-lock.json')); const pkg = JSON.parse(rd('package.json'));
+const out = (...a) => console.log(...a);
+// 1. install-script coverage
+out('== 1. install-script coverage');
+const withScripts = Object.entries(lock.packages).filter(([k,v]) => v.hasInstallScript && k !== '');
+const names = withScripts.map(([k]) => k.replace(/^.*node_modules\//, ''));
+out('lockfile hasInstallScript entries:', withScripts.map(([k,v]) => `${k}@${v.version}`).join(', '));
+const allow = pkg.allowScripts || {}; out('allowScripts:', JSON.stringify(allow));
+const uncovered = names.filter(n => !(n in allow)); out('uncovered:', uncovered.length, uncovered.join(','));
+const extra = Object.keys(allow).filter(n => !names.includes(n)); out('allowScripts entries without lockfile install script:', extra.length ? extra.join(',') : 'none');
+// 2. licence inventory
+out('== 2. licence inventory');
+const counts = {}; const nonPerm = []; const missing = []; const ws = [];
+const PERM = new Set(['MIT','ISC','Apache-2.0','BSD-2-Clause','BSD-3-Clause','0BSD','BlueOak-1.0.0']);
+let third = 0;
+for (const [k, v] of Object.entries(lock.packages)) {
+  if (k === '') continue;
+  if (v.link || !k.includes('node_modules/')) { ws.push(`${k}${v.link ? ' -> ' + v.resolved : ''}`); continue; }
+  third++;
+  const lic = v.license; if (!lic || /UNLICENSED|UNKNOWN/i.test(lic)) missing.push(k);
+  counts[lic] = (counts[lic] || 0) + 1;
+  if (!PERM.has(lic)) nonPerm.push({ k, v: v.version, lic, dev: !!v.dev, optional: !!v.optional });
+}
+out('third-party entries:', third); out('counts:', JSON.stringify(counts)); out('missing/unknown/UNLICENSED:', missing.length);
+out('workspace entries:', ws.join(' | '));
+out('non-permissive:'); for (const e of nonPerm) out('  ', e.k, e.v, e.lic, 'dev=' + e.dev, 'optional=' + e.optional);
+const badNP = nonPerm.filter(e => !(/lightningcss/.test(e.k) && e.lic === 'MPL-2.0') && !(e.k === 'node_modules/caniuse-lite' && e.lic === 'CC-BY-4.0') || !e.dev);
+out('non-permissive outside lightningcss*/caniuse-lite or non-dev:', badNP.length, badNP.map(e=>e.k).join(','));
+// cross-check installed licence fields for these
+for (const e of nonPerm) { const p = path.join(R, e.k, 'package.json'); if (fs.existsSync(p)) { const j = JSON.parse(fs.readFileSync(p)); out('   installed', e.k, j.version, j.license, j.repository && (j.repository.url || j.repository)); } else out('   not installed (platform optional):', e.k); }
+// 3. manifest consistency
+out('== 3. manifest vs lockfile/installed');
+const man = JSON.parse(rd('docs/architecture/toolchain-version-manifest.json')); let mm = 0, checked = 0;
+const nvmrc = rd('.nvmrc').toString().trim();
+const chk = (label, a, b) => { checked++; if (a !== b) { mm++; out('  MISMATCH', label, a, '!=', b); } };
+chk('runtime.node vs .nvmrc', man.runtime.node, nvmrc);
+chk('runtime.node vs devEngines', man.runtime.node, pkg.devEngines.runtime.version);
+chk('runtime.npm vs packageManager', 'npm@' + man.runtime.npm, pkg.packageManager);
+chk('runtime.npm vs devEngines', man.runtime.npm, pkg.devEngines.packageManager.version);
+chk('runtime.node vs running', man.runtime.node, process.versions.node);
+chk('angularNodeEngineRange', man.runtime.angularNodeEngineRange, lock.packages['node_modules/@angular/core'].engines.node);
+for (const [n, v] of Object.entries(man.directDependencies)) {
+  chk(n + ' pkg', v, (pkg.dependencies[n] ?? pkg.devDependencies[n]));
+  chk(n + ' lock root', v, (lock.packages[''].dependencies?.[n] ?? lock.packages[''].devDependencies?.[n]));
+  chk(n + ' lock', v, lock.packages['node_modules/' + n].version);
+  chk(n + ' installed', v, JSON.parse(rd('node_modules/' + n + '/package.json')).version);
+}
+const allDirect = Object.keys({...pkg.dependencies, ...pkg.devDependencies}); chk('direct set', JSON.stringify(allDirect.sort()), JSON.stringify(Object.keys(man.directDependencies).sort()));
+for (const [k, v] of Object.entries(man.buildTools)) { chk(k + ' lock', v, lock.packages[k]?.version); chk(k + ' installed', v, JSON.parse(rd(k + '/package.json')).version); }
+chk('lockfileVersion', man.lockfile.lockfileVersion, lock.lockfileVersion);
+chk('lock sha', man.lockfile.sha256, crypto.createHash('sha256').update(rd('package-lock.json')).digest('hex'));
+chk('denied set', JSON.stringify([...man.installScriptPolicy.denied].sort()), JSON.stringify(Object.keys(allow).filter(k=>allow[k]===false).sort()));
+out('checked', checked, 'mismatches', mm);
+// AC08 tools present
+for (const t of ['@angular/build','esbuild','vite','sass','postcss','lightningcss','browserslist','caniuse-lite']) out('  AC08', t, man.buildTools['node_modules/'+t] ?? man.directDependencies[t] ?? 'MISSING');
+// exact pins
+const bad = allDirect.filter(n => !/^\d+\.\d+\.\d+$/.test(pkg.dependencies[n] ?? pkg.devDependencies[n])); out('non-exact direct pins:', bad.length);
+out('ts peer range compiler-cli:', lock.packages['node_modules/@angular/compiler-cli'].peerDependencies?.typescript, ' rxjs peer core:', lock.packages['node_modules/@angular/core'].peerDependencies?.rxjs);
+// 4. controlled sources
+out('== 4. controlled sources vs PACK_MANIFEST.json');
+const pm = JSON.parse(rd('PACK_MANIFEST.json'));
+const list = pm.files || pm.entries || pm; const arr = Array.isArray(list) ? list : Object.entries(list).map(([p, x]) => ({ path: p, ...x }));
+const walk = d => fs.readdirSync(path.join(R, d), { withFileTypes: true }).flatMap(e => e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]);
+const targets = [...walk('.paep-control'), '.gitignore']; let ok = 0;
+for (const t of targets) {
+  const e = arr.find(x => (x.path || x.file || x.name) === t);
+  const buf = rd(t); const h = crypto.createHash('sha256').update(buf).digest('hex');
+  const eh = e && (e.sha256 || e.hash); const es = e && (e.size ?? e.bytes);
+  const good = e && eh === h && es === buf.length; if (good) ok++;
+  out(`  ${good ? 'MATCH' : 'MISMATCH'} ${t} ${h} ${buf.length}${e ? '' : ' (not in manifest)'}`);
+}
+out(`controlled files matching: ${ok}/${targets.length}`);

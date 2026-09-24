@@ -1,0 +1,3 @@
+$ node -e <compare lockfile license/version with installed node_modules/*/package.json for every installed third-party entry> (cwd: clone, Node 24.21.0)
+installed third-party packages compared: 306 licence/version discrepancies: 0
+EXIT_CODE=0

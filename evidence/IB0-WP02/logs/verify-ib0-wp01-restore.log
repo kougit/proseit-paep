@@ -1,0 +1,7 @@
+# Restore IB0-WP01 evidence and prove it is unchanged
+# date: 2026-09-24T05:05:40Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+$ bash -c git checkout -- evidence/IB0-WP01/reports/ib0-wp01-verification.json && git diff --exit-code b6b023fea11625360f0bf43cd0bdcba968cda90d -- work-packages/IB0-WP01 evidence/IB0-WP01 && echo 'IB0-WP01 work package and evidence byte-identical to baseline'
+IB0-WP01 work package and evidence byte-identical to baseline
+EXIT_CODE=0

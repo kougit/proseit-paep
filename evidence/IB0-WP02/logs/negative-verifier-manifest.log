@@ -1,0 +1,22 @@
+# Negative: verifier must fail when the manifest disagrees with the lockfile
+# manifest drift
+# date: 2026-09-24T05:05:54Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/neg
+
+npm ci exit=0
+diff --git a/docs/architecture/toolchain-version-manifest.json b/docs/architecture/toolchain-version-manifest.json
+index 9a46471..08c88e0 100644
+--- a/docs/architecture/toolchain-version-manifest.json
++++ b/docs/architecture/toolchain-version-manifest.json
+@@ -37,7 +37,7 @@
+     "node_modules/@angular-devkit/schematics": "22.1.8",
+     "node_modules/@schematics/angular": "22.1.8",
+     "node_modules/esbuild": "0.28.2",
+-    "node_modules/vite": "8.1.5",
++    "node_modules/vite": "8.1.4",
+     "node_modules/rolldown": "1.2.0",
+     "node_modules/vite/node_modules/rolldown": "1.1.5",
+     "node_modules/sass": "1.101.0",
+FAIL V11 Version manifest matches .nvmrc, package.json, package-lock.json and the installed tree — buildTools node_modules/vite: manifest 8.1.4 != lockfile 8.1.5; buildTools node_modules/vite: manifest 8.1.4 != installed 8.1.5
+IB0-WP02 verification: FAIL (19/20)
+EXIT_CODE=1

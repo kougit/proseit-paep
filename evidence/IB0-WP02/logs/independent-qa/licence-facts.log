@@ -1,0 +1,57 @@
+$ npm explain lightningcss
+lightningcss@1.33.0 dev
+node_modules/lightningcss
+  lightningcss@"^1.32.0" from vite@8.1.5
+  node_modules/vite
+    vite@"8.1.5" from @angular/build@22.1.8
+    node_modules/@angular/build
+      dev @angular/build@"22.1.8" from the root project
+    peer vite@"^6.0.0 || ^7.0.0 || ^8.0.0" from @vitejs/plugin-basic-ssl@2.3.0
+    node_modules/@vitejs/plugin-basic-ssl
+      @vitejs/plugin-basic-ssl@"2.3.0" from @angular/build@22.1.8
+      node_modules/@angular/build
+        dev @angular/build@"22.1.8" from the root project
+$ npm explain caniuse-lite
+caniuse-lite@1.0.30001810 dev
+node_modules/caniuse-lite
+  caniuse-lite@"^1.0.30001810" from browserslist@4.29.0
+  node_modules/browserslist
+    browserslist@"^4.26.0" from @angular/build@22.1.8
+    node_modules/@angular/build
+      dev @angular/build@"22.1.8" from the root project
+    browserslist@"^4.24.0" from @babel/helper-compilation-targets@8.0.6
+    node_modules/@babel/helper-compilation-targets
+      @babel/helper-compilation-targets@"^8.0.0" from @babel/core@8.0.1
+      node_modules/@babel/core
+        @babel/core@"8.0.1" from @angular/build@22.1.8
+        node_modules/@angular/build
+          dev @angular/build@"22.1.8" from the root project
+        @babel/core@"8.0.1" from @angular/compiler-cli@22.1.8
+        node_modules/@angular/compiler-cli
+          peer @angular/compiler-cli@"^22.0.0" from @angular/build@22.1.8
+          node_modules/@angular/build
+            dev @angular/build@"22.1.8" from the root project
+          dev @angular/compiler-cli@"22.1.8" from the root project
+    peer browserslist@">= 4.21.0" from update-browserslist-db@1.3.3
+    node_modules/update-browserslist-db
+      update-browserslist-db@"^1.3.3" from browserslist@4.29.0
+$ npm ls --omit=dev lightningcss caniuse-lite
+@proseit/paep-workspace@0.0.0 /tmp/claude-0/-home-claude-proseit-paep/***/scratchpad/iqa/clone
+`-- (empty)
+
+EXIT=1
+$ lockfile fields
+node_modules/lightningcss 1.33.0 MPL-2.0 dev=true https://registry.npmjs.org/lightningcss/-/lightningcss-1.33.0.tgz sha512-WkUDrojuJs0xk...
+node_modules/caniuse-lite 1.0.30001810 CC-BY-4.0 dev=true https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001810.tgz sha512-TITQPUkaz+aVk...
+node_modules/vite 8.1.5 MIT dev=true https://registry.npmjs.org/vite/-/vite-8.1.5.tgz sha512-7ULLwsCdYx/nR...
+node_modules/browserslist 4.29.0 MIT dev=true https://registry.npmjs.org/browserslist/-/browserslist-4.29.0.tgz sha512-3GSvyjvDI4Dur...
+$ grep -rn lightningcss node_modules/@angular/build --include=*.js -l | head
+grep_exit=0
+$ head -3 node_modules/caniuse-lite/LICENSE; author
+Attribution 4.0 International
+
+=======================================================================
+{"name":"Ben Briggs","email":"beneb.info@gmail.com","url":"http://beneb.info"}
+ Mozilla Public License Version 2.0
+==================================
+

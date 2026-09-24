@@ -1,0 +1,15 @@
+$ curl -sSf https://nodejs.org/dist/v24.21.0/SHASUMS256.txt
+curl_exit=0
+fd8e59d5a511510f6a298afb548f18c7d2b1be404d8b4a27d94fbe49f56cb2d6  node-v24.21.0-linux-x64.tar.xz
+$ curl download tarball
+curl_exit=0
+fd8e59d5a511510f6a298afb548f18c7d2b1be404d8b4a27d94fbe49f56cb2d6  node-v24.21.0-linux-x64.tar.xz
+node-v24.21.0-linux-x64.tar.xz: OK
+tar_check_exit=0
+7fde7b8afa198da66257f42ee2001d874c7355631e6d1579a5fb5ef1f246df4c  node-v24.21.0-linux-x64/bin/node
+7fde7b8afa198da66257f42ee2001d874c7355631e6d1579a5fb5ef1f246df4c  /opt/node24/bin/node
+cmp_exit=0
+  "version": "11.19.0",
+    "version": "4.29.0",
+$ diff -r <tarball>/lib/node_modules/npm /opt/node24/lib/node_modules/npm
+npm_dir_diff_exit=0

@@ -1,0 +1,77 @@
+$ git diff 8525598 HEAD -- work-packages/IB0-WP02/ACCEPTANCE.md work-packages/IB0-WP02/QUALITY_GATE_RUNBOOK.md
+exit=0
+$ git diff 8525598 HEAD --stat -- work-packages/IB0-WP02/WORK_PACKAGE.md
+diff --git a/work-packages/IB0-WP02/WORK_PACKAGE.md b/work-packages/IB0-WP02/WORK_PACKAGE.md
+index b8bb123..38724f2 100644
+--- a/work-packages/IB0-WP02/WORK_PACKAGE.md
++++ b/work-packages/IB0-WP02/WORK_PACKAGE.md
+@@ -6,7 +6,7 @@
+ **Design classification:** D0 — not a UI work package; no design handoff required (PAEP-DCH-01 §5 applies to UI work packages only)  
+ **Execution agent:** Claude Code  
+ **Acceptance authority:** Solutions Architect / Main Product Owner or delegated technical reviewer; licence dispositions additionally require the Engineering Governance / IP owner (PAEP v1.1 Approval and Decision Rights)  
+-**Definition status:** Drafted by Claude Code on 2026-09-23 from PAEP-IR-01 §4.4 (IB0-WP2), PAEP-IB-01 §4 and the IB0-WP01 deferrals, because the controlled pack supplied no IB0-WP02 definition. This definition, including `ACCEPTANCE.md`, is **pending human approval** and is confirmed or amended by the acceptance authority at review.
++**Definition status:** **APPROVED** on 2026-09-24 by the Product Owner / Solutions Architect (24 acceptance criteria, unchanged). Drafted by Claude Code on 2026-09-23 from PAEP-IR-01 §4.4 (IB0-WP2), PAEP-IB-01 §4 and the IB0-WP01 deferrals, because the controlled pack supplied no IB0-WP02 definition. The approval was conditional on every criterion tracing to IB-01/IR-01 requirements without WP03, WP04 or later scope; the definition audit that confirmed this is `evidence/IB0-WP02/reports/definition-audit.md`. Controlled amendments made at approval are listed in §12.
+ 
+ ## 1. Objective
+ 
+@@ -16,9 +16,9 @@ Formally pin and enforce the approved PAEP toolchain baseline recorded during IB
+ 
+ The implementation plan (`docs/architecture/IB0-WP02-IMPLEMENTATION-PLAN.md`) records how each condition is met:
+ 
+-(i) **R1: execution authorised.** The Product Owner / Solutions Architect instructed execution of IB0-WP02 in the PAEP project thread on 2026-09-23. Claude drafted this `WORK_PACKAGE.md` and `ACCEPTANCE.md` and may not approve them itself. They are submitted with the implementation for human approval, and the acceptance authority may amend a criterion, in which case the work is re-verified against the amended criterion before ACCEPTED.
++(i) **R1: execution authorised.** The Product Owner / Solutions Architect instructed execution of IB0-WP02 in the PAEP project thread on 2026-09-23. Claude drafted this `WORK_PACKAGE.md` and `ACCEPTANCE.md` and may not approve them itself. They are submitted with the implementation for human approval, and the acceptance authority may amend a criterion, in which case the work is re-verified against the amended criterion before ACCEPTED. **Closed 2026-09-24:** the PO/SA approved the definition with all 24 criteria unchanged.
+ 
+-(ii) **R2: execution contract.** The root `CLAUDE.md` still names IB0-WP01 as the current bounded objective, and its items 6–7 point to `work-packages/IB0-WP01/`. Claude does not edit its own execution contract. The Product Owner / Solutions Architect instruction to execute IB0-WP02 is the authority for this run; every mandatory rule and stop condition in `CLAUDE.md` is still applied. **Open:** a human updates the bounded objective and items 6–7 to IB0-WP02 (or confirms the contract stays as is) before acceptance. See §11.
++(ii) **R2: execution contract.** The root `CLAUDE.md` still names IB0-WP01 as the current bounded objective, and its items 6–7 point to `work-packages/IB0-WP01/`. Claude does not edit its own execution contract. The Product Owner / Solutions Architect instruction to execute IB0-WP02 is the authority for this run; every mandatory rule and stop condition in `CLAUDE.md` is still applied. **Closed 2026-09-24:** the PO/SA expressly authorised Claude to amend `CLAUDE.md` once, replacing the IB0-WP01-specific objective with a durable, work-package-neutral authorisation rule. See §11(i) and §12.
+ 
+ (iii) **R3: Node enforcement strictness.** Default taken: an exact `24.21.0` in both `.nvmrc` and `devEngines.runtime`, with `onFail: "error"`, as PAEP-IB-01 §4.1 requires an exact pin. See §11.
+ 
+@@ -58,9 +58,11 @@ Claude may create or modify:
+ 
+ (vi) `tooling/verification/verify-ib0-wp02.mjs` (new; Node built-ins only).
+ 
+-(vii) `evidence/IB0-WP02/**` (new), `work-packages/IB0-WP02/**` (traceability and acceptance report), and the root `README.md` (toolchain/pinning section).
++(vii) `evidence/IB0-WP02/**` (new), `work-packages/IB0-WP02/**` (traceability, acceptance report, and this package's prompts, runbook and report template), and the root `README.md` (toolchain/pinning section).
+ 
+-(viii) Nothing else. `CLAUDE.md` is updated by a human, not by Claude (§2(ii)).
++(viii) `CLAUDE.md`: one amendment only, expressly authorised by the PO/SA on 2026-09-24 (§12). It replaces the work-package-specific scope restriction with a work-package-neutral rule and relaxes no control.
++
++(ix) Nothing else.
+ 
+ Claude shall **not** modify:
+ 
+@@ -102,7 +104,7 @@ Claude shall **not** modify:
+ 
+ (vi) Do not introduce secrets, registry tokens or credentials, including in `.npmrc`.
+ 
+-(vii) Licence approval is a human (Engineering Governance / IP owner) decision. Claude records the analysis and a *proposed* disposition only (PAEP-EQP-01 §1.3(iv)).
++(vii) Licence approval is a human (Engineering Governance / IP owner) decision. Claude records the analysis and a *proposed* disposition only (PAEP-EQP-01 §1.3(iv)). The `lightningcss` and `caniuse-lite` dispositions were decided by the PO/SA on 2026-09-24 and are recorded in `docs/licences/`.
+ 
+ ## 7. Implementation tasks
+ 
+@@ -185,7 +187,7 @@ Negative checks, run only in a scratch copy:
+ 
+ ## 11. Known source conflicts and handling
+ 
+-(i) **`CLAUDE.md` bounded objective names IB0-WP01 only.** Handling: readiness condition R2. Claude executes IB0-WP02 under the Product Owner / Solutions Architect instruction and applies every `CLAUDE.md` rule and stop condition, but does not edit `CLAUDE.md`. Updating the bounded objective to IB0-WP02 is a human action, recorded as open in the acceptance report. No architecture decision is changed.
++(i) **`CLAUDE.md` bounded objective names IB0-WP01 only.** Handling: readiness condition R2. Claude executed IB0-WP02 under the Product Owner / Solutions Architect instruction and applied every `CLAUDE.md` rule and stop condition. **Resolved 2026-09-24:** under express PO/SA authorisation, Claude amended `CLAUDE.md` once. The objective is now work-package neutral ("execute only the work package explicitly authorised by the Product Owner / Solutions Architect in the current instruction"), not "IB0-WP02 only". No architecture decision or engineering control is changed.
+ 
+ (ii) **PAEP-IB-01 §3/§4.1/§4.2(i) expect Nx-compatible orchestration and an Nx version in the manifest; no Nx exists (user direction at IB0-WP01).** Handling: the manifest records `nx: "not used — orchestration deferred to IB0-WP04"`. WP02 does not add Nx and does not raise an ADR against ADR-002; IB0-WP04 does that.
+ 
+@@ -202,3 +204,15 @@ Negative checks, run only in a scratch copy:
+ ## 12. Exit rule
+ 
+ IB0-WP02 reaches technical PASS only when every mandatory criterion in `ACCEPTANCE.md` passes and the required evidence exists. PASS is not ACCEPTED. Human acceptance, and the separate licence dispositions, are recorded by the authorised reviewers.
++
++## 12. Controlled amendments at approval (2026-09-24)
++
++Authority: Product Owner / Solutions Architect instruction "IB0-WP02 — Product Owner / Solutions Architect authorization, controlled amendment, final QA and merge", 2026-09-24. Record: `evidence/IB0-WP02/notes/closure-authorisation.md`.
++
++(i) **Definition approved.** `WORK_PACKAGE.md` and `ACCEPTANCE.md` approved with all 24 criteria unchanged. Readiness conditions R1 and R2 closed. This section and the status lines in §2, §4(vii)–(ix), §6(vii) and §11(i) record the approval; no criterion text changed.
++
++(ii) **`CLAUDE.md` amended once.** The "Current bounded objective" section became "Work-package authorisation", with the durable rule quoted in §11(i). Source-of-truth items 6–7 and execution-discipline items 7–8 now refer to the authorised work package instead of IB0-WP01. The source-of-truth hierarchy, controlled baseline, mandatory rules, clean-room, security and anti-weakening rules, execution discipline and stop conditions are otherwise unchanged. The amendment adds that acceptance and merge authorisation remain PO/SA decisions.
++
++(iii) **Licence dispositions.** `lightningcss` (MPL-2.0) and `caniuse-lite` (CC-BY-4.0) approved as build-time dependencies, with the re-review triggers the PO/SA set. Recorded in `docs/licences/THIRD-PARTY-LICENCE-REVIEW.md`, `docs/licences/THIRD-PARTY-NOTICES.md` (new, within §4(v)) and `docs/provenance/PROVENANCE-REGISTER.md`.
++
++(iv) **Deferrals preserved.** Explicit `strict`/`strictTemplates` stays with IB0-WP03 and the Nx project graph with IB0-WP04.
+EXIT_CODE=0 (read-only git/file inspection; all commands completed)

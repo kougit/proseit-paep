@@ -1,0 +1,14 @@
+# Toolchain versions
+# date: 2026-09-24T05:05:11Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+.nvmrc: 24.21.0
+node --version: v24.21.0
+npm --version: 11.19.0
+packageManager: npm@11.19.0
+devEngines: {"runtime":{"name":"node","version":"24.21.0","onFail":"error"},"packageManager":{"name":"npm","version":"11.19.0","onFail":"error"}}
+uname: Linux 6.18.44-fc-v37 x86_64
+npm registry: https://registry.npmjs.org/
+npm effective policy: engine-strict=true strict-allow-scripts=true ignore-scripts=false
+7fde7b8afa198da66257f42ee2001d874c7355631e6d1579a5fb5ef1f246df4c  /opt/node24/bin/node
+EXIT_CODE=0

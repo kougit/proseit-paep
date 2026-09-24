@@ -1,0 +1,22 @@
+# Production build: reference-app
+# date: 2026-09-24T05:05:20Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+$ npm run build:reference-app
+
+> @proseit/paep-workspace@0.0.0 build:reference-app
+> ng build reference-app --configuration production
+
+❯ Building...
+✔ Building...
+Initial chunk files | Names         |  Raw size | Estimated transfer size
+main-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB
+styles-5INURTSO.css | styles        |   0 bytes |                 0 bytes
+
+                    | Initial total | 190.65 kB |                52.09 kB
+
+Application bundle generation complete. [4.035 seconds] - 2026-09-24T05:05:25.981Z
+
+Output location: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone/dist/reference-app
+
+EXIT_CODE=0

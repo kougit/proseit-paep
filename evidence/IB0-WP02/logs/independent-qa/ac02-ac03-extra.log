@@ -1,0 +1,11 @@
+$ od -c clone/.nvmrc
+0000000   2   4   .   2   1   .   0  \n
+0000010
+regex ^v?\d+\.\d+\.\d+\n?$: true
+$ (neg-a) Node 22 npm run build:reference-app
+npm error code EBADDEVENGINES
+npm error EBADDEVENGINES The developer of this package has specified the following through devEngines
+npm error EBADDEVENGINES Invalid devEngines.runtime
+npm error EBADDEVENGINES Invalid semver version "24.21.0" does not match "v22.22.2" for "runtime"
+npm error EBADDEVENGINES {
+EXIT_CODE=1

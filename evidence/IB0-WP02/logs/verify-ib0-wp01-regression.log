@@ -1,0 +1,24 @@
+# IB0-WP01 verifier regression
+# date: 2026-09-24T05:05:35Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+$ node tooling/verification/verify-ib0-wp01.mjs
+PASS V01 package.json exists
+PASS V02 package-lock.json exists
+PASS V03 Angular/Nx workspace metadata exists
+PASS V04 package.json parses
+PASS V05 npm is declared package manager — npm@11.19.0
+PASS V06 Required PAEP repository topology exists — 42 required directories present
+PASS V07 build:reference-app script exists — ng build reference-app --configuration production
+PASS V08 build:ui-lab script exists — ng build ui-lab --configuration production
+PASS V09 qa:ib0-wp01 script exists — node tooling/verification/verify-ib0-wp01.mjs
+PASS V10 reference-app is registered as workspace project
+PASS V11 ui-lab is registered as workspace project
+PASS V12 No obvious out-of-scope Frappe/reporting/commercial UI dependencies — none
+PASS V13 No obvious committed secrets in apps/packages/config — none
+PASS V14 reference-app build passes — exit=0
+PASS V15 ui-lab build passes — exit=0
+
+IB0-WP01 verifier result: PASS
+Evidence: evidence/IB0-WP01/reports/ib0-wp01-verification.json
+EXIT_CODE=0

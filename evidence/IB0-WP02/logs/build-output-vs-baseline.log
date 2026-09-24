@@ -1,0 +1,26 @@
+# Production build output: IB0-WP02 commit 916cb9d vs IB0-WP01 baseline b6b023f
+# Baseline hashes: fresh clone of b6b023f built on Node 24.21.0 / npm 11.19.0 during the IB0-WP02 reproducibility review lane (install scripts run).
+# WP02 hashes: logs/dist-hashes.log (fresh clone of 916cb9d, install scripts denied).
+
+## b6b023f
+826d77b6b3f125519073a19783e45c85d96e8daadc3ad87c14439c9398a3f259  dist/reference-app/3rdpartylicenses.txt
+f9102be80297c0529207607be5277b4f90bca89d65988fa1771b91c7894e815f  dist/reference-app/browser/favicon.ico
+5bca83ac0e6e4bd50f67884e881cefd017b85aacc832c277fcdbf57630719655  dist/reference-app/browser/index.html
+8fb68a9133ca3f58ecbcdfadc939dae45ccc5cf348bc1b8b3621ba6a51bae5d6  dist/reference-app/browser/main-4FFRGG7I.js
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  dist/reference-app/browser/styles-5INURTSO.css
+a79ddcc8a115190e9c19479ed36914741a7d1db74f0a1153529efc80725505fe  dist/reference-app/prerendered-routes.json
+826d77b6b3f125519073a19783e45c85d96e8daadc3ad87c14439c9398a3f259  dist/ui-lab/3rdpartylicenses.txt
+f9102be80297c0529207607be5277b4f90bca89d65988fa1771b91c7894e815f  dist/ui-lab/browser/favicon.ico
+7f2a13f5a13a0b5cdf924fa253834add39e2ccb5ad11075b8c904f3687074df1  dist/ui-lab/browser/index.html
+a15259cb22b08a96c5f822f2b7dfbc6217e4ae5db11ceae945cc7f41d5eb18d3  dist/ui-lab/browser/main-RPR4FBCF.js
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  dist/ui-lab/browser/styles-5INURTSO.css
+a79ddcc8a115190e9c19479ed36914741a7d1db74f0a1153529efc80725505fe  dist/ui-lab/prerendered-routes.json
+
+## diff (baseline vs 916cb9d)
+(no differences: all 12 output files byte-identical)
+EXIT_CODE=0
+
+## Re-check at closure commit 0078bb2 (2026-09-24)
+Fresh clone of 0078bb2, Node 24.21.0 / npm 11.19.0; logs/dist-hashes.log compared with the 916cb9d hashes above:
+12/12 files byte-identical to 916cb9d, and therefore to the b6b023f baseline
+EXIT_CODE=0

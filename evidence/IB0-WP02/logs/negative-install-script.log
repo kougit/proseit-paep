@@ -1,0 +1,23 @@
+# Negative: an install script not covered by allowScripts must fail npm ci under strict-allow-scripts
+# unreviewed install script
+# date: 2026-09-24T05:05:53Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/neg
+
+diff --git a/package.json b/package.json
+index 7a036ed..4652fd2 100644
+--- a/package.json
++++ b/package.json
+@@ -43,7 +43,6 @@
+   },
+   "allowScripts": {
+     "@parcel/watcher": false,
+-    "esbuild": false,
+     "fsevents": false,
+     "lmdb": false,
+     "msgpackr-extract": false
+npm error code ESTRICTALLOWSCRIPTS
+npm error --strict-allow-scripts: 1 package(s) have install scripts not covered by allowScripts:
+npm error   esbuild@0.28.2 (install: (install scripts present))
+npm error Approve them with `npm install-scripts approve`, deny them with `npm install-scripts deny`, or bypass this check with `--dangerously-allow-all-scripts`.
+npm error A complete log of this run can be found in: /root/.npm/_logs/2026-09-24T05_05_53_557Z-debug-0.log
+EXIT_CODE=1

@@ -3,6 +3,18 @@
   "version": "0.0.0",
   "private": true,
   "packageManager": "npm@11.19.0",
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "24.21.0",
+      "onFail": "error"
+    },
+    "packageManager": {
+      "name": "npm",
+      "version": "11.19.0",
+      "onFail": "error"
+    }
+  },
   "workspaces": [
     "packages/*"
   ],
@@ -10,7 +22,8 @@
     "ng": "ng",
     "build:reference-app": "ng build reference-app --configuration production",
     "build:ui-lab": "ng build ui-lab --configuration production",
-    "qa:ib0-wp01": "node tooling/verification/verify-ib0-wp01.mjs"
+    "qa:ib0-wp01": "node tooling/verification/verify-ib0-wp01.mjs",
+    "qa:ib0-wp02": "node tooling/verification/verify-ib0-wp02.mjs"
   },
   "dependencies": {
     "@angular/common": "22.1.8",
@@ -27,5 +40,12 @@
     "@angular/cli": "22.1.8",
     "@angular/compiler-cli": "22.1.8",
     "typescript": "6.0.3"
+  },
+  "allowScripts": {
+    "@parcel/watcher": false,
+    "esbuild": false,
+    "fsevents": false,
+    "lmdb": false,
+    "msgpackr-extract": false
   }
 }

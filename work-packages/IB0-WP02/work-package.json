@@ -1,0 +1,41 @@
+{
+  "id": "IB0-WP02",
+  "roadmap_alias": "PAEP-IR-01 IB0-WP2",
+  "title": "Toolchain/Version Baseline and Lockfile Control",
+  "milestone": "IB0",
+  "wbs": "W1 / IB0",
+  "design_classification": "D0",
+  "status": "ACCEPTED",
+  "acceptance": { "status": "ACCEPTED", "authority": "Product Owner / Solutions Architect", "date": "2026-09-24", "technical_verification": "PASS", "independent_qa": "PASS", "architecture_conformance": "PASS" },
+  "predecessor": { "id": "IB0-WP01", "status": "ACCEPTED", "baseline_commit": "b6b023f" },
+  "objective": "Pin and enforce the approved PAEP toolchain (Node, npm, Angular/CLI, TypeScript, RxJS, build tools), commit an in-sync lockfile unchanged by npm ci, record a machine-readable version manifest, and close the IB0-WP01 install-script policy and lightningcss/caniuse-lite licence-review deferrals.",
+  "controlled_baseline": {
+    "node": "24 LTS, exact pin (.nvmrc + devEngines.runtime, onFail=error)",
+    "npm": "exact pin (packageManager + devEngines)",
+    "angular": "22.x, @angular/core aligned with @angular/cli",
+    "typescript": "6.0.x exact",
+    "rxjs": "7.x exact",
+    "package_manager": "npm workspaces + committed package-lock.json; npm ci",
+    "workspace": "Angular CLI workspace; Nx-compatible orchestration deferred to IB0-WP04 (Nx not used)"
+  },
+  "bootstrap_versions_to_formalise": {
+    "node": "24.21.0", "npm": "11.19.0", "angular": "22.1.8", "angular_cli": "22.1.8",
+    "typescript": "6.0.3", "rxjs": "7.8.2", "tslib": "2.8.1"
+  },
+  "definition_status": "APPROVED 2026-09-24 by Product Owner / Solutions Architect (24 criteria unchanged); drafted by Claude Code 2026-09-23",
+  "readiness_conditions": ["R1 CLOSED 2026-09-24: execution authorised by PO/SA 2026-09-23; WORK_PACKAGE.md and ACCEPTANCE.md approved by PO/SA 2026-09-24", "R2 CLOSED 2026-09-24: CLAUDE.md amended once under express PO/SA authorisation to a durable work-package-neutral authorisation rule", "R3 Node enforcement: exact 24.21.0 in .nvmrc and devEngines.runtime (default taken)"],
+  "licence_dispositions": { "lightningcss": "APPROVED BUILD-TIME DEPENDENCY (MPL-2.0), PO/SA 2026-09-24", "caniuse-lite": "APPROVED BUILD-TIME DEPENDENCY (CC-BY-4.0) with caniuse.com attribution, PO/SA 2026-09-24" },
+  "deferred_from": ["IB0-WP01 ACCEPTANCE_REPORT deferred actions: Node/npm pinning and install-script policy; licence review lightningcss and caniuse-lite"],
+  "out_of_scope_owners": { "strict/strictTemplates, tsconfig.base.json, path aliases, lint/format": "IB0-WP03", "Nx/project graph, nx.json, boundaries, cycles, deep imports": "IB0-WP04", "CI workflows, unit-test runner, qa stages": "IB0-WP05", "release manifest, release SBOM, attestation": "W11" },
+  "mandatory_acceptance_ids": [
+    "IB0-WP02-AC01", "IB0-WP02-AC02", "IB0-WP02-AC03", "IB0-WP02-AC04", "IB0-WP02-AC05", "IB0-WP02-AC06",
+    "IB0-WP02-AC07", "IB0-WP02-AC08", "IB0-WP02-AC09", "IB0-WP02-AC10", "IB0-WP02-AC11", "IB0-WP02-AC12",
+    "IB0-WP02-AC13", "IB0-WP02-AC14", "IB0-WP02-AC15", "IB0-WP02-AC16", "IB0-WP02-AC17", "IB0-WP02-AC18",
+    "IB0-WP02-AC19", "IB0-WP02-AC20", "IB0-WP02-AC21", "IB0-WP02-AC22", "IB0-WP02-AC23", "IB0-WP02-AC24"
+  ],
+  "verifier": "tooling/verification/verify-ib0-wp02.mjs",
+  "evidence_path": "evidence/IB0-WP02/",
+  "technical_pass_requires_all_mandatory_criteria": true,
+  "human_acceptance_required": true,
+  "licence_disposition_authority": "Engineering Governance / IP owner"
+}

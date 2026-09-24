@@ -1,0 +1,58 @@
+$ node <traceability parser>
+columns: Requirement ID | Source | Work Package | Implementation Artifact | Acceptance Criteria | Verification | Status | Evidence Location
+rows: 20
+ACs covered: 24 missing: none
+status values: {"PASS":20}
+rows with wrong column count: 0
+evidence paths missing: 0
+   IB0-PLAN-002 -> IB0-WP02-AC01 | PASS
+   IB0-NODE-001 -> IB0-WP02-AC02;IB0-WP02-AC03 | PASS
+   IB0-NPM-001 -> IB0-WP02-AC04 | PASS
+   IB0-FW-001 -> IB0-WP02-AC05 | PASS
+   IB0-TS-001 -> IB0-WP02-AC06 | PASS
+   IB0-RX-001 -> IB0-WP02-AC07 | PASS
+   IB0-BUILD-001 -> IB0-WP02-AC08 | PASS
+   IB0-MAN-001 -> IB0-WP02-AC09 | PASS
+   IB0-LOCK-001 -> IB0-WP02-AC10;IB0-WP02-AC11 | PASS
+   IB0-BLD-002 -> IB0-WP02-AC12;IB0-WP02-AC13 | PASS
+   IB0-SCRIPT-001 -> IB0-WP02-AC14 | PASS
+   IB0-LIC-001 -> IB0-WP02-AC15;IB0-WP02-AC16 | PASS
+   IB0-PROV-002 -> IB0-WP02-AC17 | PASS
+   IB0-SCOPE-002 -> IB0-WP02-AC18;IB0-WP02-AC19 | PASS
+   IB0-CTRL-001 -> IB0-WP02-AC20 | PASS
+   IB0-REG-001 -> IB0-WP02-AC21 | PASS
+   IB0-VER-002 -> IB0-WP02-AC22 | PASS
+   IB0-EVID-002 -> IB0-WP02-AC23;IB0-WP02-AC24 | PASS
+   IB0-LIC-002 -> IB0-WP02-AC15;IB0-WP02-AC17 | PASS
+   IB0-GOV-001 -> IB0-WP02-AC18;IB0-WP02-AC24 | PASS
+
+$ required evidence (WORK_PACKAGE §10)
+present README.md (5706 B)
+present logs/npm-ci.log (34605 B)
+present logs/lockfile-unchanged.log (772 B)
+present logs/build-reference-app.log (941 B)
+present logs/build-ui-lab.log (906 B)
+present logs/ng-version.log (2296 B)
+present logs/toolchain-versions.log (734 B)
+present logs/registry-review.log (3189 B)
+present logs/install-scripts-ls.log (318 B)
+present logs/negative-node-version.log (3526 B)
+present logs/negative-lockfile-drift.log (973 B)
+present logs/clean-clone-reproduction.log (961 B)
+present logs/verify-ib0-wp02.log (3319 B)
+present logs/verify-ib0-wp01-regression.log (1296 B)
+present logs/controlled-source-integrity.log (2597 B)
+present logs/scope-and-secret-scan.log (7763 B)
+present reports/ib0-wp02-verification.json (5866 B)
+present reports/version-manifest.md (3044 B)
+present reports/lockfile-diff.md (1384 B)
+present reports/install-script-policy.md (4809 B)
+present reports/licence-inventory.json (88640 B)
+present reports/licence-inventory.md (2973 B)
+present notes/implementation-summary.md (4514 B)
+present docs/architecture/toolchain-version-manifest.json
+present docs/licences/THIRD-PARTY-LICENCE-REVIEW.md
+present docs/provenance/PROVENANCE-REGISTER.md
+present work-packages/IB0-WP02/ACCEPTANCE_REPORT.md
+present work-packages/IB0-WP02/TRACEABILITY.csv
+EXIT_CODE=0 (read-only git/file inspection; all commands completed)

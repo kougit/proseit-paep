@@ -1,0 +1,9 @@
+# npm audit (all and runtime)
+# date: 2026-09-24T05:05:40Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+$ bash -c npm audit; echo '--- --omit=dev'; npm audit --omit=dev
+found 0 vulnerabilities
+--- --omit=dev
+found 0 vulnerabilities
+EXIT_CODE=0

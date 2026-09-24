@@ -1,0 +1,11 @@
+# Installed-tree difference: same lockfile (b6b023f), npm 11.19.0 (left) vs npm 10.9.7 (right)
+# Recorded during the IB0-WP02 toolchain review lane on 2026-09-23 (diff of installed node_modules/**/package.json paths)
+
+34a35,37
+> node_modules/@emnapi/core/package.json
+> node_modules/@emnapi/runtime/package.json
+> node_modules/@emnapi/wasi-threads/package.json
+72a76
+> node_modules/@napi-rs/wasm-runtime/package.json
+81a86
+> node_modules/@tybys/wasm-util/package.json

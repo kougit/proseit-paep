@@ -1,0 +1,15 @@
+# date: 2026-09-24T05:10:23Z commit: fd096c1ab0a92921c1d789fe241bb33299b28da1 cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/iqa/neg-b
+# PATH=/opt/node24/bin:/usr/bin:/bin node: v24.21.0 npm-cli: 10.9.7
+$ mutation: true
+$ git diff --stat
+$ /opt/node24/bin/node /opt/node22/lib/node_modules/npm/bin/npm-cli.js ci
+npm error code EBADDEVENGINES
+npm error EBADDEVENGINES The developer of this package has specified the following through devEngines
+npm error EBADDEVENGINES Invalid devEngines.packageManager
+npm error EBADDEVENGINES Invalid semver version "11.19.0" does not match "10.9.7" for "packageManager"
+npm error EBADDEVENGINES {
+npm error EBADDEVENGINES   current: { name: 'npm', version: '10.9.7' },
+npm error EBADDEVENGINES   required: { name: 'npm', version: '11.19.0', onFail: 'error' }
+npm error EBADDEVENGINES }
+npm error A complete log of this run can be found in: /root/.npm/_logs/2026-09-24T05_10_23_999Z-debug-0.log
+EXIT_CODE=1

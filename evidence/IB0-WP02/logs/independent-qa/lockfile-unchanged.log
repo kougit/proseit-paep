@@ -1,0 +1,8 @@
+# date: 2026-09-24T05:09:25Z node: v24.21.0 npm: 11.19.0 commit: fd096c1ab0a92921c1d789fe241bb33299b28da1 cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/iqa/clone
+# PATH=/opt/node24/bin:/usr/bin:/bin
+$ git diff --exit-code -- package.json package-lock.json; echo diff_exit=$?; git diff --exit-code b6b023fea11625360f0bf43cd0bdcba968cda90d -- package-lock.json; echo baseline_lock_diff_exit=$?; sha256sum package-lock.json; git show b6b023f:package-lock.json | sha256sum; git status --porcelain
+diff_exit=0
+baseline_lock_diff_exit=0
+be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69  package-lock.json
+be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69  -
+EXIT_CODE=0

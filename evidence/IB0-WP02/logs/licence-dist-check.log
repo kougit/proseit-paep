@@ -1,0 +1,96 @@
+# Licence evidence from build output
+# date: 2026-09-24T05:05:41Z node: v24.21.0 npm: 11.19.0 commit: 0078bb2b2aaf0c603b932c124ad437a3409d418d
+# cwd: /tmp/claude-0/-home-claude-proseit-paep/0d500fce-d6c0-500f-b840-9623079f4413/scratchpad/qa/clone
+
+Positive control (must list files): grep -rIilE 'rxjs|tslib' dist/
+dist/reference-app/3rdpartylicenses.txt
+dist/ui-lab/3rdpartylicenses.txt
+control exit=0 (0 = pattern syntax matches as expected)
+
+Search (must find nothing): grep -rIilE 'lightningcss|caniuse|browserslist|Mozilla Public|MPL-2|creativecommons|CC-BY' dist/
+search exit=1 (1 = no matches)
+
+npm ls lightningcss caniuse-lite --all:
+@proseit/paep-workspace@0.0.0 /tmp/claude-0/-home-claude-proseit-paep/***/scratchpad/qa/clone
+`-- @angular/build@22.1.8
+  +-- browserslist@4.29.0
+  | `-- caniuse-lite@1.0.30001810
+  `-- vite@8.1.5
+    `-- lightningcss@1.33.0
+
+
+npm ls --omit=dev --all (runtime closure):
+@proseit/paep-workspace@0.0.0 /tmp/claude-0/-home-claude-proseit-paep/***/scratchpad/qa/clone
++-- @angular/common@22.1.8
+| +-- @angular/core@22.1.8 deduped
+| +-- rxjs@7.8.2 deduped
+| `-- tslib@2.8.1 deduped
++-- @angular/compiler@22.1.8
+| `-- tslib@2.8.1 deduped
++-- @angular/core@22.1.8
+| +-- @angular/compiler@22.1.8 deduped
+| +-- rxjs@7.8.2 deduped
+| +-- tslib@2.8.1 deduped
+| `-- UNMET OPTIONAL DEPENDENCY zone.js@~0.15.0 || ~0.16.0
++-- @angular/forms@22.1.8
+| +-- @angular/common@22.1.8 deduped
+| +-- @angular/core@22.1.8 deduped
+| +-- @angular/platform-browser@22.1.8 deduped
+| +-- @standard-schema/spec@1.1.0
+| +-- rxjs@7.8.2 deduped
+| +-- tslib@2.8.1 deduped
+| `-- zod@4.4.3
++-- @angular/platform-browser@22.1.8
+| +-- UNMET OPTIONAL DEPENDENCY @angular/animations@22.1.8
+| +-- @angular/common@22.1.8 deduped
+| +-- @angular/core@22.1.8 deduped
+| `-- tslib@2.8.1 deduped
++-- @angular/router@22.1.8
+| +-- @angular/common@22.1.8 deduped
+| +-- @angular/core@22.1.8 deduped
+| +-- @angular/platform-browser@22.1.8 deduped
+| +-- rxjs@7.8.2 deduped
+| `-- tslib@2.8.1 deduped
++-- @proseit/frappe-sdk@0.0.0 -> ./packages/frappe-sdk
++-- @proseit/paep-analytics@0.0.0 -> ./packages/analytics
++-- @proseit/paep-components@0.0.0 -> ./packages/components
++-- @proseit/paep-contracts@0.0.0 -> ./packages/contracts
++-- @proseit/paep-domain-ai@0.0.0 -> ./packages/domain-ai
++-- @proseit/paep-domain-commerce@0.0.0 -> ./packages/domain-commerce
++-- @proseit/paep-domain-construction@0.0.0 -> ./packages/domain-construction
++-- @proseit/paep-domain-fiscal@0.0.0 -> ./packages/domain-fiscal
++-- @proseit/paep-domain-iot@0.0.0 -> ./packages/domain-iot
++-- @proseit/paep-domain-maintenance@0.0.0 -> ./packages/domain-maintenance
++-- @proseit/paep-domain-manufacturing@0.0.0 -> ./packages/domain-manufacturing
++-- @proseit/paep-domain-quality@0.0.0 -> ./packages/domain-quality
++-- @proseit/paep-enterprise@0.0.0 -> ./packages/enterprise
++-- @proseit/paep-foundation@0.0.0 -> ./packages/foundation
++-- @proseit/paep-i18n@0.0.0 -> ./packages/i18n
++-- @proseit/paep-observability@0.0.0 -> ./packages/observability
++-- @proseit/paep-offline@0.0.0 -> ./packages/offline
++-- @proseit/paep-platform@0.0.0 -> ./packages/platform
++-- rxjs@7.8.2
+| `-- tslib@2.8.1 deduped
+`-- tslib@2.8.1
+
+
+Packages named in dist/reference-app/3rdpartylicenses.txt:
+Package: @angular/core
+Package: rxjs
+Package: tslib
+Package: @angular/common
+Package: @angular/platform-browser
+Package: @angular/router
+
+Files under dist/reference-app:
+dist/reference-app/3rdpartylicenses.txt
+dist/reference-app/browser/favicon.ico
+dist/reference-app/browser/index.html
+dist/reference-app/browser/main-4FFRGG7I.js
+dist/reference-app/browser/styles-5INURTSO.css
+dist/reference-app/prerendered-routes.json
+
+lightningcss removal test (production output with lightningcss removed must be identical):
+builds without lightningcss: reference-app exit=0 ui-lab exit=0
+browser output byte-identical with and without lightningcss
+EXIT_CODE=0

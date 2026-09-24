@@ -163,6 +163,7 @@ try {
     if (cfg.errors.length) strictProblems.push(`${name}: ${cfg.errors.length} config errors`);
     if (o.strict !== true || o.noImplicitAny !== true || o.strictTemplates !== true) strictProblems.push(`${name}: effective strict=${o.strict} noImplicitAny=${o.noImplicitAny} strictTemplates=${o.strictTemplates}`);
     for (const k of STRICT_FAMILY) if (o[k] === false) strictProblems.push(`${name}: effective ${k}=false`);
+    if (o.noCheck) strictProblems.push(`${name}: effective noCheck=${o.noCheck}`);
     if (Object.keys(o.paths || {}).length !== 18) strictProblems.push(`${name}: effective paths ${Object.keys(o.paths || {}).length}`);
     effective.push(`${name}: strict=${o.strict} noImplicitAny=${o.noImplicitAny} strictTemplates=${o.strictTemplates} paths=${Object.keys(o.paths || {}).length}`);
   }

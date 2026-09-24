@@ -66,7 +66,7 @@ function mutate(edits) {
     for (const p of links) fs.rmSync(p, { force: true });
     for (const [p, c] of saved) { if (c === null) fs.rmSync(p, { force: true }); else fs.writeFileSync(p, c); }
     // Remove directories a case created (they are empty once their files are gone).
-    for (const d of ['packages/rogue/src', 'packages/rogue', 'packages/components/src/lib', 'packages/components/src/dist', 'packages/components/src/sub', 'packages/contracts/src/lib', 'tooling/wp04-outside']) {
+    for (const d of ['packages/rogue/src', 'packages/rogue', 'packages/components/src/lib', 'packages/components/src/dist', 'packages/components/src/sub', 'packages/contracts/src/lib', 'tooling/wp04-outside', 'packages/frappe-sdk/node_modules']) {
       const dp = path.join(copy, d);
       if (fs.existsSync(dp) && fs.readdirSync(dp).length === 0) fs.rmdirSync(dp);
     }
@@ -221,6 +221,9 @@ try {
   checkerCase('N48', 'allowlisted same-category edge by deep import', [allow(pair('domain-quality', 'domain-fiscal')), [entry('domain-quality'), append("import '@proseit/paep-domain-fiscal/src/index';")]], 'DEEP_IMPORT');
   checkerCase('N49', 'allowlisted same-category pair in both directions forms a cycle', [allow(pair('domain-quality', 'domain-fiscal'), pair('domain-fiscal', 'domain-quality')), [entry('domain-quality'), append("import '@proseit/paep-domain-fiscal';")], [entry('domain-fiscal'), append("import '@proseit/paep-domain-quality';")]], 'CYCLE');
   checkerCase('N50', 'allowlist entry crossing categories (components -> enterprise)', [allow(pair('components', 'enterprise'))], 'MODEL');
+  // A workspace package reached under another name (PO/SA: fail closed; QA final round M1).
+  checkerCase('N53', 'workspace package aliased in a manifest ("i18n-x": "file:../i18n") and imported by that name', [['packages/frappe-sdk/package.json', (t) => { const p = JSON.parse(t); p.dependencies = { 'i18n-x': 'file:../i18n' }; return JSON.stringify(p, null, 2) + '\n'; }], [entry('frappe-sdk'), append("import 'i18n-x';")]], 'UNKNOWN_PACKAGE');
+  checkerCase('N54', 'bare import linked by node_modules to a workspace package (frappe-sdk -> i18n via "i18n-x")', [['packages/frappe-sdk/node_modules/i18n-x', 'symlink:../../i18n'], [entry('frappe-sdk'), append("import 'i18n-x';")]], 'DIRECTION');
   checkerCase('N52', 'allowlist entry linking two applications (reference-app -> ui-lab)', [allow({ source: 'reference-app', target: 'ui-lab', rationale: 'IB0-WP04 negative test', approval: 'test only' })], 'MODEL');
   checkerCase('N51', 'allowlist entry without a rationale', [allow(pair('domain-quality', 'domain-fiscal', { rationale: '' }))], 'MODEL');
 
@@ -263,8 +266,8 @@ const head = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf
 fs.writeFileSync(path.join(reportsDir, 'negative-tests.json'), JSON.stringify({
   workPackage: 'IB0-WP04', generatedAt: new Date().toISOString(), commit: head, node: process.versions.node,
   result: passed ? 'PASS' : 'FAIL',
-  controls: results.filter((r) => r.id.startsWith('C')).length,
-  negatives: results.filter((r) => r.id.startsWith('N')).length,
+  controls: results.filter((r) => /^(C|O)\d|^S\dc$/.test(r.id)).length,
+  negatives: results.filter((r) => !/^(C|O)\d|^S\dc$/.test(r.id)).length,
   cases: results
 }, null, 2) + '\n', 'utf8');
 

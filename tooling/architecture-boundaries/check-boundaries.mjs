@@ -396,6 +396,16 @@ export function checkBoundaries(root = process.cwd()) {
         addEdge(project, target, kind, where);
         continue;
       }
+      // A bare name that node_modules links to a workspace project (a file:, link: or npm:
+      // alias) would hide the edge behind another name; judge it by its real path.
+      const bare = spec.startsWith('@') ? spec.split('/').slice(0, 2).join('/') : spec.split('/')[0];
+      const linked = [`${project.root}/node_modules/${bare}`, `node_modules/${bare}`].find((d) => fs.existsSync(abs(d)));
+      const linkedOwner = linked ? ownerOf(fs.realpathSync(abs(linked))) : null;
+      if (linkedOwner) {
+        flag('UNKNOWN_PACKAGE', `${project.name} imports "${spec}", which resolves to ${linkedOwner.name} under another name; import it by its own name`, where);
+        if (linkedOwner !== project) addEdge(project, linkedOwner, kind, where);
+        continue;
+      }
       if (!externalByProject.has(project.name)) externalByProject.set(project.name, []);
       externalByProject.get(project.name).push({ spec, where, reexport });
     }
@@ -411,6 +421,7 @@ export function checkBoundaries(root = process.cwd()) {
         const target = packageNames.get(dep);
         if (target) addEdge(p, target, 'implicit', `${m} ${field}`);
         else if (dep.startsWith('@proseit/')) flag('UNKNOWN_PACKAGE', `${p.name} declares ${dep} (${field}), which is not a workspace package`, m);
+        else if (/^(file|link|workspace|portal):|^npm:@proseit\//.test(String(pkg[field][dep]))) flag('UNKNOWN_PACKAGE', `${p.name} declares ${dep} as "${pkg[field][dep]}" (${field}), a local or aliased reference; depend on a workspace package by its own name`, m);
         else {
           if (!externalByProject.has(p.name)) externalByProject.set(p.name, []);
           externalByProject.get(p.name).push({ spec: dep, where: `${m} ${field}`, reexport: false });

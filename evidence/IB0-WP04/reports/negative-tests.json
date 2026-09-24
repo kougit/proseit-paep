@@ -1,0 +1,370 @@
+{
+  "workPackage": "IB0-WP04",
+  "generatedAt": "2026-09-24T10:14:53.483Z",
+  "commit": "f74fb78ac871b0a302a7819a5c1d7752544f2409",
+  "node": "24.21.0",
+  "result": "PASS",
+  "controls": 4,
+  "negatives": 29,
+  "cases": [
+    {
+      "id": "C0",
+      "name": "positive control: unmutated workspace passes",
+      "tool": "arch:check",
+      "expected": "exit 0, no violations, 0 edges (0 optional)",
+      "exit": 0,
+      "rules": [],
+      "pass": true
+    },
+    {
+      "id": "C1",
+      "name": "allowed-edge control: enterprise -> components (Yes), frappe-sdk -> offline (Optional), reference-app -> enterprise (Yes)",
+      "tool": "arch:check",
+      "expected": "exit 0, no violations, 3 edges (1 optional)",
+      "exit": 0,
+      "rules": [],
+      "pass": true
+    },
+    {
+      "id": "C2",
+      "name": "allowed-edge control: reference-app production build resolves @proseit/paep-enterprise through tsconfig.base.json",
+      "tool": "ng build reference-app --configuration production",
+      "expected": "exit 0",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "C3",
+      "name": "positive control: WP04 verifier static checks pass unmutated",
+      "tool": "qa:ib0-wp04 --static-only",
+      "expected": "exit 0, all PASS",
+      "exit": 0,
+      "failedChecks": [],
+      "pass": true
+    },
+    {
+      "id": "N01",
+      "name": "forbidden upward import: components -> enterprise",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N02",
+      "name": "contracts -> @angular/core",
+      "tool": "arch:check",
+      "expected": "exit 1, CONTRACTS_NEUTRAL",
+      "exit": 1,
+      "rules": [
+        "CONTRACTS_NEUTRAL"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N03",
+      "name": "foundation -> enterprise",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N04",
+      "name": "deep import: enterprise -> @proseit/paep-components/src/internal/button",
+      "tool": "arch:check",
+      "expected": "exit 1, DEEP_IMPORT",
+      "exit": 1,
+      "rules": [
+        "DEEP_IMPORT"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N05",
+      "name": "circular dependency over allowed Optional edges: platform <-> observability (caught by the cycle rule alone)",
+      "tool": "arch:check",
+      "expected": "exit 1, CYCLE, no DIRECTION",
+      "exit": 1,
+      "rules": [
+        "CYCLE"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N06",
+      "name": "public-entry-point bypass by relative path: enterprise -> ../../components/src/index",
+      "tool": "arch:check",
+      "expected": "exit 1, ENTRY_BYPASS",
+      "exit": 1,
+      "rules": [
+        "ENTRY_BYPASS"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N07",
+      "name": "unknown project category (\"widgets\")",
+      "tool": "arch:check",
+      "expected": "exit 1, CLASSIFICATION",
+      "exit": 1,
+      "rules": [
+        "ALIAS",
+        "CLASSIFICATION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N08",
+      "name": "unclassified package packages/rogue",
+      "tool": "arch:check",
+      "expected": "exit 1, CLASSIFICATION",
+      "exit": 1,
+      "rules": [
+        "CLASSIFICATION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N09",
+      "name": "app -> app: reference-app imports ui-lab source",
+      "tool": "arch:check",
+      "expected": "exit 1, ENTRY_BYPASS",
+      "exit": 1,
+      "rules": [
+        "DIRECTION",
+        "ENTRY_BYPASS"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N10",
+      "name": "package -> app: components imports reference-app source",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION",
+        "ENTRY_BYPASS"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N11",
+      "name": "contracts uses a DOM global (document)",
+      "tool": "arch:check",
+      "expected": "exit 1, CONTRACTS_NEUTRAL",
+      "exit": 1,
+      "rules": [
+        "CONTRACTS_NEUTRAL"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N12",
+      "name": "frappe-sdk -> components (UI)",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N13",
+      "name": "analytics -> frappe-sdk",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N14",
+      "name": "domain -> domain: domain-quality -> domain-fiscal",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N15",
+      "name": "forbidden manifest dependency: foundation package.json depends on enterprise",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N16",
+      "name": "forbidden edge by dynamic import(): foundation -> enterprise",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N17",
+      "name": "forbidden edge by type-only import: platform -> enterprise",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N18",
+      "name": "forbidden edge by re-export: components re-exports analytics",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N19",
+      "name": "analytics re-exports a visualization vendor module",
+      "tool": "arch:check",
+      "expected": "exit 1, ANALYTICS_VENDOR_EXPORT",
+      "exit": 1,
+      "rules": [
+        "ANALYTICS_VENDOR_EXPORT"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N20",
+      "name": "app copies package source",
+      "tool": "arch:check",
+      "expected": "exit 1, COPIED_CODE",
+      "exit": 1,
+      "rules": [
+        "COPIED_CODE"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N21",
+      "name": "model matrix tampered: platform -> frappe-sdk set to \"Yes\"",
+      "tool": "arch:check",
+      "expected": "exit 1, MODEL",
+      "exit": 1,
+      "rules": [
+        "MODEL"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N22",
+      "name": "wildcard deep alias added to tsconfig.base.json",
+      "tool": "arch:check",
+      "expected": "exit 1, ALIAS",
+      "exit": 1,
+      "rules": [
+        "ALIAS"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N23",
+      "name": "alias retargeted below the entry point",
+      "tool": "arch:check",
+      "expected": "exit 1, ALIAS",
+      "exit": 1,
+      "rules": [
+        "ALIAS"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N24",
+      "name": "paths re-added to tsconfig.json (second alias registry)",
+      "tool": "arch:check",
+      "expected": "exit 1, ALIAS",
+      "exit": 1,
+      "rules": [
+        "ALIAS"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N25",
+      "name": "unknown @proseit/* package imported",
+      "tool": "arch:check",
+      "expected": "exit 1, UNKNOWN_PACKAGE",
+      "exit": 1,
+      "rules": [
+        "UNKNOWN_PACKAGE"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N26",
+      "name": "import from tooling/ (outside every project)",
+      "tool": "arch:check",
+      "expected": "exit 1, OUTSIDE_PROJECT",
+      "exit": 1,
+      "rules": [
+        "OUTSIDE_PROJECT"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N27",
+      "name": "forbidden edge by import = require(): foundation -> enterprise",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N28",
+      "name": "nx added to devDependencies",
+      "tool": "qa:ib0-wp04 --static-only",
+      "expected": "exit 1, V15 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V15",
+        "V16"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N29",
+      "name": "nx.json created",
+      "tool": "qa:ib0-wp04 --static-only",
+      "expected": "exit 1, V15 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V15",
+        "V17"
+      ],
+      "pass": true
+    }
+  ]
+}

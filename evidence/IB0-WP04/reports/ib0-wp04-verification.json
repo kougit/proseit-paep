@@ -1,0 +1,176 @@
+{
+  "workPackage": "IB0-WP04",
+  "generatedAt": "2026-09-24T10:14:27.921Z",
+  "mode": "full",
+  "commit": "f74fb78ac871b0a302a7819a5c1d7752544f2409",
+  "baseline": "ac6b786caf3485ce2b45724be2b437c28f04b66b",
+  "trackedChangesAtRun": [],
+  "node": "24.21.0",
+  "npm": "11.19.0",
+  "typescript": "6.0.3",
+  "platform": "linux-x64",
+  "nxDisposition": "NOT REQUIRED FOR IB0-WP04",
+  "architecture": {
+    "projects": 20,
+    "libraries": 18,
+    "applications": 2,
+    "sourceFiles": 26,
+    "importsScanned": 18,
+    "edges": 0,
+    "optionalEdges": 0,
+    "cycles": 0,
+    "aliases": 18,
+    "aliasResolutions": 36,
+    "matrixCellsCompared": 144,
+    "contractsDiagnostics": 0,
+    "violations": 0,
+    "violationsByRule": {}
+  },
+  "result": "PASS",
+  "checks": [
+    {
+      "id": "V01",
+      "name": "Architecture model layers and 12x12 matrix equal PAEP-IB-01 §6.1 and Appendix B cell by cell",
+      "pass": true,
+      "details": "144/144 cells match; layers match §6.1"
+    },
+    {
+      "id": "V02",
+      "name": "Every package directory, npm workspace and angular.json project is classified exactly once with a known category and tags",
+      "pass": true,
+      "details": "20 projects classified (18 libraries, 2 applications); 0 unknown"
+    },
+    {
+      "id": "V03",
+      "name": "Project graph generated in the Nx ProjectGraph shape with one node per project, tags, layers, edges and depConstraints",
+      "pass": true,
+      "details": "20 nodes, 0 edges, 12 constraints -> evidence/IB0-WP04/reports/project-graph.json"
+    },
+    {
+      "id": "V04",
+      "name": "tsconfig.base.json holds only the alias registry; tsconfig.json extends it without paths; no other paths/baseUrl; every app build inherits it",
+      "pass": true,
+      "details": "tsconfig.base.json: 18 aliases; chain apps/*/tsconfig.app.json -> tsconfig.json -> tsconfig.base.json"
+    },
+    {
+      "id": "V05",
+      "name": "WP03 strict controls preserved: literal in tsconfig.json, all other options equal the baseline, app tsconfigs unchanged, effective options strict for both apps",
+      "pass": true,
+      "details": "reference-app: strict=true noImplicitAny=true strictTemplates=true paths=18; ui-lab: strict=true noImplicitAny=true strictTemplates=true paths=18"
+    },
+    {
+      "id": "V06",
+      "name": "tsconfig.base.json maps each package name to exactly its src/index.ts (no wildcard, no app alias) and every alias resolves from every app",
+      "pass": true,
+      "details": "18/18 aliases; 36/36 resolutions"
+    },
+    {
+      "id": "V07",
+      "name": "Every package has its src/index.ts public entry point, still a placeholder (export {} only)",
+      "pass": true,
+      "details": "18/18 entry points"
+    },
+    {
+      "id": "V08",
+      "name": "Dependency direction: every edge allowed by Appendix B; no same-category edge",
+      "pass": true,
+      "details": "0 findings; 18 imports in 26 files, 0 edges; 0 optional"
+    },
+    {
+      "id": "V09",
+      "name": "No deep @proseit/<pkg>/<path> import and no unknown @proseit/* import",
+      "pass": true,
+      "details": "0 findings; 18 imports in 26 files, 0 edges"
+    },
+    {
+      "id": "V10",
+      "name": "No relative/rooted import leaves its project (public-entry-point bypass or ownership violation)",
+      "pass": true,
+      "details": "0 findings; 18 imports in 26 files, 0 edges"
+    },
+    {
+      "id": "V11",
+      "name": "No circular package dependency",
+      "pass": true,
+      "details": "0 findings; 18 imports in 26 files, 0 edges; 0 cycles"
+    },
+    {
+      "id": "V12",
+      "name": "contracts imports no external module and compiles with ES2022 only and no ambient types",
+      "pass": true,
+      "details": "0 findings; 18 imports in 26 files, 0 edges; 0 diagnostics"
+    },
+    {
+      "id": "V13",
+      "name": "analytics re-exports no external module; no app file copies package source",
+      "pass": true,
+      "details": "0 findings; 18 imports in 26 files, 0 edges"
+    },
+    {
+      "id": "V14",
+      "name": "npm run arch:check exits 0",
+      "pass": true,
+      "details": "exit=0; PAEP architecture check: PASS — 20 projects, 0 edges (0 optional), 0 cycles, 18 imports in 26 files, 0 violations"
+    },
+    {
+      "id": "V15",
+      "name": "No Nx: no nx/@nx/@nrwl dependency, lockfile entry or install, and no nx.json or project.json",
+      "pass": true,
+      "details": "none; Nx disposition: NOT REQUIRED FOR IB0-WP04"
+    },
+    {
+      "id": "V16",
+      "name": "package-lock.json is byte-identical to the baseline and package.json differs only by the three WP04 scripts",
+      "pass": true,
+      "details": "lockfile sha256 be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69"
+    },
+    {
+      "id": "V17",
+      "name": "No WP05/IB1+ or Nx/lint artefacts, apps/packages/angular.json unchanged, and every changed path is within WORK_PACKAGE §4",
+      "pass": true,
+      "details": "15 changed paths, all permitted"
+    },
+    {
+      "id": "V18",
+      "name": "Controlled sources match PACK_MANIFEST.json; .paep-control, .gitignore, PACK_MANIFEST.json and CLAUDE.md unchanged",
+      "pass": true,
+      "details": "13/13 files match sha256 and size"
+    },
+    {
+      "id": "V19",
+      "name": "No credential or secret signatures in files added or modified since the baseline",
+      "pass": true,
+      "details": "15 files scanned; findings: none"
+    },
+    {
+      "id": "V20",
+      "name": "build:reference-app production build passes",
+      "pass": true,
+      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.09 kB\n\nApplication bundle generation complete. [1.792 seconds] - 2026-09-24T10:14:08.374Z\n\nOutput location: /tmp/paep-wp04-clone-Gg2F/repo/dist/reference-app"
+    },
+    {
+      "id": "V21",
+      "name": "build:ui-lab production build passes",
+      "pass": true,
+      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-RPR4FBCF.js    | main          | 190.65 kB |                52.16 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.16 kB\n\nApplication bundle generation complete. [1.748 seconds] - 2026-09-24T10:14:10.776Z\n\nOutput location: /tmp/paep-wp04-clone-Gg2F/repo/dist/ui-lab"
+    },
+    {
+      "id": "V22",
+      "name": "IB0-WP03 regression: every WP03 check passes except the bounded V05/V08/V10/V12/V17, each reporting only WP04-authorised change; WP03 records unchanged",
+      "pass": true,
+      "details": "WP03 13/18 pass; bounded: V05, V08, V10, V12, V17 (exit 1); restored: evidence/IB0-WP03/logs/ib0-wp01-verification.regression.json, evidence/IB0-WP03/logs/ib0-wp02-verification.regression.json, evidence/IB0-WP03/logs/verify-ib0-wp02-regression.log, evidence/IB0-WP03/reports/ib0-wp03-verification.json"
+    },
+    {
+      "id": "V23",
+      "name": "IB0-WP02 regression: every WP02 check passes except V17, whose findings are only tsconfig.base.json and the accepted WP03 paths",
+      "pass": true,
+      "details": "WP02 19/20 pass; V17 bounded: out-of-scope file present: tsconfig.base.json; protected paths changed: packages/analytics/src/index.ts, packages/components/src/index.ts, packages/contracts/src/index.ts, packages/domain-ai/src/index.ts, packages/domain-commerce/src/index.ts, packages/domain-construction/src/index.ts, packages/domain-fiscal/src/index.ts, packages/domain-iot/src/index.ts, packages/domain-maintenance/src/index.ts, packages/domain-manufacturing/src/index.ts, packages/domain-quality/src/index.ts, packages/enterprise/src/index.ts, packages/foundation/src/index.ts, packages/frappe-sdk/src/index.ts, packages/i18n/src/index.ts, packages/observability/src/index.ts, packages/offline/src/index.ts, packages/platform/src/index.ts, tsconfig.json"
+    },
+    {
+      "id": "V24",
+      "name": "IB0-WP01 regression passes",
+      "pass": true,
+      "details": "WP01 15/15 pass"
+    }
+  ]
+}

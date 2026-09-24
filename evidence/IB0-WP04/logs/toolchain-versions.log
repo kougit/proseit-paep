@@ -1,0 +1,7 @@
+# date: 2026-09-24T10:13:47Z node: v24.21.0 npm: 11.19.0 commit: f74fb78ac871b0a302a7819a5c1d7752544f2409
+.nvmrc: 24.21.0
+devEngines: {"runtime":{"name":"node","version":"24.21.0","onFail":"error"},"packageManager":{"name":"npm","version":"11.19.0","onFail":"error"}}
+packageManager: npm@11.19.0
+engine-strict=true
+strict-allow-scripts=true
+EXIT_CODE=0

@@ -1,0 +1,8 @@
+# date: 2026-09-24T10:14:03Z node: v24.21.0 npm: 11.19.0 commit: f74fb78ac871b0a302a7819a5c1d7752544f2409
+$ npm run arch:check
+
+> @proseit/paep-workspace@0.0.0 arch:check
+> node tooling/architecture-boundaries/check-boundaries.mjs
+
+PAEP architecture check: PASS — 20 projects, 0 edges (0 optional), 0 cycles, 18 imports in 26 files, 0 violations
+EXIT_CODE=0

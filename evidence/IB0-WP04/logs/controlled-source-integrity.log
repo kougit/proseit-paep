@@ -1,0 +1,17 @@
+# date: 2026-09-24T10:14:53Z node: v24.21.0 npm: 11.19.0 commit: f74fb78ac871b0a302a7819a5c1d7752544f2409
+MATCH .gitignore 3646b9d51803eca2cd8e7e5fec090abeab78137ee03e326689e875e29560b8bc
+MATCH .paep-control/SOURCE_OF_TRUTH.md cbae92bae66d58d8ea5ef5e90ae9df127098f6777711179e9d13b685dd8f5262
+MATCH .paep-control/originals/PAEP_DCH_v1.0.pdf 9a6a5efd82e71e7533cf883710b24c61e8b54ba1fe4910b402ba0340391e4996
+MATCH .paep-control/originals/PAEP_EQP_v1.1.pdf c61d5ace05815a7fbd3272c1587d1b6fa7a32fd6ce280aab6008c3bc70783b04
+MATCH .paep-control/originals/PAEP_IB_v1.0.pdf cae5f62fbba6dd274ff83be4e3759ebecdafe220cf647b9e1427d6c16ccb623d
+MATCH .paep-control/originals/PAEP_IR_v1.0.docx 1e2d9c3ff2b34ea0675225e226b2444270acefa23c0369a5c2fa5d07096375ba
+MATCH .paep-control/originals/PAEP_v1.1.pdf a9ae79b4c122e114811b23490ef9710d4921829a389a304e8d3a54c74bda74d9
+MATCH .paep-control/reference-baseline/PAEP_BASE_v1.0.zip 170945d6422fa46742c7eef6920166ed4b2c69c7130449509f8dc76687cb4ad2
+MATCH .paep-control/text/PAEP_DCH_01_v1.0_text.md 8bc9aee796b07644dedc240cba661c0c1c5b20b2bd99a233a6224a1153f48a75
+MATCH .paep-control/text/PAEP_EQP_01_v1.1_text.md 920d12e28e7cb4e9a96af28ec4803bab892c1032d1d94a0ac0452825b8a4bb09
+MATCH .paep-control/text/PAEP_IB_01_v1.0_text.md bfdc1dbd1b73bc26f3893b2d8db1a327ec362b628137aa8270aacf2b66bbbf28
+MATCH .paep-control/text/PAEP_IR_01_v1.0_text.md 5cd5f01ab5a036296711a83768757b39338a5b28b5e57e2baed9b87b12731586
+MATCH .paep-control/text/PAEP_v1.1_text.md 7abebe5fa09c6f903423734164f2fdbb7618711267190b10ade1423cd70b2c4f
+13/13 match
+$ git diff --stat ac6b786caf3485ce2b45724be2b437c28f04b66b HEAD -- .paep-control .gitignore PACK_MANIFEST.json CLAUDE.md
+EXIT_CODE=0

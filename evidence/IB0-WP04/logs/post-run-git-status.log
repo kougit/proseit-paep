@@ -1,0 +1,4 @@
+# date: 2026-09-24T10:14:53Z node: v24.21.0 npm: 11.19.0 commit: f74fb78ac871b0a302a7819a5c1d7752544f2409
+tracked changes after the runs (expect only evidence/IB0-WP04):
+--- earlier WP records vs baseline:
+EXIT_CODE=0

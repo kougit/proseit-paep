@@ -1,0 +1,425 @@
+{
+  "$comment": "PAEP project graph (IB0-WP04). nodes/dependencies follow the Nx ProjectGraph JSON shape; generated without Nx.",
+  "nodes": {
+    "@proseit/paep-analytics": {
+      "name": "@proseit/paep-analytics",
+      "type": "lib",
+      "data": {
+        "root": "packages/analytics",
+        "projectType": "library",
+        "category": "analytics",
+        "layer": "L3",
+        "tags": [
+          "layer:L3",
+          "type:analytics"
+        ]
+      }
+    },
+    "@proseit/paep-components": {
+      "name": "@proseit/paep-components",
+      "type": "lib",
+      "data": {
+        "root": "packages/components",
+        "projectType": "library",
+        "category": "components",
+        "layer": "L2",
+        "tags": [
+          "layer:L2",
+          "type:components"
+        ]
+      }
+    },
+    "@proseit/paep-contracts": {
+      "name": "@proseit/paep-contracts",
+      "type": "lib",
+      "data": {
+        "root": "packages/contracts",
+        "projectType": "library",
+        "category": "contracts",
+        "layer": "L0",
+        "tags": [
+          "layer:L0",
+          "type:contracts"
+        ]
+      }
+    },
+    "@proseit/paep-domain-ai": {
+      "name": "@proseit/paep-domain-ai",
+      "type": "lib",
+      "data": {
+        "root": "packages/domain-ai",
+        "projectType": "library",
+        "category": "domain",
+        "layer": "L3",
+        "tags": [
+          "layer:L3",
+          "type:domain"
+        ]
+      }
+    },
+    "@proseit/paep-domain-commerce": {
+      "name": "@proseit/paep-domain-commerce",
+      "type": "lib",
+      "data": {
+        "root": "packages/domain-commerce",
+        "projectType": "library",
+        "category": "domain",
+        "layer": "L3",
+        "tags": [
+          "layer:L3",
+          "type:domain"
+        ]
+      }
+    },
+    "@proseit/paep-domain-construction": {
+      "name": "@proseit/paep-domain-construction",
+      "type": "lib",
+      "data": {
+        "root": "packages/domain-construction",
+        "projectType": "library",
+        "category": "domain",
+        "layer": "L3",
+        "tags": [
+          "layer:L3",
+          "type:domain"
+        ]
+      }
+    },
+    "@proseit/paep-domain-fiscal": {
+      "name": "@proseit/paep-domain-fiscal",
+      "type": "lib",
+      "data": {
+        "root": "packages/domain-fiscal",
+        "projectType": "library",
+        "category": "domain",
+        "layer": "L3",
+        "tags": [
+          "layer:L3",
+          "type:domain"
+        ]
+      }
+    },
+    "@proseit/paep-domain-iot": {
+      "name": "@proseit/paep-domain-iot",
+      "type": "lib",
+      "data": {
+        "root": "packages/domain-iot",
+        "projectType": "library",
+        "category": "domain",
+        "layer": "L3",
+        "tags": [
+          "layer:L3",
+          "type:domain"
+        ]
+      }
+    },
+    "@proseit/paep-domain-maintenance": {
+      "name": "@proseit/paep-domain-maintenance",
+      "type": "lib",
+      "data": {
+        "root": "packages/domain-maintenance",
+        "projectType": "library",
+        "category": "domain",
+        "layer": "L3",
+        "tags": [
+          "layer:L3",
+          "type:domain"
+        ]
+      }
+    },
+    "@proseit/paep-domain-manufacturing": {
+      "name": "@proseit/paep-domain-manufacturing",
+      "type": "lib",
+      "data": {
+        "root": "packages/domain-manufacturing",
+        "projectType": "library",
+        "category": "domain",
+        "layer": "L3",
+        "tags": [
+          "layer:L3",
+          "type:domain"
+        ]
+      }
+    },
+    "@proseit/paep-domain-quality": {
+      "name": "@proseit/paep-domain-quality",
+      "type": "lib",
+      "data": {
+        "root": "packages/domain-quality",
+        "projectType": "library",
+        "category": "domain",
+        "layer": "L3",
+        "tags": [
+          "layer:L3",
+          "type:domain"
+        ]
+      }
+    },
+    "@proseit/paep-enterprise": {
+      "name": "@proseit/paep-enterprise",
+      "type": "lib",
+      "data": {
+        "root": "packages/enterprise",
+        "projectType": "library",
+        "category": "enterprise",
+        "layer": "L3",
+        "tags": [
+          "layer:L3",
+          "type:enterprise"
+        ]
+      }
+    },
+    "@proseit/paep-foundation": {
+      "name": "@proseit/paep-foundation",
+      "type": "lib",
+      "data": {
+        "root": "packages/foundation",
+        "projectType": "library",
+        "category": "foundation",
+        "layer": "L0",
+        "tags": [
+          "layer:L0",
+          "type:foundation"
+        ]
+      }
+    },
+    "@proseit/frappe-sdk": {
+      "name": "@proseit/frappe-sdk",
+      "type": "lib",
+      "data": {
+        "root": "packages/frappe-sdk",
+        "projectType": "library",
+        "category": "frappe-sdk",
+        "layer": "L2",
+        "tags": [
+          "layer:L2",
+          "type:frappe-sdk"
+        ]
+      }
+    },
+    "@proseit/paep-i18n": {
+      "name": "@proseit/paep-i18n",
+      "type": "lib",
+      "data": {
+        "root": "packages/i18n",
+        "projectType": "library",
+        "category": "i18n",
+        "layer": "L1",
+        "tags": [
+          "layer:L1",
+          "type:i18n"
+        ]
+      }
+    },
+    "@proseit/paep-observability": {
+      "name": "@proseit/paep-observability",
+      "type": "lib",
+      "data": {
+        "root": "packages/observability",
+        "projectType": "library",
+        "category": "observability",
+        "layer": "L1",
+        "tags": [
+          "layer:L1",
+          "type:observability"
+        ]
+      }
+    },
+    "@proseit/paep-offline": {
+      "name": "@proseit/paep-offline",
+      "type": "lib",
+      "data": {
+        "root": "packages/offline",
+        "projectType": "library",
+        "category": "offline",
+        "layer": "L2",
+        "tags": [
+          "layer:L2",
+          "type:offline"
+        ]
+      }
+    },
+    "@proseit/paep-platform": {
+      "name": "@proseit/paep-platform",
+      "type": "lib",
+      "data": {
+        "root": "packages/platform",
+        "projectType": "library",
+        "category": "platform",
+        "layer": "L1",
+        "tags": [
+          "layer:L1",
+          "type:platform"
+        ]
+      }
+    },
+    "reference-app": {
+      "name": "reference-app",
+      "type": "app",
+      "data": {
+        "root": "apps/reference-app",
+        "projectType": "application",
+        "category": "app",
+        "layer": "L4",
+        "tags": [
+          "layer:L4",
+          "type:app"
+        ]
+      }
+    },
+    "ui-lab": {
+      "name": "ui-lab",
+      "type": "app",
+      "data": {
+        "root": "apps/ui-lab",
+        "projectType": "application",
+        "category": "app",
+        "layer": "L4",
+        "tags": [
+          "layer:L4",
+          "type:app"
+        ]
+      }
+    }
+  },
+  "dependencies": {
+    "@proseit/paep-analytics": [],
+    "@proseit/paep-components": [],
+    "@proseit/paep-contracts": [],
+    "@proseit/paep-domain-ai": [],
+    "@proseit/paep-domain-commerce": [],
+    "@proseit/paep-domain-construction": [],
+    "@proseit/paep-domain-fiscal": [],
+    "@proseit/paep-domain-iot": [],
+    "@proseit/paep-domain-maintenance": [],
+    "@proseit/paep-domain-manufacturing": [],
+    "@proseit/paep-domain-quality": [],
+    "@proseit/paep-enterprise": [],
+    "@proseit/paep-foundation": [],
+    "@proseit/frappe-sdk": [],
+    "@proseit/paep-i18n": [],
+    "@proseit/paep-observability": [],
+    "@proseit/paep-offline": [],
+    "@proseit/paep-platform": [],
+    "reference-app": [],
+    "ui-lab": []
+  },
+  "edges": [],
+  "depConstraints": [
+    {
+      "sourceTag": "type:contracts",
+      "onlyDependOnLibsWithTags": []
+    },
+    {
+      "sourceTag": "type:foundation",
+      "onlyDependOnLibsWithTags": []
+    },
+    {
+      "sourceTag": "type:platform",
+      "onlyDependOnLibsWithTags": [
+        "type:contracts",
+        "type:foundation",
+        "type:observability"
+      ]
+    },
+    {
+      "sourceTag": "type:i18n",
+      "onlyDependOnLibsWithTags": [
+        "type:contracts",
+        "type:foundation",
+        "type:platform",
+        "type:observability"
+      ]
+    },
+    {
+      "sourceTag": "type:observability",
+      "onlyDependOnLibsWithTags": [
+        "type:contracts",
+        "type:platform"
+      ]
+    },
+    {
+      "sourceTag": "type:components",
+      "onlyDependOnLibsWithTags": [
+        "type:contracts",
+        "type:foundation",
+        "type:platform",
+        "type:i18n",
+        "type:observability"
+      ]
+    },
+    {
+      "sourceTag": "type:offline",
+      "onlyDependOnLibsWithTags": [
+        "type:contracts",
+        "type:platform",
+        "type:i18n",
+        "type:observability"
+      ]
+    },
+    {
+      "sourceTag": "type:frappe-sdk",
+      "onlyDependOnLibsWithTags": [
+        "type:contracts",
+        "type:platform",
+        "type:observability",
+        "type:offline"
+      ]
+    },
+    {
+      "sourceTag": "type:enterprise",
+      "onlyDependOnLibsWithTags": [
+        "type:contracts",
+        "type:foundation",
+        "type:platform",
+        "type:i18n",
+        "type:observability",
+        "type:components",
+        "type:offline"
+      ]
+    },
+    {
+      "sourceTag": "type:analytics",
+      "onlyDependOnLibsWithTags": [
+        "type:contracts",
+        "type:foundation",
+        "type:platform",
+        "type:i18n",
+        "type:observability",
+        "type:components",
+        "type:offline",
+        "type:enterprise"
+      ]
+    },
+    {
+      "sourceTag": "type:domain",
+      "onlyDependOnLibsWithTags": [
+        "type:contracts",
+        "type:foundation",
+        "type:platform",
+        "type:i18n",
+        "type:observability",
+        "type:components",
+        "type:offline",
+        "type:enterprise",
+        "type:analytics"
+      ]
+    },
+    {
+      "sourceTag": "type:app",
+      "onlyDependOnLibsWithTags": [
+        "type:contracts",
+        "type:foundation",
+        "type:platform",
+        "type:i18n",
+        "type:observability",
+        "type:components",
+        "type:offline",
+        "type:frappe-sdk",
+        "type:enterprise",
+        "type:analytics",
+        "type:domain"
+      ]
+    }
+  ]
+}

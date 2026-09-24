@@ -1,0 +1,37 @@
+{
+  "id": "IB0-WP04",
+  "roadmap_alias": "PAEP-IR-01 IB0-WP4",
+  "title": "Project Graph, Package Boundaries and Dependency Enforcement",
+  "milestone": "IB0",
+  "wbs": "W1 / IB0",
+  "design_classification": "D0",
+  "status": "IN PROGRESS",
+  "acceptance": { "status": "NOT ACCEPTED", "authority": "Product Owner / Solutions Architect", "technical_verification": "PASS", "independent_qa": "PENDING", "criteria": "29/29 PASS" },
+  "predecessor": { "id": "IB0-WP03", "status": "ACCEPTED", "baseline_commit": "ac6b786" },
+  "objective": "Classify every project with Nx-compatible tags, generate the project dependency graph, and reject forbidden dependency directions, circular package dependencies, deep/internal imports and public-entry-point bypasses, with negative tests proving each rejection.",
+  "controlled_requirements": ["PAEP-IB-01 §6.1, §6.2, Appendix B", "PAEP-IB-01 §4.1, §4.2, §5.1, §5.2, §7.1(i), §22", "PAEP-IR-01 §4.2, §4.3, §4.4 IB0-WP4, §4.5, §4.6(iii)", "PAEP v1.1 §3, §5.3", "PAEP-EQP-01 §16, §29.1(iv)"],
+  "definition_status": "DRAFT pending PO/SA approval",
+  "defaults_pending_po_sa": {
+    "matrix_dash_cells": "Off-diagonal '-' cells in Appendix B are not allowed",
+    "same_category_edges": "domain-* to another domain-*, and app to app, not allowed without an ADR",
+    "tsconfig_base_json": "IMPLEMENTED as the alias registry only; strictness stays literal in tsconfig.json",
+    "wp03_regression": "Bounded exception: WP03 V05, V08, V10, V12, V17 may report only WP04-authorised change",
+    "optional_cells": "Allowed; graph flags each Optional edge for justification"
+  },
+  "nx_disposition": "NOT REQUIRED FOR IB0-WP04",
+  "out_of_scope_owners": { "ESLint boundary rules, lint/format": "deferred (PO/SA, WP03 closure)", "CI workflows and stages": "IB0-WP05", "package contents, contracts, exports manifests": "IB1 and later" },
+  "mandatory_acceptance_ids": [
+    "IB0-WP04-AC01", "IB0-WP04-AC02", "IB0-WP04-AC03", "IB0-WP04-AC04", "IB0-WP04-AC05", "IB0-WP04-AC06",
+    "IB0-WP04-AC07", "IB0-WP04-AC08", "IB0-WP04-AC09", "IB0-WP04-AC10", "IB0-WP04-AC11", "IB0-WP04-AC12",
+    "IB0-WP04-AC13", "IB0-WP04-AC14", "IB0-WP04-AC15", "IB0-WP04-AC16", "IB0-WP04-AC17", "IB0-WP04-AC18",
+    "IB0-WP04-AC19", "IB0-WP04-AC20", "IB0-WP04-AC21", "IB0-WP04-AC22", "IB0-WP04-AC23", "IB0-WP04-AC24",
+    "IB0-WP04-AC25", "IB0-WP04-AC26", "IB0-WP04-AC27", "IB0-WP04-AC28", "IB0-WP04-AC29"
+  ],
+  "checker": "tooling/architecture-boundaries/check-boundaries.mjs",
+  "model": "tooling/architecture-boundaries/architecture-model.json",
+  "verifier": "tooling/verification/verify-ib0-wp04.mjs",
+  "negative_runner": "tooling/verification/negative-ib0-wp04.mjs",
+  "evidence_path": "evidence/IB0-WP04/",
+  "technical_pass_requires_all_mandatory_criteria": true,
+  "human_acceptance_required": true
+}

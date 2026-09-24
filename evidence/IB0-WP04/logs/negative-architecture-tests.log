@@ -1,0 +1,274 @@
+# date: 2026-09-24T10:14:28.542Z node: v24.21.0 scratch: /tmp/paep-wp04-negative-AtQNhw/repo
+# checker: node tooling/architecture-boundaries/check-boundaries.mjs --json (the command behind npm run arch:check)
+
+## C0 positive control: unmutated workspace passes
+expected: exit 0, no violations, 0 edges (0 optional)
+summary: {"edges":0,"optionalEdges":0,"cycles":0,"violations":0}
+
+EXIT_CODE=0
+RESULT=PASS
+
+## C1 allowed-edge control: enterprise -> components (Yes), frappe-sdk -> offline (Optional), reference-app -> enterprise (Yes)
+expected: exit 0, no violations, 3 edges (1 optional)
+summary: {"edges":3,"optionalEdges":1,"cycles":0,"violations":0}
+
+EXIT_CODE=0
+RESULT=PASS
+
+## C2 allowed-edge control: reference-app production build resolves @proseit/paep-enterprise through tsconfig.base.json
+expected: exit 0
+Application bundle generation complete. [3.443 seconds] - 2026-09-24T10:14:33.528Z
+Output location: /tmp/paep-wp04-negative-AtQNhw/repo/dist/reference-app
+EXIT_CODE=0
+RESULT=PASS
+
+## C3 positive control: WP04 verifier static checks pass unmutated
+expected: exit 0, all PASS
+IB0-WP04 verification (static-only): PASS (19/19)
+EXIT_CODE=0
+RESULT=PASS
+
+## N01 forbidden upward import: components -> enterprise
+expected: exit 1, DIRECTION
+summary: {"edges":1,"optionalEdges":0,"cycles":0,"violations":1}
+  DIRECTION @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/index.ts]
+EXIT_CODE=1
+RESULT=PASS
+
+## N02 contracts -> @angular/core
+expected: exit 1, CONTRACTS_NEUTRAL
+summary: {"edges":0,"optionalEdges":0,"cycles":0,"violations":1}
+  CONTRACTS_NEUTRAL @proseit/paep-contracts (contracts) depends on external module "@angular/core", which is not approved [packages/contracts/src/index.ts]
+EXIT_CODE=1
+RESULT=PASS
+
+## N03 foundation -> enterprise
+expected: exit 1, DIRECTION
+summary: {"edges":1,"optionalEdges":0,"cycles":0,"violations":1}
+  DIRECTION @proseit/paep-foundation (foundation) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/foundation/src/index.ts]
+EXIT_CODE=1
+RESULT=PASS
+
+## N04 deep import: enterprise -> @proseit/paep-components/src/internal/button
+expected: exit 1, DEEP_IMPORT
+summary: {"edges":1,"optionalEdges":0,"cycles":0,"violations":1}
+  DEEP_IMPORT @proseit/paep-enterprise imports "@proseit/paep-components/src/internal/button" below the @proseit/paep-components entry point [packages/enterprise/src/index.ts]
+EXIT_CODE=1
+RESULT=PASS
+
+## N05 circular dependency over allowed Optional edges: platform <-> observability (caught by the cycle rule alone)
+expected: exit 1, CYCLE, no DIRECTION
+summary: {"edges":2,"optionalEdges":2,"cycles":1,"violations":1}
+  CYCLE circular package dependency: @proseit/paep-observability <-> @proseit/paep-platform
+EXIT_CODE=1
+RESULT=PASS
+
+## N06 public-entry-point bypass by relative path: enterprise -> ../../components/src/index
+expected: exit 1, ENTRY_BYPASS
+summary: {"edges":1,"optionalEdges":0,"cycles":0,"violations":1}
+  ENTRY_BYPASS @proseit/paep-enterprise imports "../../components/src/index" inside @proseit/paep-components; use its public entry point [packages/enterprise/src/index.ts]
+EXIT_CODE=1
+RESULT=PASS
+
+## N07 unknown project category ("widgets")
+expected: exit 1, CLASSIFICATION
+summary: {"edges":0,"optionalEdges":0,"cycles":0,"violations":2}
+  CLASSIFICATION @proseit/paep-components: unknown category "widgets"
+  ALIAS alias @proseit/paep-components is not a classified package
+EXIT_CODE=1
+RESULT=PASS
+
+## N08 unclassified package packages/rogue
+expected: exit 1, CLASSIFICATION
+summary: {"edges":0,"optionalEdges":0,"cycles":0,"violations":1}
+  CLASSIFICATION packages/rogue is not classified in the model
+EXIT_CODE=1
+RESULT=PASS
+
+## N09 app -> app: reference-app imports ui-lab source
+expected: exit 1, ENTRY_BYPASS
+summary: {"edges":1,"optionalEdges":0,"cycles":0,"violations":2}
+  ENTRY_BYPASS reference-app imports "../../../ui-lab/src/app/app" inside ui-lab; use its public entry point [apps/reference-app/src/app/app.ts]
+  DIRECTION reference-app (app) -> ui-lab (app) is not allowed (Appendix B: - (same category)) [apps/reference-app/src/app/app.ts]
+EXIT_CODE=1
+RESULT=PASS
+
+## N10 package -> app: components imports reference-app source
+expected: exit 1, DIRECTION
+summary: {"edges":1,"optionalEdges":0,"cycles":0,"violations":2}
+  ENTRY_BYPASS @proseit/paep-components imports "../../../apps/reference-app/src/app/app" inside reference-app; use its public entry point [packages/components/src/index.ts]
+  DIRECTION @proseit/paep-components (components) -> reference-app (app) is not allowed (Appendix B: -) [packages/components/src/index.ts]
+EXIT_CODE=1
+RESULT=PASS
+
+## N11 contracts uses a DOM global (document)
+expected: exit 1, CONTRACTS_NEUTRAL
+summary: {"edges":0,"optionalEdges":0,"cycles":0,"violations":1}
+  CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2584 Cannot find name 'document'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'. [packages/contracts/src/index.ts:4]
+EXIT_CODE=1
+RESULT=PASS
+
+## N12 frappe-sdk -> components (UI)
+expected: exit 1, DIRECTION
+summary: {"edges":1,"optionalEdges":0,"cycles":0,"violations":1}
+  DIRECTION @proseit/frappe-sdk (frappe-sdk) -> @proseit/paep-components (components) is not allowed (Appendix B: No) [packages/frappe-sdk/src/index.ts]
+EXIT_CODE=1
+RESULT=PASS
+
+## N13 analytics -> frappe-sdk
+expected: exit 1, DIRECTION
+summary: {"edges":1,"optionalEdges":0,"cycles":0,"violations":1}
+  DIRECTION @proseit/paep-analytics (analytics) -> @proseit/frappe-sdk (frappe-sdk) is not allowed (Appendix B: No) [packages/analytics/src/index.ts]
+EXIT_CODE=1
+RESULT=PASS
+
+## N14 domain -> domain: domain-quality -> domain-fiscal
+expected: exit 1, DIRECTION
+summary: {"edges":1,"optionalEdges":0,"cycles":0,"violations":1}
+  DIRECTION @proseit/paep-domain-quality (domain) -> @proseit/paep-domain-fiscal (domain) is not allowed (Appendix B: - (same category)) [packages/domain-quality/src/index.ts]
+EXIT_CODE=1
+RESULT=PASS
+
+## N15 forbidden manifest dependency: foundation package.json depends on enterprise
+expected: exit 1, DIRECTION
+summary: {"edges":1,"optionalEdges":0,"cycles":0,"violations":1}
+  DIRECTION @proseit/paep-foundation (foundation) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/foundation/package.json dependencies]
+EXIT_CODE=1
+RESULT=PASS
+
+## N16 forbidden edge by dynamic import(): foundation -> enterprise
+expected: exit 1, DIRECTION
+summary: {"edges":1,"optionalEdges":0,"cycles":0,"violations":1}
+  DIRECTION @proseit/paep-foundation (foundation) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/foundation/src/index.ts]
+EXIT_CODE=1
+RESULT=PASS
+
+## N17 forbidden edge by type-only import: platform -> enterprise
+expected: exit 1, DIRECTION
+summary: {"edges":1,"optionalEdges":0,"cycles":0,"violations":1}
+  DIRECTION @proseit/paep-platform (platform) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/platform/src/index.ts]
+EXIT_CODE=1
+RESULT=PASS
+
+## N18 forbidden edge by re-export: components re-exports analytics
+expected: exit 1, DIRECTION
+summary: {"edges":1,"optionalEdges":0,"cycles":0,"violations":1}
+  DIRECTION @proseit/paep-components (components) -> @proseit/paep-analytics (analytics) is not allowed (Appendix B: -) [packages/components/src/index.ts]
+EXIT_CODE=1
+RESULT=PASS
+
+## N19 analytics re-exports a visualization vendor module
+expected: exit 1, ANALYTICS_VENDOR_EXPORT
+summary: {"edges":0,"optionalEdges":0,"cycles":0,"violations":1}
+  ANALYTICS_VENDOR_EXPORT @proseit/paep-analytics re-exports external module "echarts" [packages/analytics/src/index.ts]
+EXIT_CODE=1
+RESULT=PASS
+
+## N20 app copies package source
+expected: exit 1, COPIED_CODE
+summary: {"edges":0,"optionalEdges":0,"cycles":0,"violations":1}
+  COPIED_CODE apps/reference-app/src/app/formatter.ts duplicates packages/components/src/lib/formatter.ts [apps/reference-app/src/app/formatter.ts]
+EXIT_CODE=1
+RESULT=PASS
+
+## N21 model matrix tampered: platform -> frappe-sdk set to "Yes"
+expected: exit 1, MODEL
+summary: {"edges":0,"optionalEdges":0,"cycles":0,"violations":1}
+  MODEL matrix platform -> frappe-sdk: controlled "-", model "Yes"
+EXIT_CODE=1
+RESULT=PASS
+
+## N22 wildcard deep alias added to tsconfig.base.json
+expected: exit 1, ALIAS
+summary: {"edges":0,"optionalEdges":0,"cycles":0,"violations":2}
+  ALIAS wildcard alias @proseit/paep-components/*
+  ALIAS alias @proseit/paep-components/* is not a classified package
+EXIT_CODE=1
+RESULT=PASS
+
+## N23 alias retargeted below the entry point
+expected: exit 1, ALIAS
+summary: {"edges":0,"optionalEdges":0,"cycles":0,"violations":3}
+  ALIAS @proseit/paep-components: alias maps to ["./packages/components/src/lib/internal.ts"], expected ["./packages/components/src/index.ts"]
+  ALIAS reference-app: @proseit/paep-components resolves to nothing
+  ALIAS ui-lab: @proseit/paep-components resolves to nothing
+EXIT_CODE=1
+RESULT=PASS
+
+## N24 paths re-added to tsconfig.json (second alias registry)
+expected: exit 1, ALIAS
+summary: {"edges":0,"optionalEdges":0,"cycles":0,"violations":35}
+  ALIAS tsconfig.json defines paths; tsconfig.base.json is the only alias registry
+  ALIAS reference-app: @proseit/paep-analytics resolves to nothing
+  ALIAS reference-app: @proseit/paep-contracts resolves to nothing
+  ALIAS reference-app: @proseit/paep-domain-ai resolves to nothing
+  ALIAS reference-app: @proseit/paep-domain-commerce resolves to nothing
+  ALIAS reference-app: @proseit/paep-domain-construction resolves to nothing
+  ALIAS reference-app: @proseit/paep-domain-fiscal resolves to nothing
+  ALIAS reference-app: @proseit/paep-domain-iot resolves to nothing
+  ALIAS reference-app: @proseit/paep-domain-maintenance resolves to nothing
+  ALIAS reference-app: @proseit/paep-domain-manufacturing resolves to nothing
+  ALIAS reference-app: @proseit/paep-domain-quality resolves to nothing
+  ALIAS reference-app: @proseit/paep-enterprise resolves to nothing
+  ALIAS reference-app: @proseit/paep-foundation resolves to nothing
+  ALIAS reference-app: @proseit/frappe-sdk resolves to nothing
+  ALIAS reference-app: @proseit/paep-i18n resolves to nothing
+  ALIAS reference-app: @proseit/paep-observability resolves to nothing
+  ALIAS reference-app: @proseit/paep-offline resolves to nothing
+  ALIAS reference-app: @proseit/paep-platform resolves to nothing
+  ALIAS ui-lab: @proseit/paep-analytics resolves to nothing
+  ALIAS ui-lab: @proseit/paep-contracts resolves to nothing
+  ALIAS ui-lab: @proseit/paep-domain-ai resolves to nothing
+  ALIAS ui-lab: @proseit/paep-domain-commerce resolves to nothing
+  ALIAS ui-lab: @proseit/paep-domain-construction resolves to nothing
+  ALIAS ui-lab: @proseit/paep-domain-fiscal resolves to nothing
+  ALIAS ui-lab: @proseit/paep-domain-iot resolves to nothing
+  ALIAS ui-lab: @proseit/paep-domain-maintenance resolves to nothing
+  ALIAS ui-lab: @proseit/paep-domain-manufacturing resolves to nothing
+  ALIAS ui-lab: @proseit/paep-domain-quality resolves to nothing
+  ALIAS ui-lab: @proseit/paep-enterprise resolves to nothing
+  ALIAS ui-lab: @proseit/paep-foundation resolves to nothing
+  ALIAS ui-lab: @proseit/frappe-sdk resolves to nothing
+  ALIAS ui-lab: @proseit/paep-i18n resolves to nothing
+  ALIAS ui-lab: @proseit/paep-observability resolves to nothing
+  ALIAS ui-lab: @proseit/paep-offline resolves to nothing
+  ALIAS ui-lab: @proseit/paep-platform resolves to nothing
+EXIT_CODE=1
+RESULT=PASS
+
+## N25 unknown @proseit/* package imported
+expected: exit 1, UNKNOWN_PACKAGE
+summary: {"edges":0,"optionalEdges":0,"cycles":0,"violations":1}
+  UNKNOWN_PACKAGE @proseit/paep-enterprise imports "@proseit/paep-unknown", which is not a workspace package [packages/enterprise/src/index.ts]
+EXIT_CODE=1
+RESULT=PASS
+
+## N26 import from tooling/ (outside every project)
+expected: exit 1, OUTSIDE_PROJECT
+summary: {"edges":0,"optionalEdges":0,"cycles":0,"violations":1}
+  OUTSIDE_PROJECT @proseit/paep-enterprise imports "../../../tooling/test-utils/helpers", outside every project [packages/enterprise/src/index.ts]
+EXIT_CODE=1
+RESULT=PASS
+
+## N27 forbidden edge by import = require(): foundation -> enterprise
+expected: exit 1, DIRECTION
+summary: {"edges":1,"optionalEdges":0,"cycles":0,"violations":1}
+  DIRECTION @proseit/paep-foundation (foundation) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/foundation/src/index.ts]
+EXIT_CODE=1
+RESULT=PASS
+
+## N28 nx added to devDependencies
+expected: exit 1, V15 FAIL
+FAIL V15 No Nx: no nx/@nx/@nrwl dependency, lockfile entry or install, and no nx.json or project.json — package.json: nx
+FAIL V16 package-lock.json is byte-identical to the baseline and package.json differs only by the three WP04 scripts — package.json fields other than scripts changed
+IB0-WP04 verification (static-only): FAIL (17/19)
+EXIT_CODE=1
+RESULT=PASS
+
+## N29 nx.json created
+expected: exit 1, V15 FAIL
+FAIL V15 No Nx: no nx/@nx/@nrwl dependency, lockfile entry or install, and no nx.json or project.json — file nx.json
+FAIL V17 No WP05/IB1+ or Nx/lint artefacts, apps/packages/angular.json unchanged, and every changed path is within WORK_PACKAGE §4 — out-of-scope files: nx.json; changed outside WORK_PACKAGE §4: nx.json
+IB0-WP04 verification (static-only): FAIL (17/19)
+EXIT_CODE=1
+RESULT=PASS

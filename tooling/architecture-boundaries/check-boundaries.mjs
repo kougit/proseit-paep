@@ -12,8 +12,8 @@
  *   ALIAS                   the alias registry or tsconfig inheritance is inconsistent
  *   ENTRY_POINT             a package has no public entry point
  *   DIRECTION               an edge is not allowed by the matrix (upward, "No", or a same-category
- *                           edge that the sameCategoryAllowlist does not name), including a same-category
- *                           pair reached only transitively
+ *                           edge that the sameCategoryAllowlist does not name), including a pair
+ *                           reached only through a chain of individually allowed edges
  *   CYCLE                   packages depend on each other circularly
  *   DEEP_IMPORT             an import names a path below a package (@proseit/<pkg>/<path>)
  *   UNKNOWN_PACKAGE         an import names an @proseit/* module that is not a workspace package
@@ -448,9 +448,11 @@ export function checkBoundaries(root = process.cwd()) {
     return { source: e.source, target: e.target, sourceCategory: from.category, targetCategory: to.category, matrix: sameCategory ? (listed ? 'same category, allowlisted' : '- (same category, not allowlisted)') : verdict, allowed, needsJustification: allowed && verdict === 'Optional', kinds: [...e.kinds].sort(), files: [...e.files].sort() };
   }).sort((a, b) => a.source.localeCompare(b.source) || a.target.localeCompare(b.target));
   for (const e of edgeList) if (!e.allowed) flag('DIRECTION', `${e.source} (${e.sourceCategory}) -> ${e.target} (${e.targetCategory}) is not allowed (Appendix B: ${e.matrix})`, e.files.join(', '));
-  // A chain of edges must not let a project reach another project of its own category that
-  // the allowlist does not name (for example domain-a -> domain-b -> domain-c with only the
-  // two direct pairs listed).
+  // Appendix B is also a reachability constraint (PO/SA decision, 2026-09-24): a chain of
+  // individually allowed edges must not let a project reach one it may not depend on, for
+  // example frappe-sdk -> offline -> i18n where frappe-sdk -> i18n is "No". The same holds for
+  // a project of its own category that the allowlist does not name (domain-a -> domain-b ->
+  // domain-c with only the two direct pairs listed).
   const out = new Map(projects.map((p) => [p.name, edgeList.filter((e) => e.source === p.name).map((e) => e.target)]));
   const transitive = [];
   for (const p of projects) {
@@ -464,11 +466,15 @@ export function checkBoundaries(root = process.cwd()) {
     }
     for (const n of seen) {
       const t = byName.get(n);
-      if (n === p.name || t.category !== p.category || edges.has(`${p.name}\u0000${n}`)) continue;
-      if (!allowlist.has(`${p.name}\u0000${n}`)) transitive.push({ source: p.name, target: n, category: p.category });
+      if (n === p.name || edges.has(`${p.name}\u0000${n}`)) continue;
+      if (t.category === p.category) {
+        if (!allowlist.has(`${p.name}\u0000${n}`)) transitive.push({ source: p.name, target: n, why: `both ${p.category}, and the sameCategoryAllowlist does not name the pair` });
+      } else if (!ALLOWED_CELLS.has(cell(p.category, t.category))) {
+        transitive.push({ source: p.name, target: n, why: `Appendix B ${p.category} -> ${t.category}: ${cell(p.category, t.category) ?? 'unknown'}` });
+      }
     }
   }
-  for (const t of transitive) flag('DIRECTION', `${t.source} reaches ${t.target} (both ${t.category}) transitively, and the sameCategoryAllowlist does not name the pair`);
+  for (const t of transitive) flag('DIRECTION', `${t.source} reaches ${t.target} transitively, which is not allowed (${t.why})`);
 
   // ---- Cycles (Tarjan strongly connected components) -------------------------------
   const adj = new Map(projects.map((p) => [p.name, []]));

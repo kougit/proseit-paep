@@ -98,7 +98,8 @@ function checkerCase(id, name, edits, expectedRule, extra = {}) {
   const rules = parsed ? [...new Set(parsed.violations.map((v) => v.rule))].sort() : [];
   let pass;
   if (!expectedRule) pass = r.status === 0 && parsed?.ok === true && (extra.edges === undefined || parsed.summary.edges === extra.edges) && (extra.optional === undefined || parsed.summary.optionalEdges === extra.optional);
-  else pass = r.status === 1 && rules.includes(expectedRule) && !(extra.absent || []).some((x) => rules.includes(x));
+  else pass = r.status === 1 && rules.includes(expectedRule) && !(extra.absent || []).some((x) => rules.includes(x))
+    && (!extra.transitive || (parsed.violations.length > 0 && parsed.violations.every((v) => v.rule === 'DIRECTION' && v.message.includes('transitively'))));
   const expected = expectedRule ? `exit 1, ${expectedRule}${extra.absent ? `, no ${extra.absent.join('/')}` : ''}` : `exit 0, no violations${extra.edges !== undefined ? `, ${extra.edges} edges (${extra.optional} optional)` : ''}`;
   results.push({ id, name, tool: 'arch:check', expected, exit: r.status, rules, pass });
   const detail = parsed ? parsed.violations.map((v) => `  ${v.rule} ${v.message}${v.where ? ` [${v.where}]` : ''}`) : [r.out.slice(0, 2000)];
@@ -222,6 +223,15 @@ try {
   checkerCase('N50', 'allowlist entry crossing categories (components -> enterprise)', [allow(pair('components', 'enterprise'))], 'MODEL');
   checkerCase('N52', 'allowlist entry linking two applications (reference-app -> ui-lab)', [allow({ source: 'reference-app', target: 'ui-lab', rationale: 'IB0-WP04 negative test', approval: 'test only' })], 'MODEL');
   checkerCase('N51', 'allowlist entry without a rationale', [allow(pair('domain-quality', 'domain-fiscal', { rationale: '' }))], 'MODEL');
+
+  // IB-01 Appendix B Optional links (PO/SA decision, 2026-09-24): each of the eight is
+  // permitted on its own; none is required (C0 has no edge and passes).
+  const OPTIONAL = [['platform', 'observability'], ['observability', 'platform'], ['i18n', 'platform'], ['i18n', 'observability'], ['frappe-sdk', 'offline'], ['analytics', 'enterprise'], ['domain-quality', 'enterprise'], ['domain-quality', 'analytics']];
+  OPTIONAL.forEach(([a, b], i) => checkerCase(`O${i + 1}`, `control: Optional edge ${a} -> ${b} alone is permitted`, [[entry(a), append(`import '@proseit/paep-${b}';`)]], null, { edges: 1, optional: 1 }));
+  // "No" is a reachability constraint: each chain below is built from individually allowed
+  // edges, and only the transitive rule rejects it.
+  const CHAINS = [['observability', 'platform', 'foundation'], ['offline', 'platform', 'foundation'], ['offline', 'i18n', 'foundation'], ['frappe-sdk', 'platform', 'foundation'], ['frappe-sdk', 'offline', 'i18n']];
+  CHAINS.forEach(([a, b, c], i) => checkerCase(`T${i + 1}`, `transitive forbidden chain ${a} -> ${b} -> ${c} (${a} -> ${c} is "No")`, [[entry(a), append(`import '@proseit/paep-${b}';`)], [entry(b), append(`import '@proseit/paep-${c}';`)]], 'DIRECTION', { transitive: true }));
 
   // WP03 strictness still holds under the WP04 hierarchy (PO/SA decision 3), proven by builds.
   const TS_VIOLATION = (t) => `${t}\nexport function wp04NegativeTs(value) { const s: string = null; return s + value; }\n`;

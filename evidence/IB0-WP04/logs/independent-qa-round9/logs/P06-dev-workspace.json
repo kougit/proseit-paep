@@ -1,0 +1,28 @@
+{
+  "ok": false,
+  "summary": {
+    "projects": 20,
+    "libraries": 18,
+    "applications": 2,
+    "sourceFiles": 26,
+    "importsScanned": 18,
+    "edges": 0,
+    "optionalEdges": 0,
+    "cycles": 0,
+    "aliases": 18,
+    "aliasResolutions": 36,
+    "matrixCellsCompared": 144,
+    "contractsDiagnostics": 0,
+    "violations": 1,
+    "violationsByRule": {
+      "UNKNOWN_PACKAGE": 1
+    }
+  },
+  "violations": [
+    {
+      "rule": "UNKNOWN_PACKAGE",
+      "message": "@proseit/frappe-sdk declares i18n-x as \"workspace:*\" (devDependencies), a local or aliased reference; depend on a workspace package by its own name",
+      "where": "packages/frappe-sdk/package.json"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "summary": {
+    "projects": 20,
+    "libraries": 18,
+    "applications": 2,
+    "sourceFiles": 26,
+    "importsScanned": 19,
+    "edges": 0,
+    "optionalEdges": 0,
+    "cycles": 0,
+    "aliases": 18,
+    "aliasResolutions": 36,
+    "matrixCellsCompared": 144,
+    "contractsDiagno

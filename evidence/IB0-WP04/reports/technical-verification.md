@@ -1,6 +1,6 @@
 # IB0-WP04 Technical Verification Report
 
-**Commit under test:** `9c74dbe9235ed34df3ee465a4bb2d0b9e9a8fe94` (branch `claude/ib0-wp04-011ntv`), run from a fresh `git clone` of GitHub on Node 24.21.0 / npm 11.19.0 (linux-x64), 2026-09-24. **Baseline:** `ac6b786` (IB0-WP03 merge). **Result:** technical **PASS**, AC01–AC29.
+**Commit under test:** `d2f142c90c6cdbcc03164c76f93660acfe43c1ce` (branch `claude/ib0-wp04-011ntv`), run from a fresh `git clone` of GitHub on Node 24.21.0 / npm 11.19.0 (linux-x64), 2026-09-24. **Baseline:** `ac6b786` (IB0-WP03 merge). **Result:** technical **PASS**, AC01–AC29.
 
 ## Positive gates
 
@@ -11,7 +11,7 @@
 | `npm ci` | Exit 0 | `logs/npm-ci.log` |
 | Lockfile unchanged after `npm ci` and byte-identical to `ac6b786` | Exit 0 | `logs/lockfile-unchanged.log` |
 | `npm run build:reference-app` / `build:ui-lab` | Exit 0 / exit 0 | `logs/build-reference-app.log`, `logs/build-ui-lab.log` |
-| `npm run arch:check` | PASS: 20 projects, 0 edges, 0 cycles, 0 violations | `logs/arch-check-cli.log` |
+| `npm run arch:check` (= `npm run qa:architecture`) | PASS: 20 projects, 0 edges, 0 cycles, 0 violations | `logs/arch-check-cli.log` |
 | `npm run qa:ib0-wp04` | PASS 24/24 | `logs/verify-ib0-wp04.log`, `reports/ib0-wp04-verification.json` |
 | Project graph | 20 nodes, 12 depConstraints | `reports/project-graph.json`, `reports/architecture-boundaries.md` |
 | WP03 regression (inside V22) | 13/18 pass + bounded V05, V08, V10, V12, V17 (only WP04-authorised change) | `logs/verify-ib0-wp03-regression.log`, `logs/ib0-wp03-verification.regression.json` |
@@ -23,7 +23,7 @@
 
 ## Negative architecture tests
 
-`npm run qa:ib0-wp04:negative`: **PASS 50/50** (`logs/negative-architecture-tests.log`, `logs/negative-tests.log`, `reports/negative-tests.json`).
+`npm run qa:ib0-wp04:negative`: **PASS 86/86** (16 controls, 70 rejections) (`logs/negative-architecture-tests.log`, `logs/negative-tests.log`, `reports/negative-tests.json`).
 
 | Cases | Result |
 | --- | --- |
@@ -33,6 +33,12 @@
 | N39 (added after QA round 2): `package.json` `imports` alias to a bare forbidden package name; control C4: `#lib/*` pattern inside the same package | exit 1 DIRECTION; C4 exit 0 |
 | N40–N42 (added after QA round 3): conditional `imports` branches (`import`, `browser`) and a longer pattern naming a forbidden package | 3/3 exit 1 DIRECTION |
 | N43–N45 (added after QA rounds 4 and 5): nested `package.json` remapping `#z`, `#x` → `#y` chain, symlinked directory pulling in outside code | 3/3 exit 1 (CLASSIFICATION, OUTSIDE_PROJECT, CLASSIFICATION) |
+| N46–N52 and control C5 (PO/SA Decision 2): unlisted same-category pair, transitive same-category chain, allowlisted pair by deep import, allowlisted pair both ways, allowlist entry crossing categories, without rationale, linking two apps | 7/7 exit 1 (DIRECTION, DIRECTION, DEEP_IMPORT, CYCLE, MODEL ×3); C5 exit 0 |
+| O1–O8 (PO/SA: Appendix B Optional links): each of the eight Optional edges alone | 8/8 exit 0, 1 Optional edge |
+| T1–T5 (PO/SA: "No" is a reachability constraint): observability → platform → foundation; offline → platform → foundation; offline → i18n → foundation; frappe-sdk → platform → foundation; frappe-sdk → offline → i18n | 5/5 exit 1, DIRECTION from the transitive rule only |
+| N53–N56 (final review M1, round 9 F1/F2): workspace package aliased in a manifest; bare import linked to a workspace package; link to a folder outside every project; plain-path manifest reference | 4/4 exit 1 (UNKNOWN_PACKAGE, DIRECTION, OUTSIDE_PROJECT, UNKNOWN_PACKAGE) |
+| S1, S2 (PO/SA Decision 3): TypeScript and Angular-template strict violations in reference-app; S1c, S2c controls with strictness off | S1 fails TS7006 + TS2322, S2 fails TS2345; S1c, S2c build |
+| S3–S9: `strict` removed, `noImplicitAny` false, `strictTemplates` false, `noCheck` set, weakening in `tsconfig.base.json`, app `strictNullChecks` false, `// @ts-nocheck` | 7/7 verifier FAIL (V05; S7 V04) |
 | N28 `nx` devDependency, N29 `nx.json` | 2/2 verifier V15 FAIL |
 
 N05 is the key cycle proof: platform → observability and observability → platform are each allowed ("Optional"), so only the CYCLE rule rejects the pair, and the run shows no DIRECTION finding.
@@ -46,25 +52,25 @@ N05 is the key cycle proof: platform → observability and observability → pla
 | AC03 | PASS | V02: 20/20 |
 | AC04 | PASS | V03: 20 nodes |
 | AC05 | PASS | V04 |
-| AC06 | PASS | V05 |
+| AC06 | PASS | V05; S1–S9, S1c, S2c |
 | AC07 | PASS | V06: 18/18 aliases, 36/36 resolutions |
 | AC08 | PASS | V07: 18/18 placeholders |
-| AC09 | PASS | V08: 0 forbidden edges |
-| AC10 | PASS | V09 |
-| AC11 | PASS | V10 |
+| AC09 | PASS | V08: 0 forbidden edges, 0 forbidden transitive pairs; allowlist empty |
+| AC10 | PASS | V09; N53, N54, N56 |
+| AC11 | PASS | V10; N55 |
 | AC12 | PASS | V11: 0 cycles |
 | AC13 | PASS | V12: 0 findings, 0 diagnostics |
 | AC14 | PASS | V13 |
-| AC15 | PASS | V14; `logs/arch-check-cli.log` exit 0 |
-| AC16 | PASS | 5/5 controls; 45/45 rejected |
+| AC15 | PASS | V14, V16 (`qa:architecture` = `arch:check`); `logs/arch-check-cli.log` exit 0 |
+| AC16 | PASS | 16/16 controls; 70/70 rejected (86/86) |
 | AC17 | PASS | V15; N28, N29. Nx disposition: NOT REQUIRED FOR IB0-WP04 |
 | AC18 | PASS | `npm ci` exit 0 |
 | AC19 | PASS | exit 0 |
 | AC20 | PASS | exit 0 |
 | AC21 | PASS | V16; lockfile sha256 `be1154cb…6b69` |
 | AC22 | PASS | V18: 13/13 |
-| AC23 | PASS (bounded exception pending PO/SA) | V22 |
-| AC24 | PASS (accepted WP03 exception plus `tsconfig.base.json`, pending PO/SA) | V23 |
+| AC23 | PASS (bounded exception approved by the PO/SA, Decision 3) | V22 |
+| AC24 | PASS (accepted WP03 exception plus `tsconfig.base.json`, approved by the PO/SA) | V23 |
 | AC25 | PASS | V24: 15/15 |
 | AC26 | PASS | V17, V19 |
 | AC27 | PASS | Verifier JSON; `logs/post-run-git-status.log` |
@@ -73,4 +79,4 @@ N05 is the key cycle proof: platform → observability and observability → pla
 
 ## Defects
 
-D1 (medium, checker, closed): independent QA round 1 (`reports/independent-qa-round1.md`) showed the checker missed violations in nested `dist/`/`node_modules/`/`.angular/` folders (M1), in `.d.ts` files (M2) and DOM globals pulled into contracts by `/// <reference lib>` (M3), plus Low gaps L2, L3 (augmentation, `require.resolve`), L4 (relative `imports` targets only), L5, L6 and L8. Fixed in `3ec81fc`; AC03, AC09, AC13, AC14 and AC16 strengthened; N30–N38 added. D2 (medium, documentation, closed): the IB-01 §6.1 versus Appendix B conflict (M4) was not reported; now in `reports/definition-audit.md` §6 for PO/SA decision. D3 (low, evidence, closed): L7 and R2-L4 evidence-index and status-vocabulary inconsistencies corrected. D4 (low, checker, closed): independent QA round 2 R2-L1 (bare-name `imports` target bypass) and R2-L2 (false positive on `#prefix/*` patterns), fixed in `499ae29`. D5 (low, checker, closed): independent QA round 3 R3-L1 (conditional `imports` branches and longest-prefix patterns), fixed in `be181cf`; N40–N42 added. D6 (high, checker, closed): independent QA round 4 F-1, a nested `package.json` below a project root could remap `#` imports unseen, and F-2 (medium), an `imports` target naming another `#` subpath was not checked; fixed in `dcda855`; N43, N44 added. D7 (medium, checker, closed): independent QA round 5 R5-M1, the file walk did not follow or flag a symlinked directory inside a project; fixed in `9c74dbe` (any symlink below a project root is rejected); N45 added. Later branch commits after `9c74dbe` change documentation and evidence only.
+D1 (medium, checker, closed): independent QA round 1 (`reports/independent-qa-round1.md`) showed the checker missed violations in nested `dist/`/`node_modules/`/`.angular/` folders (M1), in `.d.ts` files (M2) and DOM globals pulled into contracts by `/// <reference lib>` (M3), plus Low gaps L2, L3 (augmentation, `require.resolve`), L4 (relative `imports` targets only), L5, L6 and L8. Fixed in `3ec81fc`; AC03, AC09, AC13, AC14 and AC16 strengthened; N30–N38 added. D2 (medium, documentation, closed): the IB-01 §6.1 versus Appendix B conflict (M4) was not reported; now in `reports/definition-audit.md` §6 for PO/SA decision. D3 (low, evidence, closed): L7 and R2-L4 evidence-index and status-vocabulary inconsistencies corrected. D4 (low, checker, closed): independent QA round 2 R2-L1 (bare-name `imports` target bypass) and R2-L2 (false positive on `#prefix/*` patterns), fixed in `499ae29`. D5 (low, checker, closed): independent QA round 3 R3-L1 (conditional `imports` branches and longest-prefix patterns), fixed in `be181cf`; N40–N42 added. D6 (high, checker, closed): independent QA round 4 F-1, a nested `package.json` below a project root could remap `#` imports unseen, and F-2 (medium), an `imports` target naming another `#` subpath was not checked; fixed in `dcda855`; N43, N44 added. D7 (medium, checker, closed): independent QA round 5 R5-M1, the file walk did not follow or flag a symlinked directory inside a project; fixed in `9c74dbe` (any symlink below a project root is rejected); N45 added. D8 (low, checker, closed): independent QA round 7 L3/L4 (allowlist entries linking two apps; V08 wording), fixed in `9c50108`; N52. D9 (medium, checker, closed): final review M1, a workspace package reached under another name, fixed in `05e593d`; N53, N54. D10 (medium, checker, closed): round 9 F1, a `node_modules` link to a folder outside every project, and F2 (low), plain-path manifest references, fixed in `d2f142c`; N55, N56. Later branch commits after `d2f142c` change documentation and evidence only.

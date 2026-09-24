@@ -1,0 +1,153 @@
+======== Resolving module 'i18n-x' from '<scratch>/qa9/cases/P19-link-to-tooling-reexport/packages/frappe-sdk/src/index.ts'. ========
+Explicitly specified module resolution kind: 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+File '<scratch>/qa9/cases/P19-link-to-tooling-reexport/packages/frappe-sdk/src/package.json' does not exist.
+Found 'package.json' at '<scratch>/qa9/cases/P19-link-to-tooling-reexport/packages/frappe-sdk/package.json'.
+Loading module 'i18n-x' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '<scratch>/qa9/cases/P19-link-to-tooling-reexport/packages/frappe-sdk/src/node_modules' does not exist, skipping all lookups in it.
+Directory '<scratch>/qa9/cases/P19-link-to-tooling-reexport/packages/frappe-sdk/node_modules' does not exist, skipping all lookups in it.
+Directory '<scratch>/qa9/cases/P19-link-to-tooling-reexport/packages/node_modules' does not exist, skipping all lookups in it.
+Found 'package.json' at '<scratch>/qa9/cases/P19-link-to-tooling-reexport/node_modules/i18n-x/package.json'.
+File '<scratch>/qa9/cases/P19-link-to-tooling-reexport/node_modules/i18n-x.ts' does not exist.
+File '<scratch>/qa9/cases/P19-link-to-tooling-reexport/node_modules/i18n-x.tsx' does not exist.
+File '<scratch>/qa9/cases/P19-link-to-tooling-reexport/node_modules/i18n-x.d.ts' does not exist.
+'package.json' does not have a 'typesVersions' field.
+'package.json' does not have a 'typings' field.
+'package.json' does not have a 'types' field.
+'package.json' has 'main' field 'index.ts' that references '<scratch>/qa9/cases/P19-link-to-tooling-reexport/node_modules/i18n-x/index.ts'.
+File '<scratch>/qa9/cases/P19-link-to-tooling-reexport/node_modules/i18n-x/index.ts' exists - use it as a name resolution result.
+Resolving real path for '<scratch>/qa9/cases/P19-link-to-tooling-reexport/node_modules/i18n-x/index.ts', result '<scratch>/qa9/cases/P19-link-to-tooling-reexport/tooling/qa9x/index.ts'.
+======== Module name 'i18n-x' was successfully resolved to '<scratch>/qa9/cases/P19-link-to-tooling-reexport/tooling/qa9x/index.ts'. ========
+======== Resolving module '../../packages/i18n/src/index' from '<scratch>/qa9/cases/P19-link-to-tooling-reexport/tooling/qa9x/index.ts'. ========
+Explicitly specified module resolution kind: 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+Loading module as file / folder, candidate module location '<scratch>/qa9/cases/P19-link-to-tooling-reexport/packages/i18n/src/index', target file types: TypeScript, JavaScript, Declaration, JSON.
+File '<scratch>/qa9/cases/P19-link-to-tooling-reexport/packages/i18n/src/index.ts' exists - use it as a name resolution result.
+======== Module name '../../packages/i18n/src/index' was successfully resolved to '<scratch>/qa9/cases/P19-link-to-tooling-reexport/packages/i18n/src/index.ts'. ========
+File '<repo>/node_modules/typescript/lib/package.json' does not exist.
+Found 'package.json' at '<repo>/node_modules/typescript/package.json'.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.
+File '<repo>/node_modules/typescript/lib/package.json' does not exist according to earlier cached lookups.
+File '<repo>/node_modules/typescript/package.json' exists according to earlier cached lookups.

@@ -243,7 +243,7 @@ jobs:
       - name: PAEP setup
         uses: ./.github/actions/paep-setup
 
-      - name: Production build: reference-app
+      - name: Production build (reference-app)
         run: |
           set -euo pipefail
           npm run build:reference-app 2>&1 | tee "$PAEP_EVIDENCE_DIR/build-reference-app-1.log"
@@ -276,7 +276,7 @@ jobs:
       - name: PAEP setup
         uses: ./.github/actions/paep-setup
 
-      - name: Production build: ui-lab
+      - name: Production build (ui-lab)
         run: |
           set -euo pipefail
           npm run build:ui-lab 2>&1 | tee "$PAEP_EVIDENCE_DIR/build-ui-lab-1.log"

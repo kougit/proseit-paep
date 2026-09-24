@@ -256,6 +256,8 @@ try {
   caseRun('P12', '(xi) floating Node version in setup-node fails the provenance gate', [[SETUP, replace('node-version-file: .nvmrc', "node-version: '24.x'")]], () => verifyGate('provenance'), [/FAIL W15/]);
   caseRun('P13', '(xi) second, unreviewed workflow file fails the provenance gate', [['.github/workflows/other.yml', () => 'name: other\non: push\njobs: {}\n']], () => verifyGate('provenance'), [/FAIL W09/]);
 
+  caseRun('P14', '(xi) invalid workflow YAML (unquoted ": " in a step name, which GitHub rejects) fails the provenance gate', [[WORKFLOW, replace('- name: Production build (reference-app)', '- name: Production build: reference-app')]], () => verifyGate('provenance'), [/FAIL W09/, /plain scalar contains/]);
+
   // ---- scope: Nx and IB1 --------------------------------------------------------------------------------
   caseRun('N01', 'Nx introduced (nx.json) fails the governance gate', [['nx.json', () => '{}\n']], () => verifyGate('governance'), [/FAIL W04/]);
   caseRun('N02', 'IB1 artefact (config/runtime-config.schema.json) fails the governance gate', [['config/runtime-config.schema.json', () => '{}\n']], () => verifyGate('governance'), [/FAIL W05/]);

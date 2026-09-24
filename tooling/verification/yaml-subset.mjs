@@ -43,6 +43,8 @@ export function parseYaml(text) {
     if (s === '[]') return [];
     if (/^\[.*\]$/.test(s)) return s.slice(1, -1).split(',').map((x) => scalar(x));
     if (/^[{&*!>|%@`]/.test(s)) throw new Error(`unsupported YAML value: ${s}`);
+    // A plain scalar may not contain ": " (YAML reads it as a nested mapping and rejects the file).
+    if (/: /.test(s) || s.endsWith(':')) throw new Error(`plain scalar contains ": " (quote it): ${s}`);
     if (s === 'true') return true;
     if (s === 'false') return false;
     if (/^-?\d+$/.test(s)) return Number(s);

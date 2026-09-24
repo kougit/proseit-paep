@@ -1,4 +1,4 @@
-# date: 2026-09-24T09:18:58Z node: v24.21.0 npm: 11.19.0 commit: 15386a95361b7a95c100bebd76d3c0907e5e6554
+# date: 2026-09-24T09:35:41Z node: v24.21.0 npm: 11.19.0 commit: 0f2d38174d57dda229e62a545477e8d8288e8a00
 $ bash -c node -e "const fs=require(\"fs\"),c=require(\"crypto\");const m=require(\"./PACK_MANIFEST.json\").files.filter(f=>f.path===\".gitignore\"||f.path.startsWith(\".paep-control/\"));let ok=0;for(const f of m){const h=c.createHash(\"sha256\").update(fs.readFileSync(f.path)).digest(\"hex\");const s=fs.statSync(f.path).size;const g=h===f.sha256&&s===f.bytes;ok+=g;console.log((g?\"MATCH \":\"MISMATCH \")+f.path)}console.log(ok+\"/\"+m.length+\" match\");process.exit(ok===m.length?0:1)" && echo "git diff --stat de13629 HEAD -- .paep-control .gitignore PACK_MANIFEST.json CLAUDE.md:" && git diff --exit-code --stat de13629 HEAD -- .paep-control .gitignore PACK_MANIFEST.json CLAUDE.md && echo "(empty)"
 MATCH .gitignore
 MATCH .paep-control/SOURCE_OF_TRUTH.md

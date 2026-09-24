@@ -2,7 +2,7 @@
 
 Evidence for IB0-WP03 (compiler, type-safety and static-quality baseline).
 
-**Commit under test:** `15386a95361b7a95c100bebd76d3c0907e5e6554` (implementation), run from a fresh `git clone` of GitHub on Node 24.21.0 / npm 11.19.0 (linux-x64), 2026-09-24. Later branch commits change documentation and evidence only; independent QA re-ran every gate on the PR head (`reports/independent-qa.md`). **Baseline:** IB0-WP02 merge commit `de13629`. **Status:** TECHNICAL PASS; see `reports/acceptance-readiness.md` for QA and readiness. ACCEPTED is a PO/SA decision.
+**Commit under test:** `0f2d38174d57dda229e62a545477e8d8288e8a00` (implementation `15386a9` plus the verifier hardening from independent QA round 1), run from a fresh `git clone` of GitHub on Node 24.21.0 / npm 11.19.0 (linux-x64), 2026-09-24. Later branch commits change documentation and evidence only; independent QA re-ran every gate on the PR head (`reports/independent-qa.md`). **Baseline:** IB0-WP02 merge commit `de13629`. **Status:** technical PASS; see `reports/acceptance-readiness.md` for QA and readiness. ACCEPTED is a PO/SA decision.
 
 ## Reports
 
@@ -12,7 +12,7 @@ Evidence for IB0-WP03 (compiler, type-safety and static-quality baseline).
 | `reports/compiler-configuration.md` | Before/after compiler options, effective values, negative proof, alias and entry-point table |
 | `reports/technical-verification.md` | All gates, negative cases, defects and per-criterion result |
 | `reports/ib0-wp03-verification.json` | Verifier output, 18/18 PASS, with commit, Node, npm and TypeScript versions |
-| `reports/negative-tests.json` | Negative runner output, 19/19 |
+| `reports/negative-tests.json` | Negative runner output, 23/23 |
 | `reports/independent-qa.md` | Independent clean-context QA |
 | `reports/acceptance-readiness.md` | Readiness for PO/SA authorisation |
 
@@ -40,8 +40,9 @@ Evidence for IB0-WP03 (compiler, type-safety and static-quality baseline).
 | Path | Cases | Result |
 | --- | --- | --- |
 | `logs/negative-strictness.log` | B0–B2c: TypeScript and template violations with flag-off controls | 5/5 as expected |
-| `logs/negative-verifier-mutations.log` | M0–M13: verifier positive control and 13 weakening mutations | 14/14 as expected |
-| `logs/negative-tests.log` | Runner console output | PASS 19/19 |
+| `logs/negative-verifier-mutations.log` | M0–M17: verifier positive control and 17 weakening mutations | 18/18 as expected |
+| `logs/independent-qa-round1/` | Independent QA round 1 raw logs and helper scripts (at `f19a422`) | QA PASS with findings F1–F8 |
+| `logs/negative-tests.log` | Runner console output | PASS 23/23 |
 
 ## Notes
 

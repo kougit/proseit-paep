@@ -1,0 +1,21 @@
+# date: 2026-09-24T09:25:20Z
+# node: v24.21.0 npm: 11.19.0
+# dir: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/qa/base commit: de13629b302e1bbaccc59bb0e93f69c7fed9cdcb
+# cmd: npm ci 2>&1 | tail -3 && npm run build:reference-app 2>&1 | tail -6 && npm run build:ui-lab 2>&1 | tail -6
+
+  run `npm fund` for details
+
+found 0 vulnerabilities
+                    | Initial total | 190.65 kB |                52.09 kB
+
+Application bundle generation complete. [4.071 seconds] - 2026-09-24T09:25:33.149Z
+
+Output location: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/qa/base/dist/reference-app
+
+                    | Initial total | 190.65 kB |                52.16 kB
+
+Application bundle generation complete. [3.252 seconds] - 2026-09-24T09:25:37.145Z
+
+Output location: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/qa/base/dist/ui-lab
+
+EXIT_CODE=0

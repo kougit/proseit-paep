@@ -1,0 +1,22 @@
+# date: 2026-09-24T09:25:05Z
+# node: v24.21.0 npm: 11.19.0
+# dir: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/qa/repo commit: f19a4223748be90d98b99e3c47c6477910c5a17f
+# cmd: npm run build:ui-lab 2>&1 | tail -25
+
+
+> @proseit/paep-workspace@0.0.0 build:ui-lab
+> ng build ui-lab --configuration production
+
+❯ Building...
+✔ Building...
+Initial chunk files | Names         |  Raw size | Estimated transfer size
+main-RPR4FBCF.js    | main          | 190.65 kB |                52.16 kB
+styles-5INURTSO.css | styles        |   0 bytes |                 0 bytes
+
+                    | Initial total | 190.65 kB |                52.16 kB
+
+Application bundle generation complete. [3.039 seconds] - 2026-09-24T09:25:08.864Z
+
+Output location: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/qa/repo/dist/ui-lab
+
+EXIT_CODE=0

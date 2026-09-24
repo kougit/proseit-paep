@@ -1,7 +1,7 @@
 {
   "workPackage": "IB0-WP02",
-  "generatedAt": "2026-09-24T09:19:28.200Z",
-  "commit": "15386a95361b7a95c100bebd76d3c0907e5e6554",
+  "generatedAt": "2026-09-24T09:36:09.879Z",
+  "commit": "0f2d38174d57dda229e62a545477e8d8288e8a00",
   "trackedChangesAtRun": [
     "M evidence/IB0-WP02/reports/licence-inventory.json"
   ],
@@ -116,19 +116,19 @@
       "id": "V18",
       "name": "No credential or secret signatures in files added or modified since the baseline",
       "pass": true,
-      "details": "122 files scanned; findings: none"
+      "details": "153 files scanned; findings: none"
     },
     {
       "id": "V19",
       "name": "reference-app production build passes",
       "pass": true,
-      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.09 kB\n\nApplication bundle generation complete. [1.695 seconds] - 2026-09-24T09:19:25.720Z\n\nOutput location: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/run1/repo/dist/reference-app"
+      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.09 kB\n\nApplication bundle generation complete. [1.878 seconds] - 2026-09-24T09:36:07.262Z\n\nOutput location: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/run2/repo/dist/reference-app"
     },
     {
       "id": "V20",
       "name": "ui-lab production build passes",
       "pass": true,
-      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-RPR4FBCF.js    | main          | 190.65 kB |                52.16 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.16 kB\n\nApplication bundle generation complete. [1.755 seconds] - 2026-09-24T09:19:28.137Z\n\nOutput location: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/run1/repo/dist/ui-lab"
+      "details": "exit=0\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-RPR4FBCF.js    | main          | 190.65 kB |                52.16 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.16 kB\n\nApplication bundle generation complete. [1.855 seconds] - 2026-09-24T09:36:09.797Z\n\nOutput location: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/run2/repo/dist/ui-lab"
     }
   ]
 }

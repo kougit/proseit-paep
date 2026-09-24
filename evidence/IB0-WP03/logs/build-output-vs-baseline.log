@@ -1,4 +1,4 @@
-# date: 2026-09-24T09:18:58Z node: v24.21.0 npm: 11.19.0 commit: 15386a95361b7a95c100bebd76d3c0907e5e6554
+# date: 2026-09-24T09:35:41Z node: v24.21.0 npm: 11.19.0 commit: 0f2d38174d57dda229e62a545477e8d8288e8a00
 $ bash -c cd dist && find . -type f | sort | xargs sha256sum > ../../dist.sha && cat ../../dist.sha && echo '--- diff against the IB0-WP02 main (de13629) build:' && diff ../../dist.sha /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/dist-baseline.sha && echo 'all output files byte-identical'
 826d77b6b3f125519073a19783e45c85d96e8daadc3ad87c14439c9398a3f259  ./reference-app/3rdpartylicenses.txt
 f9102be80297c0529207607be5277b4f90bca89d65988fa1771b91c7894e815f  ./reference-app/browser/favicon.ico

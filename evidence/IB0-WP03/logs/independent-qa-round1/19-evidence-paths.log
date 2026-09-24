@@ -1,0 +1,108 @@
+# date: 2026-09-24T09:30:57Z
+# node: v24.21.0 npm: 11.19.0
+# dir: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/qa/repo commit: f19a4223748be90d98b99e3c47c6477910c5a17f
+# cmd: 
+echo "## README paths"; grep -oE "\`(reports|logs|notes)/[^\`]+\`" evidence/IB0-WP03/README.md | tr -d "\`" | sort -u | while read p; do [ -e "evidence/IB0-WP03/$p" ] && echo "EXISTS $p" || echo "MISSING $p"; done
+echo "## TRACEABILITY evidence paths"; tail -n +2 work-packages/IB0-WP03/TRACEABILITY.csv | awk -F, "{print \$NF}" | tr ";" "\n" | sort -u | while read p; do [ -e "$p" ] && echo "EXISTS $p" || echo "MISSING $p"; done
+echo "## TRACEABILITY implementation-file paths"; for p in docs/architecture/IB0-WP03-IMPLEMENTATION-PLAN.md tooling/verification/negative-ib0-wp03.mjs tooling/verification/verify-ib0-wp03.mjs work-packages/IB0-WP03/WORK_PACKAGE.md work-packages/IB0-WP03/ACCEPTANCE.md work-packages/IB0-WP03/ACCEPTANCE_REPORT.md; do [ -e $p ] && echo "EXISTS $p" || echo "MISSING $p"; done
+echo "## AC coverage in TRACEABILITY"; for i in $(seq -w 1 24); do n=$(grep -c "IB0-WP03-AC$i" work-packages/IB0-WP03/TRACEABILITY.csv); echo "AC$i rows=$n"; done | paste -sd" "
+echo "## TRACEABILITY statuses"; tail -n +2 work-packages/IB0-WP03/TRACEABILITY.csv | awk -F, "{print \$(NF-1)}" | sort | uniq -c
+echo "## commits after implementation commit touch only docs/evidence/work-packages:"; git diff --name-only 15386a9 HEAD | grep -v -E "^(evidence/IB0-WP03/|work-packages/IB0-WP03/)" || echo "(none outside evidence/work-packages)"
+echo "## ACCEPTANCE.md / WORK_PACKAGE.md changes in f19a422:"; git diff 8d7a643 f19a422 -- work-packages/IB0-WP03/ACCEPTANCE.md work-packages/IB0-WP03/WORK_PACKAGE.md
+
+## README paths
+EXISTS logs/build-output-vs-baseline.log
+EXISTS logs/build-reference-app.log
+EXISTS logs/build-ui-lab.log
+EXISTS logs/clean-clone-reproduction.log
+EXISTS logs/controlled-source-integrity.log
+EXISTS logs/ib0-wp01-verification.regression.json
+EXISTS logs/ib0-wp02-verification.regression.json
+EXISTS logs/lockfile-unchanged.log
+EXISTS logs/negative-strictness.log
+EXISTS logs/negative-tests.log
+EXISTS logs/negative-verifier-mutations.log
+EXISTS logs/ng-version.log
+EXISTS logs/npm-ci.log
+EXISTS logs/post-run-git-status.log
+EXISTS logs/pre-clone-state.log
+EXISTS logs/scope-and-secret-scan.log
+EXISTS logs/toolchain-versions.log
+EXISTS logs/verify-ib0-wp01-regression.log
+EXISTS logs/verify-ib0-wp02-regression.log
+EXISTS logs/verify-ib0-wp03.log
+EXISTS notes/implementation-summary.md
+MISSING reports/acceptance-readiness.md
+EXISTS reports/compiler-configuration.md
+EXISTS reports/definition-audit.md
+EXISTS reports/ib0-wp03-verification.json
+MISSING reports/independent-qa.md
+EXISTS reports/negative-tests.json
+EXISTS reports/technical-verification.md
+## TRACEABILITY evidence paths
+EXISTS docs/architecture/IB0-WP03-IMPLEMENTATION-PLAN.md
+EXISTS evidence/IB0-WP03/README.md
+EXISTS evidence/IB0-WP03/logs/build-output-vs-baseline.log
+EXISTS evidence/IB0-WP03/logs/build-reference-app.log
+EXISTS evidence/IB0-WP03/logs/build-ui-lab.log
+EXISTS evidence/IB0-WP03/logs/clean-clone-reproduction.log
+EXISTS evidence/IB0-WP03/logs/controlled-source-integrity.log
+EXISTS evidence/IB0-WP03/logs/ib0-wp01-verification.regression.json
+EXISTS evidence/IB0-WP03/logs/ib0-wp02-verification.regression.json
+EXISTS evidence/IB0-WP03/logs/lockfile-unchanged.log
+EXISTS evidence/IB0-WP03/logs/negative-strictness.log
+EXISTS evidence/IB0-WP03/logs/negative-verifier-mutations.log
+EXISTS evidence/IB0-WP03/logs/npm-ci.log
+EXISTS evidence/IB0-WP03/logs/post-run-git-status.log
+EXISTS evidence/IB0-WP03/logs/scope-and-secret-scan.log
+EXISTS evidence/IB0-WP03/logs/verify-ib0-wp01-regression.log
+EXISTS evidence/IB0-WP03/logs/verify-ib0-wp02-regression.log
+EXISTS evidence/IB0-WP03/logs/verify-ib0-wp03.log
+EXISTS evidence/IB0-WP03/reports/compiler-configuration.md
+EXISTS evidence/IB0-WP03/reports/definition-audit.md
+EXISTS evidence/IB0-WP03/reports/ib0-wp03-verification.json
+MISSING evidence/IB0-WP03/reports/independent-qa.md
+EXISTS evidence/IB0-WP03/reports/negative-tests.json
+EXISTS evidence/IB0-WP03/reports/technical-verification.md
+EXISTS work-packages/IB0-WP03/ACCEPTANCE_REPORT.md
+## TRACEABILITY implementation-file paths
+EXISTS docs/architecture/IB0-WP03-IMPLEMENTATION-PLAN.md
+EXISTS tooling/verification/negative-ib0-wp03.mjs
+EXISTS tooling/verification/verify-ib0-wp03.mjs
+EXISTS work-packages/IB0-WP03/WORK_PACKAGE.md
+EXISTS work-packages/IB0-WP03/ACCEPTANCE.md
+EXISTS work-packages/IB0-WP03/ACCEPTANCE_REPORT.md
+## AC coverage in TRACEABILITY
+AC01 rows=3 AC02 rows=2 AC03 rows=2 AC04 rows=3 AC05 rows=2 AC06 rows=2 AC07 rows=2 AC08 rows=3 AC09 rows=2 AC10 rows=2 AC11 rows=2 AC12 rows=2 AC13 rows=2 AC14 rows=2 AC15 rows=2 AC16 rows=2 AC17 rows=2 AC18 rows=2 AC19 rows=2 AC20 rows=3 AC21 rows=2 AC22 rows=2 AC23 rows=2 AC24 rows=3
+## TRACEABILITY statuses
+      1 IN PROGRESS
+     18 PASS
+## commits after implementation commit touch only docs/evidence/work-packages:
+(none outside evidence/work-packages)
+## ACCEPTANCE.md / WORK_PACKAGE.md changes in f19a422:
+diff --git a/work-packages/IB0-WP03/ACCEPTANCE.md b/work-packages/IB0-WP03/ACCEPTANCE.md
+index d154113..7067d11 100644
+--- a/work-packages/IB0-WP03/ACCEPTANCE.md
++++ b/work-packages/IB0-WP03/ACCEPTANCE.md
+@@ -25,7 +25,7 @@ Every criterion is mandatory unless an authorised reviewer explicitly marks it N
+ | IB0-WP03-AC17 | No WP04, WP05 or IB1+ scope. None of `tsconfig.base.json`, lint/format/test-runner config, `.github/`, or boundary/cycle/deep-import tooling exists; `tooling/architecture-boundaries/` holds only its README; `apps/**` is unchanged; package entry points export nothing; every changed path is within WORK_PACKAGE §4. | Verifier; `logs/scope-and-secret-scan.log` | 0 violations |
+ | IB0-WP03-AC18 | Controlled-source integrity. Every file under `.paep-control/` and `.gitignore` matches its SHA-256 and size in `PACK_MANIFEST.json` (13/13); no unlisted file; `.paep-control`, `.gitignore`, `PACK_MANIFEST.json` and `CLAUDE.md` unchanged from the baseline. | Verifier; `logs/controlled-source-integrity.log` | 13/13 match |
+ | IB0-WP03-AC19 | No credential, secret, private key, registry token or bearer token in any file added or modified since the baseline. | Verifier; secret scan | 0 findings |
+-| IB0-WP03-AC20 | `node tooling/verification/verify-ib0-wp03.mjs` reports PASS and writes `evidence/IB0-WP03/reports/ib0-wp03-verification.json` with the commit SHA, Node and npm versions and per-check results. It writes nothing outside `evidence/IB0-WP03/`. | Verifier report; `git status` | PASS |
++| IB0-WP03-AC20 | `node tooling/verification/verify-ib0-wp03.mjs` reports PASS and writes `evidence/IB0-WP03/reports/ib0-wp03-verification.json` with the commit SHA, Node and npm versions and per-check results. After the run, no tracked file outside `evidence/IB0-WP03/` is modified (the earlier verifiers it runs as regression rewrite their own tracked JSON, which it restores). | Verifier report; `git status` | PASS |
+ | IB0-WP03-AC21 | IB0-WP02 regression. `verify-ib0-wp02.mjs` run at the commit under test passes every check except V17, and V17's only finding is "protected paths changed" listing paths WORK_PACKAGE §4 permits (`tsconfig.json`, `packages/<dir>/src/index.ts`). After the run, `evidence/IB0-WP02/**` and `work-packages/IB0-WP02/**` are byte-unchanged from the baseline. (Pending PO/SA decision; see WORK_PACKAGE §6(ii).) | Verifier; `logs/verify-ib0-wp02-regression.log` | 19/20 + bounded V17; 0 diffs |
+ | IB0-WP03-AC22 | IB0-WP01 regression. `verify-ib0-wp01.mjs` passes 15/15 at the commit under test, and `evidence/IB0-WP01/**` and `work-packages/IB0-WP01/**` are byte-unchanged from the baseline afterwards. | Verifier; `logs/verify-ib0-wp01-regression.log` | PASS; 0 diffs |
+ | IB0-WP03-AC23 | The evidence in WORK_PACKAGE §7 is retained under `evidence/IB0-WP03/` and indexed in its README, which names the commit under test. | Evidence index | Complete |
+diff --git a/work-packages/IB0-WP03/WORK_PACKAGE.md b/work-packages/IB0-WP03/WORK_PACKAGE.md
+index d0819bf..ec24577 100644
+--- a/work-packages/IB0-WP03/WORK_PACKAGE.md
++++ b/work-packages/IB0-WP03/WORK_PACKAGE.md
+@@ -78,3 +78,7 @@ Stored under `evidence/IB0-WP03/` and indexed in its README: verifier JSON and l
+ ## 8. Completion rule
+ 
+ Technical PASS requires every criterion in `ACCEPTANCE.md` to pass. Claude reports TECHNICAL PASS, INDEPENDENT QA PASS and READY FOR AUTHORIZATION at most. ACCEPTED and merge are decisions of the Product Owner / Solutions Architect.
++
++## 9. Drafting changes
++
++(i) 2026-09-24, before the first recorded verification run: AC20 was clarified from "writes nothing outside `evidence/IB0-WP03/`" to "no tracked file outside `evidence/IB0-WP03/` is modified after the run", because the WP02 and WP01 verifiers it runs as regression rewrite, and it restores, their own tracked JSON. The check itself is unchanged and is proven by `logs/post-run-git-status.log`.
+EXIT_CODE=0

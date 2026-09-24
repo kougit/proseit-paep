@@ -1,8 +1,8 @@
 # IB0-WP03 Technical Verification Report
 
-**Commit under test:** `15386a95361b7a95c100bebd76d3c0907e5e6554` (implementation commit), from a fresh `git clone` of `origin/claude/ib0-wp03-7s51em`, Node 24.21.0 / npm 11.19.0, linux-x64, 2026-09-24. Later commits on the branch change only documentation and evidence; the independent QA re-runs every gate on the final PR head.
+**Commit under test:** `0f2d38174d57dda229e62a545477e8d8288e8a00` (implementation `15386a9` plus the verifier hardening that followed independent QA round 1), from a fresh `git clone` of `origin/claude/ib0-wp03-7s51em`, Node 24.21.0 / npm 11.19.0, linux-x64, 2026-09-24. The first full run at `15386a9` gave the same gate results with 19 negative cases. Later commits change only documentation and evidence; independent QA round 2 re-runs every gate on the final PR head.
 
-**Result: TECHNICAL PASS — 24/24 criteria.**
+**Result: PASS (technical) — 24/24 criteria.**
 
 ## Gates
 
@@ -20,8 +20,8 @@
 | WP01 regression (in V18) | PASS 15/15 | `logs/verify-ib0-wp01-regression.log` |
 | Tracked files after all runs; WP01/WP02 records vs baseline | Clean; empty diff | `logs/post-run-git-status.log` |
 | Controlled sources | 13/13 SHA-256 match; empty diff for `.paep-control`, `.gitignore`, `PACK_MANIFEST.json`, `CLAUDE.md` | `logs/controlled-source-integrity.log` |
-| Scope and secrets | 26 changed paths, all permitted; no out-of-scope files; 0 Nx; dependencies identical; apps unchanged; 0 secret findings | `logs/scope-and-secret-scan.log` |
-| `npm run qa:ib0-wp03:negative` | PASS 19/19 | `logs/negative-strictness.log`, `logs/negative-verifier-mutations.log`, `reports/negative-tests.json` |
+| Scope and secrets | 57 changed paths (including retained evidence), all permitted; no out-of-scope files; 0 Nx; dependencies identical; apps unchanged; 0 secret findings | `logs/scope-and-secret-scan.log` |
+| `npm run qa:ib0-wp03:negative` | PASS 23/23 | `logs/negative-strictness.log`, `logs/negative-verifier-mutations.log`, `reports/negative-tests.json` |
 
 ## Negative cases
 
@@ -46,6 +46,10 @@
 | M11 alias removed | V08 FAIL | V08, V09 |
 | M12 wildcard deep alias | V08 FAIL | V08 |
 | M13 entry point deleted | V09 FAIL | V09 |
+| M14 `noCheck: true` added | V04 FAIL | V04, V05 |
+| M15 `allowUnreachableCode: true` added | V05 FAIL | V04, V05 |
+| M16 extended diagnostics suppressed | V04 FAIL | V04, V05 |
+| M17 uppercase `// @TS-NOCHECK` in an entry point | V07 FAIL | V07 |
 
 M1, M3 and M4 matter most: removing a flag leaves the default on, so a build would still pass, and only the explicit-configuration checks catch it.
 
@@ -54,6 +58,8 @@ M1, M3 and M4 matter most: removing a flag leaves the default on, so a build wou
 | ID | Severity | Finding | Fix |
 | --- | --- | --- | --- |
 | D1 | Low (tooling) | First negative run: every verifier mutation case failed for the wrong reason. The scratch copy links `node_modules` as a symlink, which `/node_modules/` in `.gitignore` does not match, so V12 saw an untracked path and V14 tried to read it as a file (EISDIR). | Runner adds `/node_modules` to the copy's local `.git/info/exclude`; V14 scans regular files only. No criterion or check was relaxed; re-run 19/19. |
+| D2 | Medium (verifier) | Independent QA round 1 (F1, F3, F5): the verifier accepted an added `"noCheck": true` (with which both negative violations build), other unlisted options and suppressed Angular extended diagnostics, and V07 was case-sensitive although TypeScript honours `// @TS-NOCHECK`. | `0f2d381`: V04 rejects type-check-disabling options and suppressed extended diagnostics; V05 is an allow-list; V07 is case-insensitive; mutations M14–M17 added. AC04–AC06 and AC11 strengthened (WORK_PACKAGE §9(ii)). Re-run 23/23. |
+| D3 | Low (records) | QA F6: status words outside EQP App. C in the evidence README and `work-package.json`. | Corrected in `0f2d381`. |
 
 ## Criteria
 
@@ -61,7 +67,7 @@ M1, M3 and M4 matter most: removing a flag leaves the default on, so a build wou
 | --- | --- | --- |
 | AC01 | PASS | Plan in `8d7a643`, parent of `15386a9`, the first commit touching `tsconfig.json`/`packages/**` |
 | AC02–AC08 | PASS | Verifier V01–V09 |
-| AC09–AC11 | PASS | Negative runner 19/19 |
+| AC09–AC11 | PASS | Negative runner 23/23 |
 | AC12–AC14 | PASS | Fresh-clone gates |
 | AC15–AC19 | PASS | V10–V14; scope, lockfile and integrity logs |
 | AC20 | PASS | Verifier 18/18; post-run status clean |

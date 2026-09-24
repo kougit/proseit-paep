@@ -1,4 +1,4 @@
-# date: 2026-09-24T09:18:58Z node: v24.21.0 npm: 11.19.0 commit: 15386a95361b7a95c100bebd76d3c0907e5e6554
+# date: 2026-09-24T09:35:41Z node: v24.21.0 npm: 11.19.0 commit: 0f2d38174d57dda229e62a545477e8d8288e8a00
 $ npm run qa:ib0-wp03:negative
 
 > @proseit/paep-workspace@0.0.0 qa:ib0-wp03:negative
@@ -23,6 +23,10 @@ PASS M10 @ts-ignore added to app source — exit 1; failed checks: V07, V12
 PASS M11 contracts alias removed — exit 1; failed checks: V08, V09
 PASS M12 wildcard deep alias added — exit 1; failed checks: V08
 PASS M13 contracts entry point deleted — exit 1; failed checks: V09
+PASS M14 type checking switched off ("noCheck": true added) — exit 1; failed checks: V04, V05
+PASS M15 unlisted option added ("allowUnreachableCode": true) — exit 1; failed checks: V04, V05
+PASS M16 Angular extended diagnostics suppressed — exit 1; failed checks: V04, V05
+PASS M17 uppercase // @TS-NOCHECK in an entry point — exit 1; failed checks: V07
 
-IB0-WP03 negative tests: PASS (19/19)
+IB0-WP03 negative tests: PASS (23/23)
 EXIT_CODE=0

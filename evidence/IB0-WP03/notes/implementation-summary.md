@@ -7,7 +7,7 @@
 | `tsconfig.json` | `strict: true`, `noImplicitAny: true` and `strictTemplates: true` stated explicitly; `paths` with one alias per workspace package |
 | `packages/*/src/index.ts` (18) | Placeholder public entry points (`export {};`) |
 | `tooling/verification/verify-ib0-wp03.mjs` | Verifier, 18 checks (14 static, 2 builds, 2 regression) |
-| `tooling/verification/negative-ib0-wp03.mjs` | Negative runner, 19 cases in a scratch copy |
+| `tooling/verification/negative-ib0-wp03.mjs` | Negative runner, 23 cases in a scratch copy |
 | `package.json` | `qa:ib0-wp03` and `qa:ib0-wp03:negative` scripts |
 | `docs/architecture/IB0-WP03-IMPLEMENTATION-PLAN.md`, `docs/adr/ADR-REGISTER.md` | Plan; "no ADR needed" note |
 | `work-packages/IB0-WP03/**`, `evidence/IB0-WP03/**` | Definition, criteria, runbook, traceability, report; evidence |
@@ -20,7 +20,9 @@ Not changed: `package-lock.json` and every dependency, `angular.json`, `apps/**`
 | --- | --- |
 | `8d7a643` | Plan and draft definition (before any configuration change, AC01) |
 | `15386a9` | Configuration, entry points, verifiers, scripts, ADR note |
-| later | Evidence, traceability and reports (docs only) |
+| `f19a422` | Evidence, traceability and reports (docs only) |
+| `0f2d381` | Verifier hardening after independent QA round 1 (F1, F3, F5, F6) |
+| later | Re-recorded evidence and QA reports (docs only) |
 
 ## Defaults taken (pending PO/SA decisions requested on 2026-09-24)
 

@@ -1,14 +1,14 @@
 # IB0-WP03 Acceptance Report
 
 **Work package:** IB0-WP03 — Compiler, Type-Safety and Static-Quality Baseline (PAEP-IR-01 IB0-WP3)  
-**Commit / revision:** implementation `15386a9`; PR head recorded in `evidence/IB0-WP03/reports/acceptance-readiness.md`  
+**Commit / revision:** implementation `15386a9`, verifier hardening `0f2d381` (evidence commit under test); PR head recorded in `evidence/IB0-WP03/reports/acceptance-readiness.md`  
 **Baseline:** IB0-WP02 ACCEPTED and CLOSED, merge commit `de13629`  
 **Technical reviewer:** Claude Code (execution); independent QA by a separate clean-context Claude review  
 **Review date:** 2026-09-24
 
 ## Implemented scope
 
-TypeScript `strict` and `noImplicitAny` and Angular `strictTemplates` are now set explicitly to `true` in the root `tsconfig.json`, which both applications extend, instead of relying on TypeScript 6.0 / Angular 22 defaults. Each of the 18 workspace packages has a placeholder public entry point (`src/index.ts`, `export {};`) and exactly one path alias keyed by its package name. A new verifier (`npm run qa:ib0-wp03`, 18 checks) and a negative runner (`npm run qa:ib0-wp03:negative`, 19 cases) prove the controls are effective and that removing or weakening any of them is detected. No dependency, lockfile, app, `angular.json` or controlled file changed; build output is byte-identical to IB0-WP02.
+TypeScript `strict` and `noImplicitAny` and Angular `strictTemplates` are now set explicitly to `true` in the root `tsconfig.json`, which both applications extend, instead of relying on TypeScript 6.0 / Angular 22 defaults. Each of the 18 workspace packages has a placeholder public entry point (`src/index.ts`, `export {};`) and exactly one path alias keyed by its package name. A new verifier (`npm run qa:ib0-wp03`, 18 checks) and a negative runner (`npm run qa:ib0-wp03:negative`, 23 cases) prove the controls are effective and that removing or weakening any of them is detected. No dependency, lockfile, app, `angular.json` or controlled file changed; build output is byte-identical to IB0-WP02.
 
 ## Requirement traceability
 
@@ -24,7 +24,7 @@ TypeScript `strict` and `noImplicitAny` and Angular `strictTemplates` are now se
 | `npm run build:ui-lab` | Exit 0 | `logs/build-ui-lab.log` |
 | Build output vs `de13629` | 12/12 identical | `logs/build-output-vs-baseline.log` |
 | `npm run qa:ib0-wp03` | PASS 18/18 | `logs/verify-ib0-wp03.log`; `reports/ib0-wp03-verification.json` |
-| `npm run qa:ib0-wp03:negative` | PASS 19/19 | `logs/negative-strictness.log`; `logs/negative-verifier-mutations.log` |
+| `npm run qa:ib0-wp03:negative` | PASS 23/23 | `logs/negative-strictness.log`; `logs/negative-verifier-mutations.log` |
 | WP02 regression | 19/20 + V17 bounded exception (only WP03-permitted paths) | `logs/verify-ib0-wp02-regression.log` |
 | WP01 regression | PASS 15/15 | `logs/verify-ib0-wp01-regression.log` |
 | Controlled-source integrity | 13/13 | `logs/controlled-source-integrity.log` |
@@ -52,7 +52,7 @@ TypeScript `strict` and `noImplicitAny` and Angular `strictTemplates` are now se
 | AC08 | PASS | V09, 0 diagnostics |
 | AC09 | PASS | B1 exit 1 (TS7006, TS2322); B1c exit 0 |
 | AC10 | PASS | B2 exit 1 (TS2345); B2c exit 0 |
-| AC11 | PASS | M0 PASS; M1–M13 13/13 detected |
+| AC11 | PASS | M0 PASS; M1–M17 17/17 detected |
 | AC12 | PASS | `npm ci` exit 0 in fresh clone |
 | AC13 | PASS | exit 0 |
 | AC14 | PASS | exit 0 |
@@ -69,7 +69,7 @@ TypeScript `strict` and `noImplicitAny` and Angular `strictTemplates` are now se
 
 ## Defects
 
-D1 (low, tooling, closed): negative runner's scratch copy exposed its symlinked `node_modules` to the verifier's scope and secret checks. Fixed in the runner and V14 without relaxing any check. See `evidence/IB0-WP03/reports/technical-verification.md`. No open defects.
+D1 (low, tooling, closed): negative runner's scratch copy exposed its symlinked `node_modules` to the verifier's scope and secret checks. Fixed in the runner and V14 without relaxing any check. See `evidence/IB0-WP03/reports/technical-verification.md`. D2 (medium, verifier, closed): independent QA round 1 showed the verifier missed an added `"noCheck": true` (which lets both violations build), other unlisted options and suppressed extended diagnostics (F1, F5), and matched `@ts-nocheck` case-sensitively (F3). Fixed in `0f2d381` by strengthening V04, V05 and V07 and adding mutations M14–M17; AC04–AC06 and AC11 were strengthened, none relaxed. D3 (low, closed): status words outside EQP App. C (F6) corrected. No open defects.
 
 ## Exceptions
 

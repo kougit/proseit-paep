@@ -1,7 +1,7 @@
 {
   "workPackage": "IB0-WP03",
-  "generatedAt": "2026-09-24T09:20:02.462Z",
-  "commit": "15386a95361b7a95c100bebd76d3c0907e5e6554",
+  "generatedAt": "2026-09-24T09:36:48.958Z",
+  "commit": "0f2d38174d57dda229e62a545477e8d8288e8a00",
   "node": "24.21.0",
   "result": "PASS",
   "cases": [
@@ -201,6 +201,49 @@
       "exit": 1,
       "failedChecks": [
         "V09"
+      ],
+      "pass": true
+    },
+    {
+      "id": "M14",
+      "name": "type checking switched off (\"noCheck\": true added)",
+      "expected": "exit 1, V04 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V04",
+        "V05"
+      ],
+      "pass": true
+    },
+    {
+      "id": "M15",
+      "name": "unlisted option added (\"allowUnreachableCode\": true)",
+      "expected": "exit 1, V05 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V04",
+        "V05"
+      ],
+      "pass": true
+    },
+    {
+      "id": "M16",
+      "name": "Angular extended diagnostics suppressed",
+      "expected": "exit 1, V04 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V04",
+        "V05"
+      ],
+      "pass": true
+    },
+    {
+      "id": "M17",
+      "name": "uppercase // @TS-NOCHECK in an entry point",
+      "expected": "exit 1, V07 FAIL",
+      "exit": 1,
+      "failedChecks": [
+        "V07"
       ],
       "pass": true
     }

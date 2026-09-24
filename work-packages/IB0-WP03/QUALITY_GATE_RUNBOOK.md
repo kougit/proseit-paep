@@ -24,7 +24,7 @@ Run from the root of a **fresh `git clone`** of the commit under test, on the pi
 npm run qa:ib0-wp03:negative
 ```
 
-Evidence: `negative-strictness.log`, `negative-verifier-mutations.log`, `reports/negative-tests.json`. Pass: 19/19 cases as expected — B1 and B2 fail the build with TS7006/TS2322 and TS2345; their controls B1c and B2c build only with the flag switched off; M0 passes; M1–M13 each fail the verifier on the named check.
+Evidence: `negative-strictness.log`, `negative-verifier-mutations.log`, `reports/negative-tests.json`. Pass: 23/23 cases as expected — B1 and B2 fail the build with TS7006/TS2322 and TS2345; their controls B1c and B2c build only with the flag switched off; M0 passes; M1–M17 each fail the verifier on the named check.
 
 ## Failure rule
 

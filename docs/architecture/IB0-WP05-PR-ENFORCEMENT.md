@@ -1,7 +1,7 @@
 # IB0-WP05 Proposed Pull-Request Enforcement for `main`
 
 **Status:** PREPARED, NOT APPLIED. Activation timing is a PO/SA decision at WP05 acceptance (PO/SA brief §22, §25).  
-**Required check context:** `PAEP / gate` (GitHub Actions check run from workflow "PAEP CI", job id `gate`). The exact name and GitHub App are confirmed from the real run in `evidence/IB0-WP05/reports/github-actions-run.md`.
+**Required check context:** `PAEP / gate` (GitHub Actions check run from workflow "PAEP CI", job id `gate`). Confirmed from the real runs (36047194635, 36048105730, 36052554946): the check context is exactly `PAEP / gate`, posted by the GitHub Actions app (`app.id` 15368) (`evidence/IB0-WP05/reports/github-actions-run.md`).
 
 ## 1. Current repository state (read through the GitHub API, 2026-09-24)
 
@@ -59,7 +59,7 @@ A required check that names `PAEP / gate` before the workflow exists on `main` c
 | --- | --- |
 | Pull request required | No direct pushes to `main`. |
 | `PAEP / gate` only | The gate already requires all nine jobs; listing them individually would duplicate the policy and break when a job is renamed. |
-| `integration_id` 15368 (GitHub Actions) | Only a check posted by GitHub Actions satisfies the rule; a status or check with the same name from another app does not. Confirm the app id from the real run before applying. |
+| `integration_id` 15368 (GitHub Actions) | Only a check posted by GitHub Actions satisfies the rule; a status or check with the same name from another app does not. Confirmed as 15368 on the WP05 runs; re-read it on the `main` push run before applying. |
 | Branch must be up to date (`strict: true`) | Work packages merge one at a time, so this costs one re-run when `main` moves and guarantees the gate ran against the current `main`. No deadlock: "Update branch" re-triggers the `pull_request` run. |
 | Required approvals: 0 | The repository has one maintainer, who also authors the PRs; GitHub does not let an author approve their own PR, so 1 would block every merge. PO/SA acceptance stays the human control. Revisit when a second reviewer exists. |
 | Conversation resolution required | Review comments must be resolved before merge; cheap and consistent with the WP QA loops. |

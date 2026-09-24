@@ -5,7 +5,7 @@
   "milestone": "IB0",
   "wbs": "W1 / IB0",
   "design_classification": "D0",
-  "status": "IN PROGRESS",
+  "status": "BLOCKED",
   "acceptance": {
     "status": "NOT ACCEPTED",
     "authority": "Product Owner / Solutions Architect"
@@ -68,5 +68,8 @@
   ],
   "evidence_path": "evidence/IB0-WP05/",
   "technical_pass_requires_all_mandatory_criteria": true,
-  "human_acceptance_required": true
+  "human_acceptance_required": true,
+  "status_note": "Every criterion except AC25 met (AC24 READY, AC27 Complete); AC25 needs the PO/SA lint/unit-test decision. READY FOR AUTHORIZATION.",
+  "code_commit_under_test": "089f8640b07cfdbf880601903543513b27776784",
+  "required_check_context": "PAEP / gate (GitHub Actions app 15368)"
 }

@@ -1,0 +1,89 @@
+PASS C0 positive control: unmutated workspace passes — exit 0; rules: none
+PASS C1 allowed-edge control: enterprise -> components (Yes), frappe-sdk -> offline (Optional), reference-app -> enterprise (Yes) — exit 0; rules: none
+PASS C2 allowed-edge control: reference-app production build resolves @proseit/paep-enterprise through tsconfig.base.json — exit 0
+FAIL C3 positive control: WP04 verifier static checks pass unmutated — exit 1; failed checks: V16, V17
+PASS N01 forbidden upward import: components -> enterprise — exit 1; rules: DIRECTION
+PASS N02 contracts -> @angular/core — exit 1; rules: CONTRACTS_NEUTRAL
+PASS N03 foundation -> enterprise — exit 1; rules: DIRECTION
+PASS N04 deep import: enterprise -> @proseit/paep-components/src/internal/button — exit 1; rules: DEEP_IMPORT
+PASS N05 circular dependency over allowed Optional edges: platform <-> observability (caught by the cycle rule alone) — exit 1; rules: CYCLE
+PASS N06 public-entry-point bypass by relative path: enterprise -> ../../components/src/index — exit 1; rules: ENTRY_BYPASS
+PASS N07 unknown project category ("widgets") — exit 1; rules: ALIAS, CLASSIFICATION
+PASS N08 unclassified package packages/rogue — exit 1; rules: CLASSIFICATION
+PASS N09 app -> app: reference-app imports ui-lab source — exit 1; rules: DIRECTION, ENTRY_BYPASS
+PASS N10 package -> app: components imports reference-app source — exit 1; rules: DIRECTION, ENTRY_BYPASS
+PASS N11 contracts uses a DOM global (document) — exit 1; rules: CONTRACTS_NEUTRAL
+PASS N12 frappe-sdk -> components (UI) — exit 1; rules: DIRECTION
+PASS N13 analytics -> frappe-sdk — exit 1; rules: DIRECTION
+PASS N14 domain -> domain: domain-quality -> domain-fiscal — exit 1; rules: DIRECTION
+PASS N15 forbidden manifest dependency: foundation package.json depends on enterprise — exit 1; rules: DIRECTION
+PASS N16 forbidden edge by dynamic import(): foundation -> enterprise — exit 1; rules: DIRECTION
+PASS N17 forbidden edge by type-only import: platform -> enterprise — exit 1; rules: DIRECTION
+PASS N18 forbidden edge by re-export: components re-exports analytics — exit 1; rules: DIRECTION
+PASS N19 analytics re-exports a visualization vendor module — exit 1; rules: ANALYTICS_VENDOR_EXPORT
+PASS N20 app copies package source — exit 1; rules: COPIED_CODE
+PASS N21 model matrix tampered: platform -> frappe-sdk set to "Yes" — exit 1; rules: MODEL
+PASS N22 wildcard deep alias added to tsconfig.base.json — exit 1; rules: ALIAS
+PASS N23 alias retargeted below the entry point — exit 1; rules: ALIAS
+PASS N24 paths re-added to tsconfig.json (second alias registry) — exit 1; rules: ALIAS
+PASS N25 unknown @proseit/* package imported — exit 1; rules: UNKNOWN_PACKAGE
+PASS N26 import from tooling/ (outside every project) — exit 1; rules: OUTSIDE_PROJECT
+PASS N27 forbidden edge by import = require(): foundation -> enterprise — exit 1; rules: DIRECTION
+PASS N30 forbidden import hidden in a nested dist/ folder: components -> enterprise — exit 1; rules: DIRECTION
+PASS N31 forbidden edge in a .d.ts file: components -> enterprise — exit 1; rules: DIRECTION
+PASS N32 contracts pulls DOM globals with /// <reference lib="dom" /> — exit 1; rules: CONTRACTS_NEUTRAL
+PASS N33 /// <reference path> into another package: components -> enterprise source — exit 1; rules: DIRECTION, ENTRY_BYPASS
+PASS N34 project category reassigned in the model: domain-ai classified as enterprise — exit 1; rules: CLASSIFICATION
+PASS N35 analytics imports a vendor module and exports its binding — exit 1; rules: ANALYTICS_VENDOR_EXPORT
+PASS N36 forbidden edge by module augmentation: foundation declares module '@proseit/paep-enterprise' — exit 1; rules: DIRECTION
+PASS N37 package.json imports alias (#ent) into another package: components -> enterprise source — exit 1; rules: DIRECTION, ENTRY_BYPASS
+PASS N38 contracts .js file uses a DOM global — exit 1; rules: CONTRACTS_NEUTRAL
+PASS N39 package.json imports alias to a bare package name (#ent -> @proseit/paep-enterprise): components -> enterprise — exit 1; rules: DIRECTION
+PASS N40 imports condition "import" -> forbidden package, "default" -> local file — exit 1; rules: DIRECTION
+PASS N41 imports condition "browser" -> forbidden package, "default" -> local file — exit 1; rules: DIRECTION
+PASS N42 longer imports pattern (#a/b/*) -> forbidden package wins over #a/* — exit 1; rules: DIRECTION
+PASS N43 nested package.json below a package root remaps #z to a forbidden package — exit 1; rules: CLASSIFICATION
+PASS N44 imports target that is another #subpath (#x -> #y -> forbidden package) — exit 1; rules: OUTSIDE_PROJECT
+PASS N45 symlinked directory inside a package pulls in a file outside every project that imports a forbidden package — exit 1; rules: CLASSIFICATION
+PASS C4 control: package.json imports pattern inside the same package (#lib/* -> ./src/lib/*.ts) passes — exit 0; rules: none
+PASS C5 control: allowlisted same-category edge domain-quality -> domain-fiscal passes — exit 0; rules: none
+PASS N46 same-category edge not on the allowlist (another domain pair is listed) — exit 1; rules: DIRECTION
+PASS N47 transitive same-category chain: domain-quality -> domain-fiscal -> domain-iot, only the direct pairs listed — exit 1; rules: DIRECTION
+PASS N48 allowlisted same-category edge by deep import — exit 1; rules: DEEP_IMPORT
+PASS N49 allowlisted same-category pair in both directions forms a cycle — exit 1; rules: CYCLE
+PASS N50 allowlist entry crossing categories (components -> enterprise) — exit 1; rules: MODEL
+PASS N53 workspace package aliased in a manifest ("i18n-x": "file:../i18n") and imported by that name — exit 1; rules: UNKNOWN_PACKAGE
+PASS N54 bare import linked by node_modules to a workspace package (frappe-sdk -> i18n via "i18n-x") — exit 1; rules: DIRECTION, UNKNOWN_PACKAGE
+PASS N55 bare import linked by node_modules to a folder outside every project (tooling/) that re-exports i18n — exit 1; rules: OUTSIDE_PROJECT
+PASS N56 manifest dependency given as a plain path ("i18n-x": "../i18n") — exit 1; rules: UNKNOWN_PACKAGE
+PASS N52 allowlist entry linking two applications (reference-app -> ui-lab) — exit 1; rules: MODEL
+PASS N51 allowlist entry without a rationale — exit 1; rules: MODEL
+PASS O1 control: Optional edge platform -> observability alone is permitted — exit 0; rules: none
+PASS O2 control: Optional edge observability -> platform alone is permitted — exit 0; rules: none
+PASS O3 control: Optional edge i18n -> platform alone is permitted — exit 0; rules: none
+PASS O4 control: Optional edge i18n -> observability alone is permitted — exit 0; rules: none
+PASS O5 control: Optional edge frappe-sdk -> offline alone is permitted — exit 0; rules: none
+PASS O6 control: Optional edge analytics -> enterprise alone is permitted — exit 0; rules: none
+PASS O7 control: Optional edge domain-quality -> enterprise alone is permitted — exit 0; rules: none
+PASS O8 control: Optional edge domain-quality -> analytics alone is permitted — exit 0; rules: none
+PASS T1 transitive forbidden chain observability -> platform -> foundation (observability -> foundation is "No") — exit 1; rules: DIRECTION
+PASS T2 transitive forbidden chain offline -> platform -> foundation (offline -> foundation is "No") — exit 1; rules: DIRECTION
+PASS T3 transitive forbidden chain offline -> i18n -> foundation (offline -> foundation is "No") — exit 1; rules: DIRECTION
+PASS T4 transitive forbidden chain frappe-sdk -> platform -> foundation (frappe-sdk -> foundation is "No") — exit 1; rules: DIRECTION
+PASS T5 transitive forbidden chain frappe-sdk -> offline -> i18n (frappe-sdk -> i18n is "No") — exit 1; rules: DIRECTION
+PASS S1 TypeScript strict violation (implicit any, null to string) fails the reference-app build — exit 1
+PASS S1c control: the same violation builds once strict and noImplicitAny are false — exit 0
+PASS S2 Angular template strict violation ($event passed as number) fails the reference-app build — exit 1
+PASS S2c control: the same template builds once strictTemplates is false — exit 0
+PASS S3 "strict" removed from tsconfig.json — exit 1; failed checks: V05, V16, V17
+PASS S4 "noImplicitAny" set to false in tsconfig.json — exit 1; failed checks: V05, V16, V17
+PASS S5 "strictTemplates" set to false in tsconfig.json — exit 1; failed checks: V05, V16, V17
+PASS S6 type checking switched off ("noCheck": true) in tsconfig.json — exit 1; failed checks: V05, V16, V17
+PASS S7 strictness weakened through inheritance ("strict": false, "noCheck": true in tsconfig.base.json) — exit 1; failed checks: V04, V05, V14, V16, V17
+PASS S8 app tsconfig sets strictNullChecks false — exit 1; failed checks: V05, V16, V17
+PASS S9 // @ts-nocheck added to a package entry point — exit 1; failed checks: V05, V16, V17
+PASS N28 nx added to devDependencies — exit 1; failed checks: V15, V16, V17
+PASS N29 nx.json created — exit 1; failed checks: V15, V16, V17
+
+IB0-WP04 negative tests: FAIL (85/86)
+EXIT_CODE=1

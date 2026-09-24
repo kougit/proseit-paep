@@ -1,0 +1,471 @@
+{
+  "$comment": "PAEP architecture model (IB0-WP04). Machine-readable form of PAEP-IB-01 v1.0 §6.1 (layers) and Appendix B (package dependency matrix). Read by tooling/architecture-boundaries/check-boundaries.mjs, which compares the matrix with the controlled text cell by cell. Changing a rule requires an approved ADR (PAEP-IB-01 §6.2(viii); PAEP-IR-01 §4.3(vi)).",
+  "schemaVersion": 1,
+  "source": {
+    "document": ".paep-control/text/PAEP_IB_01_v1.0_text.md",
+    "layers": "§6.1 Layer definitions",
+    "matrix": "Appendix B. Package Dependency Matrix"
+  },
+  "layers": {
+    "L0": "Base",
+    "L1": "Cross-cutting platform",
+    "L2": "Reusable interaction / adapters",
+    "L3": "Experience capabilities",
+    "L4": "Applications"
+  },
+  "categories": {
+    "contracts": {
+      "layer": "L0",
+      "matrixLabel": "contracts"
+    },
+    "foundation": {
+      "layer": "L0",
+      "matrixLabel": "foundation"
+    },
+    "platform": {
+      "layer": "L1",
+      "matrixLabel": "platform"
+    },
+    "i18n": {
+      "layer": "L1",
+      "matrixLabel": "i18n"
+    },
+    "observability": {
+      "layer": "L1",
+      "matrixLabel": "observability"
+    },
+    "components": {
+      "layer": "L2",
+      "matrixLabel": "components"
+    },
+    "offline": {
+      "layer": "L2",
+      "matrixLabel": "offline"
+    },
+    "frappe-sdk": {
+      "layer": "L2",
+      "matrixLabel": "frappe-sdk"
+    },
+    "enterprise": {
+      "layer": "L3",
+      "matrixLabel": "enterprise"
+    },
+    "analytics": {
+      "layer": "L3",
+      "matrixLabel": "analytics"
+    },
+    "domain": {
+      "layer": "L3",
+      "matrixLabel": "domain-*"
+    },
+    "app": {
+      "layer": "L4",
+      "matrixLabel": "apps/*"
+    }
+  },
+  "matrix": {
+    "$comment": "Rows = from, columns = to, in matrixColumns order. Yes and Optional allow the edge; No and - do not. - on the diagonal is the same package; for domain-* and apps/* it also covers another project of the same category, which needs an ADR.",
+    "matrixColumns": [
+      "contracts",
+      "foundation",
+      "platform",
+      "i18n",
+      "observability",
+      "components",
+      "offline",
+      "frappe-sdk",
+      "enterprise",
+      "analytics",
+      "domain",
+      "app"
+    ],
+    "rows": {
+      "contracts": [
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-"
+      ],
+      "foundation": [
+        "No",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-"
+      ],
+      "platform": [
+        "Yes",
+        "Optional",
+        "-",
+        "-",
+        "Optional",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-"
+      ],
+      "i18n": [
+        "Yes",
+        "Optional",
+        "Optional",
+        "-",
+        "Optional",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-"
+      ],
+      "observability": [
+        "Yes",
+        "No",
+        "Optional",
+        "No",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-"
+      ],
+      "components": [
+        "Optional",
+        "Yes",
+        "Optional",
+        "Yes",
+        "Optional",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-"
+      ],
+      "offline": [
+        "Yes",
+        "No",
+        "Yes",
+        "Optional",
+        "Yes",
+        "No",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-"
+      ],
+      "frappe-sdk": [
+        "Yes",
+        "No",
+        "Optional",
+        "No",
+        "Yes",
+        "No",
+        "Optional",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-"
+      ],
+      "enterprise": [
+        "Yes",
+        "Yes",
+        "Yes",
+        "Yes",
+        "Yes",
+        "Yes",
+        "Yes",
+        "No",
+        "-",
+        "-",
+        "-",
+        "-"
+      ],
+      "analytics": [
+        "Yes",
+        "Yes",
+        "Yes",
+        "Yes",
+        "Yes",
+        "Yes",
+        "Optional",
+        "No",
+        "Optional",
+        "-",
+        "-",
+        "-"
+      ],
+      "domain": [
+        "Yes",
+        "Yes",
+        "Optional",
+        "Yes",
+        "Optional",
+        "Yes",
+        "Optional",
+        "No",
+        "Optional",
+        "Optional",
+        "-",
+        "-"
+      ],
+      "app": [
+        "Yes",
+        "Yes",
+        "Yes",
+        "Yes",
+        "Yes",
+        "Yes",
+        "Yes",
+        "Yes",
+        "Yes",
+        "Yes",
+        "Yes",
+        "-"
+      ]
+    }
+  },
+  "publicEntryPoint": "src/index.ts",
+  "aliasRegistry": "tsconfig.base.json",
+  "externalImports": {
+    "$comment": "Approved external modules for categories that restrict them. contracts: PAEP-IB-01 §6.1 L0 (approved external dependencies only), §6.2(iii), §7.1(i); none approved yet.",
+    "contracts": []
+  },
+  "noExternalReexport": {
+    "$comment": "PAEP-IB-01 §6.2(v); EQP Claude contract: visualization-vendor objects are not part of PAEP public reporting contracts.",
+    "categories": [
+      "analytics"
+    ]
+  },
+  "copiedCode": {
+    "$comment": "PAEP v1.1 §5.3; PAEP-IR-01 §2.3(v); EQP §16(iv): apps do not duplicate platform code.",
+    "minNonWhitespaceChars": 200
+  },
+  "projects": [
+    {
+      "name": "@proseit/paep-analytics",
+      "root": "packages/analytics",
+      "projectType": "library",
+      "category": "analytics",
+      "tags": [
+        "layer:L3",
+        "type:analytics"
+      ]
+    },
+    {
+      "name": "@proseit/paep-components",
+      "root": "packages/components",
+      "projectType": "library",
+      "category": "components",
+      "tags": [
+        "layer:L2",
+        "type:components"
+      ]
+    },
+    {
+      "name": "@proseit/paep-contracts",
+      "root": "packages/contracts",
+      "projectType": "library",
+      "category": "contracts",
+      "tags": [
+        "layer:L0",
+        "type:contracts"
+      ]
+    },
+    {
+      "name": "@proseit/paep-domain-ai",
+      "root": "packages/domain-ai",
+      "projectType": "library",
+      "category": "domain",
+      "tags": [
+        "layer:L3",
+        "type:domain"
+      ]
+    },
+    {
+      "name": "@proseit/paep-domain-commerce",
+      "root": "packages/domain-commerce",
+      "projectType": "library",
+      "category": "domain",
+      "tags": [
+        "layer:L3",
+        "type:domain"
+      ]
+    },
+    {
+      "name": "@proseit/paep-domain-construction",
+      "root": "packages/domain-construction",
+      "projectType": "library",
+      "category": "domain",
+      "tags": [
+        "layer:L3",
+        "type:domain"
+      ]
+    },
+    {
+      "name": "@proseit/paep-domain-fiscal",
+      "root": "packages/domain-fiscal",
+      "projectType": "library",
+      "category": "domain",
+      "tags": [
+        "layer:L3",
+        "type:domain"
+      ]
+    },
+    {
+      "name": "@proseit/paep-domain-iot",
+      "root": "packages/domain-iot",
+      "projectType": "library",
+      "category": "domain",
+      "tags": [
+        "layer:L3",
+        "type:domain"
+      ]
+    },
+    {
+      "name": "@proseit/paep-domain-maintenance",
+      "root": "packages/domain-maintenance",
+      "projectType": "library",
+      "category": "domain",
+      "tags": [
+        "layer:L3",
+        "type:domain"
+      ]
+    },
+    {
+      "name": "@proseit/paep-domain-manufacturing",
+      "root": "packages/domain-manufacturing",
+      "projectType": "library",
+      "category": "domain",
+      "tags": [
+        "layer:L3",
+        "type:domain"
+      ]
+    },
+    {
+      "name": "@proseit/paep-domain-quality",
+      "root": "packages/domain-quality",
+      "projectType": "library",
+      "category": "domain",
+      "tags": [
+        "layer:L3",
+        "type:domain"
+      ]
+    },
+    {
+      "name": "@proseit/paep-enterprise",
+      "root": "packages/enterprise",
+      "projectType": "library",
+      "category": "enterprise",
+      "tags": [
+        "layer:L3",
+        "type:enterprise"
+      ]
+    },
+    {
+      "name": "@proseit/paep-foundation",
+      "root": "packages/foundation",
+      "projectType": "library",
+      "category": "foundation",
+      "tags": [
+        "layer:L0",
+        "type:foundation"
+      ]
+    },
+    {
+      "name": "@proseit/frappe-sdk",
+      "root": "packages/frappe-sdk",
+      "projectType": "library",
+      "category": "frappe-sdk",
+      "tags": [
+        "layer:L2",
+        "type:frappe-sdk"
+      ]
+    },
+    {
+      "name": "@proseit/paep-i18n",
+      "root": "packages/i18n",
+      "projectType": "library",
+      "category": "i18n",
+      "tags": [
+        "layer:L1",
+        "type:i18n"
+      ]
+    },
+    {
+      "name": "@proseit/paep-observability",
+      "root": "packages/observability",
+      "projectType": "library",
+      "category": "observability",
+      "tags": [
+        "layer:L1",
+        "type:observability"
+      ]
+    },
+    {
+      "name": "@proseit/paep-offline",
+      "root": "packages/offline",
+      "projectType": "library",
+      "category": "offline",
+      "tags": [
+        "layer:L2",
+        "type:offline"
+      ]
+    },
+    {
+      "name": "@proseit/paep-platform",
+      "root": "packages/platform",
+      "projectType": "library",
+      "category": "platform",
+      "tags": [
+        "layer:L1",
+        "type:platform"
+      ]
+    },
+    {
+      "name": "reference-app",
+      "root": "apps/reference-app",
+      "projectType": "application",
+      "category": "app",
+      "tags": [
+        "layer:L4",
+        "type:app"
+      ]
+    },
+    {
+      "name": "ui-lab",
+      "root": "apps/ui-lab",
+      "projectType": "application",
+      "category": "app",
+      "tags": [
+        "layer:L4",
+        "type:app"
+      ]
+    }
+  ]
+}

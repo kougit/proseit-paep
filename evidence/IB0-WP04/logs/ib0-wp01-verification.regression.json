@@ -1,7 +1,7 @@
 {
   "workPackage": "IB0-WP01",
-  "generatedAt": "2026-09-24T10:52:49.530Z",
-  "cwd": "/tmp/paep-wp04-clone-Csg8/repo",
+  "generatedAt": "2026-09-24T11:03:08.189Z",
+  "cwd": "/tmp/paep-wp04-clone-jhRP/repo",
   "result": "PASS",
   "checks": [
     {
@@ -86,13 +86,13 @@
       "id": "V14",
       "name": "reference-app build passes",
       "pass": true,
-      "details": "exit=0\n> @proseit/paep-workspace@0.0.0 build:reference-app\n> ng build reference-app --configuration production\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.09 kB\n\nApplication bundle generation complete. [1.724 seconds] - 2026-09-24T10:52:46.937Z\n\nOutput location: /tmp/paep-wp04-clone-Csg8/repo/dist/reference-app"
+      "details": "exit=0\n> @proseit/paep-workspace@0.0.0 build:reference-app\n> ng build reference-app --configuration production\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.09 kB\n\nApplication bundle generation complete. [1.684 seconds] - 2026-09-24T11:03:05.705Z\n\nOutput location: /tmp/paep-wp04-clone-jhRP/repo/dist/reference-app"
     },
     {
       "id": "V15",
       "name": "ui-lab build passes",
       "pass": true,
-      "details": "exit=0\n> @proseit/paep-workspace@0.0.0 build:ui-lab\n> ng build ui-lab --configuration production\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-RPR4FBCF.js    | main          | 190.65 kB |                52.16 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.16 kB\n\nApplication bundle generation complete. [1.884 seconds] - 2026-09-24T10:52:49.462Z\n\nOutput location: /tmp/paep-wp04-clone-Csg8/repo/dist/ui-lab"
+      "details": "exit=0\n> @proseit/paep-workspace@0.0.0 build:ui-lab\n> ng build ui-lab --configuration production\n\n❯ Building...\n✔ Building...\nInitial chunk files | Names         |  Raw size | Estimated transfer size\nmain-RPR4FBCF.js    | main          | 190.65 kB |                52.16 kB\nstyles-5INURTSO.css | styles        |   0 bytes |                 0 bytes\n\n                    | Initial total | 190.65 kB |                52.16 kB\n\nApplication bundle generation complete. [1.771 seconds] - 2026-09-24T11:03:08.126Z\n\nOutput location: /tmp/paep-wp04-clone-jhRP/repo/dist/ui-lab"
     }
   ]
 }

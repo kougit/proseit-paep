@@ -1,0 +1,457 @@
+[
+  {
+    "id": "FP01",
+    "name": "components: nested intra-project relative imports",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "FP02",
+    "name": "app imports its own nested files",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "FP03",
+    "name": "app main.ts /// <reference types=\"@angular/localize\" />",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "FP04",
+    "name": "app typings.d.ts declare module '*.svg'",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "FP05",
+    "name": "components /// <reference path=\"./local.d.ts\" /> within own project",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "FP06",
+    "name": "components package.json imports pattern \"#lib/*\" -> ./src/lib/*",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "FP07",
+    "name": "components package.json imports exact \"#lib\" -> ./src/lib/index.ts",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "FP08",
+    "name": "components package.json imports conditional \"#lib\" -> {default: ./src/lib/index.ts}",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "FP09",
+    "name": "analytics uses Angular (Injectable, signal) without re-exporting",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "FP10",
+    "name": "analytics: parameter shadows an imported vendor name; exported function",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "FP11",
+    "name": "app imports Angular/rxjs subpaths",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "FP12",
+    "name": "contracts: plain types incl. Promise, .d.ts interface, declare global, and checked .js",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "FP13",
+    "name": "components declare module '*.html' ambient",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "FP14",
+    "name": "nested dist/ and .angular/ folders with legitimate intra-project code (app)",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "FP15",
+    "name": "bare specifiers that look rooted but are npm subpaths: 'config/raw', 'docs/x'",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "FP16",
+    "name": "require.resolve with a non-literal argument",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "FP17",
+    "name": "package-root node_modules with foreign code is skipped (legit install folder)",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "NN01",
+    "name": "#ent imports alias to a bare workspace package name",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/sub.ts]"
+    ]
+  },
+  {
+    "id": "NN02",
+    "name": "#ent conditional imports object into another package",
+    "wantExit": 1,
+    "wantRules": [
+      "ENTRY_BYPASS"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION",
+      "ENTRY_BYPASS"
+    ],
+    "ok": true,
+    "violations": [
+      "ENTRY_BYPASS: @proseit/paep-components imports \"#ent\" inside @proseit/paep-enterprise; use its public entry point [packages/components/src/lib/sub.ts]",
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/sub.ts]"
+    ]
+  },
+  {
+    "id": "NN03",
+    "name": "#ent/* pattern imports into another package",
+    "wantExit": 1,
+    "wantRules": [
+      "ENTRY_BYPASS"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION",
+      "ENTRY_BYPASS"
+    ],
+    "ok": true,
+    "violations": [
+      "ENTRY_BYPASS: @proseit/paep-components imports \"#ent/index\" inside @proseit/paep-enterprise; use its public entry point [packages/components/src/lib/sub.ts]",
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/sub.ts]"
+    ]
+  },
+  {
+    "id": "NN04",
+    "name": "/// <reference types=\"@proseit/paep-enterprise\" /> in components",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/t.ts]"
+    ]
+  },
+  {
+    "id": "NN05",
+    "name": "analytics: import then export default",
+    "wantExit": 1,
+    "wantRules": [
+      "ANALYTICS_VENDOR_EXPORT"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "ANALYTICS_VENDOR_EXPORT"
+    ],
+    "ok": true,
+    "violations": [
+      "ANALYTICS_VENDOR_EXPORT: @proseit/paep-analytics re-exports external module \"echarts\" [packages/analytics/src/index.ts]"
+    ]
+  },
+  {
+    "id": "NN06",
+    "name": "analytics: export import x = require()",
+    "wantExit": 1,
+    "wantRules": [
+      "ANALYTICS_VENDOR_EXPORT"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "ANALYTICS_VENDOR_EXPORT"
+    ],
+    "ok": true,
+    "violations": [
+      "ANALYTICS_VENDOR_EXPORT: @proseit/paep-analytics re-exports external module \"echarts\" [packages/analytics/src/lib/v.cts]"
+    ]
+  },
+  {
+    "id": "NN07",
+    "name": "analytics: exported const aliasing an imported vendor binding",
+    "wantExit": 1,
+    "wantRules": [
+      "ANALYTICS_VENDOR_EXPORT"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "NN08",
+    "name": "forbidden import in a nested .angular/ folder in a package",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/.angular/x.ts]"
+    ]
+  },
+  {
+    "id": "NN09",
+    "name": "forbidden import in a nested node_modules/ folder below src",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/node_modules/x.ts]"
+    ]
+  },
+  {
+    "id": "NN10",
+    "name": "contracts: /// <reference lib=\"dom\" /> in a .d.ts",
+    "wantExit": 1,
+    "wantRules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "ok": true,
+    "violations": [
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts declares /// <reference lib=dom> [packages/contracts/src/lib/g.d.ts]"
+    ]
+  },
+  {
+    "id": "NN11",
+    "name": "contracts: .tsx using window",
+    "wantExit": 1,
+    "wantRules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "ok": true,
+    "violations": [
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'window'. [packages/contracts/src/lib/w.tsx:1]"
+    ]
+  },
+  {
+    "id": "NN12",
+    "name": "contracts: .mjs using document",
+    "wantExit": 1,
+    "wantRules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "ok": true,
+    "violations": [
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2584 Cannot find name 'document'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'. [packages/contracts/src/lib/w.mjs:1]"
+    ]
+  },
+  {
+    "id": "NN13",
+    "name": "contracts: /// <reference path> to typescript lib.dom.d.ts in node_modules",
+    "wantExit": 1,
+    "wantRules": [
+      "OUTSIDE_PROJECT"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "OUTSIDE_PROJECT"
+    ],
+    "ok": true,
+    "violations": [
+      "OUTSIDE_PROJECT: @proseit/paep-contracts imports \"../../../../node_modules/typescript/lib/lib.dom.d.ts\", outside every project [packages/contracts/src/lib/p.ts]"
+    ]
+  },
+  {
+    "id": "NN14",
+    "name": "category check: packages/i18n model entry recategorised as platform",
+    "wantExit": 1,
+    "wantRules": [
+      "CLASSIFICATION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CLASSIFICATION"
+    ],
+    "ok": true,
+    "violations": [
+      "CLASSIFICATION: @proseit/paep-i18n: category platform does not match directory packages/i18n"
+    ]
+  },
+  {
+    "id": "NN15",
+    "name": "rooted specifier to an existing file in another package",
+    "wantExit": 1,
+    "wantRules": [
+      "ENTRY_BYPASS"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "ENTRY_BYPASS"
+    ],
+    "ok": true,
+    "violations": [
+      "ENTRY_BYPASS: @proseit/paep-enterprise imports \"packages/components/src/index.ts\" inside @proseit/paep-components; use its public entry point [packages/enterprise/src/index.ts]"
+    ]
+  },
+  {
+    "id": "NN16",
+    "name": "components: reference path to its own nested node_modules code that imports enterprise",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  }
+]

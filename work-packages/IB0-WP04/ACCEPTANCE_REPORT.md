@@ -1,7 +1,7 @@
 # IB0-WP04 Acceptance Report
 
 **Work package:** IB0-WP04 — Project Graph, Package Boundaries and Dependency Enforcement (PAEP-IR-01 IB0-WP4)  
-**Commit / revision:** implementation `9347807`, `f74fb78`, QA round 1 fixes `3ec81fc`, QA round 2 fix `499ae29` (commit under test); PR head recorded in `evidence/IB0-WP04/reports/acceptance-readiness.md`  
+**Commit / revision:** implementation `9347807`, `f74fb78`, QA round 1 fixes `3ec81fc`, QA round 2 fix `499ae29`, QA round 3 fix `be181cf` (commit under test); PR head recorded in `evidence/IB0-WP04/reports/acceptance-readiness.md`  
 **Baseline:** IB0-WP03 ACCEPTED and CLOSED, merge commit `ac6b786`  
 **Technical reviewer:** Claude Code (execution); independent QA by a separate clean-context Claude review  
 **Review date:** 2026-09-24
@@ -23,7 +23,7 @@ The PAEP architecture is now machine-readable and enforced. `tooling/architectur
 | `npm run build:reference-app` / `build:ui-lab` | Exit 0 / exit 0 | `logs/build-reference-app.log`, `logs/build-ui-lab.log` |
 | `npm run arch:check` | PASS, 0 violations | `logs/arch-check-cli.log` |
 | `npm run qa:ib0-wp04` | PASS 24/24 | `logs/verify-ib0-wp04.log`; `reports/ib0-wp04-verification.json` |
-| `npm run qa:ib0-wp04:negative` | PASS 44/44 | `logs/negative-architecture-tests.log`; `reports/negative-tests.json` |
+| `npm run qa:ib0-wp04:negative` | PASS 47/47 | `logs/negative-architecture-tests.log`; `reports/negative-tests.json` |
 | WP03 regression | 13/18 + bounded V05/V08/V10/V12/V17 | `logs/verify-ib0-wp03-regression.log` |
 | WP02 regression | 19/20 + bounded V17 | `logs/verify-ib0-wp02-regression.log` |
 | WP01 regression | PASS 15/15 | `logs/verify-ib0-wp01-regression.log` |
@@ -44,7 +44,7 @@ AC01–AC29: **29/29 PASS** (per-criterion evidence in `evidence/IB0-WP04/report
 
 ## Defects
 
-D1 (medium, closed): checker gaps from independent QA round 1 (M1–M3, L2, L3 augmentation and `require.resolve`, L4 relative `imports` targets, L5, L6, L8), fixed in `3ec81fc`; criteria strengthened, none relaxed. D2 (medium, closed): §6.1/Appendix B conflict now reported for PO/SA decision (exception (iii)). D3 (low, closed): evidence-index and status-vocabulary fixes (L7, R2-L4). D4 (low, closed): `package.json` `imports` bare-name bypass and pattern false positive (R2-L1, R2-L2), fixed in `499ae29`. D5 (low, closed): conditional `imports` branches and longest-prefix patterns (R3-L1), fixed after `7fa2462`, N40–N42. Details: `evidence/IB0-WP04/reports/technical-verification.md`.
+D1 (medium, closed): checker gaps from independent QA round 1 (M1–M3, L2, L3 augmentation and `require.resolve`, L4 relative `imports` targets, L5, L6, L8), fixed in `3ec81fc`; criteria strengthened, none relaxed. D2 (medium, closed): §6.1/Appendix B conflict now reported for PO/SA decision (exception (iii)). D3 (low, closed): evidence-index and status-vocabulary fixes (L7, R2-L4). D4 (low, closed): `package.json` `imports` bare-name bypass and pattern false positive (R2-L1, R2-L2), fixed in `499ae29`. D5 (low, closed): conditional `imports` branches and longest-prefix patterns (R3-L1), fixed in `be181cf`, N40–N42. Details: `evidence/IB0-WP04/reports/technical-verification.md`.
 
 ## Exceptions (pending PO/SA decision)
 

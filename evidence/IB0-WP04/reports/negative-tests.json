@@ -1,11 +1,11 @@
 {
   "workPackage": "IB0-WP04",
-  "generatedAt": "2026-09-24T10:53:30.381Z",
-  "commit": "499ae29c27a51fd75eb4a19464b89a339dd1b35f",
+  "generatedAt": "2026-09-24T11:03:50.831Z",
+  "commit": "be181cfe896c1d1f04026021390aecd502cd4953",
   "node": "24.21.0",
   "result": "PASS",
   "controls": 5,
-  "negatives": 39,
+  "negatives": 42,
   "cases": [
     {
       "id": "C0",
@@ -446,6 +446,39 @@
     {
       "id": "N39",
       "name": "package.json imports alias to a bare package name (#ent -> @proseit/paep-enterprise): components -> enterprise",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N40",
+      "name": "imports condition \"import\" -> forbidden package, \"default\" -> local file",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N41",
+      "name": "imports condition \"browser\" -> forbidden package, \"default\" -> local file",
+      "tool": "arch:check",
+      "expected": "exit 1, DIRECTION",
+      "exit": 1,
+      "rules": [
+        "DIRECTION"
+      ],
+      "pass": true
+    },
+    {
+      "id": "N42",
+      "name": "longer imports pattern (#a/b/*) -> forbidden package wins over #a/*",
       "tool": "arch:check",
       "expected": "exit 1, DIRECTION",
       "exit": 1,

@@ -1,0 +1,89 @@
+# date: 2026-09-24T10:57:43Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 7fa24627a6ea7998a73dec5e713b12b64fe5274d
+# cwd: /tmp/paep-wp04-qa3-DMSYc4/scratch
+# cmd: bash /tmp/claude-0/-home-claude-proseit-paep/baa00b7b-0d6c-562c-abda-fc0d973cf425/scratchpad/qa3/scripts/qa3-builds.sh
+
+=================== R2-L2: legit #lib/* pattern (expect arch:check 0, build 0)
+ M apps/reference-app/src/main.ts
+ M packages/components/package.json
+ M packages/components/src/index.ts
+ M packages/enterprise/src/index.ts
+?? packages/components/src/lib/
+  "imports": {
+    "#lib/*": "./src/lib/*.ts"
+  }
+}
+PAEP architecture check: PASS — 20 projects, 1 edges (0 optional), 0 cycles, 20 imports in 28 files, 0 violations
+arch:check EXIT=0
+Application bundle generation complete. [3.181 seconds] - 2026-09-24T10:57:48.812Z
+Output location: /tmp/paep-wp04-qa3-DMSYc4/scratch/dist/reference-app
+ng build EXIT=0
+enterprise code IN bundle: no
+=================== R2-L1: #ent -> bare enterprise (expect arch:check 1)
+ M apps/reference-app/src/main.ts
+ M packages/components/package.json
+ M packages/components/src/index.ts
+ M packages/enterprise/src/index.ts
+?? packages/components/src/lib/
+  "imports": {
+    "#ent": "@proseit/paep-enterprise"
+  }
+}
+VIOLATION DIRECTION @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/index.ts]
+PAEP architecture check: FAIL — 20 projects, 2 edges (0 optional), 0 cycles, 20 imports in 28 files, 1 violations
+arch:check EXIT=1
+Application bundle generation complete. [2.887 seconds] - 2026-09-24T10:57:53.228Z
+Output location: /tmp/paep-wp04-qa3-DMSYc4/scratch/dist/reference-app
+ng build EXIT=0
+enterprise code IN bundle: yes
+=================== M03: conditional import->enterprise, default->local
+ M apps/reference-app/src/main.ts
+ M packages/components/package.json
+ M packages/components/src/index.ts
+ M packages/enterprise/src/index.ts
+?? packages/components/src/lib/
+  "imports": {
+    "#ent": {
+      "import": "@proseit/paep-enterprise",
+      "default": "./src/lib/x.ts"
+PAEP architecture check: PASS — 20 projects, 1 edges (0 optional), 0 cycles, 20 imports in 28 files, 0 violations
+arch:check EXIT=0
+Application bundle generation complete. [2.666 seconds] - 2026-09-24T10:57:57.399Z
+Output location: /tmp/paep-wp04-qa3-DMSYc4/scratch/dist/reference-app
+ng build EXIT=0
+enterprise code IN bundle: yes
+=================== M04: conditional browser->enterprise, default->local
+ M apps/reference-app/src/main.ts
+ M packages/components/package.json
+ M packages/components/src/index.ts
+ M packages/enterprise/src/index.ts
+?? packages/components/src/lib/
+  "imports": {
+    "#ent": {
+      "browser": "@proseit/paep-enterprise",
+      "default": "./src/lib/x.ts"
+PAEP architecture check: PASS — 20 projects, 1 edges (0 optional), 0 cycles, 20 imports in 28 files, 0 violations
+arch:check EXIT=0
+Application bundle generation complete. [2.888 seconds] - 2026-09-24T10:58:01.780Z
+Output location: /tmp/paep-wp04-qa3-DMSYc4/scratch/dist/reference-app
+ng build EXIT=0
+enterprise code IN bundle: yes
+=================== M10: less specific pattern first; import #a/b/x
+ M apps/reference-app/src/main.ts
+ M packages/components/package.json
+ M packages/components/src/index.ts
+ M packages/enterprise/src/index.ts
+?? packages/components/src/lib/
+  "imports": {
+    "#a/*": "./src/lib/*.ts",
+    "#a/b/*": "@proseit/paep-enterprise"
+  }
+PAEP architecture check: PASS — 20 projects, 1 edges (0 optional), 0 cycles, 20 imports in 28 files, 0 violations
+arch:check EXIT=0
+Application bundle generation complete. [2.726 seconds] - 2026-09-24T10:58:06.021Z
+Output location: /tmp/paep-wp04-qa3-DMSYc4/scratch/dist/reference-app
+ng build EXIT=0
+enterprise code IN bundle: yes
+--- final status
+EXIT_CODE=0

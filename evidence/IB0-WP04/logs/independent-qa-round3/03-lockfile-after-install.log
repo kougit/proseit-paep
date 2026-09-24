@@ -1,0 +1,11 @@
+# date: 2026-09-24T10:54:58Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 7fa24627a6ea7998a73dec5e713b12b64fe5274d
+# cwd: /tmp/paep-wp04-qa3-DMSYc4/repo
+# cmd: sha256sum package-lock.json; git diff --quiet ac6b786 -- package-lock.json && echo "lockfile identical to ac6b786 after npm ci"; echo "git status:"; git status --porcelain; echo "(end)"
+
+be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69  package-lock.json
+lockfile identical to ac6b786 after npm ci
+git status:
+(end)
+EXIT_CODE=0

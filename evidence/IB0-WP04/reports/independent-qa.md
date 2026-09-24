@@ -6,7 +6,7 @@
 | --- | --- | --- | --- |
 | 1 | `1c16f80` | **FAIL** — 4 Medium (M1 nested `dist/` skipped; M2 `.d.ts` not scanned; M3 `/// <reference lib="dom">` in contracts; M4 unreported §6.1/Appendix B conflict), 8 Low, 7 Observations. All 17 mandatory checks reproduced. | `reports/independent-qa-round1.md`; `logs/independent-qa-round1/` |
 | 2 | `7a8f4e9` | **PASS** — M1–M4 closed; 0 High, 0 Medium; 6 Low (R2-L1 bare-name `imports` target bypass; R2-L2 `#prefix/*` false positive; R2-L3 `export const x = vendor`; R2-L4 evidence wording; R2-L5 non-tsconfig alias files; R2-L6 computed dynamic imports and JSDoc types), 5 Observations. Gates: verifier 24/24, negatives 42/42, builds, lockfile, integrity 13/13, matrix 144/144 by its own parser, 82-case harness with no regression. | `reports/independent-qa-round2.md`; `logs/independent-qa-round2/` |
-| 3 (delta) | see below | See round 3 section | — |
+| 3 (delta) | `7fa2462` | **PASS** — R2-L1 and R2-L2 closed; 0 High, 0 Medium; 1 Low (R3-L1: conditional `imports` branches other than the checked one, and pattern order, could still hide a forbidden target); no regressions (82-case harness 73/82 as expected, the rest known residuals or test artefacts); 17 false-positive probes pass; verifier 24/24, negatives 44/44, builds, lockfile, integrity 13/13. | `reports/independent-qa-round3.md`; `logs/independent-qa-round3/` |
 
 ## Disposition of open findings after round 2
 
@@ -17,4 +17,9 @@
 | R2-L3, R2-L5, R2-L6, R2-O1 | Recorded as residual risk in `work-packages/IB0-WP04/ACCEPTANCE_REPORT.md` |
 | M4 / C1 | Reported; PO/SA decision card posted; default "Appendix B governs" |
 
-## Round 3 (delta)
+| R3-L1 | Fixed in `be181cf`: every string target of a conditional or array `imports` entry is checked, and pattern keys follow Node's longest-prefix rule; negative cases N40–N42 reproduce the reviewer's M03, M04 and M10 and are rejected. Fresh-clone gates at `be181cf`: verifier 24/24, negatives 47/47 |
+| R3-O1 | README index, technical-verification D1 wording and this summary corrected |
+
+## Overall
+
+**INDEPENDENT QA: PASS** (rounds 2 and 3). Every Medium finding was closed with strengthened criteria; no criterion was relaxed. The R3-L1 fix is proven by the author's negative cases N40–N42 in a fresh clone; it was not re-reviewed by the independent reviewer.

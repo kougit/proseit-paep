@@ -1,9 +1,11 @@
-# date: 2026-09-24T10:53:30Z node: v24.21.0 npm: 11.19.0 commit: 499ae29c27a51fd75eb4a19464b89a339dd1b35f
+# date: 2026-09-24T11:03:50Z node: v24.21.0 npm: 11.19.0 commit: be181cfe896c1d1f04026021390aecd502cd4953
 tracked changes after the runs (expect only evidence/IB0-WP04):
  M evidence/IB0-WP04/logs/ib0-wp01-verification.regression.json
  M evidence/IB0-WP04/logs/ib0-wp02-verification.regression.json
  M evidence/IB0-WP04/logs/ib0-wp03-verification.regression.json
  M evidence/IB0-WP04/logs/negative-architecture-tests.log
+ M evidence/IB0-WP04/logs/verify-ib0-wp02-regression.log
+ M evidence/IB0-WP04/logs/verify-ib0-wp03-regression.log
  M evidence/IB0-WP04/reports/ib0-wp04-verification.json
  M evidence/IB0-WP04/reports/negative-tests.json
 --- earlier WP records vs baseline:

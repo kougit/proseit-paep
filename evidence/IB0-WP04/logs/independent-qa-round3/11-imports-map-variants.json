@@ -1,0 +1,405 @@
+[
+  {
+    "id": "M01",
+    "name": "conditional {default: bare enterprise}",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/use.ts]"
+    ]
+  },
+  {
+    "id": "M02",
+    "name": "conditional {types: ./src/lib/x.ts, default: bare enterprise}",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/use.ts]"
+    ]
+  },
+  {
+    "id": "M03",
+    "name": "conditional {import: bare enterprise, default: ./src/lib/x.ts} (bundlers take \"import\")",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "M04",
+    "name": "conditional {browser: bare enterprise, default: ./src/lib/x.ts}",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "M05",
+    "name": "nested conditional {node: {import: ../enterprise/src/index.ts}}",
+    "wantExit": 1,
+    "wantRules": [
+      "ENTRY_BYPASS"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION",
+      "ENTRY_BYPASS"
+    ],
+    "ok": true,
+    "violations": [
+      "ENTRY_BYPASS: @proseit/paep-components imports \"#ent\" inside @proseit/paep-enterprise; use its public entry point [packages/components/src/lib/use.ts]",
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/use.ts]"
+    ]
+  },
+  {
+    "id": "M06",
+    "name": "legit conditional pattern {types,default} -> ./src/lib/*.ts",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "M07",
+    "name": "nested pattern into another package #ent/* -> ../enterprise/src/*",
+    "wantExit": 1,
+    "wantRules": [
+      "ENTRY_BYPASS"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION",
+      "ENTRY_BYPASS"
+    ],
+    "ok": true,
+    "violations": [
+      "ENTRY_BYPASS: @proseit/paep-components imports \"#ent/lib/deep/y\" inside @proseit/paep-enterprise; use its public entry point [packages/components/src/lib/use.ts]",
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/use.ts]"
+    ]
+  },
+  {
+    "id": "M08",
+    "name": "pattern to bare package without * in target (#p/* -> @proseit/paep-enterprise)",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/use.ts]"
+    ]
+  },
+  {
+    "id": "M09",
+    "name": "pattern to deep import of an allowed package from enterprise (#c/* -> @proseit/paep-components/*)",
+    "wantExit": 1,
+    "wantRules": [
+      "DEEP_IMPORT"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DEEP_IMPORT"
+    ],
+    "ok": true,
+    "violations": [
+      "DEEP_IMPORT: @proseit/paep-enterprise imports \"@proseit/paep-components/src/internal\" below the @proseit/paep-components entry point [packages/enterprise/src/lib/use.ts]"
+    ]
+  },
+  {
+    "id": "M10",
+    "name": "more specific pattern listed second (#a/* -> ./src/lib/*.ts, #a/b/* -> bare enterprise); import #a/b/x (Node picks longest prefix)",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": false,
+    "violations": []
+  },
+  {
+    "id": "M11",
+    "name": "exact key beats pattern (#a/* -> ./src/lib/*.ts, #a/x -> bare enterprise); import #a/x",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/use.ts]"
+    ]
+  },
+  {
+    "id": "M12",
+    "name": "contracts pattern to external module (#rx/* -> rxjs/*)",
+    "wantExit": 1,
+    "wantRules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "ok": true,
+    "violations": [
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts (contracts) depends on external module \"rxjs/operators\", which is not approved [packages/contracts/src/lib/use.ts]"
+    ]
+  },
+  {
+    "id": "M13",
+    "name": "contracts exact alias to @angular/core",
+    "wantExit": 1,
+    "wantRules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "CONTRACTS_NEUTRAL"
+    ],
+    "ok": true,
+    "violations": [
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts (contracts) depends on external module \"@angular/core\", which is not approved [packages/contracts/src/lib/use.ts]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AbortSignal'. [node_modules/@angular/core/types/_api-chunk.d.ts:240]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2552 Cannot find name 'VoidFunction'. Did you mean 'Function'? [node_modules/@angular/core/types/_debug_node-chunk.d.ts:54]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2552 Cannot find name 'VoidFunction'. Did you mean 'Function'? [node_modules/@angular/core/types/_debug_node-chunk.d.ts:76]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2552 Cannot find name 'VoidFunction'. Did you mean 'Function'? [node_modules/@angular/core/types/_debug_node-chunk.d.ts:79]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2552 Cannot find name 'VoidFunction'. Did you mean 'Function'? [node_modules/@angular/core/types/_debug_node-chunk.d.ts:83]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2552 Cannot find name 'VoidFunction'. Did you mean 'Function'? [node_modules/@angular/core/types/_debug_node-chunk.d.ts:87]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2552 Cannot find name 'VoidFunction'. Did you mean 'Function'? [node_modules/@angular/core/types/_debug_node-chunk.d.ts:93]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'HTMLElement'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:147]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListener'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:613]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListener'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:614]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:1101]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:1101]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:1116]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:1121]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'HTMLElement'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:2449]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'IntersectionObserverInit'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:3113]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventTarget'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:4023]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:5936]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'ErrorEvent'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:5954]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventTarget'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:5961]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'ErrorEvent'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:5975]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AddEventListenerOptions'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:5977]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOrEventListenerObject'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:5978]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AddEventListenerOptions'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:5978]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOptions'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:5979]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOrEventListenerObject'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:5980]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOptions'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:5980]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventTarget'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:5992]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AddEventListenerOptions'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:6000]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOrEventListenerObject'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:6001]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AddEventListenerOptions'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:6001]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOptions'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:6002]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOrEventListenerObject'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:6003]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventListenerOptions'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:6003]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2689 Cannot extend an interface 'Event'. Did you mean 'implements'? [node_modules/@angular/core/types/_debug_node-chunk.d.ts:6019]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventInit'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:6024]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2689 Cannot extend an interface 'Event'. Did you mean 'implements'? [node_modules/@angular/core/types/_debug_node-chunk.d.ts:6028]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AbortSignal'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:6036]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'FormData'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:6037]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventInit'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:6043]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AbortSignal'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:6050]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'FormData'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:6051]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [node_modules/@angular/core/types/_debug_node-chunk.d.ts:7389]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'HTMLElement'. [node_modules/@angular/core/types/_event_dispatcher-chunk.d.ts:142]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [node_modules/@angular/core/types/core.d.ts:2639]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [node_modules/@angular/core/types/core.d.ts:2779]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Request'. [node_modules/@angular/core/types/core.d.ts:3023]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2694 Namespace 'globalThis' has no exported member 'ResponseInit'. [node_modules/@angular/core/types/core.d.ts:3030]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2694 Namespace 'globalThis' has no exported member 'ResponseInit'. [node_modules/@angular/core/types/core.d.ts:3030]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [node_modules/@angular/core/types/core.d.ts:3677]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [node_modules/@angular/core/types/core.d.ts:3837]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [node_modules/@angular/core/types/core.d.ts:3838]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [node_modules/@angular/core/types/core.d.ts:3839]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'VoidFunction'. [node_modules/@angular/core/types/core.d.ts:3840]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Document'. [node_modules/@angular/core/types/core.d.ts:4176]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [node_modules/@angular/core/types/core.d.ts:4228]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [node_modules/@angular/core/types/core.d.ts:4682]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'IntersectionObserverInit'. [node_modules/@angular/core/types/core.d.ts:5198]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'IntersectionObserverInit'. [node_modules/@angular/core/types/core.d.ts:5205]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'IntersectionObserverInit'. [node_modules/@angular/core/types/core.d.ts:5210]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Document'. [node_modules/@angular/core/types/core.d.ts:7069]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventTarget'. [node_modules/@angular/core/types/core.d.ts:7070]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Document'. [node_modules/@angular/core/types/core.d.ts:7076]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventTarget'. [node_modules/@angular/core/types/core.d.ts:7077]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Document'. [node_modules/@angular/core/types/core.d.ts:7083]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'EventTarget'. [node_modules/@angular/core/types/core.d.ts:7084]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [node_modules/@angular/core/types/core.d.ts:7143]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'HTMLElement'. [node_modules/@angular/core/types/core.d.ts:7143]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Document'. [node_modules/@angular/core/types/core.d.ts:7385]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Document'. [node_modules/@angular/core/types/core.d.ts:7392]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [node_modules/@angular/core/types/core.d.ts:7416]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [node_modules/@angular/core/types/core.d.ts:7423]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [node_modules/@angular/core/types/core.d.ts:7662]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [node_modules/@angular/core/types/core.d.ts:8689]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [node_modules/@angular/core/types/core.d.ts:8691]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [node_modules/@angular/core/types/core.d.ts:8785]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [node_modules/@angular/core/types/core.d.ts:8796]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'IdleDeadline'. [node_modules/@angular/core/types/core.d.ts:8962]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'IdleRequestOptions'. [node_modules/@angular/core/types/core.d.ts:8962]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Document'. [node_modules/@angular/core/types/core.d.ts:8989]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'Node'. [node_modules/@angular/core/types/core.d.ts:9447]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'AbortSignal'. [node_modules/@angular/core/types/core.d.ts:9608]",
+      "CONTRACTS_NEUTRAL: @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2304 Cannot find name 'setTimeout'. [node_modules/rxjs/dist/types/internal/scheduler/timerHandle.d.ts:1]"
+    ]
+  },
+  {
+    "id": "M14",
+    "name": "contracts legit pattern to own files",
+    "wantExit": 0,
+    "wantRules": [],
+    "absent": [],
+    "exit": 0,
+    "rules": [],
+    "ok": true,
+    "violations": []
+  },
+  {
+    "id": "M15",
+    "name": "analytics re-exports vendor through #ec alias",
+    "wantExit": 1,
+    "wantRules": [
+      "ANALYTICS_VENDOR_EXPORT"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "ANALYTICS_VENDOR_EXPORT"
+    ],
+    "ok": true,
+    "violations": [
+      "ANALYTICS_VENDOR_EXPORT: @proseit/paep-analytics re-exports external module \"echarts\" [packages/analytics/src/lib/v.ts]"
+    ]
+  },
+  {
+    "id": "M16",
+    "name": "unresolvable #x (no imports map)",
+    "wantExit": 1,
+    "wantRules": [
+      "OUTSIDE_PROJECT"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "OUTSIDE_PROJECT"
+    ],
+    "ok": true,
+    "violations": [
+      "OUTSIDE_PROJECT: @proseit/paep-components imports \"#x\", which its package.json imports map does not resolve [packages/components/src/lib/use.ts]"
+    ]
+  },
+  {
+    "id": "M17",
+    "name": "unresolvable #x (map without matching key)",
+    "wantExit": 1,
+    "wantRules": [
+      "OUTSIDE_PROJECT"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "OUTSIDE_PROJECT"
+    ],
+    "ok": true,
+    "violations": [
+      "OUTSIDE_PROJECT: @proseit/paep-components imports \"#x\", which its package.json imports map does not resolve [packages/components/src/lib/use.ts]"
+    ]
+  },
+  {
+    "id": "M18",
+    "name": "#x in an app (apps have no package.json)",
+    "wantExit": 1,
+    "wantRules": [
+      "OUTSIDE_PROJECT"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "OUTSIDE_PROJECT"
+    ],
+    "ok": true,
+    "violations": [
+      "OUTSIDE_PROJECT: ui-lab imports \"#x\", which its package.json imports map does not resolve [apps/ui-lab/src/app/app.ts]"
+    ]
+  },
+  {
+    "id": "M19",
+    "name": "null target (#x: null, Node \"not exported\")",
+    "wantExit": 1,
+    "wantRules": [
+      "OUTSIDE_PROJECT"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "OUTSIDE_PROJECT"
+    ],
+    "ok": true,
+    "violations": [
+      "OUTSIDE_PROJECT: @proseit/paep-components imports \"#x\", which its package.json imports map does not resolve [packages/components/src/lib/use.ts]"
+    ]
+  },
+  {
+    "id": "M20",
+    "name": "array target (#ent: [bare enterprise])",
+    "wantExit": 1,
+    "wantRules": [
+      "DIRECTION"
+    ],
+    "absent": [],
+    "exit": 1,
+    "rules": [
+      "DIRECTION"
+    ],
+    "ok": true,
+    "violations": [
+      "DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -) [packages/components/src/lib/use.ts]"
+    ]
+  }
+]

@@ -79,3 +79,48 @@ Two rounds. Round 1 (below, verbatim apart from log paths) reviewed `f19a422` an
 No critical or high findings. Every mandatory criterion AC01–AC24 passes on my independent evidence. F1 is a real gap in verifier coverage, and I recommend fixing it before the PO/SA records ACCEPTED. It does not make the delivered configuration non-conformant or any criterion as written fail.
 
 QA RESULT: PASS
+
+## Round 2
+
+| Field | Value |
+| --- | --- |
+| Commit under review | `813b7ca0359763a75ca445343ef586c5122f5a67` (PR head, branch `claude/ib0-wp03-7s51em`). Verifier changes in `0f2d381`; evidence re-recorded in `813b7ca`. |
+| Date | 2026-09-24 |
+| Reviewer | Independent Claude QA context, the same reviewer as round 1. The implementer's round-2 reports were not relied on. |
+| Method | 1. Fresh `git clone` from GitHub, with no `node_modules`, `dist` or `.angular` present beforehand. Node 24.21.0 and npm 11.19.0 from `/opt/node24/bin`. 2. Full gate re-run on the head. 3. My own verifier mutations, run with `--static-only` in a separate local clone that has `node_modules` symlinked. 4. Diff review of `f19a422..813b7ca`. `/home/claude/proseit-paep` was not modified. Nothing was pushed. |
+| Raw logs | `logs/independent-qa-round2/01..11-*.log`, each with a header and a trailing `EXIT_CODE=n`. The mutation script is at `logs/independent-qa-round2/scripts/mut3.sh`. |
+
+### Results
+
+| # | Check | Result | Evidence (logs/independent-qa-round2/) |
+| --- | --- | --- | --- |
+| 1 | **F1 reproduction on the verifier.** Positive control P0 passes 14/14. Each of the following now fails with verifier exit 1: R1 `noCheck: true` (V04, V05); R2 `allowUnreachableCode: true` (V04, V05); R3 `allowUnusedLabels: true` (V04, V05); R4 `extendedDiagnostics.defaultCategory: "suppress"` (V04, V05). **New mutations of my own**, all caught: N1 `typeCheckHostBindings: false` added (V05 allow-list); N2 per-check `extendedDiagnostics.checks.invalidBananaInBox: "suppress"` (V04, V05); N3 top-level `exclude` added to the root tsconfig (V05); N4 `noCheck: true` in `apps/ui-lab/tsconfig.app.json` only (V04, V05, V12); N5 `skipDefaultLibCheck: true` added (V05). | PASS | 10 |
+| 2 | **F3.** Uppercase `// @TS-NOCHECK` fails V07 both in `packages/foundation/src/index.ts` (R5) and in `apps/reference-app/src/app/app.ts` (R6, where V12 also fails). Mixed-case `// @Ts-Ignore` in an entry point fails V07 (R7). The regex now carries the `/i` flag. | PASS | 10 |
+| 3 | **F6 status wording.** `work-package.json` now uses `"status": "PASS"`, `technical_verification: "PASS"` and `independent_qa: "PASS"`. `acceptance.status` is `null`, with a note that it awaits the PO/SA. "PENDING" and "DRAFTED" no longer appear as status values. The README says "technical PASS", and ACCEPTANCE.md's technical result rule now reads "Technical **PASS**". TRACEABILITY uses only PASS (18) and IN PROGRESS (1: the QA row). No "TECHNICAL PASS", "PENDING" or "READY FOR AUTHORI…" token remains in the WP03 records. | PASS | 11 |
+| 4 | **Full regression on the head.** `npm ci` exits 0 (0 vulnerabilities). Both production builds exit 0, and `main-*.js` hashes are identical to round 1 and to the `de13629` build. `npm run qa:ib0-wp03` passes 18/18. Its WP02 regression gives 19/20, with V17 listing exactly `tsconfig.json` plus the 18 `packages/*/src/index.ts`. WP01 gives 15/15. Afterwards the tracked tree was modified only under `evidence/IB0-WP03/`, and the WP01/WP02 records match `de13629`. `npm run qa:ib0-wp03:negative` passes 23/23: B0–B2c 5/5, M0–M17 18/18, and the new M14–M17 are all detected. No scratch directory was left behind. The lockfile is byte-identical to `de13629`. Controlled files match 13/13. | PASS | 01–09 |
+| 5 | **Change boundary and criteria.** `0f2d381` touches only `tooling/verification/verify-ib0-wp03.mjs`, `tooling/verification/negative-ib0-wp03.mjs` and `work-packages/IB0-WP03/{ACCEPTANCE.md, WORK_PACKAGE.md, work-package.json}`. `813b7ca` touches only `evidence/IB0-WP03/**` and `work-packages/IB0-WP03/**`. There is no change to `tsconfig.json`, `package.json`, `package-lock.json`, `apps/**`, `packages/**`, `angular.json`, `.paep-control/**`, `.gitignore`, `PACK_MANIFEST.json` or `CLAUDE.md` since `f19a422`. **ACCEPTANCE.md, f19a422 vs 813b7ca:** AC04 adds the check-disabling options and extendedDiagnostics suppression. AC05 adds the root-key allow-list. AC06 becomes "in any letter case". AC11 grows from 13/13 to 17/17 mutations. The result rule changes only in wording. These are strengthenings only. No criterion was removed or relaxed. | PASS | diff review; 03 |
+| 6 | **Evidence.** Every README path and every TRACEABILITY evidence path exists. `reports/acceptance-readiness.md` is missing, as expected. All 14 headed logs and all 3 JSON reports record commit `0f2d38174d57…`. The committed results (18/18, 23/23) match what I observed. The round-1 QA report is retained verbatim, apart from disclosed log-path and heading adaptations, with its raw logs under `logs/independent-qa-round1/`. | PASS | 11 |
+
+### Status of round-1 findings
+
+| ID | Round-1 severity | Status | Note |
+| --- | --- | --- | --- |
+| F1 | Medium | CLOSED | V05 now allow-lists root keys and V04 deny-lists check-disabling options in every tsconfig. R1–R3 and N1, N3, N4, N5 all confirm it. |
+| F2 | Medium | DECISION | The lint/format deferral, the `tsconfig.base.json` placement and the WP02 V17 bounded exception still await the PO/SA. They remain recorded transparently. |
+| F3 | Low | CLOSED | V07 is case-insensitive (R5–R7). |
+| F4 | Low | DECISION | The AC20 rewording still needs explicit PO/SA approval together with the draft definition. |
+| F5 | Observation | CLOSED | extendedDiagnostics suppression is detected at both the default and per-check level (R4, N2). |
+| F6 | Low | CLOSED | Status fields now use App. C vocabulary or `null` with a note. |
+| F7 | Observation | CLOSED | The evidence now names `0f2d381`. `813b7ca` changes evidence and docs only, and I re-ran the gates at `813b7ca`. |
+| F8 | Observation | OPEN | There is still no `qa:types` script. It is recommended only (EQP App. B) and fits naturally with WP05. It does not block. |
+
+### New findings
+
+| ID | Severity | Finding | Recommended action |
+| --- | --- | --- | --- |
+| G1 | Observation | `CHECK_DISABLING` in the verifier includes `checkJs`. Setting it to `true` *enables* JS checking, so it is not a weakening. It is harmless here, because `allowJs` is off and the V05 allow-list would flag it anyway. ACCEPTANCE.md AC04 repeats the same wording. | Optional: drop `checkJs` from the list, or rename the list "unapproved options". No action needed for acceptance. |
+| G2 | Observation | `work-package.json` already records `independent_qa: "PASS"`, and TRACEABILITY row IB0-QA-003 is still IN PROGRESS, both before this round-2 verdict. | Update both after round 2 is recorded. |
+
+No critical, high or medium technical findings remain open. The only open items are F2 and F4, which are PO/SA decisions.
+
+QA RESULT: PASS

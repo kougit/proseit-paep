@@ -35,7 +35,7 @@ TypeScript `strict` and `noImplicitAny` and Angular `strictTemplates` are now se
 | Check | Reviewer | Date | Result |
 | --- | --- | --- | --- |
 | Definition audit (scope traced to controlled sources) | Claude Code | 2026-09-24 | PASS |
-| Independent QA (fresh clone of PR head) | Independent Claude reviewer | 2026-09-24 | See `evidence/IB0-WP03/reports/independent-qa.md` |
+| Independent QA round 1 (`f19a422`) and round 2 (`813b7ca`), fresh clones | Independent Claude reviewer | 2026-09-24 | PASS both rounds; F1, F3, F5, F6 fixed; `evidence/IB0-WP03/reports/independent-qa.md` |
 | Definition approval; decisions on lint/format and WP02 V17 | Product Owner / Solutions Architect | Pending | Pending |
 
 ## Acceptance criteria
@@ -85,7 +85,9 @@ No dependency was added, removed or re-versioned; `package-lock.json` is byte-id
 
 (ii) Deep-import enforcement, the project graph, `nx.json` and `tsconfig.base.json` remain with IB0-WP04.
 
-(iii) The earlier verifiers rewrite their own tracked JSON and depend on run order; the WP03 verifier handles this, and `notes/implementation-summary.md` records it for later work packages.
+(iii) QA observations left as they are: F8, no `qa:types` script yet (fits IB0-WP05 CI); G1, `checkJs` sits in the verifier's type-check-disabling list although it enables checking of JavaScript (harmless: no project uses JS).
+
+(iv) The earlier verifiers rewrite their own tracked JSON and depend on run order; the WP03 verifier handles this, and `notes/implementation-summary.md` records it for later work packages.
 
 ## Technical result
 

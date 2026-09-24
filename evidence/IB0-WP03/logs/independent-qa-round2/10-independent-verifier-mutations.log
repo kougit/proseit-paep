@@ -1,0 +1,65 @@
+# date: 2026-09-24T09:40:22Z
+# node: v24.21.0 npm: 11.19.0
+# dir: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/qa2/mut commit: 813b7ca0359763a75ca445343ef586c5122f5a67
+# cmd: bash /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/mut3.sh
+
+=== P0 positive control
+IB0-WP03 verification (static-only): PASS (14/14)
+VERIFIER_EXIT=0
+=== R1 noCheck: true (root)
+FAIL V04 No tsconfig*.json in the repository turns a strict-family or template strict option off, or disables or suppresses type checking — tsconfig.json: compilerOptions.noCheck=true
+FAIL V05 Root tsconfig holds exactly the baseline options with their values plus the WP03 keys, and the app tsconfig files are unchanged — compilerOptions.noCheck added (not a baseline or WP03 key)
+IB0-WP03 verification (static-only): FAIL (12/14)
+VERIFIER_EXIT=1
+=== R2 allowUnreachableCode: true (root)
+FAIL V04 No tsconfig*.json in the repository turns a strict-family or template strict option off, or disables or suppresses type checking — tsconfig.json: compilerOptions.allowUnreachableCode=true
+FAIL V05 Root tsconfig holds exactly the baseline options with their values plus the WP03 keys, and the app tsconfig files are unchanged — compilerOptions.allowUnreachableCode added (not a baseline or WP03 key)
+IB0-WP03 verification (static-only): FAIL (12/14)
+VERIFIER_EXIT=1
+=== R3 allowUnusedLabels: true (root)
+FAIL V04 No tsconfig*.json in the repository turns a strict-family or template strict option off, or disables or suppresses type checking — tsconfig.json: compilerOptions.allowUnusedLabels=true
+FAIL V05 Root tsconfig holds exactly the baseline options with their values plus the WP03 keys, and the app tsconfig files are unchanged — compilerOptions.allowUnusedLabels added (not a baseline or WP03 key)
+IB0-WP03 verification (static-only): FAIL (12/14)
+VERIFIER_EXIT=1
+=== R4 extendedDiagnostics.defaultCategory: suppress (root)
+FAIL V04 No tsconfig*.json in the repository turns a strict-family or template strict option off, or disables or suppresses type checking — tsconfig.json: angularCompilerOptions.extendedDiagnostics suppresses diagnosti
+FAIL V05 Root tsconfig holds exactly the baseline options with their values plus the WP03 keys, and the app tsconfig files are unchanged — angularCompilerOptions.extendedDiagnostics added (not a baseline or WP03 key)
+IB0-WP03 verification (static-only): FAIL (12/14)
+VERIFIER_EXIT=1
+=== R5 uppercase // @TS-NOCHECK in packages/foundation/src/index.ts
+FAIL V07 No @ts-ignore, @ts-nocheck, @ts-expect-error or $any( in apps/** or packages/** source — 30 files scanned; findings: packages/foundation/src/index.ts
+IB0-WP03 verification (static-only): FAIL (13/14)
+VERIFIER_EXIT=1
+=== R6 uppercase // @TS-NOCHECK in apps/reference-app/src/app/app.ts
+FAIL V07 No @ts-ignore, @ts-nocheck, @ts-expect-error or $any( in apps/** or packages/** source — 30 files scanned; findings: apps/reference-app/src/app/app.ts
+FAIL V12 No WP04/WP05/IB1+ artefacts, apps unchanged, and every changed path is within WORK_PACKAGE §4 — apps changed: apps/reference-app/src/app/app.ts; changed outside WORK_PACKAGE §4: apps/reference-app/src/app/ap
+IB0-WP03 verification (static-only): FAIL (12/14)
+VERIFIER_EXIT=1
+=== R7 mixed-case // @Ts-Ignore in packages/contracts/src/index.ts
+FAIL V07 No @ts-ignore, @ts-nocheck, @ts-expect-error or $any( in apps/** or packages/** source — 30 files scanned; findings: packages/contracts/src/index.ts
+IB0-WP03 verification (static-only): FAIL (13/14)
+VERIFIER_EXIT=1
+=== N1 (new) angularCompilerOptions.typeCheckHostBindings: false added (root)
+FAIL V05 Root tsconfig holds exactly the baseline options with their values plus the WP03 keys, and the app tsconfig files are unchanged — angularCompilerOptions.typeCheckHostBindings added (not a baseline or WP03 key)
+IB0-WP03 verification (static-only): FAIL (13/14)
+VERIFIER_EXIT=1
+=== N2 (new) per-check extended diagnostic suppression {checks:{invalidBananaInBox:'suppress'}}
+FAIL V04 No tsconfig*.json in the repository turns a strict-family or template strict option off, or disables or suppresses type checking — tsconfig.json: angularCompilerOptions.extendedDiagnostics suppresses diagnosti
+FAIL V05 Root tsconfig holds exactly the baseline options with their values plus the WP03 keys, and the app tsconfig files are unchanged — angularCompilerOptions.extendedDiagnostics added (not a baseline or WP03 key)
+IB0-WP03 verification (static-only): FAIL (12/14)
+VERIFIER_EXIT=1
+=== N3 (new) top-level 'exclude' added to root tsconfig
+FAIL V05 Root tsconfig holds exactly the baseline options with their values plus the WP03 keys, and the app tsconfig files are unchanged — top-level exclude added
+IB0-WP03 verification (static-only): FAIL (13/14)
+VERIFIER_EXIT=1
+=== N4 (new) noCheck: true set in apps/ui-lab/tsconfig.app.json only
+FAIL V04 No tsconfig*.json in the repository turns a strict-family or template strict option off, or disables or suppresses type checking — apps/ui-lab/tsconfig.app.json: compilerOptions.noCheck=true
+FAIL V05 Root tsconfig holds exactly the baseline options with their values plus the WP03 keys, and the app tsconfig files are unchanged — changed: apps/ui-lab/tsconfig.app.json
+FAIL V12 No WP04/WP05/IB1+ artefacts, apps unchanged, and every changed path is within WORK_PACKAGE §4 — apps changed: apps/ui-lab/tsconfig.app.json; changed outside WORK_PACKAGE §4: apps/ui-lab/tsconfig.app.json
+IB0-WP03 verification (static-only): FAIL (11/14)
+VERIFIER_EXIT=1
+=== N5 (new) skipDefaultLibCheck: true added (root, unlisted option)
+FAIL V05 Root tsconfig holds exactly the baseline options with their values plus the WP03 keys, and the app tsconfig files are unchanged — compilerOptions.skipDefaultLibCheck added (not a baseline or WP03 key)
+IB0-WP03 verification (static-only): FAIL (13/14)
+VERIFIER_EXIT=1
+EXIT_CODE=0

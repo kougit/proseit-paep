@@ -1,0 +1,8 @@
+# date: 2026-09-24T09:39:26Z
+# node: v24.21.0 npm: 11.19.0
+# dir: /tmp/claude-0/-home-claude-proseit-paep/e14f03b0-cc84-56f3-a148-d5ff9a9d45bb/scratchpad/qa2/repo commit: 813b7ca0359763a75ca445343ef586c5122f5a67
+# cmd: node -e "const j=require(\"./evidence/IB0-WP03/logs/ib0-wp02-verification.regression.json\");const f=j.checks.filter(c=>!c.pass);console.log(\"passed\",j.checks.length-f.length+\"/\"+j.checks.length);for(const c of f)console.log(c.id,c.details)"
+
+passed 19/20
+V17 protected paths changed: packages/analytics/src/index.ts, packages/components/src/index.ts, packages/contracts/src/index.ts, packages/domain-ai/src/index.ts, packages/domain-commerce/src/index.ts, packages/domain-construction/src/index.ts, packages/domain-fiscal/src/index.ts, packages/domain-iot/src/index.ts, packages/domain-maintenance/src/index.ts, packages/domain-manufacturing/src/index.ts, packages/domain-quality/src/index.ts, packages/enterprise/src/index.ts, packages/foundation/src/index.ts, packages/frappe-sdk/src/index.ts, packages/i18n/src/index.ts, packages/observability/src/index.ts, packages/offline/src/index.ts, packages/platform/src/index.ts, tsconfig.json
+EXIT_CODE=0

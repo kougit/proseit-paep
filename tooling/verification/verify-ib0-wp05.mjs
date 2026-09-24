@@ -707,6 +707,8 @@ if (want('W25')) {
     p.length ? p.join('; ') : `${files.length} files; ${files.reduce((a, f) => a + f.bytes, 0)} bytes`);
 }
 
+results.sort((a, b) => a.id.localeCompare(b.id));
+
 // ---- Report ----------------------------------------------------------------------------------
 const passed = results.length > 0 && results.every((r) => r.pass);
 const head = git('rev-parse', 'HEAD');

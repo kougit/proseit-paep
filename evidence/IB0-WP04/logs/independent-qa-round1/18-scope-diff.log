@@ -1,0 +1,130 @@
+# date: 2026-09-24T10:30:32Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 1c16f80539b17c9797a6b194fac63c1fbdb3f8a2
+# cwd: /tmp/paep-wp04-qa-580y7m/repo
+# cmd: B=ac6b786; H=1c16f80539b17c9797a6b194fac63c1fbdb3f8a2; echo "== name-status"; git diff --name-status $B $H; echo "== paths outside WORK_PACKAGE §4 (QA regexes)"; git diff --name-only $B $H | grep -vE "^(tsconfig\.base\.json|tsconfig\.json|package\.json|tooling/architecture-boundaries/.*|tooling/verification/(verify|negative)-ib0-wp04\.mjs|docs/architecture/IB0-WP04-IMPLEMENTATION-PLAN\.md|docs/adr/ADR-REGISTER\.md|docs/provenance/PROVENANCE-REGISTER\.md|work-packages/IB0-WP04/.*|evidence/IB0-WP04/.*)$" || echo none; echo "== apps/packages/angular.json/package-lock diff (expect empty)"; git diff --stat $B $H -- apps packages angular.json package-lock.json tooling/verification/verify-ib0-wp01.mjs tooling/verification/verify-ib0-wp02.mjs tooling/verification/verify-ib0-wp03.mjs tooling/verification/negative-ib0-wp03.mjs; echo "(end)"; echo "== WP05/IB1 artefacts"; git ls-tree -r --name-only $H | grep -E "^\.github/|eslint|prettier|vitest|jest|karma|nx\.json|project\.json|\.dependency-cruiser|madgerc|runtime-config\.json$" || echo none; echo "== config/ tree (IB1 runtime config must be untouched)"; git diff --stat $B $H -- config; echo "(end)"; echo "== ADR/provenance diffs"; git diff $B $H -- docs/adr/ADR-REGISTER.md docs/provenance/PROVENANCE-REGISTER.md tooling/architecture-boundaries/README.md; echo "== package.json diff"; git diff $B $H -- package.json; echo "== secret patterns in added/modified files"; git diff --name-only --diff-filter=AM $B $H | xargs grep -lE -- "-----BEGIN [A-Z ]*PRIVATE KEY-----|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{36,}|npm_[A-Za-z0-9]{36}|Bearer [A-Za-z0-9._~+/-]{20,}" || echo "no secret signatures"
+
+== name-status
+M	docs/adr/ADR-REGISTER.md
+A	docs/architecture/IB0-WP04-IMPLEMENTATION-PLAN.md
+M	docs/provenance/PROVENANCE-REGISTER.md
+A	evidence/IB0-WP04/README.md
+A	evidence/IB0-WP04/logs/arch-check-cli.log
+A	evidence/IB0-WP04/logs/arch-check.log
+A	evidence/IB0-WP04/logs/build-reference-app.log
+A	evidence/IB0-WP04/logs/build-ui-lab.log
+A	evidence/IB0-WP04/logs/clean-clone-reproduction.log
+A	evidence/IB0-WP04/logs/controlled-source-integrity.log
+A	evidence/IB0-WP04/logs/ib0-wp01-verification.regression.json
+A	evidence/IB0-WP04/logs/ib0-wp02-verification.regression.json
+A	evidence/IB0-WP04/logs/ib0-wp03-verification.regression.json
+A	evidence/IB0-WP04/logs/lockfile-unchanged.log
+A	evidence/IB0-WP04/logs/negative-architecture-tests.log
+A	evidence/IB0-WP04/logs/negative-tests.log
+A	evidence/IB0-WP04/logs/ng-version.log
+A	evidence/IB0-WP04/logs/npm-ci.log
+A	evidence/IB0-WP04/logs/post-run-git-status.log
+A	evidence/IB0-WP04/logs/pre-clone-state.log
+A	evidence/IB0-WP04/logs/scope-and-secret-scan.log
+A	evidence/IB0-WP04/logs/toolchain-versions.log
+A	evidence/IB0-WP04/logs/verify-ib0-wp01-regression.log
+A	evidence/IB0-WP04/logs/verify-ib0-wp02-regression.log
+A	evidence/IB0-WP04/logs/verify-ib0-wp03-regression.log
+A	evidence/IB0-WP04/logs/verify-ib0-wp04.log
+A	evidence/IB0-WP04/reports/architecture-boundaries.md
+A	evidence/IB0-WP04/reports/definition-audit.md
+A	evidence/IB0-WP04/reports/ib0-wp04-verification.json
+A	evidence/IB0-WP04/reports/negative-tests.json
+A	evidence/IB0-WP04/reports/project-graph.json
+A	evidence/IB0-WP04/reports/technical-verification.md
+M	package.json
+M	tooling/architecture-boundaries/README.md
+A	tooling/architecture-boundaries/architecture-model.json
+A	tooling/architecture-boundaries/check-boundaries.mjs
+A	tooling/verification/negative-ib0-wp04.mjs
+A	tooling/verification/verify-ib0-wp04.mjs
+A	tsconfig.base.json
+M	tsconfig.json
+A	work-packages/IB0-WP04/ACCEPTANCE.md
+A	work-packages/IB0-WP04/ACCEPTANCE_REPORT.md
+A	work-packages/IB0-WP04/QUALITY_GATE_RUNBOOK.md
+A	work-packages/IB0-WP04/TRACEABILITY.csv
+A	work-packages/IB0-WP04/WORK_PACKAGE.md
+A	work-packages/IB0-WP04/work-package.json
+== paths outside WORK_PACKAGE §4 (QA regexes)
+none
+== apps/packages/angular.json/package-lock diff (expect empty)
+(end)
+== WP05/IB1 artefacts
+none
+== config/ tree (IB1 runtime config must be untouched)
+(end)
+== ADR/provenance diffs
+diff --git a/docs/adr/ADR-REGISTER.md b/docs/adr/ADR-REGISTER.md
+index f7e85eb..1624833 100644
+--- a/docs/adr/ADR-REGISTER.md
++++ b/docs/adr/ADR-REGISTER.md
+@@ -12,3 +12,4 @@ No new ADR is approved by this pack.
+ | --- | --- | --- |
+ | IB0-WP02 | No | Exact Node pinning, npm workspaces, a committed lockfile and `npm ci` are already controlled by PAEP-IB-01 §4.1. `.nvmrc`, `devEngines`, `.npmrc` and `allowScripts` are equivalent developer tooling and dependency-hygiene controls. No controlled decision changed. See `docs/architecture/IB0-WP02-IMPLEMENTATION-PLAN.md`. |
+ | IB0-WP03 | No | `strict`, `noImplicitAny` and `strictTemplates` are already controlled by PAEP-IB-01 §4.1; path aliases and public entry points by PAEP-IR-01 §4.4 and PAEP-IB-01 §6.2(ii). They are set in the Angular CLI root `tsconfig.json`. `tsconfig.base.json` and the project graph stay with IB0-WP04. No controlled decision changed. See `docs/architecture/IB0-WP03-IMPLEMENTATION-PLAN.md`. |
++| IB0-WP04 | No (pending PO/SA confirmation) | Dependency direction, layers and the matrix are already controlled by PAEP-IB-01 §6.1, §6.2 and Appendix B; the model transcribes them and the checker compares them cell by cell with the controlled text. No new shared package, no dependency-direction change and no new deployable boundary (EQP §16(vi)). Nx is not introduced (IB-01 §2.3(ii): Nx is not an immutable dependency; ADR-002 in IB-01 App. F remains a proposed register entry). `tsconfig.base.json` follows the controlled topology (IB-01 §5.1; IR-01 §4.2). The same-category default (no `domain-*` to `domain-*`, no app to app without an ADR) is recorded for PO/SA confirmation. See `docs/architecture/IB0-WP04-IMPLEMENTATION-PLAN.md`. |
+diff --git a/docs/provenance/PROVENANCE-REGISTER.md b/docs/provenance/PROVENANCE-REGISTER.md
+index d8a20df..0ce6554 100644
+--- a/docs/provenance/PROVENANCE-REGISTER.md
++++ b/docs/provenance/PROVENANCE-REGISTER.md
+@@ -15,7 +15,7 @@ Record dependencies, generators and external artefacts introduced by a work pack
+ | caniuse-lite | 1.0.30001810, transitive devDependency via `@angular/build` → `browserslist` 4.29.0; package https://github.com/browserslist/caniuse-lite, data caniuse.com (Alexis Deveria); registry, sha512 | Build-time browser-support data used to pick esbuild targets; no data in `dist/`; not distributed | CC-BY-4.0; attribution to caniuse.com (Alexis Deveria) retained in `docs/licences/THIRD-PARTY-NOTICES.md` N2 | **Approved 2026-09-24, Product Owner / Solutions Architect: APPROVED BUILD-TIME DEPENDENCY, with attribution.** Build-time use only; no broader approval inferred. Re-review trigger: the data becomes part of a separately distributed PAEP dataset or artefact, or its use materially changes. Data refresh only through a controlled lockfile change | `docs/licences/THIRD-PARTY-LICENCE-REVIEW.md` §4; `evidence/IB0-WP02/logs/licence-dist-check.log` |
+ | Other transitive dependencies | Remaining entries of `package-lock.json` (434 third-party entries in total, all registry.npmjs.org with sha512) | Build/dev tooling | MIT, ISC, BSD-2-Clause, BSD-3-Clause, Apache-2.0, BlueOak-1.0.0 | Proposed (IB0-WP02), pending human approval | `evidence/IB0-WP02/reports/licence-inventory.json` |
+ | npm install scripts | `@parcel/watcher` 2.6.0, `esbuild` 0.28.2, `fsevents` 2.3.3, `lmdb` 3.5.6, `msgpackr-extract` 3.0.4 | Would build or fetch native binaries at install time; redundant with the prebuilt platform packages in the lockfile | n/a (policy) | Proposed (IB0-WP02): all denied in `package.json` `allowScripts`; `.npmrc` `strict-allow-scripts=true` fails install on any new unreviewed script. Pending human approval | `evidence/IB0-WP02/reports/install-script-policy.md` |
+-| Workspace orchestration tooling | Not used. Plain Angular CLI + npm workspaces; no Nx (orchestration deferred to IB0-WP04). | n/a | n/a | n/a | `docs/architecture/IB0-WP01-IMPLEMENTATION-PLAN.md`; `docs/architecture/toolchain-version-manifest.json` |
++| Workspace orchestration tooling | Not used. Plain Angular CLI + npm workspaces; no Nx. IB0-WP04: Nx disposition NOT REQUIRED; the project graph and module boundaries are enforced by PAEP-authored tooling (`tooling/architecture-boundaries/check-boundaries.mjs`, Node built-ins plus the already-pinned `typescript`). No third-party code, template or configuration copied; no new dependency. | Development/CI only | n/a (PAEP-authored) | n/a | `docs/architecture/IB0-WP01-IMPLEMENTATION-PLAN.md`; `docs/architecture/IB0-WP04-IMPLEMENTATION-PLAN.md` |
+ | Angular CLI generators (`@schematics/angular` 22.1.8) | `ng generate application` for `reference-app` and `ui-lab`; `ng new` workspace defaults for `tsconfig.json` and `.editorconfig` | Generated starter files, including the Angular default `favicon.ico` | MIT (Angular generator output) | Pending human review | Implementation commit `b9904d0` |
+ | Angular default favicon | Unmodified `@schematics/angular` template asset in `apps/*/public/favicon.ico` | Placeholder browser icon (shipped) | Generator package MIT; the image is the Angular logo (brand/trademark question) | Proposed (IB0-WP02): internal use only; replace with a ProSEIT-owned icon before any external release. Pending human approval | `docs/licences/THIRD-PARTY-LICENCE-REVIEW.md` L4 |
+ | Starter page content | Generator welcome page replaced by an original one-line neutral placeholder | Avoid shipping Angular marketing content | ProSEIT-authored | Pending human review | `apps/*/src/app/app.html` |
+diff --git a/tooling/architecture-boundaries/README.md b/tooling/architecture-boundaries/README.md
+index bd02f95..8a15a64 100644
+--- a/tooling/architecture-boundaries/README.md
++++ b/tooling/architecture-boundaries/README.md
+@@ -1,5 +1,19 @@
+ # tooling/architecture-boundaries
+ 
+-Development/CI tooling for package-boundary tags, dependency-direction rules and cycle/deep-import detection (IB0-WP04). Not part of any production bundle.
++Development/CI tooling for package-boundary tags, dependency-direction rules and cycle/deep-import detection (IB0-WP04). Not part of any production bundle. No third-party dependency: Node.js built-ins plus the pinned `typescript` parser.
+ 
+-**Status:** placeholder created by IB0-WP01.
++| File | Purpose |
++| --- | --- |
++| `architecture-model.json` | Machine-readable PAEP architecture: layers L0–L4 and categories (PAEP-IB-01 §6.1), the package dependency matrix (Appendix B, transcribed exactly), Nx-style project tags (`layer:*`, `type:*`) and the classification of every project |
++| `check-boundaries.mjs` | Builds the project graph and fails on any unclassified project, model drift from the controlled text, alias inconsistency, forbidden edge, cycle, deep import, entry-point bypass, contracts neutrality breach, analytics vendor re-export or app copy of package code |
++
++```text
++npm run arch:check                                   # exit 0 = PASS, 1 = violations, 2 = checker error
++node tooling/architecture-boundaries/check-boundaries.mjs --graph <file> --json
++```
++
++`--graph` writes the graph in the Nx `ProjectGraph` JSON shape (`nodes`, `dependencies`) with the edge list, each edge's Appendix B verdict and the Nx-form `depConstraints`. Nx is not installed; see `docs/architecture/IB0-WP04-IMPLEMENTATION-PLAN.md`.
++
++Rules are controlled architecture. Changing the model or a rule needs an approved ADR (PAEP-IB-01 §6.2(viii); PAEP-IR-01 §4.3(vi)); the checker rejects a matrix that differs from `.paep-control/text/PAEP_IB_01_v1.0_text.md`.
++
++**Status:** implemented by IB0-WP04.
+== package.json diff
+diff --git a/package.json b/package.json
+index abf1bec..3ca3cea 100644
+--- a/package.json
++++ b/package.json
+@@ -25,7 +25,10 @@
+     "qa:ib0-wp01": "node tooling/verification/verify-ib0-wp01.mjs",
+     "qa:ib0-wp02": "node tooling/verification/verify-ib0-wp02.mjs",
+     "qa:ib0-wp03": "node tooling/verification/verify-ib0-wp03.mjs",
+-    "qa:ib0-wp03:negative": "node tooling/verification/negative-ib0-wp03.mjs"
++    "qa:ib0-wp03:negative": "node tooling/verification/negative-ib0-wp03.mjs",
++    "arch:check": "node tooling/architecture-boundaries/check-boundaries.mjs",
++    "qa:ib0-wp04": "node tooling/verification/verify-ib0-wp04.mjs",
++    "qa:ib0-wp04:negative": "node tooling/verification/negative-ib0-wp04.mjs"
+   },
+   "dependencies": {
+     "@angular/common": "22.1.8",
+== secret patterns in added/modified files
+no secret signatures
+EXIT_CODE=0

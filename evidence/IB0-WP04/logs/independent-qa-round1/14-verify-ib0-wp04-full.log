@@ -1,0 +1,37 @@
+# date: 2026-09-24T10:28:45Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 1c16f80539b17c9797a6b194fac63c1fbdb3f8a2
+# cwd: /tmp/paep-wp04-qa-580y7m/repo
+# cmd: npm run qa:ib0-wp04
+
+
+> @proseit/paep-workspace@0.0.0 qa:ib0-wp04
+> node tooling/verification/verify-ib0-wp04.mjs
+
+PASS V01 Architecture model layers and 12x12 matrix equal PAEP-IB-01 §6.1 and Appendix B cell by cell — 144/144 cells match; layers match §6.1
+PASS V02 Every package directory, npm workspace and angular.json project is classified exactly once with a known category and tags — 20 projects classified (18 libraries, 2 applications); 0 unknown
+PASS V03 Project graph generated in the Nx ProjectGraph shape with one node per project, tags, layers, edges and depConstraints — 20 nodes, 0 edges, 12 constraints -> evidence/IB0-WP04/reports/project-graph.json
+PASS V04 tsconfig.base.json holds only the alias registry; tsconfig.json extends it without paths; no other paths/baseUrl; every app build inherits it — tsconfig.base.json: 18 aliases; chain apps/*/tsconfig.app.json -> tsconfig.json -> tsconfig.base.json
+PASS V05 WP03 strict controls preserved: literal in tsconfig.json, all other options equal the baseline, app tsconfigs unchanged, effective options strict for both apps — reference-app: strict=true noImplicitAny=true strictTemplates=true paths=18; ui-lab: strict=true noImplicitAny=true strictTemplates=true paths=18
+PASS V06 tsconfig.base.json maps each package name to exactly its src/index.ts (no wildcard, no app alias) and every alias resolves from every app — 18/18 aliases; 36/36 resolutions
+PASS V07 Every package has its src/index.ts public entry point, still a placeholder (export {} only) — 18/18 entry points
+PASS V08 Dependency direction: every edge allowed by Appendix B; no same-category edge — 0 findings; 18 imports in 26 files, 0 edges; 0 optional
+PASS V09 No deep @proseit/<pkg>/<path> import and no unknown @proseit/* import — 0 findings; 18 imports in 26 files, 0 edges
+PASS V10 No relative/rooted import leaves its project (public-entry-point bypass or ownership violation) — 0 findings; 18 imports in 26 files, 0 edges
+PASS V11 No circular package dependency — 0 findings; 18 imports in 26 files, 0 edges; 0 cycles
+PASS V12 contracts imports no external module and compiles with ES2022 only and no ambient types — 0 findings; 18 imports in 26 files, 0 edges; 0 diagnostics
+PASS V13 analytics re-exports no external module; no app file copies package source — 0 findings; 18 imports in 26 files, 0 edges
+PASS V14 npm run arch:check exits 0 — exit=0; PAEP architecture check: PASS — 20 projects, 0 edges (0 optional), 0 cycles, 18 imports in 26 files, 0 violations
+PASS V15 No Nx: no nx/@nx/@nrwl dependency, lockfile entry or install, and no nx.json or project.json — none; Nx disposition: NOT REQUIRED FOR IB0-WP04
+PASS V16 package-lock.json is byte-identical to the baseline and package.json differs only by the three WP04 scripts — lockfile sha256 be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69
+PASS V17 No WP05/IB1+ or Nx/lint artefacts, apps/packages/angular.json unchanged, and every changed path is within WORK_PACKAGE §4 — 46 changed paths, all permitted
+PASS V18 Controlled sources match PACK_MANIFEST.json; .paep-control, .gitignore, PACK_MANIFEST.json and CLAUDE.md unchanged — 13/13 files match sha256 and size
+PASS V19 No credential or secret signatures in files added or modified since the baseline — 46 files scanned; findings: none
+PASS V20 build:reference-app production build passes — exit=0
+PASS V21 build:ui-lab production build passes — exit=0
+PASS V22 IB0-WP03 regression: every WP03 check passes except the bounded V05/V08/V10/V12/V17, each reporting only WP04-authorised change; WP03 records unchanged — WP03 13/18 pass; bounded: V05, V08, V10, V12, V17 (exit 1); restored: evidence/IB0-WP03/logs/ib0-wp01-verification.regression.json, evidence/IB0-WP03/logs/ib0-wp02-verification.regression.json, evidence/IB0-WP03/logs/verify-ib0-wp02-regression.log, evidence/IB0-WP03/reports/ib0-wp03-verification.json
+PASS V23 IB0-WP02 regression: every WP02 check passes except V17, whose findings are only tsconfig.base.json and the accepted WP03 paths — WP02 19/20 pass; V17 bounded: out-of-scope file present: tsconfig.base.json; protected paths changed: packages/analytics/src/index.ts, packages/components/src/index.ts, packages/contracts/src/index.ts, packages/domain-ai/src/index.ts, packages/domain-commerce/src/index.ts, packages/domain-construction/src/index.ts, packages/domain-fiscal/src/index.ts, packages/domain-iot/src/index.ts, packages/domain-maintenance/src/index.ts, packages/domain-manufacturing/src/index.ts, packages/domain-quality/src/index.ts, packages/enterprise/src/index.ts, packages/foundation/src/index.ts, packages/frappe-sdk/src/index.ts, packages/i18n/src/index.ts, packages/observability/src/index.ts, packages/offline/src/index.ts, packages/platform/src/index.ts, tsconfig.json
+PASS V24 IB0-WP01 regression passes — WP01 15/15 pass
+
+IB0-WP04 verification (full): PASS (24/24)
+EXIT_CODE=0

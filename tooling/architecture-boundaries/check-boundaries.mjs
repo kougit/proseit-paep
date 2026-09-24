@@ -35,7 +35,9 @@ import ts from 'typescript';
 
 const MODEL_PATH = 'tooling/architecture-boundaries/architecture-model.json';
 const SOURCE_EXT = /\.(ts|tsx|mts|cts|js|mjs|cjs)$/;
-const SKIP_DIRS = new Set(['node_modules', 'dist', '.angular', '.git']);
+// Build/install folders are skipped only at the workspace root; below it only a
+// project's own node_modules is skipped, so source hidden in a nested dist/ is still scanned.
+const ROOT_SKIP_DIRS = new Set(['node_modules', 'dist', '.angular', '.git']);
 const ALLOWED_CELLS = new Set(['Yes', 'Optional']);
 const MANIFEST_FIELDS = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
 
@@ -46,11 +48,12 @@ export function checkBoundaries(root = process.cwd()) {
   const rel = (p) => path.relative(root, p).split(path.sep).join('/');
   const exists = (p) => fs.existsSync(abs(p));
   const readJson = (p) => JSON.parse(fs.readFileSync(abs(p), 'utf8'));
+  let projectRootSet = new Set();
   const walk = (dir, out = []) => {
     if (!exists(dir)) return out;
     for (const e of fs.readdirSync(abs(dir), { withFileTypes: true })) {
-      if (SKIP_DIRS.has(e.name)) continue;
-      const p = `${dir}/${e.name}`;
+      if (e.name === '.git' || (dir === '.' && ROOT_SKIP_DIRS.has(e.name)) || (e.name === 'node_modules' && projectRootSet.has(dir))) continue;
+      const p = dir === '.' ? e.name : `${dir}/${e.name}`;
       if (e.isDirectory()) walk(p, out); else out.push(p);
     }
     return out;
@@ -116,6 +119,7 @@ export function checkBoundaries(root = process.cwd()) {
 
   // ---- Classification ------------------------------------------------------------
   const projects = Array.isArray(model.projects) ? model.projects : [];
+  projectRootSet = new Set(projects.map((p) => p.root));
   const byName = new Map();
   const byRoot = new Map();
   for (const p of projects) {
@@ -131,6 +135,9 @@ export function checkBoundaries(root = process.cwd()) {
     const isApp = p.category === 'app';
     if (p.projectType !== (isApp ? 'application' : 'library')) flag('CLASSIFICATION', `${p.name}: projectType ${p.projectType}`);
     if (isApp !== p.root.startsWith('apps/')) flag('CLASSIFICATION', `${p.name}: category ${p.category} does not match root ${p.root}`);
+    // A package's category follows from its directory (packages/domain-* -> domain; packages/<category>).
+    const dir = p.root.split('/').pop();
+    if (!isApp && p.category !== (dir.startsWith('domain-') ? 'domain' : dir)) flag('CLASSIFICATION', `${p.name}: category ${p.category} does not match directory ${p.root}`);
   }
   // Every package directory, npm workspace and angular.json project must be a model project.
   const rootPkg = readJson('package.json');
@@ -249,34 +256,77 @@ export function checkBoundaries(root = process.cwd()) {
   };
   const sourceFiles = [];
   const externalByProject = new Map();
-  for (const p of projects) for (const f of walk(p.root)) if (SOURCE_EXT.test(f) && !f.endsWith('.d.ts')) sourceFiles.push({ project: p, file: f });
+  for (const p of projects) for (const f of walk(p.root)) if (SOURCE_EXT.test(f)) sourceFiles.push({ project: p, file: f });
 
+  // Returns every module reference in a file. `reexport` marks an external module whose
+  // bindings the file exports (export … from, or import then export). `lib` lists
+  // /// <reference lib> and <reference types> directives.
   const specifiersOf = (file) => {
-    const sf = ts.createSourceFile(file, fs.readFileSync(abs(file), 'utf8'), ts.ScriptTarget.Latest, true);
+    const text = fs.readFileSync(abs(file), 'utf8');
+    const sf = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true);
+    const pre = ts.preProcessFile(text, true, true);
     const out = [];
     const lit = (n) => (n && ts.isStringLiteralLike(n) ? n.text : null);
+    const bound = new Map();
+    const exported = new Set();
+    const hasExport = (n) => (ts.canHaveModifiers(n) ? ts.getModifiers(n) : undefined)?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword);
+    const bind = (name, entry) => { if (name) bound.set(name.text, entry); };
     const visit = (n) => {
-      if (ts.isImportDeclaration(n)) out.push({ spec: lit(n.moduleSpecifier), kind: 'static', reexport: false });
-      else if (ts.isExportDeclaration(n) && n.moduleSpecifier) out.push({ spec: lit(n.moduleSpecifier), kind: 'static', reexport: true });
-      else if (ts.isImportEqualsDeclaration(n) && ts.isExternalModuleReference(n.moduleReference)) out.push({ spec: lit(n.moduleReference.expression), kind: 'static', reexport: false });
+      if (ts.isImportDeclaration(n)) {
+        const e = { spec: lit(n.moduleSpecifier), kind: 'static', reexport: false };
+        out.push(e);
+        const c = n.importClause;
+        if (c) {
+          bind(c.name, e);
+          if (c.namedBindings && ts.isNamespaceImport(c.namedBindings)) bind(c.namedBindings.name, e);
+          if (c.namedBindings && ts.isNamedImports(c.namedBindings)) for (const el of c.namedBindings.elements) bind(el.name, e);
+        }
+      } else if (ts.isExportDeclaration(n) && n.moduleSpecifier) out.push({ spec: lit(n.moduleSpecifier), kind: 'static', reexport: true });
+      else if (ts.isExportDeclaration(n) && n.exportClause && ts.isNamedExports(n.exportClause)) for (const el of n.exportClause.elements) exported.add((el.propertyName || el.name).text);
+      else if (ts.isExportAssignment(n) && ts.isIdentifier(n.expression)) exported.add(n.expression.text);
+      else if (ts.isImportEqualsDeclaration(n) && ts.isExternalModuleReference(n.moduleReference)) {
+        const e = { spec: lit(n.moduleReference.expression), kind: 'static', reexport: Boolean(hasExport(n)) };
+        out.push(e);
+        bind(n.name, e);
+      } else if (ts.isModuleDeclaration(n) && ts.isStringLiteral(n.name)) out.push({ spec: n.name.text, kind: 'static', reexport: false });
       else if (ts.isCallExpression(n) && n.expression.kind === ts.SyntaxKind.ImportKeyword) out.push({ spec: lit(n.arguments[0]), kind: 'dynamic', reexport: false });
       else if (ts.isCallExpression(n) && ts.isIdentifier(n.expression) && n.expression.text === 'require' && n.arguments.length === 1) out.push({ spec: lit(n.arguments[0]), kind: 'static', reexport: false });
+      else if (ts.isCallExpression(n) && ts.isPropertyAccessExpression(n.expression) && ts.isIdentifier(n.expression.expression) && n.expression.expression.text === 'require' && n.expression.name.text === 'resolve') out.push({ spec: lit(n.arguments[0]), kind: 'static', reexport: false });
       else if (ts.isImportTypeNode(n) && ts.isLiteralTypeNode(n.argument)) out.push({ spec: lit(n.argument.literal), kind: 'static', reexport: false });
       ts.forEachChild(n, visit);
     };
     visit(sf);
-    return out.filter((s) => s.spec !== null);
+    for (const [name, e] of bound) if (exported.has(name)) e.reexport = true;
+    // /// <reference path> behaves like a relative import; <reference types> like a bare import.
+    for (const r of pre.referencedFiles) out.push({ spec: r.fileName.startsWith('.') || r.fileName.startsWith('/') ? r.fileName : `./${r.fileName}`, kind: 'static', reexport: false });
+    for (const r of pre.typeReferenceDirectives) out.push({ spec: r.fileName, kind: 'static', reexport: false });
+    return { specs: out.filter((x) => x.spec !== null), lib: [...pre.libReferenceDirectives.map((r) => `lib=${r.fileName}`), ...pre.typeReferenceDirectives.map((r) => `types=${r.fileName}`)] };
   };
 
   let importsScanned = 0;
+  const referenceDirectives = new Map();
+  const existsAny = (t) => ['', '.ts', '.d.ts', '.tsx', '.mts', '.cts', '.js', '.mjs', '.cjs', '/index.ts'].some((x) => fs.existsSync(`${t}${x}`));
+  // Resolves a package.json "imports" subpath (#name) of the importing project to a workspace path.
+  const subpathTarget = (project, spec) => {
+    const m = `${project.root}/package.json`;
+    if (!exists(m)) return null;
+    const map = readJson(m).imports || {};
+    let t = map[spec];
+    while (t && typeof t === 'object') t = t.default ?? t.import ?? t.types ?? Object.values(t)[0];
+    return typeof t === 'string' ? path.resolve(abs(project.root), t) : null;
+  };
   for (const { project, file } of sourceFiles) {
-    for (const { spec, kind, reexport } of specifiersOf(file)) {
+    const { specs, lib } = specifiersOf(file);
+    if (lib.length) referenceDirectives.set(file, { project, lib });
+    for (const { spec, kind, reexport } of specs) {
       importsScanned += 1;
       const where = file;
       const isRelative = spec.startsWith('./') || spec.startsWith('../') || spec === '.' || spec === '..' || path.isAbsolute(spec);
-      const isRooted = /^(apps|packages|tooling|config|docs|evidence)\//.test(spec);
-      if (isRelative || isRooted) {
-        const target = isRooted ? abs(spec) : path.resolve(path.dirname(abs(file)), spec);
+      const isRooted = /^(apps|packages|tooling|config|docs|evidence)\//.test(spec) && existsAny(abs(spec));
+      const isSubpath = spec.startsWith('#');
+      if (isRelative || isRooted || isSubpath) {
+        const target = isSubpath ? subpathTarget(project, spec) : isRooted ? abs(spec) : path.resolve(path.dirname(abs(file)), spec);
+        if (!target) { flag('OUTSIDE_PROJECT', `${project.name} imports "${spec}", which its package.json imports map does not resolve`, where); continue; }
         const owner = ownerOf(target);
         if (owner === project) continue;
         if (!owner) { flag('OUTSIDE_PROJECT', `${project.name} imports "${spec}", outside every project`, where); continue; }
@@ -360,11 +410,15 @@ export function checkBoundaries(root = process.cwd()) {
       if (!allow.includes(name)) flag('CONTRACTS_NEUTRAL', `${p.name} (${p.category}) depends on external module "${x.spec}", which is not approved`, x.where);
     }
   }
+  // /// <reference lib|types> would pull DOM or other ambient globals into contracts.
+  for (const [file, { project, lib }] of referenceDirectives) {
+    if (allowedExternal[project.category] && Array.isArray(allowedExternal[project.category])) flag('CONTRACTS_NEUTRAL', `${project.name} declares ${lib.map((l) => `/// <reference ${l}>`).join(', ')}`, file);
+  }
   let contractsDiagnostics = 0;
   for (const p of projects.filter((q) => q.category === 'contracts')) {
-    const files = walk(p.root).filter((f) => /\.(ts|mts|cts)$/.test(f)).map(abs);
+    const files = walk(p.root).filter((f) => SOURCE_EXT.test(f)).map(abs);
     if (!files.length) continue;
-    const program = ts.createProgram(files, { strict: true, noEmit: true, target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.Preserve, moduleResolution: ts.ModuleResolutionKind.Bundler, lib: ['lib.es2022.d.ts'], types: [], skipLibCheck: true, isolatedModules: true });
+    const program = ts.createProgram(files, { strict: true, noEmit: true, target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.Preserve, moduleResolution: ts.ModuleResolutionKind.Bundler, lib: ['lib.es2022.d.ts'], types: [], skipLibCheck: false, isolatedModules: true, allowJs: true, checkJs: true, jsx: ts.JsxEmit.Preserve });
     for (const d of ts.getPreEmitDiagnostics(program)) {
       contractsDiagnostics += 1;
       const loc = d.file ? `${rel(d.file.fileName)}:${d.file.getLineAndCharacterOfPosition(d.start ?? 0).line + 1}` : '';

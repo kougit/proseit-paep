@@ -57,7 +57,7 @@ function mutate(edits) {
   return () => {
     for (const [p, c] of saved) { if (c === null) fs.rmSync(p, { force: true }); else fs.writeFileSync(p, c); }
     // Remove directories a case created (they are empty once their files are gone).
-    for (const d of ['packages/rogue/src', 'packages/rogue', 'packages/components/src/lib']) {
+    for (const d of ['packages/rogue/src', 'packages/rogue', 'packages/components/src/lib', 'packages/components/src/dist', 'packages/contracts/src/lib']) {
       const dp = path.join(copy, d);
       if (fs.existsSync(dp) && fs.readdirSync(dp).length === 0) fs.rmdirSync(dp);
     }
@@ -164,6 +164,20 @@ try {
   checkerCase('N25', 'unknown @proseit/* package imported', [[entry('enterprise'), append("import '@proseit/paep-unknown';")]], 'UNKNOWN_PACKAGE');
   checkerCase('N26', 'import from tooling/ (outside every project)', [[entry('enterprise'), append("import '../../../tooling/test-utils/helpers';")]], 'OUTSIDE_PROJECT');
   checkerCase('N27', 'forbidden edge by import = require(): foundation -> enterprise', [[entry('foundation'), append("import wp04 = require('@proseit/paep-enterprise');\nexport const wp04Ref = wp04;")]], 'DIRECTION');
+
+  // Added after independent QA round 1 (findings M1-M3, L2, L3, L4, L5, L6, L8).
+  checkerCase('N30', 'forbidden import hidden in a nested dist/ folder: components -> enterprise', [['packages/components/src/dist/impl.ts', () => "import '@proseit/paep-enterprise';\nexport {};\n"]], 'DIRECTION');
+  checkerCase('N31', 'forbidden edge in a .d.ts file: components -> enterprise', [['packages/components/src/lib/types.d.ts', () => "import type * as Wp04 from '@proseit/paep-enterprise';\nexport type Wp04Ns = typeof Wp04;\n"]], 'DIRECTION');
+  checkerCase('N32', 'contracts pulls DOM globals with /// <reference lib="dom" />', [['packages/contracts/src/lib/dom.ts', () => '/// <reference lib="dom" />\nexport const wp04Title = document.title;\n']], 'CONTRACTS_NEUTRAL');
+  checkerCase('N33', '/// <reference path> into another package: components -> enterprise source', [[entry('components'), (t) => `/// <reference path="../../enterprise/src/index.ts" />\n${t}`]], 'ENTRY_BYPASS');
+  checkerCase('N34', 'project category reassigned in the model: domain-ai classified as enterprise', [[MODEL, (t) => { const m = JSON.parse(t); const p = m.projects.find((q) => q.name === '@proseit/paep-domain-ai'); p.category = 'enterprise'; p.tags = ['layer:L3', 'type:enterprise']; return JSON.stringify(m, null, 2) + '\n'; }]], 'CLASSIFICATION');
+  checkerCase('N35', 'analytics imports a vendor module and exports its binding', [[entry('analytics'), append("import * as echarts from 'echarts';\nexport { echarts };")]], 'ANALYTICS_VENDOR_EXPORT');
+  checkerCase('N36', "forbidden edge by module augmentation: foundation declares module '@proseit/paep-enterprise'", [[entry('foundation'), append("declare module '@proseit/paep-enterprise' {\n  interface Wp04Augment { x: string }\n}")]], 'DIRECTION');
+  checkerCase('N37', 'package.json imports alias (#ent) into another package: components -> enterprise source', [
+    ['packages/components/package.json', (t) => { const p = JSON.parse(t); p.imports = { '#ent': '../enterprise/src/index.ts' }; return JSON.stringify(p, null, 2) + '\n'; }],
+    [entry('components'), append("import '#ent';")]
+  ], 'ENTRY_BYPASS');
+  checkerCase('N38', 'contracts .js file uses a DOM global', [['packages/contracts/src/lib/title.js', () => 'export const wp04Title = document.title;\n']], 'CONTRACTS_NEUTRAL');
 
   // No Nx (AC17).
   verifierCase('N28', 'nx added to devDependencies', [['package.json', (t) => { const p = JSON.parse(t); p.devDependencies.nx = '22.0.0'; return JSON.stringify(p, null, 2) + '\n'; }]], 'V15');

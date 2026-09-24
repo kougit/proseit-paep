@@ -1,0 +1,41 @@
+# date: 2026-09-24T10:21:07Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 1c16f80539b17c9797a6b194fac63c1fbdb3f8a2
+# cwd: /tmp/paep-wp04-qa-580y7m/repo
+# cmd: git status --porcelain; ls -a; test -e node_modules || echo "no node_modules"; test -e dist || echo "no dist"; test -e .angular || echo "no .angular"; sha256sum package-lock.json; git show ac6b786:package-lock.json | sha256sum; git diff --quiet ac6b786 HEAD -- package-lock.json && echo "lockfile identical to ac6b786"
+
+.
+..
+.editorconfig
+.git
+.gitignore
+.npmrc
+.nvmrc
+.paep-control
+CLAUDE.md
+CLAUDE_ENVIRONMENT_GUIDE.md
+NEXT_AFTER_PASS.md
+PACK_CONTENTS.md
+PACK_MANIFEST.json
+README.md
+RUN_IB0-WP01.txt
+WINDOWS_README.txt
+angular.json
+apps
+config
+docs
+evidence
+package-lock.json
+package.json
+packages
+tooling
+tsconfig.base.json
+tsconfig.json
+work-packages
+no node_modules
+no dist
+no .angular
+be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69  package-lock.json
+be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69  -
+lockfile identical to ac6b786
+EXIT_CODE=0

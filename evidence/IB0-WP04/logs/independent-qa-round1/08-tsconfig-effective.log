@@ -1,0 +1,60 @@
+# date: 2026-09-24T10:23:02Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 1c16f80539b17c9797a6b194fac63c1fbdb3f8a2
+# cwd: /tmp/paep-wp04-qa-580y7m/repo
+# cmd: echo '== tsconfig.base.json top-level keys'; node -e "const ts=require('typescript');const c=ts.parseConfigFileTextToJson('b',require('fs').readFileSync('tsconfig.base.json','utf8')).config;console.log(Object.keys(c), Object.keys(c.compilerOptions), Object.keys(c.compilerOptions.paths).length)"; echo '== app tsconfig diffs vs ac6b786 (empty = unchanged)'; git diff --stat ac6b786 -- apps/reference-app/tsconfig.app.json apps/ui-lab/tsconfig.app.json; echo '== tracked tsconfig files'; git ls-files | grep -E 'tsconfig[^/]*\.json$'; echo '== tsconfig files containing paths/baseUrl keys'; grep -l -E '"(paths|baseUrl)"' $(git ls-files | grep -E 'tsconfig[^/]*\.json$'); echo '== tsc --showConfig'; npx tsc --showConfig -p apps/reference-app/tsconfig.app.json > /tmp/claude-0/-home-claude-proseit-paep/baa00b7b-0d6c-562c-abda-fc0d973cf425/scratchpad/qa/08a-showconfig-reference-app.json; node -e "const c=require('/tmp/claude-0/-home-claude-proseit-paep/baa00b7b-0d6c-562c-abda-fc0d973cf425/scratchpad/qa/08a-showconfig-reference-app.json');console.log('reference-app paths',Object.keys(c.compilerOptions.paths).length,'strict',c.compilerOptions.strict,'noImplicitAny',c.compilerOptions.noImplicitAny)"; npx tsc --showConfig -p apps/ui-lab/tsconfig.app.json > /tmp/claude-0/-home-claude-proseit-paep/baa00b7b-0d6c-562c-abda-fc0d973cf425/scratchpad/qa/08b-showconfig-ui-lab.json; node -e "const c=require('/tmp/claude-0/-home-claude-proseit-paep/baa00b7b-0d6c-562c-abda-fc0d973cf425/scratchpad/qa/08b-showconfig-ui-lab.json');console.log('ui-lab paths',Object.keys(c.compilerOptions.paths).length,'strict',c.compilerOptions.strict,'noImplicitAny',c.compilerOptions.noImplicitAny)"; echo '== readConfiguration (@angular/compiler-cli)'; node /tmp/claude-0/-home-claude-proseit-paep/baa00b7b-0d6c-562c-abda-fc0d973cf425/scratchpad/qa/scripts/effective-config.mjs
+
+== tsconfig.base.json top-level keys
+[ 'compilerOptions' ] [ 'paths' ] 18
+== app tsconfig diffs vs ac6b786 (empty = unchanged)
+== tracked tsconfig files
+apps/reference-app/tsconfig.app.json
+apps/ui-lab/tsconfig.app.json
+tsconfig.base.json
+tsconfig.json
+== tsconfig files containing paths/baseUrl keys
+tsconfig.base.json
+== tsc --showConfig
+reference-app paths 18 strict true noImplicitAny true
+ui-lab paths 18 strict true noImplicitAny true
+== readConfiguration (@angular/compiler-cli)
+reference-app: errors=0 strict=true noImplicitAny=true strictTemplates=true baseUrl=undefined paths=18
+   @proseit/paep-analytics -> ["./packages/analytics/src/index.ts"]
+   @proseit/paep-components -> ["./packages/components/src/index.ts"]
+   @proseit/paep-contracts -> ["./packages/contracts/src/index.ts"]
+   @proseit/paep-domain-ai -> ["./packages/domain-ai/src/index.ts"]
+   @proseit/paep-domain-commerce -> ["./packages/domain-commerce/src/index.ts"]
+   @proseit/paep-domain-construction -> ["./packages/domain-construction/src/index.ts"]
+   @proseit/paep-domain-fiscal -> ["./packages/domain-fiscal/src/index.ts"]
+   @proseit/paep-domain-iot -> ["./packages/domain-iot/src/index.ts"]
+   @proseit/paep-domain-maintenance -> ["./packages/domain-maintenance/src/index.ts"]
+   @proseit/paep-domain-manufacturing -> ["./packages/domain-manufacturing/src/index.ts"]
+   @proseit/paep-domain-quality -> ["./packages/domain-quality/src/index.ts"]
+   @proseit/paep-enterprise -> ["./packages/enterprise/src/index.ts"]
+   @proseit/paep-foundation -> ["./packages/foundation/src/index.ts"]
+   @proseit/frappe-sdk -> ["./packages/frappe-sdk/src/index.ts"]
+   @proseit/paep-i18n -> ["./packages/i18n/src/index.ts"]
+   @proseit/paep-observability -> ["./packages/observability/src/index.ts"]
+   @proseit/paep-offline -> ["./packages/offline/src/index.ts"]
+   @proseit/paep-platform -> ["./packages/platform/src/index.ts"]
+ui-lab: errors=0 strict=true noImplicitAny=true strictTemplates=true baseUrl=undefined paths=18
+   @proseit/paep-analytics -> ["./packages/analytics/src/index.ts"]
+   @proseit/paep-components -> ["./packages/components/src/index.ts"]
+   @proseit/paep-contracts -> ["./packages/contracts/src/index.ts"]
+   @proseit/paep-domain-ai -> ["./packages/domain-ai/src/index.ts"]
+   @proseit/paep-domain-commerce -> ["./packages/domain-commerce/src/index.ts"]
+   @proseit/paep-domain-construction -> ["./packages/domain-construction/src/index.ts"]
+   @proseit/paep-domain-fiscal -> ["./packages/domain-fiscal/src/index.ts"]
+   @proseit/paep-domain-iot -> ["./packages/domain-iot/src/index.ts"]
+   @proseit/paep-domain-maintenance -> ["./packages/domain-maintenance/src/index.ts"]
+   @proseit/paep-domain-manufacturing -> ["./packages/domain-manufacturing/src/index.ts"]
+   @proseit/paep-domain-quality -> ["./packages/domain-quality/src/index.ts"]
+   @proseit/paep-enterprise -> ["./packages/enterprise/src/index.ts"]
+   @proseit/paep-foundation -> ["./packages/foundation/src/index.ts"]
+   @proseit/frappe-sdk -> ["./packages/frappe-sdk/src/index.ts"]
+   @proseit/paep-i18n -> ["./packages/i18n/src/index.ts"]
+   @proseit/paep-observability -> ["./packages/observability/src/index.ts"]
+   @proseit/paep-offline -> ["./packages/offline/src/index.ts"]
+   @proseit/paep-platform -> ["./packages/platform/src/index.ts"]
+RESULT PASS
+EXIT_CODE=0

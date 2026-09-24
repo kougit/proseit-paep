@@ -1,6 +1,6 @@
 # IB0-WP04 Definition Audit
 
-**Date:** 2026-09-24. **Baseline:** `main` at `ac6b786` (IB0-WP03 merge). **Method:** read-only review of the controlled sources in priority order (CLAUDE.md), the IB0-WP01/02/03 acceptance records and the repository, as six lanes: A requirements, B current graph, C enforcement design, D tsconfig/path model, E negative-test design, F regression. **Result:** PASS — every criterion traces to a controlled requirement or governance rule; no material architecture conflict; defaults listed in §5 need PO/SA confirmation.
+**Date:** 2026-09-24. **Baseline:** `main` at `ac6b786` (IB0-WP03 merge). **Method:** read-only review of the controlled sources in priority order (CLAUDE.md), the IB0-WP01/02/03 acceptance records and the repository, as six lanes: A requirements, B current graph, C enforcement design, D tsconfig/path model, E negative-test design, F regression. **Result:** PASS — every criterion traces to a controlled requirement or governance rule; one intra-document conflict (§6 below, found by independent QA round 1) is reported for PO/SA decision with a default that affects no current edge; defaults listed in §5 need PO/SA confirmation.
 
 ## 1. Pre-flight (all PASS)
 
@@ -70,8 +70,17 @@ No criterion adds WP05 (CI, test runner), IB1 (contracts, runtime config) or lin
 | D8 | WP03 verifier scope checks flag WP04 changes | Bounded exception V05/V08/V10/V12/V17 (AC23) | Same pattern the PO/SA accepted for WP02 V17 at WP03 |
 | D9 | Analytics vendor exposure (App. D, §6.2(v)) | Mechanical proxy: analytics may not re-export an external module; semantic review of contract types stays with the analytics milestone | No analytics code exists; a vendor list would be invented |
 | D10 | §6.2(v) "arbitrary transport calls", §6.2(vii) domain business validation | Not mechanically checked in WP04 | Runtime/behavioural rules; no code exists; owners are the IB1+ milestones |
+| D12 | IB-01 §6.1 (lower layers only) versus Appendix B (eight same-layer Optional cells) | Appendix B governs | See §6 |
 | D11 | `docs/architecture/toolchain-version-manifest.json` says Nx "deferred to IB0-WP04" | Left unchanged; disposition recorded here, in the plan and provenance register | File is under WP02 verification |
 
 ## 6. Conflicts
 
-None material. The controlled sources agree on direction, cycles, deep imports and contracts neutrality; Appendix B is the exact rule set. Nx is optional by IB-01 §2.3(ii). No stop condition in CLAUDE.md applies.
+**Corrected after independent QA round 1 (finding M4).** The first version of this audit said there was no conflict. That was wrong.
+
+**C1 — IB-01 §6.1 versus IB-01 Appendix B (same document, same priority).** §6.1 says L1 may depend on "L0 only", L2 on "L0-L1" and L3 on "L0-L2 as required". Appendix B allows eight same-layer edges, all "Optional": platform ↔ observability, i18n → platform, i18n → observability (L1); frappe-sdk → offline (L2); analytics → enterprise, domain-* → enterprise, domain-* → analytics (L3).
+
+- **Default taken (pending PO/SA):** Appendix B governs. It is the per-pair rule set; §6.1's own L2 row adds a per-pair detail ("frappe-sdk may depend on observability/contracts"); and the PO/SA instruction for IB0-WP04 describes the direction as "lower/equal architectural categories". The only allowed cycle this permits is platform ↔ observability, which the CYCLE rule rejects (negative case N05).
+- **Why this is not a stop:** the graph has 0 edges, so no code depends on the choice; both options keep every "No" cell, upward edge, cycle and deep-import rule; the stricter reading is a small checker change the PO/SA can order.
+- **Alternative:** §6.1 governs (strict layering; the eight cells become forbidden, cycles become impossible without a DIRECTION finding).
+
+Other areas agree: direction for all cross-layer pairs, cycles, deep imports and contracts neutrality. Nx is optional by IB-01 §2.3(ii). No other CLAUDE.md stop condition applies.

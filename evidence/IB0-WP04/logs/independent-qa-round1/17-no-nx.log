@@ -1,0 +1,19 @@
+# date: 2026-09-24T10:29:48Z
+# node: v24.21.0 npm: 11.19.0
+# HEAD: 1c16f80539b17c9797a6b194fac63c1fbdb3f8a2
+# cwd: /tmp/paep-wp04-qa-580y7m/repo
+# cmd: echo '== package.json nx deps'; node -e "const p=require('./package.json');const all={...p.dependencies,...p.devDependencies,...p.optionalDependencies,...p.peerDependencies};console.log(Object.keys(all).filter(n=>n==='nx'||/^@(nx|nrwl)\//.test(n)))"; echo '== lockfile entries mentioning nx/@nx/@nrwl'; grep -nE '"(node_modules/)?(nx|@nx/[^"]+|@nrwl/[^"]+)"' package-lock.json || echo none; echo '== node_modules'; ls -d node_modules/nx node_modules/@nx node_modules/@nrwl 2>&1; echo '== nx.json/project.json anywhere (excluding node_modules)'; find . -path ./node_modules -prune -o \( -name nx.json -o -name project.json \) -print | grep . || echo none; echo '== nx in node_modules/.bin'; ls node_modules/.bin | grep -x nx || echo none
+
+== package.json nx deps
+[]
+== lockfile entries mentioning nx/@nx/@nrwl
+none
+== node_modules
+ls: cannot access 'node_modules/nx': No such file or directory
+ls: cannot access 'node_modules/@nx': No such file or directory
+ls: cannot access 'node_modules/@nrwl': No such file or directory
+== nx.json/project.json anywhere (excluding node_modules)
+none
+== nx in node_modules/.bin
+none
+EXIT_CODE=0

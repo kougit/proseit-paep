@@ -28,6 +28,8 @@ The work was split into four read-only review lanes (toolchain, licences, reprod
 
 (ii) **R2. Open.** `CLAUDE.md` still names IB0-WP01 as the bounded objective. Claude does not edit its own execution contract; a human updates it. All `CLAUDE.md` rules and stop conditions are applied to this run.
 
+*Closure note, 2026-09-24:* R1 and R2 were closed by the Product Owner / Solutions Architect. The definition was approved unchanged, and Claude was expressly authorised to amend `CLAUDE.md` once to a work-package-neutral rule (`work-packages/IB0-WP02/WORK_PACKAGE.md` §12).
+
 (iii) **R3.** Exact Node pin `24.21.0`, enforced with `onFail: "error"`.
 
 ## Registry and release review (2026-09-23)
@@ -49,7 +51,7 @@ No version changes, so the lockfile's third-party resolution is expected to stay
 
 (ii) **npm pin.** Keep `packageManager: npm@11.19.0` and add `devEngines.packageManager` = npm `11.19.0`, `onFail: "error"`. npm itself ignores `packageManager`, and npm 10 installs a different tree from the same lockfile, so the npm version must be enforced too.
 
-(iii) **Dependency engines.** `.npmrc` `engine-strict=true`, so a dependency whose declared `engines` do not match the pinned Node fails install rather than warning.
+(iii) **Dependency engines.** `.npmrc` `engine-strict=true`, so a dependency whose declared `engines` do not match the pinned Node fails install rather than warning. `.npmrc` is used because `engine-strict` and `strict-allow-scripts` are npm configuration keys, which `package.json` cannot hold (WORK_PACKAGE §4(iii)).
 
 (iv) **Install-script policy.** In npm 11.19.0 the root `allowScripts` field is advisory: unreviewed install scripts still run, with a warning. Only explicit `false` entries are skipped. Policy: deny all five lockfile packages that declare install scripts (`@parcel/watcher`, `esbuild`, `fsevents`, `lmdb`, `msgpackr-extract`), and set `.npmrc` `strict-allow-scripts=true` so any new unreviewed install script fails `npm ci`. Every denied script is redundant with the prebuilt platform packages already in the lockfile; the build output is byte-identical with the scripts run or denied. `fsevents` is macOS-only and is listed so macOS installs do not fail under strict mode.
 

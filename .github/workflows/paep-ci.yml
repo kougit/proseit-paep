@@ -1,4 +1,4 @@
-# PAEP CI — IB0-WP05 automated quality gates.
+# PAEP CI - IB0-WP05 automated quality gates.
 # Design: docs/architecture/IB0-WP05-CI-DESIGN.md. Policy checked by
 # tooling/verification/verify-ib0-wp05.mjs against tooling/verification/ib0-wp05-ci-policy.json.
 # Security rules: pull_request only (never pull_request_target), read-only token,

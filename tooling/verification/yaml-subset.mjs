@@ -5,13 +5,18 @@
  * .github/actions/paep-setup/action.yml: mappings, sequences (including
  * "- key: value" items), plain and quoted scalars, [a, b] and {} flow values,
  * "|" block scalars and comments. Anything else (tabs, anchors, aliases, tags,
- * folded scalars, flow mappings, duplicate keys, backslash escapes) throws, so the policy checks in
+ * folded scalars, flow mappings, duplicate keys, backslash escapes, any
+ * character outside printable ASCII and \n) throws, so the policy checks in
  * verify-ib0-wp05.mjs fail closed instead of misreading a workflow.
  * Node.js built-ins only; no YAML dependency is added.
  */
 
 export function parseYaml(text) {
   if (text.includes('\t')) throw new Error('tab characters are not supported');
+  // Printable ASCII and \n only: YAML parsers treat \r, U+0085, U+2028 and U+2029 as line breaks, and a
+  // line break this reader missed could hide a key inside what looks like a comment (independent QA, NEL).
+  const bad = /[^\x20-\x7e\n]/.exec(text);
+  if (bad) throw new Error(`character U+${bad[0].codePointAt(0).toString(16).toUpperCase().padStart(4, '0')} at offset ${bad.index} is not supported (printable ASCII and \\n only)`);
   const raw = text.split(/\r?\n/);
   let i = 0;
   const blank = (l) => /^\s*(#.*)?$/.test(l);

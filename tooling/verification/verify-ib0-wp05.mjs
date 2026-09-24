@@ -362,6 +362,8 @@ if (want('W12') && wf) {
   else {
     if (g.name !== policy.gate.name) p.push(`gate name "${g.name}"`);
     if (g.if !== policy.gate.if) p.push(`gate if "${g.if}"`);
+    if (g['runs-on'] !== policy.workflow.runner) p.push(`gate runs-on ${JSON.stringify(g['runs-on'])}`);
+    if (!Number.isInteger(g['timeout-minutes']) || g['timeout-minutes'] < 1 || g['timeout-minutes'] > 10) p.push(`gate timeout-minutes ${g['timeout-minutes']}`);
     if (!Array.isArray(g.needs) || !sameSet(g.needs, mandatoryIds)) p.push(`gate needs ${JSON.stringify(g.needs)}`);
     if (Object.keys(g).some((k) => !['name', 'if', 'needs', 'runs-on', 'timeout-minutes', 'permissions', 'steps'].includes(k))) p.push(`gate keys ${Object.keys(g).join(', ')}`);
     const steps = Array.isArray(g.steps) ? g.steps : [];

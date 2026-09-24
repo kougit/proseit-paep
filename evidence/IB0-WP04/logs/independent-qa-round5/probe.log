@@ -1,0 +1,21 @@
+P1_pkgjson_dir rc=0 ok=true scanned=20 
+P2_app_manifest_imports_deep rc=1 ok=false scanned=19 DEEP_IMPORT: reference-app imports "@proseit/paep-components/src/index" below the @proseit/paep-components entry point
+P3_app_manifest_imports_otherapp rc=1 ok=false scanned=19 ENTRY_BYPASS: reference-app imports "apps/ui-lab/src/main.ts" inside ui-lab; use its public entry point | DIRECTION: reference-app (app) -> ui-lab (app) is not allowed (Appendix B: - (same category))
+P4_app_manifest_name_and_deps rc=0 ok=true scanned=18 
+P5_app_nested_pkgjson rc=1 ok=false scanned=18 CLASSIFICATION: reference-app has a nested package.json at apps/reference-app/src/app/package.json; a project has at most one manifest, at its root | OUTSIDE_PROJECT: reference-app imports "#o", which its package.json imports map does not resolve
+P6_nested_named_proseit rc=1 ok=false scanned=18 CLASSIFICATION: @proseit/paep-enterprise has a nested package.json at packages/enterprise/src/x/package.json; a project has at most one manifest, at its root
+P7_cond_nested_hash rc=1 ok=false scanned=18 OUTSIDE_PROJECT: @proseit/paep-components imports "#x", whose imports map target "#y" is another #subpath
+P8_array_hash rc=1 ok=false scanned=19 OUTSIDE_PROJECT: @proseit/paep-components imports "#x", whose imports map target "#y" is another #subpath
+P9_hole_hash rc=1 ok=false scanned=18 OUTSIDE_PROJECT: @proseit/paep-components imports "#p/#y", whose imports map target "#y" is another #subpath
+P10_hole_bare rc=1 ok=false scanned=19 DIRECTION: @proseit/paep-components (components) -> @proseit/paep-enterprise (enterprise) is not allowed (Appendix B: -)
+P11_root_imports_app rc=1 ok=false scanned=18 OUTSIDE_PROJECT: reference-app imports "#o", which its package.json imports map does not resolve
+P12_root_imports_pkg_ignored rc=0 ok=true scanned=19 
+P13_src_node_modules_pkgjson rc=1 ok=false scanned=18 CLASSIFICATION: @proseit/paep-components has a nested package.json at packages/components/src/node_modules/foo/package.json; a project has at most one manifest, at its root
+P14_root_node_modules_pkgjson rc=0 ok=true scanned=18 
+P15_control_lib_pattern rc=0 ok=true scanned=19 
+P16_count_once rc=0 ok=true scanned=19 
+P17_app_pkgjson_is_dir rc=2 architecture check error: Error: EISDIR: illegal operation on a directory, read
+P18_symlink_dir_escape rc=0 ok=true scanned=19 
+P19_symlink_pkgjson rc=1 ok=false scanned=18 CLASSIFICATION: @proseit/paep-components has a nested package.json at packages/components/src/sub/package.json; a project has at most one manifest, at its root
+P20_project_node_modules_source rc=0 ok=true scanned=19 
+P21_nested_pkgjson_in_git_dir rc=0 ok=true scanned=19 

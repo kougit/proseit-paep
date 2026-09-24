@@ -1,0 +1,56 @@
+
+> @proseit/paep-workspace@0.0.0 qa:ib0-wp04:negative
+> node tooling/verification/negative-ib0-wp04.mjs
+
+PASS C0 positive control: unmutated workspace passes — exit 0; rules: none
+PASS C1 allowed-edge control: enterprise -> components (Yes), frappe-sdk -> offline (Optional), reference-app -> enterprise (Yes) — exit 0; rules: none
+PASS C2 allowed-edge control: reference-app production build resolves @proseit/paep-enterprise through tsconfig.base.json — exit 0
+PASS C3 positive control: WP04 verifier static checks pass unmutated — exit 0; failed checks: none
+PASS N01 forbidden upward import: components -> enterprise — exit 1; rules: DIRECTION
+PASS N02 contracts -> @angular/core — exit 1; rules: CONTRACTS_NEUTRAL
+PASS N03 foundation -> enterprise — exit 1; rules: DIRECTION
+PASS N04 deep import: enterprise -> @proseit/paep-components/src/internal/button — exit 1; rules: DEEP_IMPORT
+PASS N05 circular dependency over allowed Optional edges: platform <-> observability (caught by the cycle rule alone) — exit 1; rules: CYCLE
+PASS N06 public-entry-point bypass by relative path: enterprise -> ../../components/src/index — exit 1; rules: ENTRY_BYPASS
+PASS N07 unknown project category ("widgets") — exit 1; rules: ALIAS, CLASSIFICATION
+PASS N08 unclassified package packages/rogue — exit 1; rules: CLASSIFICATION
+PASS N09 app -> app: reference-app imports ui-lab source — exit 1; rules: DIRECTION, ENTRY_BYPASS
+PASS N10 package -> app: components imports reference-app source — exit 1; rules: DIRECTION, ENTRY_BYPASS
+PASS N11 contracts uses a DOM global (document) — exit 1; rules: CONTRACTS_NEUTRAL
+PASS N12 frappe-sdk -> components (UI) — exit 1; rules: DIRECTION
+PASS N13 analytics -> frappe-sdk — exit 1; rules: DIRECTION
+PASS N14 domain -> domain: domain-quality -> domain-fiscal — exit 1; rules: DIRECTION
+PASS N15 forbidden manifest dependency: foundation package.json depends on enterprise — exit 1; rules: DIRECTION
+PASS N16 forbidden edge by dynamic import(): foundation -> enterprise — exit 1; rules: DIRECTION
+PASS N17 forbidden edge by type-only import: platform -> enterprise — exit 1; rules: DIRECTION
+PASS N18 forbidden edge by re-export: components re-exports analytics — exit 1; rules: DIRECTION
+PASS N19 analytics re-exports a visualization vendor module — exit 1; rules: ANALYTICS_VENDOR_EXPORT
+PASS N20 app copies package source — exit 1; rules: COPIED_CODE
+PASS N21 model matrix tampered: platform -> frappe-sdk set to "Yes" — exit 1; rules: MODEL
+PASS N22 wildcard deep alias added to tsconfig.base.json — exit 1; rules: ALIAS
+PASS N23 alias retargeted below the entry point — exit 1; rules: ALIAS
+PASS N24 paths re-added to tsconfig.json (second alias registry) — exit 1; rules: ALIAS
+PASS N25 unknown @proseit/* package imported — exit 1; rules: UNKNOWN_PACKAGE
+PASS N26 import from tooling/ (outside every project) — exit 1; rules: OUTSIDE_PROJECT
+PASS N27 forbidden edge by import = require(): foundation -> enterprise — exit 1; rules: DIRECTION
+PASS N30 forbidden import hidden in a nested dist/ folder: components -> enterprise — exit 1; rules: DIRECTION
+PASS N31 forbidden edge in a .d.ts file: components -> enterprise — exit 1; rules: DIRECTION
+PASS N32 contracts pulls DOM globals with /// <reference lib="dom" /> — exit 1; rules: CONTRACTS_NEUTRAL
+PASS N33 /// <reference path> into another package: components -> enterprise source — exit 1; rules: DIRECTION, ENTRY_BYPASS
+PASS N34 project category reassigned in the model: domain-ai classified as enterprise — exit 1; rules: CLASSIFICATION
+PASS N35 analytics imports a vendor module and exports its binding — exit 1; rules: ANALYTICS_VENDOR_EXPORT
+PASS N36 forbidden edge by module augmentation: foundation declares module '@proseit/paep-enterprise' — exit 1; rules: DIRECTION
+PASS N37 package.json imports alias (#ent) into another package: components -> enterprise source — exit 1; rules: DIRECTION, ENTRY_BYPASS
+PASS N38 contracts .js file uses a DOM global — exit 1; rules: CONTRACTS_NEUTRAL
+PASS N39 package.json imports alias to a bare package name (#ent -> @proseit/paep-enterprise): components -> enterprise — exit 1; rules: DIRECTION
+PASS N40 imports condition "import" -> forbidden package, "default" -> local file — exit 1; rules: DIRECTION
+PASS N41 imports condition "browser" -> forbidden package, "default" -> local file — exit 1; rules: DIRECTION
+PASS N42 longer imports pattern (#a/b/*) -> forbidden package wins over #a/* — exit 1; rules: DIRECTION
+PASS N43 nested package.json below a package root remaps #z to a forbidden package — exit 1; rules: CLASSIFICATION
+PASS N44 imports target that is another #subpath (#x -> #y -> forbidden package) — exit 1; rules: OUTSIDE_PROJECT
+PASS C4 control: package.json imports pattern inside the same package (#lib/* -> ./src/lib/*.ts) passes — exit 0; rules: none
+PASS N28 nx added to devDependencies — exit 1; failed checks: V15, V16
+PASS N29 nx.json created — exit 1; failed checks: V15, V17
+
+IB0-WP04 negative tests: PASS (49/49)
+rc=0

@@ -45,19 +45,28 @@ const ngBin = path.join(root, 'node_modules', '@angular', 'cli', 'bin', 'ng.js')
 const build = () => exec([ngBin, 'build', 'reference-app', '--configuration', 'production']);
 
 // Applies file edits for one case and returns a function restoring every touched file.
+// An edit given as 'symlink:<target>' creates a symbolic link instead of a file.
 function mutate(edits) {
   const saved = new Map();
+  const links = [];
   for (const [file, fn] of edits) {
     const p = path.join(copy, file);
+    if (typeof fn === 'string' && fn.startsWith('symlink:')) {
+      fs.mkdirSync(path.dirname(p), { recursive: true });
+      fs.symlinkSync(fn.slice('symlink:'.length), p);
+      links.push(p);
+      continue;
+    }
     if (!saved.has(p)) saved.set(p, fs.existsSync(p) ? fs.readFileSync(p) : null);
     const next = fn(fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : null);
     fs.mkdirSync(path.dirname(p), { recursive: true });
     if (next === null) fs.rmSync(p); else fs.writeFileSync(p, next);
   }
   return () => {
+    for (const p of links) fs.rmSync(p, { force: true });
     for (const [p, c] of saved) { if (c === null) fs.rmSync(p, { force: true }); else fs.writeFileSync(p, c); }
     // Remove directories a case created (they are empty once their files are gone).
-    for (const d of ['packages/rogue/src', 'packages/rogue', 'packages/components/src/lib', 'packages/components/src/dist', 'packages/contracts/src/lib']) {
+    for (const d of ['packages/rogue/src', 'packages/rogue', 'packages/components/src/lib', 'packages/components/src/dist', 'packages/components/src/sub', 'packages/contracts/src/lib', 'tooling/wp04-outside']) {
       const dp = path.join(copy, d);
       if (fs.existsSync(dp) && fs.readdirSync(dp).length === 0) fs.rmdirSync(dp);
     }
@@ -189,6 +198,7 @@ try {
   checkerCase('N42', 'longer imports pattern (#a/b/*) -> forbidden package wins over #a/*', [importsMap({ '#a/*': './src/lib/*.ts', '#a/b/*': '@proseit/paep-enterprise' }), [entry('components'), append("import '#a/b/x';")]], 'DIRECTION');
   checkerCase('N43', 'nested package.json below a package root remaps #z to a forbidden package', [importsMap({ '#z': './src/lib/x.ts' }), LOCAL_X, ['packages/components/src/sub/package.json', () => JSON.stringify({ imports: { '#z': '@proseit/paep-enterprise' } }) + '\n'], ['packages/components/src/sub/use.ts', () => "import '#z';\n"], [entry('components'), append("import './sub/use';")]], 'CLASSIFICATION');
   checkerCase('N44', 'imports target that is another #subpath (#x -> #y -> forbidden package)', [importsMap({ '#x': '#y', '#y': '@proseit/paep-enterprise' }), [entry('components'), append("import type {} from '#x';")]], 'OUTSIDE_PROJECT');
+  checkerCase('N45', 'symlinked directory inside a package pulls in a file outside every project that imports a forbidden package', [['tooling/wp04-outside/use.ts', () => "import '@proseit/paep-enterprise';\nexport {};\n"], ['packages/components/src/evil', 'symlink:../../../tooling/wp04-outside'], [entry('components'), append("import './evil/use';")]], 'CLASSIFICATION');
   checkerCase('C4', 'control: package.json imports pattern inside the same package (#lib/* -> ./src/lib/*.ts) passes', [
     ['packages/components/package.json', (t) => { const p = JSON.parse(t); p.imports = { '#lib/*': './src/lib/*.ts' }; return JSON.stringify(p, null, 2) + '\n'; }],
     ['packages/components/src/lib/x.ts', () => 'export const wp04X = 1;\n'],

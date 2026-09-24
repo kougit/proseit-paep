@@ -8,7 +8,7 @@
  * workspace-package dependencies in package.json files. It fails when:
  *   MODEL                   the model is malformed or its layers/matrix differ from PAEP-IB-01 §6.1 / Appendix B
  *   CLASSIFICATION          a project is unclassified, unknown, missing, duplicated or mis-tagged,
- *                           or has a nested package.json below its root
+ *                           or has a nested package.json or a symbolic link below its root
  *   ALIAS                   the alias registry or tsconfig inheritance is inconsistent
  *   ENTRY_POINT             a package has no public entry point
  *   DIRECTION               an edge is not allowed by the matrix (upward, lateral or "No")
@@ -260,7 +260,10 @@ export function checkBoundaries(root = process.cwd()) {
   const externalByProject = new Map();
   for (const p of projects) {
     for (const f of walk(p.root)) {
-      if (SOURCE_EXT.test(f)) sourceFiles.push({ project: p, file: f });
+      // A symlink could pull files from anywhere (another project, tooling/) into this one
+      // without being scanned, so a project may contain none.
+      if (fs.lstatSync(abs(f)).isSymbolicLink()) flag('CLASSIFICATION', `${p.name} contains a symbolic link at ${f}; projects contain no symlinks`, f);
+      else if (SOURCE_EXT.test(f)) sourceFiles.push({ project: p, file: f });
       // Node and TypeScript read "imports" from the nearest package.json, so a nested one
       // could remap #subpaths out of sight of the project's own manifest.
       else if (path.basename(f) === 'package.json' && f !== `${p.root}/package.json`) flag('CLASSIFICATION', `${p.name} has a nested package.json at ${f}; a project has at most one manifest, at its root`, f);
@@ -321,7 +324,7 @@ export function checkBoundaries(root = process.cwd()) {
   // which is then checked like any other import.
   const subpathTargets = (project, spec) => {
     const m = `${project.root}/package.json`;
-    if (!exists(m)) return [];
+    if (!exists(m) || !fs.statSync(abs(m)).isFile()) return [];
     const map = readJson(m).imports || {};
     let t = Object.hasOwn(map, spec) ? map[spec] : undefined;
     let hole = null;

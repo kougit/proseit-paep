@@ -5,7 +5,10 @@
  * boundary checker behind `npm run arch:check` passes the unmutated
  * workspace and allowed edges, and exits non-zero naming the expected rule
  * for each forbidden dependency, cycle, deep import, entry-point bypass,
- * classification, alias and neutrality violation (AC16). Two further cases
+ * classification, alias and neutrality violation (AC16), including the
+ * same-category allowlist, the transitive "No" rule (T1-T5) and each Appendix B
+ * Optional edge alone (O1-O8). S1-S9 prove the WP03 strictness controls under
+ * the WP04 tsconfig hierarchy by production builds and verifier cases; N28-N29
  * prove the WP04 verifier rejects an Nx installation (AC17).
  * The scratch copy includes .git (the verifier compares against the baseline)
  * and links node_modules from the repository. It is deleted afterwards.

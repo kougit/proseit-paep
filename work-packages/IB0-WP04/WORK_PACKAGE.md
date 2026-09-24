@@ -85,7 +85,7 @@ Claude shall **not** modify: `.paep-control/**`, `.gitignore`, `PACK_MANIFEST.js
 
 (vii) PAEP-EQP-01 Appendix B is the QA command-naming standard: `qa:architecture` is exposed for the existing architecture gate; no other QA command is created without its capability (PO/SA Decision 1).
 
-(viii) Nested `package.json`, `#` subpath chains and symlinks below a project root stay permanently rejected (PO/SA security edge-case decisions; N43–N45).
+(viii) Nested `package.json`, `#` subpath chains and symlinks below a project root stay permanently rejected (PO/SA security edge-case decisions; N43–N45). Every symlink below a project root is rejected whatever its real path (stricter than a real-path test), and a bare import is judged by the real path of its `node_modules` entry (N54).
 
 ## 7. Required evidence
 
@@ -107,4 +107,4 @@ Technical PASS requires every criterion in `ACCEPTANCE.md` to pass. Claude repor
 
 (v) 2026-09-24, after independent QA rounds 4 and 5 (F-1, F-2, R5-M1): a nested `package.json` or a symbolic link below a project root, and an `imports` target that is another `#` subpath, are rejected; AC16 gains N43–N45. No criterion was relaxed.
 
-(vi) 2026-09-24, applying the PO/SA decisions: AC06 also requires no suppression directive and cites S1–S9; AC09 adds the same-category allowlist and the transitive reachability rule; AC15 adds `qa:architecture`; AC16 gains C5, O1–O8, T1–T5, N46–N52 and S1–S9 (82 cases); AC21 counts four scripts; AC23 records the approval. After independent QA round 7, allowlist entries linking two applications are rejected (N52). No criterion was relaxed.
+(vi) 2026-09-24, applying the PO/SA decisions: AC06 also requires no suppression directive and cites S1–S9; AC09 adds the same-category allowlist and the transitive reachability rule; AC15 adds `qa:architecture`; AC16 gains C5, O1–O8, T1–T5, N46–N52 and S1–S9 (82 cases); AC21 counts four scripts; AC23 records the approval. After independent QA round 7, allowlist entries linking two applications are rejected (N52). After the final independent review (round 8, M1), AC10 also rejects a workspace package reached under another name (N53, N54; 84 cases). No criterion was relaxed.

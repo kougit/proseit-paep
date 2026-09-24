@@ -8,7 +8,7 @@ Evidence for IB0-WP04 (project graph, package boundaries and dependency enforcem
 
 | Path | Content |
 | --- | --- |
-| `reports/definition-audit.md` | Pre-flight, controlled requirements, current graph, criterion trace, defaults D1–D11, conflicts (none) |
+| `reports/definition-audit.md` | Pre-flight, controlled requirements, current graph, criterion trace, defaults D1–D12, conflict C1 (§6.1 versus Appendix B) for PO/SA decision |
 | `reports/architecture-boundaries.md` | Classification, allowed dependencies, rules and tsconfig inheritance |
 | `reports/project-graph.json` | Generated project graph (Nx ProjectGraph shape, edges, depConstraints) |
 | `reports/ib0-wp04-verification.json` | Verifier output, 24/24 PASS, with commit, Node, npm and TypeScript versions |

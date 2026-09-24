@@ -178,6 +178,15 @@ try {
     [entry('components'), append("import '#ent';")]
   ], 'ENTRY_BYPASS');
   checkerCase('N38', 'contracts .js file uses a DOM global', [['packages/contracts/src/lib/title.js', () => 'export const wp04Title = document.title;\n']], 'CONTRACTS_NEUTRAL');
+  checkerCase('N39', 'package.json imports alias to a bare package name (#ent -> @proseit/paep-enterprise): components -> enterprise', [
+    ['packages/components/package.json', (t) => { const p = JSON.parse(t); p.imports = { '#ent': '@proseit/paep-enterprise' }; return JSON.stringify(p, null, 2) + '\n'; }],
+    [entry('components'), append("import '#ent';")]
+  ], 'DIRECTION');
+  checkerCase('C4', 'control: package.json imports pattern inside the same package (#lib/* -> ./src/lib/*.ts) passes', [
+    ['packages/components/package.json', (t) => { const p = JSON.parse(t); p.imports = { '#lib/*': './src/lib/*.ts' }; return JSON.stringify(p, null, 2) + '\n'; }],
+    ['packages/components/src/lib/x.ts', () => 'export const wp04X = 1;\n'],
+    [entry('components'), append("import '#lib/x';")]
+  ], null, { edges: 0, optional: 0 });
 
   // No Nx (AC17).
   verifierCase('N28', 'nx added to devDependencies', [['package.json', (t) => { const p = JSON.parse(t); p.devDependencies.nx = '22.0.0'; return JSON.stringify(p, null, 2) + '\n'; }]], 'V15');

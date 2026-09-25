@@ -192,6 +192,11 @@ jobs:
           set -euo pipefail
           npm run qa:ib0-wp05:negative 2>&1 | tee "$PAEP_EVIDENCE_DIR/negative-ci-1.log"
 
+      - name: Baseline-governance positive, negative and promotion tests (qa:baseline:negative)
+        run: |
+          set -euo pipefail
+          npm run qa:baseline:negative 2>&1 | tee "$PAEP_EVIDENCE_DIR/negative-ci-2.log"
+
       - name: Upload evidence
         if: ${{ always() }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

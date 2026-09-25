@@ -17,7 +17,7 @@ All criteria are mandatory. PASS is technical; ACCEPTED is the PO/SA's decision.
 | R7-AC11 | Path, traversal, separator, case and symlink protection | F01–F11 |
 | R7-AC12 | Unicode and control-character protection | F12–F19 |
 | R7-AC13 | Historical baseline and accepted records preserved; rewrites and removals fail | B09, B10; B05–B08, C04, C12, G08, G09, G14 |
-| R7-AC14 | Deterministic promotion path after explicit acceptance; rollover continues with a new candidate; policy evolution only under `policyChange` | G06, G07, G12, G13, G15, G16; H01–H04, H07–H09 |
+| R7-AC14 | Deterministic promotion path after explicit acceptance; rollover continues with a new candidate; policy evolution only under `policyChange` | G06, G07, G12, G13, G15, G16; H01–H04, H07–H12 |
 | R7-AC15 | Deterministic in a clean clone; verify is read-only | A05, A06 |
 | R7-AC16 | CI integration: W26 in `PAEP / governance`; tests in `PAEP / negative-ci`; failures reach `PAEP / gate`; no skipped-to-pass path | W11, W12, W26; A04, B09 (case), D21; WP05 G00–G18 |
 | R7-AC17 | WP01–WP05 regressions pass (WP05 negative suite included); only registry-bounded findings | `qa:ib0-wp05` W16–W24; `qa:ib0-wp05:negative` |

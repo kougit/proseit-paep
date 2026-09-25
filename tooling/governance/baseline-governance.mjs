@@ -92,19 +92,27 @@ function asciiProblems(text) {
 }
 
 // ---- acceptance records ----------------------------------------------------------------------------
+/** Checks work-package.json text as a well-formed ACCEPTED record by `authority`; returns { ok, date?, why? }. */
+function wpAcceptance(raw, wp, label, authority) {
+  let j;
+  try { j = JSON.parse(raw); } catch { return { ok: false, why: `${label} is not JSON` }; }
+  if (j?.id !== wp) return { ok: false, why: `${label} id is ${j?.id}` };
+  if (j.status !== 'ACCEPTED' || j.acceptance?.status !== 'ACCEPTED') return { ok: false, why: `${label} is not ACCEPTED (status ${j.status}, acceptance ${j.acceptance?.status})` };
+  if (j.acceptance?.authority !== authority) return { ok: false, why: `${label} acceptance authority "${j.acceptance?.authority}" != "${authority}"` };
+  if (!validDate(j.acceptance?.date)) return { ok: false, why: `${label} acceptance date ${j.acceptance?.date} invalid` };
+  return { ok: true, date: j.acceptance.date };
+}
+/** True when work-package.json text claims ACCEPTED in any form (well formed or not); unreadable text that mentions ACCEPTED counts. */
+function claimsAccepted(raw) {
+  let j;
+  try { j = JSON.parse(raw); } catch { return /ACCEPTED/.test(raw); }
+  return j?.status === 'ACCEPTED' || j?.acceptance?.status === 'ACCEPTED';
+}
 /** Reads an acceptance record at a commit; returns { ok, date?, why? }. */
 function acceptanceRecord(git, commit, wp, file, authority) {
   const shown = git('show', `${commit}:${file}`);
   if (shown.status !== 0) return { ok: false, why: `${file} does not exist at ${commit.slice(0, 7)}` };
-  if (file === `work-packages/${wp}/work-package.json`) {
-    let j;
-    try { j = JSON.parse(shown.raw); } catch (e) { return { ok: false, why: `${file} at ${commit.slice(0, 7)} is not JSON` }; }
-    if (j.id !== wp) return { ok: false, why: `${file} id is ${j.id}` };
-    if (j.status !== 'ACCEPTED' || j.acceptance?.status !== 'ACCEPTED') return { ok: false, why: `${file} at ${commit.slice(0, 7)} is not ACCEPTED (status ${j.status}, acceptance ${j.acceptance?.status})` };
-    if (j.acceptance?.authority !== authority) return { ok: false, why: `${file} acceptance authority "${j.acceptance?.authority}" != "${authority}"` };
-    if (!validDate(j.acceptance?.date)) return { ok: false, why: `${file} acceptance date ${j.acceptance?.date} invalid` };
-    return { ok: true, date: j.acceptance.date };
-  }
+  if (file === `work-packages/${wp}/work-package.json`) return wpAcceptance(shown.raw, wp, `${file} at ${commit.slice(0, 7)}`, authority);
   if (file === `work-packages/${wp}/ACCEPTANCE_REPORT.md`) {
     // Accepted only for records written before work-package.json carried the acceptance (IB0-WP01).
     if (/^\| Acceptance Status \| \*{0,2}ACCEPTED\*{0,2} \|/m.test(shown.raw)) return { ok: true, date: null };
@@ -115,7 +123,7 @@ function acceptanceRecord(git, commit, wp, file, authority) {
 
 /**
  * Earliest first-parent mainline merge after `since` whose own registry carries CANDIDATE `generation` and whose tree
- * records ANY of that candidate's work packages as ACCEPTED by a controlled authority. Returns
+ * records ANY of that candidate's work packages as ACCEPTED in any form (a malformed claim freezes too). Returns
  * { commit, candidate } where `candidate` is the generation as merged (read from the mainline, never from HEAD), or null.
  */
 function acceptedMergeOf(git, generation, since, mainline) {
@@ -125,7 +133,11 @@ function acceptedMergeOf(git, generation, since, mainline) {
     try { r = JSON.parse(git('show', `${c}:${REGISTRY_PATH}`).raw); } catch { continue; }
     const g = Array.isArray(r?.generations) ? r.generations.find((x) => x?.generation === generation && x.status === 'CANDIDATE') : null;
     const wps = Array.isArray(g?.workPackages) ? g.workPackages : [];
-    const hit = wps.some((wp) => typeof wp === 'string' && CONTROLLED_AUTHORITIES.some((a) => acceptanceRecord(git, c, wp, `work-packages/${wp}/work-package.json`, a).ok));
+    const hit = wps.some((wp) => {
+      if (typeof wp !== 'string') return false;
+      const shown = git('show', `${c}:work-packages/${wp}/work-package.json`);
+      return shown.status === 0 && claimsAccepted(shown.raw);
+    });
     if (hit) return { commit: c, candidate: g };
   }
   return null;
@@ -469,14 +481,17 @@ export function evaluate(root = process.cwd(), { registryText = null } = {}) {
   const p12 = [];
   if (!fatal.length) {
     for (const d of fs.existsSync(abs('work-packages')) ? fs.readdirSync(abs('work-packages')) : []) {
-      let j = null;
-      try { j = JSON.parse(fs.readFileSync(abs(`work-packages/${d}/work-package.json`), 'utf8')); } catch { continue; }
-      if (j?.acceptance?.status !== 'ACCEPTED') continue;
+      let raw = null;
+      try { raw = fs.readFileSync(abs(`work-packages/${d}/work-package.json`), 'utf8'); } catch { continue; }
+      if (!claimsAccepted(raw)) continue;
       const owner = gens.find((g) => g.workPackages.includes(d));
-      if (!owner) p12.push(`${d} records ACCEPTED but belongs to no generation`);
+      if (!owner) { p12.push(`${d} records ACCEPTED but belongs to no generation`); continue; }
+      const authority = owner.status === 'ACCEPTED' ? owner.acceptance?.authority : owner.authorisation?.authority;
+      const r = wpAcceptance(raw, d, `work-packages/${d}/work-package.json`, CONTROLLED_AUTHORITIES.includes(authority) ? authority : CONTROLLED_AUTHORITIES[0]);
+      if (!r.ok) p12.push(`${r.why}: a record that claims ACCEPTED must be a well-formed controlled-authority acceptance`);
     }
   }
-  add('B12', 'Every work package whose record says ACCEPTED belongs to a registry generation', p12, 'complete');
+  add('B12', 'Every work package whose record claims ACCEPTED belongs to a registry generation and is a well-formed controlled-authority acceptance', p12, 'complete');
 
   // B13: promotion pending. Once the CANDIDATE's ACCEPTED record is merged on the mainline, the candidate is frozen
   // to that earliest merge and nothing but its promotion may follow.

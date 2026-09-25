@@ -75,7 +75,7 @@ Option C is the minimum that keeps the rigour: A and B both reduce R7 to "edit a
 | B10 | Immutable paths and every accepted generation's records unchanged since its accepted commit (tracked and untracked) |
 | B11 | Every path changed since the active accepted commit (tracked, untracked, deleted, no rename detection) is canonical ASCII, not a symlink, not a case variant of a protected path, and inside the CANDIDATE scope; with no CANDIDATE only the registry may change (a promotion). No tracked symlink anywhere |
 | B12 | Every `work-package.json` that says ACCEPTED belongs to a generation |
-| B13 | Promotion pending: once the CANDIDATE's ACCEPTED record is merged on the mainline, the candidate is frozen to the earliest such merge and nothing but its promotion may change; `promote` accepts only that merge |
+| B13 | Promotion pending: once a mainline merge carries the next generation as CANDIDATE with ANY of its work packages recorded ACCEPTED, that generation is frozen to the earliest such merge, as read from the mainline registry (not from HEAD): HEAD's CANDIDATE must equal it and nothing but its promotion may change; `promote` accepts only that merge, and only with every work package ACCEPTED |
 
 Also from independent QA round 1: B09 reads registry history with `--full-history` and also requires every ACCEPTED generation in the mainline registry to be present unchanged (a merge that keeps an older registry cannot hide a promotion); B08 requires `policyChange: true` for any scope entry touching governance rules (`.github/`, `CLAUDE.md`, `tooling/governance/` other than the registry file, `tooling/verification/`).
 

@@ -280,6 +280,28 @@ try {
     git('update-ref', 'refs/remotes/origin/main', M);
     return { r, pass: r.status !== 0 && new RegExp(`first accepted and merged at ${M.slice(0, 7)}; only that merge can be promoted`).test(r.out) };
   });
+  const addWp = regEdit((o) => { const c = g(o, 2); c.workPackages = [...c.workPackages, 'IB1-X'].sort(); c.protectedRecords = [...c.protectedRecords, 'evidence/IB1-X/', 'work-packages/IB1-X/'].sort(); c.authorisedScope = [...c.authorisedScope, 'evidence/IB1-X/', 'tooling/verification/yaml-subset.mjs', 'work-packages/IB1-X/'].sort(); });
+  neg('H07', 'promotion', 'QA-N1: after the accepted merge, adding a work package to the candidate does not lift the freeze', [
+    addWp, ['work-packages/IB1-X/WORK_PACKAGE.md', () => '# simulated\n'], ['evidence/IB1-PREFLIGHT-R7/README.md', (t) => `${t}\ntamper\n`]], [/FAIL B13 .*generation 2 here differs from the CANDIDATE merged and accepted at/]);
+  neg('H08', 'promotion', 'QA-N1: after the accepted merge, removing the candidate from the registry does not lift the freeze', [
+    regEdit((o) => { o.generations = o.generations.filter((x) => x.generation !== 2); })], [/FAIL B13 .*generation 2 here differs from the CANDIDATE merged and accepted at/]);
+  custom('H09', 'promotion', 'QA-N1: a later merge that adds an accepted work package to the candidate cannot be promoted', 'non-zero promote exit naming the earliest merge', () => {
+    git('checkout', '-q', '-b', 'sim-addwp', M);
+    const r0 = withEdits([addWp, ['work-packages/IB1-X/WORK_PACKAGE.md', () => '# simulated\n'], ['evidence/IB1-PREFLIGHT-R7/README.md', (t) => `${t}\ntamper\n`],
+      ['work-packages/IB1-X/work-package.json', () => `${JSON.stringify({ status: 'ACCEPTED', acceptance: { status: 'ACCEPTED', authority: 'Product Owner / Solutions Architect', date: '2026-09-27' } }, null, 2)}\n`]], () => {
+      git('add', '-A');
+      git('commit', '-q', '-m', 'add accepted work package');
+      return { status: 0, out: '' };
+    });
+    git('checkout', '-q', 'sim-main');
+    git('merge', '-q', '--no-ff', '-m', 'SIMULATION: later merge adding a work package', 'sim-addwp');
+    const M3 = gitOut('rev-parse', 'HEAD');
+    git('update-ref', 'refs/remotes/origin/main', M3);
+    const r = promote(2, M3);
+    git('reset', '-q', '--hard', M);
+    git('update-ref', 'refs/remotes/origin/main', M);
+    return { r: { status: r.status, out: `${r0.out}${r.out}` }, pass: r0.status === 0 && r.status !== 0 && new RegExp(`first accepted and merged at ${M.slice(0, 7)}; only that merge can be promoted`).test(r.out) };
+  });
   neg('G05', 'promotion', 'promotion refused when the working registry changed the candidate declaration (scope widened)', [regEdit((o) => { g(o, 2).authorisedScope.push('tooling/verification/verify-ib0-wp04.mjs'); g(o, 2).authorisedScope.sort(); })], [/PROMOTION REFUSED/, /differs from the CANDIDATE merged/], () => promote(2, M));
   custom('G06', 'promotion', 'deterministic promotion after explicit acceptance: promote --generation 2 --commit <merge> succeeds; verify then reports G2 ACCEPTED at the merge', 'promote exit 0; verify exit 0 with active G2', () => {
     const pr = promote(2, M);

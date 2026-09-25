@@ -113,11 +113,22 @@ function acceptanceRecord(git, commit, wp, file, authority) {
   return { ok: false, why: `${file} is not an acceptance record of ${wp}` };
 }
 
-/** Earliest first-parent mainline merge after `since` whose tree records every candidate work package as ACCEPTED. */
-function acceptedMergeOf(git, candidate, since, mainline) {
+/**
+ * Earliest first-parent mainline merge after `since` whose own registry carries CANDIDATE `generation` and whose tree
+ * records ANY of that candidate's work packages as ACCEPTED by a controlled authority. Returns
+ * { commit, candidate } where `candidate` is the generation as merged (read from the mainline, never from HEAD), or null.
+ */
+function acceptedMergeOf(git, generation, since, mainline) {
   const list = git('rev-list', '--first-parent', '--merges', '--reverse', `${since}..${mainline}`).out.split('\n').filter(Boolean);
-  const authority = candidate.authorisation?.authority;
-  return list.find((c) => candidate.workPackages.every((wp) => acceptanceRecord(git, c, wp, `work-packages/${wp}/work-package.json`, authority).ok)) || null;
+  for (const c of list) {
+    let r = null;
+    try { r = JSON.parse(git('show', `${c}:${REGISTRY_PATH}`).raw); } catch { continue; }
+    const g = Array.isArray(r?.generations) ? r.generations.find((x) => x?.generation === generation && x.status === 'CANDIDATE') : null;
+    const wps = Array.isArray(g?.workPackages) ? g.workPackages : [];
+    const hit = wps.some((wp) => typeof wp === 'string' && CONTROLLED_AUTHORITIES.some((a) => acceptanceRecord(git, c, wp, `work-packages/${wp}/work-package.json`, a).ok));
+    if (hit) return { commit: c, candidate: g };
+  }
+  return null;
 }
 
 // ---- core evaluation --------------------------------------------------------------------------------
@@ -471,18 +482,19 @@ export function evaluate(root = process.cwd(), { registryText = null } = {}) {
   // to that earliest merge and nothing but its promotion may follow.
   const p13 = [];
   let pendingAt = null;
-  if (!fatal.length && candidate && mainline && active) {
-    pendingAt = acceptedMergeOf(git, candidate, active.acceptedCommit, mainline);
-    if (pendingAt) {
-      const atE = git('show', `${pendingAt}:${REGISTRY_PATH}`);
-      let ereg = null;
-      try { ereg = JSON.parse(atE.raw); } catch { /* reported below */ }
-      if (!same(ereg?.generations?.find((g) => g.generation === candidate.generation), candidate)) p13.push(`generation ${candidate.generation} differs from the CANDIDATE merged and accepted at ${pendingAt.slice(0, 7)}`);
+  if (!fatal.length && mainline && active) {
+    // The frozen CANDIDATE comes from the mainline merge, not from HEAD: adding, removing or editing work packages,
+    // scope or authorisation on a later branch cannot move or lift the freeze.
+    const nextGen = active.generation + 1;
+    const frozen = acceptedMergeOf(git, nextGen, active.acceptedCommit, mainline);
+    pendingAt = frozen?.commit || null;
+    if (frozen) {
+      if (!candidate || candidate.generation !== nextGen || !same(frozen.candidate, candidate)) p13.push(`generation ${nextGen} here differs from the CANDIDATE merged and accepted at ${pendingAt.slice(0, 7)} (it is frozen until promoted)`);
       if (git('merge-base', '--is-ancestor', pendingAt, 'HEAD').status === 0) {
         const d = git('diff', '--name-only', '--no-renames', '-z', pendingAt);
         const u = git('ls-files', '--others', '--exclude-standard', '-z');
         const after = [...new Set([...zlist(d.raw), ...zlist(u.raw)])];
-        if (after.length) p13.push(`generation ${candidate.generation} was accepted and merged at ${pendingAt.slice(0, 7)}; the only permitted next change is promote --generation ${candidate.generation} --commit ${pendingAt} (changed since: ${after.join(', ')})`);
+        if (after.length) p13.push(`generation ${nextGen} was accepted and merged at ${pendingAt.slice(0, 7)}; the only permitted next change is promote --generation ${nextGen} --commit ${pendingAt} (changed since: ${after.join(', ')})`);
       }
     }
   }
@@ -548,8 +560,10 @@ export function promote(root, generation, commit) {
   else if (!git('rev-list', '--first-parent', mainline).out.split('\n').includes(full)) problems.push(`${full.slice(0, 7)} is not on the first-parent history of ${reg.policy.mainlineRef} (only a merged, PO/SA-authorised change can be promoted)`);
   if (git('rev-list', '--parents', '-n', '1', full).out.split(' ').length < 3) problems.push(`${full.slice(0, 7)} is not a merge commit`);
   const active = reg.generations.filter((x) => x.status === 'ACCEPTED').pop();
-  const earliest = mainline && active ? acceptedMergeOf(git, g, active.acceptedCommit, mainline) : null;
-  if (earliest && earliest !== full) problems.push(`the CANDIDATE was first accepted and merged at ${earliest.slice(0, 7)}; only that merge can be promoted`);
+  const earliest = mainline && active ? acceptedMergeOf(git, generation, active.acceptedCommit, mainline) : null;
+  if (active && generation !== active.generation + 1) problems.push(`only generation ${active.generation + 1} can be promoted next`);
+  if (!earliest) problems.push(`no mainline merge after ${active?.acceptedCommit?.slice(0, 7)} carries generation ${generation} as CANDIDATE with an ACCEPTED work-package record`);
+  else if (earliest.commit !== full) problems.push(`the CANDIDATE was first accepted and merged at ${earliest.commit.slice(0, 7)}; only that merge can be promoted`);
   const merged = git('show', `${full}:${REGISTRY_PATH}`);
   let mergedReg = null;
   try { mergedReg = JSON.parse(merged.raw); } catch { problems.push(`${full.slice(0, 7)} carries no readable registry`); }

@@ -15,6 +15,8 @@ The repository state is not the accepted baseline. The accepted baseline is the 
 3. Never widen `authorisedScope` beyond what the PO/SA authorised, and never to a whole top-level directory, an immutable path or an accepted record (B08 rejects these).
 4. Never edit or delete an `ACCEPTED` generation or an accepted work-package or evidence record (B09, B10).
 
+5. The CANDIDATE's authorisation and scope are written by the implementer. Reviewers must check `authorisedScope` and `policyChange` against the PO/SA's written authorisation before approving the pull request; the verifier enforces the declared scope, not who declared it.
+
 ## Procedure
 
 1. **Start from an accepted baseline.** `git fetch origin` and branch from `origin/main`. `npm run qa:baseline` must pass with no CANDIDATE, or with only the promotion of the previous generation pending (step 8).
@@ -39,5 +41,5 @@ The repository state is not the accepted baseline. The accepted baseline is the 
 | `FAIL B10 ... differs from generation <n>` | An accepted record or controlled source changed | Revert; accepted records are immutable |
 | `FAIL B05 ... not found` | `origin/main` missing locally | `git fetch origin` |
 | `FAIL B09` | An accepted generation or the policy changed | Revert the registry edit |
-| `FAIL B13 ... promotion pending` | The CANDIDATE was accepted and merged but not promoted | Run `promote` for that merge first |
+| `FAIL B13 ...` | The CANDIDATE was accepted and merged but not promoted (the freeze starts when any of its work packages is ACCEPTED on the mainline; adding or removing work packages does not lift it) | Run `promote` for that merge first |
 | `PROMOTION REFUSED` | No PO/SA ACCEPTED record in the merged commit, or not a mainline merge | Do not promote; obtain acceptance and merge first |

@@ -20,7 +20,7 @@ IB0-CI-EVID-001,PAEP-IR-01 v1.0 §4.6(iv) §7.2(i); PAEP-EQP-01 §24; PO/SA brie
 IB0-CI-NEGCI-001,PO/SA brief §17,IB0-WP05,tooling/verification/negative-ib0-wp05.mjs,IB0-WP05-AC21,qa:ib0-wp05:negative (local and CI),PASS,evidence/IB0-WP05/reports/negative-ci-tests.json
 IB0-CI-RUN-001,PAEP-IR-01 v1.0 §4.4 IB0-WP5 evidence (successful CI run from clean checkout),IB0-WP05,GitHub Actions run on the WP05 PR,IB0-WP05-AC22,GitHub API,PASS,evidence/IB0-WP05/reports/github-actions-run.md
 IB0-CI-RUN-002,PO/SA brief §21 QA lanes 4-5,IB0-WP05,Deliberate-failure run on the WP05 PR (reverted),IB0-WP05-AC23,GitHub API,PASS,evidence/IB0-WP05/reports/github-actions-run.md
-IB0-CI-ENF-001,PO/SA brief §5G §22,IB0-WP05,docs/architecture/IB0-WP05-PR-ENFORCEMENT.md,IB0-WP05-AC24,Document review; GitHub API,READY,docs/architecture/IB0-WP05-PR-ENFORCEMENT.md
-IB0-CI-LINTUNIT-001,PAEP-IR-01 v1.0 §4.4 IB0-WP5 (lint; unit test); PAEP-EQP-01 §29.1(iii) (vi),IB0-WP05,WORK_PACKAGE §5 disposition; PO/SA decision card,IB0-WP05-AC25,Decision record,PENDING PO/SA DECISION,work-packages/IB0-WP05/ACCEPTANCE_REPORT.md
+IB0-CI-ENF-001,PO/SA brief §5G §22,IB0-WP05,docs/architecture/IB0-WP05-PR-ENFORCEMENT.md,IB0-WP05-AC24,Document review; GitHub API,PASS,docs/architecture/IB0-WP05-PR-ENFORCEMENT.md
+IB0-CI-LINTUNIT-001,PAEP-IR-01 v1.0 §4.4 IB0-WP5 (lint; unit test); PAEP-EQP-01 §29.1(iii) (vi),IB0-WP05,WORK_PACKAGE §5 and §5.1 (lint/format and unit-test DEFERRED with activation triggers),IB0-WP05-AC25,PO/SA decision 2026-09-25 (ACCEPTANCE_REPORT decisions 2a/2b),PASS — APPROVED DEFERRED CAPABILITY,work-packages/IB0-WP05/ACCEPTANCE_REPORT.md
 IB0-QA-005,PAEP-EQP-01 §5; PO/SA brief §21,IB0-WP05,Independent QA lanes 1-6,IB0-WP05-AC26,QA report,PASS,evidence/IB0-WP05/reports/independent-qa.md
-IB0-EVID-005,PAEP-EQP-01 §24 §25 §32 App. C,IB0-WP05,evidence/IB0-WP05/README.md; this file; ACCEPTANCE_REPORT.md,IB0-WP05-AC27,Evidence index,COMPLETE,evidence/IB0-WP05/README.md
+IB0-EVID-005,PAEP-EQP-01 §24 §25 §32 App. C,IB0-WP05,evidence/IB0-WP05/README.md; this file; ACCEPTANCE_REPORT.md,IB0-WP05-AC27,Evidence index,PASS,evidence/IB0-WP05/README.md

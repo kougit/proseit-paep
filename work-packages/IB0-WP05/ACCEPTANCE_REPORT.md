@@ -60,23 +60,15 @@ No dependency, lockfile, app, package, `angular.json`, tsconfig or controlled so
 
 | Check | Reviewer | Date | Result |
 | --- | --- | --- | --- |
-| Definition audit (the controlled pack has no WP05 definition; drafted from the PO/SA brief) | Claude Code | 2026-09-24 | PASS; definition DRAFT for PO/SA approval |
+| Definition audit (the controlled pack has no WP05 definition; drafted from the PO/SA brief) | Claude Code | 2026-09-24 | PASS; final definition traced to IR-01 §4.4 IB0-WP5 and the PO/SA brief, no IB1 scope (re-verified 2026-09-25) |
 | Independent QA round 1, lanes 1–6 (3 parallel reviewers, `e7c615a`) | Independent Claude reviewers | 2026-09-24 | 5 Medium, 5 Low, Info. All Medium fixed in `e3a7510` |
 | Independent QA round 2, fix re-check (`e3a7510`) | Independent Claude reviewer | 2026-09-24 | Fixes confirmed; 1 new High (NEL line break) and 1 Low, fixed in `089f864` |
 | Independent QA round 3, final re-check (`089f864`) | Independent Claude reviewer | 2026-09-24 | PASS: NEL fix confirmed; no fail-open differential; 1 Low (fails closed), accepted as R10 |
-| Definition approval; lint/unit-test disposition | Product Owner / Solutions Architect | — | PENDING |
+| Definition approval; AC25 lint/unit-test disposition; enforcement disposition; acceptance and merge | Product Owner / Solutions Architect | 2026-09-25 | APPROVED (decisions 1–4 below) |
 
 ## Acceptance criteria
 
-| Range | Result |
-| --- | --- |
-| AC01–AC23 | PASS |
-| AC24 | READY (prepared, not applied) |
-| AC25 | PENDING PO/SA DECISION |
-| AC26 | PASS |
-| AC27 | Complete |
-
-Per-criterion evidence is in `evidence/IB0-WP05/reports/technical-verification.md`.
+**27/27 PASS.** AC24 passes as READY (prepared and approved, not applied, as the criterion requires). AC25 passes as **PASS — APPROVED DEFERRED CAPABILITY** (PO/SA decision 2). AC27 passes as Complete. Per-criterion evidence: `evidence/IB0-WP05/reports/technical-verification.md`.
 
 ## Defects
 
@@ -99,23 +91,21 @@ Per-criterion evidence is in `evidence/IB0-WP05/reports/technical-verification.m
 - The `main` push concurrency could replace a pending run; now grouped per commit.
 - A gate-case count error in the documentation.
 
-## Decisions required from the PO/SA
+## PO/SA decisions (2026-09-25)
 
-(i) **Approve the WP05 definition.** WORK_PACKAGE, ACCEPTANCE (AC01–AC27) and the §6 bounded exceptions were drafted by Claude.
+Recorded under the PO/SA instruction "IB0-WP05 — FINAL PRODUCT OWNER / SOLUTIONS ARCHITECT DECISIONS, ACCEPTANCE, MERGE AND POST-MERGE CLOSURE" (project chat, 2026-09-25T05:15Z).
 
-(ii) **Lint and unit-test stages (IR-01 §4.4 IB0-WP5).**
-- Default: DEFERRED to an owning WP with dependency and licence review. No placeholder command exists.
-- This decision closes AC25.
+| # | Decision | Disposition |
+| --- | --- | --- |
+| 1 | Final WP05 definition (27 criteria, QA-driven refinements, CI architecture, aggregate check, security/provenance controls, enforcement design, negative CI-control tests) | APPROVED |
+| 2a | Lint/format stage | DEFERRED — approved controlled deferral; activation trigger in WORK_PACKAGE §5.1 |
+| 2b | Unit-test CI stage | DEFERRED until meaningful executable behaviour exists; activation trigger in WORK_PACKAGE §5.1 |
+| 3 | `main` enforcement design | APPROVED; technically ADVISORY until GitHub repository/account capability permits; activation trigger in WORK_PACKAGE §5.1 |
+| 4 | Acceptance and merge of PR #5 | AUTHORISED, subject to final automated revalidation (passed) |
 
-(iii) **Enforcement on `main`.**
-- The private repository's current GitHub plan returns 403 for branch protection and rulesets.
-- Options:
-  - upgrade the account (for example GitHub Pro), then apply `IB0-WP05-PR-ENFORCEMENT.md` after merge;
-  - keep CI advisory for now.
+**Required future check:** `PAEP / gate`. The current inability to apply the ruleset is an ACCEPTED RESIDUAL RISK, not a failed criterion.
 
-(iv) **Acceptance of WP05 and authorisation to merge PR #5.**
-
-## Exceptions (proposed, WORK_PACKAGE §6)
+## Exceptions (approved with the definition, WORK_PACKAGE §6)
 
 The WP01–WP04 verifiers are unchanged. `verify-ib0-wp05.mjs` accepts only the findings WP05 itself causes:
 
@@ -153,20 +143,24 @@ The full record is `evidence/IB0-WP05/reports/residual-risk.md`, risks R1–R10:
 | R9 | GitHub service dependency |
 | R10 | The YAML reader accepts a few inputs GitHub would reject (fails closed) |
 
+## Residual-risk disposition
+
+All residual risks R1–R10 are ACCEPTED as non-blocking. R1 is recorded as the PO/SA stated it: "PAEP / gate is operational and authoritative as the automated PAEP CI signal, but GitHub currently cannot technically require it before merge because branch-protection/ruleset activation is unavailable to this repository under the presently available GitHub capability. Enforcement shall be activated when repository/account capability permits." Until then, PAEP engineering governance requires a green `PAEP / gate` before acceptance and merge through the controlled PO/SA process.
+
 ## Technical result
 
-Every criterion except AC25 is met: AC01–AC23 and AC26 PASS, AC24 READY, AC27 Complete. AC25 cannot pass without the PO/SA lint/unit-test decision, so under the ACCEPTANCE technical result rule (iii) the App. C status is **BLOCKED (external decision: AC25)**. Nothing technical is outstanding.
-
-**Status:** READY FOR AUTHORIZATION (the PO/SA decisions (i)–(iv) above)
+**PASS** (27/27)
 
 ## Human acceptance decision
 
 | Field | Value |
 | --- | --- |
-| Technical Verification | PASS on every executable gate; App. C status BLOCKED on the AC25 decision only |
+| Technical Verification | PASS |
+| CI Verification | PASS |
 | Independent QA | PASS (no open High or Medium; `evidence/IB0-WP05/reports/independent-qa.md`) |
-| Architecture Conformance | PASS (no architecture change; `qa:architecture` 0 violations) |
-| Acceptance Criteria | AC01–AC23 and AC26 PASS; AC24 READY; AC27 Complete; AC25 PENDING PO/SA DECISION |
-| Acceptance Status | NOT ACCEPTED — awaiting Product Owner / Solutions Architect |
+| Architecture Conformance | PASS |
+| Acceptance Criteria | 27/27 PASS |
+| Acceptance Status | ACCEPTED |
 | Acceptance Authority | Product Owner / Solutions Architect |
-| Acceptance Date | — |
+| Acceptance Date | 2026-09-25 |
+| Recorded under | PO/SA instruction "IB0-WP05 — FINAL PRODUCT OWNER / SOLUTIONS ARCHITECT DECISIONS, ACCEPTANCE, MERGE AND POST-MERGE CLOSURE" (project chat, 2026-09-25T05:15Z), after final automated revalidation passed |

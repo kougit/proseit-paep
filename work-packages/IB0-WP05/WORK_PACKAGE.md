@@ -6,7 +6,7 @@
 **Design classification:** D0 — not a UI work package; no design handoff required  
 **Execution agent:** Claude Code  
 **Acceptance authority:** Product Owner / Solutions Architect  
-**Definition status:** DRAFT for PO/SA approval. Drafted by Claude Code on 2026-09-24 under the PO/SA instruction "IB0-WP05 — CI/CD, AUTOMATED QUALITY GATES, SECURITY/PROVENANCE AND PULL-REQUEST ENFORCEMENT BASELINE" (project thread, 2026-09-24T18:39Z). The controlled pack supplied no IB0-WP05 definition. Claude may not approve this definition. The definition audit is `evidence/IB0-WP05/reports/definition-audit.md`.
+**Definition status:** APPROVED by the Product Owner / Solutions Architect on 2026-09-25 under the PO/SA instruction "IB0-WP05 — FINAL PRODUCT OWNER / SOLUTIONS ARCHITECT DECISIONS, ACCEPTANCE, MERGE AND POST-MERGE CLOSURE" (project chat, 2026-09-25T05:15Z), including the QA-driven refinements from the three independent QA rounds. Drafted by Claude Code on 2026-09-24 under the PO/SA instruction "IB0-WP05 — CI/CD, AUTOMATED QUALITY GATES, SECURITY/PROVENANCE AND PULL-REQUEST ENFORCEMENT BASELINE" (project thread, 2026-09-24T18:39Z). The controlled pack supplied no IB0-WP05 definition. The definition audit is `evidence/IB0-WP05/reports/definition-audit.md`.
 
 ## 1. Objective
 
@@ -64,14 +64,41 @@ Claude shall **not** modify: `.paep-control/**`, `.gitignore`, `PACK_MANIFEST.js
 
 | Item | Owner / disposition |
 | --- | --- |
-| Lint/format tooling and a lint CI stage | Deferred by the PO/SA at WP03 closure (needs an owning WP with dependency and licence review). WP05 default: DEFERRED, recorded as an open IB0 exit item; PO/SA decision requested |
-| Unit-test runner (Vitest) and a unit-test CI stage | No unit test or runner exists; adding Vitest is a new dependency. WP05 default: DEFERRED with lint; PO/SA decision requested |
-| Activating required checks on `main` | After merge, by PO/SA decision; blocked on the current GitHub plan for a private repository (§7 of the enforcement document) |
+| Lint/format tooling and a lint CI stage | **DEFERRED — approved controlled deferral** (PO/SA, 2026-09-25); activation trigger in §5.1 |
+| Unit-test runner and a unit-test CI stage | **DEFERRED — approved controlled deferral** until meaningful executable behaviour exists (PO/SA, 2026-09-25); activation trigger in §5.1 |
+| Activating required checks on `main` | Design APPROVED (PO/SA, 2026-09-25); technically ADVISORY until GitHub capability permits; activation trigger in §5.1 |
 | SBOM generation, vulnerability-scan gate, release licence approval | Release gate (IB-01 §18.1, EQP §22(v)-(vi)); EG/IP owner |
 | macOS/Windows CI runners | Not required by a controlled source; residual risk |
 | IB1 and later; Nx | Not started / NOT REQUIRED |
 
-## 6. Accepted historical-verifier behaviour (bounded exceptions, proposed)
+### 5.1 Activation triggers (PO/SA, 2026-09-25)
+
+**Lint/format activation trigger** (PO/SA, 2026-09-25). Before lint/format becomes a mandatory PAEP gate:
+1. select the controlled tooling;
+2. review dependency provenance;
+3. review licences;
+4. document configuration ownership;
+5. define meaningful lint/format acceptance criteria;
+6. integrate it into the appropriate later work package;
+7. add it to `PAEP / gate` only after the capability genuinely exists.
+
+**Unit-test activation trigger** (PO/SA, 2026-09-25). A unit-test CI stage becomes mandatory when PAEP introduces executable shared/package/component/domain/platform logic for which meaningful unit-level behaviour can be specified and tested. At that point:
+1. select or use the approved Angular/TypeScript testing mechanism;
+2. create real behavioural tests;
+3. establish coverage/quality expectations where controlled requirements justify them;
+4. integrate the unit-test result into `PAEP / gate`.
+
+**Enforcement activation trigger** (PO/SA, 2026-09-25). When GitHub branch protection or rulesets become available:
+1. verify `PAEP / gate` still exists on `main`;
+2. verify its exact check context;
+3. revalidate the prepared enforcement policy;
+4. apply the approved protection/ruleset;
+5. verify a failing `PAEP / gate` blocks merge;
+6. capture evidence.
+
+Until enforcement is active, CI is technically advisory, and PAEP engineering governance continues to require a green `PAEP / gate` before acceptance and merge through the controlled PO/SA process.
+
+## 6. Accepted historical-verifier behaviour (bounded exceptions, approved with the definition)
 
 The earlier verifiers are kept unchanged. `verify-ib0-wp05.mjs` runs them and accepts only these failures, each limited to the exact findings WP05 can cause:
 

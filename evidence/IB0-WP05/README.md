@@ -9,7 +9,7 @@ Evidence for IB0-WP05: CI/CD, automated quality gates, security/provenance and t
 
 **Baseline:** IB0-WP04 merge commit `c5c0eb0`.
 
-**Status:** every criterion except AC25 is met (AC24 READY, AC27 Complete). AC25 awaits the PO/SA lint/unit-test decision, so the App. C status is BLOCKED (external decision). Independent QA: PASS, with no open High or Medium finding (`reports/independent-qa.md`). The package is **READY FOR AUTHORIZATION**. It is not ACCEPTED.
+**Status:** 27/27 PASS; independent QA PASS; **ACCEPTED** by the Product Owner / Solutions Architect on 2026-09-25 (AC25 as an approved deferred capability; `main` enforcement approved and technically advisory until GitHub capability permits). Final revalidation: `logs/acceptance-revalidation/`.
 
 ## Reports
 
@@ -22,7 +22,7 @@ Evidence for IB0-WP05: CI/CD, automated quality gates, security/provenance and t
 | `reports/negative-ci-tests.json` | Negative suite output, 87/87 (10 controls, 77 negatives) |
 | `reports/independent-qa.md` | Independent QA: round 1 (3 lanes), round 2 (fix re-check), round 3 (final re-check); findings and dispositions |
 | `reports/residual-risk.md` | Residual risks R1–R10 |
-| `reports/acceptance-readiness.md` | PR readiness record, decisions requested, and what remains for the PO/SA |
+| `reports/acceptance-readiness.md` | PR readiness record, the PO/SA decisions of 2026-09-25 and the final revalidation |
 
 The workflow security review is `docs/architecture/IB0-WP05-CI-DESIGN.md` §4. The enforcement design is `docs/architecture/IB0-WP05-PR-ENFORCEMENT.md`. The action register is `docs/provenance/GITHUB-ACTIONS-REGISTER.md`.
 

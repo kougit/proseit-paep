@@ -96,7 +96,7 @@ Every case runs in a scratch copy with `node_modules` hard-linked. The working r
 | AC21 | PASS | 87/87 locally; negative-ci success on GitHub |
 | AC22 | PASS | run 36052554946 (and 36047194635, 36050524880) |
 | AC23 | PASS | run 36048105730: six jobs failed and `PAEP / gate` = failure; reverted in `b6004dc` |
-| AC24 | READY | `docs/architecture/IB0-WP05-PR-ENFORCEMENT.md` (context `PAEP / gate`, app 15368 confirmed); nothing applied |
-| AC25 | PENDING PO/SA DECISION | Disposition recorded (WORK_PACKAGE §5: DEFERRED, no placeholder commands); the decision is requested and not yet given |
+| AC24 | PASS (READY) | `docs/architecture/IB0-WP05-PR-ENFORCEMENT.md` (context `PAEP / gate`, app 15368 confirmed); nothing applied |
+| AC25 | PASS — APPROVED DEFERRED CAPABILITY | PO/SA decision 2026-09-25: lint/format and unit-test stages DEFERRED with activation triggers (WORK_PACKAGE §5, §5.1); no placeholder commands |
 | AC26 | PASS | `independent-qa.md`: no open High or Medium finding |
-| AC27 | Complete | `evidence/IB0-WP05/README.md`; `TRACEABILITY.csv`; `ACCEPTANCE_REPORT.md` |
+| AC27 | PASS (Complete) | `evidence/IB0-WP05/README.md`; `TRACEABILITY.csv`; `ACCEPTANCE_REPORT.md` |

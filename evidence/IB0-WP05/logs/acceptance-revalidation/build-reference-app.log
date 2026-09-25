@@ -1,0 +1,17 @@
+
+> @proseit/paep-workspace@0.0.0 build:reference-app
+> ng build reference-app --configuration production
+
+❯ Building...
+✔ Building...
+Initial chunk files | Names         |  Raw size | Estimated transfer size
+main-4FFRGG7I.js    | main          | 190.65 kB |                52.09 kB
+styles-5INURTSO.css | styles        |   0 bytes |                 0 bytes
+
+                    | Initial total | 190.65 kB |                52.09 kB
+
+Application bundle generation complete. [3.976 seconds] - 2026-09-25T05:16:35.188Z
+
+Output location: /tmp/tmp.xrxAcTOULw/r/dist/reference-app
+
+EXIT_CODE=0

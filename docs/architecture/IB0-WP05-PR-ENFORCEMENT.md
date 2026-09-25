@@ -1,6 +1,6 @@
 # IB0-WP05 Proposed Pull-Request Enforcement for `main`
 
-**Status:** PREPARED, NOT APPLIED. Activation timing is a PO/SA decision at WP05 acceptance (PO/SA brief §22, §25).  
+**Status:** APPROVED by the PO/SA on 2026-09-25; NOT APPLIED. CI enforcement mode: ADVISORY due to current GitHub repository/account capability (accepted residual risk). Required future check: `PAEP / gate`.  
 **Required check context:** `PAEP / gate` (GitHub Actions check run from workflow "PAEP CI", job id `gate`). Confirmed from the real runs (36047194635, 36048105730, 36052554946): the check context is exactly `PAEP / gate`, posted by the GitHub Actions app (`app.id` 15368) (`evidence/IB0-WP05/reports/github-actions-run.md`).
 
 ## 1. Current repository state (read through the GitHub API, 2026-09-24)
@@ -75,6 +75,18 @@ Classic branch protection equivalent (if rulesets are unavailable but protection
 2. `POST /repos/kougit/proseit-paep/rulesets` with the JSON above (owner token with administration: write).
 3. Verify: `GET /repos/kougit/proseit-paep/rules/branches/main` lists the four rules; `GET /repos/kougit/proseit-paep/branches/main` shows `protected: true`.
 4. Negative check: a direct push to `main` is rejected, and a test PR whose gate fails shows "Required status check PAEP / gate has not succeeded" and cannot be merged. Record both under the evidence of the work package that activates enforcement.
+
+## 4a. Activation trigger (PO/SA, 2026-09-25)
+
+When GitHub branch protection or rulesets become available:
+1. verify `PAEP / gate` still exists on `main`;
+2. verify its exact check context;
+3. revalidate this policy;
+4. apply the approved protection/ruleset;
+5. verify a failing `PAEP / gate` blocks merge;
+6. capture evidence.
+
+Do not retry the API calls that currently return HTTP 403 until the capability changes.
 
 ## 5. Residual risks until activation
 

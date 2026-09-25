@@ -5,10 +5,11 @@
   "milestone": "IB0",
   "wbs": "W1 / IB0",
   "design_classification": "D0",
-  "status": "BLOCKED",
+  "status": "ACCEPTED",
   "acceptance": {
-    "status": "NOT ACCEPTED",
-    "authority": "Product Owner / Solutions Architect"
+    "status": "ACCEPTED",
+    "authority": "Product Owner / Solutions Architect",
+    "date": "2026-09-25"
   },
   "predecessor": {
     "id": "IB0-WP04",
@@ -22,7 +23,7 @@
     "PAEP-EQP-01 §15, §16, §22, §24, §29.1, App. B, App. C",
     "PAEP v1.1 §3, §5.3"
   ],
-  "definition_status": "DRAFT for PO/SA approval",
+  "definition_status": "APPROVED (PO/SA, 2026-09-25)",
   "nx_disposition": "NOT REQUIRED",
   "workflow": ".github/workflows/paep-ci.yml",
   "setup_action": ".github/actions/paep-setup/action.yml",
@@ -31,9 +32,9 @@
   "negative_runner": "tooling/verification/negative-ib0-wp05.mjs",
   "aggregate_check": "PAEP / gate",
   "out_of_scope_owners": {
-    "lint/format stage": "DEFERRED (PO/SA WP03 decision; decision requested in WP05)",
-    "unit-test stage": "DEFERRED (no runner; decision requested in WP05)",
-    "branch protection / ruleset activation": "PO/SA decision after merge; blocked by GitHub plan for private repository",
+    "lint/format stage": "DEFERRED — approved controlled deferral (PO/SA 2026-09-25); activation trigger WORK_PACKAGE §5.1",
+    "unit-test stage": "DEFERRED until meaningful executable behaviour exists (PO/SA 2026-09-25); activation trigger WORK_PACKAGE §5.1",
+    "branch protection / ruleset activation": "Design APPROVED; technically ADVISORY until GitHub capability permits (accepted residual risk R1); activation trigger WORK_PACKAGE §5.1",
     "SBOM, vulnerability gate, release licence approval": "release gate (EG/IP owner)",
     "IB1 and later": "not started"
   },
@@ -69,7 +70,7 @@
   "evidence_path": "evidence/IB0-WP05/",
   "technical_pass_requires_all_mandatory_criteria": true,
   "human_acceptance_required": true,
-  "status_note": "Every criterion except AC25 met (AC24 READY, AC27 Complete); AC25 needs the PO/SA lint/unit-test decision. READY FOR AUTHORIZATION.",
   "code_commit_under_test": "089f8640b07cfdbf880601903543513b27776784",
-  "required_check_context": "PAEP / gate (GitHub Actions app 15368)"
+  "required_check_context": "PAEP / gate (GitHub Actions app 15368)",
+  "acceptance_criteria_result": "27/27 PASS"
 }

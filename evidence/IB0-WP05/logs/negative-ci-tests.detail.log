@@ -1,0 +1,1074 @@
+# date: 2026-09-24T20:09:00.619Z node: v24.21.0 scratch: /tmp/paep-wp05-negative-X4vyQ7
+# node_modules: hard-linked
+# gate script: .github/workflows/paep-ci.yml jobs.gate.steps[0].run; mandatory jobs: governance provenance architecture strictness negative-architecture negative-ci regression build-reference-app build-ui-lab
+
+## C06 control: tracked-tree check passes after an unchanged install
+expected: exit 0
+be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69  package-lock.json
+EXIT_CODE=0
+RESULT=PASS
+
+## G00 control: every mandatory job succeeded
+expected: exit 0, PAEP gate: PASS
+governance: success
+provenance: success
+architecture: success
+strictness: success
+negative-architecture: success
+negative-ci: success
+regression: success
+build-reference-app: success
+build-ui-lab: success
+PAEP gate: PASS
+EXIT_CODE=0
+RESULT=PASS
+
+## G01 mandatory job governance failed
+expected: non-zero exit, no PASS
+governance: failure
+::error title=PAEP gate::mandatory job governance finished with result 'failure'
+provenance: success
+architecture: success
+strictness: success
+negative-architecture: success
+negative-ci: success
+regression: success
+build-reference-app: success
+build-ui-lab: success
+PAEP gate: FAIL
+EXIT_CODE=1
+RESULT=PASS
+
+## G02 mandatory job provenance failed
+expected: non-zero exit, no PASS
+governance: success
+provenance: failure
+::error title=PAEP gate::mandatory job provenance finished with result 'failure'
+architecture: success
+strictness: success
+negative-architecture: success
+negative-ci: success
+regression: success
+build-reference-app: success
+build-ui-lab: success
+PAEP gate: FAIL
+EXIT_CODE=1
+RESULT=PASS
+
+## G03 mandatory job architecture failed
+expected: non-zero exit, no PASS
+governance: success
+provenance: success
+architecture: failure
+::error title=PAEP gate::mandatory job architecture finished with result 'failure'
+strictness: success
+negative-architecture: success
+negative-ci: success
+regression: success
+build-reference-app: success
+build-ui-lab: success
+PAEP gate: FAIL
+EXIT_CODE=1
+RESULT=PASS
+
+## G04 mandatory job strictness failed
+expected: non-zero exit, no PASS
+governance: success
+provenance: success
+architecture: success
+strictness: failure
+::error title=PAEP gate::mandatory job strictness finished with result 'failure'
+negative-architecture: success
+negative-ci: success
+regression: success
+build-reference-app: success
+build-ui-lab: success
+PAEP gate: FAIL
+EXIT_CODE=1
+RESULT=PASS
+
+## G05 mandatory job negative-architecture failed
+expected: non-zero exit, no PASS
+governance: success
+provenance: success
+architecture: success
+strictness: success
+negative-architecture: failure
+::error title=PAEP gate::mandatory job negative-architecture finished with result 'failure'
+negative-ci: success
+regression: success
+build-reference-app: success
+build-ui-lab: success
+PAEP gate: FAIL
+EXIT_CODE=1
+RESULT=PASS
+
+## G06 mandatory job negative-ci failed
+expected: non-zero exit, no PASS
+governance: success
+provenance: success
+architecture: success
+strictness: success
+negative-architecture: success
+negative-ci: failure
+::error title=PAEP gate::mandatory job negative-ci finished with result 'failure'
+regression: success
+build-reference-app: success
+build-ui-lab: success
+PAEP gate: FAIL
+EXIT_CODE=1
+RESULT=PASS
+
+## G07 mandatory job regression failed
+expected: non-zero exit, no PASS
+governance: success
+provenance: success
+architecture: success
+strictness: success
+negative-architecture: success
+negative-ci: success
+regression: failure
+::error title=PAEP gate::mandatory job regression finished with result 'failure'
+build-reference-app: success
+build-ui-lab: success
+PAEP gate: FAIL
+EXIT_CODE=1
+RESULT=PASS
+
+## G08 mandatory job build-reference-app failed
+expected: non-zero exit, no PASS
+governance: success
+provenance: success
+architecture: success
+strictness: success
+negative-architecture: success
+negative-ci: success
+regression: success
+build-reference-app: failure
+::error title=PAEP gate::mandatory job build-reference-app finished with result 'failure'
+build-ui-lab: success
+PAEP gate: FAIL
+EXIT_CODE=1
+RESULT=PASS
+
+## G09 mandatory job build-ui-lab failed
+expected: non-zero exit, no PASS
+governance: success
+provenance: success
+architecture: success
+strictness: success
+negative-architecture: success
+negative-ci: success
+regression: success
+build-reference-app: success
+build-ui-lab: failure
+::error title=PAEP gate::mandatory job build-ui-lab finished with result 'failure'
+PAEP gate: FAIL
+EXIT_CODE=1
+RESULT=PASS
+
+## G10 mandatory job cancelled (negative-ci)
+expected: non-zero exit, no PASS
+governance: success
+provenance: success
+architecture: success
+strictness: success
+negative-architecture: success
+negative-ci: cancelled
+::error title=PAEP gate::mandatory job negative-ci finished with result 'cancelled'
+regression: success
+build-reference-app: success
+build-ui-lab: success
+PAEP gate: FAIL
+EXIT_CODE=1
+RESULT=PASS
+
+## G11 mandatory job skipped (architecture)
+expected: non-zero exit, no PASS
+governance: success
+provenance: success
+architecture: skipped
+::error title=PAEP gate::mandatory job architecture finished with result 'skipped'
+strictness: success
+negative-architecture: success
+negative-ci: success
+regression: success
+build-reference-app: success
+build-ui-lab: success
+PAEP gate: FAIL
+EXIT_CODE=1
+RESULT=PASS
+
+## G12 mandatory job timed out (regression; GitHub reports timeouts as failure)
+expected: non-zero exit, no PASS
+governance: success
+provenance: success
+architecture: success
+strictness: success
+negative-architecture: success
+negative-ci: success
+regression: failure
+::error title=PAEP gate::mandatory job regression finished with result 'failure'
+build-reference-app: success
+build-ui-lab: success
+PAEP gate: FAIL
+EXIT_CODE=1
+RESULT=PASS
+
+## G13 mandatory job missing from needs (strictness)
+expected: non-zero exit, no PASS
+::error title=PAEP gate::needs [architecture build-reference-app build-ui-lab governance negative-architecture negative-ci provenance regression ] differ from the mandatory jobs [architecture build-reference-app build-ui-lab governance negative-architecture negative-ci provenance regression strictness ]
+governance: success
+provenance: success
+architecture: success
+strictness: missing
+::error title=PAEP gate::mandatory job strictness finished with result 'missing'
+negative-architecture: success
+negative-ci: success
+regression: success
+build-reference-app: success
+build-ui-lab: success
+PAEP gate: FAIL
+EXIT_CODE=1
+RESULT=PASS
+
+## G14 unexpected extra job in needs
+expected: non-zero exit, no PASS
+::error title=PAEP gate::needs [architecture build-reference-app build-ui-lab extra governance negative-architecture negative-ci provenance regression strictness ] differ from the mandatory jobs [architecture build-reference-app build-ui-lab governance negative-architecture negative-ci provenance regression strictness ]
+governance: success
+provenance: success
+architecture: success
+strictness: success
+negative-architecture: success
+negative-ci: success
+regression: success
+build-reference-app: success
+build-ui-lab: success
+PAEP gate: FAIL
+EXIT_CODE=1
+RESULT=PASS
+
+## G15 every mandatory job skipped
+expected: non-zero exit, no PASS
+::error title=PAEP gate::mandatory job strictness finished with result 'skipped'
+negative-architecture: skipped
+::error title=PAEP gate::mandatory job negative-architecture finished with result 'skipped'
+negative-ci: skipped
+::error title=PAEP gate::mandatory job negative-ci finished with result 'skipped'
+regression: skipped
+::error title=PAEP gate::mandatory job regression finished with result 'skipped'
+build-reference-app: skipped
+::error title=PAEP gate::mandatory job build-reference-app finished with result 'skipped'
+build-ui-lab: skipped
+::error title=PAEP gate::mandatory job build-ui-lab finished with result 'skipped'
+PAEP gate: FAIL
+EXIT_CODE=1
+RESULT=PASS
+
+## G16 empty needs context
+expected: non-zero exit, no PASS
+::error title=PAEP gate::mandatory job strictness finished with result 'missing'
+negative-architecture: missing
+::error title=PAEP gate::mandatory job negative-architecture finished with result 'missing'
+negative-ci: missing
+::error title=PAEP gate::mandatory job negative-ci finished with result 'missing'
+regression: missing
+::error title=PAEP gate::mandatory job regression finished with result 'missing'
+build-reference-app: missing
+::error title=PAEP gate::mandatory job build-reference-app finished with result 'missing'
+build-ui-lab: missing
+::error title=PAEP gate::mandatory job build-ui-lab finished with result 'missing'
+PAEP gate: FAIL
+EXIT_CODE=1
+RESULT=PASS
+
+## G17 malformed needs context
+expected: non-zero exit, no PASS
+jq: parse error: Invalid numeric literal at line 1, column 5
+EXIT_CODE=5
+RESULT=PASS
+
+## G18 unknown result value (neutral)
+expected: non-zero exit, no PASS
+governance: success
+provenance: neutral
+::error title=PAEP gate::mandatory job provenance finished with result 'neutral'
+architecture: success
+strictness: success
+negative-architecture: success
+negative-ci: success
+regression: success
+build-reference-app: success
+build-ui-lab: success
+PAEP gate: FAIL
+EXIT_CODE=1
+RESULT=PASS
+
+## C01 control: governance gate passes unmutated
+expected: exit 0
+PASS W01 Toolchain: running Node and npm equal the exact pins in .nvmrc, packageManager, devEngines (onFail=error) and the version manifest; .npmrc keeps engine-strict and strict-allow-scripts — node 24.21.0; npm 11.19.0
+PASS W02 Controlled sources match PACK_MANIFEST.json sha256 and size; .paep-control, .gitignore, PACK_MANIFEST.json and CLAUDE.md unchanged since the baseline — 13/13 controlled files match
+PASS W03 IR-01 §4.2 repository topology present; package.json only at the root and packages/<name>/ (no nested package boundary) — 26 topology entries present; 19 manifests, none nested
+PASS W04 No Nx: no nx/@nx/@nrwl dependency, lockfile entry or install, and no nx.json or project.json — none; Nx disposition NOT REQUIRED
+PASS W05 IB1 not started: apps, packages, config, angular.json and tsconfig files unchanged since the baseline; package entry points are placeholders; no runtime-config schema — no IB1 artefact; 18 placeholder entry points
+PASS W06 No dependency change: package-lock.json byte-identical to the baseline; package.json differs only by qa:types, qa:ib0-wp05 and qa:ib0-wp05:negative — lockfile sha256 be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69
+PASS W07 Every path changed since the baseline is within WORK_PACKAGE §4; no lint/format/unit-test configuration introduced — 37 changed paths, all permitted
+PASS W08 No credential or secret signatures in files added or modified since the baseline — 37 files scanned; findings: none
+IB0-WP05 verification (governance): PASS (8/8)
+EXIT_CODE=0
+RESULT=PASS
+
+## C02 control: provenance gate passes unmutated
+expected: exit 0
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+PASS W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — 9 parallel jobs: governance, provenance, architecture, strictness, negative-architecture, negative-ci, regression, build-reference-app, build-ui-lab
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): PASS (8/8)
+EXIT_CODE=0
+RESULT=PASS
+
+## C03 control: qa:types passes unmutated
+expected: exit 0
+
+EXIT_CODE=0
+RESULT=PASS
+
+## C04 control: qa:architecture passes unmutated
+expected: exit 0
+PAEP architecture check: PASS — 20 projects, 0 edges (0 optional), 0 cycles, 18 imports in 26 files, 0 violations
+EXIT_CODE=0
+RESULT=PASS
+
+## C05 control: toolchain gate passes unmutated
+expected: exit 0
+PASS W01 Toolchain: running Node and npm equal the exact pins in .nvmrc, packageManager, devEngines (onFail=error) and the version manifest; .npmrc keeps engine-strict and strict-allow-scripts — node 24.21.0; npm 11.19.0
+IB0-WP05 verification (toolchain): PASS (1/1)
+EXIT_CODE=0
+RESULT=PASS
+
+## C07 control: strictness gate passes unmutated
+expected: exit 0
+PASS W17 Strict configuration: WP04 static verifier passes V04-V07 (strict, noImplicitAny, strictTemplates, noCheck and suppression protection, aliases, entry points) and every other static check; V16/V17 report only WP05-authorised change — WP04 static 17/19 pass; bounded: V16, V17
+IB0-WP05 verification (strictness): PASS (1/1)
+EXIT_CODE=0
+RESULT=PASS
+
+## C08 control: negative-architecture gate passes unmutated
+expected: exit 0
+PASS W17 Strict configuration: WP04 static verifier passes V04-V07 (strict, noImplicitAny, strictTemplates, noCheck and suppression protection, aliases, entry points) and every other static check; V16/V17 report only WP05-authorised change — WP04 static 17/19 pass; bounded: V16, V17
+PASS W18 WP04 negative architecture/strictness suite: every case passes except positive control C3, which fails only V16/V17 with WP05-authorised findings — 85/86 pass; bounded: C3
+PASS W19 WP03 negative runner: fails only with the known M11 TypeError because WP04 moved paths from tsconfig.json to tsconfig.base.json (its strictness intent is carried by WP04 S1-S9 and the WP05 qa:types negatives) — exit 1 at negative-ib0-wp03.mjs:125 (paths in tsconfig.base.json); bounded
+IB0-WP05 verification (negative-architecture): PASS (3/3)
+EXIT_CODE=0
+RESULT=PASS
+
+## A01 (i) forbidden upward dependency contracts -> foundation fails qa:architecture
+expected: non-zero exit; output matches /DIRECTION/
+VIOLATION DIRECTION @proseit/paep-contracts (contracts) -> @proseit/paep-foundation (foundation) is not allowed (Appendix B: -) [packages/contracts/src/index.ts]
+VIOLATION CONTRACTS_NEUTRAL @proseit/paep-contracts does not compile with ES2022 only and no ambient types: TS2882 Cannot find module or type declarations for side-effect import of '@proseit/paep-foundation'. [packages/contracts/src/index.ts:4]
+PAEP architecture check: FAIL — 20 projects, 1 edges (0 optional), 0 cycles, 19 imports in 26 files, 2 violations
+EXIT_CODE=1
+RESULT=PASS
+
+## A02 (xii) prohibited change: domain-quality -> domain-fiscal (same category, not allowlisted) fails qa:architecture
+expected: non-zero exit; output matches /violation/i
+VIOLATION DIRECTION @proseit/paep-domain-quality (domain) -> @proseit/paep-domain-fiscal (domain) is not allowed (Appendix B: - (same category, not allowlisted)) [packages/domain-quality/src/index.ts]
+PAEP architecture check: FAIL — 20 projects, 1 edges (0 optional), 0 cycles, 19 imports in 26 files, 1 violations
+EXIT_CODE=1
+RESULT=PASS
+
+## A03 (xii) prohibited change: deep import into another package fails qa:architecture
+expected: non-zero exit; output matches /DEEP|UNKNOWN|violation/i
+VIOLATION DEEP_IMPORT @proseit/paep-components imports "@proseit/paep-foundation/src/index" below the @proseit/paep-foundation entry point [packages/components/src/index.ts]
+PAEP architecture check: FAIL — 20 projects, 1 edges (0 optional), 0 cycles, 19 imports in 26 files, 1 violations
+EXIT_CODE=1
+RESULT=PASS
+
+## A04 (xii) prohibited change: nested package.json boundary fails the governance gate
+expected: non-zero exit; output matches /FAIL W03/
+PASS W01 Toolchain: running Node and npm equal the exact pins in .nvmrc, packageManager, devEngines (onFail=error) and the version manifest; .npmrc keeps engine-strict and strict-allow-scripts — node 24.21.0; npm 11.19.0
+PASS W02 Controlled sources match PACK_MANIFEST.json sha256 and size; .paep-control, .gitignore, PACK_MANIFEST.json and CLAUDE.md unchanged since the baseline — 13/13 controlled files match
+FAIL W03 IR-01 §4.2 repository topology present; package.json only at the root and packages/<name>/ (no nested package boundary) — 26 topology entries present; nested package.json: packages/components/src/nested/package.json
+PASS W04 No Nx: no nx/@nx/@nrwl dependency, lockfile entry or install, and no nx.json or project.json — none; Nx disposition NOT REQUIRED
+FAIL W05 IB1 not started: apps, packages, config, angular.json and tsconfig files unchanged since the baseline; package entry points are placeholders; no runtime-config schema — changed: packages/components/src/nested/package.json; packages/components/src holds packages/components/src/index.ts, packages/components/src/nested/package.json
+PASS W06 No dependency change: package-lock.json byte-identical to the baseline; package.json differs only by qa:types, qa:ib0-wp05 and qa:ib0-wp05:negative — lockfile sha256 be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69
+FAIL W07 Every path changed since the baseline is within WORK_PACKAGE §4; no lint/format/unit-test configuration introduced — outside WORK_PACKAGE §4: packages/components/src/nested/package.json
+PASS W08 No credential or secret signatures in files added or modified since the baseline — 54 files scanned; findings: none
+IB0-WP05 verification (governance): FAIL (5/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## S01 (ii) TypeScript strict violation (implicit any, null to string) fails qa:types
+expected: non-zero exit; output matches /TS7006/ and /TS2322/
+[96msrc/app/app.ts[0m:[93m14[0m:[93m32[0m - [91merror[0m[90m TS7006: [0mParameter 'value' implicitly has an 'any' type.
+[96msrc/app/app.ts[0m:[93m14[0m:[93m47[0m - [91merror[0m[90m TS2322: [0mType 'null' is not assignable to type 'string'.
+EXIT_CODE=1
+RESULT=PASS
+
+## S02 (ii) Angular template strict violation ($event as number) fails qa:types
+expected: non-zero exit; output matches /TS2345/
+[96msrc/app/app.html[0m:[93m4[0m:[93m43[0m - [91merror[0m[90m TS2345: [0mArgument of type 'PointerEvent' is not assignable to parameter of type 'number'.
+    Error occurs in the template of component App.
+EXIT_CODE=1
+RESULT=PASS
+
+## S03 (ii) strictTemplates false fails the strictness gate
+expected: non-zero exit; output matches /FAIL W17/ and /V05/
+FAIL W17 Strict configuration: WP04 static verifier passes V04-V07 (strict, noImplicitAny, strictTemplates, noCheck and suppression protection, aliases, entry points) and every other static check; V16/V17 report only WP05-authorised change — strictness check V05 failed; V05 failed outside the WP05 bounded exception: literal strictTemplates=false; tsconfig.json differs from the baseline other than extends added and paths removed; reference-app: effective strict=true noImplicitAny=true strictTemplates=false; ui-lab: effective strict=true noImplicitAny=true strictTemplates=false
+IB0-WP05 verification (strictness): FAIL (0/1)
+EXIT_CODE=1
+RESULT=PASS
+
+## S04 (ii) noCheck true fails the strictness gate
+expected: non-zero exit; output matches /FAIL W17/ and /noCheck/
+FAIL W17 Strict configuration: WP04 static verifier passes V04-V07 (strict, noImplicitAny, strictTemplates, noCheck and suppression protection, aliases, entry points) and every other static check; V16/V17 report only WP05-authorised change — strictness check V05 failed; V05 failed outside the WP05 bounded exception: tsconfig.json differs from the baseline other than extends added and paths removed; reference-app: effective noCheck=true; ui-lab: effective noCheck=true
+IB0-WP05 verification (strictness): FAIL (0/1)
+EXIT_CODE=1
+RESULT=PASS
+
+## B01 (iii) type error fails the reference-app production build
+expected: non-zero exit; output matches /TS7006|TS2322/
+✘ [ERROR] TS7006: Parameter 'value' implicitly has an 'any' type. [plugin angular-compiler]
+✘ [ERROR] TS2322: Type 'null' is not assignable to type 'string'. [plugin angular-compiler]
+EXIT_CODE=1
+RESULT=PASS
+
+## H01 (iv) crashed WP04 negative harness fails the negative-architecture gate
+expected: non-zero exit; output matches /FAIL W18/
+PASS W17 Strict configuration: WP04 static verifier passes V04-V07 (strict, noImplicitAny, strictTemplates, noCheck and suppression protection, aliases, entry points) and every other static check; V16/V17 report only WP05-authorised change — WP04 static 17/19 pass; bounded: V16, V17
+FAIL W18 WP04 negative architecture/strictness suite: every case passes except positive control C3, which fails only V16/V17 with WP05-authorised findings — no WP04 negative report
+PASS W19 WP03 negative runner: fails only with the known M11 TypeError because WP04 moved paths from tsconfig.json to tsconfig.base.json (its strictness intent is carried by WP04 S1-S9 and the WP05 qa:types negatives) — exit 1 at negative-ib0-wp03.mjs:125 (paths in tsconfig.base.json); bounded
+IB0-WP05 verification (negative-architecture): FAIL (2/3)
+EXIT_CODE=1
+RESULT=PASS
+
+## H02 (iv) checker that stops reporting cycles makes WP04 negative cases fail, failing the negative-architecture gate
+expected: non-zero exit; output matches /FAIL W18/ and /failed/
+PASS W17 Strict configuration: WP04 static verifier passes V04-V07 (strict, noImplicitAny, strictTemplates, noCheck and suppression protection, aliases, entry points) and every other static check; V16/V17 report only WP05-authorised change — WP04 static 17/19 pass; bounded: V16, V17
+FAIL W18 WP04 negative architecture/strictness suite: every case passes except positive control C3, which fails only V16/V17 with WP05-authorised findings — N05 failed: circular dependency over allowed Optional edges: platform <-> observability (caught by the cycle rule alone) (exit 0; []); N49 failed: allowlisted same-category pair in both directions forms a cycle (exit 0; [])
+PASS W19 WP03 negative runner: fails only with the known M11 TypeError because WP04 moved paths from tsconfig.json to tsconfig.base.json (its strictness intent is carried by WP04 S1-S9 and the WP05 qa:types negatives) — exit 1 at negative-ib0-wp03.mjs:125 (paths in tsconfig.base.json); bounded
+IB0-WP05 verification (negative-architecture): FAIL (2/3)
+EXIT_CODE=1
+RESULT=PASS
+
+## L00 control: npm ci --dry-run accepts the committed manifests
+expected: exit 0
+added 324 packages in 504ms
+EXIT_CODE=0
+RESULT=PASS
+
+## L01 (v) package.json dependency changed without a lockfile update fails npm ci
+expected: non-zero exit; /npm error/
+npm error code EUSAGE
+npm error
+npm error `npm ci` can only install packages when your package.json and package-lock.json or npm-shrinkwrap.json are in sync. Please update your lock file with `npm install` before continuing.
+npm error
+npm error Invalid: lock file's rxjs@7.8.2 does not satisfy rxjs@7.8.1
+npm error Missing: rxjs@7.8.2 from lock file
+npm error Missing: rxjs@7.8.2 from lock file
+npm error Missing: rxjs@7.8.2 from lock file
+EXIT_CODE=1
+RESULT=PASS
+
+## L02 (v) lockfile modified by installation fails the tracked-tree check
+expected: non-zero exit; output matches /package-lock\.json/
+diff --git a/package-lock.json b/package-lock.json
+EXIT_CODE=1
+RESULT=PASS
+
+## L03 (v) lockfile drift from the accepted baseline fails the governance gate
+expected: non-zero exit; output matches /FAIL W06/
+PASS W01 Toolchain: running Node and npm equal the exact pins in .nvmrc, packageManager, devEngines (onFail=error) and the version manifest; .npmrc keeps engine-strict and strict-allow-scripts — node 24.21.0; npm 11.19.0
+PASS W02 Controlled sources match PACK_MANIFEST.json sha256 and size; .paep-control, .gitignore, PACK_MANIFEST.json and CLAUDE.md unchanged since the baseline — 13/13 controlled files match
+PASS W03 IR-01 §4.2 repository topology present; package.json only at the root and packages/<name>/ (no nested package boundary) — 26 topology entries present; 19 manifests, none nested
+PASS W04 No Nx: no nx/@nx/@nrwl dependency, lockfile entry or install, and no nx.json or project.json — none; Nx disposition NOT REQUIRED
+PASS W05 IB1 not started: apps, packages, config, angular.json and tsconfig files unchanged since the baseline; package entry points are placeholders; no runtime-config schema — no IB1 artefact; 18 placeholder entry points
+FAIL W06 No dependency change: package-lock.json byte-identical to the baseline; package.json differs only by qa:types, qa:ib0-wp05 and qa:ib0-wp05:negative — package-lock.json differs from the baseline
+FAIL W07 Every path changed since the baseline is within WORK_PACKAGE §4; no lint/format/unit-test configuration introduced — outside WORK_PACKAGE §4: package-lock.json
+PASS W08 No credential or secret signatures in files added or modified since the baseline — 54 files scanned; findings: none
+IB0-WP05 verification (governance): FAIL (6/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## T01 (vi) .nvmrc pin drift fails the toolchain gate
+expected: non-zero exit; output matches /FAIL W01/ and /\.nvmrc|devEngines|manifest/
+FAIL W01 Toolchain: running Node and npm equal the exact pins in .nvmrc, packageManager, devEngines (onFail=error) and the version manifest; .npmrc keeps engine-strict and strict-allow-scripts — devEngines.runtime {"name":"node","version":"24.21.0","onFail":"error"} does not pin node 24.20.0 with onFail=error; version manifest node 24.21.0 != .nvmrc 24.20.0; running Node 24.21.0 != pinned 24.20.0
+IB0-WP05 verification (toolchain): FAIL (0/1)
+EXIT_CODE=1
+RESULT=PASS
+
+## T02 (vi) running Node differs from a consistent pin (all pins 24.20.0) fails the toolchain gate
+expected: non-zero exit; output matches /FAIL W01/ and /running Node 24\.21\.0 != pinned 24\.20\.0/
+FAIL W01 Toolchain: running Node and npm equal the exact pins in .nvmrc, packageManager, devEngines (onFail=error) and the version manifest; .npmrc keeps engine-strict and strict-allow-scripts — running Node 24.21.0 != pinned 24.20.0
+IB0-WP05 verification (toolchain): FAIL (0/1)
+EXIT_CODE=1
+RESULT=PASS
+
+## T03 (vii) running npm differs from the pin fails the toolchain gate
+expected: non-zero exit; output matches /FAIL W01/ and /running npm 11\.18\.0 != pinned 11\.19\.0/
+FAIL W01 Toolchain: running Node and npm equal the exact pins in .nvmrc, packageManager, devEngines (onFail=error) and the version manifest; .npmrc keeps engine-strict and strict-allow-scripts — running npm 11.18.0 != pinned 11.19.0
+IB0-WP05 verification (toolchain): FAIL (0/1)
+EXIT_CODE=1
+RESULT=PASS
+
+## T04 (vii) packageManager pin drift fails the toolchain gate
+expected: non-zero exit; output matches /FAIL W01/
+FAIL W01 Toolchain: running Node and npm equal the exact pins in .nvmrc, packageManager, devEngines (onFail=error) and the version manifest; .npmrc keeps engine-strict and strict-allow-scripts — devEngines.packageManager {"name":"npm","version":"11.19.0","onFail":"error"} does not pin npm 11.18.0 with onFail=error; version manifest npm 11.19.0 != packageManager 11.18.0; running npm 11.19.0 != pinned 11.18.0
+IB0-WP05 verification (toolchain): FAIL (0/1)
+EXIT_CODE=1
+RESULT=PASS
+
+## T05 (vi) devEngines Node pin not met fails npm ci (EBADDEVENGINES)
+expected: non-zero exit; /EBADDEVENGINES/
+npm error code EBADDEVENGINES
+npm error EBADDEVENGINES The developer of this package has specified the following through devEngines
+npm error EBADDEVENGINES Invalid devEngines.runtime
+npm error EBADDEVENGINES Invalid semver version "24.20.0" does not match "v24.21.0" for "runtime"
+npm error EBADDEVENGINES {
+npm error EBADDEVENGINES   current: { name: 'node', version: 'v24.21.0' },
+npm error EBADDEVENGINES   required: { name: 'node', version: '24.20.0', onFail: 'error' }
+npm error EBADDEVENGINES }
+EXIT_CODE=1
+RESULT=PASS
+
+## T06 (vii) devEngines npm pin not met fails npm ci (EBADDEVENGINES)
+expected: non-zero exit; /EBADDEVENGINES/
+npm error code EBADDEVENGINES
+npm error EBADDEVENGINES The developer of this package has specified the following through devEngines
+npm error EBADDEVENGINES Invalid devEngines.packageManager
+npm error EBADDEVENGINES Invalid semver version "11.18.0" does not match "11.19.0" for "packageManager"
+npm error EBADDEVENGINES {
+npm error EBADDEVENGINES   current: { name: 'npm', version: '11.19.0' },
+npm error EBADDEVENGINES   required: { name: 'npm', version: '11.18.0', onFail: 'error' }
+npm error EBADDEVENGINES }
+EXIT_CODE=1
+RESULT=PASS
+
+## I01 (viii) new lockfile package with an unreviewed install script fails the provenance gate
+expected: non-zero exit; output matches /FAIL W16/ and /V14 failed: .*not explicitly denied: rxjs/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+PASS W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — 9 parallel jobs: governance, provenance, architecture, strictness, negative-architecture, negative-ci, regression, build-reference-app, build-ui-lab
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+FAIL W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — V14 failed: packages with install scripts: @parcel/watcher, esbuild, fsevents, lmdb, msgpackr-extract, rxjs; not explicitly denied: rxjs; npm install-scripts ls: No packages with unreviewed install scripts.; V11 failed: lockfile.sha256 differs from package-lock.json; V13 failed: working tree vs HEAD: uncommitted changes; lockfile vs b6b023f: different
+IB0-WP05 verification (provenance): FAIL (7/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## I02 (viii) install script allowed (esbuild: true) fails the provenance gate
+expected: non-zero exit; output matches /FAIL W16/ and /V14 failed: .*not explicitly denied: esbuild/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+PASS W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — 9 parallel jobs: governance, provenance, architecture, strictness, negative-architecture, negative-ci, regression, build-reference-app, build-ui-lab
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+FAIL W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — V14 failed: packages with install scripts: @parcel/watcher, esbuild, fsevents, lmdb, msgpackr-extract; not explicitly denied: esbuild; npm install-scripts ls: No packages with unreviewed install scripts.; V13 failed: working tree vs HEAD: uncommitted changes; lockfile vs b6b023f: identical
+IB0-WP05 verification (provenance): FAIL (7/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## I03 (viii) strict-allow-scripts removed from .npmrc fails the toolchain gate
+expected: non-zero exit; output matches /FAIL W01/ and /strict-allow-scripts/
+FAIL W01 Toolchain: running Node and npm equal the exact pins in .nvmrc, packageManager, devEngines (onFail=error) and the version manifest; .npmrc keeps engine-strict and strict-allow-scripts — .npmrc lacks strict-allow-scripts=true
+IB0-WP05 verification (toolchain): FAIL (0/1)
+EXIT_CODE=1
+RESULT=PASS
+
+## I04 (viii) npm install with scripts enabled in a workflow step fails the provenance gate
+expected: non-zero exit; output matches /FAIL W15/ and /installs outside npm ci/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+FAIL W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — architecture: commands ["npm install --ignore-scripts=false && npm run qa:architecture"] != ["npm run qa:architecture"]
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+FAIL W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — a run step installs outside npm ci or changes install-script/lockfile behaviour
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (6/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## F01 (ix) one byte changed in a controlled source fails the governance gate
+expected: non-zero exit; output matches /FAIL W02/ and /fingerprint mismatch/
+PASS W01 Toolchain: running Node and npm equal the exact pins in .nvmrc, packageManager, devEngines (onFail=error) and the version manifest; .npmrc keeps engine-strict and strict-allow-scripts — node 24.21.0; npm 11.19.0
+FAIL W02 Controlled sources match PACK_MANIFEST.json sha256 and size; .paep-control, .gitignore, PACK_MANIFEST.json and CLAUDE.md unchanged since the baseline — fingerprint mismatch .paep-control/text/PAEP_IR_01_v1.0_text.md; controlled files or CLAUDE.md differ from c5c0eb0
+PASS W03 IR-01 §4.2 repository topology present; package.json only at the root and packages/<name>/ (no nested package boundary) — 26 topology entries present; 19 manifests, none nested
+PASS W04 No Nx: no nx/@nx/@nrwl dependency, lockfile entry or install, and no nx.json or project.json — none; Nx disposition NOT REQUIRED
+PASS W05 IB1 not started: apps, packages, config, angular.json and tsconfig files unchanged since the baseline; package entry points are placeholders; no runtime-config schema — no IB1 artefact; 18 placeholder entry points
+PASS W06 No dependency change: package-lock.json byte-identical to the baseline; package.json differs only by qa:types, qa:ib0-wp05 and qa:ib0-wp05:negative — lockfile sha256 be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69
+FAIL W07 Every path changed since the baseline is within WORK_PACKAGE §4; no lint/format/unit-test configuration introduced — outside WORK_PACKAGE §4: .paep-control/text/PAEP_IR_01_v1.0_text.md
+PASS W08 No credential or secret signatures in files added or modified since the baseline — 54 files scanned; findings: none
+IB0-WP05 verification (governance): FAIL (6/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## F02 (ix) CLAUDE.md changed fails the governance gate
+expected: non-zero exit; output matches /FAIL W02/
+PASS W01 Toolchain: running Node and npm equal the exact pins in .nvmrc, packageManager, devEngines (onFail=error) and the version manifest; .npmrc keeps engine-strict and strict-allow-scripts — node 24.21.0; npm 11.19.0
+FAIL W02 Controlled sources match PACK_MANIFEST.json sha256 and size; .paep-control, .gitignore, PACK_MANIFEST.json and CLAUDE.md unchanged since the baseline — controlled files or CLAUDE.md differ from c5c0eb0
+PASS W03 IR-01 §4.2 repository topology present; package.json only at the root and packages/<name>/ (no nested package boundary) — 26 topology entries present; 19 manifests, none nested
+PASS W04 No Nx: no nx/@nx/@nrwl dependency, lockfile entry or install, and no nx.json or project.json — none; Nx disposition NOT REQUIRED
+PASS W05 IB1 not started: apps, packages, config, angular.json and tsconfig files unchanged since the baseline; package entry points are placeholders; no runtime-config schema — no IB1 artefact; 18 placeholder entry points
+PASS W06 No dependency change: package-lock.json byte-identical to the baseline; package.json differs only by qa:types, qa:ib0-wp05 and qa:ib0-wp05:negative — lockfile sha256 be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69
+FAIL W07 Every path changed since the baseline is within WORK_PACKAGE §4; no lint/format/unit-test configuration introduced — outside WORK_PACKAGE §4: CLAUDE.md
+PASS W08 No credential or secret signatures in files added or modified since the baseline — 54 files scanned; findings: none
+IB0-WP05 verification (governance): FAIL (6/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## F03 (ix) unlisted file under .paep-control fails the governance gate
+expected: non-zero exit; output matches /FAIL W02/ and /unlisted/
+PASS W01 Toolchain: running Node and npm equal the exact pins in .nvmrc, packageManager, devEngines (onFail=error) and the version manifest; .npmrc keeps engine-strict and strict-allow-scripts — node 24.21.0; npm 11.19.0
+FAIL W02 Controlled sources match PACK_MANIFEST.json sha256 and size; .paep-control, .gitignore, PACK_MANIFEST.json and CLAUDE.md unchanged since the baseline — unlisted .paep-control/text/extra.md
+PASS W03 IR-01 §4.2 repository topology present; package.json only at the root and packages/<name>/ (no nested package boundary) — 26 topology entries present; 19 manifests, none nested
+PASS W04 No Nx: no nx/@nx/@nrwl dependency, lockfile entry or install, and no nx.json or project.json — none; Nx disposition NOT REQUIRED
+PASS W05 IB1 not started: apps, packages, config, angular.json and tsconfig files unchanged since the baseline; package entry points are placeholders; no runtime-config schema — no IB1 artefact; 18 placeholder entry points
+PASS W06 No dependency change: package-lock.json byte-identical to the baseline; package.json differs only by qa:types, qa:ib0-wp05 and qa:ib0-wp05:negative — lockfile sha256 be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69
+FAIL W07 Every path changed since the baseline is within WORK_PACKAGE §4; no lint/format/unit-test configuration introduced — outside WORK_PACKAGE §4: .paep-control/text/extra.md
+PASS W08 No credential or secret signatures in files added or modified since the baseline — 54 files scanned; findings: none
+IB0-WP05 verification (governance): FAIL (6/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## F04 (ix) accepted WP04 record moved into work-packages/IB0-WP05 (committed rename) fails the governance gate
+expected: non-zero exit; output matches /FAIL W07/ and /IB0-WP04\/ACCEPTANCE_REPORT\.md/
+PASS W01 Toolchain: running Node and npm equal the exact pins in .nvmrc, packageManager, devEngines (onFail=error) and the version manifest; .npmrc keeps engine-strict and strict-allow-scripts — node 24.21.0; npm 11.19.0
+PASS W02 Controlled sources match PACK_MANIFEST.json sha256 and size; .paep-control, .gitignore, PACK_MANIFEST.json and CLAUDE.md unchanged since the baseline — 13/13 controlled files match
+PASS W03 IR-01 §4.2 repository topology present; package.json only at the root and packages/<name>/ (no nested package boundary) — 26 topology entries present; 19 manifests, none nested
+PASS W04 No Nx: no nx/@nx/@nrwl dependency, lockfile entry or install, and no nx.json or project.json — none; Nx disposition NOT REQUIRED
+PASS W05 IB1 not started: apps, packages, config, angular.json and tsconfig files unchanged since the baseline; package entry points are placeholders; no runtime-config schema — no IB1 artefact; 18 placeholder entry points
+PASS W06 No dependency change: package-lock.json byte-identical to the baseline; package.json differs only by qa:types, qa:ib0-wp05 and qa:ib0-wp05:negative — lockfile sha256 be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69
+FAIL W07 Every path changed since the baseline is within WORK_PACKAGE §4; no lint/format/unit-test configuration introduced — outside WORK_PACKAGE §4: work-packages/IB0-WP04/ACCEPTANCE_REPORT.md
+PASS W08 No credential or secret signatures in files added or modified since the baseline — 55 files scanned; findings: none
+IB0-WP05 verification (governance): FAIL (7/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## X01 (x) gate condition changed from always() to success() fails the provenance gate
+expected: non-zero exit; output matches /FAIL W12/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+PASS W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — 9 parallel jobs: governance, provenance, architecture, strictness, negative-architecture, negative-ci, regression, build-reference-app, build-ui-lab
+FAIL W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — gate if "${{ success() }}"
+FAIL W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — workflow.jobs.gate.if: expression not on the allowlist: ${{ success() }}
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (6/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## X02 (x) mandatory job dropped from gate needs fails the provenance gate
+expected: non-zero exit; output matches /FAIL W12/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+PASS W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — 9 parallel jobs: governance, provenance, architecture, strictness, negative-architecture, negative-ci, regression, build-reference-app, build-ui-lab
+FAIL W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — gate needs ["governance","provenance","architecture","strictness","negative-architecture","negative-ci","regression","build-reference-app"]
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (7/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## X03 (x) continue-on-error on a mandatory job fails the provenance gate
+expected: non-zero exit; output matches /FAIL W11/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+FAIL W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — architecture has continue-on-error
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (7/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## X04 (x) mandatory job made conditional (if) fails the provenance gate
+expected: non-zero exit; output matches /FAIL W11/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+FAIL W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — regression has if
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+FAIL W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — workflow.jobs.regression.if: expression not on the allowlist: ${{ github.event_name == 'push' }}
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (6/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## P01 (xi) unapproved third-party action fails the provenance gate
+expected: non-zero exit; output matches /FAIL W14/ and /unapproved action/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+FAIL W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — governance: step "extra" has name, uses; governance: run step without set -euo pipefail; governance: commands ["","node tooling/verification/verify-ib0-wp05.mjs --gate governance"] != ["node tooling/verification/verify-ib0-wp05.mjs --gate governance"]; governance: run step has extra lines
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+FAIL W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — unapproved action some-owner/some-action; jobs.governance.steps[2]: uses some-owner/some-action@0123456789abcdef0123456789abcdef01234567 not verified
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (6/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## P02 (xi) action referenced by a floating tag fails the provenance gate
+expected: non-zero exit; output matches /FAIL W14/ and /not pinned/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+PASS W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — 9 parallel jobs: governance, provenance, architecture, strictness, negative-architecture, negative-ci, regression, build-reference-app, build-ui-lab
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+FAIL W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — not pinned to a full commit SHA: actions/checkout@v7
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (7/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## P03 (xi) approved action at a different SHA fails the provenance gate
+expected: non-zero exit; output matches /FAIL W14/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+PASS W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — 9 parallel jobs: governance, provenance, architecture, strictness, negative-architecture, negative-ci, regression, build-reference-app, build-ui-lab
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+FAIL W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f is not the approved SHA 820762786026740c76f36085b0efc47a31fe5020
+FAIL W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup step 1 ("Set up Node.js from .nvmrc") differs from the reviewed step in the policy (setupSteps)
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (6/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## P04 (xi) contents: write fails the provenance gate
+expected: non-zero exit; output matches /FAIL W10/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+FAIL W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — top-level permissions {"contents":"write"}; write permission at .permissions.contents
+PASS W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — 9 parallel jobs: governance, provenance, architecture, strictness, negative-architecture, negative-ci, regression, build-reference-app, build-ui-lab
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (7/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## P05 (xi) job-level permission escalation fails the provenance gate
+expected: non-zero exit; output matches /FAIL W10/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+FAIL W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — governance overrides permissions; write permission at .jobs.governance.permissions.pull-requests
+FAIL W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — governance has permissions
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (6/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## P06 (xi) pull_request_target trigger fails the provenance gate
+expected: non-zero exit; output matches /FAIL W09/
+FAIL W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — triggers pull_request, push, workflow_dispatch, pull_request_target != pull_request, push, workflow_dispatch; forbidden trigger pull_request_target
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+PASS W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — 9 parallel jobs: governance, provenance, architecture, strictness, negative-architecture, negative-ci, regression, build-reference-app, build-ui-lab
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (7/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## P07 (xi) untrusted PR title interpolated into a run script fails the provenance gate
+expected: non-zero exit; output matches /FAIL W13/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+FAIL W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — architecture: commands ["echo \"${{ github.event.pull_request.title }}\""] != ["npm run qa:architecture"]; architecture: run step has extra lines
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+FAIL W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — workflow.jobs.architecture.steps[2].run: expression not on the allowlist: set -euo pipefail
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (6/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## P08 (xi) secrets reference fails the provenance gate
+expected: non-zero exit; output matches /FAIL W13/ and /secrets/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+PASS W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — 9 parallel jobs: governance, provenance, architecture, strictness, negative-architecture, negative-ci, regression, build-reference-app, build-ui-lab
+FAIL W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — gate step env keys TOKEN, NEEDS_JSON, MANDATORY_JOBS
+FAIL W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — workflow.jobs.gate.steps[0].env.TOKEN: secrets reference; workflow.jobs.gate.steps[0].env.TOKEN: expression not on the allowlist: ${{ secrets.NPM_TOKEN }}
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (6/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## P09 (xi) checkout persisting credentials fails the provenance gate
+expected: non-zero exit; output matches /FAIL W13/ and /persists credentials/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+FAIL W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — governance: step 1 is not checkout with fetch-depth 0 and persist-credentials false
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+FAIL W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — jobs.governance.steps[0]: checkout persists credentials
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (6/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## P10 (xi) node_modules cached with actions/cache fails the provenance gate
+expected: non-zero exit; output matches /FAIL W15/ and /actions\/cache/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+PASS W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — 9 parallel jobs: governance, provenance, architecture, strictness, negative-architecture, negative-ci, regression, build-reference-app, build-ui-lab
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+FAIL W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — unapproved action actions/cache; setup.steps[1]: uses actions/cache@0123456789abcdef0123456789abcdef01234567 not verified
+FAIL W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup has 6 steps; the policy has 5; setup step 2 ("cache") differs from the reviewed step in the policy (setupSteps); setup step 3 ("Prepare evidence directory") differs from the reviewed step in the policy (setupSteps); setup step 4 ("Toolchain gate (Node/npm against .nvmrc, devEngines, packageManager and the version manifest)") differs from the reviewed step in the policy (setupSteps); setup step 5 ("Clean install from the committed lockfile (npm ci)") differs from the reviewed step in the policy (setupSteps); setup step 6 ("Installation left every tracked file unchanged") differs from the reviewed step in the policy (setupSteps); setup.steps[1]: actions/cache; setup.steps[1]: path includes node_modules
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (6/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## P11 (xi) new unapproved dependency fails the governance gate
+expected: non-zero exit; output matches /FAIL W06/
+PASS W01 Toolchain: running Node and npm equal the exact pins in .nvmrc, packageManager, devEngines (onFail=error) and the version manifest; .npmrc keeps engine-strict and strict-allow-scripts — node 24.21.0; npm 11.19.0
+PASS W02 Controlled sources match PACK_MANIFEST.json sha256 and size; .paep-control, .gitignore, PACK_MANIFEST.json and CLAUDE.md unchanged since the baseline — 13/13 controlled files match
+PASS W03 IR-01 §4.2 repository topology present; package.json only at the root and packages/<name>/ (no nested package boundary) — 26 topology entries present; 19 manifests, none nested
+PASS W04 No Nx: no nx/@nx/@nrwl dependency, lockfile entry or install, and no nx.json or project.json — none; Nx disposition NOT REQUIRED
+PASS W05 IB1 not started: apps, packages, config, angular.json and tsconfig files unchanged since the baseline; package entry points are placeholders; no runtime-config schema — no IB1 artefact; 18 placeholder entry points
+FAIL W06 No dependency change: package-lock.json byte-identical to the baseline; package.json differs only by qa:types, qa:ib0-wp05 and qa:ib0-wp05:negative — package.json fields other than scripts changed
+PASS W07 Every path changed since the baseline is within WORK_PACKAGE §4; no lint/format/unit-test configuration introduced — 41 changed paths, all permitted
+PASS W08 No credential or secret signatures in files added or modified since the baseline — 41 files scanned; findings: none
+IB0-WP05 verification (governance): FAIL (7/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## P12 (xi) floating Node version in setup-node fails the provenance gate
+expected: non-zero exit; output matches /FAIL W15/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+PASS W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — 9 parallel jobs: governance, provenance, architecture, strictness, negative-architecture, negative-ci, regression, build-reference-app, build-ui-lab
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+FAIL W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup step 1 ("Set up Node.js from .nvmrc") differs from the reviewed step in the policy (setupSteps); setup-node inputs {"node-version":"24.x","check-latest":false,"cache":"npm","cache-dependency-path":"package-lock.json"}
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (7/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## P13 (xi) second, unreviewed workflow file fails the provenance gate
+expected: non-zero exit; output matches /FAIL W09/
+FAIL W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows holds other.yml, paep-ci.yml; .github holds .github/actions/paep-setup/action.yml, .github/workflows/other.yml, .github/workflows/paep-ci.yml; expected .github/actions/paep-setup/action.yml, .github/workflows/paep-ci.yml
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+PASS W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — 9 parallel jobs: governance, provenance, architecture, strictness, negative-architecture, negative-ci, regression, build-reference-app, build-ui-lab
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (7/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## P14 (xi) invalid workflow YAML (unquoted ": " in a step name, which GitHub rejects) fails the provenance gate
+expected: non-zero exit; output matches /FAIL W09/ and /plain scalar contains/
+FAIL W09 Workflow files parse — .github/workflows/paep-ci.yml: plain scalar contains ": " (quote it): Production build: reference-app
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (2/3)
+EXIT_CODE=1
+RESULT=PASS
+
+## P15 (x) early "exit 0" in the gate script fails the provenance gate
+expected: non-zero exit; output matches /FAIL W12/ and /gate script differs/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+PASS W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — 9 parallel jobs: governance, provenance, architecture, strictness, negative-architecture, negative-ci, regression, build-reference-app, build-ui-lab
+FAIL W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — gate script differs from the reviewed script in the policy (gate.run)
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (7/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## P16 (xi) top-level defaults replacing the run shell fails the provenance gate
+expected: non-zero exit; output matches /FAIL W09/ and /top-level keys/
+FAIL W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — workflow top-level keys name, on, permissions, defaults, concurrency, jobs != name, on, permissions, concurrency, jobs (no defaults, env or other key)
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+PASS W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — 9 parallel jobs: governance, provenance, architecture, strictness, negative-architecture, negative-ci, regression, build-reference-app, build-ui-lab
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (7/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## P17 (xi) escaped "${{" (\x24) in a double-quoted value fails the provenance gate
+expected: non-zero exit; output matches /FAIL W09/ and /escape sequence/
+FAIL W09 Workflow files parse — .github/workflows/paep-ci.yml: escape sequence in double-quoted scalar is not supported: "Evaluate every mandatory job result \x24{{ github.event.pull_request.title }}"
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (2/3)
+EXIT_CODE=1
+RESULT=PASS
+
+## P18 (xi) env re-enabling install scripts on the setup npm ci step fails the provenance gate
+expected: non-zero exit; output matches /FAIL W15/ and /differs from the reviewed step/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+PASS W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — 9 parallel jobs: governance, provenance, architecture, strictness, negative-architecture, negative-ci, regression, build-reference-app, build-ui-lab
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+FAIL W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup step 4 ("Clean install from the committed lockfile (npm ci)") differs from the reviewed step in the policy (setupSteps)
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (7/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## P19 (xi) extra install line in the setup action ("npm  install", two spaces) fails the provenance gate
+expected: non-zero exit; output matches /FAIL W15/ and /installs outside npm ci/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+PASS W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — 9 parallel jobs: governance, provenance, architecture, strictness, negative-architecture, negative-ci, regression, build-reference-app, build-ui-lab
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+FAIL W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup step 4 ("Clean install from the committed lockfile (npm ci)") differs from the reviewed step in the policy (setupSteps); a run step installs outside npm ci or changes install-script/lockfile behaviour
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (7/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## P21 (viii) "|| true" on the setup toolchain gate fails the provenance gate
+expected: non-zero exit; output matches /FAIL W15/ and /differs from the reviewed step/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+PASS W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — 9 parallel jobs: governance, provenance, architecture, strictness, negative-architecture, negative-ci, regression, build-reference-app, build-ui-lab
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+FAIL W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup step 3 ("Toolchain gate (Node/npm against .nvmrc, devEngines, packageManager and the version manifest)") differs from the reviewed step in the policy (setupSteps)
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (7/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## P22 (viii) continue-on-error on the setup npm ci step fails the provenance gate
+expected: non-zero exit; output matches /FAIL W15/ and /differs from the reviewed step/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+PASS W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — 9 parallel jobs: governance, provenance, architecture, strictness, negative-architecture, negative-ci, regression, build-reference-app, build-ui-lab
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+FAIL W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup step 4 ("Clean install from the committed lockfile (npm ci)") differs from the reviewed step in the policy (setupSteps)
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (7/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## P23 (xi) top-level defaults hidden behind U+0085 (NEL) in a comment fails the provenance gate
+expected: non-zero exit; output matches /FAIL W09/ and /U\+0085/
+FAIL W09 Workflow files parse — .github/workflows/paep-ci.yml: character U+0085 at offset 606 is not supported (printable ASCII and \n only)
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (2/3)
+EXIT_CODE=1
+RESULT=PASS
+
+## P24 (xi) gate job moved to another runner fails the provenance gate
+expected: non-zero exit; output matches /FAIL W12/ and /gate runs-on/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+PASS W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — 9 parallel jobs: governance, provenance, architecture, strictness, negative-architecture, negative-ci, regression, build-reference-app, build-ui-lab
+FAIL W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — gate runs-on "self-hosted"
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (7/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## P20 (xi) evidence upload widened with include-hidden-files fails the provenance gate
+expected: non-zero exit; output matches /FAIL W11/ and /evidence upload/
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+FAIL W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — governance: last step is not the evidence upload (always, runner.temp/paep-evidence, 30 days)
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+IB0-WP05 verification (provenance): FAIL (7/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## N01 Nx introduced (nx.json) fails the governance gate
+expected: non-zero exit; output matches /FAIL W04/
+PASS W01 Toolchain: running Node and npm equal the exact pins in .nvmrc, packageManager, devEngines (onFail=error) and the version manifest; .npmrc keeps engine-strict and strict-allow-scripts — node 24.21.0; npm 11.19.0
+PASS W02 Controlled sources match PACK_MANIFEST.json sha256 and size; .paep-control, .gitignore, PACK_MANIFEST.json and CLAUDE.md unchanged since the baseline — 13/13 controlled files match
+PASS W03 IR-01 §4.2 repository topology present; package.json only at the root and packages/<name>/ (no nested package boundary) — 26 topology entries present; 19 manifests, none nested
+FAIL W04 No Nx: no nx/@nx/@nrwl dependency, lockfile entry or install, and no nx.json or project.json — file nx.json
+PASS W05 IB1 not started: apps, packages, config, angular.json and tsconfig files unchanged since the baseline; package entry points are placeholders; no runtime-config schema — no IB1 artefact; 18 placeholder entry points
+PASS W06 No dependency change: package-lock.json byte-identical to the baseline; package.json differs only by qa:types, qa:ib0-wp05 and qa:ib0-wp05:negative — lockfile sha256 be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69
+FAIL W07 Every path changed since the baseline is within WORK_PACKAGE §4; no lint/format/unit-test configuration introduced — outside WORK_PACKAGE §4: nx.json
+PASS W08 No credential or secret signatures in files added or modified since the baseline — 43 files scanned; findings: none
+IB0-WP05 verification (governance): FAIL (6/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## N02 IB1 artefact (config/runtime-config.schema.json) fails the governance gate
+expected: non-zero exit; output matches /FAIL W05/
+PASS W01 Toolchain: running Node and npm equal the exact pins in .nvmrc, packageManager, devEngines (onFail=error) and the version manifest; .npmrc keeps engine-strict and strict-allow-scripts — node 24.21.0; npm 11.19.0
+PASS W02 Controlled sources match PACK_MANIFEST.json sha256 and size; .paep-control, .gitignore, PACK_MANIFEST.json and CLAUDE.md unchanged since the baseline — 13/13 controlled files match
+PASS W03 IR-01 §4.2 repository topology present; package.json only at the root and packages/<name>/ (no nested package boundary) — 26 topology entries present; 19 manifests, none nested
+PASS W04 No Nx: no nx/@nx/@nrwl dependency, lockfile entry or install, and no nx.json or project.json — none; Nx disposition NOT REQUIRED
+FAIL W05 IB1 not started: apps, packages, config, angular.json and tsconfig files unchanged since the baseline; package entry points are placeholders; no runtime-config schema — changed: config/runtime-config.schema.json; config/ holds README.md, runtime-config.schema.json (runtime schema is IB1)
+PASS W06 No dependency change: package-lock.json byte-identical to the baseline; package.json differs only by qa:types, qa:ib0-wp05 and qa:ib0-wp05:negative — lockfile sha256 be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69
+FAIL W07 Every path changed since the baseline is within WORK_PACKAGE §4; no lint/format/unit-test configuration introduced — outside WORK_PACKAGE §4: config/runtime-config.schema.json
+PASS W08 No credential or secret signatures in files added or modified since the baseline — 43 files scanned; findings: none
+IB0-WP05 verification (governance): FAIL (6/8)
+EXIT_CODE=1
+RESULT=PASS
+
+## N03 lint configuration introduced fails the governance gate
+expected: non-zero exit; output matches /FAIL W07/
+PASS W01 Toolchain: running Node and npm equal the exact pins in .nvmrc, packageManager, devEngines (onFail=error) and the version manifest; .npmrc keeps engine-strict and strict-allow-scripts — node 24.21.0; npm 11.19.0
+PASS W02 Controlled sources match PACK_MANIFEST.json sha256 and size; .paep-control, .gitignore, PACK_MANIFEST.json and CLAUDE.md unchanged since the baseline — 13/13 controlled files match
+PASS W03 IR-01 §4.2 repository topology present; package.json only at the root and packages/<name>/ (no nested package boundary) — 26 topology entries present; 19 manifests, none nested
+PASS W04 No Nx: no nx/@nx/@nrwl dependency, lockfile entry or install, and no nx.json or project.json — none; Nx disposition NOT REQUIRED
+PASS W05 IB1 not started: apps, packages, config, angular.json and tsconfig files unchanged since the baseline; package entry points are placeholders; no runtime-config schema — no IB1 artefact; 18 placeholder entry points
+PASS W06 No dependency change: package-lock.json byte-identical to the baseline; package.json differs only by qa:types, qa:ib0-wp05 and qa:ib0-wp05:negative — lockfile sha256 be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69
+FAIL W07 Every path changed since the baseline is within WORK_PACKAGE §4; no lint/format/unit-test configuration introduced — outside WORK_PACKAGE §4: eslint.config.mjs; lint/test config: eslint.config.mjs
+PASS W08 No credential or secret signatures in files added or modified since the baseline — 43 files scanned; findings: none
+IB0-WP05 verification (governance): FAIL (7/8)
+EXIT_CODE=1
+RESULT=PASS

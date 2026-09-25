@@ -1,0 +1,31 @@
+
+> @proseit/paep-workspace@0.0.0 qa:ib0-wp05
+> node tooling/verification/verify-ib0-wp05.mjs
+
+PASS W01 Toolchain: running Node and npm equal the exact pins in .nvmrc, packageManager, devEngines (onFail=error) and the version manifest; .npmrc keeps engine-strict and strict-allow-scripts — node 24.21.0; npm 11.19.0
+PASS W02 Controlled sources match PACK_MANIFEST.json sha256 and size; .paep-control, .gitignore, PACK_MANIFEST.json and CLAUDE.md unchanged since the baseline — 13/13 controlled files match
+PASS W03 IR-01 §4.2 repository topology present; package.json only at the root and packages/<name>/ (no nested package boundary) — 26 topology entries present; 19 manifests, none nested
+PASS W04 No Nx: no nx/@nx/@nrwl dependency, lockfile entry or install, and no nx.json or project.json — none; Nx disposition NOT REQUIRED
+PASS W05 IB1 not started: apps, packages, config, angular.json and tsconfig files unchanged since the baseline; package entry points are placeholders; no runtime-config schema — no IB1 artefact; 18 placeholder entry points
+PASS W06 No dependency change: package-lock.json byte-identical to the baseline; package.json differs only by qa:types, qa:ib0-wp05 and qa:ib0-wp05:negative — lockfile sha256 be1154cb514cd0522d6b5f382b2451cf6b52a73c9b943b13daa0542578d46b69
+PASS W07 Every path changed since the baseline is within WORK_PACKAGE §4; no lint/format/unit-test configuration introduced — 57 changed paths, all permitted
+PASS W08 No credential or secret signatures in files added or modified since the baseline — 57 files scanned; findings: none
+PASS W09 One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only — .github/workflows/paep-ci.yml: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request
+PASS W10 GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions — contents: read; gate {}
+PASS W11 Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention — 9 parallel jobs: governance, provenance, architecture, strictness, negative-architecture, negative-ci, regression, build-reference-app, build-ui-lab
+PASS W12 Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success — needs 9/9; if always(); permissions {}
+PASS W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — none
+PASS W14 Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one — actions/checkout@3d3c42e (v7.0.1, MIT); actions/setup-node@8207627 (v7.0.0, MIT); actions/upload-artifact@043fb46 (v7.0.1, MIT); local: ./.github/actions/paep-setup
+PASS W15 Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache — setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged
+PASS W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded — WP02 19/20 pass; V17 bounded
+PASS W17 Strict configuration: WP04 static verifier passes V04-V07 (strict, noImplicitAny, strictTemplates, noCheck and suppression protection, aliases, entry points) and every other static check; V16/V17 report only WP05-authorised change — WP04 static 17/19 pass; bounded: V16, V17
+PASS W18 WP04 negative architecture/strictness suite: every case passes except positive control C3, which fails only V16/V17 with WP05-authorised findings — 85/86 pass; bounded: C3
+PASS W19 WP03 negative runner: fails only with the known M11 TypeError because WP04 moved paths from tsconfig.json to tsconfig.base.json (its strictness intent is carried by WP04 S1-S9 and the WP05 qa:types negatives) — exit 1 at negative-ib0-wp03.mjs:125 (paths in tsconfig.base.json); bounded
+PASS W20 IB0-WP04 regression (full, with both builds): every check passes except V16/V17 (WP05 scripts and paths only) and V22/V23 (re-evaluated in W21/W22) — WP04 20/24 pass; bounded: V16, V17, V22, V23
+PASS W21 IB0-WP03 regression: every check passes except the accepted V05/V08/V10/V12/V17, whose findings are only WP04- or WP05-authorised change; WP01-WP03 records unchanged — WP03 13/18 pass; bounded: V05, V08, V10, V12, V17
+PASS W22 IB0-WP02 regression: every check (toolchain, pins, lockfile provenance, install scripts, licences, controlled sources, secrets) passes except V17, whose findings are tsconfig.base.json, .github/workflows and the accepted WP03 paths — WP02 19/20 pass; bounded: V17
+PASS W23 IB0-WP01 regression passes — WP01 15/15 pass; bounded: none
+PASS W24 npm run qa:types (ngc --noEmit, strict TypeScript and templates, both applications) exits 0 — exit=0
+
+IB0-WP05 verification (full): PASS (24/24)
+EXIT_CODE=0

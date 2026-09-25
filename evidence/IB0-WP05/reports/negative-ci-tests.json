@@ -1,0 +1,707 @@
+{
+  "workPackage": "IB0-WP05",
+  "generatedAt": "2026-09-24T20:17:03.814Z",
+  "commit": "089f8640b07cfdbf880601903543513b27776784",
+  "node": "24.21.0",
+  "result": "PASS",
+  "controls": 10,
+  "negatives": 77,
+  "cases": [
+    {
+      "id": "C06",
+      "name": "control: tracked-tree check passes after an unchanged install",
+      "control": true,
+      "expected": "exit 0",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "G00",
+      "name": "control: every mandatory job succeeded",
+      "control": true,
+      "expected": "exit 0, PAEP gate: PASS",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "G01",
+      "name": "mandatory job governance failed",
+      "control": false,
+      "expected": "non-zero exit, no PASS",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G02",
+      "name": "mandatory job provenance failed",
+      "control": false,
+      "expected": "non-zero exit, no PASS",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G03",
+      "name": "mandatory job architecture failed",
+      "control": false,
+      "expected": "non-zero exit, no PASS",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G04",
+      "name": "mandatory job strictness failed",
+      "control": false,
+      "expected": "non-zero exit, no PASS",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G05",
+      "name": "mandatory job negative-architecture failed",
+      "control": false,
+      "expected": "non-zero exit, no PASS",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G06",
+      "name": "mandatory job negative-ci failed",
+      "control": false,
+      "expected": "non-zero exit, no PASS",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G07",
+      "name": "mandatory job regression failed",
+      "control": false,
+      "expected": "non-zero exit, no PASS",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G08",
+      "name": "mandatory job build-reference-app failed",
+      "control": false,
+      "expected": "non-zero exit, no PASS",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G09",
+      "name": "mandatory job build-ui-lab failed",
+      "control": false,
+      "expected": "non-zero exit, no PASS",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G10",
+      "name": "mandatory job cancelled (negative-ci)",
+      "control": false,
+      "expected": "non-zero exit, no PASS",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G11",
+      "name": "mandatory job skipped (architecture)",
+      "control": false,
+      "expected": "non-zero exit, no PASS",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G12",
+      "name": "mandatory job timed out (regression; GitHub reports timeouts as failure)",
+      "control": false,
+      "expected": "non-zero exit, no PASS",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G13",
+      "name": "mandatory job missing from needs (strictness)",
+      "control": false,
+      "expected": "non-zero exit, no PASS",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G14",
+      "name": "unexpected extra job in needs",
+      "control": false,
+      "expected": "non-zero exit, no PASS",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G15",
+      "name": "every mandatory job skipped",
+      "control": false,
+      "expected": "non-zero exit, no PASS",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G16",
+      "name": "empty needs context",
+      "control": false,
+      "expected": "non-zero exit, no PASS",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G17",
+      "name": "malformed needs context",
+      "control": false,
+      "expected": "non-zero exit, no PASS",
+      "exit": 5,
+      "pass": true
+    },
+    {
+      "id": "G18",
+      "name": "unknown result value (neutral)",
+      "control": false,
+      "expected": "non-zero exit, no PASS",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "C01",
+      "name": "control: governance gate passes unmutated",
+      "control": true,
+      "expected": "exit 0",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "C02",
+      "name": "control: provenance gate passes unmutated",
+      "control": true,
+      "expected": "exit 0",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "C03",
+      "name": "control: qa:types passes unmutated",
+      "control": true,
+      "expected": "exit 0",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "C04",
+      "name": "control: qa:architecture passes unmutated",
+      "control": true,
+      "expected": "exit 0",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "C05",
+      "name": "control: toolchain gate passes unmutated",
+      "control": true,
+      "expected": "exit 0",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "C07",
+      "name": "control: strictness gate passes unmutated",
+      "control": true,
+      "expected": "exit 0",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "C08",
+      "name": "control: negative-architecture gate passes unmutated",
+      "control": true,
+      "expected": "exit 0",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "A01",
+      "name": "(i) forbidden upward dependency contracts -> foundation fails qa:architecture",
+      "control": false,
+      "expected": "non-zero exit; output matches /DIRECTION/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "A02",
+      "name": "(xii) prohibited change: domain-quality -> domain-fiscal (same category, not allowlisted) fails qa:architecture",
+      "control": false,
+      "expected": "non-zero exit; output matches /violation/i",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "A03",
+      "name": "(xii) prohibited change: deep import into another package fails qa:architecture",
+      "control": false,
+      "expected": "non-zero exit; output matches /DEEP|UNKNOWN|violation/i",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "A04",
+      "name": "(xii) prohibited change: nested package.json boundary fails the governance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W03/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "S01",
+      "name": "(ii) TypeScript strict violation (implicit any, null to string) fails qa:types",
+      "control": false,
+      "expected": "non-zero exit; output matches /TS7006/ and /TS2322/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "S02",
+      "name": "(ii) Angular template strict violation ($event as number) fails qa:types",
+      "control": false,
+      "expected": "non-zero exit; output matches /TS2345/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "S03",
+      "name": "(ii) strictTemplates false fails the strictness gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W17/ and /V05/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "S04",
+      "name": "(ii) noCheck true fails the strictness gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W17/ and /noCheck/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "B01",
+      "name": "(iii) type error fails the reference-app production build",
+      "control": false,
+      "expected": "non-zero exit; output matches /TS7006|TS2322/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "H01",
+      "name": "(iv) crashed WP04 negative harness fails the negative-architecture gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W18/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "H02",
+      "name": "(iv) checker that stops reporting cycles makes WP04 negative cases fail, failing the negative-architecture gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W18/ and /failed/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "L00",
+      "name": "control: npm ci --dry-run accepts the committed manifests",
+      "control": true,
+      "expected": "exit 0",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "L01",
+      "name": "(v) package.json dependency changed without a lockfile update fails npm ci",
+      "control": false,
+      "expected": "non-zero exit; /npm error/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "L02",
+      "name": "(v) lockfile modified by installation fails the tracked-tree check",
+      "control": false,
+      "expected": "non-zero exit; output matches /package-lock\\.json/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "L03",
+      "name": "(v) lockfile drift from the accepted baseline fails the governance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W06/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "T01",
+      "name": "(vi) .nvmrc pin drift fails the toolchain gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W01/ and /\\.nvmrc|devEngines|manifest/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "T02",
+      "name": "(vi) running Node differs from a consistent pin (all pins 24.20.0) fails the toolchain gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W01/ and /running Node 24\\.21\\.0 != pinned 24\\.20\\.0/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "T03",
+      "name": "(vii) running npm differs from the pin fails the toolchain gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W01/ and /running npm 11\\.18\\.0 != pinned 11\\.19\\.0/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "T04",
+      "name": "(vii) packageManager pin drift fails the toolchain gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W01/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "T05",
+      "name": "(vi) devEngines Node pin not met fails npm ci (EBADDEVENGINES)",
+      "control": false,
+      "expected": "non-zero exit; /EBADDEVENGINES/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "T06",
+      "name": "(vii) devEngines npm pin not met fails npm ci (EBADDEVENGINES)",
+      "control": false,
+      "expected": "non-zero exit; /EBADDEVENGINES/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "I01",
+      "name": "(viii) new lockfile package with an unreviewed install script fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W16/ and /V14 failed: .*not explicitly denied: rxjs/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "I02",
+      "name": "(viii) install script allowed (esbuild: true) fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W16/ and /V14 failed: .*not explicitly denied: esbuild/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "I03",
+      "name": "(viii) strict-allow-scripts removed from .npmrc fails the toolchain gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W01/ and /strict-allow-scripts/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "I04",
+      "name": "(viii) npm install with scripts enabled in a workflow step fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W15/ and /installs outside npm ci/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F01",
+      "name": "(ix) one byte changed in a controlled source fails the governance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W02/ and /fingerprint mismatch/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F02",
+      "name": "(ix) CLAUDE.md changed fails the governance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W02/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F03",
+      "name": "(ix) unlisted file under .paep-control fails the governance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W02/ and /unlisted/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F04",
+      "name": "(ix) accepted WP04 record moved into work-packages/IB0-WP05 (committed rename) fails the governance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W07/ and /IB0-WP04\\/ACCEPTANCE_REPORT\\.md/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "X01",
+      "name": "(x) gate condition changed from always() to success() fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W12/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "X02",
+      "name": "(x) mandatory job dropped from gate needs fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W12/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "X03",
+      "name": "(x) continue-on-error on a mandatory job fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W11/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "X04",
+      "name": "(x) mandatory job made conditional (if) fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W11/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P01",
+      "name": "(xi) unapproved third-party action fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W14/ and /unapproved action/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P02",
+      "name": "(xi) action referenced by a floating tag fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W14/ and /not pinned/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P03",
+      "name": "(xi) approved action at a different SHA fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W14/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P04",
+      "name": "(xi) contents: write fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W10/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P05",
+      "name": "(xi) job-level permission escalation fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W10/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P06",
+      "name": "(xi) pull_request_target trigger fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W09/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P07",
+      "name": "(xi) untrusted PR title interpolated into a run script fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W13/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P08",
+      "name": "(xi) secrets reference fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W13/ and /secrets/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P09",
+      "name": "(xi) checkout persisting credentials fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W13/ and /persists credentials/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P10",
+      "name": "(xi) node_modules cached with actions/cache fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W15/ and /actions\\/cache/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P11",
+      "name": "(xi) new unapproved dependency fails the governance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W06/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P12",
+      "name": "(xi) floating Node version in setup-node fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W15/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P13",
+      "name": "(xi) second, unreviewed workflow file fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W09/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P14",
+      "name": "(xi) invalid workflow YAML (unquoted \": \" in a step name, which GitHub rejects) fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W09/ and /plain scalar contains/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P15",
+      "name": "(x) early \"exit 0\" in the gate script fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W12/ and /gate script differs/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P16",
+      "name": "(xi) top-level defaults replacing the run shell fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W09/ and /top-level keys/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P17",
+      "name": "(xi) escaped \"${{\" (\\x24) in a double-quoted value fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W09/ and /escape sequence/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P18",
+      "name": "(xi) env re-enabling install scripts on the setup npm ci step fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W15/ and /differs from the reviewed step/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P19",
+      "name": "(xi) extra install line in the setup action (\"npm  install\", two spaces) fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W15/ and /installs outside npm ci/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P21",
+      "name": "(viii) \"|| true\" on the setup toolchain gate fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W15/ and /differs from the reviewed step/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P22",
+      "name": "(viii) continue-on-error on the setup npm ci step fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W15/ and /differs from the reviewed step/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P23",
+      "name": "(xi) top-level defaults hidden behind U+0085 (NEL) in a comment fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W09/ and /U\\+0085/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P24",
+      "name": "(xi) gate job moved to another runner fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W12/ and /gate runs-on/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "P20",
+      "name": "(xi) evidence upload widened with include-hidden-files fails the provenance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W11/ and /evidence upload/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "N01",
+      "name": "Nx introduced (nx.json) fails the governance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W04/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "N02",
+      "name": "IB1 artefact (config/runtime-config.schema.json) fails the governance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W05/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "N03",
+      "name": "lint configuration introduced fails the governance gate",
+      "control": false,
+      "expected": "non-zero exit; output matches /FAIL W07/",
+      "exit": 1,
+      "pass": true
+    }
+  ]
+}

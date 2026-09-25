@@ -1,0 +1,748 @@
+#!/usr/bin/env node
+/**
+ * PAEP IB0-WP05 verifier and CI gate runner.
+ *
+ * Checks the GitHub Actions CI baseline (.github/workflows/paep-ci.yml and the
+ * local setup action) against tooling/verification/ib0-wp05-ci-policy.json,
+ * the controlled toolchain, controlled sources, scope and secrets, and runs the
+ * accepted IB0-WP01..WP04 verifiers and negative suites as regression. The
+ * historical verifiers are not modified: where they intentionally flag a later
+ * authorised change, this verifier accepts only the exact bounded findings
+ * recorded in work-packages/IB0-WP05/WORK_PACKAGE.md §6 and fails on anything
+ * else.
+ *
+ * Usage (from the repository root, after `npm ci` except for --gate toolchain):
+ *   node tooling/verification/verify-ib0-wp05.mjs                 full local run (W01-W24)
+ *   node tooling/verification/verify-ib0-wp05.mjs --gate <name>   one CI gate:
+ *     toolchain | governance | provenance | strictness | negative-architecture |
+ *     regression | build-metadata --app <reference-app|ui-lab>
+ *
+ * Node.js built-ins only (typescript is not needed). The regression gates run
+ * the older verifiers, which rewrite their tracked evidence; this script copies
+ * what it needs and restores those files, and refuses to run if they already
+ * have local changes. Writes evidence/IB0-WP05/reports/ib0-wp05-verification[-<gate>].json
+ * and, when PAEP_EVIDENCE_DIR is set (CI), copies of every report it reads.
+ */
+
+import fs from 'node:fs';
+import path from 'node:path';
+import process from 'node:process';
+import crypto from 'node:crypto';
+import { spawnSync } from 'node:child_process';
+import { parseYaml } from './yaml-subset.mjs';
+
+const root = process.cwd();
+const argv = process.argv.slice(2);
+const argValue = (flag) => { const i = argv.indexOf(flag); return i >= 0 ? argv[i + 1] : undefined; };
+const gate = argValue('--gate') || 'full';
+const GATES = {
+  toolchain: ['W01'],
+  governance: ['W01', 'W02', 'W03', 'W04', 'W05', 'W06', 'W07', 'W08'],
+  provenance: ['W09', 'W10', 'W11', 'W12', 'W13', 'W14', 'W15', 'W16'],
+  strictness: ['W17'],
+  'negative-architecture': ['W17', 'W18', 'W19'],
+  regression: ['W20', 'W21', 'W22', 'W23'],
+  'build-metadata': ['W25'],
+  full: ['W01', 'W02', 'W03', 'W04', 'W05', 'W06', 'W07', 'W08', 'W09', 'W10', 'W11', 'W12', 'W13', 'W14', 'W15', 'W16',
+    'W17', 'W18', 'W19', 'W20', 'W21', 'W22', 'W23', 'W24']
+};
+if (!GATES[gate]) { console.error(`unknown gate: ${gate}`); process.exit(2); }
+const selected = new Set(GATES[gate]);
+const want = (id) => selected.has(id);
+
+// Accepted IB0-WP04 merge commit on main.
+const BASELINE_COMMIT = 'c5c0eb028e31763090ffcdf2a3ab6e22a41fc24a';
+// Earlier baselines used by the WP03/WP04 bounded-exception rules.
+const WP03_BASELINE = 'ac6b786caf3485ce2b45724be2b437c28f04b66b';
+const POLICY_PATH = 'tooling/verification/ib0-wp05-ci-policy.json';
+const WP05_SCRIPTS = {
+  // PAEP-EQP-01 Appendix B name: strict TypeScript and Angular template type-check of both applications.
+  'qa:types': 'ngc -p apps/reference-app/tsconfig.app.json --noEmit && ngc -p apps/ui-lab/tsconfig.app.json --noEmit',
+  'qa:ib0-wp05': 'node tooling/verification/verify-ib0-wp05.mjs',
+  'qa:ib0-wp05:negative': 'node tooling/verification/negative-ib0-wp05.mjs'
+};
+// Paths WORK_PACKAGE §4 permits IB0-WP05 to create or modify.
+const WP05_PERMITTED = [
+  /^\.github\/workflows\/paep-ci\.yml$/, /^\.github\/actions\/paep-setup\/action\.yml$/, /^package\.json$/,
+  /^tooling\/verification\/(verify|negative)-ib0-wp05\.mjs$/, /^tooling\/verification\/ib0-wp05-ci-policy\.json$/, /^tooling\/verification\/yaml-subset\.mjs$/,
+  /^docs\/architecture\/IB0-WP05-(IMPLEMENTATION-PLAN|CI-DESIGN|PR-ENFORCEMENT)\.md$/, /^docs\/provenance\/GITHUB-ACTIONS-REGISTER\.md$/,
+  /^docs\/adr\/ADR-REGISTER\.md$/, /^docs\/provenance\/PROVENANCE-REGISTER\.md$/,
+  /^work-packages\/IB0-WP05\//, /^evidence\/IB0-WP05\//
+];
+// Paths IB0-WP04 WORK_PACKAGE §4 permitted (copied from verify-ib0-wp04.mjs, used to re-evaluate WP03 V12).
+const WP04_PERMITTED = [
+  /^tsconfig\.base\.json$/, /^tsconfig\.json$/, /^package\.json$/, /^tooling\/architecture-boundaries\//,
+  /^tooling\/verification\/(verify|negative)-ib0-wp04\.mjs$/,
+  /^docs\/architecture\/IB0-WP04-IMPLEMENTATION-PLAN\.md$/, /^docs\/adr\/ADR-REGISTER\.md$/, /^docs\/provenance\/PROVENANCE-REGISTER\.md$/,
+  /^work-packages\/IB0-WP04\//, /^evidence\/IB0-WP04\//
+];
+const PROTECTED_RECORDS = ['evidence/IB0-WP01', 'evidence/IB0-WP02', 'evidence/IB0-WP03', 'evidence/IB0-WP04',
+  'work-packages/IB0-WP01', 'work-packages/IB0-WP02', 'work-packages/IB0-WP03', 'work-packages/IB0-WP04'];
+const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', '.angular']);
+
+const results = [];
+const add = (id, name, pass, details = '') => { if (want(id)) results.push({ id, name, pass: Boolean(pass), details }); };
+const abs = (p) => path.join(root, p);
+const exists = (p) => fs.existsSync(abs(p));
+const read = (p) => fs.readFileSync(abs(p), 'utf8');
+const readJson = (p) => JSON.parse(read(p));
+const sha256 = (p) => crypto.createHash('sha256').update(fs.readFileSync(abs(p))).digest('hex');
+const isWin = process.platform === 'win32';
+const lines = (s) => (s || '').split(/\r?\n/).filter(Boolean);
+const evidenceOut = process.env.PAEP_EVIDENCE_DIR || '';
+const reportsDir = path.join(root, 'evidence', 'IB0-WP05', 'reports');
+const logsDir = path.join(root, 'evidence', 'IB0-WP05', 'logs', 'ci-gates');
+
+function run(cmd, args, opts = {}) {
+  const r = spawnSync(cmd, args, { cwd: root, encoding: 'utf8', stdio: 'pipe', env: { ...process.env, NO_COLOR: '1', FORCE_COLOR: '0', NG_CLI_ANALYTICS: 'false' }, shell: isWin, maxBuffer: 256 * 1024 * 1024, ...opts });
+  return { status: r.status, out: `${r.stdout || ''}${r.stderr || ''}`.trim(), stdout: r.stdout || '', error: r.error };
+}
+const git = (...args) => run('git', args);
+function walk(dir, out = []) {
+  for (const e of fs.readdirSync(abs(dir), { withFileTypes: true })) {
+    if (SKIP_DIRS.has(e.name)) continue;
+    const p = dir === '.' ? e.name : `${dir}/${e.name}`;
+    if (e.isDirectory()) walk(p, out); else out.push(p);
+  }
+  return out;
+}
+function keep(name, content) {
+  // Saves a copy of a report or log this gate relied on.
+  const targets = evidenceOut ? [path.join(evidenceOut, name)] : [path.join(logsDir, gate, name)];
+  for (const t of targets) { fs.mkdirSync(path.dirname(t), { recursive: true }); fs.writeFileSync(t, content, 'utf8'); }
+}
+const sameSet = (a, b) => JSON.stringify([...new Set(a)].sort()) === JSON.stringify([...new Set(b)].sort()) && a.length === new Set(a).size;
+
+// ---- Shared state ------------------------------------------------------------------------
+let pkg = {};
+let policy = null;
+try { pkg = readJson('package.json'); } catch (e) { add('W01', 'package.json parses', false, String(e)); }
+try { policy = readJson(POLICY_PATH); } catch (e) { if (!['toolchain', 'build-metadata'].includes(gate)) add('W09', `${POLICY_PATH} parses`, false, String(e)); }
+
+// W01: toolchain (IB-01 §4.1, WP02 pins). Runs before npm ci in every CI job.
+if (want('W01')) {
+  const p = [];
+  const EXACT = /^\d+\.\d+\.\d+$/;
+  const nvmrc = exists('.nvmrc') ? read('.nvmrc').trim() : '';
+  if (!EXACT.test(nvmrc)) p.push(`.nvmrc is not an exact version: "${nvmrc}"`);
+  const de = pkg.devEngines || {};
+  if (de.runtime?.name !== 'node' || de.runtime?.version !== nvmrc || de.runtime?.onFail !== 'error') p.push(`devEngines.runtime ${JSON.stringify(de.runtime)} does not pin node ${nvmrc} with onFail=error`);
+  const pmMatch = /^npm@(\d+\.\d+\.\d+)$/.exec(pkg.packageManager || '');
+  const npmPin = pmMatch ? pmMatch[1] : '';
+  if (!npmPin) p.push(`packageManager "${pkg.packageManager}" is not npm@<exact>`);
+  if (de.packageManager?.name !== 'npm' || de.packageManager?.version !== npmPin || de.packageManager?.onFail !== 'error') p.push(`devEngines.packageManager ${JSON.stringify(de.packageManager)} does not pin npm ${npmPin} with onFail=error`);
+  try {
+    const m = readJson('docs/architecture/toolchain-version-manifest.json');
+    if (m.runtime?.node !== nvmrc) p.push(`version manifest node ${m.runtime?.node} != .nvmrc ${nvmrc}`);
+    if (m.runtime?.npm !== npmPin) p.push(`version manifest npm ${m.runtime?.npm} != packageManager ${npmPin}`);
+  } catch (e) { p.push(`version manifest: ${e.message}`); }
+  const npmrc = exists('.npmrc') ? lines(read('.npmrc')).map((l) => l.trim()) : [];
+  for (const need of ['engine-strict=true', 'strict-allow-scripts=true']) if (!npmrc.includes(need)) p.push(`.npmrc lacks ${need}`);
+  if (process.versions.node !== nvmrc) p.push(`running Node ${process.versions.node} != pinned ${nvmrc}`);
+  const npmV = run('npm', ['--version']);
+  const runningNpm = lines(npmV.stdout).pop() || '';
+  if (runningNpm !== npmPin) p.push(`running npm ${runningNpm || '(none)'} != pinned ${npmPin}`);
+  add('W01', 'Toolchain: running Node and npm equal the exact pins in .nvmrc, packageManager, devEngines (onFail=error) and the version manifest; .npmrc keeps engine-strict and strict-allow-scripts',
+    p.length === 0, p.length ? p.join('; ') : `node ${process.versions.node}; npm ${runningNpm}`);
+}
+
+// Changed paths since the WP04 baseline (tracked + untracked).
+let changedPaths = [];
+if (['W05', 'W06', 'W07', 'W08'].some(want)) {
+  // --no-renames: a moved file must show under both paths, so moving an accepted record into a WP05 folder is caught.
+  const d = git('diff', '--name-only', '--no-renames', BASELINE_COMMIT);
+  const u = git('ls-files', '--others', '--exclude-standard');
+  if (d.status !== 0) add('W07', 'git diff against the baseline', false, `git diff ${BASELINE_COMMIT} failed (full history required): ${d.out}`);
+  changedPaths = [...new Set([...lines(d.out), ...lines(u.out)])].sort();
+}
+const allFiles = ['W03', 'W04'].some(want) ? walk('.') : [];
+
+// W02: controlled sources (PACK_MANIFEST fingerprints) and CLAUDE.md unchanged.
+if (want('W02')) {
+  const p = [];
+  let n = 0;
+  try {
+    const pack = readJson('PACK_MANIFEST.json');
+    const controlled = pack.files.filter((f) => f.path === '.gitignore' || f.path.startsWith('.paep-control/'));
+    n = controlled.length;
+    for (const f of controlled) {
+      if (!exists(f.path)) { p.push(`missing ${f.path}`); continue; }
+      if (sha256(f.path) !== f.sha256 || fs.statSync(abs(f.path)).size !== f.bytes) p.push(`fingerprint mismatch ${f.path}`);
+    }
+    const listed = new Set(controlled.map((f) => f.path));
+    for (const f of walk('.paep-control')) if (!listed.has(f)) p.push(`unlisted ${f}`);
+    const d = git('diff', '--quiet', BASELINE_COMMIT, '--', '.paep-control', '.gitignore', 'PACK_MANIFEST.json', 'CLAUDE.md');
+    if (d.status !== 0) p.push(`controlled files or CLAUDE.md differ from ${BASELINE_COMMIT.slice(0, 7)}`);
+  } catch (e) { p.push(String(e)); }
+  add('W02', 'Controlled sources match PACK_MANIFEST.json sha256 and size; .paep-control, .gitignore, PACK_MANIFEST.json and CLAUDE.md unchanged since the baseline',
+    n > 0 && p.length === 0, p.length ? p.join('; ') : `${n}/${n} controlled files match`);
+}
+
+// W03: IR-01 §4.2 topology and no nested package boundary.
+if (want('W03')) {
+  const required = ['apps/reference-app', 'apps/ui-lab', 'config', 'docs', 'evidence', 'angular.json', 'tsconfig.base.json', 'package.json', 'package-lock.json',
+    ...['contracts', 'foundation', 'components', 'platform', 'enterprise', 'analytics', 'offline', 'i18n', 'observability', 'frappe-sdk'].map((d) => `packages/${d}`),
+    ...['architecture-boundaries', 'config-validation', 'test-utils', 'visual-regression', 'a11y', 'build-release'].map((d) => `tooling/${d}`)];
+  const missing = required.filter((d) => !exists(d));
+  if (!fs.readdirSync(abs('packages')).some((d) => d.startsWith('domain-'))) missing.push('packages/domain-*');
+  const manifests = allFiles.filter((f) => /(^|\/)package\.json$/.test(f));
+  const nested = manifests.filter((f) => f !== 'package.json' && !/^packages\/[^/]+\/package\.json$/.test(f));
+  add('W03', 'IR-01 §4.2 repository topology present; package.json only at the root and packages/<name>/ (no nested package boundary)',
+    missing.length === 0 && nested.length === 0, [missing.length ? `missing: ${missing.join(', ')}` : `${required.length + 1} topology entries present`, nested.length ? `nested package.json: ${nested.join(', ')}` : `${manifests.length} manifests, none nested`].join('; '));
+}
+
+// W04: no Nx.
+if (want('W04')) {
+  const p = [];
+  let lock = {};
+  try { lock = readJson('package-lock.json'); } catch (e) { p.push(String(e)); }
+  const isNx = (n) => n === 'nx' || n.startsWith('@nx/') || n.startsWith('@nrwl/');
+  for (const f of ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies']) for (const n of Object.keys(pkg[f] || {})) if (isNx(n)) p.push(`package.json ${f}: ${n}`);
+  for (const k of Object.keys(lock.packages || {})) if (isNx(k.replace(/^.*node_modules\//, ''))) p.push(`lockfile: ${k}`);
+  for (const f of allFiles) if (/(^|\/)(nx|project)\.json$/.test(f)) p.push(`file ${f}`);
+  if (exists('node_modules/nx') || exists('node_modules/@nx') || exists('node_modules/@nrwl')) p.push('Nx installed in node_modules');
+  add('W04', 'No Nx: no nx/@nx/@nrwl dependency, lockfile entry or install, and no nx.json or project.json', p.length === 0, p.length ? p.join('; ') : 'none; Nx disposition NOT REQUIRED');
+}
+
+// W05: no IB1+ implementation and no application/package/config change.
+if (want('W05')) {
+  const p = [];
+  const frozen = changedPaths.filter((f) => /^(apps|packages|config)\//.test(f) || /^(angular\.json|tsconfig[^/]*\.json)$/.test(f));
+  if (frozen.length) p.push(`changed: ${frozen.join(', ')}`);
+  const configFiles = fs.readdirSync(abs('config'));
+  if (JSON.stringify(configFiles) !== JSON.stringify(['README.md'])) p.push(`config/ holds ${configFiles.join(', ')} (runtime schema is IB1)`);
+  for (const d of fs.readdirSync(abs('packages'))) {
+    const src = walk(`packages/${d}/src`);
+    if (JSON.stringify(src) !== JSON.stringify([`packages/${d}/src/index.ts`])) p.push(`packages/${d}/src holds ${src.join(', ')}`);
+    else if (read(`packages/${d}/src/index.ts`).replace(/\/\/.*$|\/\*[\s\S]*?\*\//gm, '').trim() !== 'export {};') p.push(`packages/${d}/src/index.ts is not a placeholder`);
+  }
+  add('W05', 'IB1 not started: apps, packages, config, angular.json and tsconfig files unchanged since the baseline; package entry points are placeholders; no runtime-config schema',
+    p.length === 0, p.length ? p.join('; ') : 'no IB1 artefact; 18 placeholder entry points');
+}
+
+// W06: no dependency change (lockfile identical; package.json differs only by the WP05 scripts).
+if (want('W06')) {
+  const p = [];
+  if (git('diff', '--quiet', BASELINE_COMMIT, '--', 'package-lock.json').status !== 0) p.push('package-lock.json differs from the baseline');
+  try {
+    const base = JSON.parse(git('show', `${BASELINE_COMMIT}:package.json`).stdout);
+    const { scripts: s1 = {}, ...r1 } = pkg;
+    const { scripts: s0 = {}, ...r0 } = base;
+    if (JSON.stringify(r1) !== JSON.stringify(r0)) p.push('package.json fields other than scripts changed');
+    if (JSON.stringify(s1) !== JSON.stringify({ ...s0, ...WP05_SCRIPTS })) p.push('package.json scripts differ from baseline + the three WP05 scripts');
+  } catch (e) { p.push(String(e)); }
+  add('W06', 'No dependency change: package-lock.json byte-identical to the baseline; package.json differs only by qa:types, qa:ib0-wp05 and qa:ib0-wp05:negative',
+    p.length === 0, p.length ? p.join('; ') : `lockfile sha256 ${sha256('package-lock.json')}`);
+}
+
+// W07: scope.
+if (want('W07')) {
+  const outside = changedPaths.filter((f) => !WP05_PERMITTED.some((re) => re.test(f)));
+  const lintTest = walk('.').filter((f) => /(^|\/)(\.eslintrc[^/]*|eslint\.config\.[^/]+|\.prettierrc[^/]*|prettier\.config\.[^/]+|vitest\.config\.[^/]+|jest\.config\.[^/]+|karma\.conf\.[^/]+)$/.test(f));
+  add('W07', 'Every path changed since the baseline is within WORK_PACKAGE §4; no lint/format/unit-test configuration introduced',
+    outside.length === 0 && lintTest.length === 0,
+    [outside.length ? `outside WORK_PACKAGE §4: ${outside.join(', ')}` : `${changedPaths.length} changed paths, all permitted`, lintTest.length ? `lint/test config: ${lintTest.join(', ')}` : ''].filter(Boolean).join('; '));
+}
+
+// W08: secrets.
+if (want('W08')) {
+  const patterns = [
+    /-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----/,
+    /AKIA[0-9A-Z]{16}/,
+    /\bgh[pousr]_[A-Za-z0-9]{36,}\b/,
+    /\bgithub_pat_[A-Za-z0-9_]{50,}\b/,
+    /\bnpm_[A-Za-z0-9]{36}\b/,
+    /(?:^|\s)(?:\/\/[^\s]*:)?_(?:auth|authToken|password)\s*=\s*\S/m,
+    /\bBearer\s+[A-Za-z0-9\-._~+/]{20,}=*/,
+    /(?:api[_-]?key|client[_-]?secret|access[_-]?token|password)\s*[:=]\s*["'][^"'\n]{8,}["']/i
+  ];
+  const findings = changedPaths.filter((f) => exists(f) && fs.statSync(abs(f)).isFile() && fs.statSync(abs(f)).size < 2_000_000 && patterns.some((re) => re.test(read(f))));
+  add('W08', 'No credential or secret signatures in files added or modified since the baseline', findings.length === 0,
+    `${changedPaths.length} files scanned; findings: ${findings.join(', ') || 'none'}`);
+}
+
+// ---- Workflow policy (W09-W15) ------------------------------------------------------------
+let wf = null;
+let setup = null;
+let wfText = '';
+let setupText = '';
+if (['W09', 'W10', 'W11', 'W12', 'W13', 'W14', 'W15'].some(want) && policy) {
+  const p = [];
+  try { wfText = read(policy.workflow.path); wf = parseYaml(wfText); } catch (e) { p.push(`${policy.workflow.path}: ${e.message}`); }
+  try { setupText = read(policy.workflow.setupAction); setup = parseYaml(setupText); } catch (e) { p.push(`${policy.workflow.setupAction}: ${e.message}`); }
+  if (p.length) add('W09', 'Workflow files parse', false, p.join('; '));
+}
+const jobsOf = () => (wf && typeof wf.jobs === 'object' && wf.jobs) || {};
+const mandatoryIds = policy ? policy.mandatoryJobs.map((j) => j.id) : [];
+function* strings(v, where = '') {
+  if (typeof v === 'string') yield [v, where];
+  else if (Array.isArray(v)) for (const [k, x] of v.entries()) yield* strings(x, `${where}[${k}]`);
+  else if (v && typeof v === 'object') for (const [k, x] of Object.entries(v)) { yield [k, `${where}.${k} (key)`]; yield* strings(x, `${where}.${k}`); }
+}
+const allSteps = () => [
+  ...Object.entries(jobsOf()).flatMap(([id, j]) => (Array.isArray(j?.steps) ? j.steps : []).map((s, k) => ({ s, where: `jobs.${id}.steps[${k}]` }))),
+  ...((setup?.runs?.steps) || []).map((s, k) => ({ s, where: `setup.steps[${k}]` }))
+];
+
+// W09: workflow set and triggers.
+if (want('W09') && wf && setup) {
+  const p = [];
+  const wfDir = exists('.github/workflows') ? fs.readdirSync(abs('.github/workflows')) : [];
+  if (JSON.stringify(wfDir) !== JSON.stringify([path.basename(policy.workflow.path)])) p.push(`.github/workflows holds ${wfDir.join(', ') || 'nothing'}`);
+  const ghFiles = walk('.github');
+  const expectedGh = [policy.workflow.setupAction, policy.workflow.path].sort();
+  if (JSON.stringify(ghFiles.sort()) !== JSON.stringify(expectedGh)) p.push(`.github holds ${ghFiles.join(', ')}; expected ${expectedGh.join(', ')}`);
+  if (JSON.stringify(Object.keys(wf)) !== JSON.stringify(policy.workflow.topLevelKeys)) p.push(`workflow top-level keys ${Object.keys(wf).join(', ')} != ${policy.workflow.topLevelKeys.join(', ')} (no defaults, env or other key)`);
+  if (wf.name !== policy.workflow.name) p.push(`workflow name "${wf.name}"`);
+  const on = wf.on;
+  if (!on || typeof on !== 'object' || Array.isArray(on)) p.push('"on" is not a mapping');
+  else {
+    if (!sameSet(Object.keys(on), Object.keys(policy.workflow.triggers))) p.push(`triggers ${Object.keys(on).join(', ')} != ${Object.keys(policy.workflow.triggers).join(', ')}`);
+    for (const t of policy.workflow.forbiddenTriggers) if (t in on) p.push(`forbidden trigger ${t}`);
+    for (const [t, spec] of Object.entries(policy.workflow.triggers)) {
+      if (!(t in on)) continue;
+      if (JSON.stringify(on[t] ?? null) !== JSON.stringify(spec)) p.push(`${t}: ${JSON.stringify(on[t])} != ${JSON.stringify(spec)}`);
+    }
+  }
+  if (JSON.stringify(wf.concurrency) !== JSON.stringify({ group: policy.workflow.concurrency.group, 'cancel-in-progress': policy.workflow.concurrency.cancelInProgress })) p.push(`concurrency ${JSON.stringify(wf.concurrency)}`);
+  add('W09', 'One workflow with exactly pull_request→main, push→main and workflow_dispatch (no pull_request_target or other trigger, no path filters); concurrency cancels superseded pull_request runs only',
+    p.length === 0, p.length ? p.join('; ') : `${policy.workflow.path}: pull_request [main], push [main], workflow_dispatch; cancel-in-progress only for pull_request`);
+}
+
+// W10: least-privilege permissions.
+if (want('W10') && wf) {
+  const p = [];
+  if (JSON.stringify(wf.permissions) !== JSON.stringify(policy.workflow.topLevelPermissions)) p.push(`top-level permissions ${JSON.stringify(wf.permissions)}`);
+  for (const [id, j] of Object.entries(jobsOf())) {
+    if (id === policy.gate.id) { if (JSON.stringify(j.permissions) !== JSON.stringify(policy.gate.permissions)) p.push(`${id} permissions ${JSON.stringify(j.permissions)}`); }
+    else if (j && 'permissions' in j) p.push(`${id} overrides permissions`);
+  }
+  for (const [s, where] of strings(wf)) if (/write/i.test(s) && /permissions/.test(where)) p.push(`write permission at ${where}`);
+  add('W10', 'GITHUB_TOKEN is read-only: top-level permissions exactly contents: read, no job widens it, and the gate job has no permissions',
+    p.length === 0, p.length ? p.join('; ') : 'contents: read; gate {}');
+}
+
+// W11: parallel topology, required commands, timeouts and evidence artifacts.
+if (want('W11') && wf) {
+  const p = [];
+  const jobs = jobsOf();
+  if (!sameSet(Object.keys(jobs), [...mandatoryIds, policy.gate.id])) p.push(`jobs ${Object.keys(jobs).join(', ')}`);
+  for (const mj of policy.mandatoryJobs) {
+    const j = jobs[mj.id];
+    if (!j) { p.push(`missing job ${mj.id}`); continue; }
+    const allowedKeys = ['name', 'runs-on', 'timeout-minutes', 'steps'];
+    for (const k of Object.keys(j)) if (!allowedKeys.includes(k)) p.push(`${mj.id} has ${k}`);
+    if (j.name !== mj.name) p.push(`${mj.id} name "${j.name}" != "${mj.name}"`);
+    if (j['runs-on'] !== policy.workflow.runner) p.push(`${mj.id} runs-on ${j['runs-on']}`);
+    if (!Number.isInteger(j['timeout-minutes']) || j['timeout-minutes'] < 1 || j['timeout-minutes'] > 30) p.push(`${mj.id} timeout-minutes ${j['timeout-minutes']}`);
+    const steps = Array.isArray(j.steps) ? j.steps : [];
+    const [co, su, ...rest] = steps;
+    const up = rest.pop();
+    if (!co || !/^actions\/checkout@/.test(co.uses || '') || co.with?.['fetch-depth'] !== 0 || co.with?.['persist-credentials'] !== false || Object.keys(co).some((k) => !['name', 'uses', 'with'].includes(k)) || !sameSet(Object.keys(co.with || {}), ['fetch-depth', 'persist-credentials'])) p.push(`${mj.id}: step 1 is not checkout with fetch-depth 0 and persist-credentials false`);
+    if (!su || su.uses !== './.github/actions/paep-setup' || Object.keys(su).some((k) => !['name', 'uses'].includes(k))) p.push(`${mj.id}: step 2 is not the PAEP setup action`);
+    if (!up || !/^actions\/upload-artifact@/.test(up.uses || '') || up.if !== '${{ always() }}' || up.with?.path !== '${{ runner.temp }}/paep-evidence/'
+      || up.with?.['retention-days'] !== policy.artifactRetentionDays || up.with?.name !== `paep-${mj.id}-attempt-\${{ github.run_attempt }}`
+      || !sameSet(Object.keys(up), ['name', 'uses', 'if', 'with']) || !sameSet(Object.keys(up.with || {}), ['name', 'path', 'if-no-files-found', 'retention-days']) || up.with['if-no-files-found'] !== 'warn') p.push(`${mj.id}: last step is not the evidence upload (always, runner.temp/paep-evidence, ${policy.artifactRetentionDays} days)`);
+    const runs = rest.map((s) => s.run || '');
+    for (const s of rest) if (Object.keys(s).some((k) => !['name', 'run'].includes(k))) p.push(`${mj.id}: step "${s.name}" has ${Object.keys(s).join(', ')}`);
+    for (const r of runs) if (!/^set -euo pipefail\n/.test(r)) p.push(`${mj.id}: run step without set -euo pipefail`);
+    const cmds = runs.map((r) => (r.split('\n')[1] || '').replace(/ 2>&1 \| tee "\$PAEP_EVIDENCE_DIR\/[a-z0-9-]+\.log"$/, ''));
+    if (JSON.stringify(cmds) !== JSON.stringify(policy.requiredCommands[mj.id])) p.push(`${mj.id}: commands ${JSON.stringify(cmds)} != ${JSON.stringify(policy.requiredCommands[mj.id])}`);
+    for (const r of runs) if (r.split('\n').filter(Boolean).length !== 2) p.push(`${mj.id}: run step has extra lines`);
+  }
+  add('W11', 'Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention',
+    p.length === 0, p.length ? p.join('; ') : `${mandatoryIds.length} parallel jobs: ${mandatoryIds.join(', ')}`);
+}
+
+// W12: aggregate gate structure (behaviour is proven by the negative suite, which runs this script).
+if (want('W12') && wf) {
+  const p = [];
+  const g = jobsOf()[policy.gate.id];
+  if (!g) p.push('no gate job');
+  else {
+    if (g.name !== policy.gate.name) p.push(`gate name "${g.name}"`);
+    if (g.if !== policy.gate.if) p.push(`gate if "${g.if}"`);
+    if (g['runs-on'] !== policy.workflow.runner) p.push(`gate runs-on ${JSON.stringify(g['runs-on'])}`);
+    if (!Number.isInteger(g['timeout-minutes']) || g['timeout-minutes'] < 1 || g['timeout-minutes'] > 10) p.push(`gate timeout-minutes ${g['timeout-minutes']}`);
+    if (!Array.isArray(g.needs) || !sameSet(g.needs, mandatoryIds)) p.push(`gate needs ${JSON.stringify(g.needs)}`);
+    if (Object.keys(g).some((k) => !['name', 'if', 'needs', 'runs-on', 'timeout-minutes', 'permissions', 'steps'].includes(k))) p.push(`gate keys ${Object.keys(g).join(', ')}`);
+    const steps = Array.isArray(g.steps) ? g.steps : [];
+    if (steps.length !== 1) p.push(`gate has ${steps.length} steps`);
+    const s = steps[0] || {};
+    if (Object.keys(s).some((k) => !['name', 'env', 'run'].includes(k))) p.push(`gate step keys ${Object.keys(s).join(', ')}`);
+    if (!sameSet(Object.keys(s.env || {}), ['NEEDS_JSON', 'MANDATORY_JOBS'])) p.push(`gate step env keys ${Object.keys(s.env || {}).join(', ')}`);
+    if (s.env?.NEEDS_JSON !== '${{ toJSON(needs) }}') p.push('gate NEEDS_JSON is not toJSON(needs)');
+    const listed = String(s.env?.MANDATORY_JOBS || '').split(/\s+/).filter(Boolean);
+    if (!sameSet(listed, mandatoryIds)) p.push(`gate MANDATORY_JOBS ${listed.join(' ')}`);
+    const r = s.run || '';
+    // The script must equal the reviewed text in the policy exactly: a substring check would accept an early "exit 0".
+    if (r !== policy.gate.run) p.push('gate script differs from the reviewed script in the policy (gate.run)');
+  }
+  add('W12', 'Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success',
+    p.length === 0, p.length ? p.join('; ') : `needs ${mandatoryIds.length}/${mandatoryIds.length}; if always(); permissions {}`);
+}
+
+// W13: expressions, untrusted metadata, secrets and credentials.
+if (want('W13') && wf && setup) {
+  const p = [];
+  const ALLOWED = [
+    (s) => s === policy.workflow.concurrency.group, (s) => s === policy.workflow.concurrency.cancelInProgress,
+    (s) => s === '${{ always() }}', (s) => /^paep-[a-z-]+-attempt-\$\{\{ github\.run_attempt \}\}$/.test(s),
+    (s) => s === '${{ runner.temp }}/paep-evidence/', (s) => s === '${{ toJSON(needs) }}'
+  ];
+  for (const [doc, name] of [[wf, 'workflow'], [setup, 'setup action']]) {
+    for (const [s, where] of strings(doc)) {
+      if (/secrets\s*[.[]|\bsecrets\b\s*:/.test(s)) p.push(`${name}${where}: secrets reference`);
+      if (s.includes('${{') && !ALLOWED.some((f) => f(s))) p.push(`${name}${where}: expression not on the allowlist: ${s.slice(0, 80)}`);
+    }
+  }
+  for (const { s, where } of allSteps()) {
+    if (typeof s.run === 'string' && s.run.includes('${{')) p.push(`${where}: expression inside a run script`);
+    if (s.uses && /^actions\/checkout@/.test(s.uses) && s.with?.['persist-credentials'] !== false) p.push(`${where}: checkout persists credentials`);
+    if (s.with && typeof s.with === 'object') for (const k of Object.keys(s.with)) if (/token|password|secret/i.test(k)) p.push(`${where}: credential input ${k}`);
+  }
+  add('W13', 'No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata)',
+    p.length === 0, p.length ? p.join('; ') : 'none');
+}
+
+// W14: action pinning and register.
+if (want('W14') && wf && setup) {
+  const p = [];
+  const used = new Set();
+  for (const text of [wfText, setupText]) {
+    for (const l of text.split(/\r?\n/)) {
+      const m = /^\s*(?:- )?uses:\s*(\S+)(?:\s+#\s*(\S+))?\s*$/.exec(l);
+      if (!m) { if (/\buses:/.test(l) && !/^\s*#/.test(l)) p.push(`unrecognised uses line: ${l.trim()}`); continue; }
+      const [, ref, comment] = m;
+      if (policy.approvedLocalActions.includes(ref)) { used.add(ref); continue; }
+      const a = /^([A-Za-z0-9-]+\/[A-Za-z0-9._-]+)@([0-9a-f]{40})$/.exec(ref);
+      if (!a) { p.push(`not pinned to a full commit SHA: ${ref}`); continue; }
+      const entry = policy.approvedActions.find((x) => x.action === a[1]);
+      if (!entry) { p.push(`unapproved action ${a[1]}`); continue; }
+      if (entry.sha !== a[2]) p.push(`${a[1]}@${a[2]} is not the approved SHA ${entry.sha}`);
+      if (comment !== entry.version) p.push(`${a[1]} version comment "${comment}" != ${entry.version}`);
+      used.add(a[1]);
+    }
+  }
+  for (const { s, where } of allSteps()) if (s.uses && !used.has(s.uses.split('@')[0]) && !used.has(s.uses)) p.push(`${where}: uses ${s.uses} not verified`);
+  for (const x of policy.approvedActions) if (!used.has(x.action)) p.push(`approved but unused: ${x.action}`);
+  let register = '';
+  try { register = read('docs/provenance/GITHUB-ACTIONS-REGISTER.md'); } catch (e) { p.push(`register: ${e.message}`); }
+  for (const x of policy.approvedActions) for (const v of [x.action, x.sha, x.version, x.licence]) if (!register.includes(v)) p.push(`register lacks ${x.action} ${v}`);
+  add('W14', 'Every action is a first-party approved action pinned to its full commit SHA with the matching version comment, or the approved local setup action; the register lists each one',
+    p.length === 0, p.length ? p.join('; ') : `${policy.approvedActions.map((x) => `${x.action}@${x.sha.slice(0, 7)} (${x.version}, ${x.licence})`).join('; ')}; local: ${policy.approvedLocalActions.join(', ')}`);
+}
+
+// W15: setup action, installation and cache policy.
+if (want('W15') && setup) {
+  const p = [];
+  if (setup.runs?.using !== 'composite') p.push('setup action is not composite');
+  if (Object.keys(setup).some((k) => !['name', 'description', 'runs'].includes(k)) || !sameSet(Object.keys(setup.runs || {}), ['using', 'steps'])) p.push(`setup action keys ${Object.keys(setup).join(', ')} / runs ${Object.keys(setup.runs || {}).join(', ')}`);
+  // Every setup step (keys, inputs, env, shell and run text) must equal the reviewed steps in the policy.
+  const reviewed = policy.setupSteps;
+  const got = setup.runs?.steps || [];
+  if (got.length !== reviewed.length) p.push(`setup has ${got.length} steps; the policy has ${reviewed.length}`);
+  for (const [k, st] of got.entries()) if (JSON.stringify(st) !== JSON.stringify(reviewed[k])) p.push(`setup step ${k + 1} ("${st?.name}") differs from the reviewed step in the policy (setupSteps)`);
+  const steps = setup.runs?.steps || [];
+  const sn = steps.find((s) => /^actions\/setup-node@/.test(s.uses || ''));
+  const w = sn?.with || {};
+  if (!sn) p.push('no setup-node step');
+  else {
+    if (JSON.stringify(w) !== JSON.stringify({ 'node-version-file': '.nvmrc', 'check-latest': false, cache: 'npm', 'cache-dependency-path': 'package-lock.json' })) p.push(`setup-node inputs ${JSON.stringify(w)}`);
+  }
+  const runs = steps.map((s) => s.run || '');
+  const tIdx = runs.findIndex((r) => r.includes('verify-ib0-wp05.mjs --gate toolchain'));
+  const ciIdx = runs.findIndex((r) => /(^|\n)npm ci( |$|\n)/.test(r));
+  const clean = runs.findIndex((r) => r.includes('git diff --exit-code -- package.json package-lock.json') && r.includes('git status --porcelain'));
+  if (!(tIdx >= 0 && ciIdx > tIdx && clean > ciIdx)) p.push('setup order is not toolchain gate -> npm ci -> tracked-tree check');
+  for (const r of runs) if (r && !r.startsWith('set -euo pipefail\n')) p.push('setup run step without set -euo pipefail');
+  if (steps.some((s) => s.run && s.shell !== 'bash')) p.push('setup run step without shell: bash');
+  const everyRun = allSteps().map(({ s }) => s.run || '').join('\n');
+  if (/\bnpm\s+(install|i|add|update|rebuild)\b|--ignore-scripts=false|--foreground-scripts|--no-package-lock|--force\b|--legacy-peer-deps/.test(everyRun)) p.push('a run step installs outside npm ci or changes install-script/lockfile behaviour');
+  for (const { s, where } of allSteps()) {
+    if (/^actions\/cache@/.test(s.uses || '')) p.push(`${where}: actions/cache`);
+    if (typeof s.with?.path === 'string' && s.with.path.includes('node_modules')) p.push(`${where}: path includes node_modules`);
+  }
+  add('W15', 'Setup installs Node from .nvmrc (no floating version, no check-latest), caches only npm downloads keyed on package-lock.json, runs the toolchain gate before npm ci and fails if installation changes a tracked file; no other install command, no node_modules cache',
+    p.length === 0, p.length ? p.join('; ') : 'setup-node(.nvmrc, cache npm) -> toolchain gate -> npm ci -> tracked tree unchanged');
+}
+
+// ---- Running the accepted verifiers ----------------------------------------------------------
+let recordsChecked = false;
+function recordsClean() {
+  if (recordsChecked) return null;
+  recordsChecked = true;
+  const d = git('status', '--porcelain', '--', ...PROTECTED_RECORDS);
+  return d.out ? `earlier work-package records have local changes before the run: ${d.out.replace(/\n/g, ', ')}` : null;
+}
+function restoreRecords() {
+  const changed = lines(git('diff', '--name-only', '--', ...PROTECTED_RECORDS).out);
+  if (changed.length) git('checkout', '--', ...changed);
+  return changed;
+}
+// Deletes the reports a verifier is about to write, so a stale committed report can never be read
+// as the result of this run (restoreRecords() brings the tracked copies back afterwards).
+function runVerifier(script, extra = [], reports = []) {
+  for (const f of reports) fs.rmSync(abs(f), { force: true });
+  return run(process.execPath, [script, ...extra]);
+}
+const tryJson = (p) => { try { return readJson(p); } catch { return null; } };
+const pkgNames = () => fs.readdirSync(abs('packages')).map((d) => readJson(`packages/${d}/package.json`).name);
+const isWp05Path = (f) => WP05_PERMITTED.some((re) => re.test(f));
+
+// Bounded WP04 V16/V17 (static checks): only the WP05 scripts and WP05 paths.
+function wp04StaticBounded(check) {
+  if (check.id === 'V16') {
+    // WP04 compares against baseline + WP04 scripts; WP05's own W06 proves the rest (only the WP05 scripts added, lockfile identical).
+    return check.details === 'package.json scripts differ from baseline + the four WP04 scripts' && wp05PackageDeltaOnly();
+  }
+  if (check.id === 'V17') {
+    return check.details.split('; ').every((seg) => {
+      const m = /^(out-of-scope files|changed outside WORK_PACKAGE §4): (.+)$/.exec(seg);
+      if (!m) return false;
+      const files = m[2].split(', ');
+      return m[1] === 'out-of-scope files' ? files.every((f) => f.startsWith('.github/') && isWp05Path(f)) : files.every(isWp05Path);
+    });
+  }
+  return false;
+}
+function wp05PackageDeltaOnly() {
+  try {
+    if (git('diff', '--quiet', BASELINE_COMMIT, '--', 'package-lock.json').status !== 0) return false;
+    const base = JSON.parse(git('show', `${BASELINE_COMMIT}:package.json`).stdout);
+    const { scripts: s1 = {}, ...r1 } = pkg;
+    const { scripts: s0 = {}, ...r0 } = base;
+    return JSON.stringify(r1) === JSON.stringify(r0) && JSON.stringify(s1) === JSON.stringify({ ...s0, ...WP05_SCRIPTS });
+  } catch { return false; }
+}
+// WP02 V17 findings accepted after WP05: the WP03/WP04 findings plus .github/workflows.
+function wp02V17Bounded(c) {
+  if (!c) return false;
+  if (c.pass) return true;
+  return c.details.split('; ').every((seg) => {
+    if (seg === 'out-of-scope file present: tsconfig.base.json' || seg === 'out-of-scope file present: .github/workflows') return true;
+    const m = /^protected paths changed: (.+)$/.exec(seg);
+    return m && m[1].split(', ').every((f) => /^tsconfig\.json$|^packages\/[^/]+\/src\/index\.ts$/.test(f));
+  });
+}
+
+// W17: WP04 static verifier (strictness V04-V07 and every other static check), bounded V16/V17.
+let wp04Static = null;
+if (want('W17')) {
+  const p = [];
+  const dirty = recordsClean();
+  if (dirty) p.push(dirty);
+  else {
+    const r = runVerifier('tooling/verification/verify-ib0-wp04.mjs', ['--static-only'], ['evidence/IB0-WP04/reports/ib0-wp04-verification.json']);
+    wp04Static = tryJson('evidence/IB0-WP04/reports/ib0-wp04-verification.json');
+    keep('verify-ib0-wp04-static.log', `${r.out}\nEXIT_CODE=${r.status}\n`);
+    if (wp04Static) keep('ib0-wp04-verification.static.json', JSON.stringify(wp04Static, null, 2) + '\n');
+    restoreRecords();
+    if (!wp04Static || wp04Static.mode !== 'static-only') p.push('no WP04 static report');
+    else {
+      for (const id of ['V04', 'V05', 'V06', 'V07']) if (!wp04Static.checks.find((c) => c.id === id)?.pass) p.push(`strictness check ${id} failed`);
+      for (const c of wp04Static.checks) if (!c.pass && !wp04StaticBounded(c)) p.push(`${c.id} failed outside the WP05 bounded exception: ${c.details.slice(0, 300)}`);
+      if (wp04Static.checks.length !== 19) p.push(`WP04 static reported ${wp04Static.checks.length} checks`);
+    }
+  }
+  const fails = wp04Static ? wp04Static.checks.filter((c) => !c.pass).map((c) => c.id) : [];
+  add('W17', 'Strict configuration: WP04 static verifier passes V04-V07 (strict, noImplicitAny, strictTemplates, noCheck and suppression protection, aliases, entry points) and every other static check; V16/V17 report only WP05-authorised change',
+    p.length === 0, p.length ? p.join('; ') : `WP04 static ${19 - fails.length}/19 pass; bounded: ${fails.join(', ') || 'none'}`);
+}
+
+// W18: WP04 negative suite; only the positive control C3 may fail, with exactly V16 and V17.
+if (want('W18')) {
+  const p = [];
+  let neg = null;
+  const dirty = recordsClean();
+  if (dirty) p.push(dirty);
+  else {
+    const r = runVerifier('tooling/verification/negative-ib0-wp04.mjs', [], ['evidence/IB0-WP04/reports/negative-tests.json', 'evidence/IB0-WP04/logs/negative-architecture-tests.log']);
+    neg = tryJson('evidence/IB0-WP04/reports/negative-tests.json');
+    keep('negative-ib0-wp04.log', `${r.out}\nEXIT_CODE=${r.status}\n`);
+    if (neg) keep('ib0-wp04-negative-tests.json', JSON.stringify(neg, null, 2) + '\n');
+    if (exists('evidence/IB0-WP04/logs/negative-architecture-tests.log')) keep('ib0-wp04-negative-architecture-tests.log', read('evidence/IB0-WP04/logs/negative-architecture-tests.log'));
+    restoreRecords();
+    if (!neg) p.push('no WP04 negative report');
+    else {
+      if (neg.cases.length !== 86) p.push(`${neg.cases.length} cases (expected 86)`);
+      for (const c of neg.cases) {
+        if (c.pass) continue;
+        if (c.id === 'C3' && c.exit === 1 && sameSet(c.failedChecks || [], ['V16', 'V17'])) continue;
+        p.push(`${c.id} failed: ${c.name} (exit ${c.exit}; ${JSON.stringify(c.failedChecks || c.rules || c.codesFound)})`);
+      }
+      // C3 runs the WP04 static verifier on an unmutated copy, so its V16/V17 findings are those W17 bounds.
+      const c3 = neg.cases.find((c) => c.id === 'C3');
+      if (c3 && !c3.pass) {
+        const st = wp04Static?.checks || [];
+        if (!['V16', 'V17'].every((id) => { const c = st.find((x) => x.id === id); return c && (c.pass || wp04StaticBounded(c)); })) p.push('C3 V16/V17 findings are not the WP05 bounded ones (see W17)');
+      }
+    }
+  }
+  const failed = neg ? neg.cases.filter((c) => !c.pass).map((c) => c.id) : [];
+  add('W18', 'WP04 negative architecture/strictness suite: every case passes except positive control C3, which fails only V16/V17 with WP05-authorised findings',
+    p.length === 0, p.length ? p.join('; ') : `${neg.cases.length - failed.length}/${neg.cases.length} pass; bounded: ${failed.join(', ') || 'none'}`);
+}
+
+// W19: WP03 negative runner — accepted crash since WP04 moved paths to tsconfig.base.json.
+if (want('W19')) {
+  const p = [];
+  const r = runVerifier('tooling/verification/negative-ib0-wp03.mjs');
+  keep('negative-ib0-wp03.log', `${r.out}\nEXIT_CODE=${r.status}\n`);
+  restoreRecords();
+  let rootTs = '';
+  try { rootTs = read('tsconfig.json'); } catch { /* reported */ }
+  const hasPaths = /"paths"\s*:/.test(rootTs);
+  const baseHasPaths = exists('tsconfig.base.json') && /"paths"\s*:/.test(read('tsconfig.base.json'));
+  if (r.status === 0) p.push('WP03 negative runner now passes: remove this bounded exception');
+  else if (!(r.status === 1 && r.out.includes('negative-ib0-wp03.mjs:125') && r.out.includes('TypeError: Cannot convert undefined or null to object') && !hasPaths && baseHasPaths)) p.push(`unexpected failure (exit ${r.status}): ${r.out.split('\n').slice(0, 6).join(' | ')}`);
+  add('W19', 'WP03 negative runner: fails only with the known M11 TypeError because WP04 moved paths from tsconfig.json to tsconfig.base.json (its strictness intent is carried by WP04 S1-S9 and the WP05 qa:types negatives)',
+    p.length === 0, p.length ? p.join('; ') : 'exit 1 at negative-ib0-wp03.mjs:125 (paths in tsconfig.base.json); bounded');
+}
+
+// W20-W23: WP04 full verifier (runs WP03, which runs WP02 and WP01), re-evaluated with the WP05 bounds.
+if (['W20', 'W21', 'W22', 'W23'].some(want)) {
+  const p20 = []; const p21 = []; const p22 = []; const p23 = [];
+  const dirty = recordsClean();
+  let wp04 = null; let wp03 = null; let wp02 = null; let wp01 = null; let residual = [];
+  if (dirty) p20.push(dirty);
+  else {
+    const r = runVerifier('tooling/verification/verify-ib0-wp04.mjs', [], ['evidence/IB0-WP04/reports/ib0-wp04-verification.json', 'evidence/IB0-WP04/logs/ib0-wp03-verification.regression.json', 'evidence/IB0-WP04/logs/ib0-wp02-verification.regression.json', 'evidence/IB0-WP04/logs/ib0-wp01-verification.regression.json']);
+    keep('verify-ib0-wp04-full.log', `${r.out}\nEXIT_CODE=${r.status}\n`);
+    wp04 = tryJson('evidence/IB0-WP04/reports/ib0-wp04-verification.json');
+    wp03 = tryJson('evidence/IB0-WP04/logs/ib0-wp03-verification.regression.json');
+    wp02 = tryJson('evidence/IB0-WP04/logs/ib0-wp02-verification.regression.json');
+    wp01 = tryJson('evidence/IB0-WP04/logs/ib0-wp01-verification.regression.json');
+    for (const [n, j] of [['ib0-wp04-verification.full.json', wp04], ['ib0-wp03-verification.regression.json', wp03], ['ib0-wp02-verification.regression.json', wp02], ['ib0-wp01-verification.regression.json', wp01]]) if (j) keep(n, JSON.stringify(j, null, 2) + '\n');
+    for (const f of ['verify-ib0-wp03-regression.log', 'verify-ib0-wp02-regression.log', 'verify-ib0-wp01-regression.log']) if (exists(`evidence/IB0-WP04/logs/${f}`)) keep(f, read(`evidence/IB0-WP04/logs/${f}`));
+    restoreRecords();
+    residual = [...lines(git('diff', '--name-only', '--no-renames', WP03_BASELINE, '--', 'evidence/IB0-WP03', 'work-packages/IB0-WP03', 'evidence/IB0-WP02', 'work-packages/IB0-WP02', 'evidence/IB0-WP01', 'work-packages/IB0-WP01').out),
+      ...lines(git('diff', '--name-only', '--no-renames', BASELINE_COMMIT, '--', 'evidence/IB0-WP04', 'work-packages/IB0-WP04').out)];
+  }
+  // WP02 (run by WP03).
+  if (!wp02) p22.push('no WP02 report');
+  else {
+    for (const c of wp02.checks) if (!c.pass && c.id !== 'V17') p22.push(`${c.id} failed: ${c.details.split('\n')[0]}`);
+    if (!wp02V17Bounded(wp02.checks.find((c) => c.id === 'V17'))) p22.push(`V17 outside the bound: ${wp02.checks.find((c) => c.id === 'V17')?.details}`);
+  }
+  // WP03 (run by WP04): WP04's V22 rules with WP05 paths added to the permitted set.
+  if (!wp03) p21.push('no WP03 report');
+  else {
+    if (wp03.mode !== 'full') p21.push(`WP03 mode ${wp03.mode}`);
+    if (wp03.checks.length !== 18) p21.push(`WP03 reported ${wp03.checks.length} checks`);
+    const wp02V17 = wp02?.checks?.find((c) => c.id === 'V17');
+    const bounded = {
+      V05: (d) => d === 'top-level extends added; extends changed',
+      V08: (d) => sameSet(d.split('; '), pkgNames().map((n) => `${n}: no alias`)),
+      V10: (d) => d === 'package.json scripts differ from baseline + the two WP03 scripts',
+      V12: (d) => d.split('; ').every((seg) => {
+        const m = /^(out-of-scope files|boundary tooling \(IB0-WP04\)|changed outside WORK_PACKAGE §4): (.+)$/.exec(seg);
+        if (!m) return false;
+        const files = m[2].split(', ');
+        if (m[1] === 'out-of-scope files') return files.every((f) => f === 'tsconfig.base.json' || (f.startsWith('.github/') && isWp05Path(f)));
+        return files.every((f) => WP04_PERMITTED.some((re) => re.test(f)) || isWp05Path(f));
+      }),
+      V17: (d) => !!wp02V17 && !wp02V17.pass && wp02V17Bounded(wp02V17) && d === `V17 finding outside the bounded exception: ${wp02V17.details}`
+    };
+    for (const c of wp03.checks) {
+      if (c.pass) continue;
+      if (!bounded[c.id]) p21.push(`${c.id} failed: ${c.details.split('\n')[0]}`);
+      else if (!bounded[c.id](c.details)) p21.push(`${c.id} outside the WP04+WP05 bound: ${c.details.slice(0, 300)}`);
+    }
+  }
+  if (residual.length) p21.push(`earlier records differ from their accepted baselines (${WP03_BASELINE.slice(0, 7)} for WP01-WP03, ${BASELINE_COMMIT.slice(0, 7)} for WP04) after restore: ${residual.join(', ')}`);
+  // WP01.
+  if (!(wp01 && wp01.result === 'PASS' && wp01.checks.every((c) => c.pass))) p23.push(wp01 ? `WP01 ${wp01.checks.filter((c) => c.pass).length}/${wp01.checks.length}` : 'no WP01 report');
+  // WP04: all pass except V16, V17 (static bound), V22 (re-evaluated as W21), V23 (re-evaluated as W22).
+  if (wp04) {
+    if (wp04.mode !== 'full' || wp04.checks.length !== 24) p20.push(`WP04 mode ${wp04.mode}, ${wp04.checks.length} checks`);
+    for (const c of wp04.checks) {
+      if (c.pass) continue;
+      if (c.id === 'V16' || c.id === 'V17') { if (!wp04StaticBounded(c)) p20.push(`${c.id} outside the WP05 bound: ${c.details.slice(0, 300)}`); continue; }
+      if (c.id === 'V22') { if (p21.length) p20.push('V22 not explained by the WP05 bound (see W21)'); continue; }
+      if (c.id === 'V23') { if (p22.length) p20.push('V23 not explained by the WP05 bound (see W22)'); continue; }
+      p20.push(`${c.id} failed: ${c.details.split('\n')[0]}`);
+    }
+  } else if (!dirty) p20.push('no WP04 report');
+  const summary = (j) => (j ? `${j.checks.filter((c) => c.pass).length}/${j.checks.length} pass; bounded: ${j.checks.filter((c) => !c.pass).map((c) => c.id).join(', ') || 'none'}` : '');
+  add('W20', 'IB0-WP04 regression (full, with both builds): every check passes except V16/V17 (WP05 scripts and paths only) and V22/V23 (re-evaluated in W21/W22)', p20.length === 0, p20.length ? p20.join('; ') : `WP04 ${summary(wp04)}`);
+  add('W21', 'IB0-WP03 regression: every check passes except the accepted V05/V08/V10/V12/V17, whose findings are only WP04- or WP05-authorised change; WP01-WP03 records unchanged', p21.length === 0, p21.length ? p21.join('; ') : `WP03 ${summary(wp03)}`);
+  add('W22', 'IB0-WP02 regression: every check (toolchain, pins, lockfile provenance, install scripts, licences, controlled sources, secrets) passes except V17, whose findings are tsconfig.base.json, .github/workflows and the accepted WP03 paths', p22.length === 0, p22.length ? p22.join('; ') : `WP02 ${summary(wp02)}`);
+  add('W23', 'IB0-WP01 regression passes', p23.length === 0, p23.length ? p23.join('; ') : `WP01 ${summary(wp01)}`);
+}
+
+// W16: WP02 toolchain/provenance controls, run standalone in the provenance job.
+if (want('W16')) {
+  const p = [];
+  const dirty = recordsClean();
+  let wp02 = null;
+  if (dirty) p.push(dirty);
+  else {
+    const r = runVerifier('tooling/verification/verify-ib0-wp02.mjs', [], ['evidence/IB0-WP02/reports/ib0-wp02-verification.json']);
+    wp02 = tryJson('evidence/IB0-WP02/reports/ib0-wp02-verification.json');
+    keep('verify-ib0-wp02.log', `${r.out}\nEXIT_CODE=${r.status}\n`);
+    if (wp02) keep('ib0-wp02-verification.json', JSON.stringify(wp02, null, 2) + '\n');
+    if (exists('evidence/IB0-WP02/reports/licence-inventory.json')) keep('licence-inventory.json', read('evidence/IB0-WP02/reports/licence-inventory.json'));
+    restoreRecords();
+    if (!wp02) p.push('no WP02 report');
+    else {
+      for (const id of ['V04', 'V05', 'V06', 'V12', 'V14', 'V15']) if (!wp02.checks.find((c) => c.id === id)?.pass) p.push(`${id} failed: ${wp02.checks.find((c) => c.id === id)?.details}`);
+      for (const c of wp02.checks) if (!c.pass && c.id !== 'V17' && !p.some((x) => x.startsWith(c.id))) p.push(`${c.id} failed: ${c.details.split('\n')[0]}`);
+      if (!wp02V17Bounded(wp02.checks.find((c) => c.id === 'V17'))) p.push(`V17 outside the bound: ${wp02.checks.find((c) => c.id === 'V17')?.details}`);
+    }
+  }
+  add('W16', 'WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15); only V17 bounded',
+    p.length === 0, p.length ? p.join('; ') : `WP02 ${wp02.checks.filter((c) => c.pass).length}/${wp02.checks.length} pass; V17 bounded`);
+}
+
+// W24: strict type-check (local full run; CI runs `npm run qa:types` in the strictness job).
+if (want('W24')) {
+  const r = run('npm', ['run', 'qa:types']);
+  keep('qa-types.log', `${r.out}\nEXIT_CODE=${r.status}\n`);
+  add('W24', 'npm run qa:types (ngc --noEmit, strict TypeScript and templates, both applications) exits 0', r.status === 0, `exit=${r.status}`);
+}
+
+// W25: build metadata (CI build jobs, after the production build).
+if (want('W25')) {
+  const app = argValue('--app');
+  const p = [];
+  let files = [];
+  if (!['reference-app', 'ui-lab'].includes(app)) p.push(`--app must be reference-app or ui-lab, got ${app}`);
+  else if (!exists(`dist/${app}`)) p.push(`dist/${app} missing`);
+  else {
+    files = walk(`dist/${app}`).map((f) => ({ path: f, bytes: fs.statSync(abs(f)).size, sha256: sha256(f) }));
+    if (!files.some((f) => /\/index\.html$/.test(f.path))) p.push('no index.html');
+    if (!files.some((f) => /3rdpartylicenses\.txt$/.test(f.path))) p.push('no 3rdpartylicenses.txt');
+    keep(`build-${app}-manifest.json`, JSON.stringify({ app, commit: git('rev-parse', 'HEAD').out, files }, null, 2) + '\n');
+    const lic = files.find((f) => /3rdpartylicenses\.txt$/.test(f.path));
+    if (lic) keep(`build-${app}-3rdpartylicenses.txt`, read(lic.path));
+  }
+  add('W25', `Production build output for ${app} recorded (file list with sha256, third-party licence notices)`, p.length === 0,
+    p.length ? p.join('; ') : `${files.length} files; ${files.reduce((a, f) => a + f.bytes, 0)} bytes`);
+}
+
+results.sort((a, b) => a.id.localeCompare(b.id));
+
+// ---- Report ----------------------------------------------------------------------------------
+const passed = results.length > 0 && results.every((r) => r.pass);
+const head = git('rev-parse', 'HEAD');
+const report = {
+  workPackage: 'IB0-WP05',
+  generatedAt: new Date().toISOString(),
+  gate,
+  commit: head.status === 0 ? head.out : null,
+  baseline: BASELINE_COMMIT,
+  node: process.versions.node,
+  platform: `${process.platform}-${process.arch}`,
+  ci: process.env.GITHUB_ACTIONS === 'true' ? { runId: process.env.GITHUB_RUN_ID, attempt: process.env.GITHUB_RUN_ATTEMPT, job: process.env.GITHUB_JOB, event: process.env.GITHUB_EVENT_NAME, ref: process.env.GITHUB_REF } : null,
+  result: passed ? 'PASS' : 'FAIL',
+  checks: results
+};
+const name = gate === 'full' ? 'ib0-wp05-verification.json' : `ib0-wp05-verification-${gate}${gate === 'build-metadata' ? `-${argValue('--app')}` : ''}.json`;
+const text = JSON.stringify(report, null, 2) + '\n';
+if (evidenceOut) keep(name, text);
+else { fs.mkdirSync(reportsDir, { recursive: true }); fs.writeFileSync(path.join(reportsDir, name), text, 'utf8'); }
+
+for (const r of results) console.log(`${r.pass ? 'PASS' : 'FAIL'} ${r.id} ${r.name}${r.details ? ` — ${r.details.split('\n')[0]}` : ''}`);
+console.log(`\nIB0-WP05 verification (${gate}): ${report.result} (${results.filter((r) => r.pass).length}/${results.length})`);
+process.exit(passed ? 0 : 1);

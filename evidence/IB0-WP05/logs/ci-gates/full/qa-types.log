@@ -1,0 +1,3 @@
+> @proseit/paep-workspace@0.0.0 qa:types
+> ngc -p apps/reference-app/tsconfig.app.json --noEmit && ngc -p apps/ui-lab/tsconfig.app.json --noEmit
+EXIT_CODE=0

@@ -1,0 +1,9 @@
+node v24.21.0
+npm 11.19.0
+.nvmrc 24.21.0
+packageManager npm@11.19.0
+devEngines {"runtime":{"name":"node","version":"24.21.0","onFail":"error"},"packageManager":{"name":"npm","version":"11.19.0","onFail":"error"}}
+uname Linux x86_64
+ls: cannot access 'node_modules': No such file or directory
+ls: cannot access 'dist': No such file or directory
+ls: cannot access '.angular': No such file or directory

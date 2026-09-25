@@ -1,0 +1,341 @@
+# PAEP CI - IB0-WP05 automated quality gates.
+# Design: docs/architecture/IB0-WP05-CI-DESIGN.md. Policy checked by
+# tooling/verification/verify-ib0-wp05.mjs against tooling/verification/ib0-wp05-ci-policy.json.
+# Security rules: pull_request only (never pull_request_target), read-only token,
+# no secrets, credentials not persisted, actions pinned to full commit SHAs, and
+# no ${{ }} expression inside any run script (values reach scripts through env).
+name: PAEP CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: paep-ci-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  governance:
+    name: PAEP / governance
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out (full history for baseline comparisons)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: PAEP setup
+        uses: ./.github/actions/paep-setup
+
+      - name: Governance and integrity gate
+        run: |
+          set -euo pipefail
+          node tooling/verification/verify-ib0-wp05.mjs --gate governance 2>&1 | tee "$PAEP_EVIDENCE_DIR/governance-1.log"
+
+      - name: Upload evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: paep-governance-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/paep-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
+  provenance:
+    name: PAEP / security-provenance
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out (full history for baseline comparisons)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: PAEP setup
+        uses: ./.github/actions/paep-setup
+
+      - name: Workflow security, action pinning, install-script and lockfile provenance gate
+        run: |
+          set -euo pipefail
+          node tooling/verification/verify-ib0-wp05.mjs --gate provenance 2>&1 | tee "$PAEP_EVIDENCE_DIR/provenance-1.log"
+
+      - name: Registry signatures and provenance attestations (npm audit signatures)
+        run: |
+          set -euo pipefail
+          npm audit signatures 2>&1 | tee "$PAEP_EVIDENCE_DIR/provenance-2.log"
+
+      - name: Upload evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: paep-provenance-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/paep-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
+  architecture:
+    name: PAEP / architecture
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out (full history for baseline comparisons)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: PAEP setup
+        uses: ./.github/actions/paep-setup
+
+      - name: Architecture boundaries (qa:architecture)
+        run: |
+          set -euo pipefail
+          npm run qa:architecture 2>&1 | tee "$PAEP_EVIDENCE_DIR/architecture-1.log"
+
+      - name: Upload evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: paep-architecture-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/paep-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
+  strictness:
+    name: PAEP / strictness
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out (full history for baseline comparisons)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: PAEP setup
+        uses: ./.github/actions/paep-setup
+
+      - name: Strict TypeScript and template type-check (qa:types)
+        run: |
+          set -euo pipefail
+          npm run qa:types 2>&1 | tee "$PAEP_EVIDENCE_DIR/strictness-1.log"
+
+      - name: Strict configuration gate
+        run: |
+          set -euo pipefail
+          node tooling/verification/verify-ib0-wp05.mjs --gate strictness 2>&1 | tee "$PAEP_EVIDENCE_DIR/strictness-2.log"
+
+      - name: Upload evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: paep-strictness-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/paep-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
+  negative-architecture:
+    name: PAEP / negative-architecture
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Check out (full history for baseline comparisons)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: PAEP setup
+        uses: ./.github/actions/paep-setup
+
+      - name: Architecture and strictness negative suites
+        run: |
+          set -euo pipefail
+          node tooling/verification/verify-ib0-wp05.mjs --gate negative-architecture 2>&1 | tee "$PAEP_EVIDENCE_DIR/negative-architecture-1.log"
+
+      - name: Upload evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: paep-negative-architecture-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/paep-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
+  negative-ci:
+    name: PAEP / negative-ci
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out (full history for baseline comparisons)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: PAEP setup
+        uses: ./.github/actions/paep-setup
+
+      - name: CI-control negative tests (qa:ib0-wp05:negative)
+        run: |
+          set -euo pipefail
+          npm run qa:ib0-wp05:negative 2>&1 | tee "$PAEP_EVIDENCE_DIR/negative-ci-1.log"
+
+      - name: Upload evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: paep-negative-ci-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/paep-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
+  regression:
+    name: PAEP / regression
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Check out (full history for baseline comparisons)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: PAEP setup
+        uses: ./.github/actions/paep-setup
+
+      - name: IB0-WP01 to IB0-WP04 regression
+        run: |
+          set -euo pipefail
+          node tooling/verification/verify-ib0-wp05.mjs --gate regression 2>&1 | tee "$PAEP_EVIDENCE_DIR/regression-1.log"
+
+      - name: Upload evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: paep-regression-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/paep-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
+  build-reference-app:
+    name: PAEP / build-reference-app
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out (full history for baseline comparisons)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: PAEP setup
+        uses: ./.github/actions/paep-setup
+
+      - name: Production build (reference-app)
+        run: |
+          set -euo pipefail
+          npm run build:reference-app 2>&1 | tee "$PAEP_EVIDENCE_DIR/build-reference-app-1.log"
+
+      - name: Build metadata
+        run: |
+          set -euo pipefail
+          node tooling/verification/verify-ib0-wp05.mjs --gate build-metadata --app reference-app 2>&1 | tee "$PAEP_EVIDENCE_DIR/build-reference-app-2.log"
+
+      - name: Upload evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: paep-build-reference-app-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/paep-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
+  build-ui-lab:
+    name: PAEP / build-ui-lab
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out (full history for baseline comparisons)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: PAEP setup
+        uses: ./.github/actions/paep-setup
+
+      - name: Production build (ui-lab)
+        run: |
+          set -euo pipefail
+          npm run build:ui-lab 2>&1 | tee "$PAEP_EVIDENCE_DIR/build-ui-lab-1.log"
+
+      - name: Build metadata
+        run: |
+          set -euo pipefail
+          node tooling/verification/verify-ib0-wp05.mjs --gate build-metadata --app ui-lab 2>&1 | tee "$PAEP_EVIDENCE_DIR/build-ui-lab-2.log"
+
+      - name: Upload evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: paep-build-ui-lab-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/paep-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
+  gate:
+    name: PAEP / gate
+    if: ${{ always() }}
+    needs:
+      - governance
+      - provenance
+      - architecture
+      - strictness
+      - negative-architecture
+      - negative-ci
+      - regression
+      - build-reference-app
+      - build-ui-lab
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Evaluate every mandatory job result
+        env:
+          NEEDS_JSON: ${{ toJSON(needs) }}
+          MANDATORY_JOBS: governance provenance architecture strictness negative-architecture negative-ci regression build-reference-app build-ui-lab
+        run: |
+          set -euo pipefail
+          fail=0
+          actual="$(jq -r 'keys[]' <<<"$NEEDS_JSON" | sort | tr '\n' ' ')"
+          expected="$(tr ' ' '\n' <<<"$MANDATORY_JOBS" | sed '/^$/d' | sort | tr '\n' ' ')"
+          if [ "$actual" != "$expected" ]; then
+            echo "::error title=PAEP gate::needs [$actual] differ from the mandatory jobs [$expected]"
+            fail=1
+          fi
+          for job in $MANDATORY_JOBS; do
+            result="$(jq -r --arg job "$job" '.[$job].result // "missing"' <<<"$NEEDS_JSON")"
+            echo "$job: $result"
+            echo "| $job | $result |" >> "${GITHUB_STEP_SUMMARY:-/dev/null}"
+            if [ "$result" != "success" ]; then
+              echo "::error title=PAEP gate::mandatory job $job finished with result '$result'"
+              fail=1
+            fi
+          done
+          if [ "$fail" -ne 0 ]; then
+            echo "PAEP gate: FAIL"
+            exit 1
+          fi
+          echo "PAEP gate: PASS"

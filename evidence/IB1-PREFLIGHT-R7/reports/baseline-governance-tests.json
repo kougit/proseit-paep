@@ -1,0 +1,843 @@
+{
+  "workPackage": "IB1-PREFLIGHT-R7",
+  "generatedAt": "2026-09-25T07:43:13.559Z",
+  "commit": "647c52e414c979b1b25cdd5c562bfc831cd75a86",
+  "node": "24.21.0",
+  "result": "PASS",
+  "positives": 13,
+  "total": 104,
+  "cases": [
+    {
+      "id": "A01",
+      "section": "positive",
+      "name": "current candidate state validates (active G1 = accepted IB0, G2 CANDIDATE)",
+      "expected": "exit 0; output matches /PAEP baseline governance: PASS \\(13\\/13\\)/ and /active G1 5fbbedde4ed97899e88cfd4bd4cad02e34101914/ and /candidate G2 IB1-PREFLIGHT-R7 \\(NOT ACCEPTED\\)/",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "A02",
+      "section": "positive",
+      "name": "accepted IB0 baseline record is bound to git: merge on mainline, tree, ACCEPTED records, fingerprints",
+      "expected": "exit 0; output matches /PASS B05 .*G1 5fbbedd tree fb10ab5/ and /PASS B06 .*G1: Product Owner \\/ Solutions Architect, 2026-09-25, 5 records/ and /PASS B07 .*G1: 29 fingerprints/",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "A03",
+      "section": "positive",
+      "name": "authorised R7 changes are in scope (B11 names the G2 scope)",
+      "expected": "exit 0; output matches /PASS B11 .*changed paths since 5fbbedd, all in the G2 scope/",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "A04",
+      "section": "positive",
+      "name": "the WP05 governance gate consumes the registry (W26 and W07 pass)",
+      "expected": "exit 0; output matches /PASS W26 .*active G1 5fbbedd; candidate G2 IB1-PREFLIGHT-R7 \\(CANDIDATE, not accepted\\)/ and /PASS W07/ and /verification \\(governance\\): PASS/",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "A05",
+      "section": "positive",
+      "name": "verify is read-only: registry bytes and git status unchanged after verify",
+      "expected": "identical registry and status",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "A06",
+      "section": "positive",
+      "name": "deterministic: two runs give identical output, and a fresh clone of the snapshot passes",
+      "expected": "identical output; clone exit 0",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "A07",
+      "section": "positive",
+      "name": "historical accepted evidence stays readable: every G1 record reads ACCEPTED at the accepted commit",
+      "expected": "every record ACCEPTED",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "B01",
+      "section": "drift",
+      "name": "governed file outside the scope changed (architecture checker)",
+      "expected": "non-zero exit; output matches /FAIL B11 .*unauthorised change: tooling\\/architecture-boundaries\\/check-boundaries\\.mjs/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "B02",
+      "section": "drift",
+      "name": "implementation file changed without authorisation (substantive IB1 attempt)",
+      "expected": "non-zero exit; output matches /FAIL B11 .*unauthorised change: packages\\/contracts\\/src\\/index\\.ts/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "B03",
+      "section": "drift",
+      "name": "new governed artifact outside the scope (second action)",
+      "expected": "non-zero exit; output matches /FAIL B11 .*unauthorised change: \\.github\\/actions\\/other\\/action\\.yml/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "B04",
+      "section": "drift",
+      "name": "unapproved additional changed path: package.json dropped from the scope while it is changed",
+      "expected": "non-zero exit; output matches /FAIL B11 .*unauthorised change: package\\.json/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "B05",
+      "section": "drift",
+      "name": "accepted evidence record edited (evidence/IB0-WP04)",
+      "expected": "non-zero exit; output matches /FAIL B10 .*evidence\\/IB0-WP04\\// and /FAIL B11/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "B06",
+      "section": "drift",
+      "name": "accepted record removed (work-packages/IB0-WP05/ACCEPTANCE.md)",
+      "expected": "non-zero exit; output matches /FAIL B10 .*work-packages\\/IB0-WP05\\//",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "B07",
+      "section": "drift",
+      "name": "immutable controlled source changed",
+      "expected": "non-zero exit; output matches /FAIL B10 .*\\.paep-control\\//",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "B08",
+      "section": "drift",
+      "name": "file added inside an accepted record folder",
+      "expected": "non-zero exit; output matches /FAIL B10 .*evidence\\/IB0-WP05\\//",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "B09",
+      "section": "drift",
+      "name": "unauthorised drift reaches the governance gate (W07 and W26 fail)",
+      "expected": "non-zero exit; output matches /FAIL W07/ and /FAIL W26/ and /verification \\(governance\\): FAIL/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "B10",
+      "section": "drift",
+      "name": "CLAUDE.md changed without authorisation",
+      "expected": "non-zero exit; output matches /FAIL B11 .*unauthorised change: CLAUDE\\.md/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "C01",
+      "section": "tamper",
+      "name": "fingerprint substitution: controlled source edited and its fingerprint replaced to hide it",
+      "expected": "non-zero exit; output matches /FAIL B07 .*fingerprint \\.paep-control\\// and /FAIL B10/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "C02",
+      "section": "tamper",
+      "name": "expected fingerprint changed only to make verification green",
+      "expected": "non-zero exit; output matches /FAIL B07 .*fingerprint package-lock\\.json/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "C03",
+      "section": "tamper",
+      "name": "protected path removed from the fingerprints",
+      "expected": "non-zero exit; output matches /FAIL B07 .*missing: CLAUDE\\.md/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "C04",
+      "section": "tamper",
+      "name": "accepted record removed from protection and added to the candidate scope",
+      "expected": "non-zero exit; output matches /FAIL B04 .*generation 1 protectedRecords/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "C05",
+      "section": "tamper",
+      "name": "immutable controlled source removed from policy (and its fingerprint)",
+      "expected": "non-zero exit; output matches /FAIL B04 .*lacks controlled source \\.gitignore/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "C06",
+      "section": "tamper",
+      "name": "Claude added as an acceptance authority",
+      "expected": "non-zero exit; output matches /FAIL B04 .*\"Claude Code\" is not a controlled acceptance authority/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "C07",
+      "section": "tamper",
+      "name": "accepted tree identity edited",
+      "expected": "non-zero exit; output matches /FAIL B05 .*acceptedTree/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "C08",
+      "section": "tamper",
+      "name": "acceptance evidence blob edited",
+      "expected": "non-zero exit; output matches /FAIL B06 .*evidence work-packages\\/IB0-WP05\\/work-package\\.json blob/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "C09",
+      "section": "tamper",
+      "name": "nested metadata: extra key inside a generation",
+      "expected": "non-zero exit; output matches /FAIL B02 .*generations\\[1\\] keys/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "C10",
+      "section": "tamper",
+      "name": "reordered generation fields",
+      "expected": "non-zero exit; output matches /FAIL B02 .*generations\\[1\\] keys/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "C11",
+      "section": "tamper",
+      "name": "mainline reference redirected to another ref",
+      "expected": "non-zero exit; output matches /FAIL B02 .*mainlineRef/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "C12",
+      "section": "tamper",
+      "name": "accepted work package dropped from the baseline (IB0-WP05 still records ACCEPTED)",
+      "expected": "non-zero exit; output matches /FAIL B12 .*IB0-WP05 records ACCEPTED but belongs to no generation/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "D01",
+      "section": "schema",
+      "name": "malformed JSON",
+      "expected": "non-zero exit; output matches /FAIL B01 .*not JSON/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "D02",
+      "section": "schema",
+      "name": "duplicate key (a second \"status\": \"ACCEPTED\" in the candidate)",
+      "expected": "non-zero exit; output matches /FAIL B01 .*canonical form/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "D03",
+      "section": "schema",
+      "name": "unknown acceptance state (APPROVED)",
+      "expected": "non-zero exit; output matches /FAIL B02 .*\"APPROVED\" is not one of ACCEPTED, CANDIDATE/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "D04",
+      "section": "schema",
+      "name": "unknown schemaVersion",
+      "expected": "non-zero exit; output matches /FAIL B02 .*unknown schemaVersion 2/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "D05",
+      "section": "schema",
+      "name": "acceptance authority missing",
+      "expected": "non-zero exit; output matches /FAIL B02 .*acceptance authority and evidence are mandatory/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "D06",
+      "section": "schema",
+      "name": "acceptance evidence missing (empty list)",
+      "expected": "non-zero exit; output matches /FAIL B02 .*acceptance authority and evidence are mandatory/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "D07",
+      "section": "schema",
+      "name": "acceptance evidence for one work package removed",
+      "expected": "non-zero exit; output matches /FAIL B06 .*no acceptance evidence for IB0-WP03 \\(unaccepted milestone\\)/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "D08",
+      "section": "schema",
+      "name": "acceptance authority not controlled (Claude Code)",
+      "expected": "non-zero exit; output matches /FAIL B06 .*\"Claude Code\" is not a controlled acceptance authority/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "D09",
+      "section": "history",
+      "name": "generation rollback: candidate renumbered to 1",
+      "expected": "non-zero exit; output matches /FAIL B03 .*no gap, duplicate or rollback/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "D10",
+      "section": "history",
+      "name": "duplicate/reused generation number",
+      "expected": "non-zero exit; output matches /FAIL B03/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "D11",
+      "section": "history",
+      "name": "two CANDIDATE generations",
+      "expected": "non-zero exit; output matches /FAIL B03 .*2 CANDIDATE generations/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "D12",
+      "section": "history",
+      "name": "historical accepted baseline removed (no ACCEPTED generation left)",
+      "expected": "non-zero exit; output matches /FAIL B03 .*no ACCEPTED generation/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "D13",
+      "section": "history",
+      "name": "predecessor baseline does not exist",
+      "expected": "non-zero exit; output matches /FAIL B05 .*does not exist \\(nonexistent predecessor baseline\\)/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "D14",
+      "section": "history",
+      "name": "predecessor is an unmerged branch commit (IB0-WP05 acceptance commit, not the merge)",
+      "expected": "non-zero exit; output matches /FAIL B05 .*is not a merge commit/ and /is not on the first-parent history/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "D15",
+      "section": "history",
+      "name": "baseline rolled back to the IB0-WP04 merge (IB0-WP05 not accepted there)",
+      "expected": "non-zero exit; output matches /FAIL B06 .*work-packages\\/IB0-WP05\\/work-package\\.json does not exist/ and /FAIL B07/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "D16",
+      "section": "history",
+      "name": "mainline reference missing (fails closed)",
+      "expected": "non-zero exit; output matches /FAIL B05 .*refs\\/remotes\\/origin\\/main not found/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "D17",
+      "section": "history",
+      "name": "candidate authorisation missing",
+      "expected": "non-zero exit; output matches /FAIL B02 .*authorisation is required for a CANDIDATE/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "D18",
+      "section": "history",
+      "name": "candidate authorised by a non-controlled authority",
+      "expected": "non-zero exit; output matches /FAIL B08 .*\"Claude Code\" is not a controlled authority/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "D19",
+      "section": "history",
+      "name": "candidate authorisation reference outside its own records",
+      "expected": "non-zero exit; output matches /FAIL B08 .*authorisation reference CLAUDE\\.md/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "D20",
+      "section": "history",
+      "name": "registry missing",
+      "expected": "non-zero exit; output matches /FAIL B01 .*missing/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "D21",
+      "section": "history",
+      "name": "invalid registry makes the governance gate fail closed (W02, W05-W08, W26)",
+      "expected": "non-zero exit; output matches /FAIL W02 .*no valid accepted baseline/ and /FAIL W05/ and /FAIL W06/ and /FAIL W07/ and /FAIL W08/ and /FAIL W26/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "E01",
+      "section": "promotion",
+      "name": "candidate treated as accepted (status flipped, acceptance fields left empty)",
+      "expected": "non-zero exit; output matches /FAIL B02 .*acceptedCommit is not a full 40-hex commit id/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "E02",
+      "section": "promotion",
+      "name": "self-promotion by hand: candidate marked ACCEPTED at the current branch commit with PO/SA wording",
+      "expected": "non-zero exit; output matches /FAIL B05 .*is not a merge commit/ and /is not on the first-parent history of refs\\/remotes\\/origin\\/main/ and /FAIL B06 .*is not ACCEPTED/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "E03",
+      "section": "promotion",
+      "name": "automatic promotion of the current state without authority is refused (promote at HEAD)",
+      "expected": "non-zero exit; output matches /PROMOTION REFUSED/ and /is not on the first-parent history/ and /is not a merge commit/ and /is not ACCEPTED/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "E04",
+      "section": "promotion",
+      "name": "promotion of a non-candidate generation is refused",
+      "expected": "non-zero exit; output matches /PROMOTION REFUSED/ and /generation 1 is not a CANDIDATE/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F01",
+      "section": "paths",
+      "name": "'..' traversal in a scope entry",
+      "expected": "non-zero exit; output matches /FAIL B04 .*non-canonical path \"tooling\\/..\\/.paep-control\\/\"/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F02",
+      "section": "paths",
+      "name": "backslash separator in a scope entry",
+      "expected": "non-zero exit; output matches /FAIL B04 .*non-canonical path/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F03",
+      "section": "paths",
+      "name": "absolute path in a scope entry",
+      "expected": "non-zero exit; output matches /FAIL B04 .*non-canonical path \"\\/etc\\/\"/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F04",
+      "section": "paths",
+      "name": "case-variant scope entry aliasing an immutable source (.PAEP-CONTROL/text/)",
+      "expected": "non-zero exit; output matches /FAIL B08 .*overlaps immutable \\.paep-control\\//",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F05",
+      "section": "paths",
+      "name": "case-variant file beside an accepted record (Evidence/IB0-WP05/x.md)",
+      "expected": "non-zero exit; output matches /FAIL B11 .*case variant of protected evidence\\/IB0-WP05\\//",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F06",
+      "section": "paths",
+      "name": "duplicate scope entry (case-insensitive)",
+      "expected": "non-zero exit; output matches /FAIL B04 .*duplicate entry/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F07",
+      "section": "paths",
+      "name": "scope widened to a whole top-level directory (tooling/)",
+      "expected": "non-zero exit; output matches /FAIL B08 .*tooling\\/ authorises a whole top-level directory/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F08",
+      "section": "paths",
+      "name": "scope overlapping an accepted record (evidence/IB0-WP05/)",
+      "expected": "non-zero exit; output matches /FAIL B08 .*overlaps accepted record evidence\\/IB0-WP05\\//",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F09",
+      "section": "paths",
+      "name": "symlink escaping the repository inside the authorised scope",
+      "expected": "non-zero exit; output matches /FAIL B11 .*tooling\\/governance\\/escape is a symlink/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F10",
+      "section": "paths",
+      "name": "symlink to an immutable source inside the authorised scope",
+      "expected": "non-zero exit; output matches /FAIL B11 .*tooling\\/governance\\/alias is a symlink/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F11",
+      "section": "paths",
+      "name": "registry replaced by a symlink",
+      "expected": "non-zero exit; output matches /FAIL B01 .*not a regular file \\(symlink\\)/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F12",
+      "section": "chars",
+      "name": "U+2028 LINE SEPARATOR in the registry",
+      "expected": "non-zero exit; output matches /FAIL B01 .*U\\+2028/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F13",
+      "section": "chars",
+      "name": "U+0085 NEL in the registry",
+      "expected": "non-zero exit; output matches /FAIL B01 .*U\\+0085/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F14",
+      "section": "chars",
+      "name": "byte-order mark before the registry",
+      "expected": "non-zero exit; output matches /FAIL B01 .*U\\+FEFF/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F15",
+      "section": "chars",
+      "name": "CRLF line endings in the registry",
+      "expected": "non-zero exit; output matches /FAIL B01 .*U\\+000D/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F16",
+      "section": "chars",
+      "name": "escaped \\u002e in a scope path (dot hidden as an escape)",
+      "expected": "non-zero exit; output matches /FAIL B01 .*canonical form/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F17",
+      "section": "chars",
+      "name": "zero-width space inside a scope entry (escaped)",
+      "expected": "non-zero exit; output matches /FAIL B01 .*U\\+200B/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F18",
+      "section": "chars",
+      "name": "non-ASCII changed file name inside the scope",
+      "expected": "non-zero exit; output matches /FAIL B11 .*non-canonical changed path \"tooling\\/governance\\/caf/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "F19",
+      "section": "chars",
+      "name": "control character (TAB) in the registry",
+      "expected": "non-zero exit; output matches /FAIL B01 .*U\\+0009/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G01",
+      "section": "promotion",
+      "name": "promotion refused at a mainline merge that carries no PO/SA ACCEPTED record",
+      "expected": "non-zero exit; output matches /PROMOTION REFUSED/ and /work-packages\\/IB1-PREFLIGHT-R7\\/work-package\\.json at [0-9a-f]{7} is not ACCEPTED/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G02",
+      "section": "promotion",
+      "name": "before promotion: acceptance recorded on the branch, yet G2 is still CANDIDATE and G1 stays the active baseline",
+      "expected": "exit 0; output matches /active G1 5fbbedde4ed97899e88cfd4bd4cad02e34101914/ and /candidate G2 IB1-PREFLIGHT-R7 \\(NOT ACCEPTED\\)/",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "G03",
+      "section": "promotion",
+      "name": "promotion refused at the accepted branch commit (not a mainline merge)",
+      "expected": "non-zero exit; output matches /PROMOTION REFUSED/ and /not on the first-parent history/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "H10",
+      "section": "promotion",
+      "name": "QA-N3: an ACCEPTED record with an invalid date fails",
+      "expected": "non-zero exit; output matches /FAIL B12 .*acceptance date 2026-09-31 invalid/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "H11",
+      "section": "promotion",
+      "name": "QA-N3: an ACCEPTED record with a near-miss authority fails",
+      "expected": "non-zero exit; output matches /FAIL B12 .*acceptance authority \"Product Owner \\/ Solutions Architect \"/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "H12",
+      "section": "promotion",
+      "name": "QA-N3: a merged malformed ACCEPTED claim still freezes the candidate; a later corrected merge cannot be promoted",
+      "expected": "B13 fails on a tamper branch; promote at the later merge refused",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "H13",
+      "section": "promotion",
+      "name": "QA-N4: an acceptance recorded only as an ACCEPTANCE_REPORT.md row fails",
+      "expected": "non-zero exit; output matches /FAIL B12 .*claims ACCEPTED anywhere in its records needs a well-formed/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "H14",
+      "section": "promotion",
+      "name": "QA-N5: case and padding variants of ACCEPTED count as claims and fail",
+      "expected": "non-zero exit; output matches /FAIL B12 .*is not ACCEPTED/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "H15",
+      "section": "promotion",
+      "name": "QA-N4: a merged report-only acceptance still freezes the candidate; a later merge cannot be promoted",
+      "expected": "B13 fails on a tamper branch; promote at the later merge refused",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G04",
+      "section": "promotion",
+      "name": "after the simulated merge, before promotion: G1 still active, G2 still CANDIDATE",
+      "expected": "exit 0; output matches /active G1 5fbbedde4ed97899e88cfd4bd4cad02e34101914/ and /candidate G2 .*NOT ACCEPTED/",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "H02",
+      "section": "promotion",
+      "name": "QA-F2: after the accepted merge, before promotion, an edit to the candidate's records fails (promotion pending)",
+      "expected": "non-zero exit; output matches /FAIL B13 .*the only permitted next change is promote --generation 2/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "H03",
+      "section": "promotion",
+      "name": "QA-F2: after the accepted merge, widening the candidate scope fails (frozen to the accepted merge)",
+      "expected": "non-zero exit; output matches /FAIL B13 .*differs from the CANDIDATE merged and accepted/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "H04",
+      "section": "promotion",
+      "name": "QA-F2: promotion at a later mainline merge (not the earliest accepted merge) is refused",
+      "expected": "non-zero promote exit naming the earliest merge",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "H07",
+      "section": "promotion",
+      "name": "QA-N1: after the accepted merge, adding a work package to the candidate does not lift the freeze",
+      "expected": "non-zero exit; output matches /FAIL B13 .*generation 2 here differs from the CANDIDATE merged and accepted at/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "H08",
+      "section": "promotion",
+      "name": "QA-N1: after the accepted merge, removing the candidate from the registry does not lift the freeze",
+      "expected": "non-zero exit; output matches /FAIL B13 .*generation 2 here differs from the CANDIDATE merged and accepted at/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "H09",
+      "section": "promotion",
+      "name": "QA-N1: a later merge that adds an accepted work package to the candidate cannot be promoted",
+      "expected": "non-zero promote exit naming the earliest merge",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G05",
+      "section": "promotion",
+      "name": "promotion refused when the working registry changed the candidate declaration (scope widened)",
+      "expected": "non-zero exit; output matches /PROMOTION REFUSED/ and /differs from the CANDIDATE merged/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G06",
+      "section": "promotion",
+      "name": "deterministic promotion after explicit acceptance: promote --generation 2 --commit <merge> succeeds; verify then reports G2 ACCEPTED at the merge",
+      "expected": "promote exit 0; verify exit 0 with active G2",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "G07",
+      "section": "promotion",
+      "name": "promoted state validates; the IB0 generation stays identifiable and unchanged",
+      "expected": "exit 0; output matches /PASS B05 .*G1 5fbbedd.*G2 4b34221/ and /PASS B09/",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "G08",
+      "section": "promotion",
+      "name": "after promotion: historical IB0 generation rewritten",
+      "expected": "non-zero exit; output matches /FAIL B09 .*accepted generation 1 .*rewritten or removed/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G09",
+      "section": "promotion",
+      "name": "after promotion: rollback by deleting the promoted generation",
+      "expected": "non-zero exit; output matches /FAIL B09/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G10",
+      "section": "promotion",
+      "name": "after promotion: policy loosened without a policyChange candidate",
+      "expected": "non-zero exit; output matches /FAIL B09 .*policy differs/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G11",
+      "section": "promotion",
+      "name": "after promotion: drift without a new candidate",
+      "expected": "non-zero exit; output matches /FAIL B11 .*unauthorised change: tooling\\/governance\\/extra\\.md/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G12",
+      "section": "promotion",
+      "name": "rollover continues: a new CANDIDATE (G3) declared with its scope validates its in-scope change",
+      "expected": "exit 0; output matches /active G2 4b342210ec6f7a43b378ba10d7180d236bf86894/ and /candidate G3 IB1-WP01 \\(NOT ACCEPTED\\)/",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "G13",
+      "section": "promotion",
+      "name": "rollover: a change outside the new candidate scope fails",
+      "expected": "non-zero exit; output matches /FAIL B11 .*unauthorised change: tooling\\/verification\\/verify-ib0-wp05\\.mjs/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G14",
+      "section": "promotion",
+      "name": "rollover: the promoted G2 records become immutable (work-packages/IB1-PREFLIGHT-R7 edited)",
+      "expected": "non-zero exit; output matches /FAIL B10 .*work-packages\\/IB1-PREFLIGHT-R7\\//",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "G15",
+      "section": "promotion",
+      "name": "policy evolution: a CANDIDATE that declares policyChange may tighten the policy (README.md becomes governed)",
+      "expected": "exit 0; output matches /PAEP baseline governance: PASS/ and /candidate G3 IB1-WP01/",
+      "exit": 0,
+      "pass": true
+    },
+    {
+      "id": "G16",
+      "section": "promotion",
+      "name": "policy change hidden in a CANDIDATE without policyChange fails",
+      "expected": "non-zero exit; output matches /FAIL B09 .*policy differs/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "H05",
+      "section": "promotion",
+      "name": "QA-F3: a CANDIDATE without policyChange may not change the governance verifier",
+      "expected": "non-zero exit; output matches /FAIL B08 .*tooling\\/governance\\/baseline-governance\\.mjs changes governance rules; it requires policyChange=true/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "H06",
+      "section": "promotion",
+      "name": "QA-F3: a CANDIDATE without policyChange may not change the CI workflow or CLAUDE.md",
+      "expected": "non-zero exit; output matches /FAIL B08 .*\\.github\\/workflows\\/paep-ci\\.yml changes governance rules/ and /CLAUDE\\.md changes governance rules/",
+      "exit": 1,
+      "pass": true
+    },
+    {
+      "id": "H01",
+      "section": "promotion",
+      "name": "QA-F1: a merge that keeps the pre-promotion registry (git merge -s ours) cannot hide the promoted generation",
+      "expected": "verify fails B09",
+      "exit": 1,
+      "pass": true
+    }
+  ]
+}

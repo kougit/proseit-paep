@@ -24,4 +24,4 @@ R7-SCOPE-001,Authorising instruction §14,IB1-PREFLIGHT-R7,no apps/packages/conf
 R7-DOC-001,Authorising instruction §21,IB1-PREFLIGHT-R7,docs/architecture/BASELINE-ROLLOVER.md,R7-AC23,Review,PASS,docs/architecture/BASELINE-ROLLOVER.md
 R7-EVID-001,Authorising instruction §22; EQP §24 §25,IB1-PREFLIGHT-R7,evidence/IB1-PREFLIGHT-R7/; this file,R7-AC24,Evidence index review,PASS,evidence/IB1-PREFLIGHT-R7/README.md
 R7-QA-001,Authorising instruction §20,IB1-PREFLIGHT-R7,independent QA lanes 1-6,R7-AC25,Independent QA report (rounds 1-5),PASS,evidence/IB1-PREFLIGHT-R7/reports/independent-qa.md
-R7-PR-001,Authorising instruction §23,IB1-PREFLIGHT-R7,pull request to main,R7-AC26,GitHub Actions run; PR state,PENDING,evidence/IB1-PREFLIGHT-R7/reports/github-actions-run.md
+R7-PR-001,Authorising instruction §23,IB1-PREFLIGHT-R7,pull request to main,R7-AC26,GitHub Actions run 36109852885 (PAEP / gate success); PR #6 ready and mergeable,PASS,evidence/IB1-PREFLIGHT-R7/reports/github-actions-run.md

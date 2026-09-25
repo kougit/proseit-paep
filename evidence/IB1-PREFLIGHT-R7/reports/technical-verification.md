@@ -56,4 +56,4 @@ All runs are from a clean `npm ci` on the committed head, with Node 24.21.0 and 
 | R7-AC23 | PASS | `docs/architecture/BASELINE-ROLLOVER.md` |
 | R7-AC24 | PASS | `../README.md`, `TRACEABILITY.csv`, `residual-risk.md`, `ACCEPTANCE_REPORT.md` |
 | R7-AC25 | PASS | `independent-qa.md` |
-| R7-AC26 | See `github-actions-run.md` | PR, run ID and head SHA |
+| R7-AC26 | PASS | PR #6 ready, mergeable clean; run 36109852885 on `2d7d762`: 10/10 success including `PAEP / gate` (`github-actions-run.md`) |

@@ -13,7 +13,7 @@
  *
  * IB1-PREFLIGHT-R7: the comparison baseline and the permitted change scope are
  * no longer fixed here. They come from the controlled baseline registry
- * (tooling/governance/baseline-registry.json, checked by W26 = B01-B12 of
+ * (tooling/governance/baseline-registry.json, checked by W26 = B01-B13 of
  * tooling/governance/baseline-governance.mjs): the baseline is the newest
  * ACCEPTED generation and the scope is the CANDIDATE's authorisedScope.
  *
@@ -147,11 +147,11 @@ const changedPaths = gov ? gov.changedPaths : [];
 const inScope = (f) => Boolean(gov) && gov.inScope(f);
 const noBase = 'no valid accepted baseline in the baseline registry (see W26)';
 
-// W26: controlled baseline governance (B01-B12).
+// W26: controlled baseline governance (B01-B13).
 if (want('W26')) {
   const failed = gov.results.filter((r) => !r.pass);
-  add('W26', 'Controlled baseline governance: the registry is valid and append-only, the active ACCEPTED generation is a PO/SA-accepted mainline merge, immutable sources and accepted records are unchanged, and every change since it is inside the CANDIDATE scope (B01-B12)',
-    failed.length === 0, failed.length ? failed.map((r) => `${r.id}: ${r.details}`).join('; ') : `B01-B12 pass; active G${gov.active.generation} ${BASE.slice(0, 7)}; candidate ${gov.candidate ? `G${gov.candidate.generation} ${gov.candidate.workPackages.join(', ')} (CANDIDATE, not accepted)` : 'none'}`);
+  add('W26', 'Controlled baseline governance: the registry is valid and append-only, the active ACCEPTED generation is a PO/SA-accepted mainline merge, immutable sources and accepted records are unchanged, and every change since it is inside the CANDIDATE scope (B01-B13)',
+    failed.length === 0, failed.length ? failed.map((r) => `${r.id}: ${r.details}`).join('; ') : `B01-B13 pass; active G${gov.active.generation} ${BASE.slice(0, 7)}; candidate ${gov.candidate ? `G${gov.candidate.generation} ${gov.candidate.workPackages.join(', ')} (CANDIDATE, not accepted)` : 'none'}`);
 }
 const allFiles = ['W03', 'W04'].some(want) ? walk('.') : [];
 

@@ -17,7 +17,7 @@
  * only succeeds for a mainline merge that already carries an ACCEPTED record.
  *
  * Usage (repository root):
- *   node tooling/governance/baseline-governance.mjs verify     B01-B12, exit 0/1
+ *   node tooling/governance/baseline-governance.mjs verify     B01-B13, exit 0/1
  *   node tooling/governance/baseline-governance.mjs status     active/candidate summary (JSON)
  *   node tooling/governance/baseline-governance.mjs promote --generation <n> --commit <sha>
  *
@@ -47,6 +47,9 @@ const STATES = ['ACCEPTED', 'CANDIDATE'];
 // recorded delegation, which does not exist, so it is not listed). PACK_MANIFEST.json fingerprints .gitignore and .paep-control.
 const CONTROLLED_AUTHORITIES = ['Product Owner / Solutions Architect'];
 const IMMUTABLE_FLOOR = ['.gitignore', '.paep-control/', 'PACK_MANIFEST.json'];
+// Paths that hold the rules deciding acceptance (CI workflow, verifiers, this module, CLAUDE.md). A CANDIDATE whose
+// scope touches them (other than the registry file) must declare policyChange=true, so a governance change is explicit.
+const GOVERNANCE_CRITICAL = ['.github/', 'CLAUDE.md', 'tooling/governance/', 'tooling/verification/'];
 // One path segment: ASCII letters, digits, '.', '_' and '-', never '.' or '..'.
 const SEGMENT = /^[A-Za-z0-9._-]+$/;
 const WP_ID = /^[A-Z0-9]+(?:-[A-Z0-9]+)+$/;
@@ -108,6 +111,13 @@ function acceptanceRecord(git, commit, wp, file, authority) {
     return { ok: false, why: `${file} at ${commit.slice(0, 7)} has no "| Acceptance Status | ACCEPTED |" row` };
   }
   return { ok: false, why: `${file} is not an acceptance record of ${wp}` };
+}
+
+/** Earliest first-parent mainline merge after `since` whose tree records every candidate work package as ACCEPTED. */
+function acceptedMergeOf(git, candidate, since, mainline) {
+  const list = git('rev-list', '--first-parent', '--merges', '--reverse', `${since}..${mainline}`).out.split('\n').filter(Boolean);
+  const authority = candidate.authorisation?.authority;
+  return list.find((c) => candidate.workPackages.every((wp) => acceptanceRecord(git, c, wp, `work-packages/${wp}/work-package.json`, authority).ok)) || null;
 }
 
 // ---- core evaluation --------------------------------------------------------------------------------
@@ -349,10 +359,11 @@ export function evaluate(root = process.cwd(), { registryText = null } = {}) {
       for (const r of protectedAll) if (overlaps(e, r, true)) p08.push(`scope entry ${e} overlaps accepted record ${r}`);
     }
     if (!inScope(REGISTRY_PATH)) p08.push(`authorisedScope must list ${REGISTRY_PATH} (declaring a candidate changes the registry)`);
+    if (c.policyChange !== true) for (const e of c.authorisedScope) if (e !== REGISTRY_PATH && GOVERNANCE_CRITICAL.some((k) => overlaps(e, k, true))) p08.push(`scope entry ${e} changes governance rules; it requires policyChange=true (an explicit, PO/SA-authorised governance change)`);
   }
   if (p08.length) scope = [];
-  add('B08', 'The CANDIDATE (if any) carries PO/SA authorisation with a reference in its own records, lists its own records and the registry, and its scope never overlaps immutable sources, accepted records or a whole top-level directory', p08,
-    candidate ? `G${candidate.generation} ${candidate.workPackages.join(', ')}: ${candidate.authorisedScope.length} scope entries` : 'no candidate');
+  add('B08', 'The CANDIDATE (if any) carries PO/SA authorisation with a reference in its own records, lists its own records and the registry, never overlaps immutable sources, accepted records or a whole top-level directory, and declares policyChange when it touches governance rules', p08,
+    candidate ? `G${candidate.generation} ${candidate.workPackages.join(', ')}: ${candidate.authorisedScope.length} scope entries${candidate.policyChange ? '; GOVERNANCE CHANGE (policyChange=true)' : ''}` : 'no candidate');
 
   // B09: registry history (append-only; policy fixed unless the candidate declares policyChange)
   const p09 = [];
@@ -378,8 +389,17 @@ export function evaluate(root = process.cwd(), { registryText = null } = {}) {
         }
       }
     }
-    // Every ACCEPTED generation in any committed version of the registry in HEAD's history must survive unchanged.
-    const commits = git('log', '--format=%H', 'HEAD', '--', REGISTRY_PATH).out.split('\n').filter(Boolean);
+    // Every ACCEPTED generation in the mainline registry, and in any committed version of the registry in HEAD's
+    // history, must survive unchanged. --full-history: a merge that keeps one side's registry must not hide the other.
+    if (mainline) {
+      const ms = git('show', `${mainline}:${REGISTRY_PATH}`);
+      if (ms.status === 0) {
+        let mreg = null;
+        try { mreg = JSON.parse(ms.raw); } catch { p09.push(`registry at ${pol.mainlineRef} is not JSON`); }
+        for (const og of (mreg?.generations || []).filter((g) => g.status === 'ACCEPTED')) if (!same(gens.find((g) => g.generation === og.generation), og)) p09.push(`accepted generation ${og.generation} recorded on ${pol.mainlineRef} is missing or different here (stale or rolled-back baseline)`);
+      }
+    }
+    const commits = git('log', '--full-history', '--format=%H', 'HEAD', '--', REGISTRY_PATH).out.split('\n').filter(Boolean);
     for (const c of commits) {
       const s = git('show', `${c}:${REGISTRY_PATH}`);
       if (s.status !== 0) continue; // deletion commit
@@ -447,6 +467,28 @@ export function evaluate(root = process.cwd(), { registryText = null } = {}) {
   }
   add('B12', 'Every work package whose record says ACCEPTED belongs to a registry generation', p12, 'complete');
 
+  // B13: promotion pending. Once the CANDIDATE's ACCEPTED record is merged on the mainline, the candidate is frozen
+  // to that earliest merge and nothing but its promotion may follow.
+  const p13 = [];
+  let pendingAt = null;
+  if (!fatal.length && candidate && mainline && active) {
+    pendingAt = acceptedMergeOf(git, candidate, active.acceptedCommit, mainline);
+    if (pendingAt) {
+      const atE = git('show', `${pendingAt}:${REGISTRY_PATH}`);
+      let ereg = null;
+      try { ereg = JSON.parse(atE.raw); } catch { /* reported below */ }
+      if (!same(ereg?.generations?.find((g) => g.generation === candidate.generation), candidate)) p13.push(`generation ${candidate.generation} differs from the CANDIDATE merged and accepted at ${pendingAt.slice(0, 7)}`);
+      if (git('merge-base', '--is-ancestor', pendingAt, 'HEAD').status === 0) {
+        const d = git('diff', '--name-only', '--no-renames', '-z', pendingAt);
+        const u = git('ls-files', '--others', '--exclude-standard', '-z');
+        const after = [...new Set([...zlist(d.raw), ...zlist(u.raw)])];
+        if (after.length) p13.push(`generation ${candidate.generation} was accepted and merged at ${pendingAt.slice(0, 7)}; the only permitted next change is promote --generation ${candidate.generation} --commit ${pendingAt} (changed since: ${after.join(', ')})`);
+      }
+    }
+  }
+  add('B13', 'A CANDIDATE whose ACCEPTED record is already merged on the mainline is frozen to its earliest accepted merge and must be promoted before any other change', p13,
+    pendingAt ? `promotion pending at ${pendingAt.slice(0, 7)} (no other change)` : 'no promotion pending');
+
   const packageProblems = [];
   let authorisedSince = () => () => false;
   if (base) {
@@ -505,6 +547,9 @@ export function promote(root, generation, commit) {
   if (!mainline) problems.push(`${reg.policy.mainlineRef} not found`);
   else if (!git('rev-list', '--first-parent', mainline).out.split('\n').includes(full)) problems.push(`${full.slice(0, 7)} is not on the first-parent history of ${reg.policy.mainlineRef} (only a merged, PO/SA-authorised change can be promoted)`);
   if (git('rev-list', '--parents', '-n', '1', full).out.split(' ').length < 3) problems.push(`${full.slice(0, 7)} is not a merge commit`);
+  const active = reg.generations.filter((x) => x.status === 'ACCEPTED').pop();
+  const earliest = mainline && active ? acceptedMergeOf(git, g, active.acceptedCommit, mainline) : null;
+  if (earliest && earliest !== full) problems.push(`the CANDIDATE was first accepted and merged at ${earliest.slice(0, 7)}; only that merge can be promoted`);
   const merged = git('show', `${full}:${REGISTRY_PATH}`);
   let mergedReg = null;
   try { mergedReg = JSON.parse(merged.raw); } catch { problems.push(`${full.slice(0, 7)} carries no readable registry`); }

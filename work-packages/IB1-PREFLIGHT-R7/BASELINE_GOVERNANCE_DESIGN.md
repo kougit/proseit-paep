@@ -49,7 +49,7 @@ Option C is the minimum that keeps the rigour: A and B both reduce R7 to "edit a
 | `name`, `milestone`, `workPackages` | Originating milestone and work packages |
 | `status` | `ACCEPTED` or `CANDIDATE`; anything else fails closed |
 | `authorisation` | PO/SA authorisation of the change (authority, date, reference file in the WP's own records) |
-| `policyChange` | true only for a CANDIDATE allowed to change `policy` (generation 2 bootstraps the registry) |
+| `policyChange` | true only for a CANDIDATE authorised to change governance: the registry `policy` or any governance-critical path (CI workflow, verifiers, this module, CLAUDE.md). Generation 2 bootstraps the registry |
 | `authorisedScope` | Exact files or `dir/` subtrees the CANDIDATE may change (never a top-level directory, immutable path or accepted record) |
 | `protectedRecords` | `work-packages/<WP>/` and `evidence/<WP>/`; immutable once the generation is ACCEPTED |
 | `acceptedCommit`, `acceptedTree` | The PO/SA-authorised merge commit on the mainline and its tree (null for a CANDIDATE) |
@@ -59,7 +59,7 @@ Option C is the minimum that keeps the rigour: A and B both reduce R7 to "edit a
 
 **Non-self-reference:** an ACCEPTED generation names the merge commit that the PO/SA already authorised. The registry is updated in a later commit (the promotion), so no file contains its own commit or its own hash. Fingerprints are git object ids of that earlier commit, recomputed from history by the verifier, never taken from the working tree.
 
-## 4. Verification rules (B01–B12)
+## 4. Verification rules (B01–B13)
 
 | Rule | Check |
 | --- | --- |
@@ -75,6 +75,9 @@ Option C is the minimum that keeps the rigour: A and B both reduce R7 to "edit a
 | B10 | Immutable paths and every accepted generation's records unchanged since its accepted commit (tracked and untracked) |
 | B11 | Every path changed since the active accepted commit (tracked, untracked, deleted, no rename detection) is canonical ASCII, not a symlink, not a case variant of a protected path, and inside the CANDIDATE scope; with no CANDIDATE only the registry may change (a promotion). No tracked symlink anywhere |
 | B12 | Every `work-package.json` that says ACCEPTED belongs to a generation |
+| B13 | Promotion pending: once the CANDIDATE's ACCEPTED record is merged on the mainline, the candidate is frozen to the earliest such merge and nothing but its promotion may change; `promote` accepts only that merge |
+
+Also from independent QA round 1: B09 reads registry history with `--full-history` and also requires every ACCEPTED generation in the mainline registry to be present unchanged (a merge that keeps an older registry cannot hide a promotion); B08 requires `policyChange: true` for any scope entry touching governance rules (`.github/`, `CLAUDE.md`, `tooling/governance/` other than the registry file, `tooling/verification/`).
 
 `verify` is read-only. When B01–B09 fail there is no valid baseline, and B10, B11 and every dependent WP05 check fail closed.
 
@@ -87,7 +90,7 @@ Option C is the minimum that keeps the rigour: A and B both reduce R7 to "edit a
 * W06: lockfile and non-script `package.json` fields equal the accepted baseline unless `package-lock.json` is in scope; accepted scripts are unchanged; new scripts need `package.json` in scope.
 * W07 is B11 plus the existing lint/test-configuration ban (unless such a file is in scope).
 * W08 scans files changed since the accepted baseline.
-* W26 (new, governance job and full run) requires B01–B12.
+* W26 (new, governance job and full run) requires B01–B13.
 * The bounds for the older verifiers accept a reported path only if it changed in accepted history between that verifier's own commit and the active accepted commit, or is an in-scope change now with B11 passing; "file present" findings also accept files present in the accepted tree. The content-level bounds for WP03 V05/V08 (the WP04 tsconfig change) stay exact.
 * Local runs of the WP05 verifier and negative suite write to the git-ignored `tmp/paep-evidence/`, because `evidence/IB0-WP05/` is now an immutable accepted record.
 
@@ -122,7 +125,8 @@ Each threat is a test in `tooling/governance/negative-baseline-governance.mjs` (
 | 16 | evidence missing | D06, D07 |
 | 17 | generation rollback | D09, G09 |
 | 18 | duplicate generation | D10, D11 |
-| 19 | automatic regeneration without authorisation | E03, A05 (verify is read-only), G01, G03, G05 |
+| 19 | automatic regeneration without authorisation | E03, A05 (verify is read-only), G01, G03, G05, H04 |
+| + | merge hiding a promotion; edits between merge and promotion; governance change without declaration (QA round 1) | H01, H02, H03, H04, H05, H06 |
 | 20 | state differs from the baseline but PASS | B01–B10, D21 |
 | + | Unicode and control characters (WP05 lesson) | F12–F19 |
 | + | candidate treated as accepted; self-promotion | E01, E02 |
@@ -130,4 +134,4 @@ Each threat is a test in `tooling/governance/negative-baseline-governance.mjs` (
 
 ## 9. Performance (Lane H)
 
-The verifier uses only local git plumbing and file reads: about 60 git calls, under 2 s on the repository. The full test suite runs 89 cases in about 25 s. No network access.
+The verifier uses only local git plumbing and file reads: about 60 git calls, under 2 s on the repository. The full test suite runs 95 cases in about 30 s. No network access.

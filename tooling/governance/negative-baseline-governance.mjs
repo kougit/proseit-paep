@@ -113,7 +113,7 @@ const R7 = 'IB1-PREFLIGHT-R7';
 
 try {
   // ---- A: positive controls --------------------------------------------------------------------------
-  pos('A01', 'positive', 'current candidate state validates (active G1 = accepted IB0, G2 CANDIDATE)', [], [/PAEP baseline governance: PASS \(12\/12\)/, new RegExp(`active G1 ${IB0}`), /candidate G2 IB1-PREFLIGHT-R7 \(NOT ACCEPTED\)/]);
+  pos('A01', 'positive', 'current candidate state validates (active G1 = accepted IB0, G2 CANDIDATE)', [], [/PAEP baseline governance: PASS \(13\/13\)/, new RegExp(`active G1 ${IB0}`), /candidate G2 IB1-PREFLIGHT-R7 \(NOT ACCEPTED\)/]);
   pos('A02', 'positive', 'accepted IB0 baseline record is bound to git: merge on mainline, tree, ACCEPTED records, fingerprints', [], [/PASS B05 .*G1 5fbbedd tree fb10ab5/, /PASS B06 .*G1: Product Owner \/ Solutions Architect, 2026-09-25, 5 records/, /PASS B07 .*G1: 29 fingerprints/]);
   pos('A03', 'positive', 'authorised R7 changes are in scope (B11 names the G2 scope)', [], [/PASS B11 .*changed paths since 5fbbedd, all in the G2 scope/]);
   pos('A04', 'positive', 'the WP05 governance gate consumes the registry (W26 and W07 pass)', [], [/PASS W26 .*active G1 5fbbedd; candidate G2 IB1-PREFLIGHT-R7 \(CANDIDATE, not accepted\)/, /PASS W07/, /verification \(governance\): PASS/], gate);
@@ -265,6 +265,21 @@ try {
   const M = gitOut('rev-parse', 'HEAD');
   git('update-ref', 'refs/remotes/origin/main', M);
   pos('G04', 'promotion', 'after the simulated merge, before promotion: G1 still active, G2 still CANDIDATE', [], [new RegExp(`active G1 ${IB0}`), /candidate G2 .*NOT ACCEPTED/]);
+  neg('H02', 'promotion', 'QA-F2: after the accepted merge, before promotion, an edit to the candidate\'s records fails (promotion pending)', [['evidence/IB1-PREFLIGHT-R7/README.md', (t) => `${t}\ntampered\n`]], [/FAIL B13 .*the only permitted next change is promote --generation 2/]);
+  neg('H03', 'promotion', 'QA-F2: after the accepted merge, widening the candidate scope fails (frozen to the accepted merge)', [regEdit((o) => { g(o, 2).authorisedScope.push('tooling/verification/yaml-subset.mjs'); g(o, 2).authorisedScope.sort(); })], [/FAIL B13 .*differs from the CANDIDATE merged and accepted/]);
+  custom('H04', 'promotion', 'QA-F2: promotion at a later mainline merge (not the earliest accepted merge) is refused', 'non-zero promote exit naming the earliest merge', () => {
+    git('checkout', '-q', '-b', 'sim-later', M);
+    fs.appendFileSync(P('evidence/IB1-PREFLIGHT-R7/README.md'), 'later\n');
+    git('commit', '-q', '-am', 'later change');
+    git('checkout', '-q', 'sim-main');
+    git('merge', '-q', '--no-ff', '-m', 'SIMULATION: later merge', 'sim-later');
+    const M3 = gitOut('rev-parse', 'HEAD');
+    git('update-ref', 'refs/remotes/origin/main', M3);
+    const r = promote(2, M3);
+    git('reset', '-q', '--hard', M);
+    git('update-ref', 'refs/remotes/origin/main', M);
+    return { r, pass: r.status !== 0 && new RegExp(`first accepted and merged at ${M.slice(0, 7)}; only that merge can be promoted`).test(r.out) };
+  });
   neg('G05', 'promotion', 'promotion refused when the working registry changed the candidate declaration (scope widened)', [regEdit((o) => { g(o, 2).authorisedScope.push('tooling/verification/verify-ib0-wp04.mjs'); g(o, 2).authorisedScope.sort(); })], [/PROMOTION REFUSED/, /differs from the CANDIDATE merged/], () => promote(2, M));
   custom('G06', 'promotion', 'deterministic promotion after explicit acceptance: promote --generation 2 --commit <merge> succeeds; verify then reports G2 ACCEPTED at the merge', 'promote exit 0; verify exit 0 with active G2', () => {
     const pr = promote(2, M);
@@ -291,6 +306,21 @@ try {
     g3((o) => { g(o, 3).policyChange = true; o.policy.governedPaths = [...o.policy.governedPaths, 'README.md'].sort(); }), ['work-packages/IB1-WP01/WORK_PACKAGE.md', () => '# simulated\n']], [/PAEP baseline governance: PASS/, /candidate G3 IB1-WP01/]);
   neg('G16', 'promotion', 'policy change hidden in a CANDIDATE without policyChange fails', [
     g3((o) => { o.policy.governedPaths = [...o.policy.governedPaths, 'README.md'].sort(); }), ['work-packages/IB1-WP01/WORK_PACKAGE.md', () => '# simulated\n']], [/FAIL B09 .*policy differs/]);
+  neg('H05', 'promotion', 'QA-F3: a CANDIDATE without policyChange may not change the governance verifier', [
+    g3((o) => { g(o, 3).authorisedScope = [...g(o, 3).authorisedScope, 'tooling/governance/baseline-governance.mjs'].sort(); }), ['work-packages/IB1-WP01/WORK_PACKAGE.md', () => '# simulated\n']], [/FAIL B08 .*tooling\/governance\/baseline-governance\.mjs changes governance rules; it requires policyChange=true/]);
+  neg('H06', 'promotion', 'QA-F3: a CANDIDATE without policyChange may not change the CI workflow or CLAUDE.md', [
+    g3((o) => { g(o, 3).authorisedScope = [...g(o, 3).authorisedScope, '.github/workflows/paep-ci.yml', 'CLAUDE.md'].sort(); }), ['work-packages/IB1-WP01/WORK_PACKAGE.md', () => '# simulated\n']], [/FAIL B08 .*\.github\/workflows\/paep-ci\.yml changes governance rules/, /CLAUDE\.md changes governance rules/]);
+  custom('H01', 'promotion', 'QA-F1: a merge that keeps the pre-promotion registry (git merge -s ours) cannot hide the promoted generation', 'verify fails B09', () => {
+    const Pm = gitOut('rev-parse', 'HEAD');
+    git('update-ref', 'refs/remotes/origin/main', Pm);
+    git('checkout', '-q', '-b', 'atk', M);
+    fs.appendFileSync(P('evidence/IB1-PREFLIGHT-R7/README.md'), 'tamper\n');
+    git('commit', '-q', '-am', 'tamper');
+    git('merge', '-q', '-s', 'ours', '-m', 'hide promotion', Pm);
+    const r = verify();
+    git('checkout', '-q', '-f', 'sim-main');
+    return { r, pass: r.status !== 0 && /FAIL B09 .*accepted generation 2 recorded on refs\/remotes\/origin\/main is missing or different here/.test(r.out) && /FAIL B09 .*recorded at [0-9a-f]{7} was rewritten or removed/.test(r.out) };
+  });
   git('update-ref', 'refs/remotes/origin/main', mainBefore);
   git('checkout', '-q', '--detach', SNAP);
 } finally {

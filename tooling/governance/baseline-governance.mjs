@@ -102,11 +102,32 @@ function wpAcceptance(raw, wp, label, authority) {
   if (!validDate(j.acceptance?.date)) return { ok: false, why: `${label} acceptance date ${j.acceptance?.date} invalid` };
   return { ok: true, date: j.acceptance.date };
 }
-/** True when work-package.json text claims ACCEPTED in any form (well formed or not); unreadable text that mentions ACCEPTED counts. */
+/** True when work-package.json text claims acceptance in any form (well formed or not, any case or padding). */
 function claimsAccepted(raw) {
   let j;
-  try { j = JSON.parse(raw); } catch { return /ACCEPTED/.test(raw); }
-  return j?.status === 'ACCEPTED' || j?.acceptance?.status === 'ACCEPTED';
+  try { j = JSON.parse(raw); } catch { return /accepted/i.test(raw); }
+  const is = (v) => typeof v === 'string' && v.trim().toLowerCase() === 'accepted';
+  return is(j?.status) || is(j?.acceptance?.status);
+}
+/** A markdown "| Acceptance Status | ACCEPTED |" row in any case or emphasis (the IB0 report form). */
+const REPORT_ACCEPTED = /Acceptance Status[^\n|]*\|\s*[*_`]*\s*accepted/i;
+/** True when a work package's record folder at `ref` (a commit, or null for the working tree) claims acceptance in any form. */
+function wpClaimsAccepted(git, ref, wp, root) {
+  const dir = `work-packages/${wp}`;
+  const files = ref
+    ? git('ls-tree', '-r', '--name-only', '-z', ref, '--', `${dir}/`).raw.split('\0').filter(Boolean)
+    : (fs.existsSync(path.join(root, dir)) ? fs.readdirSync(path.join(root, dir), { recursive: true }).map((n) => `${dir}/${String(n).split(path.sep).join('/')}`) : []);
+  const text = (f) => {
+    if (ref) { const r = git('show', `${ref}:${f}`); return r.status === 0 ? r.raw : null; }
+    try { return fs.readFileSync(path.join(root, f), 'utf8'); } catch { return null; }
+  };
+  for (const f of files) {
+    const t = text(f);
+    if (t === null) continue;
+    if (f === `${dir}/work-package.json` && claimsAccepted(t)) return true;
+    if (/\.md$/i.test(f) && REPORT_ACCEPTED.test(t)) return true;
+  }
+  return false;
 }
 /** Reads an acceptance record at a commit; returns { ok, date?, why? }. */
 function acceptanceRecord(git, commit, wp, file, authority) {
@@ -133,11 +154,7 @@ function acceptedMergeOf(git, generation, since, mainline) {
     try { r = JSON.parse(git('show', `${c}:${REGISTRY_PATH}`).raw); } catch { continue; }
     const g = Array.isArray(r?.generations) ? r.generations.find((x) => x?.generation === generation && x.status === 'CANDIDATE') : null;
     const wps = Array.isArray(g?.workPackages) ? g.workPackages : [];
-    const hit = wps.some((wp) => {
-      if (typeof wp !== 'string') return false;
-      const shown = git('show', `${c}:work-packages/${wp}/work-package.json`);
-      return shown.status === 0 && claimsAccepted(shown.raw);
-    });
+    const hit = wps.some((wp) => typeof wp === 'string' && wpClaimsAccepted(git, c, wp, null));
     if (hit) return { commit: c, candidate: g };
   }
   return null;
@@ -481,14 +498,15 @@ export function evaluate(root = process.cwd(), { registryText = null } = {}) {
   const p12 = [];
   if (!fatal.length) {
     for (const d of fs.existsSync(abs('work-packages')) ? fs.readdirSync(abs('work-packages')) : []) {
-      let raw = null;
-      try { raw = fs.readFileSync(abs(`work-packages/${d}/work-package.json`), 'utf8'); } catch { continue; }
-      if (!claimsAccepted(raw)) continue;
+      if (!wpClaimsAccepted(git, null, d, root)) continue;
       const owner = gens.find((g) => g.workPackages.includes(d));
       if (!owner) { p12.push(`${d} records ACCEPTED but belongs to no generation`); continue; }
-      const authority = owner.status === 'ACCEPTED' ? owner.acceptance?.authority : owner.authorisation?.authority;
-      const r = wpAcceptance(raw, d, `work-packages/${d}/work-package.json`, CONTROLLED_AUTHORITIES.includes(authority) ? authority : CONTROLLED_AUTHORITIES[0]);
-      if (!r.ok) p12.push(`${r.why}: a record that claims ACCEPTED must be a well-formed controlled-authority acceptance`);
+      if (owner.status === 'ACCEPTED') continue; // validated at its accepted commit (B06) and immutable since (B10)
+      let raw = null;
+      try { raw = fs.readFileSync(abs(`work-packages/${d}/work-package.json`), 'utf8'); } catch { /* reported below */ }
+      const authority = CONTROLLED_AUTHORITIES.includes(owner.authorisation?.authority) ? owner.authorisation.authority : CONTROLLED_AUTHORITIES[0];
+      const r = raw === null ? { ok: false, why: `work-packages/${d}/work-package.json is missing` } : wpAcceptance(raw, d, `work-packages/${d}/work-package.json`, authority);
+      if (!r.ok) p12.push(`${r.why}: a work package that claims ACCEPTED anywhere in its records needs a well-formed controlled-authority acceptance in work-package.json`);
     }
   }
   add('B12', 'Every work package whose record claims ACCEPTED belongs to a registry generation and is a well-formed controlled-authority acceptance', p12, 'complete');

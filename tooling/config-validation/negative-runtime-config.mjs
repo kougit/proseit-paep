@@ -46,7 +46,7 @@ export const MUTATIONS = [
   { id: 'M27-deep-freeze-noop', file: `${RC}/freeze.ts`, find: 'Object.freeze(value);', replace: '' },
   { id: 'M28-startup-catch-returns-ok', file: `${RC}/startup.ts`, find: "outcome = runtimeConfigFailure('internal', [{ stage: 'internal', code: 'CFG_INTERNAL', path: '' }]);", replace: 'outcome = deepFreeze({ ok: true, store: { config: {}, compatibility: {}, configId: \'00000000\' } }) as unknown as RuntimeConfigOutcome;' },
   { id: 'M29-startup-onReady-on-failure', file: `${RC}/startup.ts`, find: 'else startup.onFailure(outcome);', replace: 'else { startup.onFailure(outcome); await startup.onReady(outcome as unknown as RuntimeConfigStore); }' },
-  { id: 'M30-startup-accepts-unfrozen-outcome', file: `${RC}/startup.ts`, find: ' || (outcome.ok === true && !Object.isFrozen(outcome.store.config))', replace: '' },
+  { id: 'M30-startup-accepts-unvalidated-outcome', file: `${RC}/startup.ts`, find: ' || (outcome.ok === true && !isValidatedRuntimeConfigStore(outcome.store))', replace: '' },
   { id: 'M31-startup-latch-removed', file: `${RC}/startup.ts`, find: 'if (started) {', replace: 'if (started && Date.now() < 0) {' },
   { id: 'M32-loader-no-redirect-check', file: `${RC}/load.ts`, find: "if (response.redirected || (response.url !== '' && response.url !== options.configUrl)) return loadFailure('CFG_LOAD_REDIRECT');", replace: '' },
   { id: 'M33-loader-no-content-type-check', file: `${RC}/load.ts`, find: "if (!/^application\\/json\\s*(;|$)/.test(type)) return loadFailure('CFG_LOAD_CONTENT_TYPE');", replace: '' },

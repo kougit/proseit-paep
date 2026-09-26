@@ -1,6 +1,6 @@
 import type { RuntimeConfigFailure, RuntimeConfigOutcome, RuntimeConfigStore } from '@proseit/paep-contracts';
 import { deepFreeze } from './freeze.js';
-import { runtimeConfigFailure } from './validate.js';
+import { isValidatedRuntimeConfigStore, runtimeConfigFailure } from './validate.js';
 
 /** Hooks for a fail-closed startup: exactly one of them runs, once. */
 export interface RuntimeConfigStartup {
@@ -29,7 +29,7 @@ export async function startWithRuntimeConfig(startup: RuntimeConfigStartup): Pro
   let outcome: RuntimeConfigOutcome;
   try {
     outcome = await startup.load();
-    if (outcome === null || typeof outcome !== 'object' || (outcome.ok === true && !Object.isFrozen(outcome.store.config))) throw new Error('unvalidated outcome');
+    if (outcome === null || typeof outcome !== 'object' || (outcome.ok === true && !isValidatedRuntimeConfigStore(outcome.store))) throw new Error('unvalidated outcome');
   } catch {
     outcome = runtimeConfigFailure('internal', [{ stage: 'internal', code: 'CFG_INTERNAL', path: '' }]);
   }

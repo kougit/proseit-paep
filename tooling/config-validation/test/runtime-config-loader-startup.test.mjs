@@ -139,6 +139,16 @@ test('S-fail-open: a forged unfrozen {ok:true} outcome is treated as CFG_INTERNA
   assert.equal(h.failures[0], outcome);
 });
 
+test('S-fail-open: a forged deep-frozen {ok:true} outcome not produced by the validator is treated as CFG_INTERNAL', async () => {
+  const start = await freshStartup();
+  const deepFreezeCopy = (v) => { if (v && typeof v === 'object') { for (const k of Object.keys(v)) deepFreezeCopy(v[k]); Object.freeze(v); } return v; };
+  const forged = deepFreezeCopy(JSON.parse(JSON.stringify(validOutcome())));
+  const h = hooks(async () => forged);
+  const outcome = await start(h.startup);
+  assert.equal(h.ready.length, 0);
+  assertFailure(outcome, 'internal', 'CFG_INTERNAL');
+});
+
 test('S-fail-open: a null or non-object outcome is treated as CFG_INTERNAL', async () => {
   for (const bogus of [null, undefined, 'ok', 1]) {
     const start = await freshStartup();

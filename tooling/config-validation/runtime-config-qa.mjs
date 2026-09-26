@@ -26,7 +26,7 @@ const GENERATOR = path.join(HERE, 'generate-validator.mjs');
 export const EXPECTED_TESTS = Object.freeze({
   'runtime-config-positive.test.mjs': 20,
   'runtime-config-negative.test.mjs': 122,
-  'runtime-config-loader-startup.test.mjs': 22
+  'runtime-config-loader-startup.test.mjs': 23
 });
 export const EXPECTED_TOTAL = Object.values(EXPECTED_TESTS).reduce((a, b) => a + b, 0);
 

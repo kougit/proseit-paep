@@ -20,6 +20,14 @@ export function fingerprint(bytes: Uint8Array): string {
   return h.toString(16).padStart(8, '0');
 }
 
+// Stores produced by this module. The startup gate accepts only these, so a forged or hand-built outcome cannot start the application.
+const VALIDATED_STORES = new WeakSet<object>();
+
+/** True only for a store returned by validateRuntimeConfigBytes in this page. */
+export function isValidatedRuntimeConfigStore(store: unknown): boolean {
+  return typeof store === 'object' && store !== null && VALIDATED_STORES.has(store);
+}
+
 /** Build the fail-safe state. The diagnostic identifier carries the code and the document fingerprint, never content. */
 export function runtimeConfigFailure(stage: RuntimeConfigStage, issues: readonly RuntimeConfigIssue[], bytes?: Uint8Array): RuntimeConfigFailure {
   const first = issues[0] ?? { stage, code: 'CFG_INTERNAL' as RuntimeConfigErrorCode, path: '' };
@@ -64,7 +72,9 @@ export function validateRuntimeConfigBytes(bytes: Uint8Array, context: RuntimeCo
     const compat = checkCompatibility(config, context);
     if (compat.issues.length) return runtimeConfigFailure('compatibility', compat.issues, bytes);
 
-    return deepFreeze({ ok: true, store: { config: deepFreeze(config), compatibility: compat.report, configId: fingerprint(bytes) } });
+    const store = deepFreeze({ config: deepFreeze(config), compatibility: compat.report, configId: fingerprint(bytes) });
+    VALIDATED_STORES.add(store);
+    return deepFreeze({ ok: true, store });
   } catch {
     return runtimeConfigFailure('internal', [{ stage: 'internal', code: 'CFG_INTERNAL', path: '' }], bytes);
   }

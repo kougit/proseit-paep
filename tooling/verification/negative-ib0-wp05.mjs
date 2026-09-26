@@ -16,9 +16,9 @@
  *   only the manifests, so no install can reach the linked node_modules.
  *
  * PAEP_EVIDENCE_DIR is removed from the environment of every scratch run.
- * Writes evidence/IB0-WP05/logs/negative-ci-tests.log and
- * evidence/IB0-WP05/reports/negative-ci-tests.json (and copies to
- * PAEP_EVIDENCE_DIR in CI).
+ * Writes negative-ci-tests.log and negative-ci-tests.json to PAEP_EVIDENCE_DIR
+ * (CI) or, locally, to the git-ignored tmp/paep-evidence/ib0-wp05-negative/
+ * (IB1-PREFLIGHT-R7: evidence/IB0-WP05 is an accepted, immutable record).
  */
 
 import fs from 'node:fs';
@@ -30,8 +30,8 @@ import { parseYaml } from './yaml-subset.mjs';
 
 const root = process.cwd();
 const evidenceOut = process.env.PAEP_EVIDENCE_DIR || '';
-const logsDir = path.join(root, 'evidence', 'IB0-WP05', 'logs');
-const reportsDir = path.join(root, 'evidence', 'IB0-WP05', 'reports');
+const logsDir = path.join(root, 'tmp', 'paep-evidence', 'ib0-wp05-negative');
+const reportsDir = logsDir;
 const WORKFLOW = '.github/workflows/paep-ci.yml';
 const SETUP = '.github/actions/paep-setup/action.yml';
 const POLICY = 'tooling/verification/ib0-wp05-ci-policy.json';

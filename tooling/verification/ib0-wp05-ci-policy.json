@@ -112,7 +112,8 @@
       "node tooling/verification/verify-ib0-wp05.mjs --gate negative-architecture"
     ],
     "negative-ci": [
-      "npm run qa:ib0-wp05:negative"
+      "npm run qa:ib0-wp05:negative",
+      "npm run qa:baseline:negative"
     ],
     "regression": [
       "node tooling/verification/verify-ib0-wp05.mjs --gate regression"

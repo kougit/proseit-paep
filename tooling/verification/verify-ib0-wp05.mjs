@@ -7,9 +7,15 @@
  * the controlled toolchain, controlled sources, scope and secrets, and runs the
  * accepted IB0-WP01..WP04 verifiers and negative suites as regression. The
  * historical verifiers are not modified: where they intentionally flag a later
- * authorised change, this verifier accepts only the exact bounded findings
- * recorded in work-packages/IB0-WP05/WORK_PACKAGE.md §6 and fails on anything
- * else.
+ * authorised change, this verifier accepts a finding only when the paths it
+ * names changed in accepted history (up to the active accepted baseline) or are
+ * in the current CANDIDATE's authorised scope, and fails on anything else.
+ *
+ * IB1-PREFLIGHT-R7: the comparison baseline and the permitted change scope are
+ * no longer fixed here. They come from the controlled baseline registry
+ * (tooling/governance/baseline-registry.json, checked by W26 = B01-B13 of
+ * tooling/governance/baseline-governance.mjs): the baseline is the newest
+ * ACCEPTED generation and the scope is the CANDIDATE's authorisedScope.
  *
  * Usage (from the repository root, after `npm ci` except for --gate toolchain):
  *   node tooling/verification/verify-ib0-wp05.mjs                 full local run (W01-W24)
@@ -20,8 +26,9 @@
  * Node.js built-ins only (typescript is not needed). The regression gates run
  * the older verifiers, which rewrite their tracked evidence; this script copies
  * what it needs and restores those files, and refuses to run if they already
- * have local changes. Writes evidence/IB0-WP05/reports/ib0-wp05-verification[-<gate>].json
- * and, when PAEP_EVIDENCE_DIR is set (CI), copies of every report it reads.
+ * have local changes. Writes ib0-wp05-verification[-<gate>].json and copies of every
+ * report it reads to PAEP_EVIDENCE_DIR (CI) or, locally, to the git-ignored
+ * tmp/paep-evidence/ib0-wp05/ (the accepted evidence/IB0-WP05 record is immutable).
  */
 
 import fs from 'node:fs';
@@ -30,6 +37,7 @@ import process from 'node:process';
 import crypto from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { parseYaml } from './yaml-subset.mjs';
+import { evaluate as evaluateBaseline } from '../governance/baseline-governance.mjs';
 
 const root = process.cwd();
 const argv = process.argv.slice(2);
@@ -37,45 +45,27 @@ const argValue = (flag) => { const i = argv.indexOf(flag); return i >= 0 ? argv[
 const gate = argValue('--gate') || 'full';
 const GATES = {
   toolchain: ['W01'],
-  governance: ['W01', 'W02', 'W03', 'W04', 'W05', 'W06', 'W07', 'W08'],
+  governance: ['W01', 'W02', 'W03', 'W04', 'W05', 'W06', 'W07', 'W08', 'W26'],
   provenance: ['W09', 'W10', 'W11', 'W12', 'W13', 'W14', 'W15', 'W16'],
   strictness: ['W17'],
   'negative-architecture': ['W17', 'W18', 'W19'],
   regression: ['W20', 'W21', 'W22', 'W23'],
   'build-metadata': ['W25'],
   full: ['W01', 'W02', 'W03', 'W04', 'W05', 'W06', 'W07', 'W08', 'W09', 'W10', 'W11', 'W12', 'W13', 'W14', 'W15', 'W16',
-    'W17', 'W18', 'W19', 'W20', 'W21', 'W22', 'W23', 'W24']
+    'W17', 'W18', 'W19', 'W20', 'W21', 'W22', 'W23', 'W24', 'W26']
 };
 if (!GATES[gate]) { console.error(`unknown gate: ${gate}`); process.exit(2); }
 const selected = new Set(GATES[gate]);
 const want = (id) => selected.has(id);
 
-// Accepted IB0-WP04 merge commit on main.
-const BASELINE_COMMIT = 'c5c0eb028e31763090ffcdf2a3ab6e22a41fc24a';
-// Earlier baselines used by the WP03/WP04 bounded-exception rules.
-const WP03_BASELINE = 'ac6b786caf3485ce2b45724be2b437c28f04b66b';
-const POLICY_PATH = 'tooling/verification/ib0-wp05-ci-policy.json';
-const WP05_SCRIPTS = {
-  // PAEP-EQP-01 Appendix B name: strict TypeScript and Angular template type-check of both applications.
-  'qa:types': 'ngc -p apps/reference-app/tsconfig.app.json --noEmit && ngc -p apps/ui-lab/tsconfig.app.json --noEmit',
-  'qa:ib0-wp05': 'node tooling/verification/verify-ib0-wp05.mjs',
-  'qa:ib0-wp05:negative': 'node tooling/verification/negative-ib0-wp05.mjs'
+// The fixed baselines inside the unmodified historical verifiers (facts about those files, not the current
+// baseline): each one reports paths changed since its own commit, which this verifier bounds below.
+const HISTORICAL_VERIFIER_BASELINE = {
+  wp02: 'b6b023fea11625360f0bf43cd0bdcba968cda90d',
+  wp03: 'de13629b302e1bbaccc59bb0e93f69c7fed9cdcb',
+  wp04: 'ac6b786caf3485ce2b45724be2b437c28f04b66b'
 };
-// Paths WORK_PACKAGE §4 permits IB0-WP05 to create or modify.
-const WP05_PERMITTED = [
-  /^\.github\/workflows\/paep-ci\.yml$/, /^\.github\/actions\/paep-setup\/action\.yml$/, /^package\.json$/,
-  /^tooling\/verification\/(verify|negative)-ib0-wp05\.mjs$/, /^tooling\/verification\/ib0-wp05-ci-policy\.json$/, /^tooling\/verification\/yaml-subset\.mjs$/,
-  /^docs\/architecture\/IB0-WP05-(IMPLEMENTATION-PLAN|CI-DESIGN|PR-ENFORCEMENT)\.md$/, /^docs\/provenance\/GITHUB-ACTIONS-REGISTER\.md$/,
-  /^docs\/adr\/ADR-REGISTER\.md$/, /^docs\/provenance\/PROVENANCE-REGISTER\.md$/,
-  /^work-packages\/IB0-WP05\//, /^evidence\/IB0-WP05\//
-];
-// Paths IB0-WP04 WORK_PACKAGE §4 permitted (copied from verify-ib0-wp04.mjs, used to re-evaluate WP03 V12).
-const WP04_PERMITTED = [
-  /^tsconfig\.base\.json$/, /^tsconfig\.json$/, /^package\.json$/, /^tooling\/architecture-boundaries\//,
-  /^tooling\/verification\/(verify|negative)-ib0-wp04\.mjs$/,
-  /^docs\/architecture\/IB0-WP04-IMPLEMENTATION-PLAN\.md$/, /^docs\/adr\/ADR-REGISTER\.md$/, /^docs\/provenance\/PROVENANCE-REGISTER\.md$/,
-  /^work-packages\/IB0-WP04\//, /^evidence\/IB0-WP04\//
-];
+const POLICY_PATH = 'tooling/verification/ib0-wp05-ci-policy.json';
 const PROTECTED_RECORDS = ['evidence/IB0-WP01', 'evidence/IB0-WP02', 'evidence/IB0-WP03', 'evidence/IB0-WP04',
   'work-packages/IB0-WP01', 'work-packages/IB0-WP02', 'work-packages/IB0-WP03', 'work-packages/IB0-WP04'];
 const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', '.angular']);
@@ -90,8 +80,9 @@ const sha256 = (p) => crypto.createHash('sha256').update(fs.readFileSync(abs(p))
 const isWin = process.platform === 'win32';
 const lines = (s) => (s || '').split(/\r?\n/).filter(Boolean);
 const evidenceOut = process.env.PAEP_EVIDENCE_DIR || '';
-const reportsDir = path.join(root, 'evidence', 'IB0-WP05', 'reports');
-const logsDir = path.join(root, 'evidence', 'IB0-WP05', 'logs', 'ci-gates');
+// Local runs write under the git-ignored tmp/ folder: evidence/IB0-WP05 is an accepted, immutable record (B10).
+const reportsDir = path.join(root, 'tmp', 'paep-evidence', 'ib0-wp05');
+const logsDir = path.join(root, 'tmp', 'paep-evidence', 'ib0-wp05', 'ci-gates');
 
 function run(cmd, args, opts = {}) {
   const r = spawnSync(cmd, args, { cwd: root, encoding: 'utf8', stdio: 'pipe', env: { ...process.env, NO_COLOR: '1', FORCE_COLOR: '0', NG_CLI_ANALYTICS: 'false' }, shell: isWin, maxBuffer: 256 * 1024 * 1024, ...opts });
@@ -146,14 +137,21 @@ if (want('W01')) {
     p.length === 0, p.length ? p.join('; ') : `node ${process.versions.node}; npm ${runningNpm}`);
 }
 
-// Changed paths since the WP04 baseline (tracked + untracked).
-let changedPaths = [];
-if (['W05', 'W06', 'W07', 'W08'].some(want)) {
-  // --no-renames: a moved file must show under both paths, so moving an accepted record into a WP05 folder is caught.
-  const d = git('diff', '--name-only', '--no-renames', BASELINE_COMMIT);
-  const u = git('ls-files', '--others', '--exclude-standard');
-  if (d.status !== 0) add('W07', 'git diff against the baseline', false, `git diff ${BASELINE_COMMIT} failed (full history required): ${d.out}`);
-  changedPaths = [...new Set([...lines(d.out), ...lines(u.out)])].sort();
+// Controlled baseline (registry): the active ACCEPTED generation and the CANDIDATE's authorised scope.
+// Changed paths are tracked + untracked since that baseline, without rename detection (a moved record shows under
+// both paths). gov.base is null when the registry is invalid, and every check that needs it then fails closed.
+const needsBaseline = ['W02', 'W05', 'W06', 'W07', 'W08', 'W16', 'W17', 'W18', 'W20', 'W21', 'W22', 'W23', 'W26'].some(want);
+const gov = needsBaseline ? evaluateBaseline(root) : null;
+const BASE = gov?.base || null;
+const changedPaths = gov ? gov.changedPaths : [];
+const inScope = (f) => Boolean(gov) && gov.inScope(f);
+const noBase = 'no valid accepted baseline in the baseline registry (see W26)';
+
+// W26: controlled baseline governance (B01-B13).
+if (want('W26')) {
+  const failed = gov.results.filter((r) => !r.pass);
+  add('W26', 'Controlled baseline governance: the registry is valid and append-only, the active ACCEPTED generation is a PO/SA-accepted mainline merge, immutable sources and accepted records are unchanged, and every change since it is inside the CANDIDATE scope (B01-B13)',
+    failed.length === 0, failed.length ? failed.map((r) => `${r.id}: ${r.details}`).join('; ') : `B01-B13 pass; active G${gov.active.generation} ${BASE.slice(0, 7)}; candidate ${gov.candidate ? `G${gov.candidate.generation} ${gov.candidate.workPackages.join(', ')} (CANDIDATE, not accepted)` : 'none'}`);
 }
 const allFiles = ['W03', 'W04'].some(want) ? walk('.') : [];
 
@@ -171,10 +169,13 @@ if (want('W02')) {
     }
     const listed = new Set(controlled.map((f) => f.path));
     for (const f of walk('.paep-control')) if (!listed.has(f)) p.push(`unlisted ${f}`);
-    const d = git('diff', '--quiet', BASELINE_COMMIT, '--', '.paep-control', '.gitignore', 'PACK_MANIFEST.json', 'CLAUDE.md');
-    if (d.status !== 0) p.push(`controlled files or CLAUDE.md differ from ${BASELINE_COMMIT.slice(0, 7)}`);
+    if (!BASE) p.push(noBase);
+    else {
+      if (git('diff', '--quiet', BASE, '--', '.paep-control', '.gitignore', 'PACK_MANIFEST.json').status !== 0) p.push(`controlled files differ from the accepted baseline ${BASE.slice(0, 7)}`);
+      if (git('diff', '--quiet', BASE, '--', 'CLAUDE.md').status !== 0 && !inScope('CLAUDE.md')) p.push(`CLAUDE.md differs from the accepted baseline ${BASE.slice(0, 7)} without authorisation in the CANDIDATE scope`);
+    }
   } catch (e) { p.push(String(e)); }
-  add('W02', 'Controlled sources match PACK_MANIFEST.json sha256 and size; .paep-control, .gitignore, PACK_MANIFEST.json and CLAUDE.md unchanged since the baseline',
+  add('W02', 'Controlled sources match PACK_MANIFEST.json sha256 and size; .paep-control, .gitignore and PACK_MANIFEST.json unchanged since the accepted baseline; CLAUDE.md unchanged unless the CANDIDATE scope authorises it',
     n > 0 && p.length === 0, p.length ? p.join('; ') : `${n}/${n} controlled files match`);
 }
 
@@ -204,44 +205,44 @@ if (want('W04')) {
   add('W04', 'No Nx: no nx/@nx/@nrwl dependency, lockfile entry or install, and no nx.json or project.json', p.length === 0, p.length ? p.join('; ') : 'none; Nx disposition NOT REQUIRED');
 }
 
-// W05: no IB1+ implementation and no application/package/config change.
+// W05: application/package/config changes only inside the authorised scope; while no generation authorises
+// implementation paths (IB1 not started), every entry point stays a placeholder and config/ holds no schema.
+const IMPL = (f) => /^(apps|packages|config)\//.test(f) || /^(angular\.json|tsconfig[^/]*\.json)$/.test(f);
 if (want('W05')) {
   const p = [];
-  const frozen = changedPaths.filter((f) => /^(apps|packages|config)\//.test(f) || /^(angular\.json|tsconfig[^/]*\.json)$/.test(f));
-  if (frozen.length) p.push(`changed: ${frozen.join(', ')}`);
-  const configFiles = fs.readdirSync(abs('config'));
-  if (JSON.stringify(configFiles) !== JSON.stringify(['README.md'])) p.push(`config/ holds ${configFiles.join(', ')} (runtime schema is IB1)`);
-  for (const d of fs.readdirSync(abs('packages'))) {
-    const src = walk(`packages/${d}/src`);
-    if (JSON.stringify(src) !== JSON.stringify([`packages/${d}/src/index.ts`])) p.push(`packages/${d}/src holds ${src.join(', ')}`);
-    else if (read(`packages/${d}/src/index.ts`).replace(/\/\/.*$|\/\*[\s\S]*?\*\//gm, '').trim() !== 'export {};') p.push(`packages/${d}/src/index.ts is not a placeholder`);
+  if (!BASE) p.push(noBase);
+  const frozen = changedPaths.filter((f) => IMPL(f) && !inScope(f));
+  if (frozen.length) p.push(`changed without authorisation: ${frozen.join(', ')}`);
+  const gens = gov?.registry?.generations || [];
+  const implAuthorised = gens.some((g) => g.generation > 1 && (g.authorisedScope || []).some((e) => /^(apps|packages|config)\/|^(angular\.json|tsconfig[^/]*\.json)$/.test(e)));
+  if (!implAuthorised) {
+    const configFiles = fs.readdirSync(abs('config'));
+    if (JSON.stringify(configFiles) !== JSON.stringify(['README.md'])) p.push(`config/ holds ${configFiles.join(', ')} (runtime schema is IB1)`);
+    for (const d of fs.readdirSync(abs('packages'))) {
+      const src = walk(`packages/${d}/src`);
+      if (JSON.stringify(src) !== JSON.stringify([`packages/${d}/src/index.ts`])) p.push(`packages/${d}/src holds ${src.join(', ')}`);
+      else if (read(`packages/${d}/src/index.ts`).replace(/\/\/.*$|\/\*[\s\S]*?\*\//gm, '').trim() !== 'export {};') p.push(`packages/${d}/src/index.ts is not a placeholder`);
+    }
   }
-  add('W05', 'IB1 not started: apps, packages, config, angular.json and tsconfig files unchanged since the baseline; package entry points are placeholders; no runtime-config schema',
-    p.length === 0, p.length ? p.join('; ') : 'no IB1 artefact; 18 placeholder entry points');
+  add('W05', 'Implementation scope: apps, packages, config, angular.json and tsconfig files change only inside the CANDIDATE scope; while no generation authorises them (IB1 not started) entry points are placeholders and config/ holds no runtime schema',
+    p.length === 0, p.length ? p.join('; ') : (implAuthorised ? 'implementation changes authorised by the registry and in scope' : 'IB1 not started: no generation authorises implementation paths; 18 placeholder entry points'));
 }
 
-// W06: no dependency change (lockfile identical; package.json differs only by the WP05 scripts).
+// W06: no unauthorised dependency change: lockfile and non-script package.json fields equal the accepted
+// baseline unless package-lock.json is in scope; accepted scripts unchanged; new scripts only with package.json in scope.
 if (want('W06')) {
-  const p = [];
-  if (git('diff', '--quiet', BASELINE_COMMIT, '--', 'package-lock.json').status !== 0) p.push('package-lock.json differs from the baseline');
-  try {
-    const base = JSON.parse(git('show', `${BASELINE_COMMIT}:package.json`).stdout);
-    const { scripts: s1 = {}, ...r1 } = pkg;
-    const { scripts: s0 = {}, ...r0 } = base;
-    if (JSON.stringify(r1) !== JSON.stringify(r0)) p.push('package.json fields other than scripts changed');
-    if (JSON.stringify(s1) !== JSON.stringify({ ...s0, ...WP05_SCRIPTS })) p.push('package.json scripts differ from baseline + the three WP05 scripts');
-  } catch (e) { p.push(String(e)); }
-  add('W06', 'No dependency change: package-lock.json byte-identical to the baseline; package.json differs only by qa:types, qa:ib0-wp05 and qa:ib0-wp05:negative',
+  const p = gov ? gov.packageProblems : [noBase];
+  add('W06', 'No unauthorised dependency change: package-lock.json and every non-script package.json field equal the accepted baseline (unless the CANDIDATE scope holds package-lock.json); accepted scripts unchanged; script additions only with package.json in scope',
     p.length === 0, p.length ? p.join('; ') : `lockfile sha256 ${sha256('package-lock.json')}`);
 }
 
-// W07: scope.
+// W07: change authorisation (B11) and no lint/format/unit-test configuration unless the CANDIDATE scope names it.
 if (want('W07')) {
-  const outside = changedPaths.filter((f) => !WP05_PERMITTED.some((re) => re.test(f)));
-  const lintTest = walk('.').filter((f) => /(^|\/)(\.eslintrc[^/]*|eslint\.config\.[^/]+|\.prettierrc[^/]*|prettier\.config\.[^/]+|vitest\.config\.[^/]+|jest\.config\.[^/]+|karma\.conf\.[^/]+)$/.test(f));
-  add('W07', 'Every path changed since the baseline is within WORK_PACKAGE §4; no lint/format/unit-test configuration introduced',
-    outside.length === 0 && lintTest.length === 0,
-    [outside.length ? `outside WORK_PACKAGE §4: ${outside.join(', ')}` : `${changedPaths.length} changed paths, all permitted`, lintTest.length ? `lint/test config: ${lintTest.join(', ')}` : ''].filter(Boolean).join('; '));
+  const b11 = gov.results.find((r) => r.id === 'B11');
+  const lintTest = walk('.').filter((f) => /(^|\/)(\.eslintrc[^/]*|eslint\.config\.[^/]+|\.prettierrc[^/]*|prettier\.config\.[^/]+|vitest\.config\.[^/]+|jest\.config\.[^/]+|karma\.conf\.[^/]+)$/.test(f) && !(changedPaths.includes(f) && inScope(f)));
+  add('W07', 'Every path changed since the accepted baseline is inside the CANDIDATE\'s authorised scope (B11); no lint/format/unit-test configuration outside that scope',
+    Boolean(BASE) && b11.pass && lintTest.length === 0,
+    [!BASE ? noBase : b11.details, lintTest.length ? `lint/test config: ${lintTest.join(', ')}` : ''].filter(Boolean).join('; '));
 }
 
 // W08: secrets.
@@ -257,7 +258,8 @@ if (want('W08')) {
     /(?:api[_-]?key|client[_-]?secret|access[_-]?token|password)\s*[:=]\s*["'][^"'\n]{8,}["']/i
   ];
   const findings = changedPaths.filter((f) => exists(f) && fs.statSync(abs(f)).isFile() && fs.statSync(abs(f)).size < 2_000_000 && patterns.some((re) => re.test(read(f))));
-  add('W08', 'No credential or secret signatures in files added or modified since the baseline', findings.length === 0,
+  if (!BASE) findings.push(noBase);
+  add('W08', 'No credential or secret signatures in files added or modified since the accepted baseline', findings.length === 0,
     `${changedPaths.length} files scanned; findings: ${findings.join(', ') || 'none'}`);
 }
 
@@ -488,42 +490,48 @@ function runVerifier(script, extra = [], reports = []) {
 }
 const tryJson = (p) => { try { return readJson(p); } catch { return null; } };
 const pkgNames = () => fs.readdirSync(abs('packages')).map((d) => readJson(`packages/${d}/package.json`).name);
-const isWp05Path = (f) => WP05_PERMITTED.some((re) => re.test(f));
 
-// Bounded WP04 V16/V17 (static checks): only the WP05 scripts and WP05 paths.
+// Historical-verifier bounds (IB1-PREFLIGHT-R7). An older verifier compares with its own fixed commit and so
+// reports every later change. A reported path is accepted only if it changed in accepted history between that
+// commit and the active accepted baseline, or is a change now inside the CANDIDATE scope (B11 passing);
+// "present" findings also accept a path that exists in the accepted baseline tree. Any other text fails.
+const since = (key) => (BASE && gov ? gov.authorisedSince(HISTORICAL_VERIFIER_BASELINE[key]) : () => false);
+const presentAccepted = (key) => {
+  const ok = since(key);
+  const tree = BASE ? lines(git('ls-tree', '-r', '--name-only', BASE).out) : [];
+  return (f) => ok(f, { presence: true }) || tree.some((t) => t.startsWith(`${f}/`)) || (changedPaths.some((c) => c.startsWith(`${f}/`) && inScope(c)) && gov.results.find((r) => r.id === 'B11').pass);
+};
+const segmentsOk = (details, rules) => details.split('; ').every((seg) => rules.some(([re, test]) => { const m = re.exec(seg); return m && test(m); }));
+const fileList = (m) => m[m.length - 1].split(', ');
+// A package.json / package-lock.json finding: the file changed in accepted history or in scope now, and W06 holds.
+const pkgFinding = (key) => [/^(package\.json scripts differ from baseline \+ the (?:two WP03|four WP04) scripts|package\.json fields other than scripts changed|package-lock\.json differs from the baseline)$/,
+  (m) => Boolean(gov) && gov.packageProblems.length === 0 && since(key)(m[1].startsWith('package-lock') ? 'package-lock.json' : 'package.json')];
+
+// Bounded WP04 V16/V17 (static checks).
 function wp04StaticBounded(check) {
-  if (check.id === 'V16') {
-    // WP04 compares against baseline + WP04 scripts; WP05's own W06 proves the rest (only the WP05 scripts added, lockfile identical).
-    return check.details === 'package.json scripts differ from baseline + the four WP04 scripts' && wp05PackageDeltaOnly();
-  }
+  if (check.id === 'V16') return segmentsOk(check.details, [pkgFinding('wp04')]);
   if (check.id === 'V17') {
-    return check.details.split('; ').every((seg) => {
-      const m = /^(out-of-scope files|changed outside WORK_PACKAGE §4): (.+)$/.exec(seg);
-      if (!m) return false;
-      const files = m[2].split(', ');
-      return m[1] === 'out-of-scope files' ? files.every((f) => f.startsWith('.github/') && isWp05Path(f)) : files.every(isWp05Path);
-    });
+    const ok = since('wp04');
+    const present = presentAccepted('wp04');
+    return segmentsOk(check.details, [
+      [/^out-of-scope files: (.+)$/, (m) => fileList(m).every(present)],
+      [/^(changed outside WORK_PACKAGE §4|apps\/packages\/angular\.json changed): (.+)$/, (m) => fileList(m).every((f) => ok(f))]
+    ]);
   }
   return false;
 }
-function wp05PackageDeltaOnly() {
-  try {
-    if (git('diff', '--quiet', BASELINE_COMMIT, '--', 'package-lock.json').status !== 0) return false;
-    const base = JSON.parse(git('show', `${BASELINE_COMMIT}:package.json`).stdout);
-    const { scripts: s1 = {}, ...r1 } = pkg;
-    const { scripts: s0 = {}, ...r0 } = base;
-    return JSON.stringify(r1) === JSON.stringify(r0) && JSON.stringify(s1) === JSON.stringify({ ...s0, ...WP05_SCRIPTS });
-  } catch { return false; }
-}
-// WP02 V17 findings accepted after WP05: the WP03/WP04 findings plus .github/workflows.
+// Bounded WP02 V17.
 function wp02V17Bounded(c) {
   if (!c) return false;
   if (c.pass) return true;
-  return c.details.split('; ').every((seg) => {
-    if (seg === 'out-of-scope file present: tsconfig.base.json' || seg === 'out-of-scope file present: .github/workflows') return true;
-    const m = /^protected paths changed: (.+)$/.exec(seg);
-    return m && m[1].split(', ').every((f) => /^tsconfig\.json$|^packages\/[^/]+\/src\/index\.ts$/.test(f));
-  });
+  const ok = since('wp02');
+  const present = presentAccepted('wp02');
+  const depNames = (o) => Object.keys({ ...(o.dependencies || {}), ...(o.devDependencies || {}) }).sort();
+  return segmentsOk(c.details, [
+    [/^out-of-scope file present: (.+)$/, (m) => present(m[1])],
+    [/^(protected paths changed|untracked files in protected paths): (.+)$/, (m) => fileList(m).every((f) => ok(f))],
+    [/^dependency names changed: /, () => Boolean(BASE) && (inScope('package-lock.json') || JSON.stringify(depNames(pkg)) === JSON.stringify(depNames(JSON.parse(git('show', `${BASE}:package.json`).stdout))))]
+  ]);
 }
 
 // W17: WP04 static verifier (strictness V04-V07 and every other static check), bounded V16/V17.
@@ -541,12 +549,12 @@ if (want('W17')) {
     if (!wp04Static || wp04Static.mode !== 'static-only') p.push('no WP04 static report');
     else {
       for (const id of ['V04', 'V05', 'V06', 'V07']) if (!wp04Static.checks.find((c) => c.id === id)?.pass) p.push(`strictness check ${id} failed`);
-      for (const c of wp04Static.checks) if (!c.pass && !wp04StaticBounded(c)) p.push(`${c.id} failed outside the WP05 bounded exception: ${c.details.slice(0, 300)}`);
+      for (const c of wp04Static.checks) if (!c.pass && !wp04StaticBounded(c)) p.push(`${c.id} failed outside the accepted-history/CANDIDATE bound: ${c.details.slice(0, 300)}`);
       if (wp04Static.checks.length !== 19) p.push(`WP04 static reported ${wp04Static.checks.length} checks`);
     }
   }
   const fails = wp04Static ? wp04Static.checks.filter((c) => !c.pass).map((c) => c.id) : [];
-  add('W17', 'Strict configuration: WP04 static verifier passes V04-V07 (strict, noImplicitAny, strictTemplates, noCheck and suppression protection, aliases, entry points) and every other static check; V16/V17 report only WP05-authorised change',
+  add('W17', 'Strict configuration: WP04 static verifier passes V04-V07 (strict, noImplicitAny, strictTemplates, noCheck and suppression protection, aliases, entry points) and every other static check; V16/V17 report only accepted-history or in-scope change',
     p.length === 0, p.length ? p.join('; ') : `WP04 static ${19 - fails.length}/19 pass; bounded: ${fails.join(', ') || 'none'}`);
 }
 
@@ -575,12 +583,12 @@ if (want('W18')) {
       const c3 = neg.cases.find((c) => c.id === 'C3');
       if (c3 && !c3.pass) {
         const st = wp04Static?.checks || [];
-        if (!['V16', 'V17'].every((id) => { const c = st.find((x) => x.id === id); return c && (c.pass || wp04StaticBounded(c)); })) p.push('C3 V16/V17 findings are not the WP05 bounded ones (see W17)');
+        if (!['V16', 'V17'].every((id) => { const c = st.find((x) => x.id === id); return c && (c.pass || wp04StaticBounded(c)); })) p.push('C3 V16/V17 findings are not the bounded ones (see W17)');
       }
     }
   }
   const failed = neg ? neg.cases.filter((c) => !c.pass).map((c) => c.id) : [];
-  add('W18', 'WP04 negative architecture/strictness suite: every case passes except positive control C3, which fails only V16/V17 with WP05-authorised findings',
+  add('W18', 'WP04 negative architecture/strictness suite: every case passes except positive control C3, which fails only V16/V17 with accepted-history or in-scope findings',
     p.length === 0, p.length ? p.join('; ') : `${neg.cases.length - failed.length}/${neg.cases.length} pass; bounded: ${failed.join(', ') || 'none'}`);
 }
 
@@ -600,7 +608,7 @@ if (want('W19')) {
     p.length === 0, p.length ? p.join('; ') : 'exit 1 at negative-ib0-wp03.mjs:125 (paths in tsconfig.base.json); bounded');
 }
 
-// W20-W23: WP04 full verifier (runs WP03, which runs WP02 and WP01), re-evaluated with the WP05 bounds.
+// W20-W23: WP04 full verifier (runs WP03, which runs WP02 and WP01), re-evaluated with the registry bounds.
 if (['W20', 'W21', 'W22', 'W23'].some(want)) {
   const p20 = []; const p21 = []; const p22 = []; const p23 = [];
   const dirty = recordsClean();
@@ -616,8 +624,9 @@ if (['W20', 'W21', 'W22', 'W23'].some(want)) {
     for (const [n, j] of [['ib0-wp04-verification.full.json', wp04], ['ib0-wp03-verification.regression.json', wp03], ['ib0-wp02-verification.regression.json', wp02], ['ib0-wp01-verification.regression.json', wp01]]) if (j) keep(n, JSON.stringify(j, null, 2) + '\n');
     for (const f of ['verify-ib0-wp03-regression.log', 'verify-ib0-wp02-regression.log', 'verify-ib0-wp01-regression.log']) if (exists(`evidence/IB0-WP04/logs/${f}`)) keep(f, read(`evidence/IB0-WP04/logs/${f}`));
     restoreRecords();
-    residual = [...lines(git('diff', '--name-only', '--no-renames', WP03_BASELINE, '--', 'evidence/IB0-WP03', 'work-packages/IB0-WP03', 'evidence/IB0-WP02', 'work-packages/IB0-WP02', 'evidence/IB0-WP01', 'work-packages/IB0-WP01').out),
-      ...lines(git('diff', '--name-only', '--no-renames', BASELINE_COMMIT, '--', 'evidence/IB0-WP04', 'work-packages/IB0-WP04').out)];
+    // Accepted records must be exactly as accepted after the older verifiers ran and were restored (B10, re-evaluated).
+    const after = evaluateBaseline(root).results.find((x) => x.id === 'B10');
+    if (!after.pass) residual = [after.details];
   }
   // WP02 (run by WP03).
   if (!wp02) p22.push('no WP02 report');
@@ -625,7 +634,7 @@ if (['W20', 'W21', 'W22', 'W23'].some(want)) {
     for (const c of wp02.checks) if (!c.pass && c.id !== 'V17') p22.push(`${c.id} failed: ${c.details.split('\n')[0]}`);
     if (!wp02V17Bounded(wp02.checks.find((c) => c.id === 'V17'))) p22.push(`V17 outside the bound: ${wp02.checks.find((c) => c.id === 'V17')?.details}`);
   }
-  // WP03 (run by WP04): WP04's V22 rules with WP05 paths added to the permitted set.
+  // WP03 (run by WP04): V05/V08 are WP04's accepted tsconfig change (exact text); V10/V12 use the registry bounds.
   if (!wp03) p21.push('no WP03 report');
   else {
     if (wp03.mode !== 'full') p21.push(`WP03 mode ${wp03.mode}`);
@@ -634,23 +643,20 @@ if (['W20', 'W21', 'W22', 'W23'].some(want)) {
     const bounded = {
       V05: (d) => d === 'top-level extends added; extends changed',
       V08: (d) => sameSet(d.split('; '), pkgNames().map((n) => `${n}: no alias`)),
-      V10: (d) => d === 'package.json scripts differ from baseline + the two WP03 scripts',
-      V12: (d) => d.split('; ').every((seg) => {
-        const m = /^(out-of-scope files|boundary tooling \(IB0-WP04\)|changed outside WORK_PACKAGE §4): (.+)$/.exec(seg);
-        if (!m) return false;
-        const files = m[2].split(', ');
-        if (m[1] === 'out-of-scope files') return files.every((f) => f === 'tsconfig.base.json' || (f.startsWith('.github/') && isWp05Path(f)));
-        return files.every((f) => WP04_PERMITTED.some((re) => re.test(f)) || isWp05Path(f));
-      }),
+      V10: (d) => segmentsOk(d, [pkgFinding('wp03')]),
+      V12: (d) => segmentsOk(d, [
+        [/^(out-of-scope files|boundary tooling \(IB0-WP04\)): (.+)$/, (m) => fileList(m).every(presentAccepted('wp03'))],
+        [/^(changed outside WORK_PACKAGE §4|apps changed): (.+)$/, (m) => fileList(m).every((f) => since('wp03')(f))]
+      ]),
       V17: (d) => !!wp02V17 && !wp02V17.pass && wp02V17Bounded(wp02V17) && d === `V17 finding outside the bounded exception: ${wp02V17.details}`
     };
     for (const c of wp03.checks) {
       if (c.pass) continue;
       if (!bounded[c.id]) p21.push(`${c.id} failed: ${c.details.split('\n')[0]}`);
-      else if (!bounded[c.id](c.details)) p21.push(`${c.id} outside the WP04+WP05 bound: ${c.details.slice(0, 300)}`);
+      else if (!bounded[c.id](c.details)) p21.push(`${c.id} outside the accepted-history/CANDIDATE bound: ${c.details.slice(0, 300)}`);
     }
   }
-  if (residual.length) p21.push(`earlier records differ from their accepted baselines (${WP03_BASELINE.slice(0, 7)} for WP01-WP03, ${BASELINE_COMMIT.slice(0, 7)} for WP04) after restore: ${residual.join(', ')}`);
+  if (residual.length) p21.push(`accepted records differ from their accepted generation after restore: ${residual.join(', ')}`);
   // WP01.
   if (!(wp01 && wp01.result === 'PASS' && wp01.checks.every((c) => c.pass))) p23.push(wp01 ? `WP01 ${wp01.checks.filter((c) => c.pass).length}/${wp01.checks.length}` : 'no WP01 report');
   // WP04: all pass except V16, V17 (static bound), V22 (re-evaluated as W21), V23 (re-evaluated as W22).
@@ -658,16 +664,16 @@ if (['W20', 'W21', 'W22', 'W23'].some(want)) {
     if (wp04.mode !== 'full' || wp04.checks.length !== 24) p20.push(`WP04 mode ${wp04.mode}, ${wp04.checks.length} checks`);
     for (const c of wp04.checks) {
       if (c.pass) continue;
-      if (c.id === 'V16' || c.id === 'V17') { if (!wp04StaticBounded(c)) p20.push(`${c.id} outside the WP05 bound: ${c.details.slice(0, 300)}`); continue; }
-      if (c.id === 'V22') { if (p21.length) p20.push('V22 not explained by the WP05 bound (see W21)'); continue; }
-      if (c.id === 'V23') { if (p22.length) p20.push('V23 not explained by the WP05 bound (see W22)'); continue; }
+      if (c.id === 'V16' || c.id === 'V17') { if (!wp04StaticBounded(c)) p20.push(`${c.id} outside the accepted-history/CANDIDATE bound: ${c.details.slice(0, 300)}`); continue; }
+      if (c.id === 'V22') { if (p21.length) p20.push('V22 not explained by the bound (see W21)'); continue; }
+      if (c.id === 'V23') { if (p22.length) p20.push('V23 not explained by the bound (see W22)'); continue; }
       p20.push(`${c.id} failed: ${c.details.split('\n')[0]}`);
     }
   } else if (!dirty) p20.push('no WP04 report');
   const summary = (j) => (j ? `${j.checks.filter((c) => c.pass).length}/${j.checks.length} pass; bounded: ${j.checks.filter((c) => !c.pass).map((c) => c.id).join(', ') || 'none'}` : '');
-  add('W20', 'IB0-WP04 regression (full, with both builds): every check passes except V16/V17 (WP05 scripts and paths only) and V22/V23 (re-evaluated in W21/W22)', p20.length === 0, p20.length ? p20.join('; ') : `WP04 ${summary(wp04)}`);
-  add('W21', 'IB0-WP03 regression: every check passes except the accepted V05/V08/V10/V12/V17, whose findings are only WP04- or WP05-authorised change; WP01-WP03 records unchanged', p21.length === 0, p21.length ? p21.join('; ') : `WP03 ${summary(wp03)}`);
-  add('W22', 'IB0-WP02 regression: every check (toolchain, pins, lockfile provenance, install scripts, licences, controlled sources, secrets) passes except V17, whose findings are tsconfig.base.json, .github/workflows and the accepted WP03 paths', p22.length === 0, p22.length ? p22.join('; ') : `WP02 ${summary(wp02)}`);
+  add('W20', 'IB0-WP04 regression (full, with both builds): every check passes except V16/V17 (only accepted-history or in-scope package/path changes) and V22/V23 (re-evaluated in W21/W22)', p20.length === 0, p20.length ? p20.join('; ') : `WP04 ${summary(wp04)}`);
+  add('W21', 'IB0-WP03 regression: every check passes except the accepted V05/V08 (WP04 tsconfig change, exact) and V10/V12/V17, whose findings are only accepted-history or in-scope change; accepted records unchanged', p21.length === 0, p21.length ? p21.join('; ') : `WP03 ${summary(wp03)}`);
+  add('W22', 'IB0-WP02 regression: every check (toolchain, pins, lockfile provenance, install scripts, licences, controlled sources, secrets) passes except V17, whose findings are only accepted-history or in-scope change', p22.length === 0, p22.length ? p22.join('; ') : `WP02 ${summary(wp02)}`);
   add('W23', 'IB0-WP01 regression passes', p23.length === 0, p23.length ? p23.join('; ') : `WP01 ${summary(wp01)}`);
 }
 
@@ -731,7 +737,9 @@ const report = {
   generatedAt: new Date().toISOString(),
   gate,
   commit: head.status === 0 ? head.out : null,
-  baseline: BASELINE_COMMIT,
+  baseline: BASE,
+  baselineGeneration: gov?.active ? gov.active.generation : null,
+  candidate: gov?.candidate ? { generation: gov.candidate.generation, workPackages: gov.candidate.workPackages, status: gov.candidate.status } : null,
   node: process.versions.node,
   platform: `${process.platform}-${process.arch}`,
   ci: process.env.GITHUB_ACTIONS === 'true' ? { runId: process.env.GITHUB_RUN_ID, attempt: process.env.GITHUB_RUN_ATTEMPT, job: process.env.GITHUB_JOB, event: process.env.GITHUB_EVENT_NAME, ref: process.env.GITHUB_REF } : null,

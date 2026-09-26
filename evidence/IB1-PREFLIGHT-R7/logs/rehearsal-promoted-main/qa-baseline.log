@@ -1,0 +1,20 @@
+PASS B01 Registry is one regular file of printable ASCII and LF in canonical JSON (no duplicate keys, escapes, BOM, CR or control/line-separator characters) — tooling/governance/baseline-registry.json
+PASS B02 Schema paep-baseline-registry v1: exact keys and types; known state; ACCEPTED carries commit, tree, authority, evidence and fingerprints; CANDIDATE carries authorisation and scope and no acceptance — schemaVersion 1; 2 generations
+PASS B03 Generations are numbered 1..n with predecessor n-1; ACCEPTED generations come first; at most one CANDIDATE and it is last; each work package belongs to one generation — 2 ACCEPTED (active generation 2); CANDIDATE none
+PASS B04 Every registry path is canonical (no traversal, backslash, absolute, empty or non-ASCII segment), sorted and unique ignoring case; protected records are the generation's own work-package and evidence folders — all paths canonical
+PASS B05 Each ACCEPTED generation names an existing merge commit on the first-parent mainline, an ancestor of HEAD, with the recorded tree; accepted commits descend from one another — G1 5fbbedd tree fb10ab5; G2 0d4430b tree b5f61f0
+PASS B06 Each ACCEPTED generation names a controlled acceptance authority and, for every work package, an acceptance record that says ACCEPTED inside the accepted commit itself (blob-pinned) — G1: Product Owner / Solutions Architect, 2026-09-25, 5 records; G2: Product Owner / Solutions Architect, 2026-09-26, 1 records
+PASS B07 Fingerprints cover exactly the immutable, governed and protected paths and equal the git objects at the accepted commit (recomputed from history, never from the working tree) — G1: 29 fingerprints; G2: 21 fingerprints
+PASS B08 The CANDIDATE (if any) carries PO/SA authorisation with a reference in its own records, lists its own records and the registry, never overlaps immutable sources, accepted records or a whole top-level directory, and declares policyChange when it touches governance rules — no candidate
+PASS B09 Registry is append-only: accepted generations recorded at the active accepted commit or anywhere in HEAD's history are unchanged; a promotion only fills acceptance fields; policy changes only under a CANDIDATE that declares policyChange — append-only history holds
+PASS B10 Immutable controlled sources and every accepted work-package and evidence record are unchanged since their accepted commit (no rewrite, removal or addition) — 3 immutable paths and 12 accepted records unchanged
+PASS B11 Every path changed since the active accepted baseline is canonical, not a symlink or case variant, and inside the CANDIDATE's authorised scope (without a candidate only a promotion of the registry may change) — 1 changed paths since 0d4430b, all registry promotion
+PASS B12 Every work package whose record claims ACCEPTED belongs to a registry generation and is a well-formed controlled-authority acceptance — complete
+PASS B13 A CANDIDATE whose ACCEPTED record is already merged on the mainline is frozen to its earliest accepted merge and must be promoted before any other change — no promotion pending
+
+PAEP baseline governance: PASS (13/13); active G2 0d4430ba40431fe53304047c8d1ca08748560dc1; candidate none
+
+real	0m0.504s
+user	0m0.294s
+sys	0m0.213s
+EXIT=0

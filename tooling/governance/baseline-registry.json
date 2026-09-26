@@ -1,0 +1,160 @@
+{
+  "schema": "paep-baseline-registry",
+  "schemaVersion": 1,
+  "policy": {
+    "acceptanceAuthorities": [
+      "Product Owner / Solutions Architect"
+    ],
+    "mainlineRef": "refs/remotes/origin/main",
+    "immutablePaths": [
+      ".gitignore",
+      ".paep-control/",
+      "PACK_MANIFEST.json"
+    ],
+    "governedPaths": [
+      ".github/",
+      ".npmrc",
+      ".nvmrc",
+      "CLAUDE.md",
+      "angular.json",
+      "docs/adr/",
+      "docs/architecture/toolchain-version-manifest.json",
+      "docs/licences/",
+      "docs/provenance/",
+      "package-lock.json",
+      "package.json",
+      "tooling/architecture-boundaries/",
+      "tooling/governance/",
+      "tooling/verification/",
+      "tsconfig.base.json",
+      "tsconfig.json"
+    ]
+  },
+  "generations": [
+    {
+      "generation": 1,
+      "name": "IB0 accepted implementation baseline",
+      "milestone": "IB0",
+      "workPackages": [
+        "IB0-WP01",
+        "IB0-WP02",
+        "IB0-WP03",
+        "IB0-WP04",
+        "IB0-WP05"
+      ],
+      "status": "ACCEPTED",
+      "predecessorGeneration": null,
+      "authorisation": null,
+      "policyChange": false,
+      "authorisedScope": null,
+      "protectedRecords": [
+        "evidence/IB0-WP01/",
+        "evidence/IB0-WP02/",
+        "evidence/IB0-WP03/",
+        "evidence/IB0-WP04/",
+        "evidence/IB0-WP05/",
+        "work-packages/IB0-WP01/",
+        "work-packages/IB0-WP02/",
+        "work-packages/IB0-WP03/",
+        "work-packages/IB0-WP04/",
+        "work-packages/IB0-WP05/"
+      ],
+      "acceptedCommit": "5fbbedde4ed97899e88cfd4bd4cad02e34101914",
+      "acceptedTree": "fb10ab5db706e41f70c37384787740966a8d0d2f",
+      "acceptance": {
+        "authority": "Product Owner / Solutions Architect",
+        "date": "2026-09-25",
+        "evidence": [
+          {
+            "path": "work-packages/IB0-WP01/ACCEPTANCE_REPORT.md",
+            "blob": "d4e7dec47b89b45ab02b504c8e22b83e5465f6ac"
+          },
+          {
+            "path": "work-packages/IB0-WP02/work-package.json",
+            "blob": "87ed4751db45b0b6dc71fd7fd13124bde3155ae0"
+          },
+          {
+            "path": "work-packages/IB0-WP03/work-package.json",
+            "blob": "eeb42fb4b4e2048690a9b33a284f890eafa90036"
+          },
+          {
+            "path": "work-packages/IB0-WP04/work-package.json",
+            "blob": "26182b51d8fb87f3c07ba1f580838a6edbb772d2"
+          },
+          {
+            "path": "work-packages/IB0-WP05/work-package.json",
+            "blob": "3f00c330522745f85559bc0b6b4fb6b8a4a7c556"
+          }
+        ]
+      },
+      "fingerprints": {
+        ".github/": "0cc2a1fd4a0ea51a23fdcc8e237e330fae2893ba",
+        ".gitignore": "14dd79e40e46517f3ab496db8bfb33e0686650eb",
+        ".npmrc": "3cefa3035c08b733cde4e55a5115bd76afdbd23b",
+        ".nvmrc": "df6ae3370f9f89272d88629c442cf554d6c1f9fb",
+        ".paep-control/": "6ccb81c274dfef6140f8e2bc5e6fb2567a2c1527",
+        "CLAUDE.md": "904ef5251fb50305f070d01c41d5458f12036a8b",
+        "PACK_MANIFEST.json": "65d82fb7f4545d3966c6893c782053662fbee77f",
+        "angular.json": "3168f90e58302a0eaa8e39ef6dcdb98a782cfd2d",
+        "docs/adr/": "27fb8368e3c92da3bd6c3602affe478d58ccb50b",
+        "docs/architecture/toolchain-version-manifest.json": "9a46471d931db5dd9529d035999968fa160cd793",
+        "docs/licences/": "8db3de3734052fed8837a1331ced89cf902f8936",
+        "docs/provenance/": "efe9cc79b670a107993aff7e57c364e325207fc5",
+        "evidence/IB0-WP01/": "3b342fdb9852c66a846708c73316e115b394a254",
+        "evidence/IB0-WP02/": "21c6962a0f915237df004981ffbfced2995084b4",
+        "evidence/IB0-WP03/": "661ef0ccbe502e93d531a9f23410925f0af21db0",
+        "evidence/IB0-WP04/": "ae6f305e98dd459dc7c2c1408c129eba7695e04e",
+        "evidence/IB0-WP05/": "e83f9adcbaf7671a33ceb4ff5a7ed26648b9192d",
+        "package-lock.json": "9e38a0292e13e15a57d873992ba3921d0e1d8b85",
+        "package.json": "9263c038e0d58a74c928fbad6bd6567cbaa6524f",
+        "tooling/architecture-boundaries/": "5d7d3191a9be8ae5c2ff7d11505a286b322c3b21",
+        "tooling/governance/": "absent",
+        "tooling/verification/": "47da54611d36740f60ff3fe24a0ad2e143bda3f7",
+        "tsconfig.base.json": "994bb1f7acef2319532afe8bb25aa7d3b970c774",
+        "tsconfig.json": "4d88b1ae7992a7335ed3156f2f870f6d2de6d43a",
+        "work-packages/IB0-WP01/": "23f7c97039b3ca54726a7bbf5a58973f164e4425",
+        "work-packages/IB0-WP02/": "0406de4b1aa5a0eff61bd79a88bd35b21d34588b",
+        "work-packages/IB0-WP03/": "a5b7eb28cdadcdf00946a313303d313a27b7fc59",
+        "work-packages/IB0-WP04/": "bcc74429036afc83763accfcaabb5b7485846dc3",
+        "work-packages/IB0-WP05/": "cec9b6738bbbf5a1cb840e6cda8d35b17fb04d7b"
+      },
+      "notes": "Bootstrap record of the already accepted IB0 state (IB0-WP01..WP05 ACCEPTED and CLOSED; WP05 merged as PR #5). Recorded by IB1-PREFLIGHT-R7 from git facts only; it does not change the meaning of the IB0 acceptance. IB0-WP01 acceptance is read from its ACCEPTANCE_REPORT.md because its work-package.json predates recorded acceptance."
+    },
+    {
+      "generation": 2,
+      "name": "IB1 pre-flight R7 controlled baseline governance",
+      "milestone": "IB1",
+      "workPackages": [
+        "IB1-PREFLIGHT-R7"
+      ],
+      "status": "CANDIDATE",
+      "predecessorGeneration": 1,
+      "authorisation": {
+        "authority": "Product Owner / Solutions Architect",
+        "date": "2026-09-25",
+        "reference": "work-packages/IB1-PREFLIGHT-R7/WORK_PACKAGE.md"
+      },
+      "policyChange": true,
+      "authorisedScope": [
+        ".github/workflows/paep-ci.yml",
+        "docs/architecture/BASELINE-ROLLOVER.md",
+        "evidence/IB1-PREFLIGHT-R7/",
+        "package.json",
+        "tooling/governance/",
+        "tooling/verification/ib0-wp05-ci-policy.json",
+        "tooling/verification/negative-ib0-wp05.mjs",
+        "tooling/verification/verify-ib0-wp05.mjs",
+        "work-packages/IB1-PREFLIGHT-R7/"
+      ],
+      "protectedRecords": [
+        "evidence/IB1-PREFLIGHT-R7/",
+        "work-packages/IB1-PREFLIGHT-R7/"
+      ],
+      "acceptedCommit": null,
+      "acceptedTree": null,
+      "acceptance": null,
+      "fingerprints": null,
+      "notes": "CANDIDATE only. Prepared by Claude Code under the PO/SA authorisation of the IB1 pre-flight R7 remediation. It becomes ACCEPTED only through the promote command after PO/SA acceptance and merge (docs/architecture/BASELINE-ROLLOVER.md). policyChange is true because this generation bootstraps the registry."
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "IB1-PREFLIGHT-R7",
+  "title": "IB1 pre-flight: controlled baseline-governance remediation of residual risk R7",
+  "milestone": "IB1",
+  "design_classification": "D0",
+  "status": "ACCEPTED",
+  "acceptance": {
+    "status": "ACCEPTED",
+    "authority": "Product Owner / Solutions Architect",
+    "date": "2026-09-26"
+  },
+  "predecessor": {
+    "id": "IB0",
+    "status": "ACCEPTED",
+    "baseline_commit": "5fbbedde4ed97899e88cfd4bd4cad02e34101914",
+    "baseline_tree": "fb10ab5db706e41f70c37384787740966a8d0d2f"
+  },
+  "baseline_registry": "tooling/governance/baseline-registry.json",
+  "baseline_generation": {
+    "active_accepted": 1,
+    "candidate": 2,
+    "candidate_status": "CANDIDATE"
+  },
+  "nx_disposition": "NOT REQUIRED",
+  "ib1_substantive_implementation": "NOT STARTED",
+  "evidence_path": "evidence/IB1-PREFLIGHT-R7/",
+  "human_acceptance_required": true,
+  "r7_status": "ACCEPTED FOR PROMOTION",
+  "claude_md_disposition": "PROTECTED GOVERNED ARTIFACT"
+}

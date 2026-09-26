@@ -32,7 +32,9 @@
     "qa:ib0-wp04:negative": "node tooling/verification/negative-ib0-wp04.mjs",
     "qa:types": "ngc -p apps/reference-app/tsconfig.app.json --noEmit && ngc -p apps/ui-lab/tsconfig.app.json --noEmit",
     "qa:ib0-wp05": "node tooling/verification/verify-ib0-wp05.mjs",
-    "qa:ib0-wp05:negative": "node tooling/verification/negative-ib0-wp05.mjs"
+    "qa:ib0-wp05:negative": "node tooling/verification/negative-ib0-wp05.mjs",
+    "qa:baseline": "node tooling/governance/baseline-governance.mjs verify",
+    "qa:baseline:negative": "node tooling/governance/negative-baseline-governance.mjs"
   },
   "dependencies": {
     "@angular/common": "22.1.8",

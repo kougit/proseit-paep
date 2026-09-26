@@ -1,0 +1,2556 @@
+{
+  "generatedFrom": {
+    "commit": "5fbbedde4ed97899e88cfd4bd4cad02e34101914",
+    "tree": "fb10ab5db706e41f70c37384787740966a8d0d2f",
+    "registry": "tooling/governance/baseline-registry.json"
+  },
+  "method": "git ls-tree of the accepted commit classified by registry policy.immutablePaths, generation 1 protectedRecords and policy.governedPaths; all other tracked paths are scope-controlled by B11",
+  "generatedDerived": [
+    "node_modules/",
+    "dist/",
+    ".angular/",
+    "tmp/",
+    ".tmp/",
+    "coverage/ (git-ignored by the immutable .gitignore; never tracked)"
+  ],
+  "oldFixedBaselineCoverage": {
+    "BASELINE_COMMIT": "c5c0eb028e31763090ffcdf2a3ab6e22a41fc24a (every tracked path via W05-W08 diff)",
+    "WP05_PERMITTED": "12 path regexes",
+    "WP05_SCRIPTS": "3 scripts",
+    "PROTECTED_RECORDS": "WP01-WP04 records",
+    "controlled": ".paep-control, .gitignore, PACK_MANIFEST.json, CLAUDE.md"
+  },
+  "counts": {
+    "MUTABLE IMPLEMENTATION ARTIFACT": 106,
+    "GOVERNED BASELINE ARTIFACT": 31,
+    "IMMUTABLE CONTROLLED SOURCE": 14,
+    "EVIDENCE / HISTORICAL RECORD": 480
+  },
+  "total": 631,
+  "items": [
+    {
+      "path": ".editorconfig",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": ".github/actions/paep-setup/action.yml",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": ".github/workflows/paep-ci.yml",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": ".gitignore",
+      "class": "IMMUTABLE CONTROLLED SOURCE"
+    },
+    {
+      "path": ".npmrc",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": ".nvmrc",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": ".paep-control/SOURCE_OF_TRUTH.md",
+      "class": "IMMUTABLE CONTROLLED SOURCE"
+    },
+    {
+      "path": ".paep-control/originals/PAEP_DCH_v1.0.pdf",
+      "class": "IMMUTABLE CONTROLLED SOURCE"
+    },
+    {
+      "path": ".paep-control/originals/PAEP_EQP_v1.1.pdf",
+      "class": "IMMUTABLE CONTROLLED SOURCE"
+    },
+    {
+      "path": ".paep-control/originals/PAEP_IB_v1.0.pdf",
+      "class": "IMMUTABLE CONTROLLED SOURCE"
+    },
+    {
+      "path": ".paep-control/originals/PAEP_IR_v1.0.docx",
+      "class": "IMMUTABLE CONTROLLED SOURCE"
+    },
+    {
+      "path": ".paep-control/originals/PAEP_v1.1.pdf",
+      "class": "IMMUTABLE CONTROLLED SOURCE"
+    },
+    {
+      "path": ".paep-control/reference-baseline/PAEP_BASE_v1.0.zip",
+      "class": "IMMUTABLE CONTROLLED SOURCE"
+    },
+    {
+      "path": ".paep-control/text/PAEP_DCH_01_v1.0_text.md",
+      "class": "IMMUTABLE CONTROLLED SOURCE"
+    },
+    {
+      "path": ".paep-control/text/PAEP_EQP_01_v1.1_text.md",
+      "class": "IMMUTABLE CONTROLLED SOURCE"
+    },
+    {
+      "path": ".paep-control/text/PAEP_IB_01_v1.0_text.md",
+      "class": "IMMUTABLE CONTROLLED SOURCE"
+    },
+    {
+      "path": ".paep-control/text/PAEP_IR_01_v1.0_text.md",
+      "class": "IMMUTABLE CONTROLLED SOURCE"
+    },
+    {
+      "path": ".paep-control/text/PAEP_v1.1_text.md",
+      "class": "IMMUTABLE CONTROLLED SOURCE"
+    },
+    {
+      "path": "CLAUDE.md",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "CLAUDE_ENVIRONMENT_GUIDE.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "NEXT_AFTER_PASS.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "PACK_CONTENTS.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "PACK_MANIFEST.json",
+      "class": "IMMUTABLE CONTROLLED SOURCE"
+    },
+    {
+      "path": "README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "RUN_IB0-WP01.txt",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "WINDOWS_README.txt",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "angular.json",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "apps/reference-app/public/favicon.ico",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "apps/reference-app/src/app/app.config.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "apps/reference-app/src/app/app.css",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "apps/reference-app/src/app/app.html",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "apps/reference-app/src/app/app.routes.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "apps/reference-app/src/app/app.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "apps/reference-app/src/index.html",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "apps/reference-app/src/main.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "apps/reference-app/src/styles.css",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "apps/reference-app/tsconfig.app.json",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "apps/ui-lab/public/favicon.ico",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "apps/ui-lab/src/app/app.config.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "apps/ui-lab/src/app/app.css",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "apps/ui-lab/src/app/app.html",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "apps/ui-lab/src/app/app.routes.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "apps/ui-lab/src/app/app.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "apps/ui-lab/src/index.html",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "apps/ui-lab/src/main.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "apps/ui-lab/src/styles.css",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "apps/ui-lab/tsconfig.app.json",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "config/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "docs/adr/ADR-REGISTER.md",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "docs/architecture/IB0-WP01-IMPLEMENTATION-PLAN.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "docs/architecture/IB0-WP02-IMPLEMENTATION-PLAN.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "docs/architecture/IB0-WP03-IMPLEMENTATION-PLAN.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "docs/architecture/IB0-WP04-IMPLEMENTATION-PLAN.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "docs/architecture/IB0-WP05-CI-DESIGN.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "docs/architecture/IB0-WP05-IMPLEMENTATION-PLAN.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "docs/architecture/IB0-WP05-PR-ENFORCEMENT.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "docs/architecture/toolchain-version-manifest.json",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "docs/licences/README.md",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "docs/licences/THIRD-PARTY-LICENCE-REVIEW.md",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "docs/licences/THIRD-PARTY-NOTICES.md",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "docs/migration/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "docs/provenance/GITHUB-ACTIONS-REGISTER.md",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "docs/provenance/PROVENANCE-REGISTER.md",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "docs/reporting-metrics/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "evidence/IB0-WP01/README.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/.gitkeep",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/build-reference-app.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/build-ui-lab.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/clean-clone-reproduction.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/independent-qa/build-reference-app.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/independent-qa/build-ui-lab.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/independent-qa/committed-verification.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/independent-qa/dist-listing.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/independent-qa/env.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/independent-qa/fresh-verification.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/independent-qa/git-status.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/independent-qa/ng-version.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/independent-qa/node22-sidenote.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/independent-qa/npm-audit-all.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/independent-qa/npm-audit-prod.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/independent-qa/npm-ci.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/independent-qa/npm-ls.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/independent-qa/validate-pack.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/independent-qa/verify-ib0-wp01.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/ng-version.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/npm-ci.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/scope-and-secret-scan.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/logs/verify-ib0-wp01.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/notes/.gitkeep",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/notes/implementation-summary.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/reports/.gitkeep",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/reports/dependency-baseline.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/reports/ib0-wp01-verification.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/reports/independent-qa.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP01/reports/toolchain-baseline.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/README.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/build-output-vs-baseline.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/build-reference-app.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/build-ui-lab.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/clean-clone-reproduction.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/closure-audit/lane-b-licence-provenance.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/closure-audit/lane-c-reproducibility.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/closure-audit/lane-d-control-github.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/controlled-source-integrity.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/dist-hashes.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/erratum-baseline-install-scripts.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/ib0-wp01-verification.regression.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/ac01-plan-order.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/ac02-ac03-extra.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/baseline-build.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/baseline-npm-ci.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/build-reference-app.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/build-ui-lab.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/claude-md-diff.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/definition-changes.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/dist-check.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/install-scripts-ls.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/licence-facts.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/licence-installed-crosscheck.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/lightningcss-removed-build.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/lightningcss-upstream-licence.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/lockfile-unchanged.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/negative-a-wrong-node.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/negative-b-wrong-npm.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/negative-c-lockfile-drift.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/negative-d-unreviewed-script.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/negative-e-manifest-drift.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/ng-version.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/node-binary-verification.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/npm-ci.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/qa-ib0-wp02.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/recompute.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/recompute.mjs.txt",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/scope.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/secret-scan.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/toolchain-versions.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/traceability-evidence.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/independent-qa/verify-ib0-wp01-regression.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/install-scripts-ls.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/licence-dist-check.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/lockfile-regenerate-check.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/lockfile-unchanged.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/negative-install-script.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/negative-lockfile-drift.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/negative-node-version.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/negative-verifier-manifest.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/ng-version.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/npm-audit.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/npm-ci-analysis.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/npm-ci.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/npm10-vs-npm11-installed-tree.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/registry-review.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/scope-and-secret-scan.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/toolchain-versions.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/verify-ib0-wp01-regression.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/verify-ib0-wp01-restore.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/logs/verify-ib0-wp02.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/notes/closure-authorisation.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/notes/implementation-summary.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/reports/acceptance-readiness.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/reports/definition-audit.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/reports/ib0-wp02-verification.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/reports/independent-qa.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/reports/install-script-policy.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/reports/licence-inventory.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/reports/licence-inventory.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/reports/lockfile-diff.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP02/reports/version-manifest.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/README.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/build-output-vs-baseline.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/build-reference-app.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/build-ui-lab.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/clean-clone-reproduction.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/controlled-source-integrity.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/ib0-wp01-verification.regression.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/ib0-wp02-verification.regression.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/01-pre-state.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/02-npm-ci.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/03-lockfile-after-ci.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/04-build-reference-app.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/05-build-ui-lab.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/06-baseline-de13629-ci-build.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/07-dist-hash-compare.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/08-effective-config.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/09-independent-negative-strictness.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/10-verify-ib0-wp02-regression.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/11-verify-ib0-wp01-regression.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/12-qa-ib0-wp03.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/13-independent-verifier-mutations.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/14-independent-verifier-mutations-2.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/15-qa-ib0-wp03-negative.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/16-controlled-source-integrity.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/17-scope-nx-wp04-lockfile.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/18-aliases-and-secret-scan.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/19-evidence-paths.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/scripts/effcfg.mjs",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/scripts/mut.sh",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/scripts/mut2.sh",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/scripts/neg.sh",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round1/scripts/run.sh",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round2/01-pre-state.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round2/02-npm-ci.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round2/03-lockfile-controlled.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round2/04-build-reference-app.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round2/05-build-ui-lab.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round2/06-dist-hashes.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round2/07-qa-ib0-wp03.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round2/08-wp02-v17-detail.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round2/09-qa-ib0-wp03-negative.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round2/10-independent-verifier-mutations.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round2/11-evidence-and-status.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round2/scripts/mut3.sh",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/independent-qa-round2/scripts/run2.sh",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/lockfile-unchanged.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/negative-strictness.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/negative-tests.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/negative-verifier-mutations.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/ng-version.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/npm-ci.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/post-run-git-status.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/pre-clone-state.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/pre-merge-revalidation/build-output-vs-baseline.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/pre-merge-revalidation/build-reference-app.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/pre-merge-revalidation/build-ui-lab.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/pre-merge-revalidation/clean-clone-reproduction.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/pre-merge-revalidation/controlled-source-integrity.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/pre-merge-revalidation/ib0-wp03-verification.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/pre-merge-revalidation/lockfile-unchanged.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/pre-merge-revalidation/negative-strictness.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/pre-merge-revalidation/negative-tests.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/pre-merge-revalidation/negative-tests.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/pre-merge-revalidation/negative-verifier-mutations.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/pre-merge-revalidation/ng-version.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/pre-merge-revalidation/npm-ci.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/pre-merge-revalidation/post-run-git-status.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/pre-merge-revalidation/pre-clone-state.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/pre-merge-revalidation/scope-and-secret-scan.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/pre-merge-revalidation/toolchain-versions.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/pre-merge-revalidation/verify-ib0-wp01-regression.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/pre-merge-revalidation/verify-ib0-wp02-regression.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/pre-merge-revalidation/verify-ib0-wp03.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/scope-and-secret-scan.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/toolchain-versions.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/verify-ib0-wp01-regression.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/verify-ib0-wp02-regression.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/logs/verify-ib0-wp03.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/notes/closure-authorisation.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/notes/implementation-summary.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/reports/acceptance-readiness.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/reports/compiler-configuration.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/reports/definition-audit.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/reports/ib0-wp03-verification.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/reports/independent-qa.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/reports/negative-tests.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP03/reports/technical-verification.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/README.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/arch-check-cli.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/arch-check.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/build-reference-app.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/build-ui-lab.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/clean-clone-reproduction.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/controlled-source-integrity.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/ib0-wp01-verification.regression.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/ib0-wp02-verification.regression.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/ib0-wp03-verification.regression.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/01-pre-clone-state.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/02-npm-ci.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/03-lockfile-after-install.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/04-build-reference-app.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/05-build-ui-lab.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/06-arch-check.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/07-matrix-and-classification.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/08-tsconfig-effective.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/08a-showconfig-reference-app.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/08b-showconfig-ui-lab.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/09-qa-mutations.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/09-qa-mutations.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/10-qa-mutations-supplement.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/10-qa-mutations-supplement.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/11-qa-build-demonstrations.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/12-allowed-cycle-enumeration.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/13-negative-ib0-wp04.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/14-verify-ib0-wp04-full.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/15-post-run-git-status.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/16-controlled-source-integrity.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/17-no-nx.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/18-scope-diff.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/19-false-positive-rooted-specifier.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/scripts/allowed_cycles.py",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/scripts/effective-config.mjs",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/scripts/integrity.py",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/scripts/matrix_compare.py",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/scripts/qa-builds.sh",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/scripts/qa-mutations-2.mjs",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/scripts/qa-mutations.mjs",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round1/scripts/runlog.sh",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round10/neg.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round10/probe.sh",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/01-pre-clone-state.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/02-npm-ci.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/03-lockfile-after-install.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/04-build-reference-app.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/05-build-ui-lab.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/06-arch-check.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/07-diff-bbe3dee-7a8f4e9.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/08-qa-mutations-82-part1.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/08-qa-mutations-82-part1.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/09-qa-mutations-82-part2.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/09-qa-mutations-82-part2.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/10-round2-probes.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/10-round2-probes.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/11-round2-build-probes.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/12-round1-build-demos-rerun.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/13-negative-ib0-wp04.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/14-verify-ib0-wp04-full.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/15-post-run-git-status.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/16-controlled-source-integrity.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/17-matrix-and-classification.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/18-no-nx.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/scripts/allowed_cycles.py",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/scripts/effective-config.mjs",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/scripts/integrity.py",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/scripts/matrix_compare.py",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/scripts/qa-builds.sh",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/scripts/qa-mutations-2.mjs",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/scripts/qa-mutations.mjs",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/scripts/qa-round2-probes.mjs",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/scripts/qa2-builds.sh",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round2/scripts/runlog.sh",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/01-pre-clone-state.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/02-npm-ci.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/03-lockfile-after-install.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/04-build-reference-app.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/05-build-ui-lab.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/06-arch-check.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/07-diff-499ae29-7fa2462.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/08-qa-mutations-82-part1.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/08-qa-mutations-82-part1.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/09-qa-mutations-82-part2.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/09-qa-mutations-82-part2.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/10-round2-probes.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/10-round2-probes.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/11-imports-map-variants.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/11-imports-map-variants.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/12-imports-build-probes.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/13-negative-ib0-wp04.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/14-verify-ib0-wp04-full.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/15-post-run-git-status.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/16-controlled-source-integrity.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/17-evidence-consistency.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/scripts/allowed_cycles.py",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/scripts/effective-config.mjs",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/scripts/evidence-check.sh",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/scripts/integrity.py",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/scripts/matrix_compare.py",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/scripts/qa-builds.sh",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/scripts/qa-mutations-2.mjs",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/scripts/qa-mutations.mjs",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/scripts/qa-round2-probes.mjs",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/scripts/qa-round3-imports-variants.mjs",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/scripts/qa2-builds.sh",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/scripts/qa3-builds.sh",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round3/scripts/runlog.sh",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round4/cases.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round4/run.mjs",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round5/neg-run.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round5/probe.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round5/probe.mjs",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round6/neg-run.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round6/probe.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round6/probe.sh",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round6/probe2.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round6/probe2.sh",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round6/probe3.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round6/probe3.sh",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round7/probe-allowlist.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round7/probe-allowlist.mjs",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round7/probe-strict.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round7/probe-strict.mjs",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round7/qa-architecture-negative.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round7/qa-architecture.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round7/qa-negative.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round8/closure.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round8/closure.mjs",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round8/effopts.mjs",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round8/neg.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round8/probe.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round8/probe.mjs",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P00-baseline.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P01-angular-app-import.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P02-npm-alias-nonproseit-root-link.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P03-npm-alias-manifest-only.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P04-peer-file.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P05-optional-link.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P06-dev-workspace.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P07-plain-path-manifest.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P08-uppercase-FILE.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P09-git-file.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P10-tgz-path.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P11-deep-bare.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P12-scoped-alias.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P13-app-nm-symlink.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P14-require.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P15-dynamic-import.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P16-ref-types.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P17-intermediate-packages-nm.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P18-src-nm-symlink.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P19-link-to-tooling-reexport.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P19-tsc-trace.txt",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P19b-with-real-export.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P20-subpath-import-to-alias.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P21-import-type.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P22-declare-module.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P23-full-chain-plainpath-tooling.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/P24-symlinked-root.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/negative.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/probes-summary.txt",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/logs/qa-architecture.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/independent-qa-round9/probe.sh",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/lockfile-unchanged.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/negative-architecture-tests.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/negative-tests.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/ng-version.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/npm-ci.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/post-run-git-status.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/pre-clone-state.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/scope-and-secret-scan.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/toolchain-versions.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/verify-ib0-wp01-regression.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/verify-ib0-wp02-regression.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/verify-ib0-wp03-regression.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/logs/verify-ib0-wp04.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/reports/acceptance-readiness.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/reports/architecture-boundaries.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/reports/definition-audit.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/reports/ib0-wp04-verification.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/reports/independent-qa-round1.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/reports/independent-qa-round10.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/reports/independent-qa-round2.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/reports/independent-qa-round3.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/reports/independent-qa-round4.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/reports/independent-qa-round5.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/reports/independent-qa-round6.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/reports/independent-qa-round7.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/reports/independent-qa-round8.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/reports/independent-qa-round9.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/reports/independent-qa.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/reports/negative-tests.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/reports/project-graph.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP04/reports/technical-verification.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/README.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/acceptance-revalidation/build-reference-app.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/acceptance-revalidation/build-ui-lab.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/acceptance-revalidation/clean-clone-reproduction.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/acceptance-revalidation/ib0-wp05-verification.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/acceptance-revalidation/lockfile-unchanged.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/acceptance-revalidation/negative-ci-tests.detail.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/acceptance-revalidation/negative-ci-tests.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/acceptance-revalidation/negative-ci-tests.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/acceptance-revalidation/npm-ci.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/acceptance-revalidation/post-run-git-status.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/acceptance-revalidation/qa-architecture.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/acceptance-revalidation/qa-types.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/acceptance-revalidation/toolchain-versions.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/acceptance-revalidation/verify-ib0-wp05-full.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/build-reference-app.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/build-ui-lab.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/ci-gates/full/ib0-wp01-verification.regression.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/ci-gates/full/ib0-wp02-verification.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/ci-gates/full/ib0-wp02-verification.regression.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/ci-gates/full/ib0-wp03-verification.regression.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/ci-gates/full/ib0-wp04-negative-architecture-tests.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/ci-gates/full/ib0-wp04-negative-tests.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/ci-gates/full/ib0-wp04-verification.full.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/ci-gates/full/ib0-wp04-verification.static.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/ci-gates/full/licence-inventory.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/ci-gates/full/negative-ib0-wp03.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/ci-gates/full/negative-ib0-wp04.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/ci-gates/full/qa-types.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/ci-gates/full/verify-ib0-wp01-regression.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/ci-gates/full/verify-ib0-wp02-regression.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/ci-gates/full/verify-ib0-wp02.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/ci-gates/full/verify-ib0-wp03-regression.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/ci-gates/full/verify-ib0-wp04-full.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/ci-gates/full/verify-ib0-wp04-static.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/clean-clone-reproduction.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/lockfile-unchanged.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/negative-ci-tests.detail.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/negative-ci-tests.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/npm-ci.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/post-run-git-status.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/qa-architecture.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/qa-types.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/toolchain-versions.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/logs/verify-ib0-wp05-full.log",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/reports/acceptance-readiness.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/reports/definition-audit.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/reports/github-actions-run.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/reports/ib0-wp05-verification.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/reports/independent-qa.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/reports/negative-ci-tests.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/reports/residual-risk.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/IB0-WP05/reports/technical-verification.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "evidence/accessibility/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "evidence/analytics/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "evidence/performance/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "evidence/portability/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "evidence/releases/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "evidence/sbom/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "evidence/security/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "evidence/tests/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "evidence/usability/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "package-lock.json",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "package.json",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "packages/analytics/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/analytics/package.json",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/analytics/src/index.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/components/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/components/package.json",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/components/src/index.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/contracts/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/contracts/package.json",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/contracts/src/index.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-ai/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-ai/package.json",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-ai/src/index.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-commerce/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-commerce/package.json",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-commerce/src/index.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-construction/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-construction/package.json",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-construction/src/index.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-fiscal/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-fiscal/package.json",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-fiscal/src/index.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-iot/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-iot/package.json",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-iot/src/index.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-maintenance/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-maintenance/package.json",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-maintenance/src/index.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-manufacturing/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-manufacturing/package.json",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-manufacturing/src/index.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-quality/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-quality/package.json",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/domain-quality/src/index.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/enterprise/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/enterprise/package.json",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/enterprise/src/index.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/foundation/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/foundation/package.json",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/foundation/src/index.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/frappe-sdk/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/frappe-sdk/package.json",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/frappe-sdk/src/index.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/i18n/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/i18n/package.json",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/i18n/src/index.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/observability/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/observability/package.json",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/observability/src/index.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/offline/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/offline/package.json",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/offline/src/index.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/platform/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/platform/package.json",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "packages/platform/src/index.ts",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "tooling/a11y/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "tooling/analytics-test/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "tooling/architecture-boundaries/README.md",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "tooling/architecture-boundaries/architecture-model.json",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "tooling/architecture-boundaries/check-boundaries.mjs",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "tooling/build-release/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "tooling/config-validation/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "tooling/test-utils/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "tooling/verification/ib0-wp05-ci-policy.json",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "tooling/verification/negative-ib0-wp03.mjs",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "tooling/verification/negative-ib0-wp04.mjs",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "tooling/verification/negative-ib0-wp05.mjs",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "tooling/verification/validate-pack.mjs",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "tooling/verification/verify-ib0-wp01.mjs",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "tooling/verification/verify-ib0-wp02.mjs",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "tooling/verification/verify-ib0-wp03.mjs",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "tooling/verification/verify-ib0-wp04.mjs",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "tooling/verification/verify-ib0-wp05.mjs",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "tooling/verification/yaml-subset.mjs",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "tooling/visual-regression/README.md",
+      "class": "MUTABLE IMPLEMENTATION ARTIFACT"
+    },
+    {
+      "path": "tsconfig.base.json",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "tsconfig.json",
+      "class": "GOVERNED BASELINE ARTIFACT"
+    },
+    {
+      "path": "work-packages/IB0-WP01/ACCEPTANCE.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP01/ACCEPTANCE_REPORT.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP01/ACCEPTANCE_REPORT_TEMPLATE.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP01/QUALITY_GATE_RUNBOOK.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP01/TRACEABILITY.csv",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP01/WORK_PACKAGE.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP01/prompts/00_QUICK_START.txt",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP01/prompts/01_EXECUTE.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP01/prompts/02_INDEPENDENT_QA.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP01/prompts/03_DEFECT_REPAIR.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP01/prompts/04_ACCEPTANCE_SUMMARY.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP01/work-package.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP02/ACCEPTANCE.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP02/ACCEPTANCE_REPORT.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP02/ACCEPTANCE_REPORT_TEMPLATE.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP02/QUALITY_GATE_RUNBOOK.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP02/TRACEABILITY.csv",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP02/WORK_PACKAGE.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP02/prompts/00_QUICK_START.txt",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP02/prompts/01_EXECUTE.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP02/prompts/02_INDEPENDENT_QA.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP02/prompts/03_DEFECT_REPAIR.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP02/prompts/04_ACCEPTANCE_SUMMARY.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP02/work-package.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP03/ACCEPTANCE.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP03/ACCEPTANCE_REPORT.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP03/QUALITY_GATE_RUNBOOK.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP03/TRACEABILITY.csv",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP03/WORK_PACKAGE.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP03/work-package.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP04/ACCEPTANCE.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP04/ACCEPTANCE_REPORT.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP04/QUALITY_GATE_RUNBOOK.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP04/TRACEABILITY.csv",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP04/WORK_PACKAGE.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP04/work-package.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP05/ACCEPTANCE.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP05/ACCEPTANCE_REPORT.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP05/TRACEABILITY.csv",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP05/WORK_PACKAGE.md",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    },
+    {
+      "path": "work-packages/IB0-WP05/work-package.json",
+      "class": "EVIDENCE / HISTORICAL RECORD"
+    }
+  ]
+}

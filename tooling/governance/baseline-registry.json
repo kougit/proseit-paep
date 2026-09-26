@@ -194,7 +194,7 @@
       "workPackages": [
         "IB1-CONTRACTS-CONFIG"
       ],
-      "status": "CANDIDATE",
+      "status": "ACCEPTED",
       "predecessorGeneration": 2,
       "authorisation": {
         "authority": "Product Owner / Solutions Architect",
@@ -228,10 +228,41 @@
         "evidence/IB1-CONTRACTS-CONFIG/",
         "work-packages/IB1-CONTRACTS-CONFIG/"
       ],
-      "acceptedCommit": null,
-      "acceptedTree": null,
-      "acceptance": null,
-      "fingerprints": null,
+      "acceptedCommit": "b6ae8427e4d54840f71dadd5fedcce99d50f4584",
+      "acceptedTree": "9c122bd3f62cf0ff0c16c3889f5860ff7c86a04c",
+      "acceptance": {
+        "authority": "Product Owner / Solutions Architect",
+        "date": "2026-09-26",
+        "evidence": [
+          {
+            "path": "work-packages/IB1-CONTRACTS-CONFIG/work-package.json",
+            "blob": "b484dbf820cec378fc328cbe79a42aecb0976150"
+          }
+        ]
+      },
+      "fingerprints": {
+        ".github/": "598dc03b388d31280f1b81cf69d6d63a92620d7b",
+        ".gitignore": "14dd79e40e46517f3ab496db8bfb33e0686650eb",
+        ".npmrc": "3cefa3035c08b733cde4e55a5115bd76afdbd23b",
+        ".nvmrc": "df6ae3370f9f89272d88629c442cf554d6c1f9fb",
+        ".paep-control/": "6ccb81c274dfef6140f8e2bc5e6fb2567a2c1527",
+        "CLAUDE.md": "904ef5251fb50305f070d01c41d5458f12036a8b",
+        "PACK_MANIFEST.json": "65d82fb7f4545d3966c6893c782053662fbee77f",
+        "angular.json": "3168f90e58302a0eaa8e39ef6dcdb98a782cfd2d",
+        "docs/adr/": "27fb8368e3c92da3bd6c3602affe478d58ccb50b",
+        "docs/architecture/toolchain-version-manifest.json": "9a46471d931db5dd9529d035999968fa160cd793",
+        "docs/licences/": "8db3de3734052fed8837a1331ced89cf902f8936",
+        "docs/provenance/": "efe9cc79b670a107993aff7e57c364e325207fc5",
+        "evidence/IB1-CONTRACTS-CONFIG/": "aa9a76d98cbc1b4fb2df0c9c3253c37f5d896a74",
+        "package-lock.json": "9e38a0292e13e15a57d873992ba3921d0e1d8b85",
+        "package.json": "2af00ac8ee0e1c6b8482648fdfb00e01452c775c",
+        "tooling/architecture-boundaries/": "5d7d3191a9be8ae5c2ff7d11505a286b322c3b21",
+        "tooling/governance/": "58082d258decd6571f764c18649647a1dcb60b0b",
+        "tooling/verification/": "d8e7137615495ba160af0b189f58bdd4fb6cd21e",
+        "tsconfig.base.json": "994bb1f7acef2319532afe8bb25aa7d3b970c774",
+        "tsconfig.json": "4d88b1ae7992a7335ed3156f2f870f6d2de6d43a",
+        "work-packages/IB1-CONTRACTS-CONFIG/": "aef2c3a209ecdde501579df12a152a4eadd087c9"
+      },
       "notes": "CANDIDATE only. Prepared by Claude Code under the PO/SA instruction authorising substantive IB1 (project thread, 2026-09-26T13:52Z). policyChange is true because IB1 adds three mandatory CI jobs and bounds the IB0-WP05 regression for IB1 entry points and dependency edges (.github/ and tooling/verification/). It becomes ACCEPTED only through the promote command after PO/SA acceptance and merge."
     }
   ]

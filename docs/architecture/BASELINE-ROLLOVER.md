@@ -15,7 +15,8 @@ The repository state is not the accepted baseline. The accepted baseline is the 
 3. Never widen `authorisedScope` beyond what the PO/SA authorised, and never to a whole top-level directory, an immutable path or an accepted record (B08 rejects these).
 4. Never edit or delete an `ACCEPTED` generation or an accepted work-package or evidence record (B09, B10).
 
-5. The CANDIDATE's authorisation and scope are written by the implementer. Reviewers must check `authorisedScope` and `policyChange` against the PO/SA's written authorisation before approving the pull request; the verifier enforces the declared scope, not who declared it.
+5. `CLAUDE.md` is a PROTECTED GOVERNED ARTIFACT (PO/SA, 2026-09-26): locked by default, and changed only under explicit PO/SA authorisation, declared in a CANDIDATE with `policyChange`, verified, independently reviewed, recorded in the acceptance record and promoted. Never change it to widen the implementer's own authority.
+6. The CANDIDATE's authorisation and scope are written by the implementer. Reviewers must check `authorisedScope` and `policyChange` against the PO/SA's written authorisation before approving the pull request; the verifier enforces the declared scope, not who declared it.
 
 ## Procedure
 

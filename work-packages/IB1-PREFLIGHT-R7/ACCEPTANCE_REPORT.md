@@ -1,4 +1,4 @@
-# IB1-PREFLIGHT-R7 Acceptance-Readiness Report
+# IB1-PREFLIGHT-R7 Acceptance Report
 
 **Work package:** IB1-PREFLIGHT-R7 — controlled baseline-governance remediation of residual risk R7 (IB1 pre-flight; not substantive IB1)
 **Authorisation:** PO/SA instruction "IB1 PRE-FLIGHT — R7 CONTROLLED BASELINE REMEDIATION" (project thread, 2026-09-25)
@@ -11,9 +11,12 @@
 | Item | Status |
 | --- | --- |
 | Technical status | PASS (local gates, independent QA; GitHub run recorded in `github-actions-run.md`) |
-| Acceptance Status | PENDING (PO/SA decision) |
-| Registry generation 2 | CANDIDATE (not promoted) |
-| R7 | Remediated, not CLOSED |
+| Acceptance Status | ACCEPTED |
+| Acceptance Authority | Product Owner / Solutions Architect |
+| Acceptance Date | 2026-09-26 |
+| R7 Status | ACCEPTED FOR PROMOTION |
+| Registry generation 2 | CANDIDATE until the separate post-merge promotion |
+| R7 | Remediated; CLOSED only after promotion and post-promotion verification |
 | IB1 substantive implementation | NOT STARTED |
 
 ## Implemented scope
@@ -49,10 +52,21 @@ Five review rounds by clean-clone reviewers found 2 High, 5 Medium, several Low 
 
 `evidence/IB1-PREFLIGHT-R7/reports/residual-risk.md` (Low/Info only; PO/SA disposition required).
 
-## Decisions required from the PO/SA
+## Defect found during pre-acceptance rehearsal
 
-1. Accept or reject IB1-PREFLIGHT-R7 and the residual risks.
-2. If accepted: record the acceptance in `work-packages/IB1-PREFLIGHT-R7/work-package.json`, authorise the merge (merge commit), then authorise the promotion of generation 2 (`BASELINE-ROLLOVER.md` steps 6–9).
-3. Whether `CLAUDE.md` should become immutable (residual R7-RR3).
+**D-R7-01 (medium, closed): the baseline test suite depended on the live acceptance state.** Rehearsing acceptance, merge and promotion in a scratch clone showed `negative-baseline-governance.mjs` failing 27 cases once the record says ACCEPTED, and after promotion, so `PAEP / negative-ci` would have failed. Fixed in the acceptance commit: the suite builds a fixture of the R7 lifecycle start; no case or assertion changed. Independent QA round 6: PASS. The rehearsal then passed every gate on the promoted state.
 
-Claude Code has not merged, has not promoted generation 2, has not marked R7 CLOSED and has not started substantive IB1.
+**D-R7-02 (high, closed): after promotion the WP05 regression bounds would have rejected the promotion itself.** The same rehearsal, run through every gate on the promoted state, failed W17, W18, W20 and W21 (21/25) and WP05 negative controls C07/C08: with no CANDIDATE, the older-verifier bound refused the promoted `baseline-registry.json`, which is the one change B11 permits after an accepted merge. Fixed in `authorisedSince` (the registry is accepted only when there is no CANDIDATE and B11 passes); new test G17 fails without the fix and passes with it. The suite is now 105 cases (13 positive, 92 negative). The rehearsal is repeated on the acceptance commit before it is pushed.
+
+## PO/SA decisions (2026-09-26)
+
+Recorded under the PO/SA instruction "IB1-PREFLIGHT-R7 — FINAL ACCEPTANCE, MERGE, GENERATION-2 PROMOTION AND POST-PROMOTION CLOSURE" (project chat, 2026-09-26T12:25Z).
+
+| # | Decision | Disposition |
+| --- | --- | --- |
+| 1 | R7 remediation (IB1-PREFLIGHT-R7) | APPROVED; ACCEPTED |
+| 2 | Recorded Low and Info residual risks (R7-RR1–RR10) | ACCEPTED, subject to final revalidation (passed before this record was committed) |
+| 3 | `CLAUDE.md` (R7-RR3) | PROTECTED GOVERNED ARTIFACT: locked by default, governed and versionable under explicit PO/SA authority; not immutable |
+| 4 | Merge of PR #6 (merge commit) and promotion of generation 2 | AUTHORISED, subject to new-head CI, the final pre-merge check and the promotion race gate |
+
+Generation 1 remains the historical accepted IB0 baseline. Generation 2 remains CANDIDATE in this commit; it becomes ACCEPTED only through the separate post-merge `promote` step (`BASELINE-ROLLOVER.md` steps 8–9). Substantive IB1 is not started.

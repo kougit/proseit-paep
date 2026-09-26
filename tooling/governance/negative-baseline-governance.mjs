@@ -3,8 +3,9 @@
  * PAEP baseline-governance tests (IB1-PREFLIGHT-R7): positive controls, adversarial negatives and the
  * candidate-promotion test.
  *
- * Works on a disposable scratch copy of the repository (with .git, without node_modules): the working tree is
- * committed there as one snapshot commit, each case mutates the copy, runs the command CI runs and restores it.
+ * Works on a disposable scratch copy of the repository (with .git, without node_modules). The copy is reset to a
+ * fixture (generation 1 plus the current generation 2 scope, generation 2 as CANDIDATE, see below) committed as one
+ * snapshot commit; each case mutates the copy, runs the command CI runs and restores it.
  * A negative case passes only when the command exits non-zero AND its output names the expected rule (for
  * example "FAIL B11" with the offending path). A positive case passes only on exit 0 with the expected output.
  *
@@ -39,6 +40,38 @@ const sh = (cmd, args, opts = {}) => {
 };
 const git = (...a) => sh('git', a);
 const gitOut = (...a) => git(...a).out.trim();
+// Fixture: every case simulates the IB1-PREFLIGHT-R7 lifecycle from its start, whatever the repository's current
+// generation. The snapshot is the generation 1 (IB0) commit plus the current files inside the generation 2 scope,
+// with generation 2 returned to its CANDIDATE form and its work-package records to their pre-acceptance form (a
+// promotion only fills acceptance fields, B09). The real current state is verified by qa:baseline (W26), not here.
+const FIXTURE_ACCEPTANCE_ROW = /(Acceptance Status[^\n|]*\|\s*[*_`]*\s*)accepted[*_`]*/gi;
+{
+  const live = JSON.parse(fs.readFileSync(path.join(copy, REG), 'utf8'));
+  const g1 = live.generations.find((x) => x.generation === 1);
+  const g2 = live.generations.find((x) => x.generation === 2);
+  const inScope = (f) => g2.authorisedScope.some((e) => (e.endsWith('/') ? f.startsWith(e) : f === e));
+  const listed = (ref) => (ref ? git('ls-tree', '-r', '--name-only', '-z', ref) : git('ls-files', '-z', '--cached', '--others', '--exclude-standard')).out.split('\0').filter(Boolean);
+  const keep = new Map(listed(null).filter(inScope).map((f) => [f, fs.readFileSync(path.join(copy, f))]));
+  git('checkout', '-q', '-f', '--detach', g1.acceptedCommit);
+  git('clean', '-q', '-f', '-d');
+  for (const f of listed(g1.acceptedCommit).filter(inScope)) fs.rmSync(path.join(copy, f), { force: true });
+  for (const [f, data] of keep) { fs.mkdirSync(path.dirname(path.join(copy, f)), { recursive: true }); fs.writeFileSync(path.join(copy, f), data); }
+  Object.assign(g2, { status: 'CANDIDATE', acceptedCommit: null, acceptedTree: null, acceptance: null, fingerprints: null });
+  live.generations = live.generations.filter((x) => x.generation <= 2);
+  fs.writeFileSync(path.join(copy, REG), `${JSON.stringify(live, null, 2)}\n`);
+  for (const wp of g2.workPackages) {
+    const wpj = path.join(copy, 'work-packages', wp, 'work-package.json');
+    const j = JSON.parse(fs.readFileSync(wpj, 'utf8'));
+    Object.assign(j, { status: 'READY FOR AUTHORIZATION', acceptance: { status: 'PENDING', authority: g2.authorisation.authority, date: null } });
+    fs.writeFileSync(wpj, `${JSON.stringify(j, null, 2)}\n`);
+    for (const f of listed(null).filter((x) => x.startsWith(`work-packages/${wp}/`) && /\.md$/i.test(x))) {
+      const t = fs.readFileSync(path.join(copy, f), 'utf8');
+      const u = t.replace(FIXTURE_ACCEPTANCE_ROW, '$1PENDING');
+      if (u !== t) fs.writeFileSync(path.join(copy, f), u);
+    }
+  }
+  git('update-ref', 'refs/remotes/origin/main', g1.acceptedCommit);
+}
 git('add', '-A');
 git('commit', '-q', '--no-verify', '--allow-empty', '-m', 'scratch snapshot');
 const SNAP = gitOut('rev-parse', 'HEAD');
@@ -368,6 +401,15 @@ try {
   });
   git('commit', '-q', '-am', 'SIMULATION: promote generation 2');
   pos('G07', 'promotion', 'promoted state validates; the IB0 generation stays identifiable and unchanged', [], [new RegExp(`PASS B05 .*G1 ${IB0.slice(0, 7)}.*G2 ${M.slice(0, 7)}`), /PASS B09/]);
+  custom('G17', 'promotion', 'D-R7-02: after promotion (no CANDIDATE) the older-verifier bound accepts the promoted registry and accepted history, and nothing else', 'registry and accepted-history paths authorised; an unrelated path and a drifted path refused', () => {
+    const probe = `import('./${CLI}').then((m) => { const e = m.evaluate(process.cwd()); const a = e.authorisedSince('${IB0}'); console.log(JSON.stringify({ reg: a('${REG}'), hist: a('tooling/governance/baseline-governance.mjs'), other: a('apps/reference-app/src/main.ts') })); })`;
+    const clean = sh(process.execPath, ['--input-type=module', '-e', probe]);
+    const drift = withEdits([['apps/reference-app/src/main.ts', (t) => `${t}// drift\n`]], () => sh(process.execPath, ['--input-type=module', '-e', probe]));
+    let c = {}; let d = {};
+    try { c = JSON.parse(clean.out.trim().split('\n').pop()); d = JSON.parse(drift.out.trim().split('\n').pop()); } catch { /* reported as fail */ }
+    const pass = c.reg === true && c.hist === true && c.other === false && d.other === false && d.reg === false;
+    return { r: { status: pass ? 1 : 0, out: `clean ${clean.out}\ndrift ${drift.out}` }, pass };
+  });
   neg('G08', 'promotion', 'after promotion: historical IB0 generation rewritten', [regEdit((o) => { g(o, 1).notes = 'rewritten'; })], [/FAIL B09 .*accepted generation 1 .*rewritten or removed/]);
   neg('G09', 'promotion', 'after promotion: rollback by deleting the promoted generation', [regEdit((o) => { o.generations = o.generations.filter((x) => x.generation !== 2); })], [/FAIL B09/]);
   neg('G10', 'promotion', 'after promotion: policy loosened without a policyChange candidate', [regEdit((o) => { o.policy.governedPaths = o.policy.governedPaths.filter((x) => x !== 'CLAUDE.md'); })], [/FAIL B09 .*policy differs/]);

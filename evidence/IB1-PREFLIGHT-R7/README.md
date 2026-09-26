@@ -1,6 +1,6 @@
 # IB1-PREFLIGHT-R7 Evidence
 
-Evidence for the controlled baseline-governance remediation of residual risk R7. Status: **READY FOR AUTHORIZATION**. Registry generation 2 is a CANDIDATE; acceptance is the PO/SA's decision.
+Evidence for the controlled baseline-governance remediation of residual risk R7. Status: **ACCEPTED** by the PO/SA (2026-09-26); R7 ACCEPTED FOR PROMOTION. Registry generation 2 stays CANDIDATE until the post-merge promotion.
 
 | File | Content |
 | --- | --- |
@@ -20,5 +20,6 @@ Evidence for the controlled baseline-governance remediation of residual risk R7.
 | `logs/qa-ib0-wp05-full.log` | `npm run qa:ib0-wp05` (full) |
 | `logs/qa-ib0-wp05-negative.log` | `npm run qa:ib0-wp05:negative` |
 | `logs/qa-architecture.log` | `npm run qa:architecture` |
+| `logs/pre-acceptance/` | Pre-acceptance revalidation (2026-09-26) on PR head `c36e043`: the same commands, all PASS |
 
 Work-package records: `work-packages/IB1-PREFLIGHT-R7/` (WORK_PACKAGE, ACCEPTANCE, R7_ROOT_CAUSE, BASELINE_GOVERNANCE_DESIGN, TRACEABILITY, ACCEPTANCE_REPORT, work-package.json). Procedure: `docs/architecture/BASELINE-ROLLOVER.md`.

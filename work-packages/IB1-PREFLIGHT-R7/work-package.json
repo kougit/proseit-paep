@@ -3,11 +3,11 @@
   "title": "IB1 pre-flight: controlled baseline-governance remediation of residual risk R7",
   "milestone": "IB1",
   "design_classification": "D0",
-  "status": "READY FOR AUTHORIZATION",
+  "status": "ACCEPTED",
   "acceptance": {
-    "status": "PENDING",
+    "status": "ACCEPTED",
     "authority": "Product Owner / Solutions Architect",
-    "date": null
+    "date": "2026-09-26"
   },
   "predecessor": {
     "id": "IB0",
@@ -24,5 +24,7 @@
   "nx_disposition": "NOT REQUIRED",
   "ib1_substantive_implementation": "NOT STARTED",
   "evidence_path": "evidence/IB1-PREFLIGHT-R7/",
-  "human_acceptance_required": true
+  "human_acceptance_required": true,
+  "r7_status": "ACCEPTED FOR PROMOTION",
+  "claude_md_disposition": "PROTECTED GOVERNED ARTIFACT"
 }

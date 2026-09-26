@@ -561,7 +561,9 @@ export function evaluate(root = process.cwd(), { registryText = null } = {}) {
       const present = new Set(zlist(git('ls-tree', '-r', '--name-only', '-z', base).raw));
       return (f, { presence = false } = {}) => {
         if (!hist) return false;
-        if (changedPaths.includes(f)) return Boolean(candidate) && inScope(f) && !p11.length;
+        // A change since the active baseline: inside the CANDIDATE scope, or (no CANDIDATE) only the registry
+        // promotion that B11 permits.
+        if (changedPaths.includes(f)) return !p11.length && (candidate ? inScope(f) : f === REGISTRY_PATH);
         return hist.has(f) || (presence && present.has(f));
       };
     };

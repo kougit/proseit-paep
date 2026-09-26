@@ -1,6 +1,6 @@
 # IB1-CONTRACTS-CONFIG — Contract Catalogue
 
-Package `@proseit/paep-contracts`, entry point `packages/contracts/src/index.ts` (type-only `export type *` barrel). 100 public types. Every property is `readonly`; no runtime value is exported (`qa:contracts` S3). Generated from the sources and the reviewed API snapshot `tooling/test-utils/contract-api-report.json`.
+Package `@proseit/paep-contracts`, entry point `packages/contracts/src/index.ts` (type-only `export type *` barrel). 101 public types. Every property is `readonly`; no runtime value is exported (`qa:contracts` S3). Generated from the sources and the reviewed API snapshot `tooling/test-utils/contract-api-report.json`.
 
 ## `config/compatibility.ts`
 
@@ -177,6 +177,7 @@ Package `@proseit/paep-contracts`, entry point `packages/contracts/src/index.ts`
 | `ReportColumn` | interface | Reporting shape (PAEP-IB-01 Appendix D). |
 | `DataSource` | type | Reporting shape (PAEP-IB-01 Appendix D). |
 | `DataFreshness` | interface | Reporting shape (PAEP-IB-01 Appendix D). |
+| `ReportCellValue` | type | One report cell: a scalar, or a money amount with its explicit currency (PAEP-IB-01 §7.3: never infer currency). |
 | `ReportRow` | type | One result row keyed by column key; columns are dynamic per dataset, so a record map is the model. |
 | `ReportResult` | interface | Reporting shape (PAEP-IB-01 Appendix D). |
 | `DrillRequest` | interface | Reporting shape (PAEP-IB-01 Appendix D). |

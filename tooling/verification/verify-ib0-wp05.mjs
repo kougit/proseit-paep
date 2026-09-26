@@ -780,6 +780,11 @@ if (want('W25')) {
     p.length ? p.join('; ') : `${files.length} files; ${files.reduce((a, f) => a + f.bytes, 0)} bytes`);
 }
 
+// Every check of the selected gate must report. A check skipped because its input is missing or unparseable (for example
+// an empty workflow file parsing to null) fails instead of silently shrinking the gate (independent QA, IB1-CONTRACTS-CONFIG).
+for (const id of selected) {
+  if (!results.some((r) => r.id === id)) results.push({ id, name: 'Check did not run', pass: false, details: 'a prerequisite input was missing or did not parse (see the other findings); a gate check may never be skipped' });
+}
 results.sort((a, b) => a.id.localeCompare(b.id));
 
 // ---- Report ----------------------------------------------------------------------------------

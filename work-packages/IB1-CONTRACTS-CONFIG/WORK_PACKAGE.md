@@ -82,3 +82,4 @@ The WP05 negative CI-control suite (`negative-ib0-wp05.mjs`, in scope) was adapt
 | Per-job gate cases after G09 are named `GJ10`–`GJ12` | Twelve mandatory jobs would otherwise reuse the fixed ids G10–G12 |
 | New cases K01–K03 | The IB1 jobs are mandatory: dropping one from the gate or replacing its commands fails W11/W12 |
 | New cases K04–K07 and a duplicate-id guard | W11/W12 now also compare the CI policy with the policy at the active accepted commit (accepted jobs, commands, gate and workflow policy may not change; jobs may only be added), so editing the policy and the workflow together cannot weaken an accepted control (independent QA Q6-1) |
+| New case K08; every selected check must report | An empty or unparseable workflow previously made W09–W14 skip silently (pre-existing since IB0-WP05, found by QA round 2); a skipped check now fails |

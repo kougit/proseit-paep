@@ -3,7 +3,7 @@
   "title": "IB1: product-neutral contracts and governed runtime configuration",
   "milestone": "IB1",
   "design_classification": "D0",
-  "status": "IN PROGRESS",
+  "status": "PASS",
   "acceptance": {
     "status": "NOT ACCEPTED",
     "authority": "Product Owner / Solutions Architect",

@@ -29,12 +29,12 @@ Code commit verified: `7ae5bca` (fresh clone, clean `npm ci`, Node 24.21.0, npm 
 | IB1-AC19 | PASS | `qa:types`; both builds; WP04 S1c (builds with strict off) |
 | IB1-AC20 | PASS | `qa:baseline` 13/13 (active G2, candidate G3 NOT ACCEPTED); `qa:baseline:negative` 105/105 |
 | IB1-AC21 | PASS | `qa:ib0-wp05` 25/25; `qa:ib0-wp05:negative` 98/98 |
-| IB1-AC22 | PASS locally; CI in `reports/ci-report.md` | W11, W12; K01–K08, GJ10–GJ12 |
+| IB1-AC22 | PASS | run 36252266440 (`reports/ci-report.md`); W11, W12; K01–K08, GJ10–GJ12 |
 | IB1-AC23 | PASS | W08 and WP02–WP04 secret scans (in `qa:ib0-wp05`); QA Q7 |
 | IB1-AC24 | PASS | W02, W04 |
 | IB1-AC25 | PASS | `evidence/IB1-CONTRACTS-CONFIG/README.md`; `TRACEABILITY.csv` |
 | IB1-AC26 | PASS | `reports/independent-qa.md`: no open High or Medium |
-| IB1-AC27 | see `reports/ci-report.md` | ready PR, real Actions run, `PAEP / gate` |
+| IB1-AC27 | PASS | ready PR #8, run 36252266440 on `4c4c351`, 13/13 checks and `PAEP / gate` success (`reports/ci-report.md`) |
 
 ## 2. Decisions recorded for the PO/SA
 
@@ -54,4 +54,4 @@ Listed in `WORK_PACKAGE.md` §7 for acceptance: WP04 V07 and WP03 V09 "entry poi
 
 ## 5. Residual risks
 
-`evidence/IB1-CONTRACTS-CONFIG/reports/residual-risk.md`: RR1–RR13, all Low or Info.
+`evidence/IB1-CONTRACTS-CONFIG/reports/residual-risk.md`: RR1–RR14, all Low or Info.

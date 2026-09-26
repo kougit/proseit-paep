@@ -25,4 +25,4 @@ IB1-SEC-001,CLAUDE.md secrets rule; EQP security review,IB1-CONTRACTS-CONFIG,all
 IB1-SRC-001,PACK_MANIFEST.json; CLAUDE.md,IB1-CONTRACTS-CONFIG,none (unchanged),IB1-AC24,W02; W04,PASS,evidence/IB1-CONTRACTS-CONFIG/logs/verification-7ae5bca/
 IB1-EVD-001,CLAUDE.md execution discipline 7-8; EQP §24-§25,IB1-CONTRACTS-CONFIG,evidence/IB1-CONTRACTS-CONFIG/; work-packages/IB1-CONTRACTS-CONFIG/,IB1-AC25,review,PASS,evidence/IB1-CONTRACTS-CONFIG/README.md
 IB1-QA-001,Authorising instruction Q1-Q8,IB1-CONTRACTS-CONFIG,independent QA agents,IB1-AC26,Q1-Q8,PASS,evidence/IB1-CONTRACTS-CONFIG/reports/independent-qa.md
-IB1-PR-001,Authorising instruction PR workflow,IB1-CONTRACTS-CONFIG,pull request to main,IB1-AC27,GitHub Actions PAEP / gate,IN PROGRESS,evidence/IB1-CONTRACTS-CONFIG/reports/ci-report.md
+IB1-PR-001,Authorising instruction PR workflow,IB1-CONTRACTS-CONFIG,pull request to main,IB1-AC27,GitHub Actions PAEP / gate,PASS,evidence/IB1-CONTRACTS-CONFIG/reports/ci-report.md

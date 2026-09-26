@@ -136,7 +136,8 @@ try {
   // Runs first, before any gate writes evidence into the copy.
   caseRun('C06', 'control: tracked-tree check passes after an unchanged install', [], () => exec('bash', ['-c', treeCheckScript], { env: { ...env, RUNNER_TEMP: scratch } }));
   gateCase('G00', 'control: every mandatory job succeeded', needsWith(), true);
-  MANDATORY.forEach((j, k) => gateCase(`G${String(k + 1).padStart(2, '0')}`, `mandatory job ${j} failed`, needsWith({ [j]: 'failure' }), false));
+  // One failure case per mandatory job; ids beyond G09 use GJ so they never collide with the fixed G10-G18 cases (IB1 added jobs).
+  MANDATORY.forEach((j, k) => gateCase(k < 9 ? `G0${k + 1}` : `GJ${k + 1}`, `mandatory job ${j} failed`, needsWith({ [j]: 'failure' }), false));
   gateCase('G10', 'mandatory job cancelled (negative-ci)', needsWith({ 'negative-ci': 'cancelled' }), false);
   gateCase('G11', 'mandatory job skipped (architecture)', needsWith({ architecture: 'skipped' }), false);
   gateCase('G12', 'mandatory job timed out (regression; GitHub reports timeouts as failure)', needsWith({ regression: 'failure' }), false);
@@ -286,8 +287,14 @@ try {
 
   // ---- scope: Nx and IB1 --------------------------------------------------------------------------------
   caseRun('N01', 'Nx introduced (nx.json) fails the governance gate', [['nx.json', () => '{}\n']], () => verifyGate('governance'), [/FAIL W04/]);
-  caseRun('N02', 'IB1 artefact (config/runtime-config.schema.json) fails the governance gate', [['config/runtime-config.schema.json', () => '{}\n']], () => verifyGate('governance'), [/FAIL W05/]);
+  // IB1-CONTRACTS-CONFIG: config/ is now CANDIDATE scope, so N02 uses a successor package outside that scope (frappe-sdk is IB4).
+  caseRun('N02', 'successor artefact outside the CANDIDATE scope (packages/frappe-sdk source) fails the governance gate', [['packages/frappe-sdk/src/lib/client.ts', () => 'export const client = 1;\n']], () => verifyGate('governance'), [/FAIL W05/]);
   caseRun('N03', 'lint configuration introduced fails the governance gate', [['eslint.config.mjs', () => 'export default [];\n']], () => verifyGate('governance'), [/FAIL W07/]);
+
+  // ---- IB1-CONTRACTS-CONFIG jobs are mandatory like the IB0 jobs ---------------------------------------
+  caseRun('I01', 'IB1 contracts job dropped from gate needs fails the provenance gate', [[WORKFLOW, replace('      - contracts\n      - runtime-config\n', '      - runtime-config\n')]], () => verifyGate('provenance'), [/FAIL W12/]);
+  caseRun('I02', 'IB1 runtime-config job command replaced fails the provenance gate', [[WORKFLOW, replace('          npm run qa:runtime-config 2>&1', '          npm run qa:types 2>&1')]], () => verifyGate('provenance'), [/FAIL W11/]);
+  caseRun('I03', 'IB1 portability proof removed from the runtime-config-negative job fails the provenance gate', [[WORKFLOW, replace('          npm run qa:runtime-config:portability 2>&1', '          echo skipped 2>&1')]], () => verifyGate('provenance'), [/FAIL W11/]);
 } finally {
   fs.rmSync(scratch, { recursive: true, force: true });
 }

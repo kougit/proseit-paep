@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "1.0",
+  "product": {
+    "id": "reference-app",
+    "name": "Minimal",
+    "release": "0.0.1"
+  },
+  "deployment": {
+    "environment": "test",
+    "profile": "cloud-saas",
+    "basePath": "/"
+  },
+  "backend": {
+    "apiBaseUrl": "https://api.example.test",
+    "compatibility": {
+      "apiContract": "pmra-api-v1",
+      "minimumPaep": "1.1"
+    }
+  },
+  "identity": {
+    "mode": "frappe-session"
+  },
+  "localisation": {
+    "defaultLocale": "en",
+    "supportedLocales": [
+      "en"
+    ]
+  },
+  "features": {
+    "capabilityDiscovery": "manifest"
+  },
+  "telemetry": {
+    "enabled": false
+  },
+  "analytics": {
+    "enabled": false
+  },
+  "pwa": {
+    "enabled": false,
+    "offlineProfile": "none"
+  }
+}

@@ -352,7 +352,7 @@ if (want('W11') && wf) {
     if (JSON.stringify(cmds) !== JSON.stringify(policy.requiredCommands[mj.id])) p.push(`${mj.id}: commands ${JSON.stringify(cmds)} != ${JSON.stringify(policy.requiredCommands[mj.id])}`);
     for (const r of runs) if (r.split('\n').filter(Boolean).length !== 2) p.push(`${mj.id}: run step has extra lines`);
   }
-  add('W11', 'Nine mandatory jobs run in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention',
+  add('W11', 'Every mandatory job in the CI policy runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention',
     p.length === 0, p.length ? p.join('; ') : `${mandatoryIds.length} parallel jobs: ${mandatoryIds.join(', ')}`);
 }
 
@@ -507,8 +507,14 @@ const fileList = (m) => m[m.length - 1].split(', ');
 const pkgFinding = (key) => [/^(package\.json scripts differ from baseline \+ the (?:two WP03|four WP04) scripts|package\.json fields other than scripts changed|package-lock\.json differs from the baseline)$/,
   (m) => Boolean(gov) && gov.packageProblems.length === 0 && since(key)(m[1].startsWith('package-lock') ? 'package-lock.json' : 'package.json')];
 
-// Bounded WP04 V16/V17 (static checks).
+// IB1-CONTRACTS-CONFIG: the WP03/WP04 verifiers require the IB0 placeholder entry points. A package entry point that is
+// no longer a placeholder is accepted only when it changed since the accepted baseline inside the CANDIDATE scope (B11 passing).
+const filledEntry = (f) => /^packages\/[a-z][a-z0-9-]*\/src\/index\.ts$/.test(f) && changedPaths.includes(f) && inScope(f)
+  && Boolean(gov) && gov.results.find((r) => r.id === 'B11').pass;
+
+// Bounded WP04 V07 (filled entry points) and V16/V17 (static checks).
 function wp04StaticBounded(check) {
+  if (check.id === 'V07') return segmentsOk(check.details, [[/^(.+) is not a placeholder$/, (m) => filledEntry(m[1])]]);
   if (check.id === 'V16') return segmentsOk(check.details, [pkgFinding('wp04')]);
   if (check.id === 'V17') {
     const ok = since('wp04');
@@ -548,25 +554,31 @@ if (want('W17')) {
     restoreRecords();
     if (!wp04Static || wp04Static.mode !== 'static-only') p.push('no WP04 static report');
     else {
-      for (const id of ['V04', 'V05', 'V06', 'V07']) if (!wp04Static.checks.find((c) => c.id === id)?.pass) p.push(`strictness check ${id} failed`);
+      for (const id of ['V04', 'V05', 'V06', 'V07']) {
+        const c = wp04Static.checks.find((x) => x.id === id);
+        if (!c?.pass && !(id === 'V07' && c && wp04StaticBounded(c))) p.push(`strictness check ${id} failed`);
+      }
       for (const c of wp04Static.checks) if (!c.pass && !wp04StaticBounded(c)) p.push(`${c.id} failed outside the accepted-history/CANDIDATE bound: ${c.details.slice(0, 300)}`);
       if (wp04Static.checks.length !== 19) p.push(`WP04 static reported ${wp04Static.checks.length} checks`);
     }
   }
   const fails = wp04Static ? wp04Static.checks.filter((c) => !c.pass).map((c) => c.id) : [];
-  add('W17', 'Strict configuration: WP04 static verifier passes V04-V07 (strict, noImplicitAny, strictTemplates, noCheck and suppression protection, aliases, entry points) and every other static check; V16/V17 report only accepted-history or in-scope change',
+  add('W17', 'Strict configuration: WP04 static verifier passes V04-V07 (strict, noImplicitAny, strictTemplates, noCheck and suppression protection, aliases, entry points) and every other static check; V07 reports only entry points filled inside the CANDIDATE scope; V16/V17 report only accepted-history or in-scope change',
     p.length === 0, p.length ? p.join('; ') : `WP04 static ${19 - fails.length}/19 pass; bounded: ${fails.join(', ') || 'none'}`);
 }
 
-// W18: WP04 negative suite; only the positive control C3 may fail, with exactly V16 and V17.
+// W18: WP04 negative suite; only the positive control C3 may fail (V16/V17, plus V07 for filled entry points), and edge-count
+// controls only by the edges of the unmutated graph.
 if (want('W18')) {
   const p = [];
   let neg = null;
+  let negLog = ''; // read before restoreRecords() brings back the accepted copy
   const dirty = recordsClean();
   if (dirty) p.push(dirty);
   else {
     const r = runVerifier('tooling/verification/negative-ib0-wp04.mjs', [], ['evidence/IB0-WP04/reports/negative-tests.json', 'evidence/IB0-WP04/logs/negative-architecture-tests.log']);
     neg = tryJson('evidence/IB0-WP04/reports/negative-tests.json');
+    negLog = exists('evidence/IB0-WP04/logs/negative-architecture-tests.log') ? read('evidence/IB0-WP04/logs/negative-architecture-tests.log') : '';
     keep('negative-ib0-wp04.log', `${r.out}\nEXIT_CODE=${r.status}\n`);
     if (neg) keep('ib0-wp04-negative-tests.json', JSON.stringify(neg, null, 2) + '\n');
     if (exists('evidence/IB0-WP04/logs/negative-architecture-tests.log')) keep('ib0-wp04-negative-architecture-tests.log', read('evidence/IB0-WP04/logs/negative-architecture-tests.log'));
@@ -574,21 +586,37 @@ if (want('W18')) {
     if (!neg) p.push('no WP04 negative report');
     else {
       if (neg.cases.length !== 86) p.push(`${neg.cases.length} cases (expected 86)`);
+      // IB1-CONTRACTS-CONFIG: the WP04 edge-count controls were written for an IB0 graph with no edge. The unmutated graph now has
+      // E0 edges (measured here, and it must equal what C0 reports); a control is accepted only if it still exits 0 with no
+      // violation or cycle and reports exactly its own edges plus E0 (optional edges likewise). E0 > 0 requires an entry point
+      // filled inside the CANDIDATE scope.
+      const live = run(process.execPath, ['tooling/architecture-boundaries/check-boundaries.mjs', '--json']);
+      let base0 = null;
+      try { const j = JSON.parse(live.stdout); if (live.status === 0 && j.ok === true) base0 = { edges: j.summary.edges, optional: j.summary.optionalEdges }; } catch { /* fails below */ }
+      const summaryOf = (id) => { const m = new RegExp(`^## ${id} [^\\n]*\\nexpected: [^\\n]*\\nsummary: (\\{[^\\n]*\\})$`, 'm').exec(negLog); try { return m ? JSON.parse(m[1]) : null; } catch { return null; } };
+      const graphGrew = Boolean(base0) && (base0.edges === 0 || ['packages/contracts/src/index.ts', 'packages/platform/src/index.ts'].some(filledEntry)) && summaryOf('C0')?.edges === base0.edges;
+      const edgeBounded = (c) => {
+        const want = /^exit 0, no violations, (\d+) edges \((\d+) optional\)$/.exec(c.expected || '');
+        const got = summaryOf(c.id);
+        return graphGrew && base0.edges > 0 && c.tool === 'arch:check' && Boolean(want) && c.exit === 0 && (c.rules || []).length === 0 && Boolean(got)
+          && got.violations === 0 && got.cycles === 0 && got.edges === Number(want[1]) + base0.edges && got.optionalEdges === Number(want[2]) + base0.optional;
+      };
       for (const c of neg.cases) {
         if (c.pass) continue;
-        if (c.id === 'C3' && c.exit === 1 && sameSet(c.failedChecks || [], ['V16', 'V17'])) continue;
+        if (c.id === 'C3' && c.exit === 1 && (sameSet(c.failedChecks || [], ['V16', 'V17']) || sameSet(c.failedChecks || [], ['V07', 'V16', 'V17']))) continue;
+        if (edgeBounded(c)) continue;
         p.push(`${c.id} failed: ${c.name} (exit ${c.exit}; ${JSON.stringify(c.failedChecks || c.rules || c.codesFound)})`);
       }
       // C3 runs the WP04 static verifier on an unmutated copy, so its V16/V17 findings are those W17 bounds.
       const c3 = neg.cases.find((c) => c.id === 'C3');
       if (c3 && !c3.pass) {
         const st = wp04Static?.checks || [];
-        if (!['V16', 'V17'].every((id) => { const c = st.find((x) => x.id === id); return c && (c.pass || wp04StaticBounded(c)); })) p.push('C3 V16/V17 findings are not the bounded ones (see W17)');
+        if (!['V07', 'V16', 'V17'].every((id) => { const c = st.find((x) => x.id === id); return c && (c.pass || wp04StaticBounded(c)); })) p.push('C3 V07/V16/V17 findings are not the bounded ones (see W17)');
       }
     }
   }
   const failed = neg ? neg.cases.filter((c) => !c.pass).map((c) => c.id) : [];
-  add('W18', 'WP04 negative architecture/strictness suite: every case passes except positive control C3, which fails only V16/V17 with accepted-history or in-scope findings',
+  add('W18', 'WP04 negative architecture/strictness suite: every case passes except positive control C3, which fails only V16/V17 (and V07 for entry points filled in scope) with accepted-history or in-scope findings, and edge-count controls that differ only by the edges of the unmutated graph',
     p.length === 0, p.length ? p.join('; ') : `${neg.cases.length - failed.length}/${neg.cases.length} pass; bounded: ${failed.join(', ') || 'none'}`);
 }
 
@@ -643,6 +671,7 @@ if (['W20', 'W21', 'W22', 'W23'].some(want)) {
     const bounded = {
       V05: (d) => d === 'top-level extends added; extends changed',
       V08: (d) => sameSet(d.split('; '), pkgNames().map((n) => `${n}: no alias`)),
+      V09: (d) => segmentsOk(d, [[/^(.+) is not a placeholder \(export \{\} only\)$/, (m) => filledEntry(m[1])]]),
       V10: (d) => segmentsOk(d, [pkgFinding('wp03')]),
       V12: (d) => segmentsOk(d, [
         [/^(out-of-scope files|boundary tooling \(IB0-WP04\)): (.+)$/, (m) => fileList(m).every(presentAccepted('wp03'))],
@@ -664,15 +693,15 @@ if (['W20', 'W21', 'W22', 'W23'].some(want)) {
     if (wp04.mode !== 'full' || wp04.checks.length !== 24) p20.push(`WP04 mode ${wp04.mode}, ${wp04.checks.length} checks`);
     for (const c of wp04.checks) {
       if (c.pass) continue;
-      if (c.id === 'V16' || c.id === 'V17') { if (!wp04StaticBounded(c)) p20.push(`${c.id} outside the accepted-history/CANDIDATE bound: ${c.details.slice(0, 300)}`); continue; }
+      if (c.id === 'V07' || c.id === 'V16' || c.id === 'V17') { if (!wp04StaticBounded(c)) p20.push(`${c.id} outside the accepted-history/CANDIDATE bound: ${c.details.slice(0, 300)}`); continue; }
       if (c.id === 'V22') { if (p21.length) p20.push('V22 not explained by the bound (see W21)'); continue; }
       if (c.id === 'V23') { if (p22.length) p20.push('V23 not explained by the bound (see W22)'); continue; }
       p20.push(`${c.id} failed: ${c.details.split('\n')[0]}`);
     }
   } else if (!dirty) p20.push('no WP04 report');
   const summary = (j) => (j ? `${j.checks.filter((c) => c.pass).length}/${j.checks.length} pass; bounded: ${j.checks.filter((c) => !c.pass).map((c) => c.id).join(', ') || 'none'}` : '');
-  add('W20', 'IB0-WP04 regression (full, with both builds): every check passes except V16/V17 (only accepted-history or in-scope package/path changes) and V22/V23 (re-evaluated in W21/W22)', p20.length === 0, p20.length ? p20.join('; ') : `WP04 ${summary(wp04)}`);
-  add('W21', 'IB0-WP03 regression: every check passes except the accepted V05/V08 (WP04 tsconfig change, exact) and V10/V12/V17, whose findings are only accepted-history or in-scope change; accepted records unchanged', p21.length === 0, p21.length ? p21.join('; ') : `WP03 ${summary(wp03)}`);
+  add('W20', 'IB0-WP04 regression (full, with both builds): every check passes except V07 (only entry points filled inside the CANDIDATE scope), V16/V17 (only accepted-history or in-scope package/path changes) and V22/V23 (re-evaluated in W21/W22)', p20.length === 0, p20.length ? p20.join('; ') : `WP04 ${summary(wp04)}`);
+  add('W21', 'IB0-WP03 regression: every check passes except the accepted V05/V08 (WP04 tsconfig change, exact), V09 (only entry points filled inside the CANDIDATE scope) and V10/V12/V17, whose findings are only accepted-history or in-scope change; accepted records unchanged', p21.length === 0, p21.length ? p21.join('; ') : `WP03 ${summary(wp03)}`);
   add('W22', 'IB0-WP02 regression: every check (toolchain, pins, lockfile provenance, install scripts, licences, controlled sources, secrets) passes except V17, whose findings are only accepted-history or in-scope change', p22.length === 0, p22.length ? p22.join('; ') : `WP02 ${summary(wp02)}`);
   add('W23', 'IB0-WP01 regression passes', p23.length === 0, p23.length ? p23.join('; ') : `WP01 ${summary(wp01)}`);
 }

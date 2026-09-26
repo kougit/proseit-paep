@@ -2,5 +2,5 @@
   "name": "@proseit/paep-platform",
   "version": "0.0.0",
   "private": true,
-  "description": "PAEP package placeholder reserved by IB0-WP01. No implementation yet."
+  "description": "PAEP platform: framework-neutral runtime configuration (IB1); other platform abstractions are IB3."
 }

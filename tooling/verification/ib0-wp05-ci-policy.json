@@ -85,6 +85,18 @@
       "name": "PAEP / regression"
     },
     {
+      "id": "contracts",
+      "name": "PAEP / contracts"
+    },
+    {
+      "id": "runtime-config",
+      "name": "PAEP / runtime-config"
+    },
+    {
+      "id": "runtime-config-negative",
+      "name": "PAEP / runtime-config-negative"
+    },
+    {
       "id": "build-reference-app",
       "name": "PAEP / build-reference-app"
     },
@@ -117,6 +129,16 @@
     ],
     "regression": [
       "node tooling/verification/verify-ib0-wp05.mjs --gate regression"
+    ],
+    "contracts": [
+      "npm run qa:contracts"
+    ],
+    "runtime-config": [
+      "npm run qa:runtime-config"
+    ],
+    "runtime-config-negative": [
+      "npm run qa:runtime-config:negative",
+      "npm run qa:runtime-config:portability"
     ],
     "build-reference-app": [
       "npm run build:reference-app",

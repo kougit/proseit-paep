@@ -1,0 +1,1195 @@
+{
+  "description": "IB1 runtime-configuration fixtures. valid/* must be accepted with the reference-app build context. Each invalid entry is either a committed file or a declared mutation (RFC 6901 set/remove) of a valid base document; expect gives the first failing stage, the first code and the full issue list [stage, code, path]. Secret-shaped, credential and byte-level cases are generated inside the tests, not committed.",
+  "buildContext": {
+    "expectedProductId": "reference-app",
+    "supportedApiContracts": [
+      "pmra-api-v1"
+    ],
+    "externalBiProviders": []
+  },
+  "valid": [
+    {
+      "file": "valid/cloud-saas.json",
+      "profile": "cloud-saas",
+      "environment": "production"
+    },
+    {
+      "file": "valid/private-cloud.json",
+      "profile": "private-cloud",
+      "environment": "staging"
+    },
+    {
+      "file": "valid/on-premise.json",
+      "profile": "on-premise",
+      "environment": "production",
+      "env": {
+        "documentBasePath": "/erp/"
+      }
+    },
+    {
+      "file": "valid/oidc.json",
+      "profile": "cloud-saas",
+      "environment": "test"
+    },
+    {
+      "file": "valid/minimal.json",
+      "profile": "cloud-saas",
+      "environment": "test"
+    },
+    {
+      "file": "valid/development-loopback.json",
+      "profile": "cloud-saas",
+      "environment": "development"
+    }
+  ],
+  "invalid": [
+    {
+      "id": "malformed-json",
+      "file": "invalid/malformed.json",
+      "expect": {
+        "stage": "parse",
+        "code": "CFG_PARSE_SYNTAX",
+        "issues": [
+          [
+            "parse",
+            "CFG_PARSE_SYNTAX",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "id": "duplicate-key-root",
+      "file": "invalid/duplicate-key-root.json",
+      "expect": {
+        "stage": "parse",
+        "code": "CFG_PARSE_DUPLICATE_KEY",
+        "issues": [
+          [
+            "parse",
+            "CFG_PARSE_DUPLICATE_KEY",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "id": "duplicate-key-nested",
+      "file": "invalid/duplicate-key-nested.json",
+      "expect": {
+        "stage": "parse",
+        "code": "CFG_PARSE_DUPLICATE_KEY",
+        "issues": [
+          [
+            "parse",
+            "CFG_PARSE_DUPLICATE_KEY",
+            "/product"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "forbidden-proto-root",
+      "file": "invalid/forbidden-proto-root.json",
+      "expect": {
+        "stage": "parse",
+        "code": "CFG_PARSE_FORBIDDEN_KEY",
+        "issues": [
+          [
+            "parse",
+            "CFG_PARSE_FORBIDDEN_KEY",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "id": "forbidden-proto-nested",
+      "file": "invalid/forbidden-proto-nested.json",
+      "expect": {
+        "stage": "parse",
+        "code": "CFG_PARSE_FORBIDDEN_KEY",
+        "issues": [
+          [
+            "parse",
+            "CFG_PARSE_FORBIDDEN_KEY",
+            "/features/uiHints"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "forbidden-constructor-root",
+      "file": "invalid/forbidden-constructor-root.json",
+      "expect": {
+        "stage": "parse",
+        "code": "CFG_PARSE_FORBIDDEN_KEY",
+        "issues": [
+          [
+            "parse",
+            "CFG_PARSE_FORBIDDEN_KEY",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "id": "forbidden-prototype-nested",
+      "file": "invalid/forbidden-prototype-nested.json",
+      "expect": {
+        "stage": "parse",
+        "code": "CFG_PARSE_FORBIDDEN_KEY",
+        "issues": [
+          [
+            "parse",
+            "CFG_PARSE_FORBIDDEN_KEY",
+            "/product"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "root-array",
+      "file": "invalid/root-array.json",
+      "expect": {
+        "stage": "parse",
+        "code": "CFG_PARSE_ROOT",
+        "issues": [
+          [
+            "parse",
+            "CFG_PARSE_ROOT",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "id": "number-overflow",
+      "file": "invalid/number-overflow.json",
+      "expect": {
+        "stage": "parse",
+        "code": "CFG_PARSE_NUMBER",
+        "issues": [
+          [
+            "parse",
+            "CFG_PARSE_NUMBER",
+            "/telemetry/sampleRate"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "missing-required-product",
+      "base": "valid/cloud-saas.json",
+      "remove": [
+        "/product"
+      ],
+      "expect": {
+        "stage": "schema",
+        "code": "CFG_SCHEMA_REQUIRED",
+        "issues": [
+          [
+            "schema",
+            "CFG_SCHEMA_REQUIRED",
+            "/product"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "missing-required-nested",
+      "base": "valid/cloud-saas.json",
+      "remove": [
+        "/deployment/basePath"
+      ],
+      "expect": {
+        "stage": "schema",
+        "code": "CFG_SCHEMA_REQUIRED",
+        "issues": [
+          [
+            "schema",
+            "CFG_SCHEMA_REQUIRED",
+            "/deployment/basePath"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "missing-schema-version",
+      "base": "valid/cloud-saas.json",
+      "remove": [
+        "/schemaVersion"
+      ],
+      "expect": {
+        "stage": "version",
+        "code": "CFG_VERSION_MISSING",
+        "issues": [
+          [
+            "version",
+            "CFG_VERSION_MISSING",
+            "/schemaVersion"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "unknown-schema-version",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/schemaVersion": "1.x"
+      },
+      "expect": {
+        "stage": "version",
+        "code": "CFG_VERSION_UNSUPPORTED",
+        "issues": [
+          [
+            "version",
+            "CFG_VERSION_UNSUPPORTED",
+            "/schemaVersion"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "future-schema-version",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/schemaVersion": "2.0"
+      },
+      "expect": {
+        "stage": "version",
+        "code": "CFG_VERSION_UNSUPPORTED",
+        "issues": [
+          [
+            "version",
+            "CFG_VERSION_UNSUPPORTED",
+            "/schemaVersion"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "older-schema-version",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/schemaVersion": "0.9"
+      },
+      "expect": {
+        "stage": "version",
+        "code": "CFG_VERSION_UNSUPPORTED",
+        "issues": [
+          [
+            "version",
+            "CFG_VERSION_UNSUPPORTED",
+            "/schemaVersion"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "numeric-schema-version",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/schemaVersion": 1
+      },
+      "expect": {
+        "stage": "version",
+        "code": "CFG_VERSION_UNSUPPORTED",
+        "issues": [
+          [
+            "version",
+            "CFG_VERSION_UNSUPPORTED",
+            "/schemaVersion"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "paep-minimum-too-new",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/backend/compatibility/minimumPaep": "2.0"
+      },
+      "expect": {
+        "stage": "compatibility",
+        "code": "CFG_COMPAT_PAEP",
+        "issues": [
+          [
+            "compatibility",
+            "CFG_COMPAT_PAEP",
+            "/backend/compatibility/minimumPaep"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "paep-maximum-too-old",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/backend/compatibility/minimumPaep": "1.0",
+        "/backend/compatibility/maximumPaep": "1.0"
+      },
+      "expect": {
+        "stage": "compatibility",
+        "code": "CFG_COMPAT_PAEP",
+        "issues": [
+          [
+            "compatibility",
+            "CFG_COMPAT_PAEP",
+            "/backend/compatibility/maximumPaep"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "paep-range-inverted",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/backend/compatibility/minimumPaep": "1.1",
+        "/backend/compatibility/maximumPaep": "1.0"
+      },
+      "expect": {
+        "stage": "semantic",
+        "code": "CFG_PAEP_RANGE",
+        "issues": [
+          [
+            "semantic",
+            "CFG_PAEP_RANGE",
+            "/backend/compatibility/maximumPaep"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "unsupported-api-contract",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/backend/compatibility/apiContract": "other-api-v2"
+      },
+      "expect": {
+        "stage": "compatibility",
+        "code": "CFG_COMPAT_API_CONTRACT",
+        "issues": [
+          [
+            "compatibility",
+            "CFG_COMPAT_API_CONTRACT",
+            "/backend/compatibility/apiContract"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "product-substitution",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/product/id": "other-product"
+      },
+      "expect": {
+        "stage": "compatibility",
+        "code": "CFG_COMPAT_PRODUCT",
+        "issues": [
+          [
+            "compatibility",
+            "CFG_COMPAT_PRODUCT",
+            "/product/id"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wrong-property-type",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/telemetry/enabled": "yes"
+      },
+      "expect": {
+        "stage": "schema",
+        "code": "CFG_SCHEMA_TYPE",
+        "issues": [
+          [
+            "schema",
+            "CFG_SCHEMA_TYPE",
+            "/telemetry/enabled"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "unexpected-property-root",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/featureFlags": {
+          "beta": true
+        }
+      },
+      "expect": {
+        "stage": "schema",
+        "code": "CFG_SCHEMA_ADDITIONAL",
+        "issues": [
+          [
+            "schema",
+            "CFG_SCHEMA_ADDITIONAL",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "id": "unexpected-property-nested",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/pwa/cacheStrategy": "aggressive"
+      },
+      "expect": {
+        "stage": "schema",
+        "code": "CFG_SCHEMA_ADDITIONAL",
+        "issues": [
+          [
+            "schema",
+            "CFG_SCHEMA_ADDITIONAL",
+            "/pwa"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "case-variant-key",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/Product": {
+          "id": "other-product",
+          "name": "Substitute",
+          "release": "9.9.9"
+        }
+      },
+      "expect": {
+        "stage": "schema",
+        "code": "CFG_SCHEMA_ADDITIONAL",
+        "issues": [
+          [
+            "schema",
+            "CFG_SCHEMA_ADDITIONAL",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "id": "invalid-url",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/backend/apiBaseUrl": "not a url"
+      },
+      "expect": {
+        "stage": "schema",
+        "code": "CFG_SCHEMA_PATTERN",
+        "issues": [
+          [
+            "schema",
+            "CFG_SCHEMA_PATTERN",
+            "/backend/apiBaseUrl"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "url-scheme-javascript",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/backend/apiBaseUrl": "javascript:alert(1)"
+      },
+      "expect": {
+        "stage": "content",
+        "code": "CFG_CONTENT_MARKUP",
+        "issues": [
+          [
+            "content",
+            "CFG_CONTENT_MARKUP",
+            "/backend/apiBaseUrl"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "url-scheme-data",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/backend/apiBaseUrl": "data:text/plain,hello"
+      },
+      "expect": {
+        "stage": "content",
+        "code": "CFG_CONTENT_MARKUP",
+        "issues": [
+          [
+            "content",
+            "CFG_CONTENT_MARKUP",
+            "/backend/apiBaseUrl"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "url-scheme-file",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/backend/fileBaseUrl": "file:///srv/files"
+      },
+      "expect": {
+        "stage": "schema",
+        "code": "CFG_SCHEMA_PATTERN",
+        "issues": [
+          [
+            "schema",
+            "CFG_SCHEMA_PATTERN",
+            "/backend/fileBaseUrl"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "url-scheme-ftp",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/backend/fileBaseUrl": "ftp://files.example.test/pub"
+      },
+      "expect": {
+        "stage": "content",
+        "code": "CFG_CONTENT_DATA_ACCESS",
+        "issues": [
+          [
+            "content",
+            "CFG_CONTENT_DATA_ACCESS",
+            "/backend/fileBaseUrl"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "url-scheme-ws",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/backend/realtimeUrl": "ws://realtime.example.test/socket"
+      },
+      "expect": {
+        "stage": "schema",
+        "code": "CFG_SCHEMA_PATTERN",
+        "issues": [
+          [
+            "schema",
+            "CFG_SCHEMA_PATTERN",
+            "/backend/realtimeUrl"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "url-http-non-loopback",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/backend/apiBaseUrl": "http://api.example.test"
+      },
+      "expect": {
+        "stage": "schema",
+        "code": "CFG_SCHEMA_PATTERN",
+        "issues": [
+          [
+            "schema",
+            "CFG_SCHEMA_PATTERN",
+            "/backend/apiBaseUrl"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "url-http-loopback-production",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/backend/apiBaseUrl": "http://localhost:8000"
+      },
+      "expect": {
+        "stage": "semantic",
+        "code": "CFG_URL_INSECURE",
+        "issues": [
+          [
+            "semantic",
+            "CFG_URL_INSECURE",
+            "/backend/apiBaseUrl"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "url-https-loopback-production",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/backend/apiBaseUrl": "https://localhost:8443"
+      },
+      "expect": {
+        "stage": "semantic",
+        "code": "CFG_URL_HOST",
+        "issues": [
+          [
+            "semantic",
+            "CFG_URL_HOST",
+            "/backend/apiBaseUrl"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "url-private-ip-staging",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/deployment/environment": "staging",
+        "/telemetry/endpoint": "https://10.1.2.3"
+      },
+      "expect": {
+        "stage": "semantic",
+        "code": "CFG_URL_HOST",
+        "issues": [
+          [
+            "semantic",
+            "CFG_URL_HOST",
+            "/telemetry/endpoint"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "url-userinfo",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/backend/apiBaseUrl": "https://u:p@api.example.test"
+      },
+      "expect": {
+        "stage": "content",
+        "code": "CFG_CONTENT_SECRET",
+        "issues": [
+          [
+            "content",
+            "CFG_CONTENT_SECRET",
+            "/backend/apiBaseUrl"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "url-query-token",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/backend/apiBaseUrl": "https://api.example.test/?token=abc"
+      },
+      "expect": {
+        "stage": "content",
+        "code": "CFG_CONTENT_SECRET",
+        "issues": [
+          [
+            "content",
+            "CFG_CONTENT_SECRET",
+            "/backend/apiBaseUrl"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "unknown-deployment-profile",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/deployment/profile": "hybrid-edge"
+      },
+      "expect": {
+        "stage": "schema",
+        "code": "CFG_SCHEMA_ENUM",
+        "issues": [
+          [
+            "schema",
+            "CFG_SCHEMA_ENUM",
+            "/deployment/profile"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "unknown-environment",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/deployment/environment": "qa-lab"
+      },
+      "expect": {
+        "stage": "schema",
+        "code": "CFG_SCHEMA_ENUM",
+        "issues": [
+          [
+            "schema",
+            "CFG_SCHEMA_ENUM",
+            "/deployment/environment"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "script-tag",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/product/name": "<script>run()</script>"
+      },
+      "expect": {
+        "stage": "content",
+        "code": "CFG_CONTENT_MARKUP",
+        "issues": [
+          [
+            "content",
+            "CFG_CONTENT_MARKUP",
+            "/product/name"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "script-javascript-text",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/product/name": "javascript:void(0)"
+      },
+      "expect": {
+        "stage": "content",
+        "code": "CFG_CONTENT_MARKUP",
+        "issues": [
+          [
+            "content",
+            "CFG_CONTENT_MARKUP",
+            "/product/name"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "script-event-handler",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/product/name": "x onload=run()"
+      },
+      "expect": {
+        "stage": "content",
+        "code": "CFG_CONTENT_MARKUP",
+        "issues": [
+          [
+            "content",
+            "CFG_CONTENT_MARKUP",
+            "/product/name"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "script-template-braces",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/product/name": "Hello {{user}}"
+      },
+      "expect": {
+        "stage": "content",
+        "code": "CFG_CONTENT_MARKUP",
+        "issues": [
+          [
+            "content",
+            "CFG_CONTENT_MARKUP",
+            "/product/name"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "script-template-literal",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/product/name": "Hello ${user}"
+      },
+      "expect": {
+        "stage": "content",
+        "code": "CFG_CONTENT_MARKUP",
+        "issues": [
+          [
+            "content",
+            "CFG_CONTENT_MARKUP",
+            "/product/name"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "locale-underscore",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/localisation/supportedLocales": [
+          "en",
+          "en_US"
+        ]
+      },
+      "expect": {
+        "stage": "schema",
+        "code": "CFG_SCHEMA_PATTERN",
+        "issues": [
+          [
+            "schema",
+            "CFG_SCHEMA_PATTERN",
+            "/localisation/supportedLocales/1"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "locale-default-unsupported",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/localisation/defaultLocale": "de"
+      },
+      "expect": {
+        "stage": "semantic",
+        "code": "CFG_LOCALE_DEFAULT",
+        "issues": [
+          [
+            "semantic",
+            "CFG_LOCALE_DEFAULT",
+            "/localisation/defaultLocale"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "locale-rtl-unsupported",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/localisation/rtlLocales": [
+          "he"
+        ]
+      },
+      "expect": {
+        "stage": "semantic",
+        "code": "CFG_LOCALE_RTL",
+        "issues": [
+          [
+            "semantic",
+            "CFG_LOCALE_RTL",
+            "/localisation/rtlLocales/0"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "locale-duplicate",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/localisation/supportedLocales": [
+          "en",
+          "fr",
+          "en"
+        ]
+      },
+      "expect": {
+        "stage": "schema",
+        "code": "CFG_SCHEMA_UNIQUE",
+        "issues": [
+          [
+            "schema",
+            "CFG_SCHEMA_UNIQUE",
+            "/localisation/supportedLocales/2"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "schema-substitution-root",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/$schema": "https://evil.example.test/schema.json"
+      },
+      "expect": {
+        "stage": "content",
+        "code": "CFG_CONTENT_KEY",
+        "issues": [
+          [
+            "content",
+            "CFG_CONTENT_KEY",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "id": "schema-substitution-ref",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/product/$ref": "#/$defs/any"
+      },
+      "expect": {
+        "stage": "content",
+        "code": "CFG_CONTENT_KEY",
+        "issues": [
+          [
+            "content",
+            "CFG_CONTENT_KEY",
+            "/product"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "schema-substitution-id",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/$id": "https://evil.example.test/other.json"
+      },
+      "expect": {
+        "stage": "content",
+        "code": "CFG_CONTENT_KEY",
+        "issues": [
+          [
+            "content",
+            "CFG_CONTENT_KEY",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "id": "oidc-without-issuer",
+      "base": "valid/oidc.json",
+      "remove": [
+        "/identity/issuer"
+      ],
+      "expect": {
+        "stage": "semantic",
+        "code": "CFG_IDENTITY_OIDC",
+        "issues": [
+          [
+            "semantic",
+            "CFG_IDENTITY_OIDC",
+            "/identity/issuer"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "oidc-without-openid-scope",
+      "base": "valid/oidc.json",
+      "set": {
+        "/identity/scopes": [
+          "profile"
+        ]
+      },
+      "expect": {
+        "stage": "semantic",
+        "code": "CFG_IDENTITY_OIDC",
+        "issues": [
+          [
+            "semantic",
+            "CFG_IDENTITY_OIDC",
+            "/identity/scopes"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "session-with-client-id",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/identity/clientId": "stray-client"
+      },
+      "expect": {
+        "stage": "semantic",
+        "code": "CFG_IDENTITY_UNEXPECTED",
+        "issues": [
+          [
+            "semantic",
+            "CFG_IDENTITY_UNEXPECTED",
+            "/identity/clientId"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "telemetry-without-endpoint",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/telemetry/endpoint": null
+      },
+      "expect": {
+        "stage": "semantic",
+        "code": "CFG_TELEMETRY_ENDPOINT",
+        "issues": [
+          [
+            "semantic",
+            "CFG_TELEMETRY_ENDPOINT",
+            "/telemetry/endpoint"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "analytics-without-reporting-url",
+      "base": "valid/cloud-saas.json",
+      "remove": [
+        "/analytics/reportingBaseUrl"
+      ],
+      "expect": {
+        "stage": "semantic",
+        "code": "CFG_ANALYTICS_ENDPOINT",
+        "issues": [
+          [
+            "semantic",
+            "CFG_ANALYTICS_ENDPOINT",
+            "/analytics/reportingBaseUrl"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "embedded-bi-without-provider-adapter",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/analytics/embeddedBi": {
+          "enabled": true,
+          "provider": "power-bi"
+        }
+      },
+      "expect": {
+        "stage": "semantic",
+        "code": "CFG_EMBEDDED_BI",
+        "issues": [
+          [
+            "semantic",
+            "CFG_EMBEDDED_BI",
+            "/analytics/embeddedBi"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "pwa-enabled-without-profile",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/pwa/offlineProfile": "none"
+      },
+      "expect": {
+        "stage": "semantic",
+        "code": "CFG_PWA_PROFILE",
+        "issues": [
+          [
+            "semantic",
+            "CFG_PWA_PROFILE",
+            "/pwa/offlineProfile"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "production-without-security",
+      "base": "valid/cloud-saas.json",
+      "remove": [
+        "/security"
+      ],
+      "expect": {
+        "stage": "semantic",
+        "code": "CFG_SECURITY_PROFILE",
+        "issues": [
+          [
+            "semantic",
+            "CFG_SECURITY_PROFILE",
+            "/security"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "trusted-types-default-policy",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/security/trustedTypesPolicyName": "default"
+      },
+      "expect": {
+        "stage": "semantic",
+        "code": "CFG_SECURITY_PROFILE",
+        "issues": [
+          [
+            "semantic",
+            "CFG_SECURITY_PROFILE",
+            "/security/trustedTypesPolicyName"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "base-path-mismatch",
+      "base": "valid/on-premise.json",
+      "env": {
+        "documentBasePath": "/"
+      },
+      "expect": {
+        "stage": "semantic",
+        "code": "CFG_BASE_PATH",
+        "issues": [
+          [
+            "semantic",
+            "CFG_BASE_PATH",
+            "/deployment/basePath"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "ui-hint-string-value",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/features/uiHints/darkMode": "true"
+      },
+      "expect": {
+        "stage": "schema",
+        "code": "CFG_SCHEMA_TYPE",
+        "issues": [
+          [
+            "schema",
+            "CFG_SCHEMA_TYPE",
+            "/features/uiHints/darkMode"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "ui-hint-bad-name",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/features/uiHints/Dark-Mode": true
+      },
+      "expect": {
+        "stage": "schema",
+        "code": "CFG_SCHEMA_PROPERTY_NAME",
+        "issues": [
+          [
+            "schema",
+            "CFG_SCHEMA_PROPERTY_NAME",
+            "/features/uiHints"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sample-rate-out-of-range",
+      "base": "valid/cloud-saas.json",
+      "set": {
+        "/telemetry/sampleRate": 1.5
+      },
+      "expect": {
+        "stage": "schema",
+        "code": "CFG_SCHEMA_RANGE",
+        "issues": [
+          [
+            "schema",
+            "CFG_SCHEMA_RANGE",
+            "/telemetry/sampleRate"
+          ]
+        ]
+      }
+    }
+  ]
+}

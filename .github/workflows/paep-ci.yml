@@ -1,4 +1,4 @@
-# PAEP CI - IB0-WP05 automated quality gates.
+# PAEP CI - IB0-WP05 automated quality gates, extended by IB1 (contracts and runtime configuration).
 # Design: docs/architecture/IB0-WP05-CI-DESIGN.md. Policy checked by
 # tooling/verification/verify-ib0-wp05.mjs against tooling/verification/ib0-wp05-ci-policy.json.
 # Security rules: pull_request only (never pull_request_target), read-only token,
@@ -234,6 +234,95 @@ jobs:
           if-no-files-found: warn
           retention-days: 30
 
+  contracts:
+    name: PAEP / contracts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out (full history for baseline comparisons)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: PAEP setup
+        uses: ./.github/actions/paep-setup
+
+      - name: IB1 contracts - independent compile, public API, neutrality and test doubles (qa:contracts)
+        run: |
+          set -euo pipefail
+          npm run qa:contracts 2>&1 | tee "$PAEP_EVIDENCE_DIR/contracts-1.log"
+
+      - name: Upload evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: paep-contracts-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/paep-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
+  runtime-config:
+    name: PAEP / runtime-config
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out (full history for baseline comparisons)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: PAEP setup
+        uses: ./.github/actions/paep-setup
+
+      - name: IB1 runtime configuration - schema, generated validator, positive and negative tests (qa:runtime-config)
+        run: |
+          set -euo pipefail
+          npm run qa:runtime-config 2>&1 | tee "$PAEP_EVIDENCE_DIR/runtime-config-1.log"
+
+      - name: Upload evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: paep-runtime-config-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/paep-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
+  runtime-config-negative:
+    name: PAEP / runtime-config-negative
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Check out (full history for baseline comparisons)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: PAEP setup
+        uses: ./.github/actions/paep-setup
+
+      - name: IB1 runtime-config mutation tests (qa:runtime-config:negative)
+        run: |
+          set -euo pipefail
+          npm run qa:runtime-config:negative 2>&1 | tee "$PAEP_EVIDENCE_DIR/runtime-config-negative-1.log"
+
+      - name: IB1 same-build portability and fail-safe startup proof (qa:runtime-config:portability)
+        run: |
+          set -euo pipefail
+          npm run qa:runtime-config:portability 2>&1 | tee "$PAEP_EVIDENCE_DIR/runtime-config-negative-2.log"
+
+      - name: Upload evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: paep-runtime-config-negative-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/paep-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
   build-reference-app:
     name: PAEP / build-reference-app
     runs-on: ubuntu-24.04
@@ -311,6 +400,9 @@ jobs:
       - negative-architecture
       - negative-ci
       - regression
+      - contracts
+      - runtime-config
+      - runtime-config-negative
       - build-reference-app
       - build-ui-lab
     runs-on: ubuntu-24.04
@@ -320,7 +412,7 @@ jobs:
       - name: Evaluate every mandatory job result
         env:
           NEEDS_JSON: ${{ toJSON(needs) }}
-          MANDATORY_JOBS: governance provenance architecture strictness negative-architecture negative-ci regression build-reference-app build-ui-lab
+          MANDATORY_JOBS: governance provenance architecture strictness negative-architecture negative-ci regression contracts runtime-config runtime-config-negative build-reference-app build-ui-lab
         run: |
           set -euo pipefail
           fail=0

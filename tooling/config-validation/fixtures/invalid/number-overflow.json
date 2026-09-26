@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "1.0",
+  "product": {
+    "id": "reference-app",
+    "name": "PAEP Reference Application",
+    "release": "1.2.0",
+    "brandProfile": "proseit-default"
+  },
+  "deployment": {
+    "environment": "production",
+    "profile": "cloud-saas",
+    "basePath": "/"
+  },
+  "backend": {
+    "apiBaseUrl": "https://api.saas.example.test",
+    "realtimeUrl": "https://realtime.saas.example.test",
+    "fileBaseUrl": "https://files.saas.example.test",
+    "compatibility": {
+      "apiContract": "pmra-api-v1",
+      "minimumPaep": "1.1",
+      "maximumPaep": null
+    }
+  },
+  "identity": {
+    "mode": "frappe-session",
+    "issuer": null,
+    "clientId": null,
+    "scopes": []
+  },
+  "localisation": {
+    "defaultLocale": "en",
+    "supportedLocales": [
+      "en",
+      "fr",
+      "ar"
+    ],
+    "rtlLocales": [
+      "ar"
+    ]
+  },
+  "features": {
+    "capabilityDiscovery": "server",
+    "uiHints": {
+      "commandPalette": true
+    }
+  },
+  "telemetry": {
+    "enabled": true,
+    "endpoint": "https://telemetry.saas.example.test",
+    "sampleRate": 1e400
+  },
+  "analytics": {
+    "enabled": true,
+    "reportingBaseUrl": "https://reports.saas.example.test",
+    "embeddedBi": {
+      "enabled": false
+    }
+  },
+  "pwa": {
+    "enabled": true,
+    "offlineProfile": "drafts-only"
+  },
+  "security": {
+    "trustedTypesPolicyName": "paep",
+    "cspProfile": "strict"
+  }
+}

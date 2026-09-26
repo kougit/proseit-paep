@@ -127,7 +127,7 @@
       "workPackages": [
         "IB1-PREFLIGHT-R7"
       ],
-      "status": "CANDIDATE",
+      "status": "ACCEPTED",
       "predecessorGeneration": 1,
       "authorisation": {
         "authority": "Product Owner / Solutions Architect",
@@ -150,10 +150,41 @@
         "evidence/IB1-PREFLIGHT-R7/",
         "work-packages/IB1-PREFLIGHT-R7/"
       ],
-      "acceptedCommit": null,
-      "acceptedTree": null,
-      "acceptance": null,
-      "fingerprints": null,
+      "acceptedCommit": "e7958687ecaeb859e09311d1e91688a347bfee11",
+      "acceptedTree": "6801f87b3cce9b199f1c0cbdfadd0ffd1798f3e2",
+      "acceptance": {
+        "authority": "Product Owner / Solutions Architect",
+        "date": "2026-09-26",
+        "evidence": [
+          {
+            "path": "work-packages/IB1-PREFLIGHT-R7/work-package.json",
+            "blob": "168437bc923e6668b84a386994d8572a9fde40e2"
+          }
+        ]
+      },
+      "fingerprints": {
+        ".github/": "867b0157485208b3de4e915278b52085d97a80ba",
+        ".gitignore": "14dd79e40e46517f3ab496db8bfb33e0686650eb",
+        ".npmrc": "3cefa3035c08b733cde4e55a5115bd76afdbd23b",
+        ".nvmrc": "df6ae3370f9f89272d88629c442cf554d6c1f9fb",
+        ".paep-control/": "6ccb81c274dfef6140f8e2bc5e6fb2567a2c1527",
+        "CLAUDE.md": "904ef5251fb50305f070d01c41d5458f12036a8b",
+        "PACK_MANIFEST.json": "65d82fb7f4545d3966c6893c782053662fbee77f",
+        "angular.json": "3168f90e58302a0eaa8e39ef6dcdb98a782cfd2d",
+        "docs/adr/": "27fb8368e3c92da3bd6c3602affe478d58ccb50b",
+        "docs/architecture/toolchain-version-manifest.json": "9a46471d931db5dd9529d035999968fa160cd793",
+        "docs/licences/": "8db3de3734052fed8837a1331ced89cf902f8936",
+        "docs/provenance/": "efe9cc79b670a107993aff7e57c364e325207fc5",
+        "evidence/IB1-PREFLIGHT-R7/": "6c4f9618ec4c8590f60a19d7b675fdea87677377",
+        "package-lock.json": "9e38a0292e13e15a57d873992ba3921d0e1d8b85",
+        "package.json": "5e6df2a9552dfc4e86736f53452b4dea878aaf13",
+        "tooling/architecture-boundaries/": "5d7d3191a9be8ae5c2ff7d11505a286b322c3b21",
+        "tooling/governance/": "12c5aaec5f021aa845a24a071163664837551acf",
+        "tooling/verification/": "c58064cc0e6028fe5523657072a217ad6c6789ee",
+        "tsconfig.base.json": "994bb1f7acef2319532afe8bb25aa7d3b970c774",
+        "tsconfig.json": "4d88b1ae7992a7335ed3156f2f870f6d2de6d43a",
+        "work-packages/IB1-PREFLIGHT-R7/": "d777fe30658eb5fd76869c52f925bd0b3d88a537"
+      },
       "notes": "CANDIDATE only. Prepared by Claude Code under the PO/SA authorisation of the IB1 pre-flight R7 remediation. It becomes ACCEPTED only through the promote command after PO/SA acceptance and merge (docs/architecture/BASELINE-ROLLOVER.md). policyChange is true because this generation bootstraps the registry."
     }
   ]

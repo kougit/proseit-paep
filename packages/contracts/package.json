@@ -2,5 +2,5 @@
   "name": "@proseit/paep-contracts",
   "version": "0.0.0",
   "private": true,
-  "description": "PAEP package placeholder reserved by IB0-WP01. No implementation yet."
+  "description": "Framework-neutral, type-only PAEP contracts (IB1)."
 }

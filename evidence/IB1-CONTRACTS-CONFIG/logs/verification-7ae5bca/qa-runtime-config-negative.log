@@ -1,0 +1,48 @@
+
+> @proseit/paep-workspace@0.0.0 qa:runtime-config:negative
+> node tooling/config-validation/negative-runtime-config.mjs
+
+PASS M00-control-noop: CONTROL PASS (0 failing of 187)
+PASS M01-no-duplicate-key-check: KILLED (3 failing of 187) e.g. N-fixture duplicate-key-root -> parse/CFG_PARSE_DUPLICATE_KEY | N-fixture duplicate-key-nested -> parse/CFG_PARSE_DUPLICATE_KEY
+PASS M02-no-forbidden-key-check: KILLED (4 failing of 187) e.g. N-fixture forbidden-proto-root -> parse/CFG_PARSE_FORBIDDEN_KEY | N-fixture forbidden-proto-nested -> parse/CFG_PARSE_FORBIDDEN_KEY
+PASS M03-no-depth-limit: KILLED (1 failing of 187) e.g. N-generated nesting deeper than 8 levels -> parse/CFG_PARSE_DEPTH
+PASS M04-depth-limit-off-by-one: KILLED (1 failing of 187) e.g. N-generated nesting deeper than 8 levels -> parse/CFG_PARSE_DEPTH
+PASS M05-accept-non-finite-numbers: KILLED (2 failing of 187) e.g. N-fixture number-overflow -> parse/CFG_PARSE_NUMBER | N-generated number overflow 1e400 -> parse/CFG_PARSE_NUMBER
+PASS M06-accept-bom: KILLED (1 failing of 187) e.g. N-generated BOM prefix bytes -> decode/CFG_DECODE_BOM
+PASS M07-accept-overlong-and-surrogates: KILLED (1 failing of 187) e.g. N-generated UTF-8 encoded surrogate (ED A0 80) -> decode/CFG_DECODE_UTF8
+PASS M08-accept-any-schema-version: KILLED (4 failing of 187) e.g. S-invalid: an invalid configuration reaches onFailure only | N-fixture unknown-schema-version -> version/CFG_VERSION_UNSUPPORTED
+PASS M09-no-size-limit: KILLED (2 failing of 187) e.g. L-fail: an oversize body with a false content-length is still rejected | N-generated oversize document (> 64 KiB) -> load/CFG_LOAD_TOO_LARGE
+PASS M10-unbounded-issue-list: KILLED (1 failing of 187) e.g. N-issues: findings are bounded to 20 and never include values
+PASS M11-no-secret-value-patterns: KILLED (13 failing of 187) e.g. N-fixture url-userinfo -> content/CFG_CONTENT_SECRET | N-fixture url-query-token -> content/CFG_CONTENT_SECRET
+PASS M12-no-secret-key-names: KILLED (12 failing of 187) e.g. N-generated secret key "clientSecret" at root -> content/CFG_CONTENT_SECRET | N-generated secret key "clientSecret" in uiHints -> content/CFG_CONTENT_SECRET
+PASS M13-no-markup-check: KILLED (7 failing of 187) e.g. N-fixture url-scheme-javascript -> content/CFG_CONTENT_MARKUP | N-fixture url-scheme-data -> content/CFG_CONTENT_MARKUP
+PASS M14-no-data-access-value-check: KILLED (9 failing of 187) e.g. N-fixture url-scheme-ftp -> content/CFG_CONTENT_DATA_ACCESS | N-generated DB locator postgres:// in apiBaseUrl -> content/CFG_CONTENT_DATA_ACCESS
+PASS M15-no-unsafe-text-check: KILLED (4 failing of 187) e.g. N-generated NUL via \u0000 escape in product.name -> content/CFG_CONTENT_TEXT | N-generated U+202E right-to-left override in product.name -> content/CFG_CONTENT_TEXT
+PASS M16-no-dollar-key-check: KILLED (3 failing of 187) e.g. N-fixture schema-substitution-root -> content/CFG_CONTENT_KEY | N-fixture schema-substitution-ref -> content/CFG_CONTENT_KEY
+PASS M17-schema-additionalProperties-removed: KILLED (3 failing of 187) e.g. N-fixture unexpected-property-root -> schema/CFG_SCHEMA_ADDITIONAL | N-fixture unexpected-property-nested -> schema/CFG_SCHEMA_ADDITIONAL
+PASS M18-schema-patterns-removed: KILLED (10 failing of 187) e.g. N-fixture invalid-url -> schema/CFG_SCHEMA_PATTERN | N-fixture url-scheme-file -> schema/CFG_SCHEMA_PATTERN
+PASS M19-no-insecure-url-check: KILLED (1 failing of 187) e.g. N-fixture url-http-loopback-production -> semantic/CFG_URL_INSECURE
+PASS M20-no-punycode-host-check: KILLED (1 failing of 187) e.g. N-generated punycode (xn--) host -> semantic/CFG_URL_HOST
+PASS M21-no-base-path-check: KILLED (2 failing of 187) e.g. L-base-path: the document base path is enforced by the loader | N-fixture base-path-mismatch -> semantic/CFG_BASE_PATH
+PASS M22-no-paep-range-order-check: KILLED (1 failing of 187) e.g. N-fixture paep-range-inverted -> semantic/CFG_PAEP_RANGE
+PASS M23-no-production-security-check: KILLED (1 failing of 187) e.g. N-fixture production-without-security -> semantic/CFG_SECURITY_PROFILE
+PASS M24-no-minimum-paep-check: KILLED (1 failing of 187) e.g. N-fixture paep-minimum-too-new -> compatibility/CFG_COMPAT_PAEP
+PASS M25-no-maximum-paep-check: KILLED (1 failing of 187) e.g. N-fixture paep-maximum-too-old -> compatibility/CFG_COMPAT_PAEP
+PASS M26-no-product-id-check: KILLED (2 failing of 187) e.g. N-fixture product-substitution -> compatibility/CFG_COMPAT_PRODUCT | N-context: a configuration is not accepted by a build for another product or API contract
+PASS M27-deep-freeze-noop: KILLED (163 failing of 187) e.g. L-ok: a valid same-origin JSON response loads; the request is GET, no-store, same-origin, no redirects | L-fail network rejection -> CFG_LOAD_NETWORK, never throws
+PASS M28-startup-catch-returns-ok: KILLED (4 failing of 187) e.g. S-fail-open: load rejects -> CFG_INTERNAL failure, onReady never called | S-fail-open: a forged unfrozen {ok:true} outcome is treated as CFG_INTERNAL
+PASS M29-startup-onReady-on-failure: KILLED (5 failing of 187) e.g. S-invalid: an invalid configuration reaches onFailure only | S-fail-open: load rejects -> CFG_INTERNAL failure, onReady never called
+PASS M30-startup-accepts-unvalidated-outcome: KILLED (2 failing of 187) e.g. S-fail-open: a forged unfrozen {ok:true} outcome is treated as CFG_INTERNAL | S-fail-open: a forged deep-frozen {ok:true} outcome not produced by the validator is treated as CFG_INTERNAL
+PASS M31-startup-latch-removed: KILLED (2 failing of 187) e.g. S-replace: a second start after success is refused (CFG_STARTUP_REPEATED); onReady is not called again | S-replace: a second start after a failure is also refused
+PASS M32-loader-no-redirect-check: KILLED (2 failing of 187) e.g. L-fail redirected response -> CFG_LOAD_REDIRECT, never throws | L-fail response.url differs from the requested URL -> CFG_LOAD_REDIRECT, never throws
+PASS M33-loader-no-content-type-check: KILLED (2 failing of 187) e.g. L-fail text/html content type (SPA fallback) -> CFG_LOAD_CONTENT_TYPE, never throws | L-fail missing content type -> CFG_LOAD_CONTENT_TYPE, never throws
+PASS M34-loader-no-declared-length-check: KILLED (1 failing of 187) e.g. L-fail declared content-length too large -> CFG_LOAD_TOO_LARGE, never throws
+PASS M35-loader-no-status-check: KILLED (3 failing of 187) e.g. L-fail HTTP 404 -> CFG_LOAD_STATUS, never throws | L-fail HTTP 500 -> CFG_LOAD_STATUS, never throws
+PASS M36-numeric-host-check-removed: KILLED (6 failing of 187) e.g. N-generated non-canonical numeric host https://127.1 in production -> semantic/CFG_URL_HOST | N-generated non-canonical numeric host https://0177.0.0.1 in production -> semantic/CFG_URL_HOST
+PASS M37-private-name-check-removed: KILLED (3 failing of 187) e.g. N-generated private host https://api.internal in staging -> semantic/CFG_URL_HOST | N-generated private host https://intranet in staging -> semantic/CFG_URL_HOST
+PASS M38-issue-path-redaction-removed: KILLED (4 failing of 187) e.g. N-fixture ui-hint-string-value -> schema/CFG_SCHEMA_TYPE | N-generated nesting deeper than 8 levels -> parse/CFG_PARSE_DEPTH
+PASS M39-build-context-check-removed: KILLED (2 failing of 187) e.g. N-generated empty document -> load/CFG_LOAD_EMPTY | N-context: a malformed build context fails closed as CFG_INTERNAL
+PASS M40-secret-shaped-key-check-removed: KILLED (1 failing of 187) e.g. N-generated secret-shaped unknown key holding markup is reported at its schema parent -> content/CFG_CONTENT_SECRET
+
+qa:runtime-config:negative PASS: 40/40 mutations killed, 0 survived, control passed, 0 harness error(s)
+EXIT_CODE=0

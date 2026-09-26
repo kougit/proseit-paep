@@ -1,0 +1,31 @@
+
+> @proseit/paep-workspace@0.0.0 qa:runtime-config
+> node tooling/config-validation/runtime-config-qa.mjs
+
+PASS G1 generated validator is up to date (generate-validator --check)
+PASS G2 drift detection: a modified schema makes --check fail
+PASS G3 generator output for the committed schema equals the committed validator
+PASS G4 generator refuses: format keyword
+PASS G4 generator refuses: oneOf keyword
+PASS G4 generator refuses: patternProperties keyword
+PASS G4 generator refuses: anyOf keyword
+PASS G4 generator refuses: missing additionalProperties
+PASS G4 generator refuses: additionalProperties true
+PASS G4 generator refuses: external $ref
+PASS G4 generator refuses: unanchored pattern
+PASS G4 generator refuses: partly anchored pattern
+PASS G4 generator refuses: array without items
+PASS G4 generator refuses: wrong $schema draft
+PASS C1 platform compiles with lib ES2022 only, types [] and strict (no DOM dependency)
+PASS T1 generated RUNTIME_CONFIG_SCHEMA_SHA256 equals sha256(config/runtime-config.schema.json)
+PASS T2 compiled platform exports the same schema sha256
+PASS S1 node:test suite: 187/187 passed
+PASS S2 no skipped, todo or cancelled tests
+PASS S3 test files are exactly the declared files
+PASS S4 runtime-config-positive.test.mjs: 20/20 passed
+PASS S4 runtime-config-negative.test.mjs: 143/143 passed
+PASS S4 runtime-config-loader-startup.test.mjs: 24/24 passed
+PASS V1 validate-configs: 15/15 checks passed
+
+qa:runtime-config PASS: 24/24 checks; tests 187 passed, 0 failed, 0 skipped, 0 todo of 187 expected
+EXIT_CODE=0

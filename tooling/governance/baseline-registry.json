@@ -186,6 +186,53 @@
         "work-packages/IB1-PREFLIGHT-R7/": "d777fe30658eb5fd76869c52f925bd0b3d88a537"
       },
       "notes": "CANDIDATE only. Prepared by Claude Code under the PO/SA authorisation of the IB1 pre-flight R7 remediation. It becomes ACCEPTED only through the promote command after PO/SA acceptance and merge (docs/architecture/BASELINE-ROLLOVER.md). policyChange is true because this generation bootstraps the registry."
+    },
+    {
+      "generation": 3,
+      "name": "IB1 product-neutral contracts and runtime configuration",
+      "milestone": "IB1",
+      "workPackages": [
+        "IB1-CONTRACTS-CONFIG"
+      ],
+      "status": "CANDIDATE",
+      "predecessorGeneration": 2,
+      "authorisation": {
+        "authority": "Product Owner / Solutions Architect",
+        "date": "2026-09-26",
+        "reference": "work-packages/IB1-CONTRACTS-CONFIG/WORK_PACKAGE.md"
+      },
+      "policyChange": true,
+      "authorisedScope": [
+        ".github/workflows/paep-ci.yml",
+        "apps/reference-app/public/config/",
+        "apps/reference-app/src/app/runtime-config.ts",
+        "apps/reference-app/src/main.ts",
+        "config/README.md",
+        "config/runtime-config.example.json",
+        "config/runtime-config.schema.json",
+        "docs/architecture/IB1-CONTRACTS-CONFIG-DESIGN.md",
+        "docs/architecture/RUNTIME-CONFIGURATION-GUIDE.md",
+        "evidence/IB1-CONTRACTS-CONFIG/",
+        "package.json",
+        "packages/contracts/",
+        "packages/platform/",
+        "tooling/config-validation/",
+        "tooling/governance/baseline-registry.json",
+        "tooling/test-utils/",
+        "tooling/verification/ib0-wp05-ci-policy.json",
+        "tooling/verification/negative-ib0-wp05.mjs",
+        "tooling/verification/verify-ib0-wp05.mjs",
+        "work-packages/IB1-CONTRACTS-CONFIG/"
+      ],
+      "protectedRecords": [
+        "evidence/IB1-CONTRACTS-CONFIG/",
+        "work-packages/IB1-CONTRACTS-CONFIG/"
+      ],
+      "acceptedCommit": null,
+      "acceptedTree": null,
+      "acceptance": null,
+      "fingerprints": null,
+      "notes": "CANDIDATE only. Prepared by Claude Code under the PO/SA instruction authorising substantive IB1 (project thread, 2026-09-26T13:52Z). policyChange is true because IB1 adds three mandatory CI jobs and bounds the IB0-WP05 regression for IB1 entry points and dependency edges (.github/ and tooling/verification/). It becomes ACCEPTED only through the promote command after PO/SA acceptance and merge."
     }
   ]
 }

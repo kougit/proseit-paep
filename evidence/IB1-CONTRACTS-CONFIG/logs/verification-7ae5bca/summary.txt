@@ -1,0 +1,16 @@
+npm-ci EXIT_CODE=0
+qa-types EXIT_CODE=0
+qa-architecture EXIT_CODE=0
+build-reference-app EXIT_CODE=0
+build-ui-lab EXIT_CODE=0
+qa-contracts EXIT_CODE=0
+qa-runtime-config EXIT_CODE=0
+qa-runtime-config-negative EXIT_CODE=0
+qa-runtime-config-portability EXIT_CODE=0
+generator-check EXIT_CODE=0
+qa-baseline EXIT_CODE=0
+qa-baseline-negative EXIT_CODE=0
+qa-ib0-wp05-full EXIT_CODE=0
+qa-ib0-wp05-negative EXIT_CODE=0
+lockfile unchanged
+DONE

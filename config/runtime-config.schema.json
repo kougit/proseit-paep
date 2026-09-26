@@ -1,0 +1,349 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.proseit.org/paep/runtime-config/1.0/schema.json",
+  "title": "PAEP Runtime Configuration 1.0",
+  "description": "Controlled PAEP runtime configuration schema (IB1). Closed objects only; public, non-secret deployment metadata only. The platform validator in packages/platform/src/lib/runtime-config/generated/ is generated from this file by tooling/config-validation/generate-validator.mjs.",
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+    },
+    "url": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "pattern": "^(https://[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*|http://(localhost|127\\.0\\.0\\.1|\\[::1\\]))(:([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))?(/(?!\\.{1,2}(/|$))[A-Za-z0-9._~-]+)*/?$"
+    },
+    "nullableUrl": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 2048,
+      "pattern": "^(https://[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*|http://(localhost|127\\.0\\.0\\.1|\\[::1\\]))(:([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))?(/(?!\\.{1,2}(/|$))[A-Za-z0-9._~-]+)*/?$"
+    },
+    "paepVersion": {
+      "type": "string",
+      "maxLength": 9,
+      "pattern": "^(0|[1-9][0-9]{0,3})\\.(0|[1-9][0-9]{0,3})$"
+    },
+    "locale": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 16,
+      "pattern": "^[a-z]{2,3}(-[A-Z][a-z]{3})?(-([A-Z]{2}|[0-9]{3}))?$"
+    },
+    "localeList": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 50,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/locale"
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "product",
+    "deployment",
+    "backend",
+    "identity",
+    "localisation",
+    "features",
+    "telemetry",
+    "analytics",
+    "pwa"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "product": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "release"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/slug"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "release": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 64,
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*)?(\\+[0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*)?$"
+        },
+        "brandProfile": {
+          "$ref": "#/$defs/slug"
+        }
+      }
+    },
+    "deployment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment",
+        "profile",
+        "basePath"
+      ],
+      "properties": {
+        "environment": {
+          "enum": [
+            "development",
+            "test",
+            "staging",
+            "production"
+          ]
+        },
+        "profile": {
+          "enum": [
+            "cloud-saas",
+            "private-cloud",
+            "on-premise"
+          ]
+        },
+        "basePath": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^/([A-Za-z0-9][A-Za-z0-9._~-]*/)*$"
+        }
+      }
+    },
+    "backend": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "apiBaseUrl",
+        "compatibility"
+      ],
+      "properties": {
+        "apiBaseUrl": {
+          "$ref": "#/$defs/url"
+        },
+        "realtimeUrl": {
+          "$ref": "#/$defs/nullableUrl"
+        },
+        "fileBaseUrl": {
+          "$ref": "#/$defs/nullableUrl"
+        },
+        "compatibility": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "apiContract",
+            "minimumPaep"
+          ],
+          "properties": {
+            "apiContract": {
+              "type": "string",
+              "minLength": 4,
+              "maxLength": 64,
+              "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*-v[1-9][0-9]{0,2}$"
+            },
+            "minimumPaep": {
+              "$ref": "#/$defs/paepVersion"
+            },
+            "maximumPaep": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 9,
+              "pattern": "^(0|[1-9][0-9]{0,3})\\.(0|[1-9][0-9]{0,3})$"
+            }
+          }
+        }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "frappe-session",
+            "oidc",
+            "sso-proxy"
+          ]
+        },
+        "issuer": {
+          "$ref": "#/$defs/nullableUrl"
+        },
+        "clientId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+        },
+        "scopes": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9:._/-]*$"
+          }
+        }
+      }
+    },
+    "localisation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "defaultLocale",
+        "supportedLocales"
+      ],
+      "properties": {
+        "defaultLocale": {
+          "$ref": "#/$defs/locale"
+        },
+        "supportedLocales": {
+          "$ref": "#/$defs/localeList"
+        },
+        "rtlLocales": {
+          "type": "array",
+          "maxItems": 50,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/locale"
+          }
+        }
+      }
+    },
+    "features": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capabilityDiscovery"
+      ],
+      "properties": {
+        "capabilityDiscovery": {
+          "enum": [
+            "server",
+            "manifest"
+          ]
+        },
+        "uiHints": {
+          "type": "object",
+          "maxProperties": 32,
+          "propertyNames": {
+            "pattern": "^[a-z][A-Za-z0-9]{0,63}$"
+          },
+          "additionalProperties": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "telemetry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "endpoint": {
+          "$ref": "#/$defs/nullableUrl"
+        },
+        "sampleRate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "analytics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "reportingBaseUrl": {
+          "$ref": "#/$defs/nullableUrl"
+        },
+        "embeddedBi": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "provider": {
+              "$ref": "#/$defs/slug"
+            }
+          }
+        }
+      }
+    },
+    "pwa": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "offlineProfile"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "offlineProfile": {
+          "enum": [
+            "none",
+            "drafts-only",
+            "bounded-commands"
+          ]
+        }
+      }
+    },
+    "security": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "trustedTypesPolicyName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9-]{0,63}$"
+        },
+        "cspProfile": {
+          "enum": [
+            "strict"
+          ]
+        }
+      }
+    }
+  }
+}

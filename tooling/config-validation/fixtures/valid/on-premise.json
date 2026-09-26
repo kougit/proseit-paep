@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.0",
+  "product": {
+    "id": "reference-app",
+    "name": "PAEP Reference Application",
+    "release": "1.2.0",
+    "brandProfile": "proseit-default"
+  },
+  "deployment": {
+    "environment": "production",
+    "profile": "on-premise",
+    "basePath": "/erp/"
+  },
+  "backend": {
+    "apiBaseUrl": "https://erp.plant.example.test/api",
+    "realtimeUrl": "https://erp.plant.example.test/realtime",
+    "fileBaseUrl": null,
+    "compatibility": {
+      "apiContract": "pmra-api-v1",
+      "minimumPaep": "1.1",
+      "maximumPaep": null
+    }
+  },
+  "identity": {
+    "mode": "frappe-session",
+    "issuer": null,
+    "clientId": null,
+    "scopes": []
+  },
+  "localisation": {
+    "defaultLocale": "pt-BR",
+    "supportedLocales": [
+      "pt-BR",
+      "en"
+    ]
+  },
+  "features": {
+    "capabilityDiscovery": "server",
+    "uiHints": {
+      "commandPalette": true
+    }
+  },
+  "telemetry": {
+    "enabled": false
+  },
+  "analytics": {
+    "enabled": false,
+    "reportingBaseUrl": null
+  },
+  "pwa": {
+    "enabled": true,
+    "offlineProfile": "bounded-commands"
+  },
+  "security": {
+    "trustedTypesPolicyName": "paep",
+    "cspProfile": "strict"
+  }
+}

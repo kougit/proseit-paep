@@ -1,0 +1,119 @@
+// Positive contract fixtures (PAEP-IB-01 Appendix D shapes). Compiled by tooling/test-utils/contracts-qa.mjs with the
+// contracts compiler options; every value must `satisfies` its contract with zero diagnostics and survive a JSON round trip.
+import type {
+  DatasetDescriptor,
+  ExportJob,
+  MoneyValue,
+  OfflineCommandEnvelope,
+  PaepError,
+  ReportQuery,
+  ReportResult,
+  SessionOutcome,
+  WorkflowTransitionRequest
+} from '@proseit/paep-contracts';
+
+export const datasetDescriptor = {
+  id: 'sales-summary',
+  version: '1',
+  labelKey: 'reports.salesSummary',
+  dimensions: [
+    { key: 'region', labelKey: 'dims.region', dataType: 'string', filterable: true },
+    { key: 'period', labelKey: 'dims.period', dataType: 'date', hierarchy: ['year', 'quarter', 'month'] }
+  ],
+  metrics: [
+    { key: 'revenue', labelKey: 'metrics.revenue', dataType: 'currency', aggregation: 'sum', format: '0,0.00' },
+    { key: 'orders', labelKey: 'metrics.orders', dataType: 'integer', aggregation: 'count' }
+  ],
+  defaultTimeDimension: 'period',
+  freshnessPolicy: { targetSeconds: 900, displayedToUser: true }
+} satisfies DatasetDescriptor;
+
+export const reportQuery = {
+  datasetId: 'sales-summary',
+  metrics: ['revenue', 'orders'],
+  dimensions: ['region'],
+  filters: [
+    { field: 'region', operator: 'in', value: ['north', 'south'] },
+    { field: 'period', operator: 'between', value: ['2026-01-01', '2026-03-31'] },
+    { field: 'orders', operator: 'isNotNull' }
+  ],
+  sort: [{ field: 'revenue', direction: 'desc' }],
+  limit: 50,
+  parameters: { currency: 'EUR', includeDrafts: false }
+} satisfies ReportQuery;
+
+export const reportResult = {
+  columns: [
+    { key: 'region', label: 'Region', dataType: 'string' },
+    { key: 'revenue', label: 'Revenue', dataType: 'currency', format: '0,0.00' },
+    { key: 'orders', label: 'Orders', dataType: 'integer' }
+  ],
+  rows: [
+    { region: 'north', revenue: 1200.5, orders: 12 },
+    { region: 'south', revenue: 980, orders: null }
+  ],
+  page: { nextCursor: 'cursor-2' },
+  totals: { revenue: 2180.5, orders: 12 },
+  freshness: { asOf: '2026-03-31T23:59:59Z', source: 'analytical', stale: false },
+  correlationId: 'corr-0001'
+} satisfies ReportResult;
+
+export const exportJob = {
+  id: 'export-0001',
+  status: 'succeeded',
+  progress: 100,
+  correlationId: 'corr-0002',
+  downloadUrl: 'https://files.example.test/exports/export-0001.csv',
+  expiresAt: '2026-04-01T00:00:00Z'
+} satisfies ExportJob;
+
+export const failedExportJob = {
+  id: 'export-0002',
+  status: 'failed',
+  error: { code: 'EXPORT_TOO_LARGE', category: 'validation', messageKey: 'reports.exportTooLarge', retryable: false }
+} satisfies ExportJob;
+
+export const paepError = {
+  code: 'RECORD_CONFLICT',
+  category: 'conflict',
+  messageKey: 'errors.recordConflict',
+  correlationId: 'corr-0003',
+  retryable: true,
+  fieldErrors: { amount: ['errors.amountChanged'], dueDate: ['errors.required', 'errors.dateRange'] }
+} satisfies PaepError;
+
+export const offlineCommand = {
+  commandType: 'inspection.recordReading',
+  idempotencyKey: 'op-0001',
+  context: { tenantId: 'tenant-0001', principalId: 'principal-0001' },
+  createdAt: '2026-03-31T10:00:00+01:00',
+  payload: { readingKey: 'pressure', value: '12.50', unit: 'bar' },
+  concurrency: { etag: 'W/"3"' },
+  clientIds: ['local-0001']
+} satisfies OfflineCommandEnvelope<{ readonly readingKey: string; readonly value: string; readonly unit: string }>;
+
+export const sessionAuthenticated = {
+  status: 'authenticated',
+  identity: {
+    principalId: 'principal-0001',
+    displayName: 'Example User',
+    tenant: { tenantId: 'tenant-0001', displayName: 'Example Tenant', legalEntityId: 'le-01' }
+  },
+  expiresAt: '2026-03-31T18:00:00Z'
+} satisfies SessionOutcome;
+
+export const sessionInvalid = {
+  status: 'invalid',
+  error: { code: 'SESSION_INVALID', category: 'authentication', messageKey: 'errors.sessionInvalid', retryable: false }
+} satisfies SessionOutcome;
+
+export const workflowTransition = {
+  recordId: 'rec-0001',
+  actionId: 'approve',
+  reason: 'Reviewed against evidence',
+  evidenceFileIds: ['file-0001'],
+  concurrency: { etag: 'W/"7"', serverVersion: '7' },
+  idempotencyKey: 'op-0002'
+} satisfies WorkflowTransitionRequest;
+
+export const moneyValue = { amount: '1234.50', currency: 'EUR' } satisfies MoneyValue;

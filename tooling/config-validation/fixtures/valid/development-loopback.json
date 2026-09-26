@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.0",
+  "product": {
+    "id": "reference-app",
+    "name": "PAEP Reference Application",
+    "release": "1.2.0",
+    "brandProfile": "proseit-default"
+  },
+  "deployment": {
+    "environment": "development",
+    "profile": "cloud-saas",
+    "basePath": "/"
+  },
+  "backend": {
+    "apiBaseUrl": "http://localhost:8000/api",
+    "realtimeUrl": "http://127.0.0.1:9000",
+    "fileBaseUrl": "http://[::1]:8000/files/",
+    "compatibility": {
+      "apiContract": "pmra-api-v1",
+      "minimumPaep": "1.1",
+      "maximumPaep": null
+    }
+  },
+  "identity": {
+    "mode": "frappe-session",
+    "issuer": null,
+    "clientId": null,
+    "scopes": []
+  },
+  "localisation": {
+    "defaultLocale": "en",
+    "supportedLocales": [
+      "en",
+      "fr",
+      "ar"
+    ],
+    "rtlLocales": [
+      "ar"
+    ]
+  },
+  "features": {
+    "capabilityDiscovery": "server",
+    "uiHints": {
+      "commandPalette": true
+    }
+  },
+  "telemetry": {
+    "enabled": true,
+    "endpoint": "http://localhost:4318",
+    "sampleRate": 0.25
+  },
+  "analytics": {
+    "enabled": true,
+    "reportingBaseUrl": "https://reports.example.test",
+    "embeddedBi": {
+      "enabled": false
+    }
+  },
+  "pwa": {
+    "enabled": true,
+    "offlineProfile": "drafts-only"
+  }
+}

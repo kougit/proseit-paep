@@ -1,0 +1,42 @@
+{
+  "id": "IB1-CONTRACTS-CONFIG",
+  "title": "IB1: product-neutral contracts and governed runtime configuration",
+  "milestone": "IB1",
+  "design_classification": "D0",
+  "status": "ACCEPTED",
+  "acceptance": {
+    "status": "ACCEPTED",
+    "authority": "Product Owner / Solutions Architect",
+    "date": "2026-09-26"
+  },
+  "predecessor": {
+    "id": "IB1-PREFLIGHT-R7",
+    "status": "ACCEPTED",
+    "baseline_commit": "035593b"
+  },
+  "baseline_registry": "tooling/governance/baseline-registry.json",
+  "baseline_generation": {
+    "active_accepted": 2,
+    "candidate": 3,
+    "candidate_status": "CANDIDATE"
+  },
+  "new_dependencies": [],
+  "unit_test_runner": "node:test (built into Node 24.21.0)",
+  "paep_compatibility_version": "1.1",
+  "runtime_config_schema_version": "1.0",
+  "ib2": "NOT STARTED",
+  "nx_disposition": "NOT REQUIRED",
+  "evidence_path": "evidence/IB1-CONTRACTS-CONFIG/",
+  "human_acceptance_required": true,
+  "claude_md_disposition": "PROTECTED GOVERNED ARTIFACT",
+  "acceptance_criteria": "27/27 PASS",
+  "residual_risk_dispositions": {
+    "RR6": "PASS",
+    "RR11": "ACCEPTED",
+    "RR14": "ACCEPTED LOW"
+  },
+  "findings_open": {
+    "high": 0,
+    "medium": 0
+  }
+}

@@ -1,0 +1,8 @@
+npm-ci EXIT_CODE=0
+qa-baseline EXIT_CODE=0
+qa-baseline-negative EXIT_CODE=0
+qa-ib0-wp05-full EXIT_CODE=1
+qa-contracts EXIT_CODE=0
+qa-runtime-config EXIT_CODE=0
+lockfile unchanged
+DONE

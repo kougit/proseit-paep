@@ -1,0 +1,511 @@
+{
+  "$comment": "Reviewed public API of @proseit/paep-contracts (packages/contracts/src/index.ts). Regenerate with `node tooling/test-utils/contracts-qa.mjs --update` only after review; any difference fails qa:contracts.",
+  "entryPoint": "packages/contracts/src/index.ts",
+  "exports": [
+    {
+      "name": "AnalyticsConfig",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface AnalyticsConfig{readonly enabled:boolean;readonly reportingBaseUrl?:string|null;readonly embeddedBi?:EmbeddedBiDescriptor;}"
+    },
+    {
+      "name": "BackendCompatibility",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface BackendCompatibility{readonly apiContract:string;readonly minimumPaep:PaepVersion;readonly maximumPaep?:PaepVersion|null;}"
+    },
+    {
+      "name": "BackendConfig",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface BackendConfig{readonly apiBaseUrl:string;readonly realtimeUrl?:string|null;readonly fileBaseUrl?:string|null;readonly compatibility:BackendCompatibility;}"
+    },
+    {
+      "name": "BusinessTimeContext",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface BusinessTimeContext{readonly timeZone:TimeZoneId;}"
+    },
+    {
+      "name": "Capability",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface Capability{readonly id:CapabilityId;readonly enabled:boolean;readonly reasonKey?:MessageKey;}"
+    },
+    {
+      "name": "CapabilityDiscoveryMode",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type CapabilityDiscoveryMode='server'|'manifest';"
+    },
+    {
+      "name": "CapabilityId",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type CapabilityId=string;"
+    },
+    {
+      "name": "CommandConflict",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface CommandConflict<TPayload,TServerState>{readonly attempted:OfflineCommandEnvelope<TPayload>;readonly serverState:TServerState;readonly serverConcurrency?:ConcurrencyMetadata;readonly correlationId?:CorrelationId;}"
+    },
+    {
+      "name": "CommandContext",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface CommandContext{readonly tenantId:TenantId;readonly principalId:PrincipalId;}"
+    },
+    {
+      "name": "CommandSyncState",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type CommandSyncState='local-draft'|'queued'|'synced'|'conflict'|'failed';"
+    },
+    {
+      "name": "CompatibilityReport",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface CompatibilityReport{readonly status:'compatible';readonly schemaVersion:string;readonly apiContract:string;readonly paepVersion:PaepVersion;readonly minimumPaep:PaepVersion;readonly maximumPaep:PaepVersion|null;}"
+    },
+    {
+      "name": "ConcurrencyMetadata",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface ConcurrencyMetadata{readonly etag?:string;readonly serverVersion?:string;}"
+    },
+    {
+      "name": "CorrelationId",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type CorrelationId=string;"
+    },
+    {
+      "name": "CspProfile",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type CspProfile='strict';"
+    },
+    {
+      "name": "CurrencyCode",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type CurrencyCode=string;"
+    },
+    {
+      "name": "DashboardDefinition",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface DashboardDefinition{readonly id:string;readonly version:string;readonly titleKey:MessageKey;readonly visuals:readonly VisualDefinition[];readonly globalFilters?:readonly ReportFilter[];}"
+    },
+    {
+      "name": "DataFreshness",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface DataFreshness{readonly asOf:IsoDateTime;readonly source:DataSource;readonly stale?:boolean;}"
+    },
+    {
+      "name": "DataSource",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type DataSource='operational'|'analytical'|'hybrid';"
+    },
+    {
+      "name": "DatasetDescriptor",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface DatasetDescriptor{readonly id:string;readonly version:string;readonly labelKey:MessageKey;readonly dimensions:readonly DimensionDefinition[];readonly metrics:readonly MetricDefinition[];readonly defaultTimeDimension?:string;readonly freshnessPolicy?:FreshnessPolicy;}"
+    },
+    {
+      "name": "DecimalString",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type DecimalString=string;"
+    },
+    {
+      "name": "DeploymentConfig",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface DeploymentConfig{readonly environment:DeploymentEnvironment;readonly profile:DeploymentProfile;readonly basePath:string;}"
+    },
+    {
+      "name": "DeploymentEnvironment",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type DeploymentEnvironment='development'|'test'|'staging'|'production';"
+    },
+    {
+      "name": "DeploymentProfile",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type DeploymentProfile='cloud-saas'|'private-cloud'|'on-premise';"
+    },
+    {
+      "name": "DimensionDefinition",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface DimensionDefinition{readonly key:string;readonly labelKey:MessageKey;readonly dataType:FieldDataType;readonly hierarchy?:readonly string[];readonly filterable?:boolean;}"
+    },
+    {
+      "name": "DrillRequest",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface DrillRequest{readonly reportId:string;readonly visualId:string;readonly sourceContext:Readonly<Record<string,FilterValue>>;readonly target:string;}"
+    },
+    {
+      "name": "EmbeddedBiDescriptor",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface EmbeddedBiDescriptor{readonly enabled:boolean;readonly provider?:ExternalBiProviderId;}"
+    },
+    {
+      "name": "EntityId",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type EntityId=string;"
+    },
+    {
+      "name": "ExportFormat",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type ExportFormat='csv'|'xlsx'|'pdf';"
+    },
+    {
+      "name": "ExportJob",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface ExportJob extends JobStatus{readonly downloadUrl?:string;readonly expiresAt?:IsoDateTime;}"
+    },
+    {
+      "name": "ExportRequest",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface ExportRequest{readonly reportId:string;readonly format:ExportFormat;readonly query:ReportQuery;}"
+    },
+    {
+      "name": "ExternalBiProviderId",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type ExternalBiProviderId=string;"
+    },
+    {
+      "name": "FeaturesConfig",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface FeaturesConfig{readonly capabilityDiscovery:CapabilityDiscoveryMode;readonly uiHints?:Readonly<Record<string,boolean>>;}"
+    },
+    {
+      "name": "FieldDataType",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type FieldDataType='string'|'number'|'integer'|'boolean'|'date'|'datetime'|'currency'|'percentage'|'duration';"
+    },
+    {
+      "name": "FieldFilter",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface FieldFilter{readonly field:string;readonly operator:FilterOperator;readonly value?:FilterValue;}"
+    },
+    {
+      "name": "FileAccess",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface FileAccess{readonly fileId:EntityId;readonly url:string;readonly expiresAt?:IsoDateTime;}"
+    },
+    {
+      "name": "FileChecksum",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface FileChecksum{readonly algorithm:string;readonly value:string;}"
+    },
+    {
+      "name": "FileMetadata",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface FileMetadata{readonly id:EntityId;readonly fileName:string;readonly contentType:string;readonly sizeBytes:number;readonly uploadedAt?:IsoDateTime;readonly checksum?:FileChecksum;}"
+    },
+    {
+      "name": "FileUploadState",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type FileUploadState='uploading'|'accepted'|'failed';"
+    },
+    {
+      "name": "FileUploadStatus",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface FileUploadStatus{readonly state:FileUploadState;readonly progress?:number;readonly file?:FileMetadata;readonly error?:PaepError;}"
+    },
+    {
+      "name": "FilterOperator",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type FilterOperator='eq'|'neq'|'in'|'notIn'|'gt'|'gte'|'lt'|'lte'|'between'|'contains'|'startsWith'|'isNull'|'isNotNull';"
+    },
+    {
+      "name": "FilterValue",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type FilterValue=ScalarValue|readonly ScalarValue[];"
+    },
+    {
+      "name": "FreshnessPolicy",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface FreshnessPolicy{readonly targetSeconds?:number;readonly displayedToUser?:boolean;}"
+    },
+    {
+      "name": "IdempotencyKey",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type IdempotencyKey=string;"
+    },
+    {
+      "name": "IdentityConfig",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface IdentityConfig{readonly mode:IdentityMode;readonly issuer?:string|null;readonly clientId?:string|null;readonly scopes?:readonly string[];}"
+    },
+    {
+      "name": "IdentityContext",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface IdentityContext{readonly principalId:PrincipalId;readonly displayName:string;readonly tenant:TenantContext;readonly impersonatorId?:PrincipalId;}"
+    },
+    {
+      "name": "IdentityMode",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type IdentityMode='frappe-session'|'oidc'|'sso-proxy';"
+    },
+    {
+      "name": "IsoDate",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type IsoDate=string;"
+    },
+    {
+      "name": "IsoDateTime",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type IsoDateTime=string;"
+    },
+    {
+      "name": "JobState",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type JobState='queued'|'running'|'succeeded'|'failed'|'expired';"
+    },
+    {
+      "name": "JobStatus",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface JobStatus{readonly id:EntityId;readonly status:JobState;readonly progress?:number;readonly correlationId?:CorrelationId;readonly error?:PaepError;}"
+    },
+    {
+      "name": "ListQuery",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface ListQuery{readonly page?:PageRequest;readonly sort?:readonly SortSpec[];readonly filters?:readonly FieldFilter[];}"
+    },
+    {
+      "name": "LocaleTag",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type LocaleTag=string;"
+    },
+    {
+      "name": "LocalisationConfig",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface LocalisationConfig{readonly defaultLocale:LocaleTag;readonly supportedLocales:readonly LocaleTag[];readonly rtlLocales?:readonly LocaleTag[];}"
+    },
+    {
+      "name": "MessageKey",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type MessageKey=string;"
+    },
+    {
+      "name": "MetricAggregation",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type MetricAggregation='sum'|'average'|'min'|'max'|'count'|'custom';"
+    },
+    {
+      "name": "MetricDefinition",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface MetricDefinition{readonly key:string;readonly labelKey:MessageKey;readonly dataType:FieldDataType;readonly aggregation?:MetricAggregation;readonly format?:string;readonly descriptionKey?:MessageKey;}"
+    },
+    {
+      "name": "MoneyValue",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface MoneyValue{readonly amount:DecimalString;readonly currency:CurrencyCode;}"
+    },
+    {
+      "name": "OfflineCommandEnvelope",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface OfflineCommandEnvelope<TPayload>{readonly commandType:string;readonly idempotencyKey:IdempotencyKey;readonly context:CommandContext;readonly createdAt:IsoDateTime;readonly payload:TPayload;readonly concurrency?:ConcurrencyMetadata;readonly clientIds?:readonly EntityId[];}"
+    },
+    {
+      "name": "OfflineProfile",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type OfflineProfile='none'|'drafts-only'|'bounded-commands';"
+    },
+    {
+      "name": "PaepError",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface PaepError{readonly code:PaepErrorCode;readonly category:PaepErrorCategory;readonly messageKey:MessageKey;readonly correlationId?:CorrelationId;readonly retryable:boolean;readonly fieldErrors?:Readonly<Record<string,readonly MessageKey[]>>;}"
+    },
+    {
+      "name": "PaepErrorCategory",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type PaepErrorCategory='authentication'|'authorization'|'validation'|'conflict'|'rate-limit'|'service-failure';"
+    },
+    {
+      "name": "PaepErrorCode",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type PaepErrorCode=string;"
+    },
+    {
+      "name": "PaepVersion",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type PaepVersion=string;"
+    },
+    {
+      "name": "PageInfo",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface PageInfo{readonly nextCursor?:string;}"
+    },
+    {
+      "name": "PageRequest",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface PageRequest{readonly cursor?:string;readonly limit?:number;}"
+    },
+    {
+      "name": "PageResult",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface PageResult<T>{readonly items:readonly T[];readonly nextCursor?:string;}"
+    },
+    {
+      "name": "PrincipalId",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type PrincipalId=string;"
+    },
+    {
+      "name": "ProductConfig",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface ProductConfig{readonly id:string;readonly name:string;readonly release:string;readonly brandProfile?:string;}"
+    },
+    {
+      "name": "PwaConfig",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface PwaConfig{readonly enabled:boolean;readonly offlineProfile:OfflineProfile;}"
+    },
+    {
+      "name": "ReportCellValue",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type ReportCellValue=ScalarValue|MoneyValue;"
+    },
+    {
+      "name": "ReportColumn",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface ReportColumn{readonly key:string;readonly label:string;readonly dataType:FieldDataType;readonly format?:string;}"
+    },
+    {
+      "name": "ReportFilter",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type ReportFilter=FieldFilter;"
+    },
+    {
+      "name": "ReportQuery",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface ReportQuery{readonly datasetId:string;readonly metrics:readonly string[];readonly dimensions?:readonly string[];readonly filters?:readonly ReportFilter[];readonly sort?:readonly ReportSort[];readonly cursor?:string;readonly limit?:number;readonly parameters?:Readonly<Record<string,ScalarValue>>;}"
+    },
+    {
+      "name": "ReportResult",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface ReportResult<Row extends ReportRow=ReportRow>{readonly columns:readonly ReportColumn[];readonly rows:readonly Row[];readonly page?:PageInfo;readonly totals?:Readonly<Record<string,ReportCellValue>>;readonly freshness:DataFreshness;readonly correlationId:CorrelationId;}"
+    },
+    {
+      "name": "ReportRow",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type ReportRow=Readonly<Record<string,ReportCellValue>>;"
+    },
+    {
+      "name": "ReportSort",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type ReportSort=SortSpec;"
+    },
+    {
+      "name": "ReportingGateway",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface ReportingGateway{getDataset(id:string):Promise<DatasetDescriptor>;execute(query:ReportQuery):Promise<ReportResult>;drill(request:DrillRequest):Promise<ReportResult>;requestExport(request:ExportRequest):Promise<ExportJob>;getExportJob(id:string):Promise<ExportJob>;}"
+    },
+    {
+      "name": "RuntimeConfig",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface RuntimeConfig{readonly schemaVersion:RuntimeConfigSchemaVersion;readonly product:ProductConfig;readonly deployment:DeploymentConfig;readonly backend:BackendConfig;readonly identity:IdentityConfig;readonly localisation:LocalisationConfig;readonly features:FeaturesConfig;readonly telemetry:TelemetryConfig;readonly analytics:AnalyticsConfig;readonly pwa:PwaConfig;readonly security?:SecurityConfig;}"
+    },
+    {
+      "name": "RuntimeConfigBuildContext",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface RuntimeConfigBuildContext{readonly expectedProductId:string;readonly supportedApiContracts:readonly string[];readonly externalBiProviders:readonly string[];}"
+    },
+    {
+      "name": "RuntimeConfigErrorCode",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type RuntimeConfigErrorCode='CFG_LOAD_NETWORK'|'CFG_LOAD_STATUS'|'CFG_LOAD_REDIRECT'|'CFG_LOAD_CONTENT_TYPE'|'CFG_LOAD_TOO_LARGE'|'CFG_LOAD_EMPTY'|'CFG_DECODE_UTF8'|'CFG_DECODE_BOM'|'CFG_PARSE_SYNTAX'|'CFG_PARSE_DUPLICATE_KEY'|'CFG_PARSE_FORBIDDEN_KEY'|'CFG_PARSE_DEPTH'|'CFG_PARSE_NUMBER'|'CFG_PARSE_ROOT'|'CFG_VERSION_MISSING'|'CFG_VERSION_UNSUPPORTED'|'CFG_CONTENT_KEY'|'CFG_CONTENT_TEXT'|'CFG_CONTENT_MARKUP'|'CFG_CONTENT_SECRET'|'CFG_CONTENT_DATA_ACCESS'|'CFG_SCHEMA_REQUIRED'|'CFG_SCHEMA_ADDITIONAL'|'CFG_SCHEMA_TYPE'|'CFG_SCHEMA_CONST'|'CFG_SCHEMA_ENUM'|'CFG_SCHEMA_PATTERN'|'CFG_SCHEMA_LENGTH'|'CFG_SCHEMA_RANGE'|'CFG_SCHEMA_ITEMS'|'CFG_SCHEMA_UNIQUE'|'CFG_SCHEMA_PROPERTIES'|'CFG_SCHEMA_PROPERTY_NAME'|'CFG_URL_INVALID'|'CFG_URL_INSECURE'|'CFG_URL_HOST'|'CFG_LOCALE_DEFAULT'|'CFG_LOCALE_RTL'|'CFG_IDENTITY_OIDC'|'CFG_IDENTITY_UNEXPECTED'|'CFG_TELEMETRY_ENDPOINT'|'CFG_ANALYTICS_ENDPOINT'|'CFG_EMBEDDED_BI'|'CFG_PWA_PROFILE'|'CFG_SECURITY_PROFILE'|'CFG_PAEP_RANGE'|'CFG_BASE_PATH'|'CFG_COMPAT_PRODUCT'|'CFG_COMPAT_API_CONTRACT'|'CFG_COMPAT_PAEP'|'CFG_STARTUP_REPEATED'|'CFG_INTERNAL';"
+    },
+    {
+      "name": "RuntimeConfigFailure",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface RuntimeConfigFailure{readonly ok:false;readonly stage:RuntimeConfigStage;readonly code:RuntimeConfigErrorCode;readonly issues:readonly RuntimeConfigIssue[];readonly diagnosticId:string;}"
+    },
+    {
+      "name": "RuntimeConfigIssue",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface RuntimeConfigIssue{readonly stage:RuntimeConfigStage;readonly code:RuntimeConfigErrorCode;readonly path:string;}"
+    },
+    {
+      "name": "RuntimeConfigOutcome",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type RuntimeConfigOutcome=RuntimeConfigReady|RuntimeConfigFailure;"
+    },
+    {
+      "name": "RuntimeConfigReady",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface RuntimeConfigReady{readonly ok:true;readonly store:RuntimeConfigStore;}"
+    },
+    {
+      "name": "RuntimeConfigSchemaVersion",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type RuntimeConfigSchemaVersion='1.0';"
+    },
+    {
+      "name": "RuntimeConfigStage",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type RuntimeConfigStage='load'|'decode'|'parse'|'version'|'content'|'schema'|'semantic'|'compatibility'|'startup'|'internal';"
+    },
+    {
+      "name": "RuntimeConfigStore",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface RuntimeConfigStore{readonly config:RuntimeConfig;readonly compatibility:CompatibilityReport;readonly configId:string;}"
+    },
+    {
+      "name": "ScalarValue",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type ScalarValue=string|number|boolean|null;"
+    },
+    {
+      "name": "SecurityConfig",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface SecurityConfig{readonly trustedTypesPolicyName?:string;readonly cspProfile?:CspProfile;}"
+    },
+    {
+      "name": "SessionOutcome",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type SessionOutcome={readonly status:'authenticated';readonly identity:IdentityContext;readonly expiresAt?:IsoDateTime;}|{readonly status:'unauthenticated';}|{readonly status:'expired';}|{readonly status:'invalid';readonly error?:PaepError;};"
+    },
+    {
+      "name": "SortDirection",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type SortDirection='asc'|'desc';"
+    },
+    {
+      "name": "SortSpec",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface SortSpec{readonly field:string;readonly direction:SortDirection;}"
+    },
+    {
+      "name": "TelemetryConfig",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface TelemetryConfig{readonly enabled:boolean;readonly endpoint?:string|null;readonly sampleRate?:number;}"
+    },
+    {
+      "name": "TenantContext",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface TenantContext{readonly tenantId:TenantId;readonly displayName:string;readonly legalEntityId?:EntityId;readonly projectId?:EntityId;}"
+    },
+    {
+      "name": "TenantId",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type TenantId=string;"
+    },
+    {
+      "name": "TimeZoneId",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type TimeZoneId=string;"
+    },
+    {
+      "name": "VisualDefinition",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface VisualDefinition{readonly id:string;readonly type:VisualType;readonly titleKey:MessageKey;readonly query:ReportQuery;readonly crossFilter?:boolean;readonly drillTargets?:readonly string[];}"
+    },
+    {
+      "name": "VisualType",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type VisualType='kpi'|'table'|'bar'|'line'|'area'|'pie'|'scatter'|'heatmap'|'waterfall'|'funnel'|'combo';"
+    },
+    {
+      "name": "WorkflowAction",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface WorkflowAction{readonly id:string;readonly labelKey:MessageKey;readonly requiresReason?:boolean;readonly requiresEvidence?:boolean;}"
+    },
+    {
+      "name": "WorkflowState",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface WorkflowState{readonly stateKey:string;readonly labelKey:MessageKey;readonly allowedActions:readonly WorkflowAction[];readonly concurrency?:ConcurrencyMetadata;}"
+    },
+    {
+      "name": "WorkflowTransitionRequest",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface WorkflowTransitionRequest{readonly recordId:EntityId;readonly actionId:string;readonly reason?:string;readonly evidenceFileIds?:readonly EntityId[];readonly concurrency:ConcurrencyMetadata;readonly idempotencyKey?:IdempotencyKey;}"
+    }
+  ]
+}

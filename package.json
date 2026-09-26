@@ -34,7 +34,13 @@
     "qa:ib0-wp05": "node tooling/verification/verify-ib0-wp05.mjs",
     "qa:ib0-wp05:negative": "node tooling/verification/negative-ib0-wp05.mjs",
     "qa:baseline": "node tooling/governance/baseline-governance.mjs verify",
-    "qa:baseline:negative": "node tooling/governance/negative-baseline-governance.mjs"
+    "qa:baseline:negative": "node tooling/governance/negative-baseline-governance.mjs",
+    "qa:contracts": "node tooling/test-utils/contracts-qa.mjs",
+    "qa:runtime-config": "node tooling/config-validation/runtime-config-qa.mjs",
+    "qa:runtime-config:negative": "node tooling/config-validation/negative-runtime-config.mjs",
+    "qa:runtime-config:portability": "node tooling/config-validation/portability-proof.mjs",
+    "qa:ib1": "npm run qa:contracts && npm run qa:runtime-config",
+    "qa:ib1:negative": "npm run qa:runtime-config:negative && npm run qa:runtime-config:portability"
   },
   "dependencies": {
     "@angular/common": "22.1.8",

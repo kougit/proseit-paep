@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "1.0",
+  "product": {
+    "id": "reference-app",
+    "name": "PAEP Reference Application",
+    "release": "1.2.0",
+    "brandProfile": "corp-blue"
+  },
+  "deployment": {
+    "environment": "staging",
+    "profile": "private-cloud",
+    "basePath": "/"
+  },
+  "backend": {
+    "apiBaseUrl": "https://api.corp.example.test/paep/v1",
+    "realtimeUrl": null,
+    "fileBaseUrl": "https://files.corp.example.test:8443/store/",
+    "compatibility": {
+      "apiContract": "pmra-api-v1",
+      "minimumPaep": "1.0",
+      "maximumPaep": "1.1"
+    }
+  },
+  "identity": {
+    "mode": "sso-proxy"
+  },
+  "localisation": {
+    "defaultLocale": "en",
+    "supportedLocales": [
+      "en",
+      "fr",
+      "ar"
+    ],
+    "rtlLocales": [
+      "ar"
+    ]
+  },
+  "features": {
+    "capabilityDiscovery": "server",
+    "uiHints": {
+      "commandPalette": true
+    }
+  },
+  "telemetry": {
+    "enabled": false,
+    "endpoint": null
+  },
+  "analytics": {
+    "enabled": true,
+    "reportingBaseUrl": "https://reports.corp.example.test"
+  },
+  "pwa": {
+    "enabled": false,
+    "offlineProfile": "none"
+  },
+  "security": {
+    "trustedTypesPolicyName": "paep",
+    "cspProfile": "strict"
+  }
+}

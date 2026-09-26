@@ -232,7 +232,7 @@
       "acceptedTree": null,
       "acceptance": null,
       "fingerprints": null,
-      "notes": "CANDIDATE only. Prepared by Claude Code under the PO/SA instruction authorising substantive IB1 (project thread, 2026-09-26T13:52Z). policyChange is true because IB1 adds a mandatory CI job and bounds the IB0-WP05 regression for IB1 entry points and dependency edges (.github/ and tooling/verification/). It becomes ACCEPTED only through the promote command after PO/SA acceptance and merge."
+      "notes": "CANDIDATE only. Prepared by Claude Code under the PO/SA instruction authorising substantive IB1 (project thread, 2026-09-26T13:52Z). policyChange is true because IB1 adds three mandatory CI jobs and bounds the IB0-WP05 regression for IB1 entry points and dependency edges (.github/ and tooling/verification/). It becomes ACCEPTED only through the promote command after PO/SA acceptance and merge."
     }
   ]
 }

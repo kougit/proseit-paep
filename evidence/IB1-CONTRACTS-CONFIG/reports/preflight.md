@@ -8,7 +8,7 @@ Run 2026-09-26 on a fresh clone of `origin/main` before any IB1 change. Node 24.
 | (ii) | IB1-PREFLIGHT-R7 merged and closed; generation 2 promoted | PASS: PR #6 merged (`e795868`), PR #7 merged (`035593b`) |
 | (iii) | Registry: active generation 2 ACCEPTED, no candidate | PASS: `qa:baseline` 13/13 "active G2 e795868; candidate none" |
 | (iv) | Main CI green | PASS: push run 36245405570 success (`PAEP / gate`) |
-| (v) | IB0-WP05 full verification | PASS 25/25 (`qa-ib0-wp05.log`) |
+| (v) | IB0-WP05 full verification | PASS 25/25 (`qa-ib0-wp05.log`; W25 runs only inside GitHub Actions) |
 | (vi) | IB0-WP05 negative CI-control suite | PASS 87/87 (`qa-ib0-wp05-negative.log`) |
 | (vii) | Baseline-governance tests | PASS 105/105 (`qa-baseline-negative.log`) |
 | (viii) | Architecture check | PASS: 20 projects, 0 edges, 0 violations |

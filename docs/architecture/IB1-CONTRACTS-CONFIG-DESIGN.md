@@ -44,10 +44,10 @@ No schema-validator library is added (authorising instruction: no new dependency
 | 4 | version | missing or unsupported `schemaVersion` (future versions fail; no silent downgrade) |
 | 5 | content | secrets (key and value shapes), markup and script URLs, database/ERP/analytical-store locators, unsafe Unicode, `$`/`@` keys |
 | 6 | schema | the generated closed-schema validator |
-| 7 | semantic | https only (http only for loopback in development); no loopback, private or IDN hosts in staging/production; locale rules; OIDC consistency; telemetry and analytics endpoints; registered embedded-BI providers; PWA consistency; production needs a CSP profile; `basePath` equals the document base |
+| 7 | semantic | https only (http only for loopback in development); no loopback or private hosts in staging/production; no IDN (`xn--`) hosts in any environment; locale rules; OIDC consistency; telemetry and analytics endpoints; registered embedded-BI providers; PWA consistency; production needs a CSP profile; `basePath` equals the document base |
 | 8 | compatibility | wrong product id, unsupported API contract, PAEP outside the backend's `minimumPaep`–`maximumPaep` range |
 
-Failure: a frozen `{ ok: false, stage, code, issues (≤ 20, each {stage, code, path}), diagnosticId }`. Values and unknown key names are never echoed. `diagnosticId` is `PAEP-<CODE>-<fnv8>` (FNV-1a of the bytes) so support can correlate without seeing the content. Any unexpected exception becomes `CFG_INTERNAL`.
+Failure: a frozen `{ ok: false, stage, code, issues (≤ 20, each {stage, code, path}), diagnosticId }`. Values and unknown key names are never echoed. `diagnosticId` is `PAEP-<CODE>-<fnv8>` (FNV-1a of the bytes), or `PAEP-<CODE>-nodoc` when no document was received (load and startup failures), so support can correlate without seeing the content. Any unexpected exception becomes `CFG_INTERNAL`.
 
 Success: a deep-frozen `{ ok: true, store: { config, compatibility, configId } }`.
 

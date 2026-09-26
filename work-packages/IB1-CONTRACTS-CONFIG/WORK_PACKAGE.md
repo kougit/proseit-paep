@@ -24,7 +24,7 @@
 | R-SEC | No secrets, credentials or data-store locators in configuration; https only outside local development | PAEP v1.1 §13; IB-01 §9.4; CLAUDE.md |
 | R-DEP | No new dependency | Authorising instruction; CLAUDE.md |
 | R-GOV | Baseline registry: generation 2 stays ACCEPTED, generation 3 is a CANDIDATE and is never promoted by Claude | IB1-PREFLIGHT-R7; `docs/architecture/BASELINE-ROLLOVER.md` |
-| R-CI | New mandatory jobs feed the unchanged `PAEP / gate` | IB0-WP05; authorising instruction |
+| R-CI | New mandatory jobs feed `PAEP / gate`; its check context and gate logic stay unchanged, only its job list grows | IB0-WP05; authorising instruction |
 
 ## 3. Authorised change scope (registry generation 3 `authorisedScope`)
 
@@ -73,3 +73,11 @@ The accepted IB1-PREFLIGHT-R7 mechanism (registry bounds: accepted history up to
 | WP04 negative suite edge-count controls | The architecture graph now has the IB1 edges (`platform` → `contracts`, `reference-app` → `platform`, `reference-app` → `contracts`) | Every affected case must still report its intended rule; only the absolute edge count may differ, by exactly the edges `qa:architecture` reports |
 
 Any other finding still fails.
+
+The WP05 negative CI-control suite (`negative-ib0-wp05.mjs`, in scope) was adapted, not weakened:
+
+| Change | Reason |
+| --- | --- |
+| N02 now writes `packages/frappe-sdk/src/lib/client.ts` instead of `config/runtime-config.schema.json` | `config/` is now CANDIDATE scope; the case still proves an out-of-scope successor artefact fails W05 |
+| Per-job gate cases after G09 are named `GJ10`–`GJ12` | Twelve mandatory jobs would otherwise reuse the fixed ids G10–G12 |
+| New cases I01–I03 | The IB1 jobs are mandatory: dropping one from the gate or replacing its commands fails W11/W12 |

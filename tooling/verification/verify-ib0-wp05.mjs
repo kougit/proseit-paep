@@ -509,7 +509,8 @@ const pkgFinding = (key) => [/^(package\.json scripts differ from baseline \+ th
 
 // IB1-CONTRACTS-CONFIG: the WP03/WP04 verifiers require the IB0 placeholder entry points. A package entry point that is
 // no longer a placeholder is accepted only when it changed since the accepted baseline inside the CANDIDATE scope (B11 passing).
-const filledEntry = (f) => /^packages\/[a-z][a-z0-9-]*\/src\/index\.ts$/.test(f) && changedPaths.includes(f) && inScope(f)
+const IB1_FILLED_ENTRIES = ['packages/contracts/src/index.ts', 'packages/platform/src/index.ts'];
+const filledEntry = (f) => IB1_FILLED_ENTRIES.includes(f) && changedPaths.includes(f) && inScope(f)
   && Boolean(gov) && gov.results.find((r) => r.id === 'B11').pass;
 
 // Bounded WP04 V07 (filled entry points) and V16/V17 (static checks).
@@ -594,7 +595,7 @@ if (want('W18')) {
       let base0 = null;
       try { const j = JSON.parse(live.stdout); if (live.status === 0 && j.ok === true) base0 = { edges: j.summary.edges, optional: j.summary.optionalEdges }; } catch { /* fails below */ }
       const summaryOf = (id) => { const m = new RegExp(`^## ${id} [^\\n]*\\nexpected: [^\\n]*\\nsummary: (\\{[^\\n]*\\})$`, 'm').exec(negLog); try { return m ? JSON.parse(m[1]) : null; } catch { return null; } };
-      const graphGrew = Boolean(base0) && (base0.edges === 0 || ['packages/contracts/src/index.ts', 'packages/platform/src/index.ts'].some(filledEntry)) && summaryOf('C0')?.edges === base0.edges;
+      const graphGrew = Boolean(base0) && (base0.edges === 0 || IB1_FILLED_ENTRIES.some(filledEntry)) && summaryOf('C0')?.edges === base0.edges;
       const edgeBounded = (c) => {
         const want = /^exit 0, no violations, (\d+) edges \((\d+) optional\)$/.exec(c.expected || '');
         const got = summaryOf(c.id);

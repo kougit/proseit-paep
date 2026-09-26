@@ -10,9 +10,9 @@ Development/CI tooling for the runtime-configuration schema, validator and start
 | `portability-proof.mjs` | `npm run qa:runtime-config:portability` | One production build of the reference app, started in headless Chromium with cloud-SaaS, private-cloud and on-premise files, and failing safely on bad files |
 | `validate-configs.mjs` | (run by `qa:runtime-config`) | Validates `config/runtime-config.example.json`, every `apps/*/public/config/*.json` and the fixture manifest |
 | `test/` | | `node:test` suites (positive, negative, loader and startup) |
-| `fixtures/` | | Valid and invalid configuration documents and `manifest.json` (secret-shaped inputs are built at runtime, never committed) |
+| `fixtures/` | | Valid and invalid configuration documents and `manifest.json` (credential-like inputs are built at runtime; the committed manifest holds only obviously fake `example.test` values such as `https://u:p@…`) |
 | `lib/compile-platform.mjs` | | Compiles `packages/platform` with the TypeScript API into `os.tmpdir()` for the tests |
 
 All tools write only to `os.tmpdir()` and, when set, `$PAEP_EVIDENCE_DIR`. When adding a test, update `EXPECTED_TESTS` in `runtime-config-qa.mjs`.
 
-**Status:** delivered by IB1-CONTRACTS-CONFIG (PASS pending PO/SA acceptance).
+**Status:** delivered by IB1-CONTRACTS-CONFIG (IN PROGRESS; not accepted).

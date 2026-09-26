@@ -1,6 +1,6 @@
 # @proseit/paep-contracts
 
-**Status:** implemented by IB1-CONTRACTS-CONFIG (PASS pending PO/SA acceptance).
+**Status:** implemented by IB1-CONTRACTS-CONFIG (IN PROGRESS; not accepted).
 
 **Layer:** L0 - Base (PAEP-IB-01 §6.1)
 

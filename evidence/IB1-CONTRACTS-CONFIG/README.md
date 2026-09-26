@@ -1,6 +1,6 @@
 # IB1-CONTRACTS-CONFIG Evidence
 
-Evidence for product-neutral contracts and governed runtime configuration. Status: **PASS (technical), not accepted**; PO/SA acceptance pending. Baseline generation 3 is CANDIDATE; IB2 not started.
+Evidence for product-neutral contracts and governed runtime configuration. Status: **ACCEPTED** by the PO/SA (2026-09-26; RR6 PASS, RR11 ACCEPTED, RR14 ACCEPTED LOW). Baseline generation 3 is CANDIDATE until the post-merge promotion; IB2 not started.
 
 | File | Content |
 | --- | --- |
@@ -18,5 +18,6 @@ Evidence for product-neutral contracts and governed runtime configuration. Statu
 | `reports/ci-report.md` | Pull request, GitHub Actions run and `PAEP / gate` result |
 | `logs/preflight/` | Pre-flight command logs on `035593b` |
 | `logs/verification-7ae5bca/` | Full verification on a fresh clone of `7ae5bca` with a clean `npm ci`: every command, exit code, lockfile hash before/after, tree status after install and after the run |
+| `logs/pre-acceptance/` | Pre-acceptance lanes A–H and the acceptance, merge and promotion rehearsal (finding D-IB1-01 and its verification) |
 
 Work-package records: `work-packages/IB1-CONTRACTS-CONFIG/` (WORK_PACKAGE, ACCEPTANCE, TRACEABILITY, ACCEPTANCE_REPORT, work-package.json). Design: `docs/architecture/IB1-CONTRACTS-CONFIG-DESIGN.md`. Guide: `docs/architecture/RUNTIME-CONFIGURATION-GUIDE.md`.

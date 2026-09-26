@@ -69,7 +69,7 @@ The accepted IB1-PREFLIGHT-R7 mechanism (registry bounds: accepted history up to
 
 | Historical finding | Why it appears | Bound applied in `verify-ib0-wp05.mjs` |
 | --- | --- | --- |
-| WP04 V07 / WP03 V09 "entry point is a placeholder" failing for `packages/contracts` or `packages/platform` | IB1 replaces the IB0 `export {}` placeholders with real public APIs | Accepted only for those entry points, only while they are in the CANDIDATE scope with B11 passing |
+| WP04 V07 / WP03 V09 "entry point is a placeholder" failing for `packages/contracts` or `packages/platform` | IB1 replaces the IB0 `export {}` placeholders with real public APIs | Accepted only for those two entry points: while they are in the CANDIDATE scope with B11 passing, and after promotion only as changes in accepted history since the historical verifier's baseline (D-IB1-01, PO/SA-authorised 2026-09-26) |
 | WP04 negative suite edge-count controls | The architecture graph now has the IB1 edges (`platform` → `contracts`, `reference-app` → `platform`, `reference-app` → `contracts`) | Every affected case must still report its intended rule; only the absolute edge count may differ, by exactly the edges `qa:architecture` reports |
 
 Any other finding still fails.

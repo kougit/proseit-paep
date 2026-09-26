@@ -1,0 +1,4 @@
+npm-ci EXIT_CODE=0
+qa-baseline-negative EXIT_CODE=0
+lockfile unchanged
+DONE

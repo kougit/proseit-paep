@@ -15,4 +15,4 @@ Shared test doubles, harnesses and contract-test fixtures (PAEP-IB-01 §8.2). No
 
 The doubles import contracts with `import type` only and contain no Frappe or framework fake.
 
-**Status:** delivered by IB1-CONTRACTS-CONFIG (PASS, technical; not accepted).
+**Status:** delivered by IB1-CONTRACTS-CONFIG (ACCEPTED by the PO/SA, 2026-09-26).

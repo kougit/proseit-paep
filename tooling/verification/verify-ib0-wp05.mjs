@@ -531,14 +531,14 @@ const pkgFinding = (key) => [/^(package\.json scripts differ from baseline \+ th
   (m) => Boolean(gov) && gov.packageProblems.length === 0 && since(key)(m[1].startsWith('package-lock') ? 'package-lock.json' : 'package.json')];
 
 // IB1-CONTRACTS-CONFIG: the WP03/WP04 verifiers require the IB0 placeholder entry points. A package entry point that is
-// no longer a placeholder is accepted only when it changed since the accepted baseline inside the CANDIDATE scope (B11 passing).
+// no longer a placeholder is accepted only when it changed inside the CANDIDATE scope (B11 passing) or, once promoted, in
+// accepted history after that verifier's baseline (the same bound as every other historical finding).
 const IB1_FILLED_ENTRIES = ['packages/contracts/src/index.ts', 'packages/platform/src/index.ts'];
-const filledEntry = (f) => IB1_FILLED_ENTRIES.includes(f) && changedPaths.includes(f) && inScope(f)
-  && Boolean(gov) && gov.results.find((r) => r.id === 'B11').pass;
+const filledEntry = (key) => (f) => IB1_FILLED_ENTRIES.includes(f) && since(key)(f);
 
 // Bounded WP04 V07 (filled entry points) and V16/V17 (static checks).
 function wp04StaticBounded(check) {
-  if (check.id === 'V07') return segmentsOk(check.details, [[/^(.+) is not a placeholder$/, (m) => filledEntry(m[1])]]);
+  if (check.id === 'V07') return segmentsOk(check.details, [[/^(.+) is not a placeholder$/, (m) => filledEntry('wp04')(m[1])]]);
   if (check.id === 'V16') return segmentsOk(check.details, [pkgFinding('wp04')]);
   if (check.id === 'V17') {
     const ok = since('wp04');
@@ -618,7 +618,7 @@ if (want('W18')) {
       let base0 = null;
       try { const j = JSON.parse(live.stdout); if (live.status === 0 && j.ok === true) base0 = { edges: j.summary.edges, optional: j.summary.optionalEdges }; } catch { /* fails below */ }
       const summaryOf = (id) => { const m = new RegExp(`^## ${id} [^\\n]*\\nexpected: [^\\n]*\\nsummary: (\\{[^\\n]*\\})$`, 'm').exec(negLog); try { return m ? JSON.parse(m[1]) : null; } catch { return null; } };
-      const graphGrew = Boolean(base0) && (base0.edges === 0 || IB1_FILLED_ENTRIES.some(filledEntry)) && summaryOf('C0')?.edges === base0.edges;
+      const graphGrew = Boolean(base0) && (base0.edges === 0 || IB1_FILLED_ENTRIES.some(filledEntry('wp04'))) && summaryOf('C0')?.edges === base0.edges;
       const edgeBounded = (c) => {
         const want = /^exit 0, no violations, (\d+) edges \((\d+) optional\)$/.exec(c.expected || '');
         const got = summaryOf(c.id);
@@ -695,7 +695,7 @@ if (['W20', 'W21', 'W22', 'W23'].some(want)) {
     const bounded = {
       V05: (d) => d === 'top-level extends added; extends changed',
       V08: (d) => sameSet(d.split('; '), pkgNames().map((n) => `${n}: no alias`)),
-      V09: (d) => segmentsOk(d, [[/^(.+) is not a placeholder \(export \{\} only\)$/, (m) => filledEntry(m[1])]]),
+      V09: (d) => segmentsOk(d, [[/^(.+) is not a placeholder \(export \{\} only\)$/, (m) => filledEntry('wp03')(m[1])]]),
       V10: (d) => segmentsOk(d, [pkgFinding('wp03')]),
       V12: (d) => segmentsOk(d, [
         [/^(out-of-scope files|boundary tooling \(IB0-WP04\)): (.+)$/, (m) => fileList(m).every(presentAccepted('wp03'))],

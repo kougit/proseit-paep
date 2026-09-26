@@ -34,6 +34,12 @@ Also found during integration: new WP05 negative case ids collided with existing
 
 Fixed: Q2-3 (dot path segments), Q3-2 (partial: credential assignments after whitespace, URL userinfo anywhere, more storage schemes), Q3-6 (secret-shaped keys), Q4-2 (private names, CGNAT), Q4-3 (build context type check), Q5-2 (bootstrap failure shows the fail-safe page), Q7-01 (bound limited to the two entry points), Q7-02, Q8-03 to Q8-09 (documentation). The remainder is recorded in `residual-risk.md`.
 
+## Pre-acceptance rehearsal (2026-09-26)
+
+| ID | Severity | Finding | Fix | Status |
+| --- | --- | --- | --- | --- |
+| D-IB1-01 | Medium | After a simulated merge and promotion of generation 3, `qa:ib0-wp05` failed W17, W18, W20 and W21 because the filled-entry bound held only while generation 3 was CANDIDATE | Bound also accepts the two entry points as changes in accepted history (PO/SA-authorised 2026-09-26T18:14Z); see `ACCEPTANCE_REPORT.md` §4 | CLOSED (rehearsal passes before merge, after merge and after promotion) |
+
 ## Result
 
 No open High or Medium finding.

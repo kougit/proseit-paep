@@ -15,4 +15,4 @@ Rules:
 
 Guide: `docs/architecture/RUNTIME-CONFIGURATION-GUIDE.md`.
 
-**Status:** delivered by IB1-CONTRACTS-CONFIG (PASS, technical; not accepted).
+**Status:** delivered by IB1-CONTRACTS-CONFIG (ACCEPTED by the PO/SA, 2026-09-26).

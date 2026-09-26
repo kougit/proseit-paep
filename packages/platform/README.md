@@ -1,6 +1,6 @@
 # @proseit/paep-platform
 
-**Status:** runtime-configuration subsystem implemented by IB1-CONTRACTS-CONFIG (PASS, technical; not accepted). Other platform abstractions remain IB3.
+**Status:** runtime-configuration subsystem implemented by IB1-CONTRACTS-CONFIG (ACCEPTED by the PO/SA, 2026-09-26). Other platform abstractions remain IB3.
 
 **Layer:** L1 - Cross-cutting platform (PAEP-IB-01 §6.1)
 

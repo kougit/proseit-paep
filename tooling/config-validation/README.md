@@ -15,4 +15,4 @@ Development/CI tooling for the runtime-configuration schema, validator and start
 
 All tools write only to `os.tmpdir()` and, when set, `$PAEP_EVIDENCE_DIR`. When adding a test, update `EXPECTED_TESTS` in `runtime-config-qa.mjs`.
 
-**Status:** delivered by IB1-CONTRACTS-CONFIG (PASS, technical; not accepted).
+**Status:** delivered by IB1-CONTRACTS-CONFIG (ACCEPTED by the PO/SA, 2026-09-26).

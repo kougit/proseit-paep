@@ -32,4 +32,19 @@ Pull request: [#8](https://github.com/kougit/proseit-paep/pull/8) `claude/ib1-co
 
 The three new jobs ran in parallel with the existing ones and are listed in the gate's `needs` and `MANDATORY_JOBS`; the `PAEP / gate` check context and gate logic are unchanged. A later commit that only adds this report and status records re-runs the same workflow on the new head.
 
-`PAEP / negative-ci` took 14:16 against its accepted 20-minute timeout (7:22 on `main` at `035593b`); see residual risk RR14.
+## `PAEP / negative-ci` timing (corrected 2026-09-26)
+
+An earlier version of this report compared the IB1 duration with the single run on `main` at `035593b` ("7:22"). That run was a fast outlier, not the typical pre-IB1 duration. Job durations (started to completed, from the GitHub job records), timeout 20 minutes at every commit:
+
+| Run | Commit | Duration | Timeout used |
+| --- | --- | --- | --- |
+| 36253169477 (IB1, PR #8) | `19eac59` | 15:10 | 75.8% |
+| 36252266440 (IB1, PR #8) | `4c4c351` | 14:16 | 71.3% |
+| 36245405570 (main, fast outlier) | `035593b` | 7:27 | 37.3% |
+| 36244697256 | `0a02631` | 12:08 | 60.7% |
+| 36244249784 (main) | `e795868` | 12:13 | 61.1% |
+| 36243532183 | `5a63e76` | 12:27 | 62.3% |
+| 36111039774 | `c36e043` | 12:12 | 61.0% |
+| 36109852885 | `2d7d762` | 12:21 | 61.8% |
+
+Typical pre-IB1 duration: about 12:08–12:27. IB1 adds about two to three minutes (14:16 and 15:10, about 71–76% of the 20-minute timeout). The timeout is unchanged. See residual risk RR14.

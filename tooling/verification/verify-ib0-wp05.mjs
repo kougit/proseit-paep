@@ -140,7 +140,7 @@ if (want('W01')) {
 // Controlled baseline (registry): the active ACCEPTED generation and the CANDIDATE's authorised scope.
 // Changed paths are tracked + untracked since that baseline, without rename detection (a moved record shows under
 // both paths). gov.base is null when the registry is invalid, and every check that needs it then fails closed.
-const needsBaseline = ['W02', 'W05', 'W06', 'W07', 'W08', 'W16', 'W17', 'W18', 'W20', 'W21', 'W22', 'W23', 'W26'].some(want);
+const needsBaseline = ['W02', 'W05', 'W06', 'W07', 'W08', 'W11', 'W12', 'W16', 'W17', 'W18', 'W20', 'W21', 'W22', 'W23', 'W26'].some(want);
 const gov = needsBaseline ? evaluateBaseline(root) : null;
 const BASE = gov?.base || null;
 const changedPaths = gov ? gov.changedPaths : [];
@@ -324,9 +324,32 @@ if (want('W10') && wf) {
     p.length === 0, p.length ? p.join('; ') : 'contents: read; gate {}');
 }
 
+// Accepted-policy floor (IB1-CONTRACTS-CONFIG, independent QA Q6-1). The CI policy in the working tree is a CANDIDATE change;
+// it may only add mandatory jobs. Every job of the policy at the active accepted baseline keeps its name and exact commands,
+// and every other policy field (gate, workflow, actions, retention, setup) stays byte-identical, so a CANDIDATE cannot drop,
+// weaken or rename an accepted control while editing the workflow and the policy together.
+const POLICY_FLOOR_FREE = ['policyVersion', 'workPackage', 'note', 'mandatoryJobs', 'requiredCommands'];
+function acceptedPolicyFloor() {
+  const jobs = []; const other = [];
+  if (!BASE) return { jobs: [noBase], other: [noBase] };
+  let a = null;
+  try { a = JSON.parse(git('show', `${BASE}:tooling/verification/ib0-wp05-ci-policy.json`).stdout); } catch { /* reported */ }
+  if (!a || !Array.isArray(a.mandatoryJobs)) return { jobs: ['accepted CI policy unreadable'], other: ['accepted CI policy unreadable'] };
+  for (const j of a.mandatoryJobs) {
+    const c = policy.mandatoryJobs.find((x) => x.id === j.id);
+    if (!c || c.name !== j.name) jobs.push(`accepted mandatory job ${j.id} removed or renamed`);
+    if (JSON.stringify(policy.requiredCommands?.[j.id]) !== JSON.stringify(a.requiredCommands?.[j.id])) jobs.push(`accepted commands of ${j.id} changed`);
+  }
+  for (const k of new Set([...Object.keys(a), ...Object.keys(policy)])) {
+    if (!POLICY_FLOOR_FREE.includes(k) && JSON.stringify(a[k]) !== JSON.stringify(policy[k])) other.push(`policy ${k} differs from the accepted baseline ${BASE.slice(0, 7)}`);
+  }
+  return { jobs, other };
+}
+const floor = (want('W11') || want('W12')) && policy ? acceptedPolicyFloor() : { jobs: [], other: [] };
+
 // W11: parallel topology, required commands, timeouts and evidence artifacts.
 if (want('W11') && wf) {
-  const p = [];
+  const p = [...floor.jobs];
   const jobs = jobsOf();
   if (!sameSet(Object.keys(jobs), [...mandatoryIds, policy.gate.id])) p.push(`jobs ${Object.keys(jobs).join(', ')}`);
   for (const mj of policy.mandatoryJobs) {
@@ -352,13 +375,13 @@ if (want('W11') && wf) {
     if (JSON.stringify(cmds) !== JSON.stringify(policy.requiredCommands[mj.id])) p.push(`${mj.id}: commands ${JSON.stringify(cmds)} != ${JSON.stringify(policy.requiredCommands[mj.id])}`);
     for (const r of runs) if (r.split('\n').filter(Boolean).length !== 2) p.push(`${mj.id}: run step has extra lines`);
   }
-  add('W11', 'Every mandatory job in the CI policy runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention',
+  add('W11', 'Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention',
     p.length === 0, p.length ? p.join('; ') : `${mandatoryIds.length} parallel jobs: ${mandatoryIds.join(', ')}`);
 }
 
 // W12: aggregate gate structure (behaviour is proven by the negative suite, which runs this script).
 if (want('W12') && wf) {
-  const p = [];
+  const p = [...floor.other];
   const g = jobsOf()[policy.gate.id];
   if (!g) p.push('no gate job');
   else {
@@ -380,7 +403,7 @@ if (want('W12') && wf) {
     // The script must equal the reviewed text in the policy exactly: a substring check would accept an early "exit 0".
     if (r !== policy.gate.run) p.push('gate script differs from the reviewed script in the policy (gate.run)');
   }
-  add('W12', 'Aggregate gate "PAEP / gate": needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success',
+  add('W12', 'Aggregate gate "PAEP / gate" (gate, workflow and action policy byte-identical to the accepted baseline): needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the mandatory list and every result is success',
     p.length === 0, p.length ? p.join('; ') : `needs ${mandatoryIds.length}/${mandatoryIds.length}; if always(); permissions {}`);
 }
 

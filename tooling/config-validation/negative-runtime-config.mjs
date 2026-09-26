@@ -51,7 +51,12 @@ export const MUTATIONS = [
   { id: 'M32-loader-no-redirect-check', file: `${RC}/load.ts`, find: "if (response.redirected || (response.url !== '' && response.url !== options.configUrl)) return loadFailure('CFG_LOAD_REDIRECT');", replace: '' },
   { id: 'M33-loader-no-content-type-check', file: `${RC}/load.ts`, find: "if (!/^application\\/json\\s*(;|$)/.test(type)) return loadFailure('CFG_LOAD_CONTENT_TYPE');", replace: '' },
   { id: 'M34-loader-no-declared-length-check', file: `${RC}/load.ts`, find: "if (Number.isFinite(declared) && declared > MAX_RUNTIME_CONFIG_BYTES) return loadFailure('CFG_LOAD_TOO_LARGE');", replace: '' },
-  { id: 'M35-loader-no-status-check', file: `${RC}/load.ts`, find: "if (response.status !== 200 || !response.ok) return loadFailure('CFG_LOAD_STATUS');", replace: '' }
+  { id: 'M35-loader-no-status-check', file: `${RC}/load.ts`, find: "if (response.status !== 200 || !response.ok) return loadFailure('CFG_LOAD_STATUS');", replace: '' },
+  { id: 'M36-numeric-host-check-removed', file: `${RC}/semantic.ts`, find: "if (!u.host.startsWith('[') && endsInNumber(u.host) && !isIpv4(u.host)) { add('CFG_URL_HOST', path); continue; }", replace: '' },
+  { id: 'M37-private-name-check-removed', file: `${RC}/semantic.ts`, find: 'LOOPBACK.has(u.host) || isPrivateName(u.host) ||', replace: 'LOOPBACK.has(u.host) ||' },
+  { id: 'M38-issue-path-redaction-removed', file: `${RC}/validate.ts`, find: 'path: redactPointer(i.path) }', replace: 'path: i.path }' },
+  { id: 'M39-build-context-check-removed', file: `${RC}/validate.ts`, find: "throw new Error('invalid build context');", replace: '' },
+  { id: 'M40-secret-shaped-key-check-removed', file: `${RC}/content-guard.ts`, find: "if (SECRET_VALUES.some((re) => re.test(key))) { add('CFG_CONTENT_SECRET', path); continue; }", replace: '' }
 ];
 
 function applyMutation(source, m) {

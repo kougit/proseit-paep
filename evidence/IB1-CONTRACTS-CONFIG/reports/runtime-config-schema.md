@@ -63,8 +63,8 @@ Semantic and compatibility rules that a schema cannot express are in `packages/p
 | Name | Constraint |
 | --- | --- |
 | `slug` | string; pattern `^[a-z][a-z0-9]*(-[a-z0-9]+)*$`; minLength 1; maxLength 64 |
-| `url` | string; pattern `^(https://[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*\|http://(localhost\|127\.0\.0\.1\|\[::1\]))(:[1-9][0-9]{0,4})?(/[A-Za-z0-9._~-]+)*/?$`; minLength 1; maxLength 2048 |
-| `nullableUrl` | string\|null; pattern `^(https://[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*\|http://(localhost\|127\.0\.0\.1\|\[::1\]))(:[1-9][0-9]{0,4})?(/[A-Za-z0-9._~-]+)*/?$`; minLength 1; maxLength 2048 |
+| `url` | string; pattern `^(https://[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*\|http://(localhost\|127\.0\.0\.1\|\[::1\]))(:([1-9][0-9]{0,3}\|[1-5][0-9]{4}\|6[0-4][0-9]{3}\|65[0-4][0-9]{2}\|655[0-2][0-9]\|6553[0-5]))?(/(?!\.{1,2}(/\|$))[A-Za-z0-9._~-]+)*/?$`; minLength 1; maxLength 2048 |
+| `nullableUrl` | string\|null; pattern `^(https://[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*\|http://(localhost\|127\.0\.0\.1\|\[::1\]))(:([1-9][0-9]{0,3}\|[1-5][0-9]{4}\|6[0-4][0-9]{3}\|65[0-4][0-9]{2}\|655[0-2][0-9]\|6553[0-5]))?(/(?!\.{1,2}(/\|$))[A-Za-z0-9._~-]+)*/?$`; minLength 1; maxLength 2048 |
 | `paepVersion` | string; pattern `^(0\|[1-9][0-9]{0,3})\.(0\|[1-9][0-9]{0,3})$`; maxLength 9 |
 | `locale` | string; pattern `^[a-z]{2,3}(-[A-Z][a-z]{3})?(-([A-Z]{2}\|[0-9]{3}))?$`; minLength 2; maxLength 16 |
 | `localeList` | array; minItems 1; maxItems 50; unique; items: see `locale` |

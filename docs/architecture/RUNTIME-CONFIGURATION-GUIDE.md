@@ -16,7 +16,7 @@ If the file is missing, invalid, unsafe or incompatible, the application does no
 
 1. Start from `config/runtime-config.example.json`.
 2. Set `deployment.environment` (`development`, `test`, `staging`, `production`) and `deployment.profile` (`cloud-saas`, `private-cloud`, `on-premise`).
-3. Set `deployment.basePath` to the path the application is served under (it must match the page's `<base href>`).
+3. Set `deployment.basePath` to the path the application is served under. It must match the page's `<base href>`. To serve the same build under a sub-path such as `/erp/`, set `<base href="/erp/">` in the deployed `index.html` (the only file that changes; scripts and styles stay byte-identical) and `basePath` to `/erp/`. A mismatch fails with `CFG_BASE_PATH`.
 4. Set the backend URLs. They must be `https://`; `http://` is accepted only for `localhost`, `127.0.0.1` or `[::1]` in `development`. In `staging` and `production` the host must be a public name (no loopback or private address). Punycode (`xn--`) host names are rejected in every environment.
 5. Choose the identity mode. `oidc` needs `issuer`, `clientId` and the `openid` scope. Other modes must leave the OIDC fields `null`/empty.
 6. For `production`, include `security.cspProfile: "strict"`.

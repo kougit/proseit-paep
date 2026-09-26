@@ -30,10 +30,9 @@ void startWithRuntimeConfig({
     documentBasePath: base.pathname
   }),
   onReady: async (store) => {
-    document.documentElement.dataset['paepConfig'] = 'ready';
     document.documentElement.dataset['paepProfile'] = store.config.deployment.profile;
-    await bootstrapApplication(App, { providers: [...appConfig.providers, { provide: RUNTIME_CONFIG_STORE, useValue: store }] })
-      .catch((err) => console.error(err));
+    await bootstrapApplication(App, { providers: [...appConfig.providers, { provide: RUNTIME_CONFIG_STORE, useValue: store }] });
+    document.documentElement.dataset['paepConfig'] = 'ready';
   },
   onFailure: showConfigurationFailure
 });

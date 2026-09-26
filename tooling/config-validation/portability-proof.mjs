@@ -67,10 +67,12 @@ const scenarios = [
   ['F9', 'insecure http endpoint in production fails safe', { type: 'application/json', body: variant((c) => { c.deployment.environment = 'production'; c.backend.apiBaseUrl = 'http://localhost:8000'; }) }, { failed: 'CFG_URL_INSECURE' }]
 ];
 
-function serve(dir, config) {
+function serve(dir, config, prefix = '/') {
   const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.ico': 'image/x-icon', '.json': 'application/json' };
   const server = http.createServer((req, res) => {
     const url = new URL(req.url, 'http://127.0.0.1');
+    if (!url.pathname.startsWith(prefix)) { res.writeHead(404); res.end(); return; }
+    url.pathname = `/${url.pathname.slice(prefix.length)}`;
     if (url.pathname === '/config/runtime-config.json') {
       res.writeHead(config.status ?? 200, { 'content-type': config.type, 'cache-control': 'no-store' });
       res.end(config.body);
@@ -131,6 +133,25 @@ async function main() {
       record(id, name, ok, `status=${status} code=${code || '-'} appRendered=${rendered} appRootPresent=${dom.includes('<app-root')} contentEchoed=${Boolean(leaks)}`);
     }
   }
+  // Sub-path hosting: the same bundle served under /erp/. Only index.html's <base href> is set at deploy time (a copy; the build
+  // output is not touched); every other file must be byte-identical to the build.
+  {
+    const subDir = path.join(work, 'subpath');
+    fs.cpSync(browserDir, subDir, { recursive: true });
+    const indexFile = path.join(subDir, 'index.html');
+    const html = fs.readFileSync(indexFile, 'utf8');
+    const rewritten = html.replace('<base href="/">', '<base href="/erp/">');
+    fs.writeFileSync(indexFile, rewritten);
+    const hashExceptIndex = (dir) => { fs.renameSync(path.join(dir, 'index.html'), path.join(work, 'index.tmp')); const h = hashTree(dir); fs.renameSync(path.join(work, 'index.tmp'), path.join(dir, 'index.html')); return h; };
+    const sameBundle = rewritten !== html && hashExceptIndex(subDir) === hashExceptIndex(browserDir);
+    const server = await serve(subDir, { type: 'application/json', body: profileConfig('on-premise', 'production', (c) => { c.deployment.basePath = '/erp/'; c.telemetry = { enabled: false }; c.analytics = { enabled: false }; c.identity = { mode: 'sso-proxy' }; }) }, '/erp/');
+    const dom = await dumpDom(chrome, `http://127.0.0.1:${server.address().port}/erp/`);
+    server.close();
+    const status = /data-paep-config="(ready|failed)"/.exec(dom)?.[1] ?? 'none';
+    const rendered = /<app-root[^>]*>\s*<[a-z]/i.test(dom);
+    record('S4', 'the same bundle served under /erp/ (only <base href> set at deploy time) starts with basePath /erp/', sameBundle && status === 'ready' && rendered,
+      `bundle identical except index.html=${sameBundle} status=${status} appRendered=${rendered}`);
+  }
   const after = hashTree(browserDir);
   record('B3', 'every scenario ran against the identical build output', after === before, `sha256 before ${before.slice(0, 16)} after ${after.slice(0, 16)}`);
 }
@@ -140,4 +161,4 @@ fs.rmSync(work, { recursive: true, force: true });
 const summary = { result: failed === 0 ? 'PASS' : 'FAIL', total: results.length, failed, results };
 if (process.env.PAEP_EVIDENCE_DIR) fs.writeFileSync(path.join(process.env.PAEP_EVIDENCE_DIR, 'portability-proof.json'), JSON.stringify(summary, null, 2) + '\n');
 console.log(`\nPAEP IB1 same-build portability and fail-safe startup proof: ${summary.result} (${results.length - failed}/${results.length})`);
-process.exit(failed === 0 && results.length === scenarios.length + 4 ? 0 : 1);
+process.exit(failed === 0 && results.length === scenarios.length + 5 ? 0 : 1);

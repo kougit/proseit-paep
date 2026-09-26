@@ -25,8 +25,8 @@ const GENERATOR = path.join(HERE, 'generate-validator.mjs');
 /** Declared test counts per file. The gate fails unless exactly these many tests run and pass. */
 export const EXPECTED_TESTS = Object.freeze({
   'runtime-config-positive.test.mjs': 20,
-  'runtime-config-negative.test.mjs': 122,
-  'runtime-config-loader-startup.test.mjs': 23
+  'runtime-config-negative.test.mjs': 143,
+  'runtime-config-loader-startup.test.mjs': 24
 });
 export const EXPECTED_TOTAL = Object.values(EXPECTED_TESTS).reduce((a, b) => a + b, 0);
 

@@ -183,12 +183,34 @@ add('oversize document (> 64 KiB)', () => {
   return { bytes: enc(t.replace(/\}\s*$/, ' '.repeat(P.MAX_RUNTIME_CONFIG_BYTES + 1 - t.length) + '}')) };
 }, 'load', [['load', 'CFG_LOAD_TOO_LARGE', '']]);
 const nested = (levels) => { let v = true; for (let i = 0; i < levels; i += 1) v = { n: v }; return v; };
-add('nesting deeper than 8 levels', () => { const d = base(); d.features.uiHints.deep = nested(6); return { bytes: bytesOf(d) }; }, 'parse', [['parse', 'CFG_PARSE_DEPTH', '/features/uiHints/deep/n/n/n/n/n']]);
-add('nesting at the depth limit reaches the schema stage', () => { const d = base(); d.features.uiHints.deep = nested(5); return { bytes: bytesOf(d) }; }, 'schema', [['schema', 'CFG_SCHEMA_TYPE', '/features/uiHints/deep']]);
+add('nesting deeper than 8 levels', () => { const d = base(); d.features.uiHints.deep = nested(6); return { bytes: bytesOf(d) }; }, 'parse', [['parse', 'CFG_PARSE_DEPTH', '/features/uiHints']]);
+add('nesting at the depth limit reaches the schema stage', () => { const d = base(); d.features.uiHints.deep = nested(5); return { bytes: bytesOf(d) }; }, 'schema', [['schema', 'CFG_SCHEMA_TYPE', '/features/uiHints']]);
 add('number overflow 1e400', () => ({ bytes: enc(JSON.stringify(base()).replace('"sampleRate":0.25', '"sampleRate":1e400')) }), 'parse', [['parse', 'CFG_PARSE_NUMBER', '/telemetry/sampleRate']]);
 add('root is a JSON array', () => ({ bytes: enc('[]') }), 'parse', [['parse', 'CFG_PARSE_ROOT', '']]);
 add('root is a JSON string', () => ({ bytes: enc('"1.0"') }), 'parse', [['parse', 'CFG_PARSE_ROOT', '']]);
 add('trailing content after the document', () => ({ bytes: enc(JSON.stringify(base()) + ' {}') }), 'parse', [['parse', 'CFG_PARSE_SYNTAX', '']]);
+// Independent QA Q2-1/Q4-1: numeric host forms a browser reads as IPv4 (loopback/private) are refused in every environment.
+for (const host of ['127.1', '2130706433', '0x7f000001', '0177.0.0.1', '10.1', '0', '192.168.1', '1.2.3.04']) {
+  docCase(`non-canonical numeric host https://${host} in production`, (d) => { d.deployment.environment = 'production'; d.backend.apiBaseUrl = `https://${host}`; }, 'semantic', [['semantic', 'CFG_URL_HOST', '/backend/apiBaseUrl']]);
+}
+docCase('non-canonical numeric host is refused in development too', (d) => { d.deployment.environment = 'development'; d.backend.apiBaseUrl = 'https://127.1'; }, 'semantic', [['semantic', 'CFG_URL_HOST', '/backend/apiBaseUrl']]);
+// Independent QA Q4-2: private DNS names and carrier-grade NAT addresses in staging/production.
+for (const host of ['api.internal', 'intranet', 'api.local', '100.64.0.1']) {
+  docCase(`private host https://${host} in staging`, (d) => { d.deployment.environment = 'staging'; d.backend.apiBaseUrl = `https://${host}`; }, 'semantic', [['semantic', 'CFG_URL_HOST', '/backend/apiBaseUrl']]);
+}
+// Independent QA Q2-2/Q2-3: ports above 65535 and dot-only path segments.
+docCase('port above 65535', (d) => { d.backend.apiBaseUrl = 'https://api.example.test:65536'; }, 'schema', [['schema', 'CFG_SCHEMA_PATTERN', '/backend/apiBaseUrl']]);
+docCase('dot-dot path segment', (d) => { d.backend.apiBaseUrl = 'https://api.example.test/../admin'; }, 'schema', [['schema', 'CFG_SCHEMA_PATTERN', '/backend/apiBaseUrl']]);
+// Independent QA Q3-1: a document-supplied key never appears in an issue path, whatever stage reports it.
+{
+  const key = 'sk' + '_live_' + 'Q9x8'.repeat(6);
+  add('secret-shaped unknown key holding a duplicate key is reported at its schema parent', () => { const d = base(); d.product[key] = '__DUP__'; return { bytes: enc(JSON.stringify(d).replace('"__DUP__"', '{"a":1,"a":2}')) }; }, 'parse', [['parse', 'CFG_PARSE_DUPLICATE_KEY', '/product']], [key]);
+  add('secret-shaped unknown key holding markup is reported at its schema parent', () => { const d = base(); d.identity[key] = { x: 'java' + 'script:alert(1)' }; return { bytes: bytesOf(d) }; }, 'content', [['content', 'CFG_CONTENT_SECRET', '/identity']], [key]);
+}
+// Independent QA Q3-2: credentials and storage locators inside free text.
+docCase('credential assignment inside free text', (d) => { d.product.name = 'Portal ' + 'pass' + 'word=hunter2'; }, 'content', [['content', 'CFG_CONTENT_SECRET', '/product/name']]);
+docCase('URL userinfo inside free text', (d) => { d.product.name = 'see https://u:' + 'p@host.example.test'; }, 'content', [['content', 'CFG_CONTENT_SECRET', '/product/name']]);
+docCase('object-store locator inside free text', (d) => { d.product.name = 'data in ' + 's3://bucket/x'; }, 'content', [['content', 'CFG_CONTENT_DATA_ACCESS', '/product/name']]);
 docCase('uiHints with 33 keys', (d) => { d.features.uiHints = Object.fromEntries(Array.from({ length: 33 }, (_, i) => [`hint${i}`, true])); }, 'schema', [['schema', 'CFG_SCHEMA_PROPERTIES', '/features/uiHints']]);
 
 for (const c of cases) {
@@ -235,4 +257,10 @@ test('N-robustness: 400 deterministic byte mutations never throw and always retu
     if (!outcome.ok) { rejected += 1; assert.match(outcome.diagnosticId, DIAGNOSTIC_ID); assert.notEqual(outcome.code, 'CFG_INTERNAL'); }
   }
   assert.ok(rejected > 300, `only ${rejected} mutations rejected`);
+});
+
+test('N-context: a malformed build context fails closed as CFG_INTERNAL', () => {
+  for (const bad of [{ ...CONTEXT, supportedApiContracts: 'x' + CONTEXT.supportedApiContracts[0] + 'x' }, { ...CONTEXT, externalBiProviders: null }, { ...CONTEXT, expectedProductId: 1 }, null]) {
+    assertFailure(validate(bytesOf(base()), {}, bad), { stage: 'internal', code: 'CFG_INTERNAL', issues: [['internal', 'CFG_INTERNAL', '']] });
+  }
 });

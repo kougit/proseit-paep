@@ -1,7 +1,7 @@
 import type { CorrelationId, IsoDateTime, MessageKey } from '../core/ids.js';
 import type { PageInfo, SortSpec } from '../core/paging.js';
 import type { FieldFilter, FilterValue } from '../core/query.js';
-import type { ScalarValue } from '../core/values.js';
+import type { MoneyValue, ScalarValue } from '../core/values.js';
 import type { JobStatus } from '../core/jobs.js';
 
 /*
@@ -83,15 +83,18 @@ export interface DataFreshness {
   readonly stale?: boolean;
 }
 
+/** One report cell: a scalar, or a money amount with its explicit currency (PAEP-IB-01 §7.3: never infer currency). */
+export type ReportCellValue = ScalarValue | MoneyValue;
+
 /** One result row keyed by column key; columns are dynamic per dataset, so a record map is the model. */
-export type ReportRow = Readonly<Record<string, ScalarValue>>;
+export type ReportRow = Readonly<Record<string, ReportCellValue>>;
 
 export interface ReportResult<Row extends ReportRow = ReportRow> {
   readonly columns: readonly ReportColumn[];
   readonly rows: readonly Row[];
   readonly page?: PageInfo;
   /** Totals keyed by metric key. */
-  readonly totals?: Readonly<Record<string, ScalarValue>>;
+  readonly totals?: Readonly<Record<string, ReportCellValue>>;
   readonly freshness: DataFreshness;
   readonly correlationId: CorrelationId;
 }

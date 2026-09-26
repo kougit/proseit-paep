@@ -25,7 +25,7 @@ All criteria are mandatory. PASS is technical; ACCEPTED is the PO/SA's decision.
 | IB1-AC19 | Strict typecheck and both production builds pass | `qa:types`; `build:reference-app`; `build:ui-lab` |
 | IB1-AC20 | Baseline governance: generation 2 ACCEPTED and active; generation 3 CANDIDATE with exact scope; every change in scope | `qa:baseline` B01–B13; `qa:baseline:negative` |
 | IB1-AC21 | IB0 regressions (WP01–WP05, WP05 negatives) pass with only the bounds in `WORK_PACKAGE.md` §7 | `qa:ib0-wp05`; `qa:ib0-wp05:negative` |
-| IB1-AC22 | CI: `PAEP / contracts`, `PAEP / runtime-config`, `PAEP / runtime-config-negative` run in parallel and are added to the needs and mandatory list of `PAEP / gate`, whose check context and gate logic are unchanged | W11, W12; WP05 negatives I01–I03 |
+| IB1-AC22 | CI: `PAEP / contracts`, `PAEP / runtime-config`, `PAEP / runtime-config-negative` run in parallel and are added to the needs and mandatory list of `PAEP / gate`, whose check context and gate logic are unchanged | W11, W12; WP05 negatives K01–K07 (K04–K07: accepted-policy floor) |
 | IB1-AC23 | No secret in source, fixtures, logs or evidence | W08; WP02–WP04 secret scans |
 | IB1-AC24 | Controlled sources and CLAUDE.md unchanged; no Nx | W02, W04 |
 | IB1-AC25 | Evidence set, traceability, residual risks and readiness report complete | `evidence/IB1-CONTRACTS-CONFIG/`; `TRACEABILITY.csv`; `ACCEPTANCE_REPORT.md` |

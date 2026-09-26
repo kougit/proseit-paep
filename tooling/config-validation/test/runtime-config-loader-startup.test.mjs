@@ -149,6 +149,16 @@ test('S-fail-open: a forged deep-frozen {ok:true} outcome not produced by the va
   assertFailure(outcome, 'internal', 'CFG_INTERNAL');
 });
 
+test('S-fail-open: an onReady rejection (application failed to start) shows the fail-safe state and does not reject', async () => {
+  const start = await freshStartup();
+  const h = hooks(async () => validOutcome());
+  const failures = [];
+  const outcome = await start({ load: h.startup.load, onReady: async () => { throw new Error('bootstrap failed'); }, onFailure: (f) => failures.push(f) });
+  assertFailure(outcome, 'startup', 'CFG_INTERNAL');
+  assert.equal(failures.length, 1);
+  assert.equal(failures[0], outcome);
+});
+
 test('S-fail-open: a null or non-object outcome is treated as CFG_INTERNAL', async () => {
   for (const bogus of [null, undefined, 'ok', 1]) {
     const start = await freshStartup();

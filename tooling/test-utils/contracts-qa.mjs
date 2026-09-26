@@ -360,7 +360,8 @@ const NEGATIVE = [
   ["ExportJob status 'done'", 'ExportJob', `const j: ExportJob = { id: 'a', status: 'done' };`, [2322]],
   ['authenticated SessionOutcome without identity', 'SessionOutcome', `const s: SessionOutcome = { status: 'authenticated' };`, [2322, 2741]],
   ['write through a readonly record map', 'PaepError', `declare const e: PaepError;\nif (e.fieldErrors) e.fieldErrors['a'] = [];`, [2542]],
-  ['ReportRow value as an object', 'ReportRow', `const r: ReportRow = { a: { nested: 1 } };`, [2322]],
+  ['ReportRow value as an arbitrary object (only scalars or MoneyValue)', 'ReportRow', `const r: ReportRow = { a: { nested: 1 } };`, [2353]],
+  ['ReportRow money cell without a currency', 'ReportRow', `const r: ReportRow = { a: { amount: '1.00' } };`, [2322, 2741]],
   ['record-map read is possibly undefined (noUncheckedIndexedAccess)', 'ReportRow', `declare const r: ReportRow;\nconst s: string | number | boolean | null = r['a'];`, [2322]]
 ];
 const NEG = R('tooling/test-utils/fixtures/__negative__.ts'); // virtual only

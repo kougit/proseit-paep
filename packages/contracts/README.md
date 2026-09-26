@@ -28,7 +28,8 @@ Full catalogue: `evidence/IB1-CONTRACTS-CONFIG/reports/contract-catalogue.md`.
 The reporting contracts follow Appendix D with these deliberate tightenings, all compatible with its intent:
 
 * `FieldDataType` adds `'duration'`.
-* `ReportFilter.value`, `ReportQuery.parameters`, `ReportResult.totals`, `ReportRow` and `DrillRequest.sourceContext` use `ScalarValue` or `FilterValue` instead of `unknown`, so no framework or DOM object can cross the boundary.
+* `ReportFilter.value`, `ReportQuery.parameters` and `DrillRequest.sourceContext` use `ScalarValue` or `FilterValue` instead of `unknown`; `ReportRow` cells and `ReportResult.totals` use `ReportCellValue` (a scalar or a `MoneyValue` with its explicit currency, IB-01 §7.3). No framework or DOM object can cross the boundary.
+* `MetricDefinition` may declare an optional `aggregation` (IR-01 Code Block 5).
 * `ExportJob` carries the optional `error?: PaepError` of `JobStatus`.
 * `IdentityMode` keeps the source value `'frappe-session'` (IB-01 §9.1, §9.3); it names a mode, not a dependency.
 

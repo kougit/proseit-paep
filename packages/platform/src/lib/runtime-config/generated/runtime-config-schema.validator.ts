@@ -3,7 +3,7 @@
 // Regenerate with: node tooling/config-validation/generate-validator.mjs   (CI fails if this file is stale).
 
 /** SHA-256 of the schema file this validator was generated from. */
-export const RUNTIME_CONFIG_SCHEMA_SHA256 = 'e07301ece8d193f32b4e6b95c6e6b2338f712efe36021579c8c985fb9b6d3e80';
+export const RUNTIME_CONFIG_SCHEMA_SHA256 = '819dc92b01a884636148854c22bec4d82fd851e608a1acead9e8db75ba2e21e3';
 
 /** Schema $id this validator implements. */
 export const RUNTIME_CONFIG_SCHEMA_ID = "https://schemas.proseit.org/paep/runtime-config/1.0/schema.json";
@@ -17,10 +17,13 @@ export interface SchemaIssue {
   readonly path: string;
 }
 
+/** Every property name the schema declares. Diagnostics truncate a pointer at the first segment outside this set (or an array index), so no document-supplied key is echoed. */
+export const RUNTIME_CONFIG_PROPERTY_NAMES: ReadonlySet<string> = new Set<string>(["analytics","apiBaseUrl","apiContract","backend","basePath","brandProfile","capabilityDiscovery","clientId","compatibility","cspProfile","defaultLocale","deployment","embeddedBi","enabled","endpoint","environment","features","fileBaseUrl","id","identity","issuer","localisation","maximumPaep","minimumPaep","mode","name","offlineProfile","product","profile","provider","pwa","realtimeUrl","release","reportingBaseUrl","rtlLocales","sampleRate","schemaVersion","scopes","security","supportedLocales","telemetry","trustedTypesPolicyName","uiHints"]);
+
 type JsonObject = Record<string, unknown>;
 
 const P0 = new RegExp("^[a-z][a-z0-9]*(-[a-z0-9]+)*$", 'u');
-const P1 = new RegExp("^(https://[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*|http://(localhost|127\\.0\\.0\\.1|\\[::1\\]))(:[1-9][0-9]{0,4})?(/[A-Za-z0-9._~-]+)*/?$", 'u');
+const P1 = new RegExp("^(https://[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*|http://(localhost|127\\.0\\.0\\.1|\\[::1\\]))(:([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))?(/(?!\\.{1,2}(/|$))[A-Za-z0-9._~-]+)*/?$", 'u');
 const P2 = new RegExp("^(0|[1-9][0-9]{0,3})\\.(0|[1-9][0-9]{0,3})$", 'u');
 const P3 = new RegExp("^[a-z]{2,3}(-[A-Z][a-z]{3})?(-([A-Z]{2}|[0-9]{3}))?$", 'u');
 const P4 = new RegExp("^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*)?(\\+[0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*)?$", 'u');

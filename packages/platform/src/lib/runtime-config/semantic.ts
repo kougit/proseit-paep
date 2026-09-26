@@ -27,8 +27,16 @@ function schemeAndHost(url: string): { readonly scheme: string; readonly host: s
   return m ? { scheme: (m[1] as string).toLowerCase(), host: (m[2] as string).toLowerCase() } : null;
 }
 
-const isIpv4 = (host: string): boolean => /^\d{1,3}(\.\d{1,3}){3}$/.test(host);
-const isPrivateIpv4 = (host: string): boolean => /^(10\.|127\.|0\.|169\.254\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(host);
+// Canonical dotted-decimal IPv4: four octets 0-255 without leading zeros.
+const OCTET = '(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])';
+const CANONICAL_IPV4 = new RegExp(`^${OCTET}(\\.${OCTET}){3}$`);
+const isIpv4 = (host: string): boolean => CANONICAL_IPV4.test(host);
+/** WHATWG URL parses a host whose last label is numeric (decimal, octal or 0x-hex) as IPv4, e.g. 127.1, 2130706433, 0x7f000001, 0177.0.0.1. */
+const endsInNumber = (host: string): boolean => /^(0x[0-9a-f]*|[0-9]+)$/.test(host.split('.').filter(Boolean).pop() ?? '');
+const isPrivateIpv4 = (host: string): boolean =>
+  /^(10\.|127\.|0\.|169\.254\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[01])\.|100\.(6[4-9]|[7-9][0-9]|1[01][0-9]|12[0-7])\.)/.test(host);
+/** Names that only resolve inside a private network. */
+const isPrivateName = (host: string): boolean => !host.includes('.') || /\.(localhost|local|internal|intranet|lan|home\.arpa)$/.test(host);
 
 /** Compare two "major.minor" versions numerically. */
 export function compareMajorMinor(a: string, b: string): number {
@@ -49,7 +57,10 @@ export function checkSemantics(c: RuntimeConfig, env: RuntimeConfigEnvironment, 
     const u = schemeAndHost(v);
     if (!u) { add('CFG_URL_INVALID', path); continue; }
     if (u.scheme === 'http' && !(env0 === 'development' && LOOPBACK.has(u.host))) { add('CFG_URL_INSECURE', path); continue; }
-    if ((env0 === 'staging' || env0 === 'production') && (LOOPBACK.has(u.host) || u.host.endsWith('.localhost') || (isIpv4(u.host) && isPrivateIpv4(u.host)))) add('CFG_URL_HOST', path);
+    // Numeric hosts must be canonical dotted-decimal IPv4 in every environment, so the private-range rule below cannot be
+    // bypassed by forms a browser reads as loopback or private (127.1, 2130706433, 0x7f000001, 0177.0.0.1, 10.1, 0).
+    if (!u.host.startsWith('[') && endsInNumber(u.host) && !isIpv4(u.host)) { add('CFG_URL_HOST', path); continue; }
+    if ((env0 === 'staging' || env0 === 'production') && (LOOPBACK.has(u.host) || isPrivateName(u.host) || (isIpv4(u.host) && isPrivateIpv4(u.host)))) add('CFG_URL_HOST', path);
     if (u.host.split('.').some((label) => label.startsWith('xn--'))) add('CFG_URL_HOST', path);
   }
 

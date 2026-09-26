@@ -33,8 +33,15 @@ export async function startWithRuntimeConfig(startup: RuntimeConfigStartup): Pro
   } catch {
     outcome = runtimeConfigFailure('internal', [{ stage: 'internal', code: 'CFG_INTERNAL', path: '' }]);
   }
-  if (outcome.ok === true) await startup.onReady(deepFreeze(outcome.store));
-  else startup.onFailure(outcome);
+  if (outcome.ok === true) {
+    try {
+      await startup.onReady(deepFreeze(outcome.store));
+    } catch {
+      // The application failed to start after a valid configuration: show the fail-safe state instead of a blank page.
+      outcome = runtimeConfigFailure('startup', [{ stage: 'startup', code: 'CFG_INTERNAL', path: '' }]);
+      startup.onFailure(outcome);
+    }
+  } else startup.onFailure(outcome);
   return outcome;
 }
 

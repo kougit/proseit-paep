@@ -3,7 +3,7 @@ import { checkCompatibility } from './compatibility.js';
 import { MAX_RUNTIME_CONFIG_BYTES, MAX_RUNTIME_CONFIG_ISSUES, SUPPORTED_RUNTIME_CONFIG_SCHEMA_VERSIONS } from './constants.js';
 import { guardContent } from './content-guard.js';
 import { deepFreeze } from './freeze.js';
-import { validateRuntimeConfigSchema } from './generated/runtime-config-schema.validator.js';
+import { RUNTIME_CONFIG_PROPERTY_NAMES, validateRuntimeConfigSchema } from './generated/runtime-config-schema.validator.js';
 import { checkSemantics, type RuntimeConfigEnvironment } from './semantic.js';
 import { decodeUtf8Strict, parseStrictJson } from './strict-json.js';
 
@@ -28,6 +28,20 @@ export function isValidatedRuntimeConfigStore(store: unknown): boolean {
   return typeof store === 'object' && store !== null && VALIDATED_STORES.has(store);
 }
 
+/**
+ * Truncate a pointer at its first segment that is neither a schema property name nor an array index, so a key supplied by the
+ * document (which may itself be secret-shaped) never appears in a diagnostic. The finding is then reported at that parent.
+ */
+export function redactPointer(pointer: string): string {
+  if (pointer === '') return '';
+  const kept: string[] = [];
+  for (const seg of pointer.split('/').slice(1)) {
+    if (!RUNTIME_CONFIG_PROPERTY_NAMES.has(seg) && !/^(0|[1-9][0-9]{0,2})$/.test(seg)) break;
+    kept.push(seg);
+  }
+  return kept.length ? `/${kept.join('/')}` : '';
+}
+
 /** Build the fail-safe state. The diagnostic identifier carries the code and the document fingerprint, never content. */
 export function runtimeConfigFailure(stage: RuntimeConfigStage, issues: readonly RuntimeConfigIssue[], bytes?: Uint8Array): RuntimeConfigFailure {
   const first = issues[0] ?? { stage, code: 'CFG_INTERNAL' as RuntimeConfigErrorCode, path: '' };
@@ -35,7 +49,7 @@ export function runtimeConfigFailure(stage: RuntimeConfigStage, issues: readonly
     ok: false,
     stage,
     code: first.code,
-    issues: issues.slice(0, MAX_RUNTIME_CONFIG_ISSUES).map((i) => ({ stage: i.stage, code: i.code, path: i.path })),
+    issues: issues.slice(0, MAX_RUNTIME_CONFIG_ISSUES).map((i) => ({ stage: i.stage, code: i.code, path: redactPointer(i.path) })),
     diagnosticId: `PAEP-${first.code}-${bytes ? fingerprint(bytes) : 'nodoc'}`
   });
 }
@@ -43,6 +57,8 @@ export function runtimeConfigFailure(stage: RuntimeConfigStage, issues: readonly
 /** Validate a runtime-configuration document given as bytes. Pure and synchronous; never throws. */
 export function validateRuntimeConfigBytes(bytes: Uint8Array, context: RuntimeConfigBuildContext, env: RuntimeConfigEnvironment = {}): RuntimeConfigOutcome {
   try {
+    // The build context is compiled into the application; a malformed one is a build defect and fails closed (CFG_INTERNAL).
+    if (typeof context?.expectedProductId !== 'string' || !Array.isArray(context.supportedApiContracts) || !Array.isArray(context.externalBiProviders)) throw new Error('invalid build context');
     if (bytes.length === 0) return runtimeConfigFailure('load', [{ stage: 'load', code: 'CFG_LOAD_EMPTY', path: '' }], bytes);
     if (bytes.length > MAX_RUNTIME_CONFIG_BYTES) return runtimeConfigFailure('load', [{ stage: 'load', code: 'CFG_LOAD_TOO_LARGE', path: '' }], bytes);
 

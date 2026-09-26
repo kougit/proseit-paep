@@ -292,14 +292,22 @@ try {
   caseRun('N03', 'lint configuration introduced fails the governance gate', [['eslint.config.mjs', () => 'export default [];\n']], () => verifyGate('governance'), [/FAIL W07/]);
 
   // ---- IB1-CONTRACTS-CONFIG jobs are mandatory like the IB0 jobs ---------------------------------------
-  caseRun('I01', 'IB1 contracts job dropped from gate needs fails the provenance gate', [[WORKFLOW, replace('      - contracts\n      - runtime-config\n', '      - runtime-config\n')]], () => verifyGate('provenance'), [/FAIL W12/]);
-  caseRun('I02', 'IB1 runtime-config job command replaced fails the provenance gate', [[WORKFLOW, replace('          npm run qa:runtime-config 2>&1', '          npm run qa:types 2>&1')]], () => verifyGate('provenance'), [/FAIL W11/]);
-  caseRun('I03', 'IB1 portability proof removed from the runtime-config-negative job fails the provenance gate', [[WORKFLOW, replace('          npm run qa:runtime-config:portability 2>&1', '          echo skipped 2>&1')]], () => verifyGate('provenance'), [/FAIL W11/]);
+  caseRun('K01', 'IB1 contracts job dropped from gate needs fails the provenance gate', [[WORKFLOW, replace('      - contracts\n      - runtime-config\n', '      - runtime-config\n')]], () => verifyGate('provenance'), [/FAIL W12/]);
+  caseRun('K02', 'IB1 runtime-config job command replaced fails the provenance gate', [[WORKFLOW, replace('          npm run qa:runtime-config 2>&1', '          npm run qa:types 2>&1')]], () => verifyGate('provenance'), [/FAIL W11/]);
+  caseRun('K03', 'IB1 portability proof removed from the runtime-config-negative job fails the provenance gate', [[WORKFLOW, replace('          npm run qa:runtime-config:portability 2>&1', '          echo skipped 2>&1')]], () => verifyGate('provenance'), [/FAIL W11/]);
+  // Accepted-policy floor (independent QA Q6-1): editing the policy together with the workflow cannot drop or weaken an accepted control.
+  caseRun('K04', 'accepted job build-ui-lab dropped from the CI policy fails the provenance gate', [[POLICY, jsonEdit((o) => { o.mandatoryJobs = o.mandatoryJobs.filter((j) => j.id !== 'build-ui-lab'); delete o.requiredCommands['build-ui-lab']; })]], () => verifyGate('provenance'), [/FAIL W11/, /accepted mandatory job build-ui-lab removed/]);
+  caseRun('K05', 'accepted regression command weakened in the policy and the workflow together fails the provenance gate', [[POLICY, jsonEdit((o) => { o.requiredCommands.regression = ['node tooling/verification/verify-ib0-wp05.mjs --gate toolchain']; })], [WORKFLOW, replace('verify-ib0-wp05.mjs --gate regression 2>&1', 'verify-ib0-wp05.mjs --gate toolchain 2>&1')]], () => verifyGate('provenance'), [/FAIL W11/, /accepted commands of regression changed/]);
+  caseRun('K06', 'gate script made to pass (exit 0) in the policy and the workflow together fails the provenance gate', [[POLICY, jsonEdit((o) => { o.gate.run = o.gate.run.replace('exit 1', 'exit 0'); })], [WORKFLOW, replace('            exit 1\n', '            exit 0\n')]], () => verifyGate('provenance'), [/FAIL W12/, /policy gate differs from the accepted baseline/]);
+  caseRun('K07', 'gate check context renamed in the policy and the workflow together fails the provenance gate', [[POLICY, jsonEdit((o) => { o.gate.name = 'PAEP / gate2'; o.gate.requiredCheckContext = 'PAEP / gate2'; })], [WORKFLOW, replace('    name: PAEP / gate\n', '    name: PAEP / gate2\n')]], () => verifyGate('provenance'), [/FAIL W12/, /policy gate differs from the accepted baseline/]);
 } finally {
   fs.rmSync(scratch, { recursive: true, force: true });
 }
 
-const passed = results.length > 0 && results.every((r) => r.pass);
+// Case ids must be unique, so a report can never hide one case behind another (IB1-CONTRACTS-CONFIG).
+const duplicateIds = results.map((r) => r.id).filter((id, i, a) => a.indexOf(id) !== i);
+if (duplicateIds.length) console.log(`FAIL duplicate case ids: ${[...new Set(duplicateIds)].join(', ')}`);
+const passed = results.length > 0 && results.every((r) => r.pass) && duplicateIds.length === 0;
 const head = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).stdout.trim();
 const report = {
   workPackage: 'IB0-WP05', generatedAt: new Date().toISOString(), commit: head, node: process.versions.node,

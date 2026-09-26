@@ -47,13 +47,13 @@ const SECRET_VALUES = [
   /\b(?:sk|rk)_(?:live|test)_[A-Za-z0-9]{8,}/,
   /\bAIza[0-9A-Za-z_-]{30,}/,
   /\bnpm_[A-Za-z0-9]{30,}/,
-  /(?:^|[?&#;])\s*(?:access_token|id_token|refresh_token|token|api_key|apikey|client_secret|password|pwd|secret|sig|signature|x-amz-signature|x-goog-signature|accountkey|sharedaccesskey)\s*=/i,
-  /^[a-z][a-z0-9+.-]*:\/\/[^/?#\s]*@/i
+  /(?:^|[?&#;\s])\s*(?:access_token|id_token|refresh_token|token|api_key|apikey|client_secret|password|pwd|secret|sig|signature|x-amz-signature|x-goog-signature|accountkey|sharedaccesskey)\s*=/i,
+  /\b[a-z][a-z0-9+.-]*:\/\/[^/?#\s]*@/i
 ];
 
 /** Direct database, ERP-database or analytical-store locators: the browser never receives them (PAEP-IR-01 §5.4). */
 const DATA_ACCESS_VALUES = [
-  /\b(?:postgres(?:ql)?|mysql|mariadb|mongodb(?:\+srv)?|rediss?|amqps?|mssql|sqlserver|oracle|clickhouse|cassandra|snowflake|bigquery|redshift|couchdb|neo4j|ldaps?|sftp|ftp|ssh|jdbc:[a-z0-9]+|odbc):/i,
+  /\b(?:postgres(?:ql)?|mysql|mariadb|mongodb(?:\+srv)?|rediss?|amqps?|mssql|sqlserver|oracle|clickhouse|cassandra|snowflake|bigquery|redshift|couchdb|neo4j|ldaps?|sftp|ftp|ssh|s3|gs|hdfs|sqlite|db2|trino|presto|elasticsearch|jdbc:[a-z0-9]+|odbc):/i,
   /\b(?:server|data source|host|user id|uid|initial catalog)\s*=[^;]*;/i
 ];
 
@@ -83,6 +83,7 @@ export function guardContent(value: JsonValue): RuntimeConfigIssue[] {
       const tokens = keyTokens(key);
       if (tokens.some((t) => SECRET_KEY_TOKENS.includes(t))) { add('CFG_CONTENT_SECRET', path); continue; }
       if (tokens.some((t) => DATA_ACCESS_KEY_TOKENS.includes(t))) { add('CFG_CONTENT_DATA_ACCESS', path); continue; }
+      if (SECRET_VALUES.some((re) => re.test(key))) { add('CFG_CONTENT_SECRET', path); continue; }
       visit(v[key] as JsonValue, `${path}/${pointerSegment(key)}`);
     }
   };

@@ -348,6 +348,11 @@
       "declaration": "export interface PwaConfig{readonly enabled:boolean;readonly offlineProfile:OfflineProfile;}"
     },
     {
+      "name": "ReportCellValue",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type ReportCellValue=ScalarValue|MoneyValue;"
+    },
+    {
       "name": "ReportColumn",
       "kind": "InterfaceDeclaration",
       "declaration": "export interface ReportColumn{readonly key:string;readonly label:string;readonly dataType:FieldDataType;readonly format?:string;}"
@@ -365,12 +370,12 @@
     {
       "name": "ReportResult",
       "kind": "InterfaceDeclaration",
-      "declaration": "export interface ReportResult<Row extends ReportRow=ReportRow>{readonly columns:readonly ReportColumn[];readonly rows:readonly Row[];readonly page?:PageInfo;readonly totals?:Readonly<Record<string,ScalarValue>>;readonly freshness:DataFreshness;readonly correlationId:CorrelationId;}"
+      "declaration": "export interface ReportResult<Row extends ReportRow=ReportRow>{readonly columns:readonly ReportColumn[];readonly rows:readonly Row[];readonly page?:PageInfo;readonly totals?:Readonly<Record<string,ReportCellValue>>;readonly freshness:DataFreshness;readonly correlationId:CorrelationId;}"
     },
     {
       "name": "ReportRow",
       "kind": "TypeAliasDeclaration",
-      "declaration": "export type ReportRow=Readonly<Record<string,ScalarValue>>;"
+      "declaration": "export type ReportRow=Readonly<Record<string,ReportCellValue>>;"
     },
     {
       "name": "ReportSort",

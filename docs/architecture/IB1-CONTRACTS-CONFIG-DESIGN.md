@@ -21,7 +21,7 @@ Architecture edges added (all allowed by Appendix B): `platform → contracts`, 
 2. Every property `readonly`; arrays `readonly T[]`; records `Readonly<Record<…>>`.
 3. No `any`; unions are closed string literals; optional properties use `exactOptionalPropertyTypes` semantics.
 4. Compiles standalone with `lib: ["ES2022"]`, `types: []` (no DOM, no Node) — enforced by `packages/contracts/tsconfig.json` and the architecture checker's CONTRACTS_NEUTRAL rule.
-5. Reporting shapes follow IB-01 Appendix D, which takes precedence over the IR-01 examples.
+5. Reporting shapes follow IB-01 Appendix D, which takes precedence over the IR-01 examples. Deliberate tightenings, listed for PO/SA review in `packages/contracts/README.md`: `unknown` values narrowed to `ScalarValue`/`FilterValue`, report cells and totals typed `ReportCellValue` (scalar or `MoneyValue`), `FieldDataType` adds `'duration'`, metrics may declare `aggregation`, and `ExportJob` carries the optional `error` of `JobStatus`.
 6. Offline contracts are envelopes and conflict descriptions only; no queue (offline is out of scope).
 
 ## 3. Runtime-configuration design

@@ -33,23 +33,23 @@ export class App {
     });
   }
 
-  protected setDensity(value: string): void {
-    this.settings.density.set(value as LabDensity);
+  protected setDensity(event: Event): void {
+    this.settings.density.set((event.target as HTMLSelectElement).value as LabDensity);
     this.persist();
   }
 
-  protected setDirection(value: string): void {
-    this.settings.direction.set(value as LabDirection);
+  protected setDirection(event: Event): void {
+    this.settings.direction.set((event.target as HTMLSelectElement).value as LabDirection);
     this.persist();
   }
 
-  protected setBrand(value: string): void {
-    this.settings.brand.set(value as LabBrand);
+  protected setBrand(event: Event): void {
+    this.settings.brand.set((event.target as HTMLSelectElement).value as LabBrand);
     this.persist();
   }
 
-  protected setReducedMotion(value: boolean): void {
-    this.settings.reducedMotion.set(value);
+  protected setReducedMotion(event: Event): void {
+    this.settings.reducedMotion.set((event.target as HTMLInputElement).checked);
     this.persist();
   }
 

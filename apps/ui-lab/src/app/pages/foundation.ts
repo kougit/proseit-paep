@@ -31,7 +31,7 @@ export class LabFoundationPage {
   protected readonly byPrefix = (prefix: string) => PAEP_TOKENS.filter((t) => t.name.startsWith(prefix));
   protected readonly typeRoles = PAEP_TOKENS.filter((t) => t.name.startsWith('--paep-font-size-')).map((t) => t.name.slice('--paep-font-size-'.length));
   protected readonly iconNames = Object.keys(PAEP_ICONS) as PaepIconName[];
-  protected readonly statuses = ['success', 'warning', 'error', 'info', 'neutral'];
+  protected readonly statuses: readonly ('success' | 'warning' | 'error' | 'info' | 'neutral')[] = ['success', 'warning', 'error', 'info', 'neutral'];
   protected readonly contrastPairs: readonly { label: string; fg: string; bg: string; min: number }[] = [
     { label: 'Text primary on surface', fg: '--paep-color-text-primary', bg: '--paep-color-surface', min: 4.5 },
     { label: 'Text secondary on page background', fg: '--paep-color-text-secondary', bg: '--paep-color-bg-page', min: 4.5 },

@@ -27,7 +27,7 @@ import { PAEP_TOKENS, PAEP_TOKEN_VERSION, PaepTokenCategory } from '@proseit/pae
         <h2 id="lab-catalogue">Catalogue</h2>
         <div class="lab-field lab-filter">
           <label for="lab-token-category">Category</label>
-          <select id="lab-token-category" [value]="category()" (change)="category.set($any($event.target).value)">
+          <select id="lab-token-category" [value]="category()" (change)="selectCategory($event)">
             <option value="all">All categories</option>
             @for (c of categories; track c) {
               <option [value]="c">{{ c }}</option>
@@ -83,5 +83,9 @@ export class LabTokensPage {
   protected readonly version = PAEP_TOKEN_VERSION;
   protected readonly categories = [...new Set(PAEP_TOKENS.map((t) => t.category))] as PaepTokenCategory[];
   protected readonly category = signal<string>('all');
+
+  protected selectCategory(event: Event): void {
+    this.category.set((event.target as HTMLSelectElement).value);
+  }
   protected readonly shown = computed(() => (this.category() === 'all' ? this.tokens : this.tokens.filter((t) => t.category === this.category())));
 }

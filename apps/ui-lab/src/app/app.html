@@ -5,27 +5,27 @@
   <form class="lab-settings" aria-label="Specimen settings" (submit)="$event.preventDefault()">
     <div class="lab-field">
       <label for="lab-density">Density</label>
-      <select id="lab-density" [value]="settings.density()" (change)="setDensity($any($event.target).value)">
+      <select id="lab-density" [value]="settings.density()" (change)="setDensity($event)">
         <option value="comfortable">Comfortable</option>
         <option value="compact">Compact</option>
       </select>
     </div>
     <div class="lab-field">
       <label for="lab-dir">Direction</label>
-      <select id="lab-dir" [value]="settings.direction()" (change)="setDirection($any($event.target).value)">
+      <select id="lab-dir" [value]="settings.direction()" (change)="setDirection($event)">
         <option value="ltr">LTR</option>
         <option value="rtl">RTL</option>
       </select>
     </div>
     <div class="lab-field">
       <label for="lab-brand">Brand profile</label>
-      <select id="lab-brand" [value]="settings.brand()" (change)="setBrand($any($event.target).value)">
+      <select id="lab-brand" [value]="settings.brand()" (change)="setBrand($event)">
         <option value="proseit-default">proseit-default</option>
         <option value="synthetic-demo-petrol">synthetic-demo-petrol</option>
       </select>
     </div>
     <label class="lab-settings__check">
-      <input type="checkbox" [checked]="settings.reducedMotion()" (change)="setReducedMotion($any($event.target).checked)" />
+      <input type="checkbox" [checked]="settings.reducedMotion()" (change)="setReducedMotion($event)" />
       Simulate reduced motion
     </label>
   </form>

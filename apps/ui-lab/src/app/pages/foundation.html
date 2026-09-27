@@ -29,7 +29,7 @@
         <div class="lab-grid">
           @for (s of statuses; track s) {
             <div class="lab-status" [style.color]="'var(--paep-color-status-' + s + '-fg)'" [style.background]="'var(--paep-color-status-' + s + '-bg)'" [style.border-color]="'var(--paep-color-status-' + s + '-border)'">
-              <svg [paepIcon]="$any(s)"></svg> <strong>{{ s }}</strong>
+              <svg [paepIcon]="s"></svg> <strong>{{ s }}</strong>
             </div>
           }
         </div>

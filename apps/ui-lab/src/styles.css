@@ -1,1 +1,2 @@
-/* You can add global styles to this file, and also import other style files */
+/* PAEP UI laboratory global styles: the foundation stylesheet only (tokens, base, focus, reduced motion). */
+@import '@proseit/paep-foundation/src/styles/paep-foundation.css';

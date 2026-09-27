@@ -1,0 +1,1355 @@
+# PAEP handoff manifest (PAEP-DCH-01 §9). v1.1 - APPROVED FOR IMPLEMENTATION by PO/SA 2026-09-27.
+handoffId: HOF-IB2-001
+version: '1.1'
+status: APPROVED_FOR_IMPLEMENTATION
+dchStatus: APPROVED FOR IMPLEMENTATION
+dwpId: DWP-IB2-001
+dwpVersion: '1.0'
+designWorkPackageTitle: PAEP Design Foundations, Core Components and UI Laboratory
+created: '2026-09-26'
+revised: '2026-09-27'
+revisionHistory:
+- version: '1.0'
+  date: '2026-09-26'
+  status: READY_FOR_PO_SA_REVIEW
+  note: initial review candidate
+- version: '1.1'
+  date: '2026-09-27'
+  status: READY_FOR_FINAL_PO_SA_APPROVAL
+  note: 'Narrow brand revision per PO/SA review: CHANGES REQUESTED - BRAND REVISION. Navy #24364B brand-primary, Gold #D4A62A brand-accent with dark on-accent; petrol #0B5E73 moved to synthetic-demo-petrol. No other decision changed.'
+- version: '1.1'
+  date: '2026-09-27'
+  status: APPROVED_FOR_IMPLEMENTATION
+  note: PO/SA design approval granted for v1.1
+poSaReview:
+  date: '2026-09-27'
+  reviewedVersion: '1.0'
+  decision: 'PO/SA review: CHANGES REQUESTED - BRAND REVISION'
+  overallDesign: accepted subject to the brand revision
+  retainedDecisions: system fonts; PAEP icons; comfortable default + compact option; table priority columns + Details row with bounded scroll fallback; no dark mode in IB2; responsive, accessibility and interaction decisions; 25-component tranche; clean-room position
+repositoryBase:
+  repo: kougit/proseit-paep
+  commit: d33ab91
+  baseline: Generation 3 ACCEPTED
+scope:
+  packages:
+  - '@proseit/paep-foundation'
+  - '@proseit/paep-components (IB2 tranche, 25 components)'
+  - apps/ui-lab
+  outOfScope:
+  - enterprise shell (IB3)
+  - Frappe/SDK (IB4)
+  - analytics (IB5)
+  - offline (IB7)
+  - toast
+  - tooltip
+  - menu
+  - dark theme
+  - row selection/sort/filter
+requirements:
+- REQ-IB2-TOK-01
+- REQ-IB2-TOK-02
+- REQ-IB2-TOK-03
+- REQ-IB2-TOK-04
+- REQ-IB2-TOK-05
+- REQ-IB2-TOK-06
+- REQ-IB2-TOK-07
+- REQ-IB2-TOK-08
+- REQ-IB2-TOK-09
+- REQ-IB2-TOK-10
+- REQ-IB2-RSP-01
+- REQ-IB2-RSP-02
+- REQ-IB2-RSP-03
+- REQ-IB2-RSP-04
+- REQ-IB2-A11Y-01
+- REQ-IB2-A11Y-02
+- REQ-IB2-A11Y-03
+- REQ-IB2-A11Y-04
+- REQ-IB2-CMP-01
+- REQ-IB2-CMP-02
+- REQ-IB2-LAB-01
+- REQ-IB2-LAB-02
+- REQ-IB2-I18N-01
+- REQ-IB2-SEC-01
+- REQ-IB2-CR-01
+- REQ-IB2-ASSET-01
+requirementsSource: ib2/design-preparation/01-DESIGN-PREPARATION.md §5
+screens:
+- id: SCR-IB2-L01
+  version: '1.0'
+  title: UI lab home and information architecture
+  group: UI lab
+  file: screens/L01-ui-lab-home.html
+  renders:
+  - screens/renders/L01-ui-lab-home--desktop.png
+  - screens/renders/L01-ui-lab-home--tablet.png
+  - screens/renders/L01-ui-lab-home--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - default
+  components: []
+  requirements: &id001
+  - REQ-IB2-LAB-01
+  - REQ-IB2-LAB-02
+  direction: ltr
+- id: SCR-IB2-L02
+  version: '1.0'
+  title: Component specimen template (Button)
+  group: UI lab
+  file: screens/L02-ui-lab-specimen-button.html
+  renders:
+  - screens/renders/L02-ui-lab-specimen-button--desktop.png
+  - screens/renders/L02-ui-lab-specimen-button--tablet.png
+  - screens/renders/L02-ui-lab-specimen-button--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - default
+  components: []
+  requirements: *id001
+  direction: ltr
+- id: SCR-IB2-F01
+  version: '1.0'
+  title: Colour
+  group: Foundations
+  file: screens/F01-colour.html
+  renders:
+  - screens/renders/F01-colour--desktop.png
+  - screens/renders/F01-colour--tablet.png
+  - screens/renders/F01-colour--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - default
+  components: []
+  requirements: &id002
+  - REQ-IB2-TOK-01..10
+  direction: ltr
+- id: SCR-IB2-F02
+  version: '1.0'
+  title: Typography
+  group: Foundations
+  file: screens/F02-typography.html
+  renders:
+  - screens/renders/F02-typography--desktop.png
+  - screens/renders/F02-typography--tablet.png
+  - screens/renders/F02-typography--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - default
+  components: []
+  requirements: *id002
+  direction: ltr
+- id: SCR-IB2-F03
+  version: '1.0'
+  title: Spacing, size and radius
+  group: Foundations
+  file: screens/F03-spacing-size-radius.html
+  renders:
+  - screens/renders/F03-spacing-size-radius--desktop.png
+  - screens/renders/F03-spacing-size-radius--tablet.png
+  - screens/renders/F03-spacing-size-radius--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - default
+  components: []
+  requirements: *id002
+  direction: ltr
+- id: SCR-IB2-F04
+  version: '1.0'
+  title: Surfaces and elevation
+  group: Foundations
+  file: screens/F04-surfaces-elevation.html
+  renders:
+  - screens/renders/F04-surfaces-elevation--desktop.png
+  - screens/renders/F04-surfaces-elevation--tablet.png
+  - screens/renders/F04-surfaces-elevation--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - default
+  components: []
+  requirements: *id002
+  direction: ltr
+- id: SCR-IB2-F05
+  version: '1.0'
+  title: Motion and reduced motion
+  group: Foundations
+  file: screens/F05-motion.html
+  renders:
+  - screens/renders/F05-motion--desktop.png
+  - screens/renders/F05-motion--tablet.png
+  - screens/renders/F05-motion--narrow320.png
+  - screens/renders/F05-motion--desktop-reduced-motion.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - default-motion
+  - reduced-motion
+  components:
+  - progress
+  - skeleton
+  requirements: *id002
+  direction: ltr
+- id: SCR-IB2-F06
+  version: '1.0'
+  title: Density
+  group: Foundations
+  file: screens/F06-density.html
+  renders:
+  - screens/renders/F06-density--desktop.png
+  - screens/renders/F06-density--tablet.png
+  - screens/renders/F06-density--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - default
+  components: []
+  requirements: *id002
+  direction: ltr
+- id: SCR-IB2-F07
+  version: '1.0'
+  title: Focus and interaction states
+  group: Foundations
+  file: screens/F07-focus-states.html
+  renders:
+  - screens/renders/F07-focus-states--desktop.png
+  - screens/renders/F07-focus-states--tablet.png
+  - screens/renders/F07-focus-states--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - default
+  - hover
+  - focus-visible
+  - active
+  - selected
+  - disabled
+  - read-only
+  - invalid
+  - loading
+  components: []
+  requirements: *id002
+  direction: ltr
+- id: SCR-IB2-F08
+  version: '1.0'
+  title: Icons
+  group: Foundations
+  file: screens/F08-icons.html
+  renders:
+  - screens/renders/F08-icons--desktop.png
+  - screens/renders/F08-icons--tablet.png
+  - screens/renders/F08-icons--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - default
+  components: []
+  requirements: *id002
+  direction: ltr
+- id: SCR-IB2-C01
+  version: '1.0'
+  title: Actions
+  group: Components
+  file: screens/C01-actions.html
+  renders:
+  - screens/renders/C01-actions--desktop.png
+  - screens/renders/C01-actions--tablet.png
+  - screens/renders/C01-actions--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - default
+  - hover
+  - focus-visible
+  - active
+  - disabled
+  - loading
+  - long-label
+  - narrow-width
+  - overflow-open
+  components:
+  - button
+  - icon-button
+  - action-group
+  requirements: &id003
+  - REQ-IB2-CMP-01
+  - REQ-IB2-CMP-02
+  - REQ-IB2-A11Y-01..04
+  direction: ltr
+- id: SCR-IB2-C02
+  version: '1.0'
+  title: Forms
+  group: Components
+  file: screens/C02-forms.html
+  renders:
+  - screens/renders/C02-forms--desktop.png
+  - screens/renders/C02-forms--tablet.png
+  - screens/renders/C02-forms--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - default
+  - focus
+  - disabled
+  - read-only
+  - invalid
+  - prefix-suffix
+  - dirty
+  - checked
+  - indeterminate
+  components:
+  - field
+  - input
+  - select
+  - textarea
+  - checkbox
+  - radio-group
+  requirements: *id003
+  direction: ltr
+- id: SCR-IB2-C03
+  version: '1.0'
+  title: Table shell
+  group: Components
+  file: screens/C03-table-shell.html
+  renders:
+  - screens/renders/C03-table-shell--desktop.png
+  - screens/renders/C03-table-shell--tablet.png
+  - screens/renders/C03-table-shell--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - populated
+  - loading
+  - empty
+  - no-results
+  - error
+  components:
+  - table-shell
+  - empty-state
+  requirements: *id003
+  direction: ltr
+- id: SCR-IB2-C03N
+  version: '1.0'
+  title: Table narrow strategies (D1 decision)
+  group: Components
+  file: screens/C03N-table-narrow-strategies.html
+  renders:
+  - screens/renders/C03N-table-narrow-strategies--desktop.png
+  - screens/renders/C03N-table-narrow-strategies--tablet.png
+  - screens/renders/C03N-table-narrow-strategies--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - default
+  components:
+  - table-shell
+  requirements: *id003
+  direction: ltr
+- id: SCR-IB2-C04
+  version: '1.0'
+  title: List, pagination, empty state
+  group: Components
+  file: screens/C04-list-pagination-empty.html
+  renders:
+  - screens/renders/C04-list-pagination-empty--desktop.png
+  - screens/renders/C04-list-pagination-empty--tablet.png
+  - screens/renders/C04-list-pagination-empty--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - populated
+  - loading
+  - empty
+  - no-results
+  - error
+  - first
+  - last
+  components:
+  - list
+  - pagination
+  - empty-state
+  requirements: *id003
+  direction: ltr
+- id: SCR-IB2-C05
+  version: '1.0'
+  title: Feedback
+  group: Components
+  file: screens/C05-feedback.html
+  renders:
+  - screens/renders/C05-feedback--desktop.png
+  - screens/renders/C05-feedback--tablet.png
+  - screens/renders/C05-feedback--narrow320.png
+  - screens/renders/C05-feedback--desktop-reduced-motion.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - info
+  - success
+  - warning
+  - error
+  - determinate
+  - indeterminate
+  - reduced-motion
+  components:
+  - alert
+  - status-badge
+  - progress
+  - skeleton
+  requirements: *id003
+  direction: ltr
+- id: SCR-IB2-C06A
+  version: '1.0'
+  title: 'Dialog: destructive confirmation'
+  group: Overlays
+  file: screens/C06A-dialog-destructive.html
+  renders:
+  - screens/renders/C06A-dialog-destructive--desktop.png
+  - screens/renders/C06A-dialog-destructive--tablet.png
+  - screens/renders/C06A-dialog-destructive--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - open
+  - destructive
+  components:
+  - dialog
+  requirements: *id003
+  direction: ltr
+- id: SCR-IB2-C06B
+  version: '1.0'
+  title: 'Dialog: long content'
+  group: Overlays
+  file: screens/C06B-dialog-long-content.html
+  renders:
+  - screens/renders/C06B-dialog-long-content--desktop.png
+  - screens/renders/C06B-dialog-long-content--tablet.png
+  - screens/renders/C06B-dialog-long-content--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - open
+  - long-content
+  components:
+  - dialog
+  requirements: *id003
+  direction: ltr
+- id: SCR-IB2-C06C
+  version: '1.0'
+  title: 'Dialog: large form'
+  group: Overlays
+  file: screens/C06C-dialog-form-large.html
+  renders:
+  - screens/renders/C06C-dialog-form-large--desktop.png
+  - screens/renders/C06C-dialog-form-large--tablet.png
+  - screens/renders/C06C-dialog-form-large--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - open
+  - form
+  - invalid
+  components:
+  - dialog
+  requirements: *id003
+  direction: ltr
+- id: SCR-IB2-C06D
+  version: '1.0'
+  title: Drawer
+  group: Overlays
+  file: screens/C06D-drawer.html
+  renders:
+  - screens/renders/C06D-drawer--desktop.png
+  - screens/renders/C06D-drawer--tablet.png
+  - screens/renders/C06D-drawer--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - open
+  components:
+  - drawer
+  requirements: *id003
+  direction: ltr
+- id: SCR-IB2-C06E
+  version: '1.0'
+  title: Popover
+  group: Overlays
+  file: screens/C06E-popover.html
+  renders:
+  - screens/renders/C06E-popover--desktop.png
+  - screens/renders/C06E-popover--tablet.png
+  - screens/renders/C06E-popover--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - open
+  - flipped
+  components:
+  - popover
+  requirements: *id003
+  direction: ltr
+- id: SCR-IB2-C07
+  version: '1.0'
+  title: Navigation
+  group: Components
+  file: screens/C07-navigation.html
+  renders:
+  - screens/renders/C07-navigation--desktop.png
+  - screens/renders/C07-navigation--tablet.png
+  - screens/renders/C07-navigation--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - selected
+  - unselected
+  - focus-visible
+  - disabled
+  - long-label
+  - overflow
+  - collapsed
+  - expanded
+  - current
+  components:
+  - tabs
+  - breadcrumb
+  requirements: *id003
+  direction: ltr
+- id: SCR-IB2-C08
+  version: '1.0'
+  title: Structure
+  group: Components
+  file: screens/C08-structure.html
+  renders:
+  - screens/renders/C08-structure--desktop.png
+  - screens/renders/C08-structure--tablet.png
+  - screens/renders/C08-structure--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - default
+  - header
+  - actions
+  - long-title
+  - long-content
+  - collapsed
+  components:
+  - card
+  - panel
+  - divider
+  requirements: *id003
+  direction: ltr
+- id: SCR-IB2-F09
+  version: '1.0'
+  title: Brand override demonstration
+  group: Proofs
+  file: screens/F09-brand-override.html
+  renders:
+  - screens/renders/F09-brand-override--desktop.png
+  - screens/renders/F09-brand-override--tablet.png
+  - screens/renders/F09-brand-override--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - proseit-default
+  - synthetic-demo-petrol
+  - rejected-profile
+  components: []
+  requirements: *id002
+  direction: ltr
+- id: SCR-IB2-R01
+  version: '1.0'
+  title: Long-content proof
+  group: Proofs
+  file: screens/R01-long-content.html
+  renders:
+  - screens/renders/R01-long-content--desktop.png
+  - screens/renders/R01-long-content--tablet.png
+  - screens/renders/R01-long-content--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - long-content
+  components:
+  - button
+  - field
+  - table-shell
+  - alert
+  - status-badge
+  - tabs
+  - breadcrumb
+  - card
+  requirements: &id004
+  - REQ-IB2-RSP-01..04
+  - REQ-IB2-I18N-01
+  - REQ-IB2-A11Y-01
+  direction: ltr
+- id: SCR-IB2-R02
+  version: '1.0'
+  title: RTL proof
+  group: Proofs
+  file: screens/R02-rtl.html
+  renders:
+  - screens/renders/R02-rtl--desktop.png
+  - screens/renders/R02-rtl--tablet.png
+  - screens/renders/R02-rtl--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - rtl
+  components:
+  - field
+  - radio-group
+  - pagination
+  - drawer
+  - tabs
+  - breadcrumb
+  requirements: *id004
+  direction: rtl
+- id: SCR-IB2-R02D
+  version: '1.0'
+  title: RTL drawer
+  group: Proofs
+  file: screens/R02D-drawer-rtl.html
+  renders:
+  - screens/renders/R02D-drawer-rtl--desktop.png
+  - screens/renders/R02D-drawer-rtl--tablet.png
+  - screens/renders/R02D-drawer-rtl--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - rtl
+  - open
+  components: []
+  requirements: *id004
+  direction: rtl
+- id: SCR-IB2-R03
+  version: '1.0'
+  title: 320 CSS px reflow board
+  group: Proofs
+  file: screens/R03-reflow-320.html
+  renders:
+  - screens/renders/R03-reflow-320--desktop.png
+  - screens/renders/R03-reflow-320--tablet.png
+  - screens/renders/R03-reflow-320--narrow320.png
+  viewports:
+  - desktop-1440
+  - tablet-834
+  - zoom200-640
+  - narrow-320
+  states:
+  - default
+  components:
+  - button
+  - action-group
+  - table-shell
+  - pagination
+  - alert
+  - tabs
+  - breadcrumb
+  requirements: *id004
+  direction: ltr
+componentMap:
+- component: Button
+  family: Actions
+  paepTarget: button[paepButton], a[paepButton]
+  package: '@proseit/paep-components'
+  spec: component-specs.md#button
+  screens:
+  - SCR-IB2-C01
+  - SCR-IB2-R01
+  - SCR-IB2-R03
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Icon button
+  family: Actions
+  paepTarget: button[paepIconButton]
+  package: '@proseit/paep-components'
+  spec: component-specs.md#icon-button
+  screens:
+  - SCR-IB2-C01
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Action group
+  family: Actions
+  paepTarget: paep-action-group
+  package: '@proseit/paep-components'
+  spec: component-specs.md#action-group
+  screens:
+  - SCR-IB2-C01
+  - SCR-IB2-R03
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Field wrapper
+  family: Forms
+  paepTarget: paep-field
+  package: '@proseit/paep-components'
+  spec: component-specs.md#field-wrapper
+  screens:
+  - SCR-IB2-C02
+  - SCR-IB2-R01
+  - SCR-IB2-R02
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Input
+  family: Forms
+  paepTarget: input[paepInput]
+  package: '@proseit/paep-components'
+  spec: component-specs.md#input
+  screens:
+  - SCR-IB2-C02
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Native select
+  family: Forms
+  paepTarget: select[paepSelect]
+  package: '@proseit/paep-components'
+  spec: component-specs.md#native-select
+  screens:
+  - SCR-IB2-C02
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Textarea
+  family: Forms
+  paepTarget: textarea[paepInput]
+  package: '@proseit/paep-components'
+  spec: component-specs.md#textarea
+  screens:
+  - SCR-IB2-C02
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Checkbox
+  family: Forms
+  paepTarget: input[type=checkbox][paepCheckbox]
+  package: '@proseit/paep-components'
+  spec: component-specs.md#checkbox
+  screens:
+  - SCR-IB2-C02
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Radio group
+  family: Forms
+  paepTarget: paep-radio-group + input[type=radio][paepRadio]
+  package: '@proseit/paep-components'
+  spec: component-specs.md#radio-group
+  screens:
+  - SCR-IB2-C02
+  - SCR-IB2-R02
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Table shell
+  family: Data
+  paepTarget: paep-table
+  package: '@proseit/paep-components'
+  spec: component-specs.md#table-shell
+  screens:
+  - SCR-IB2-C03
+  - SCR-IB2-C03N
+  - SCR-IB2-R01
+  - SCR-IB2-R03
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: List
+  family: Data
+  paepTarget: paep-list
+  package: '@proseit/paep-components'
+  spec: component-specs.md#list
+  screens:
+  - SCR-IB2-C04
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Pagination
+  family: Data
+  paepTarget: paep-pagination
+  package: '@proseit/paep-components'
+  spec: component-specs.md#pagination
+  screens:
+  - SCR-IB2-C04
+  - SCR-IB2-R02
+  - SCR-IB2-R03
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Empty state
+  family: Data
+  paepTarget: paep-empty-state
+  package: '@proseit/paep-components'
+  spec: component-specs.md#empty-state
+  screens:
+  - SCR-IB2-C04
+  - SCR-IB2-C03
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Alert
+  family: Feedback
+  paepTarget: paep-alert
+  package: '@proseit/paep-components'
+  spec: component-specs.md#alert
+  screens:
+  - SCR-IB2-C05
+  - SCR-IB2-R01
+  - SCR-IB2-R03
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Status badge
+  family: Feedback
+  paepTarget: paep-status-badge
+  package: '@proseit/paep-components'
+  spec: component-specs.md#status-badge
+  screens:
+  - SCR-IB2-C05
+  - SCR-IB2-R01
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Progress
+  family: Feedback
+  paepTarget: paep-progress
+  package: '@proseit/paep-components'
+  spec: component-specs.md#progress
+  screens:
+  - SCR-IB2-C05
+  - SCR-IB2-F05
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Skeleton
+  family: Feedback
+  paepTarget: paep-skeleton
+  package: '@proseit/paep-components'
+  spec: component-specs.md#skeleton
+  screens:
+  - SCR-IB2-C05
+  - SCR-IB2-F05
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Dialog
+  family: Overlays
+  paepTarget: paep-dialog (native <dialog> + showModal())
+  package: '@proseit/paep-components'
+  spec: component-specs.md#dialog
+  screens:
+  - SCR-IB2-C06A
+  - SCR-IB2-C06B
+  - SCR-IB2-C06C
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Drawer
+  family: Overlays
+  paepTarget: paep-drawer (native <dialog>, modal)
+  package: '@proseit/paep-components'
+  spec: component-specs.md#drawer
+  screens:
+  - SCR-IB2-C06D
+  - SCR-IB2-R02
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Popover
+  family: Overlays
+  paepTarget: paep-popover (HTML popover attribute + anchor positioning with script fallback)
+  package: '@proseit/paep-components'
+  spec: component-specs.md#popover
+  screens:
+  - SCR-IB2-C06E
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Tabs
+  family: Navigation
+  paepTarget: paep-tabs, paep-tab
+  package: '@proseit/paep-components'
+  spec: component-specs.md#tabs
+  screens:
+  - SCR-IB2-C07
+  - SCR-IB2-R01
+  - SCR-IB2-R02
+  - SCR-IB2-R03
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Breadcrumb
+  family: Navigation
+  paepTarget: paep-breadcrumb
+  package: '@proseit/paep-components'
+  spec: component-specs.md#breadcrumb
+  screens:
+  - SCR-IB2-C07
+  - SCR-IB2-R01
+  - SCR-IB2-R02
+  - SCR-IB2-R03
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Card
+  family: Structure
+  paepTarget: paep-card
+  package: '@proseit/paep-components'
+  spec: component-specs.md#card
+  screens:
+  - SCR-IB2-C08
+  - SCR-IB2-R01
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Panel
+  family: Structure
+  paepTarget: paep-panel
+  package: '@proseit/paep-components'
+  spec: component-specs.md#panel
+  screens:
+  - SCR-IB2-C08
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+- component: Divider
+  family: Structure
+  paepTarget: hr[paepDivider], paep-divider[vertical]
+  package: '@proseit/paep-components'
+  spec: component-specs.md#divider
+  screens:
+  - SCR-IB2-C08
+  newPatternStatus: IB2 tranche component (IR-01 §6.4)
+componentCount: 25
+tokenMap:
+  document: foundation/token-values.md
+  data: foundation/token-values.candidate.json
+  prototypeCss: foundation/prototype-reference.css (reference only)
+  layers:
+    ref: --paep-ref-*
+    semantic: --paep-color-*, --paep-space-*, --paep-font-*, --paep-radius-*, --paep-elevation-*, --paep-motion-*, --paep-size-*, --paep-density-*, --paep-focus-*, --paep-layout-*
+    brandOverridable:
+    - --paep-brand-primary
+    - --paep-brand-primary-hover
+    - --paep-brand-primary-active
+    - --paep-brand-primary-subtle
+    - --paep-brand-on-primary
+    - --paep-brand-accent
+    - --paep-brand-on-accent
+    brandDerived:
+      --paep-color-selected-bg: --paep-brand-primary-subtle
+      --paep-color-selected-fg: --paep-brand-primary
+      --paep-color-selected-indicator: --paep-brand-primary
+      --paep-color-link: --paep-brand-primary
+      progressFill: --paep-brand-primary
+    brandUsageRules:
+    - brand-accent (gold) is emphasis only and always carries on-brand-accent (dark) text
+    - white on brand-accent is prohibited (2.26:1)
+    - brand-accent as text or indicator on light surfaces is prohibited (2.26:1)
+    - brand-accent is never used in status-like shapes (badges, alerts, status icons)
+    - profiles must not override success, warning, error, information, focus, invalid, disabled or accessibility-contrast semantics
+  protected:
+  - --paep-color-status-*
+  - --paep-color-focus-*
+  - --paep-color-disabled-*
+  - --paep-color-text-*
+  - --paep-color-invalid-*
+  - --paep-color-readonly-*
+  - --paep-color-border-default
+  - --paep-color-surface*
+  - --paep-color-bg-page
+  - --paep-color-scrim
+  brandProfiles:
+    proseit-default:
+      source: PO/SA direction 2026-09-27 (primary and accent); tonal variants CANDIDATE
+      primary: '#24364B'
+      primaryHover: '#1B2A3B'
+      primaryActive: '#121E2B'
+      primarySubtle: '#E7ECF2'
+      onPrimary: '#FFFFFF'
+      accent: '#D4A62A'
+      onAccent: '#1A1F26'
+      contrast: on-primary 12.32:1 PASS; on-accent 7.32:1 PASS
+    synthetic-demo-petrol:
+      source: SYNTHETIC, non-product demonstration only; not a ProSEIT value and not the ProSEIT default
+      primary: '#0B5E73'
+      primaryHover: '#094C5E'
+      primaryActive: '#073C4A'
+      primarySubtle: '#E4F1F4'
+      onPrimary: '#FFFFFF'
+      accent: '#9ED6E0'
+      onAccent: '#1A1F26'
+      contrast: on-primary 7.34:1 PASS; on-accent 10.37:1 PASS
+    rejectedDemonstrations:
+    - rejected-demo-yellow (yellow #E9B308 with white text, 1.92:1)
+    - white on gold (2.26:1)
+    - override of a protected status token
+  contrastEvidence: foundation/token-values.md §1.7 (59 pairs; 54 required, 54 PASS, 0 FAIL; 2 exempt met; 2 prohibited combinations excluded by rule; 1 informational)
+  density:
+    default: comfortable
+    alternate: compact
+  darkTheme: not in IB2
+interaction: interaction-notes.md
+accessibility:
+  target: WCAG 2.2 AA
+  intent: accessibility-intent.md
+  keyboardFlow: interaction-notes.md §3-4
+responsive:
+  rules: responsive-rules.md
+  breakpointsPx:
+  - 600
+  - 1024
+  - 1440
+  reflowTarget: 320 CSS px
+  renderCheck: screens/render-check.json
+content:
+  keys: content-keys.md
+  longContent: SCR-IB2-R01
+  rtl:
+  - SCR-IB2-R02
+  - SCR-IB2-R02D
+reducedMotion:
+  rule: interaction-notes.md §6
+  evidence:
+  - screens/renders/F05-motion--desktop-reduced-motion.png
+  - screens/renders/C05-feedback--desktop-reduced-motion.png
+assets:
+- id: ASSET-ICON-CHECK
+  file: assets/icons/paep-icon-check.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: false
+- id: ASSET-ICON-CLOSE
+  file: assets/icons/paep-icon-close.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: false
+- id: ASSET-ICON-CHEVRON-START
+  file: assets/icons/paep-icon-chevron-start.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: true
+- id: ASSET-ICON-CHEVRON-END
+  file: assets/icons/paep-icon-chevron-end.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: true
+- id: ASSET-ICON-CHEVRON-DOWN
+  file: assets/icons/paep-icon-chevron-down.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: false
+- id: ASSET-ICON-CHEVRON-UP
+  file: assets/icons/paep-icon-chevron-up.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: false
+- id: ASSET-ICON-PAGE-FIRST
+  file: assets/icons/paep-icon-page-first.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: true
+- id: ASSET-ICON-PAGE-LAST
+  file: assets/icons/paep-icon-page-last.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: true
+- id: ASSET-ICON-MORE
+  file: assets/icons/paep-icon-more.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: false
+- id: ASSET-ICON-INFO
+  file: assets/icons/paep-icon-info.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: false
+- id: ASSET-ICON-SUCCESS
+  file: assets/icons/paep-icon-success.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: false
+- id: ASSET-ICON-WARNING
+  file: assets/icons/paep-icon-warning.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: false
+- id: ASSET-ICON-ERROR
+  file: assets/icons/paep-icon-error.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: false
+- id: ASSET-ICON-NEUTRAL
+  file: assets/icons/paep-icon-neutral.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: false
+- id: ASSET-ICON-PENDING
+  file: assets/icons/paep-icon-pending.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: false
+- id: ASSET-ICON-MINUS
+  file: assets/icons/paep-icon-minus.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: false
+- id: ASSET-ICON-PLUS
+  file: assets/icons/paep-icon-plus.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: false
+- id: ASSET-ICON-DELETE
+  file: assets/icons/paep-icon-delete.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: false
+- id: ASSET-ICON-SEARCH
+  file: assets/icons/paep-icon-search.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: false
+- id: ASSET-ICON-NO-RESULTS
+  file: assets/icons/paep-icon-no-results.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: false
+- id: ASSET-ICON-EMPTY
+  file: assets/icons/paep-icon-empty.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: false
+- id: ASSET-ICON-RETRY
+  file: assets/icons/paep-icon-retry.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: false
+- id: ASSET-ICON-EXTERNAL
+  file: assets/icons/paep-icon-external.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: true
+- id: ASSET-ICON-CONTENTS
+  file: assets/icons/paep-icon-contents.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: false
+- id: ASSET-ICON-SPINNER
+  file: assets/icons/paep-icon-spinner.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned, no third-party licence
+  mirrorInRtl: false
+- id: ASSET-ICON-SPRITE
+  file: assets/icons/paep-icons.sprite.svg
+  provenance: authored-in-HOF-IB2-001
+  owner: ProSEIT
+  licence: ProSEIT-owned
+assetProvenance: provenance.md §4
+fonts: none (system font stack)
+thirdPartyDependencies: []
+designTool:
+  role: Claude Design (PAEP-DCH-01)
+  tool: Claude Code cloud session
+  model: Anthropic Claude (configured claude-opus-5-5)
+  rendering: headless Chromium via Playwright
+  generator: provenance/generator/
+designPrompt:
+  file: provenance/design-prompt.txt
+  source: PO/SA project-thread message 2026-09-26T20:40:40Z
+provenance: provenance.md
+openDecisions:
+- id: OD-01
+  topic: font strategy
+  recommended: system font stack
+  status: APPROVED (PO/SA 2026-09-27, v1.1)
+  dependencyDecisionRequired: false
+- id: OD-02
+  topic: icon strategy
+  recommended: PAEP-owned SVG set
+  status: APPROVED (PO/SA 2026-09-27, v1.1)
+  dependencyDecisionRequired: false
+- id: OD-03
+  topic: palettes
+  recommended: cool grey / ProSEIT Navy brand-primary + ProSEIT Gold brand-accent (PO/SA direction) / protected status; petrol synthetic demo only
+  status: APPROVED (PO/SA 2026-09-27, v1.1; revised per PO/SA brand direction)
+  dependencyDecisionRequired: false
+- id: OD-04
+  topic: dark mode in IB2
+  recommended: out of IB2
+  status: APPROVED (PO/SA 2026-09-27, v1.1)
+  dependencyDecisionRequired: false
+- id: OD-05
+  topic: type scale
+  recommended: 12-30 px, body 14/20
+  status: APPROVED (PO/SA 2026-09-27, v1.1)
+  dependencyDecisionRequired: false
+- id: OD-06
+  topic: spacing scale
+  recommended: 4 px base
+  status: APPROVED (PO/SA 2026-09-27, v1.1)
+  dependencyDecisionRequired: false
+- id: OD-07
+  topic: radius
+  recommended: 0/2/4/6/8/full
+  status: APPROVED (PO/SA 2026-09-27, v1.1)
+  dependencyDecisionRequired: false
+- id: OD-08
+  topic: elevation
+  recommended: border + restrained shadows
+  status: APPROVED (PO/SA 2026-09-27, v1.1)
+  dependencyDecisionRequired: false
+- id: OD-09
+  topic: motion
+  recommended: 90-250 ms, removable
+  status: APPROVED (PO/SA 2026-09-27, v1.1)
+  dependencyDecisionRequired: false
+- id: OD-10
+  topic: breakpoints
+  recommended: 600/1024/1440
+  status: APPROVED (PO/SA 2026-09-27, v1.1)
+  dependencyDecisionRequired: false
+- id: OD-11
+  topic: container/grid
+  recommended: 4/8/12, 90 rem max, container queries
+  status: APPROVED (PO/SA 2026-09-27, v1.1)
+  dependencyDecisionRequired: false
+- id: OD-12
+  topic: density
+  recommended: comfortable default, compact opt-in
+  status: APPROVED (PO/SA 2026-09-27, v1.1)
+  dependencyDecisionRequired: false
+- id: OD-13
+  topic: focus style
+  recommended: '2 px #2D4FD1, 2 px offset, white halo'
+  status: APPROVED (PO/SA 2026-09-27, v1.1)
+  dependencyDecisionRequired: false
+- id: OD-14
+  topic: table narrow strategy
+  recommended: priority columns + row detail; bounded scroll fallback
+  status: APPROVED (PO/SA 2026-09-27, v1.1)
+  dependencyDecisionRequired: false
+- id: OD-15
+  topic: action overflow
+  recommended: More menu below 30 rem
+  status: APPROVED (PO/SA 2026-09-27, v1.1)
+  dependencyDecisionRequired: false
+- id: OD-16
+  topic: tabs overflow
+  recommended: bounded scroll in tab list
+  status: APPROVED (PO/SA 2026-09-27, v1.1)
+  dependencyDecisionRequired: false
+- id: OD-17
+  topic: breadcrumb collapse
+  recommended: first · … · parent · current
+  status: APPROVED (PO/SA 2026-09-27, v1.1)
+  dependencyDecisionRequired: false
+- id: OD-18
+  topic: drawer
+  recommended: inline-end; full width < 600 px
+  status: APPROVED (PO/SA 2026-09-27, v1.1)
+  dependencyDecisionRequired: false
+- id: OD-19
+  topic: dialog mobile
+  recommended: inset sm/md; full-screen lg
+  status: APPROVED (PO/SA 2026-09-27, v1.1)
+  dependencyDecisionRequired: false
+- id: OD-20
+  topic: tabs activation
+  recommended: automatic default; manual opt-in
+  status: APPROVED (PO/SA 2026-09-27, v1.1)
+  dependencyDecisionRequired: false
+- id: OD-21
+  topic: UI-lab IA
+  recommended: contents list + flat sections
+  status: APPROVED (PO/SA 2026-09-27, v1.1)
+  dependencyDecisionRequired: false
+openDecisionsBlockingImplementation: None unresolved. OD-03 revised to the PO/SA brand direction; the other 20 were retained at PO/SA review 2026-09-27. All 21 APPROVED by PO/SA on 2026-09-27 (v1.1); none requires a third-party dependency.
+unresolvedDeviations: []
+deviationsDirectory: deviations/
+reviewStatus:
+  gates: approvals.md
+  designReviewGates: APPROVED (PO/SA 2026-09-27)
+  poSaReview: 'PO/SA review: CHANGES REQUESTED - BRAND REVISION (2026-09-27); revision applied in v1.1'
+  poSaApproval: GRANTED
+  report: design-review-report.md
+designApproval:
+  approvedBy: Kouga (Product Owner / Solutions Architect)
+  approvedDate: '2026-09-27'
+  approvedVersion: '1.1'
+  decision: 'PO/SA APPROVAL: GRANTED - APPROVED_FOR_IMPLEMENTATION'
+  brandPrimary: '#24364B'
+  brandAccent: '#D4A62A'
+  protectedSemanticTokens: APPROVED AND NON-OVERRIDABLE
+  componentScope: 25/25 APPROVED
+  responsiveIntent: APPROVED
+  accessibilityIntent: APPROVED
+  rtlIntent: APPROVED
+  reducedMotionIntent: APPROVED
+  cleanRoomProvenance: APPROVED
+  openDesignDecisions: NONE
+  designDeviations: NONE

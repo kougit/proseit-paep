@@ -1,0 +1,45 @@
+{
+  "id": "IB2-FOUNDATION-COMPONENTS",
+  "title": "IB2: design foundations, core components and UI laboratory",
+  "milestone": "IB2",
+  "design_classification": "D2 (foundation, components); D1 (UI laboratory); D0 (tooling)",
+  "design_handoff": {
+    "id": "HOF-IB2-001",
+    "version": "1.1",
+    "status": "APPROVED_FOR_IMPLEMENTATION",
+    "approved_by": "Product Owner / Solutions Architect",
+    "date": "2026-09-27"
+  },
+  "status": "IN PROGRESS",
+  "acceptance": {
+    "status": "NOT ACCEPTED"
+  },
+  "predecessor": {
+    "id": "IB1-CONTRACTS-CONFIG",
+    "status": "ACCEPTED",
+    "baseline_commit": "d33ab91"
+  },
+  "baseline_registry": "tooling/governance/baseline-registry.json",
+  "baseline_generation": {
+    "active_accepted": 3,
+    "candidate": 4,
+    "candidate_status": "CANDIDATE"
+  },
+  "new_dependencies": [
+    "vitest@4.1.11 (dev)",
+    "@vitest/browser-playwright@4.1.11 (dev)",
+    "playwright@1.63.0 (dev)",
+    "axe-core@4.13.0 (dev, MPL-2.0, review L2)"
+  ],
+  "unit_test_runner": "Angular @angular/build:unit-test with Vitest browser mode (Chromium via CHROME_BIN)",
+  "evidence_path": "evidence/IB2-FOUNDATION-COMPONENTS/",
+  "human_acceptance_required": true,
+  "claude_md_disposition": "PROTECTED GOVERNED ARTIFACT (unchanged)",
+  "enterprise_shell": "NOT STARTED",
+  "nx_disposition": "NOT REQUIRED",
+  "acceptance_criteria": "IN PROGRESS",
+  "findings_open": {
+    "high": null,
+    "medium": null
+  }
+}

@@ -1,0 +1,69 @@
+#!/usr/bin/env node
+/**
+ * Negative suite for the IB2 design-system static gate (npm run qa:design-system:negative).
+ * Each case overlays one defect on the real repository files (nothing is written) and requires the named check
+ * to fail with the expected finding while every other check keeps its unmutated result. A final positive
+ * control runs the unmutated overlay.
+ */
+import { makeFs, runChecks } from './design-system-qa.mjs';
+
+const base = runChecks(makeFs());
+const baseById = Object.fromEntries(base.map((r) => [r.id, r.pass]));
+const real = makeFs();
+const pick = (id) => {
+  const dir = `packages/components/src/lib/${id}`;
+  const files = real.list(dir).filter((f) => f.endsWith('.css') || (f.endsWith('.ts') && !f.endsWith('.spec.ts')));
+  return files.find((f) => f.endsWith('.css')) || files.find((f) => /styles:\s*`/.test(real.read(f))) || files[0];
+};
+const append = (file, css) => {
+  const t = real.read(file);
+  return file.endsWith('.css') ? `${t}\n${css}\n` : t.replace(/styles:\s*(\[\s*)?`/, (m) => `${m}\n${css}\n`);
+};
+const target = pick('card');
+
+const cases = [
+  ['N01', 'S01', 'manifest status changed', [['evidence/design-handoff/HOF-IB2-001/handoff.manifest.yaml', (t) => t.replace('status: APPROVED_FOR_IMPLEMENTATION', 'status: DRAFT')]], /APPROVED|sha256/],
+  ['N02', 'S02', 'generated token value edited by hand', [['packages/foundation/src/styles/paep-tokens.css', (t) => t.replace('--paep-color-status-error-fg: #B3261E;', '--paep-color-status-error-fg: #C0392B;')]], /differs from the generator/],
+  ['N03', 'S02', 'approved token source changed without regenerating', [['evidence/design-handoff/HOF-IB2-001/design-export/foundation/token-values.candidate.json', (t) => t.replace('"primary": "#24364B"', '"primary": "#24364C"')]], /differs from the generator/],
+  ['N04', 'S03', 'component spec removed', [['packages/components/src/lib/dialog/dialog.spec.ts', null]], /dialog\.spec\.ts missing/],
+  ['N05', 'S03', 'component not exported from the entry point', [['packages/components/src/index.ts', (t) => t.replace(/PaepStatusBadge,?/, '')]], /PaepStatusBadge .* not exported/],
+  ['N06', 'S03', 'extra component outside the tranche', [['packages/components/src/lib/toast/toast.ts', 'export class PaepToast {}\n']], /unexpected component folder toast/],
+  ['N07', 'S04', 'raw hex colour in component CSS', [[target, () => append(target, ':host { color: #ff0000; }')]], /colour literal/],
+  ['N08', 'S04', 'named colour in component CSS', [[target, () => append(target, ':host { background: white; }')]], /colour literal/],
+  ['N09', 'S04', 'physical margin-left', [[target, () => append(target, ':host { margin-left: var(--paep-space-2); }')]], /physical property/],
+  ['N10', 'S04', 'text-align right', [[target, () => append(target, ':host { text-align: right; }')]], /physical property/],
+  ['N11', 'S04', 'raw pixel spacing', [[target, () => append(target, ':host { padding: 13px; }')]], /raw length 13px/],
+  ['N12', 'S04', 'raw shadow', [[target, () => append(target, ':host { box-shadow: 0 0 4px var(--paep-color-scrim); }')]], /raw length|shadow without/],
+  ['N13', 'S04', 'transition duration literal', [[target, () => append(target, ':host { transition: opacity 300ms ease; }')]], /motion duration without a motion token/],
+  ['N14', 'S05', 'deep import of another package', [['packages/components/src/lib/card/card.ts', (t) => `import { PAEP_TOKENS } from '@proseit/paep-foundation/src/lib/tokens/token-catalogue.generated';\n${t}`]], /deep import/],
+  ['N15', 'S05', 'component imports a later-milestone package', [['packages/components/src/lib/card/card.ts', (t) => `import '@proseit/frappe-sdk';\n${t}`]], /later milestone|components may import only/],
+  ['N16', 'S05', 'foundation imports @angular/common', [['packages/foundation/src/lib/layout/breakpoints.ts', (t) => `import { NgIf } from '@angular/common';\n${t}`]], /foundation may import only/],
+  ['N17', 'S05', 'axe-core imported by an app', [['apps/ui-lab/src/app/pages/home.ts', (t) => `import 'axe-core';\n${t}`]], /imports test tooling axe-core/],
+  ['N18', 'S06', 'PrimeNG class in a component', [['packages/components/src/lib/card/card.ts', (t) => `${t}\n// class="p-button"\nconst x = 'primeng';\n`]], /forbidden term/],
+  ['N19', 'S06', 'Angular favicon restored', [['apps/ui-lab/public/favicon.ico', 'x']], /favicon\.ico/],
+  ['N20', 'S07', 'specimen removed', [['apps/ui-lab/src/app/specimens/pagination.specimen.ts', null]], /pagination: specimen file missing/],
+  ['N21', 'S07', 'specimen not registered', [['apps/ui-lab/src/app/specimens/registry.ts', (t) => t.replace(/import \{[^}]*\} from '\.\/tabs\.specimen';\n/, '')]], /tabs: not registered/],
+  ['N22', 'S07', 'specimen without accessibility notes', [['apps/ui-lab/src/app/specimens/alert.specimen.ts', (t) => t.replace(/\baccessibility:/, 'a11yNotes:')]], /alert: meta\.accessibility missing/],
+  ['N23', 'S08', 'content key removed', [['packages/components/src/lib/messages/messages.ts', (t) => t.replace(/^\s+'paep\.table\.detailsFor':.*\n/m, '')]], /paep\.table\.detailsFor missing/],
+  ['N24', 'S09', 'focused test', [['packages/components/src/lib/tabs/tabs.spec.ts', (t) => t.replace(/\bit\(/, 'it.only(')]], /focused or skipped/],
+  ['N25', 'S09', 'skipped test', [['packages/components/src/lib/button/button.spec.ts', (t) => t.replace(/\bit\(/, 'it.skip(')]], /focused or skipped/],
+];
+
+let failures = 0;
+if (!base.every((r) => r.pass)) {
+  console.log(`FAIL C00 positive control: unmutated repository fails ${base.filter((r) => !r.pass).map((r) => r.id).join(', ')}`);
+  failures++;
+} else console.log('PASS C00 positive control: unmutated repository passes every check');
+for (const [id, check, label, edits, expect] of cases) {
+  const overlay = new Map();
+  for (const [f, e] of edits) overlay.set(f, e === null ? null : typeof e === 'string' ? e : e(real.exists(f) ? real.read(f) : ''));
+  const res = runChecks(makeFs(undefined, overlay));
+  const r = res.find((x) => x.id === check);
+  const others = res.filter((x) => x.id !== check && x.pass !== baseById[x.id]).map((x) => x.id);
+  const unchanged = [...overlay].every(([f, v]) => v !== null && real.exists(f) && real.read(f) === v);
+  const ok = !unchanged && r && !r.pass && expect.test(r.details) && others.length === 0;
+  if (!ok) failures++;
+  console.log(`${ok ? 'PASS' : 'FAIL'} ${id} ${label}: ${check} ${r?.pass ? 'passed' : 'failed'}${others.length ? `; also changed ${others.join(', ')}` : ''}${!ok && r ? ` — ${r.details.slice(0, 200)}` : ''}${unchanged ? ' (mutation did not apply)' : ''}`);
+}
+console.log(`\nPAEP design-system negative suite: ${failures ? 'FAIL' : 'PASS'} (${cases.length + 1 - failures}/${cases.length + 1})`);
+process.exit(failures ? 1 : 0);

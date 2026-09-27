@@ -29,7 +29,7 @@
     "vitest@4.1.11 (dev)",
     "@vitest/browser-playwright@4.1.11 (dev)",
     "playwright@1.63.0 (dev)",
-    "axe-core@4.13.0 (dev, MPL-2.0, review L2)"
+    "axe-core@4.13.0 (dev, MPL-2.0, review L5)"
   ],
   "unit_test_runner": "Angular @angular/build:unit-test with Vitest browser mode (Chromium via CHROME_BIN)",
   "evidence_path": "evidence/IB2-FOUNDATION-COMPONENTS/",

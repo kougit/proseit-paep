@@ -119,6 +119,12 @@ export function renderCss(src) {
   L.push('    --paep-motion-loop-state: paused;');
   L.push('  }');
   L.push('}');
+  L.push('');
+  L.push('/* Reduced-motion simulation for a subtree (UI laboratory setting), identical to the media query. */');
+  L.push('[data-paep-motion="reduce"] {');
+  for (const x of tokens.filter((y) => y.name.startsWith('--paep-motion-duration-'))) L.push(`  ${x.name}: 0ms;`);
+  L.push('  --paep-motion-loop-state: paused;');
+  L.push('}');
   return `${L.join('\n')}\n`;
 }
 

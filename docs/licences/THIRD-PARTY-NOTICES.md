@@ -31,3 +31,17 @@ Notices for code shipped in the application bundles are produced by the Angular 
 | Use in PAEP | Transitive devDependency (`@angular/build` → `browserslist` 4.29.0 → `caniuse-lite`). Used at build time to derive compile targets. Unmodified; not vendored; no data in `dist/`. |
 | Disposition | APPROVED BUILD-TIME DEPENDENCY, with attribution retained in this record |
 | Attribution text to display if the data is ever shared | "Browser support data: caniuse.com (Alexis Deveria), licensed CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). [Modified: <describe> \| Unmodified]." |
+
+## N3. axe-core (MPL-2.0)
+
+| Field | Value |
+| --- | --- |
+| Package | `axe-core` 4.13.0 |
+| Licence | MPL-2.0 (Mozilla Public License, version 2.0), https://mozilla.org/MPL/2.0/ |
+| Copyright | Deque Systems, Inc. and contributors (package metadata author: Deque Systems). The package also carries `LICENSE-3RD-PARTY.txt` for code it embeds. |
+| Upstream source | https://github.com/dequelabs/axe-core (tag `v4.13.0`) |
+| Registry artefact | https://registry.npmjs.org/axe-core/-/axe-core-4.13.0.tgz, sha512 integrity in `package-lock.json` |
+| Use in PAEP | Direct devDependency (IB2-FOUNDATION-COMPONENTS). Injected unmodified into the locally served UI laboratory by `tooling/design-system/` to run accessibility checks. Not vendored; not imported by any app or package; nothing from it is in `dist/`. |
+| Disposition | APPROVED DEV DEPENDENCY (L5, PO/SA 2026-09-27) |
+| Notice text | "This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/." |
+| Current obligation | None while PAEP does not distribute it. Any distributed artefact containing these files must include the MPL-2.0 text, `LICENSE-3RD-PARTY.txt` and a pointer to the upstream source above. |

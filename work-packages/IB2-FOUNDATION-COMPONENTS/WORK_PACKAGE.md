@@ -74,5 +74,5 @@ The accepted registry-bound mechanism (accepted history up to the active accepte
 | --- | --- | --- |
 | WP04 V07 / WP03 V09 "entry point is a placeholder" for `packages/foundation` or `packages/components` | IB2 replaces the IB0 `export {}` placeholders with real public APIs | The IB1 filled-entry bound, extended to these two entry points |
 | WP02 V13 "lockfile differs from the IB0-WP01 baseline" | The PO/SA approved four dev dependencies | Accepted only with a clean working tree, `package-lock.json` changed in scope (or accepted history) and W06 passing |
-| WP02 V15 `node_modules/axe-core: MPL-2.0 allowed only for review L1 packages` | axe-core is MPL-2.0; its review is L2 (`docs/licences/THIRD-PARTY-LICENCE-REVIEW.md`) | Accepted only for `axe-core` at dev scope, with the L2 review row present; any other licence finding fails |
+| WP02 V15 `node_modules/axe-core: MPL-2.0 allowed only for review L1 packages` | axe-core is MPL-2.0; its review is L5 (`docs/licences/THIRD-PARTY-LICENCE-REVIEW.md`) | Accepted only for `axe-core` at dev scope, with the L5 review row present; any other licence finding fails |
 | WP03 V06 "angular.json changed" | IB2 adds the ui-lab `test` target and the foundation stylesheet | Accepted only while `angular.json` is in scope or accepted history, and only if every other `angular.json` property equals the accepted baseline |

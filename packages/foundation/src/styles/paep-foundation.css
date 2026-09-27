@@ -86,3 +86,12 @@ a:hover {
     scroll-behavior: auto !important;
   }
 }
+
+[data-paep-motion='reduce'] *,
+[data-paep-motion='reduce'] *::before,
+[data-paep-motion='reduce'] *::after {
+  animation-duration: 0ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0ms !important;
+  scroll-behavior: auto !important;
+}

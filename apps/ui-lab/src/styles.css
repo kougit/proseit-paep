@@ -1,2 +1,143 @@
-/* PAEP UI laboratory global styles: the foundation stylesheet only (tokens, base, focus, reduced motion). */
+/* PAEP UI laboratory global styles: the foundation stylesheet, then lab page scaffolding (tokens only). */
 @import '@proseit/paep-foundation/src/styles/paep-foundation.css';
+
+.lab-page {
+  display: grid;
+  gap: var(--paep-space-7);
+  max-inline-size: var(--paep-layout-content-max);
+}
+
+.lab-page > *,
+.lab-page section {
+  min-inline-size: 0;
+}
+
+.lab-page h1 {
+  margin: 0;
+  font-size: var(--paep-font-size-heading-1);
+  line-height: var(--paep-line-height-heading-1);
+  font-weight: var(--paep-font-weight-heading-1);
+  letter-spacing: var(--paep-letter-spacing-heading-1);
+}
+
+.lab-page h2 {
+  margin: 0 0 var(--paep-space-3);
+  font-size: var(--paep-font-size-heading-3);
+  line-height: var(--paep-line-height-heading-3);
+  font-weight: var(--paep-font-weight-heading-3);
+}
+
+.lab-page h3 {
+  margin: 0 0 var(--paep-space-2);
+  font-size: var(--paep-font-size-title-sm);
+  line-height: var(--paep-line-height-title-sm);
+  font-weight: var(--paep-font-weight-title-sm);
+}
+
+.lab-lead {
+  margin: var(--paep-space-2) 0 0;
+  max-inline-size: var(--paep-layout-reading-max);
+  color: var(--paep-color-text-secondary);
+  font-size: var(--paep-font-size-body-lg);
+  line-height: var(--paep-line-height-body-lg);
+}
+
+.lab-panel {
+  padding: var(--paep-space-5);
+  background: var(--paep-color-surface);
+  border: 1px solid var(--paep-color-border-subtle);
+  border-radius: var(--paep-radius-lg);
+  min-inline-size: 0;
+}
+
+.lab-grid {
+  display: grid;
+  gap: var(--paep-space-4);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+}
+
+.lab-scroll {
+  max-inline-size: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--paep-color-border-subtle);
+  border-radius: var(--paep-radius-lg);
+  background: var(--paep-color-surface);
+}
+
+.lab-table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: var(--paep-font-size-body-sm);
+  line-height: var(--paep-line-height-body-sm);
+}
+
+.lab-table caption {
+  padding: var(--paep-space-3) var(--paep-space-4);
+  text-align: start;
+  font-weight: var(--paep-font-weight-label);
+}
+
+.lab-table th,
+.lab-table td {
+  padding: var(--paep-space-2) var(--paep-space-3);
+  border-block-start: 1px solid var(--paep-color-border-subtle);
+  text-align: start;
+  vertical-align: top;
+}
+
+.lab-table thead th {
+  background: var(--paep-color-surface-subtle);
+  font-weight: var(--paep-font-weight-label);
+}
+
+.lab-table code {
+  overflow-wrap: normal;
+  white-space: nowrap;
+}
+
+.lab-swatch {
+  display: inline-block;
+  inline-size: var(--paep-size-icon-md);
+  block-size: var(--paep-size-icon-md);
+  margin-inline-end: var(--paep-space-2);
+  vertical-align: middle;
+  border: 1px solid var(--paep-color-border-default);
+  border-radius: var(--paep-radius-sm);
+}
+
+.lab-list {
+  margin: 0;
+  padding-inline-start: var(--paep-space-5);
+}
+
+.lab-list li + li {
+  margin-block-start: var(--paep-space-1);
+}
+
+.lab-meta {
+  color: var(--paep-color-text-secondary);
+  font-family: var(--paep-font-family-mono);
+  font-size: var(--paep-font-size-caption);
+}
+
+.lab-field {
+  display: grid;
+  gap: var(--paep-space-1);
+}
+
+.lab-field label {
+  font-size: var(--paep-font-size-caption);
+  line-height: var(--paep-line-height-caption);
+  font-weight: var(--paep-font-weight-label);
+}
+
+.lab-field select {
+  min-block-size: var(--paep-size-target-min);
+  padding-block: var(--paep-space-1);
+  padding-inline: var(--paep-space-2);
+  font: inherit;
+  color: var(--paep-color-text-primary);
+  background: var(--paep-color-surface);
+  border: 1px solid var(--paep-color-border-default);
+  border-radius: var(--paep-radius-sm);
+}

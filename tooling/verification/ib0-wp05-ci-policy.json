@@ -97,6 +97,14 @@
       "name": "PAEP / runtime-config-negative"
     },
     {
+      "id": "components",
+      "name": "PAEP / components"
+    },
+    {
+      "id": "accessibility",
+      "name": "PAEP / accessibility"
+    },
+    {
       "id": "build-reference-app",
       "name": "PAEP / build-reference-app"
     },
@@ -139,6 +147,17 @@
     "runtime-config-negative": [
       "npm run qa:runtime-config:negative",
       "npm run qa:runtime-config:portability"
+    ],
+    "components": [
+      "npm run test:components",
+      "npm run qa:design-system",
+      "npm run qa:design-system:negative",
+      "npm run qa:ib2:ci-negative"
+    ],
+    "accessibility": [
+      "npm run build:ui-lab",
+      "npm run qa:accessibility",
+      "npm run qa:accessibility:negative"
     ],
     "build-reference-app": [
       "npm run build:reference-app",

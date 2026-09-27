@@ -242,3 +242,13 @@
     --paep-motion-loop-state: paused;
   }
 }
+
+/* Reduced-motion simulation for a subtree (UI laboratory setting), identical to the media query. */
+[data-paep-motion="reduce"] {
+  --paep-motion-duration-instant: 0ms;
+  --paep-motion-duration-fast: 0ms;
+  --paep-motion-duration-base: 0ms;
+  --paep-motion-duration-moderate: 0ms;
+  --paep-motion-duration-slow: 0ms;
+  --paep-motion-loop-state: paused;
+}

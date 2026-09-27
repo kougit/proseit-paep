@@ -1,0 +1,272 @@
+#!/usr/bin/env node
+/**
+ * PAEP IB2 design-system static quality gate (npm run qa:design-system).
+ *
+ * Checks the approved handoff evidence, token drift, the 25-component census and public API, token-only and
+ * logical-property styling, import boundaries, clean-room terms, UI-lab coverage, content keys and test hygiene.
+ * Every check reads files through `fsx`, so the negative suite can run the same checks over a mutated overlay.
+ *
+ *   node tooling/design-system/design-system-qa.mjs [--json <file>]
+ */
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { SOURCE, renderCss, renderTs, CSS_OUT, TS_OUT } from './generate-tokens.mjs';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+
+/** The IR-01 §6.4 tranche: id, family, public selector(s) and exported classes (HOF-IB2-001 component-map). */
+export const COMPONENTS = [
+  ['button', 'Actions', ['PaepButton']],
+  ['icon-button', 'Actions', ['PaepIconButton']],
+  ['action-group', 'Actions', ['PaepActionGroup']],
+  ['field', 'Forms', ['PaepField']],
+  ['input', 'Forms', ['PaepInput']],
+  ['select', 'Forms', ['PaepSelect']],
+  ['textarea', 'Forms', []],
+  ['checkbox', 'Forms', ['PaepCheckbox']],
+  ['radio', 'Forms', ['PaepRadioGroup', 'PaepRadio']],
+  ['table', 'Data', ['PaepTable']],
+  ['list', 'Data', ['PaepList']],
+  ['pagination', 'Data', ['PaepPagination']],
+  ['empty-state', 'Data', ['PaepEmptyState']],
+  ['alert', 'Feedback', ['PaepAlert']],
+  ['status-badge', 'Feedback', ['PaepStatusBadge']],
+  ['progress', 'Feedback', ['PaepProgress']],
+  ['skeleton', 'Feedback', ['PaepSkeleton']],
+  ['dialog', 'Overlay', ['PaepDialog']],
+  ['drawer', 'Overlay', ['PaepDrawer']],
+  ['popover', 'Overlay', ['PaepPopover']],
+  ['tabs', 'Navigation', ['PaepTabs', 'PaepTab']],
+  ['breadcrumb', 'Navigation', ['PaepBreadcrumb']],
+  ['card', 'Structure', ['PaepCard']],
+  ['panel', 'Structure', ['PaepPanel']],
+  ['divider', 'Structure', ['PaepDivider']],
+];
+
+export const HANDOFF = {
+  manifest: 'evidence/design-handoff/HOF-IB2-001/handoff.manifest.yaml',
+  manifestSha256: '24e7049dd675e2025ae75c099637fd3f0a9eb9f24ff2958d1ce88607d040ac53',
+  contentKeys: 'evidence/design-handoff/HOF-IB2-001/design-export/content-keys.md',
+};
+
+/** Terms that must never appear in PAEP UI source (clean-room, PAEP v1.1; IB2 authorisation). */
+export const FORBIDDEN_TERMS = [/\bultima\b/i, /primeng/i, /primeicons/i, /primeflex/i, /\bp-(button|table|dialog|inputtext|dropdown)\b/i, /\bfiori\b/i, /\bui5\b/i, /\bsapui/i, /\bmat-(button|form-field|table|dialog)\b/i, /@angular\/material/i, /@angular\/cdk/i];
+
+const COMPONENTS_DIR = 'packages/components/src/lib';
+const FOUNDATION_DIR = 'packages/foundation/src';
+
+/** Real file system rooted at the repository; `overlay` maps path -> content (null = deleted). */
+export function makeFs(root = ROOT, overlay = new Map()) {
+  const walk = (dir) => {
+    const out = new Set();
+    const abs = path.join(root, dir);
+    if (fs.existsSync(abs)) {
+      for (const e of fs.readdirSync(abs, { withFileTypes: true })) {
+        const rel = `${dir}/${e.name}`;
+        if (e.isDirectory()) for (const f of walk(rel)) out.add(f);
+        else out.add(rel);
+      }
+    }
+    for (const [f, v] of overlay) if (f.startsWith(`${dir}/`)) (v === null ? out.delete(f) : out.add(f));
+    return [...out].sort();
+  };
+  return {
+    exists: (f) => (overlay.has(f) ? overlay.get(f) !== null : fs.existsSync(path.join(root, f))),
+    read: (f) => {
+      if (overlay.has(f)) {
+        if (overlay.get(f) === null) throw new Error(`${f} deleted`);
+        return overlay.get(f);
+      }
+      return fs.readFileSync(path.join(root, f), 'utf8');
+    },
+    list: walk,
+  };
+}
+
+/** Removes comments from CSS/TS text (keeps strings roughly intact; good enough for token checks). */
+const stripComments = (t) => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"])\/\/.*$/gm, '$1');
+
+/** Extracts component CSS: .css files, and `styles:` template literals inside .ts files. */
+function cssBlocks(fsx, file) {
+  const t = fsx.read(file);
+  if (file.endsWith('.css')) return [stripComments(t)];
+  const blocks = [];
+  for (const m of t.matchAll(/styles:\s*(?:\[\s*)?`([\s\S]*?)`/g)) blocks.push(stripComments(m[1]));
+  return blocks;
+}
+
+const PHYSICAL = /(^|[\s;{])(left|right|margin-left|margin-right|padding-left|padding-right|border-left[\w-]*|border-right[\w-]*|border-top-left-radius|border-top-right-radius|border-bottom-left-radius|border-bottom-right-radius|float\s*:\s*(left|right)|text-align\s*:\s*(left|right)|clear\s*:\s*(left|right))\s*:/;
+const COLOUR_LITERAL = /#[0-9a-fA-F]{3,8}\b|\b(rgb|rgba|hsl|hsla|hwb|lab|lch|oklab|oklch|color-mix)\s*\(|\b(white|black|red|green|blue|gray|grey|yellow|orange|purple|navy|gold|silver)\b(?![-\w])/;
+// Lengths: px other than 1/2/3 px hairlines; bare rem/em except in @media/@container conditions and max/inline size limits.
+const PX = /(?<![-\w.])(\d*\.?\d+)px\b/g;
+
+export function runChecks(fsx) {
+  const results = [];
+  const add = (id, name, problems, ok) => results.push({ id, name, pass: problems.length === 0, details: problems.length ? problems.join('; ') : ok });
+
+  // S01: approved handoff retained, exact manifest, approved status.
+  {
+    const p = [];
+    if (!fsx.exists(HANDOFF.manifest)) p.push(`${HANDOFF.manifest} missing`);
+    else {
+      const t = fsx.read(HANDOFF.manifest);
+      const sha = crypto.createHash('sha256').update(t).digest('hex');
+      if (sha !== HANDOFF.manifestSha256) p.push(`manifest sha256 ${sha} != approved ${HANDOFF.manifestSha256}`);
+      if (!/^status: APPROVED_FOR_IMPLEMENTATION$/m.test(t)) p.push('manifest status is not APPROVED_FOR_IMPLEMENTATION');
+      if (!/^version: '1\.1'$/m.test(t)) p.push('manifest version is not 1.1');
+    }
+    add('S01', 'HOF-IB2-001 v1.1 APPROVED_FOR_IMPLEMENTATION is retained with the approved manifest hash', p, `sha256 ${HANDOFF.manifestSha256.slice(0, 12)}…, APPROVED_FOR_IMPLEMENTATION`);
+  }
+
+  // S02: generated token files match the approved values (no drift, no hand edits).
+  {
+    const p = [];
+    try {
+      const src = JSON.parse(fsx.read(SOURCE));
+      if (!fsx.exists(CSS_OUT) || fsx.read(CSS_OUT) !== renderCss(src)) p.push(`${CSS_OUT} differs from the generator output`);
+      if (!fsx.exists(TS_OUT) || fsx.read(TS_OUT) !== renderTs(src)) p.push(`${TS_OUT} differs from the generator output`);
+    } catch (e) { p.push(String(e.message || e)); }
+    add('S02', 'Token stylesheet and catalogue equal the generator output from the approved token values', p, 'no drift');
+  }
+
+  // S03: component census and public API.
+  const index = fsx.exists('packages/components/src/index.ts') ? fsx.read('packages/components/src/index.ts') : '';
+  {
+    const p = [];
+    const dirs = [...new Set(fsx.list(COMPONENTS_DIR).map((f) => f.slice(COMPONENTS_DIR.length + 1).split('/')[0]))].filter((d) => d !== 'messages');
+    const expected = COMPONENTS.map(([id]) => id);
+    for (const id of expected) {
+      if (!dirs.includes(id)) { p.push(`${id}: folder missing`); continue; }
+      if (!fsx.exists(`${COMPONENTS_DIR}/${id}/${id}.spec.ts`)) p.push(`${id}: ${id}.spec.ts missing`);
+    }
+    for (const d of dirs) if (!expected.includes(d)) p.push(`unexpected component folder ${d} (outside the 25-component tranche)`);
+    const exported = [...index.matchAll(/export\s*\{([^}]*)\}\s*from\s*'([^']+)'/g)].flatMap((m) => m[1].split(',').map((s) => s.trim()).filter(Boolean).map((n) => ({ n: n.replace(/^type\s+/, ''), from: m[2] })));
+    for (const [id, , classes] of COMPONENTS) for (const c of classes) if (!exported.some((e) => e.n === c)) p.push(`${c} (${id}) not exported from packages/components/src/index.ts`);
+    for (const e of exported) if (!e.from.startsWith('./lib/')) p.push(`index re-exports from ${e.from}`);
+    add('S03', 'Exactly the 25 IR-01 §6.4 components, each with behaviour tests, exported through the public entry point only', p, `${expected.length} components; ${exported.length} public exports`);
+  }
+
+  // S04: token-only, logical-property styling in components (and the foundation base stylesheet).
+  {
+    const p = [];
+    const files = fsx.list(COMPONENTS_DIR).filter((f) => (f.endsWith('.css') || f.endsWith('.ts')) && !f.endsWith('.spec.ts'));
+    let blocks = 0;
+    for (const f of files) {
+      for (const css of cssBlocks(fsx, f)) {
+        blocks++;
+        css.split('\n').forEach((line, i) => {
+          const l = line.trim();
+          if (!l) return;
+          if (COLOUR_LITERAL.test(l)) p.push(`${f}: colour literal "${l}"`);
+          if (PHYSICAL.test(` ${l}`)) p.push(`${f}: physical property "${l}"`);
+          for (const m of l.matchAll(PX)) if (!['1', '2', '3'].includes(m[1]) && !/^0?\.?0+$/.test(m[1])) p.push(`${f}: raw length ${m[0]} in "${l}"`);
+          if (/\d(rem|em)\b/.test(l) && !/^@(media|container)|max-inline-size|min-inline-size|inline-size|max-block-size|min-block-size|block-size/.test(l)) p.push(`${f}: raw rem/em length in "${l}"`);
+          if (/box-shadow\s*:/.test(l) && !/var\(--paep-(elevation|focus|color)|none|inherit/.test(l)) p.push(`${f}: shadow without an elevation or focus token "${l}"`);
+          if (/(transition|animation)(-duration)?\s*:/.test(l) && /\d+m?s\b/.test(l) && !/var\(--paep-motion/.test(l) && !/\b0m?s\b/.test(l)) p.push(`${f}: motion duration without a motion token "${l}"`);
+          void i;
+        });
+      }
+    }
+    for (const f of fsx.list(`${FOUNDATION_DIR}/styles`).filter((x) => x.endsWith('paep-foundation.css'))) {
+      for (const line of stripComments(fsx.read(f)).split('\n')) if (PHYSICAL.test(` ${line.trim()}`)) p.push(`${f}: physical property "${line.trim()}"`);
+    }
+    add('S04', 'Component styles use only --paep-* tokens (no colour, raw length, shadow or duration literals) and logical properties only', p, `${blocks} style blocks in ${files.length} files clean`);
+  }
+
+  // S05: import boundaries.
+  {
+    const p = [];
+    const tsFiles = [...fsx.list('packages/components/src'), ...fsx.list('packages/foundation/src'), ...fsx.list('apps/ui-lab/src')].filter((f) => f.endsWith('.ts'));
+    for (const f of tsFiles) {
+      const spec = f.endsWith('.spec.ts');
+      for (const m of stripComments(fsx.read(f)).matchAll(/(?:import|export)\s[^'"`]*?from\s*'([^']+)'|import\s*\(\s*'([^']+)'\s*\)|import\s*'([^']+)'/g)) {
+        const spec_ = m[1] || m[2] || m[3];
+        const inComponents = f.startsWith('packages/components/');
+        const inFoundation = f.startsWith('packages/foundation/');
+        if (/^@proseit\/[^/]+\/./.test(spec_)) p.push(`${f}: deep import ${spec_}`);
+        if (/^(axe-core|playwright|@vitest\/browser-playwright)$/.test(spec_)) p.push(`${f}: imports test tooling ${spec_}`);
+        if (/^vitest/.test(spec_) && !spec) p.push(`${f}: imports ${spec_} outside a spec`);
+        if (/frappe|erpnext/i.test(spec_) || /^@proseit\/(paep-domain-|frappe-sdk|paep-enterprise|paep-analytics|paep-offline)/.test(spec_)) p.push(`${f}: imports ${spec_} (later milestone)`);
+        if (inFoundation && !(spec_.startsWith('.') || spec_ === '@angular/core' || spec_ === '@angular/core/testing' || spec_ === '@proseit/paep-foundation' || (spec && /^vitest/.test(spec_)))) p.push(`${f}: foundation may import only @angular/core and itself, not ${spec_}`);
+        if (inComponents && !(spec_.startsWith('.') || /^@angular\/(core|common|forms|router|platform-browser)(\/testing)?$/.test(spec_) || spec_ === '@proseit/paep-foundation' || (spec && /^vitest/.test(spec_)))) p.push(`${f}: components may import only Angular and @proseit/paep-foundation, not ${spec_}`);
+        if (inComponents && spec_.startsWith('.') && path.posix.normalize(path.posix.join(path.posix.dirname(f), spec_)).split('/').slice(0, 2).join('/') !== 'packages/components') p.push(`${f}: relative import leaves the package (${spec_})`);
+        if (f.startsWith('apps/') && spec_.startsWith('.') && path.posix.normalize(path.posix.join(path.posix.dirname(f), spec_)).startsWith('packages/')) p.push(`${f}: relative import into packages (${spec_})`);
+      }
+    }
+    add('S05', 'Import boundaries: foundation imports only @angular/core; components only Angular and the foundation entry point; no deep, Frappe, domain or later-milestone imports; test tooling only in specs', p, `${tsFiles.length} TypeScript files`);
+  }
+
+  // S06: clean-room terms in UI source.
+  {
+    const p = [];
+    const files = [...fsx.list('packages/components'), ...fsx.list('packages/foundation'), ...fsx.list('apps/ui-lab')].filter((f) => /\.(ts|css|html|json|svg|md)$/.test(f));
+    for (const f of files) {
+      const t = fsx.read(f);
+      for (const re of FORBIDDEN_TERMS) if (re.test(t)) p.push(`${f}: forbidden term ${re}`);
+    }
+    if (fsx.exists('apps/ui-lab/public/favicon.ico')) p.push('apps/ui-lab/public/favicon.ico (Angular logo) still present');
+    add('S06', 'Clean-room: no Ultima, PrimeNG, SAP Fiori/UI5, Angular Material/CDK or commercial-theme terms in UI source; Angular favicon replaced', p, `${files.length} files scanned`);
+  }
+
+  // S07: UI-lab coverage: every component has a registered specimen with complete documentation.
+  {
+    const p = [];
+    const reg = fsx.exists('apps/ui-lab/src/app/specimens/registry.ts') ? fsx.read('apps/ui-lab/src/app/specimens/registry.ts') : '';
+    for (const [id, family] of COMPONENTS) {
+      const f = `apps/ui-lab/src/app/specimens/${id}.specimen.ts`;
+      if (!fsx.exists(f)) { p.push(`${id}: specimen file missing`); continue; }
+      const t = fsx.read(f);
+      if (!new RegExp(`from '\\./${id}\\.specimen'`).test(reg)) p.push(`${id}: not registered in specimens/registry.ts`);
+      if (!new RegExp(`id:\\s*'${id}'`).test(t)) p.push(`${id}: meta id missing`);
+      if (!new RegExp(`family:\\s*'${family}'`).test(t)) p.push(`${id}: family is not ${family}`);
+      for (const field of ['purpose', 'variants', 'states', 'keyboard', 'accessibility', 'responsive', 'rtl', 'contentKeys', 'unitTests']) if (!new RegExp(`\\b${field}:`).test(t)) p.push(`${id}: meta.${field} missing`);
+      if (!/<lab-specimen-page\b/.test(t) || !/<lab-example\b/.test(t)) p.push(`${id}: no specimen page or live example`);
+      if (!/from '@proseit\/paep-components'/.test(t)) p.push(`${id}: specimen does not use the public entry point`);
+    }
+    add('S07', 'UI laboratory: every one of the 25 components has a registered specimen page with purpose, variants, states, keyboard, accessibility, responsive, RTL, content keys and evidence', p, `${COMPONENTS.length} specimens registered`);
+  }
+
+  // S08: content keys: the message catalogue is exactly the handoff's key list.
+  {
+    const p = [];
+    const md = fsx.exists(HANDOFF.contentKeys) ? fsx.read(HANDOFF.contentKeys) : '';
+    const keys = [...md.matchAll(/^\| (paep\.[\w.]+) \|/gm)].map((m) => m[1]);
+    const msg = fsx.exists(`${COMPONENTS_DIR}/messages/messages.ts`) ? fsx.read(`${COMPONENTS_DIR}/messages/messages.ts`) : '';
+    const impl = [...msg.matchAll(/^\s+'(paep\.[\w.]+)':/gm)].map((m) => m[1]);
+    for (const k of keys) if (!impl.includes(k)) p.push(`${k} missing from messages.ts`);
+    for (const k of impl) if (!keys.includes(k)) p.push(`${k} not in content-keys.md`);
+    if (!keys.length) p.push('no content keys found in the handoff');
+    add('S08', 'Message catalogue holds exactly the approved content keys', p, `${keys.length} keys`);
+  }
+
+  // S09: test hygiene: no focused or skipped tests; every component spec has at least three tests.
+  {
+    const p = [];
+    const specs = [...fsx.list('packages/components/src'), ...fsx.list('packages/foundation/src')].filter((f) => f.endsWith('.spec.ts'));
+    let tests = 0;
+    for (const f of specs) {
+      const t = stripComments(fsx.read(f));
+      if (/\b(it|test|describe)\.(only|skip|todo)\b|\b(fit|fdescribe|xit|xdescribe)\s*\(/.test(t)) p.push(`${f}: focused or skipped test`);
+      const n = (t.match(/\b(it|test)\s*\(/g) || []).length;
+      tests += n;
+      if (n < 3 && f.startsWith(COMPONENTS_DIR)) p.push(`${f}: only ${n} tests`);
+    }
+    add('S09', 'Test hygiene: no focused, skipped or todo tests; every component spec has at least three behaviour tests', p, `${specs.length} spec files, ${tests} tests`);
+  }
+
+  return results;
+}
+
+function main() {
+  const jsonAt = process.argv.indexOf('--json');
+  const results = runChecks(makeFs());
+  for (const r of results) console.log(`${r.pass ? 'PASS' : 'FAIL'} ${r.id} ${r.name} — ${r.details}`);
+  const ok = results.every((r) => r.pass);
+  console.log(`\nPAEP design-system QA: ${ok ? 'PASS' : 'FAIL'} (${results.filter((r) => r.pass).length}/${results.length})`);
+  if (jsonAt > 0) fs.writeFileSync(process.argv[jsonAt + 1], `${JSON.stringify({ result: ok ? 'PASS' : 'FAIL', results }, null, 2)}\n`);
+  process.exit(ok ? 0 : 1);
+}
+
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();

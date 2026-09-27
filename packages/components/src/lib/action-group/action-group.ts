@@ -12,6 +12,7 @@ import {
   viewChild,
   viewChildren,
 } from '@angular/core';
+import { PaepIcon, PaepIconName } from '@proseit/paep-foundation';
 import { PaepButton } from '../button/button';
 import { PAEP_MESSAGES } from '../messages/messages';
 
@@ -20,6 +21,7 @@ export type PaepActionPriority = 'primary' | 'secondary' | 'destructive';
 
 interface PaepOverflowEntry {
   readonly label: string;
+  readonly icon: PaepIconName | undefined;
   readonly destructive: boolean;
   readonly disabled: boolean;
   readonly source: HTMLElement;
@@ -49,7 +51,7 @@ export function paepActionPriority(button: PaepButton): PaepActionPriority {
   exportAs: 'paepActionGroup',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [PaepButton],
+  imports: [PaepButton, PaepIcon],
   host: {
     class: 'paep-action-group',
     role: 'group',
@@ -100,7 +102,12 @@ export function paepActionPriority(button: PaepButton): PaepActionPriority {
               [class.paep-action-group__item--destructive]="entry.destructive"
               [attr.aria-disabled]="entry.disabled ? 'true' : null"
               (click)="run(entry)"
-            >{{ entry.label }}</button>
+            >
+              @if (entry.icon; as icon) {
+                <svg class="paep-action-group__item-icon" [paepIcon]="icon"></svg>
+              }
+              {{ entry.label }}
+            </button>
           }
         </div>
       }
@@ -230,6 +237,7 @@ export class PaepActionGroup {
   private collectEntries(): PaepOverflowEntry[] {
     const toEntry = (b: PaepButton): PaepOverflowEntry => ({
       label: (b.element.textContent ?? '').trim(),
+      icon: b.icon(),
       destructive: b.variant() === 'destructive',
       disabled: (b.element as HTMLButtonElement).disabled === true || b.loading(),
       source: b.element,

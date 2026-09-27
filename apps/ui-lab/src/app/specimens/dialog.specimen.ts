@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { PaepButton, PaepDialog, PaepDialogClose, PaepDialogFooter } from '@proseit/paep-components';
+import { PaepButton, PaepField, PaepInput, PaepDialog, PaepDialogClose, PaepDialogFooter } from '@proseit/paep-components';
 import { LabExample, LabSpecimenPage } from '../lab/specimen-page';
 import { LabSpecimenMeta } from '../lab/specimen-meta';
 
@@ -40,7 +40,7 @@ export const DIALOG_META: LabSpecimenMeta = {
 @Component({
   selector: 'lab-dialog-specimen',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LabSpecimenPage, LabExample, PaepDialog, PaepDialogFooter, PaepDialogClose, PaepButton],
+  imports: [LabSpecimenPage, LabExample, PaepDialog, PaepDialogFooter, PaepDialogClose, PaepButton, PaepField, PaepInput],
   template: `
     <lab-specimen-page [meta]="meta">
       <lab-example heading="Destructive confirmation (sm, busy while deleting)">
@@ -78,19 +78,10 @@ export const DIALOG_META: LabSpecimenMeta = {
       <lab-example heading="Form dialog (lg) with validation">
         <button paepButton variant="primary" (click)="formOpen.set(true)">Rename depot</button>
         <paep-dialog [(open)]="formOpen" size="lg" heading="Rename depot" (closed)="nameError.set(false)">
-          <form id="lab-rename-form" class="form" (submit)="$event.preventDefault(); save(nameInput.value)">
-            <label for="lab-depot-name">Depot name</label>
-            <input
-              #nameInput
-              id="lab-depot-name"
-              class="input"
-              value="North depot"
-              [attr.aria-invalid]="nameError() || null"
-              [attr.aria-describedby]="nameError() ? 'lab-depot-name-error' : null"
-            />
-            @if (nameError()) {
-              <p id="lab-depot-name-error" class="error">Error: enter a depot name.</p>
-            }
+          <form id="lab-rename-form" novalidate (submit)="$event.preventDefault(); save(fieldValue($event, 'depotName'))">
+            <paep-field label="Depot name" required [error]="nameError() ? 'Enter a depot name.' : null">
+              <input paepInput name="depotName" id="lab-depot-name" value="North depot" />
+            </paep-field>
           </form>
           <paep-dialog-footer>
             <button paepButton paepDialogClose>Cancel</button>
@@ -120,24 +111,6 @@ export const DIALOG_META: LabSpecimenMeta = {
     .note {
       margin: var(--paep-space-3) 0 0;
     }
-    .form {
-      display: grid;
-      gap: var(--paep-space-1);
-    }
-    .input {
-      min-block-size: var(--paep-density-control-height);
-      padding-inline: var(--paep-density-control-padding-inline);
-      border: 1px solid var(--paep-color-border-default);
-      border-radius: var(--paep-radius-sm);
-      font: inherit;
-    }
-    .input[aria-invalid='true'] {
-      border: 2px solid var(--paep-color-invalid-border);
-    }
-    .error {
-      margin: 0;
-      color: var(--paep-color-invalid-fg);
-    }
   `,
 })
 export class DialogSpecimen {
@@ -159,6 +132,11 @@ export class DialogSpecimen {
       this.deleted.set(true);
       this.confirmOpen.set(false);
     }, 1500);
+  }
+
+  /** Reads a named control from the submitted form. */
+  protected fieldValue(event: Event, name: string): string {
+    return String(new FormData(event.target as HTMLFormElement).get(name) ?? '');
   }
 
   protected save(name: string): void {

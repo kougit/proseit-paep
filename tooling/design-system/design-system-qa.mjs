@@ -52,6 +52,7 @@ export const HANDOFF = {
   // Every retained handoff file (design export and requirements source) is pinned by sha256 in this list.
   root: 'evidence/design-handoff/HOF-IB2-001',
   fileHashes: 'evidence/design-handoff/HOF-IB2-001/HANDOFF-FILES.sha256',
+  fileHashesSha256: '0e340d5af4f77ac167d3626bf422249c13951bcf83b9bf91c5f384fbb00e7a38',
   hashedDirs: ['design-export', 'requirements'],
 };
 
@@ -169,6 +170,8 @@ export function runChecks(fsx) {
     let pinned = 0;
     if (!fsx.exists(HANDOFF.fileHashes)) p.push(`${HANDOFF.fileHashes} missing`);
     else {
+      const listSha = crypto.createHash('sha256').update(fsx.readBytes(HANDOFF.fileHashes)).digest('hex');
+      if (listSha !== HANDOFF.fileHashesSha256) p.push(`${HANDOFF.fileHashes} sha256 ${listSha} != pinned ${HANDOFF.fileHashesSha256}`);
       const listed = new Map(fsx.read(HANDOFF.fileHashes).split('\n').filter(Boolean).map((l) => { const m = /^([0-9a-f]{64}) {2}(.+)$/.exec(l); return m ? [m[2], m[1]] : [l, null]; }));
       const present = HANDOFF.hashedDirs.flatMap((d) => fsx.list(`${HANDOFF.root}/${d}`)).map((f) => f.slice(HANDOFF.root.length + 1));
       for (const f of present) {

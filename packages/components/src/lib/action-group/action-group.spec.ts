@@ -97,6 +97,8 @@ describe('PaepActionGroup', () => {
     expect(divider.nextElementSibling).toBe(items()[3]);
     expect(items()[1].getAttribute('aria-disabled')).toBe('true');
     expect(items().every((i) => i.tabIndex === -1)).toBe(true);
+    expect(items()[3].querySelector('svg')?.getAttribute('aria-hidden')).toBe('true');
+    expect(items()[0].querySelector('svg')).toBeNull();
   });
 
   it('moves destructive actions after the others in the menu even when they come first in the markup', async () => {

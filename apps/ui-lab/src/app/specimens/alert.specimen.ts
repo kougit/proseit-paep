@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { PaepAlert, PaepAlertStatus } from '@proseit/paep-components';
+import { PaepAlert, PaepAlertStatus, PaepButton } from '@proseit/paep-components';
 import { LabExample, LabSpecimenPage } from '../lab/specimen-page';
 import { LabSpecimenMeta } from '../lab/specimen-meta';
 
@@ -35,7 +35,7 @@ export const ALERT_META: LabSpecimenMeta = {
 @Component({
   selector: 'lab-alert-specimen',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LabSpecimenPage, LabExample, PaepAlert],
+  imports: [PaepButton, LabSpecimenPage, LabExample, PaepAlert],
   template: `
     <lab-specimen-page [meta]="meta">
       <lab-example heading="Statuses (static, present at load)">
@@ -49,14 +49,14 @@ export const ALERT_META: LabSpecimenMeta = {
       <lab-example heading="With actions">
         <paep-alert status="error" heading="Records could not be loaded">
           The service did not respond. Nothing was changed. Reference: 7F3A-22C1.
-          <button paepAlertActions type="button" class="lab-action">Retry</button>
+          <button paepButton paepAlertActions>Retry</button>
         </paep-alert>
       </lab-example>
       <lab-example heading="Dismissible (focus returns to the region heading)">
         <p class="lab-heading" #dismissHeading>Import summary</p>
         @if (dismissedCount() > 0) {
           <p class="note">Dismissed {{ dismissedCount() }} time(s).</p>
-          <button type="button" class="lab-action" (click)="restore()">Show the alert again</button>
+          <button paepButton (click)="restore()">Show the alert again</button>
         }
         @if (showDismissible()) {
           <paep-alert status="warning" dismissible heading="Three rows were skipped" [focusAfterDismiss]="dismissHeading" (dismissed)="onDismissed()">
@@ -67,7 +67,7 @@ export const ALERT_META: LabSpecimenMeta = {
       <lab-example heading="Inserted dynamically (announced)">
         <div class="row">
           @for (s of statuses; track s) {
-            <button type="button" class="lab-action" (click)="insert(s)">Insert {{ s }}</button>
+            <button paepButton (click)="insert(s)">Insert {{ s }}</button>
           }
         </div>
         @if (inserted(); as s) {
@@ -101,9 +101,6 @@ export const ALERT_META: LabSpecimenMeta = {
     }
     .note {
       margin: 0 0 var(--paep-space-2);
-    }
-    .lab-action {
-      min-block-size: var(--paep-size-target-touch);
     }
   `,
 })

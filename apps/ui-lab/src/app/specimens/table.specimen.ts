@@ -8,6 +8,7 @@ import {
   PaepTableCell,
   PaepTableColumn,
   PaepTableRow,
+  PaepButton,
 } from '@proseit/paep-components';
 import { LabExample, LabSpecimenPage } from '../lab/specimen-page';
 import { LabSpecimenMeta } from '../lab/specimen-meta';
@@ -95,7 +96,7 @@ const ROWS: readonly PaepTableRow[] = [
 @Component({
   selector: 'lab-table-specimen',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LabSpecimenPage, LabExample, PaepTable, PaepTableCell, PaepStatusBadge, PaepPagination],
+  imports: [PaepButton, LabSpecimenPage, LabExample, PaepTable, PaepTableCell, PaepStatusBadge, PaepPagination],
   template: `
     <lab-specimen-page [meta]="meta">
       <lab-example heading="Standard with states (choose a state; resize to see priority columns move)">
@@ -118,7 +119,7 @@ const ROWS: readonly PaepTableRow[] = [
           (clearFilters)="state.set('populated')"
           (emptyAction)="state.set('populated')"
         >
-          <button paepTableActions type="button" class="lab-action">Create record</button>
+          <button paepButton paepTableActions variant="primary" icon="plus">Create record</button>
           <ng-template paepTableCell="status" let-row>
             <paep-status-badge [tone]="tone(row)">{{ row['status'] }}</paep-status-badge>
           </ng-template>

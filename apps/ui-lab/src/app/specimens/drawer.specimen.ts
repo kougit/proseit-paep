@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { PaepButton, PaepDialogClose, PaepDialogFooter, PaepDrawer, PaepDrawerSide, PaepDrawerSize } from '@proseit/paep-components';
+import { PaepButton, PaepField, PaepInput, PaepDialogClose, PaepDialogFooter, PaepDrawer, PaepDrawerSide, PaepDrawerSize } from '@proseit/paep-components';
 import { LabExample, LabSpecimenPage } from '../lab/specimen-page';
 import { LabSpecimenMeta } from '../lab/specimen-meta';
 
@@ -35,7 +35,7 @@ export const DRAWER_META: LabSpecimenMeta = {
 @Component({
   selector: 'lab-drawer-specimen',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LabSpecimenPage, LabExample, PaepDrawer, PaepDialogFooter, PaepDialogClose, PaepButton],
+  imports: [LabSpecimenPage, LabExample, PaepDrawer, PaepDialogFooter, PaepDialogClose, PaepButton, PaepField, PaepInput],
   template: `
     <lab-specimen-page [meta]="meta">
       <lab-example heading="Detail drawer (end, md, long content)">
@@ -63,19 +63,10 @@ export const DRAWER_META: LabSpecimenMeta = {
           <p class="note" role="status">Record 1 was saved (simulated).</p>
         }
         <paep-drawer [(open)]="formOpen" heading="Edit Record 1" [busy]="saving()" (closed)="depotError.set(false)">
-          <form id="lab-drawer-form" class="form" (submit)="$event.preventDefault(); save(depot.value)">
-            <label for="lab-drawer-depot">Depot</label>
-            <input
-              #depot
-              id="lab-drawer-depot"
-              class="input"
-              value="North depot"
-              [attr.aria-invalid]="depotError() || null"
-              [attr.aria-describedby]="depotError() ? 'lab-drawer-depot-error' : null"
-            />
-            @if (depotError()) {
-              <p id="lab-drawer-depot-error" class="error">Error: enter a depot.</p>
-            }
+          <form id="lab-drawer-form" novalidate (submit)="$event.preventDefault(); save(fieldValue($event, 'depot'))">
+            <paep-field label="Depot" required [error]="depotError() ? 'Enter a depot.' : null">
+              <input paepInput name="depot" id="lab-drawer-depot" value="North depot" />
+            </paep-field>
           </form>
           <paep-dialog-footer>
             <button paepButton paepDialogClose [disabled]="saving()">Cancel</button>
@@ -112,24 +103,6 @@ export const DRAWER_META: LabSpecimenMeta = {
     .dl dd {
       margin: 0 0 var(--paep-space-3);
     }
-    .form {
-      display: grid;
-      gap: var(--paep-space-1);
-    }
-    .input {
-      min-block-size: var(--paep-density-control-height);
-      padding-inline: var(--paep-density-control-padding-inline);
-      border: 1px solid var(--paep-color-border-default);
-      border-radius: var(--paep-radius-sm);
-      font: inherit;
-    }
-    .input[aria-invalid='true'] {
-      border: 2px solid var(--paep-color-invalid-border);
-    }
-    .error {
-      margin: 0;
-      color: var(--paep-color-invalid-fg);
-    }
   `,
 })
 export class DrawerSpecimen {
@@ -148,6 +121,11 @@ export class DrawerSpecimen {
     this.side.set(side);
     this.size.set(size);
     this.detailOpen.set(true);
+  }
+
+  /** Reads a named control from the submitted form. */
+  protected fieldValue(event: Event, name: string): string {
+    return String(new FormData(event.target as HTMLFormElement).get(name) ?? '');
   }
 
   protected save(depot: string): void {

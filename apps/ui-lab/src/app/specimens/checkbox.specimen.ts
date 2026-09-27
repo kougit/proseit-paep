@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { PaepCheckbox } from '@proseit/paep-components';
+import { PaepIcon } from '@proseit/paep-foundation';
 import { LabExample, LabSpecimenPage } from '../lab/specimen-page';
 import { LabSpecimenMeta } from '../lab/specimen-meta';
 
@@ -38,7 +39,7 @@ export const CHECKBOX_META: LabSpecimenMeta = {
 @Component({
   selector: 'lab-checkbox-specimen',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LabSpecimenPage, LabExample, PaepCheckbox],
+  imports: [LabSpecimenPage, LabExample, PaepCheckbox, PaepIcon],
   template: `
     <lab-specimen-page [meta]="meta">
       <lab-example heading="Single">
@@ -73,7 +74,7 @@ export const CHECKBOX_META: LabSpecimenMeta = {
           <input type="checkbox" paepCheckbox invalid required aria-describedby="terms-error" />
           I accept the delivery terms
         </label>
-        <p class="error" id="terms-error">Accept the delivery terms to continue.</p>
+        <p class="error" id="terms-error"><svg paepIcon="error"></svg>Accept the delivery terms to continue.</p>
       </lab-example>
       <lab-example heading="Long label">
         <label>
@@ -114,6 +115,9 @@ export const CHECKBOX_META: LabSpecimenMeta = {
       padding-inline-start: var(--paep-space-6);
     }
     .error {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--paep-space-1);
       margin: var(--paep-space-1) 0 0;
       color: var(--paep-color-status-error-fg);
       font-weight: var(--paep-font-weight-label);

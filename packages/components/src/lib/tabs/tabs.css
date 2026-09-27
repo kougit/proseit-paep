@@ -1,0 +1,110 @@
+:host {
+  display: block;
+  min-inline-size: 0;
+  /* The tab list scrolls inside its own box, so it must not widen grid or flex ancestors. */
+  container-type: inline-size;
+}
+.paep-tabs__bar {
+  position: relative;
+}
+.paep-tabs__list {
+  display: flex;
+  gap: var(--paep-space-1);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scroll-padding-inline: var(--paep-space-8);
+  border-block-end: 1px solid var(--paep-color-border-subtle);
+}
+.paep-tabs__tab {
+  position: relative;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--paep-space-2);
+  min-block-size: var(--paep-density-tab-height);
+  max-inline-size: 18rem;
+  padding: var(--paep-space-2) var(--paep-space-3);
+  border: 0;
+  border-start-start-radius: var(--paep-radius-sm);
+  border-start-end-radius: var(--paep-radius-sm);
+  background: transparent;
+  color: var(--paep-color-text-secondary);
+  font: inherit;
+  text-align: start;
+  overflow-wrap: break-word;
+  cursor: pointer;
+  transition: background-color var(--paep-motion-duration-fast) var(--paep-motion-easing-standard);
+}
+.paep-tabs__tab:hover {
+  background: var(--paep-color-hover-neutral);
+  color: var(--paep-color-text-primary);
+}
+.paep-tabs__tab[aria-selected='true'] {
+  color: var(--paep-color-text-primary);
+  font-weight: var(--paep-font-weight-title-sm);
+}
+.paep-tabs__tab[aria-selected='true']::after {
+  content: '';
+  position: absolute;
+  inset-inline: var(--paep-space-2);
+  inset-block-end: 0;
+  block-size: 3px;
+  background: var(--paep-color-selected-indicator);
+  border-start-start-radius: var(--paep-radius-xs);
+  border-start-end-radius: var(--paep-radius-xs);
+}
+.paep-tabs__tab[aria-disabled='true'] {
+  background: transparent;
+  color: var(--paep-color-disabled-fg);
+  cursor: not-allowed;
+}
+.paep-tabs__tab:focus-visible {
+  outline-offset: calc(var(--paep-focus-ring-width) * -1);
+  box-shadow: none;
+}
+.paep-tabs__label {
+  min-inline-size: 0;
+}
+.paep-tabs__count {
+  padding-inline: var(--paep-space-2);
+  border-radius: var(--paep-radius-full);
+  background: var(--paep-color-status-neutral-bg);
+  color: var(--paep-color-status-neutral-fg);
+  font-size: var(--paep-font-size-caption);
+  line-height: var(--paep-line-height-caption);
+  font-weight: var(--paep-font-weight-caption);
+}
+.paep-tabs__error {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--paep-space-1);
+  color: var(--paep-color-invalid-fg);
+  font-size: var(--paep-font-size-body-sm);
+  line-height: var(--paep-line-height-body-sm);
+  font-weight: var(--paep-font-weight-body-sm);
+  --paep-icon-size: var(--paep-size-icon-sm);
+}
+.paep-tabs__scroll {
+  position: absolute;
+  z-index: 1;
+  inset-block: 0 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--paep-space-8);
+  padding: 0;
+  border: 0;
+  background: var(--paep-color-surface);
+  color: var(--paep-color-icon-default);
+  cursor: pointer;
+}
+.paep-tabs__scroll[hidden] {
+  display: none;
+}
+.paep-tabs__scroll--start {
+  inset-inline-start: 0;
+}
+.paep-tabs__scroll--end {
+  inset-inline-end: 0;
+}

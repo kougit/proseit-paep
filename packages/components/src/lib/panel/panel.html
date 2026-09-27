@@ -1,0 +1,43 @@
+<section class="paep-panel" [class.paep-panel--collapsed]="collapsed()" [attr.aria-labelledby]="headingId">
+  <div class="paep-panel__head">
+    <ng-template #title>
+      @if (collapsible()) {
+        <button
+          type="button"
+          class="paep-panel__toggle"
+          [attr.aria-expanded]="expanded()"
+          [attr.aria-controls]="bodyId"
+          [attr.aria-describedby]="collapsed() && errorCount() > 0 ? errorsId : null"
+          (click)="toggle()"
+        >
+          <svg class="paep-panel__chevron" paepIcon="chevron-down"></svg>
+          <span>{{ heading() }}</span>
+        </button>
+      } @else {
+        {{ heading() }}
+      }
+    </ng-template>
+    @switch (headingLevel()) {
+      @case (2) {
+        <h2 class="paep-panel__title" [id]="headingId"><ng-container [ngTemplateOutlet]="title" /></h2>
+      }
+      @case (4) {
+        <h4 class="paep-panel__title" [id]="headingId"><ng-container [ngTemplateOutlet]="title" /></h4>
+      }
+      @case (5) {
+        <h5 class="paep-panel__title" [id]="headingId"><ng-container [ngTemplateOutlet]="title" /></h5>
+      }
+      @case (6) {
+        <h6 class="paep-panel__title" [id]="headingId"><ng-container [ngTemplateOutlet]="title" /></h6>
+      }
+      @default {
+        <h3 class="paep-panel__title" [id]="headingId"><ng-container [ngTemplateOutlet]="title" /></h3>
+      }
+    }
+    @if (collapsed() && errorCount() > 0) {
+      <span class="paep-panel__errors" [id]="errorsId"><svg paepIcon="error"></svg>{{ errorText() }}</span>
+    }
+    <div class="paep-panel__actions"><ng-content select="[paepPanelActions]" /></div>
+  </div>
+  <div class="paep-panel__body" [id]="bodyId" [hidden]="collapsed()"><ng-content /></div>
+</section>

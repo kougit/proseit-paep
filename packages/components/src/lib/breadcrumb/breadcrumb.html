@@ -1,0 +1,31 @@
+<nav
+  class="paep-breadcrumb"
+  [class.paep-breadcrumb--many]="many()"
+  [class.paep-breadcrumb--expanded]="expanded()"
+  [attr.aria-label]="label()"
+>
+  <ol class="paep-breadcrumb__list">
+    @for (item of items(); track $index; let i = $index, last = $last) {
+      <li class="paep-breadcrumb__item" [class.paep-breadcrumb__middle]="isMiddle(i)">
+        @if (i > 0) {
+          <svg class="paep-breadcrumb__separator" paepIcon="chevron-end"></svg>
+        }
+        @if (last) {
+          <span class="paep-breadcrumb__current" aria-current="page">{{ item.label }}</span>
+        } @else if (item.link !== undefined) {
+          <a class="paep-breadcrumb__link" [routerLink]="item.link">{{ item.label }}</a>
+        } @else if (item.href !== undefined) {
+          <a class="paep-breadcrumb__link" [href]="item.href">{{ item.label }}</a>
+        } @else {
+          <span class="paep-breadcrumb__text">{{ item.label }}</span>
+        }
+      </li>
+      @if (i === 0 && collapsible()) {
+        <li class="paep-breadcrumb__item paep-breadcrumb__more">
+          <svg class="paep-breadcrumb__separator" paepIcon="chevron-end"></svg>
+          <button type="button" class="paep-breadcrumb__expand" aria-expanded="false" [attr.aria-label]="showFullPathLabel()" (click)="expand()">…</button>
+        </li>
+      }
+    }
+  </ol>
+</nav>

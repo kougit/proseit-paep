@@ -1,0 +1,95 @@
+/* Field wrapper (HOF-IB2-001 component-specs "Field wrapper"). Unencapsulated so it can style the projected
+ * control's surroundings; every selector is scoped under .paep-field. */
+.paep-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--paep-density-field-gap);
+  min-inline-size: 0;
+  max-inline-size: var(--paep-layout-form-max);
+  overflow-wrap: break-word;
+}
+
+.paep-field__label {
+  color: var(--paep-color-text-primary);
+  font-size: var(--paep-font-size-label);
+  font-weight: var(--paep-font-weight-label);
+  line-height: var(--paep-line-height-label);
+  text-align: start;
+}
+
+.paep-field__req {
+  margin-inline-start: var(--paep-space-1);
+  color: var(--paep-color-status-error-fg);
+}
+
+.paep-field__meta {
+  margin-inline-start: var(--paep-space-1);
+  color: var(--paep-color-text-secondary);
+  font-size: var(--paep-font-size-body-sm);
+  font-weight: var(--paep-font-weight-body-sm);
+}
+
+.paep-field__help,
+.paep-field__error {
+  margin: 0;
+  font-size: var(--paep-font-size-body-sm);
+  line-height: var(--paep-line-height-body-sm);
+}
+
+.paep-field__help {
+  color: var(--paep-color-text-secondary);
+}
+
+.paep-field__error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--paep-space-1);
+  color: var(--paep-color-status-error-fg);
+  font-weight: var(--paep-font-weight-label);
+}
+
+.paep-field__error-icon {
+  --paep-icon-size: var(--paep-size-icon-sm);
+  margin-block-start: calc((var(--paep-line-height-body-sm) - var(--paep-size-icon-sm)) / 2);
+}
+
+.paep-field__control {
+  display: flex;
+  align-items: stretch;
+  min-inline-size: 0;
+}
+
+.paep-field__control > :not(.paep-field__affix) {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+/* Adornments: sunken surface, never wrap; the control shrinks instead. */
+.paep-field__affix {
+  display: flex;
+  flex: none;
+  align-items: center;
+  padding-inline: var(--paep-space-3);
+  background: var(--paep-color-surface-sunken);
+  color: var(--paep-color-text-primary);
+  font-size: var(--paep-font-size-body-sm);
+  white-space: nowrap;
+  border: 1px solid var(--paep-color-border-default);
+}
+
+.paep-field__affix--prefix {
+  border-inline-end: 0;
+  border-start-start-radius: var(--paep-radius-sm);
+  border-end-start-radius: var(--paep-radius-sm);
+}
+
+.paep-field__affix--suffix {
+  border-inline-start: 0;
+  border-start-end-radius: var(--paep-radius-sm);
+  border-end-end-radius: var(--paep-radius-sm);
+}
+
+/* Disabled: label in secondary colour (the control carries the dashed border). */
+.paep-field:has(.paep-field__control :disabled) .paep-field__label {
+  color: var(--paep-color-text-secondary);
+}

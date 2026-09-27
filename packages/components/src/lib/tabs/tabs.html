@@ -1,0 +1,61 @@
+<div class="paep-tabs__bar">
+  <button
+    type="button"
+    class="paep-tabs__scroll paep-tabs__scroll--start"
+    aria-hidden="true"
+    tabindex="-1"
+    [attr.aria-label]="scrollStartLabel()"
+    [hidden]="!canScrollStart()"
+    (click)="scroll(false)"
+  >
+    <svg paepIcon="chevron-start"></svg>
+  </button>
+  <div
+    #list
+    class="paep-tabs__list"
+    role="tablist"
+    [attr.aria-label]="label()"
+    (keydown)="onKeydown($event)"
+    (scroll)="updateOverflow()"
+  >
+    @for (tab of tabs(); track tab.tabId; let i = $index) {
+      <button
+        type="button"
+        role="tab"
+        class="paep-tabs__tab"
+        [id]="tab.tabId"
+        [attr.aria-selected]="i === selectedIndex()"
+        [attr.aria-controls]="tab.panelId"
+        [attr.aria-disabled]="tab.disabled() || null"
+        [attr.aria-describedby]="tab.disabled() && tab.disabledReason() ? tab.reasonId : null"
+        [tabIndex]="i === selectedIndex() ? 0 : -1"
+        (click)="activate(i)"
+      >
+        <span class="paep-tabs__label">{{ tab.label() }}</span>
+        @if (tab.count() !== undefined) {
+          <span class="paep-tabs__count">{{ tab.count() }}</span>
+        }
+        @if (tab.errorCount() > 0) {
+          <span class="paep-tabs__error"><svg paepIcon="error"></svg>{{ errorText(tab.errorCount()) }}</span>
+        }
+      </button>
+    }
+  </div>
+  <button
+    type="button"
+    class="paep-tabs__scroll paep-tabs__scroll--end"
+    aria-hidden="true"
+    tabindex="-1"
+    [attr.aria-label]="scrollEndLabel()"
+    [hidden]="!canScrollEnd()"
+    (click)="scroll(true)"
+  >
+    <svg paepIcon="chevron-end"></svg>
+  </button>
+</div>
+@for (tab of tabs(); track tab.tabId) {
+  @if (tab.disabled() && tab.disabledReason()) {
+    <span class="paep-visually-hidden" [id]="tab.reasonId">{{ tab.disabledReason() }}</span>
+  }
+}
+<ng-content />

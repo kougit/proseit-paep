@@ -97,6 +97,18 @@ export async function discover(browser, base) {
 
 const css = (page, sel, prop) => page.$eval(sel, (el, pr) => getComputedStyle(el).getPropertyValue(pr).trim(), prop);
 const rootVar = (page, name) => page.evaluate((n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim(), name);
+/**
+ * Canonical form of a token value, so that the production CSS minifier's rewriting (".15s" for "150ms",
+ * ".56" for "0.56", "#fff" for "#FFFFFF") is not mistaken for a changed value: colours are resolved by the
+ * browser, times become milliseconds, and numbers lose redundant zeros.
+ */
+const canon = (page, value) => page.evaluate((v) => {
+  const s = v.trim().replace(/\s+/g, ' ');
+  if (CSS.supports('color', s)) { const e = document.createElement('i'); e.style.color = s; document.body.append(e); const c = getComputedStyle(e).color; e.remove(); return c; }
+  const time = /^(-?[\d.]+)(ms|s)$/.exec(s);
+  if (time) return `${Number(time[1]) * (time[2] === 's' ? 1000 : 1)}ms`;
+  return s.replace(/-?\d*\.?\d+/g, (n) => String(Number(n))).toLowerCase();
+}, value);
 
 /** M1, D1, C1, B1, F1. Returns [{ id, name, problems }]. */
 export async function globalChecks(browser, base, tokens) {
@@ -116,14 +128,14 @@ export async function globalChecks(browser, base, tokens) {
       await withPage(url, opts, async (page) => {
         for (const t of tokens.filter((x) => x.name.startsWith('--paep-motion-duration-'))) {
           const v = await rootVar(page, t.name);
-          if (v !== '0ms') p.push(`${label}: ${t.name} = ${v}`);
+          if ((await canon(page, v)) !== '0ms') p.push(`${label}: ${t.name} = ${v}`);
         }
         const spin = await page.$eval('svg.paep-icon--spin', (el) => { const s = getComputedStyle(el); return `${s.animationName}|${s.animationDuration}|${s.animationPlayState}`; });
         if (!/^none\|/.test(spin) && !/\|0s\|/.test(spin) && !/paused$/.test(spin)) p.push(`${label}: spinner still animates (${spin})`);
       });
     }
     await withPage(`${base}/foundations/motion`, {}, async (page) => {
-      if ((await rootVar(page, '--paep-motion-duration-base')) !== '150ms') p.push('default motion-duration-base is not 150ms');
+      if ((await canon(page, await rootVar(page, '--paep-motion-duration-base'))) !== '150ms') p.push('default motion-duration-base is not 150ms');
     });
   });
 
@@ -153,8 +165,8 @@ export async function globalChecks(browser, base, tokens) {
       const btn = await page.$eval('main button[paepbutton]', (el) => getComputedStyle(el).backgroundColor);
       if (btn !== 'rgb(11, 94, 115)') p.push(`primary button under petrol ${btn}`);
       for (const t of tokens.filter((x) => x.protected)) {
-        const v = (await rootVar(page, t.name)).replace(/\s+/g, ' ');
-        if (v.toLowerCase() !== t.value.toLowerCase()) p.push(`${t.name} = ${v}, approved ${t.value}`);
+        const v = await rootVar(page, t.name);
+        if ((await canon(page, v)) !== (await canon(page, t.value))) p.push(`${t.name} = ${v}, approved ${t.value}`);
       }
     });
   });
@@ -221,7 +233,7 @@ async function main() {
         console.log(`${c.problems.length ? 'FAIL' : 'PASS'} ${c.id} ${c.name}${c.problems.length ? ` — ${c.problems.join('; ')}` : ''}`);
         if (c.problems.length) failed++;
       }
-      if (paths.length < 35) { console.log(`FAIL coverage: only ${paths.length} laboratory pages discovered`); failed++; }
+      if (paths.length < 40) { console.log(`FAIL coverage: only ${paths.length} laboratory pages discovered`); failed++; }
     }
   } finally {
     await browser.close();

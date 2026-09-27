@@ -97,7 +97,7 @@ function cssBlocks(fsx, file) {
   return blocks;
 }
 
-const PHYSICAL = /(^|[\s;{])(left|right|margin-left|margin-right|padding-left|padding-right|border-left[\w-]*|border-right[\w-]*|border-top-left-radius|border-top-right-radius|border-bottom-left-radius|border-bottom-right-radius|float\s*:\s*(left|right)|text-align\s*:\s*(left|right)|clear\s*:\s*(left|right))\s*:/;
+const PHYSICAL = /(^|[\s;{])((left|right|margin-left|margin-right|padding-left|padding-right|border-left[\w-]*|border-right[\w-]*|border-top-left-radius|border-top-right-radius|border-bottom-left-radius|border-bottom-right-radius)\s*:|(float|text-align|clear)\s*:\s*(left|right)\b)/;
 const COLOUR_LITERAL = /#[0-9a-fA-F]{3,8}\b|\b(rgb|rgba|hsl|hsla|hwb|lab|lch|oklab|oklch|color-mix)\s*\(|\b(white|black|red|green|blue|gray|grey|yellow|orange|purple|navy|gold|silver)\b(?![-\w])/;
 // Lengths: px other than 1/2/3 px hairlines; bare rem/em except in @media/@container conditions and max/inline size limits.
 const PX = /(?<![-\w.])(\d*\.?\d+)px\b/g;

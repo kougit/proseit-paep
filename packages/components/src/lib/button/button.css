@@ -1,0 +1,118 @@
+/* Button (HOF-IB2-001 component-specs "Button"). Tokens and logical properties only. */
+:host {
+  --paep-icon-size: var(--paep-density-icon-size);
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--paep-space-2);
+  min-block-size: var(--paep-density-control-height);
+  min-inline-size: var(--paep-size-target-min);
+  max-inline-size: 100%;
+  margin: 0;
+  padding-block: calc((var(--paep-density-control-height) - var(--paep-line-height-body) - 2px) / 2);
+  padding-inline: var(--paep-density-button-padding-inline);
+  border: 1px solid transparent;
+  border-radius: var(--paep-radius-sm);
+  background: transparent;
+  color: var(--paep-color-text-primary);
+  font: inherit;
+  font-size: var(--paep-font-size-body);
+  font-weight: var(--paep-font-weight-label);
+  line-height: var(--paep-line-height-body);
+  text-align: center;
+  text-decoration: none;
+  overflow-wrap: break-word;
+  cursor: pointer;
+  vertical-align: middle;
+  transition:
+    background-color var(--paep-motion-duration-fast) var(--paep-motion-easing-standard),
+    border-color var(--paep-motion-duration-fast) var(--paep-motion-easing-standard);
+}
+
+/* The icon aligns with the first line of a wrapping label. */
+.paep-button__icon {
+  margin-block: calc((var(--paep-line-height-body) - var(--paep-density-icon-size)) / 2);
+}
+
+.paep-button__label {
+  min-inline-size: 0;
+}
+
+:host(.paep-button--primary) {
+  background: var(--paep-brand-primary);
+  color: var(--paep-brand-on-primary);
+}
+:host(.paep-button--primary:hover) {
+  background: var(--paep-brand-primary-hover);
+}
+:host(.paep-button--primary:active) {
+  background: var(--paep-brand-primary-active);
+}
+
+:host(.paep-button--secondary) {
+  background: var(--paep-color-surface);
+  border-color: var(--paep-color-border-default);
+}
+:host(.paep-button--secondary:hover) {
+  background: var(--paep-color-hover-neutral);
+  border-color: var(--paep-color-border-strong);
+}
+:host(.paep-button--secondary:active) {
+  background: var(--paep-color-active-neutral);
+}
+
+:host(.paep-button--tertiary) {
+  color: var(--paep-brand-primary);
+  padding-inline: var(--paep-space-2);
+}
+:host(.paep-button--tertiary:hover) {
+  background: var(--paep-brand-primary-subtle);
+  text-decoration: underline;
+}
+:host(.paep-button--tertiary:active) {
+  background: var(--paep-color-active-neutral);
+}
+
+:host(.paep-button--destructive) {
+  background: var(--paep-color-status-error-strong);
+  color: var(--paep-color-text-inverse);
+}
+:host(.paep-button--destructive:hover) {
+  background: var(--paep-color-destructive-hover);
+}
+:host(.paep-button--destructive:active) {
+  background: var(--paep-color-destructive-active);
+}
+
+/* Disabled: disabled palette plus a dashed border as the non-colour cue. */
+:host(:disabled) {
+  background: var(--paep-color-disabled-bg);
+  border-color: var(--paep-color-disabled-border);
+  border-style: dashed;
+  color: var(--paep-color-disabled-fg);
+  text-decoration: none;
+  cursor: not-allowed;
+}
+:host(.paep-button--tertiary:disabled) {
+  background: transparent;
+}
+
+/* Loading keeps the variant appearance; only the cursor changes. */
+:host([aria-busy='true']) {
+  cursor: progress;
+}
+
+:host(.paep-button--block) {
+  inline-size: 100%;
+}
+
+@media (forced-colors: active) {
+  :host {
+    border-color: ButtonText;
+  }
+  :host(:disabled) {
+    border-color: GrayText;
+    color: GrayText;
+  }
+}

@@ -1,0 +1,36 @@
+/* Radio option: circle; selected = 2px brand ring + inner dot (shape cue). Shares the choice base in checkbox.css. */
+.paep-radio {
+  border-radius: 50%;
+}
+.paep-radio:checked {
+  border-width: 2px;
+  border-color: var(--paep-brand-primary);
+}
+.paep-radio:checked::after {
+  inline-size: calc(var(--paep-density-choice-size) / 2);
+  block-size: calc(var(--paep-density-choice-size) / 2);
+  border-radius: 50%;
+  background: var(--paep-brand-primary);
+}
+.paep-radio--readonly:checked {
+  border-color: var(--paep-color-text-secondary);
+}
+.paep-radio--readonly:checked::after {
+  background: var(--paep-color-text-secondary);
+}
+.paep-radio:disabled:checked {
+  border-style: solid;
+  border-color: var(--paep-color-disabled-fg);
+}
+.paep-radio:disabled:checked::after {
+  background: var(--paep-color-disabled-fg);
+}
+.paep-radio[aria-invalid='true'] {
+  border-color: var(--paep-color-invalid-border);
+}
+
+@media (forced-colors: active) {
+  .paep-radio:checked::after {
+    background: CanvasText;
+  }
+}

@@ -1,0 +1,33 @@
+/* Native select: appearance none plus a decorative chevron drawn at the inline-end from two token-coloured
+ * strokes (a native select cannot contain an icon element). Closed-state text truncates; the platform list
+ * shows full option text. */
+:host {
+  --_chevron: var(--paep-color-icon-default);
+  --_half: var(--paep-space-2);
+  --_edge: var(--paep-space-3);
+  appearance: none;
+  cursor: pointer;
+  padding-inline-end: calc(var(--paep-density-control-padding-inline) + var(--paep-space-6));
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  background-image:
+    linear-gradient(to top right, transparent calc(50% - 1px), var(--_chevron) calc(50% - 1px), var(--_chevron) calc(50% + 1px), transparent calc(50% + 1px)),
+    linear-gradient(to bottom right, transparent calc(50% - 1px), var(--_chevron) calc(50% - 1px), var(--_chevron) calc(50% + 1px), transparent calc(50% + 1px));
+  background-repeat: no-repeat;
+  background-size: var(--_half) var(--_half);
+  background-position:
+    calc(100% - var(--_edge) - var(--_half)) 50%,
+    calc(100% - var(--_edge)) 50%;
+}
+
+:host(:dir(rtl)) {
+  background-position:
+    calc(0% + var(--_edge)) 50%,
+    calc(0% + var(--_edge) + var(--_half)) 50%;
+}
+
+:host(:disabled) {
+  --_chevron: var(--paep-color-disabled-fg);
+}
+

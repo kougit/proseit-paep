@@ -1,0 +1,85 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--paep-space-1);
+  min-inline-size: 0;
+}
+.paep-progress__head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--paep-space-1) var(--paep-space-2);
+  overflow-wrap: anywhere;
+}
+label {
+  font-weight: var(--paep-font-weight-label);
+}
+.paep-progress__value {
+  color: var(--paep-color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+.paep-progress__value--reduced {
+  display: none;
+}
+progress {
+  display: block;
+  inline-size: 100%;
+  block-size: var(--paep-space-2);
+  appearance: none;
+  border: 0;
+  border-radius: var(--paep-radius-full);
+  overflow: hidden;
+  color: var(--paep-brand-primary);
+  background-color: var(--paep-ref-color-neutral-200);
+}
+progress::-webkit-progress-bar {
+  background: transparent;
+}
+progress::-webkit-progress-value {
+  background: var(--paep-brand-primary);
+  border-radius: var(--paep-radius-full);
+  transition: inline-size var(--paep-motion-duration-base) var(--paep-motion-easing-standard);
+}
+progress::-moz-progress-bar {
+  background: var(--paep-brand-primary);
+  border-radius: var(--paep-radius-full);
+}
+progress:indeterminate {
+  background-image: linear-gradient(var(--paep-brand-primary), var(--paep-brand-primary));
+  background-size: 35% 100%;
+  background-repeat: no-repeat;
+  animation: paep-progress-travel var(--paep-motion-loop-indeterminate) var(--paep-motion-easing-standard) infinite;
+  animation-play-state: var(--paep-motion-loop-state);
+}
+progress:indeterminate::-moz-progress-bar {
+  background: transparent;
+}
+progress:indeterminate:dir(rtl) {
+  animation-direction: reverse;
+}
+@keyframes paep-progress-travel {
+  from {
+    background-position: -54% 0;
+  }
+  to {
+    background-position: 154% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  progress:indeterminate {
+    animation: none;
+    background-size: auto;
+    background-image: repeating-linear-gradient(135deg, var(--paep-brand-primary) 0 var(--paep-space-1), var(--paep-brand-primary-subtle) var(--paep-space-1) var(--paep-space-2));
+  }
+  .paep-progress__value--reduced {
+    display: inline;
+  }
+}
+:host-context([data-paep-motion='reduce']) progress:indeterminate {
+  animation: none;
+  background-size: auto;
+  background-image: repeating-linear-gradient(135deg, var(--paep-brand-primary) 0 var(--paep-space-1), var(--paep-brand-primary-subtle) var(--paep-space-1) var(--paep-space-2));
+}
+:host-context([data-paep-motion='reduce']) .paep-progress__value--reduced {
+  display: inline;
+}

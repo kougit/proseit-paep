@@ -40,6 +40,7 @@
 * `docs/licences/THIRD-PARTY-LICENCE-REVIEW.md`, `docs/licences/THIRD-PARTY-NOTICES.md`, `docs/provenance/PROVENANCE-REGISTER.md`
 * `.github/workflows/paep-ci.yml`, `tooling/verification/ib0-wp05-ci-policy.json`, `tooling/verification/verify-ib0-wp05.mjs`, `tooling/verification/negative-ib0-wp05.mjs` (policy change: new jobs and the bounds in §7)
 * `tooling/governance/baseline-registry.json` (append generation 4 CANDIDATE)
+* `tooling/governance/negative-baseline-governance.mjs` (fixture repair, added during implementation: the generation 2 lifecycle fixture restores `package.json` dependency fields to their generation 2 form, so IB2's approved dev dependencies do not break the historical simulation; every case and expectation is unchanged)
 * `evidence/design-handoff/HOF-IB2-001/` (the approved handoff, DCH controlled evidence structure)
 * `work-packages/IB2-FOUNDATION-COMPONENTS/`, `evidence/IB2-FOUNDATION-COMPONENTS/`
 

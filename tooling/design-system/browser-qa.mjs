@@ -17,7 +17,8 @@
  *      content passes axe-core, at 1440 and 320 CSS px
  *
  *   node tooling/design-system/browser-qa.mjs [--capture <dir>] [--json <file>] [--pages <regex>]
- * --capture writes full-page screenshots (CANDIDATE visual evidence; never self-approved).
+ * --capture writes full-page screenshots of every page and viewport captures of every open overlay (CANDIDATE
+ * visual evidence; never self-approved).
  */
 import fs from 'node:fs';
 import http from 'node:http';
@@ -272,6 +273,20 @@ async function main() {
       } finally { await ctx.close(); }
     });
     report.pages = res;
+    if (capture && !only) {
+      // Open-overlay captures (viewport only) for comparison with the handoff's dialog, drawer and popover renders.
+      for (const vp of VIEWPORTS) {
+        for (const [pth, name] of OVERLAYS) {
+          const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height } });
+          try {
+            const { page } = await open(ctx, `${server.url}${pth}`);
+            await auditOverlay(page, name);
+            const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+            await page.screenshot({ path: path.join(capture, `overlay--${pth.split('/').pop()}--${slug}--${vp.name}.png`) });
+          } finally { await ctx.close(); }
+        }
+      }
+    }
     for (const r of res) {
       console.log(`${r.problems.length ? 'FAIL' : 'PASS'} ${r.page} ${r.viewport} ${r.dir}${r.problems.length ? `\n    ${r.problems.join('\n    ')}` : ''}`);
       if (r.problems.length) failed++;

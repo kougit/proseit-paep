@@ -57,8 +57,9 @@ export function buildTokens(src) {
   for (const [k, v] of Object.entries(src.motion.duration)) add(`--paep-motion-duration-${k}`, `${v}ms`, 'motion', 'semantic');
   for (const [k, v] of Object.entries(src.motion.easing)) add(`--paep-motion-easing-${k}`, v, 'motion', 'semantic');
   for (const [k, v] of Object.entries(src.motion.loop)) add(`--paep-motion-loop-${k}`, `${v}ms`, 'motion', 'semantic');
-  add('--paep-focus-ring-width', px(src.focus.widthPx), 'focus', 'semantic');
-  add('--paep-focus-ring-offset', px(src.focus.offsetPx), 'focus', 'semantic');
+  // token-values.md §10: the whole focus indicator is protected (the JSON's protected list names only its colours).
+  add('--paep-focus-ring-width', px(src.focus.widthPx), 'focus', 'semantic', { protect: true });
+  add('--paep-focus-ring-offset', px(src.focus.offsetPx), 'focus', 'semantic', { protect: true });
   add('--paep-layout-columns', '4', 'layout', 'semantic');
   add('--paep-layout-page-margin', '1rem', 'layout', 'semantic');
   add('--paep-layout-gutter', '1rem', 'layout', 'semantic');

@@ -58,7 +58,7 @@ export const DIALOG_META: LabSpecimenMeta = {
         >
           <paep-dialog-footer>
             <button paepButton paepDialogClose [disabled]="deleting()">Cancel</button>
-            <button paepButton variant="destructive" [loading]="deleting()" (click)="confirmDelete()">Delete record</button>
+            <button paepButton variant="destructive" icon="delete" [loading]="deleting()" (click)="confirmDelete()">Delete record</button>
           </paep-dialog-footer>
         </paep-dialog>
       </lab-example>

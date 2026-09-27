@@ -2,7 +2,7 @@
   "id": "IB2-FOUNDATION-COMPONENTS",
   "title": "IB2: design foundations, core components and UI laboratory",
   "milestone": "IB2",
-  "design_classification": "D2 (foundation, components); D1 (UI laboratory); D0 (tooling)",
+  "design_classification": "D1 (foundation, 25 components); D2 (UI laboratory); tooling/CI/governance not classified (not UI work)",
   "design_handoff": {
     "id": "HOF-IB2-001",
     "version": "1.1",

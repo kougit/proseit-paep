@@ -5,7 +5,7 @@
 **Dependency approval:** PO/SA, 2026-09-27: `vitest@4.1.11`, `@vitest/browser-playwright@4.1.11`, `playwright@1.63.0`, `axe-core@4.13.0` (dev dependencies, exact pins; axe-core MPL-2.0 under its own licence review). Browsers come from the runner (`CHROME_BIN`); nothing is downloaded.  
 **Milestone:** IB2 (PAEP-IR-01 §6.7 IB2-WP1..IB2-WP6, delivered as one work package)  
 **Predecessor:** IB1-CONTRACTS-CONFIG ACCEPTED and CLOSED; active accepted baseline generation 3 (`b6ae8427e4d54840f71dadd5fedcce99d50f4584`, promotion merge `d33ab91`)  
-**Design classification (PAEP-DCH-01):** D2 for the foundation and the 25 components (new foundational visual patterns: design review completed through HOF-IB2-001); D1 for the UI laboratory (engineering documentation surface composed only of approved components); D0 for tooling, CI and governance.  
+**Design classification (PAEP-DCH-01 §5):** D1 (Design Significant) for the foundation and the 25 components: they are new reusable foundational visual and interaction patterns (§5.1(ii)), delivered on the full route DWP-IB2-001 → Claude Design → PO/SA review → approved handoff HOF-IB2-001 v1.1 → Claude Code. D2 (Design Extension) for the UI laboratory: it is composed only of approved components, and its information architecture was approved in the same handoff (OD-21). Tooling, CI and governance are not UI work and have no DCH class. (Corrected on 2026-09-27 during evidence review: an earlier draft of this line had the D1/D2 labels inverted and used a non-existent class "D0"; the route followed is unchanged.)  
 **Execution agent:** Claude Code  
 **Acceptance authority:** Product Owner / Solutions Architect  
 **Naming:** no controlled naming rule exists for IB2 work packages; the identifier `IB2-FOUNDATION-COMPONENTS` is used.
@@ -48,7 +48,7 @@ The baseline-governance verifier enforces this scope (B11, W05).
 
 ## 4. Out of scope
 
-The enterprise shell and navigation frame; the Frappe SDK and any Frappe/ERPNext integration; authentication and session; offline/PWA; reporting and analytics UI; charts; domain kits and product screens or workflows; an i18n runtime service (content keys and English defaults only); dark mode; lint/format tooling; Nx; any other dependency; the Angular or TypeScript major; `tsconfig*.json`; `tooling/architecture-boundaries/`; controlled sources; earlier work-package records; CLAUDE.md.
+The enterprise shell and navigation frame; the Frappe SDK and any Frappe/ERPNext integration; authentication and session; offline/PWA; reporting and analytics UI; charts; domain kits and product screens or workflows; an i18n runtime service (content keys and English defaults only); dark mode; lint/format tooling; Nx; any other dependency; the Angular or TypeScript major; existing `tsconfig*.json` files (the only new one is `apps/ui-lab/tsconfig.spec.json`, inside `apps/ui-lab/`, which the Angular unit-test builder requires); `tooling/architecture-boundaries/`; controlled sources; earlier work-package records; CLAUDE.md.
 
 ## 5. Deliverables
 

@@ -12,7 +12,7 @@
 | `@proseit/paep-components` | L2 | Angular (`core`, `common`, `forms`, `router`, `platform-browser`) and `@proseit/paep-foundation` | The 25 components of IR-01 §6.4 and the message catalogue |
 | `apps/ui-lab` | app | every package through its public entry point | The permanent UI laboratory |
 
-Enforced by `qa:architecture` (TypeScript graph, unchanged) and `qa:design-system` S05 (the stricter IB2 rules, including CSS-level and test-tooling imports that the architecture checker does not scan). No package imports a later-milestone package (enterprise, Frappe SDK, offline, analytics, domain kits).
+Enforced by `qa:architecture` (TypeScript graph, unchanged) and `qa:design-system` S05 (the stricter IB2 rules the architecture checker does not apply: test-tooling imports, later-milestone imports, and CSS `@import`, where only the UI laboratory may import the foundation stylesheet `@proseit/paep-foundation/src/styles/paep-foundation.css`). No package imports a later-milestone package (enterprise, Frappe SDK, offline, analytics, domain kits).
 
 ## 2. Tokens
 
@@ -38,8 +38,8 @@ Contents list (inline start from 64 em, a Contents disclosure below), lab-wide s
 | Command | CI job | What it proves |
 | --- | --- | --- |
 | `npm run test:components` | `PAEP / components` | Foundation and component behaviour in real Chrome (Angular `@angular/build:unit-test`, Vitest browser mode): keyboard, focus entry/trap/restore, states, events, ARIA, error association, responsive container behaviour |
-| `npm run qa:design-system` (+ `:negative`) | `PAEP / components` | S01–S09: approved handoff, token drift, 25-component census and exports, token-only logical CSS, import boundaries, clean-room terms, lab coverage, content keys, test hygiene; 25 negative cases and a positive control |
-| `npm run qa:accessibility` (+ `:negative`) | `PAEP / accessibility` | Every lab page at 1440/834/320 px in LTR and RTL: axe-core WCAG 2.0/2.1/2.2 A+AA zero violations, no page overflow, no console error, one h1 and main; reduced motion, density, computed token conformance, brand isolation, focus ring; 8 negative cases and a positive control |
+| `npm run qa:design-system` (+ `:negative`) | `PAEP / components` | S01–S09: approved handoff (manifest hash and every retained handoff file pinned), token drift and breakpoints, 25-component census and exports, token-only logical CSS (every `styles` array element and host style bindings; reference tokens only where the handoff names them), import boundaries, clean-room terms, lab coverage, content keys, test hygiene; 33 negative cases and a positive control |
+| `npm run qa:accessibility` (+ `:negative`) | `PAEP / accessibility` | Every lab page at 1440/834/320 px in LTR and RTL: axe-core WCAG 2.0/2.1/2.2 A+AA zero violations, no page overflow, no console error, one h1 and main; reduced motion, density, computed token conformance, brand isolation, focus ring, and every overlay opened and audited (O1); 10 negative cases and a positive control |
 
 The browser is the runner's installed Chrome (`CHROME_BIN`, `tooling/design-system/browser.mjs`); nothing is downloaded. The new jobs run in parallel and feed `PAEP / gate`; `PAEP / negative-ci` is unchanged (RR14).
 

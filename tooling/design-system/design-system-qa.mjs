@@ -49,7 +49,23 @@ export const HANDOFF = {
   manifest: 'evidence/design-handoff/HOF-IB2-001/handoff.manifest.yaml',
   manifestSha256: '24e7049dd675e2025ae75c099637fd3f0a9eb9f24ff2958d1ce88607d040ac53',
   contentKeys: 'evidence/design-handoff/HOF-IB2-001/design-export/content-keys.md',
+  // Every retained handoff file (design export and requirements source) is pinned by sha256 in this list.
+  root: 'evidence/design-handoff/HOF-IB2-001',
+  fileHashes: 'evidence/design-handoff/HOF-IB2-001/HANDOFF-FILES.sha256',
+  hashedDirs: ['design-export', 'requirements'],
 };
+
+/**
+ * Foundation-internal reference tokens a component may read, exactly where the approved handoff's component specs
+ * name them ("Token usage"); any other --paep-ref-* use in a component fails S04.
+ */
+export const REF_TOKEN_ALLOWLIST = [
+  ['packages/components/src/lib/progress/progress.css', '--paep-ref-color-neutral-200'],
+  ['packages/components/src/lib/skeleton/skeleton.ts', '--paep-ref-color-neutral-100'],
+];
+
+/** The only deep path an app may import: the foundation stylesheet (CSS @import in apps/ui-lab/src/styles.css). */
+export const FOUNDATION_STYLESHEET = '@proseit/paep-foundation/src/styles/paep-foundation.css';
 
 /** Terms that must never appear in PAEP UI source (clean-room, PAEP v1.1; IB2 authorisation). */
 export const FORBIDDEN_TERMS = [/\bultima\b/i, /primeng/i, /primeicons/i, /primeflex/i, /\bp-(button|table|dialog|inputtext|dropdown)\b/i, /\bfiori\b/i, /\bui5\b/i, /\bsapui/i, /\bmat-(button|form-field|table|dialog)\b/i, /@angular\/material/i, /@angular\/cdk/i];
@@ -80,6 +96,14 @@ export function makeFs(root = ROOT, overlay = new Map()) {
         return overlay.get(f);
       }
       return fs.readFileSync(path.join(root, f), 'utf8');
+    },
+    /** Raw bytes (binary-safe); an overlay string is taken as UTF-8. */
+    readBytes: (f) => {
+      if (overlay.has(f)) {
+        if (overlay.get(f) === null) throw new Error(`${f} deleted`);
+        return Buffer.from(overlay.get(f), 'utf8');
+      }
+      return fs.readFileSync(path.join(root, f));
     },
     list: walk,
   };
@@ -142,7 +166,20 @@ export function runChecks(fsx) {
       if (!/^status: APPROVED_FOR_IMPLEMENTATION$/m.test(t)) p.push('manifest status is not APPROVED_FOR_IMPLEMENTATION');
       if (!/^version: '1\.1'$/m.test(t)) p.push('manifest version is not 1.1');
     }
-    add('S01', 'HOF-IB2-001 v1.1 APPROVED_FOR_IMPLEMENTATION is retained with the approved manifest hash', p, `sha256 ${HANDOFF.manifestSha256.slice(0, 12)}…, APPROVED_FOR_IMPLEMENTATION`);
+    let pinned = 0;
+    if (!fsx.exists(HANDOFF.fileHashes)) p.push(`${HANDOFF.fileHashes} missing`);
+    else {
+      const listed = new Map(fsx.read(HANDOFF.fileHashes).split('\n').filter(Boolean).map((l) => { const m = /^([0-9a-f]{64}) {2}(.+)$/.exec(l); return m ? [m[2], m[1]] : [l, null]; }));
+      const present = HANDOFF.hashedDirs.flatMap((d) => fsx.list(`${HANDOFF.root}/${d}`)).map((f) => f.slice(HANDOFF.root.length + 1));
+      for (const f of present) {
+        if (!listed.has(f)) { p.push(`handoff file ${f} is not in the pinned list`); continue; }
+        const sha = crypto.createHash('sha256').update(fsx.readBytes(`${HANDOFF.root}/${f}`)).digest('hex');
+        if (sha !== listed.get(f)) p.push(`handoff file ${f} sha256 ${sha} != pinned ${listed.get(f)}`);
+        else pinned++;
+      }
+      for (const f of listed.keys()) if (!present.includes(f)) p.push(`pinned handoff file ${f} missing`);
+    }
+    add('S01', 'HOF-IB2-001 v1.1 APPROVED_FOR_IMPLEMENTATION is retained with the approved manifest hash, and every retained handoff file matches its pinned sha256', p, `manifest sha256 ${HANDOFF.manifestSha256.slice(0, 12)}…, APPROVED_FOR_IMPLEMENTATION; ${pinned} handoff files pinned`);
   }
 
   // S02: generated token files match the approved values (no drift, no hand edits).
@@ -152,8 +189,13 @@ export function runChecks(fsx) {
       const src = JSON.parse(fsx.read(SOURCE));
       if (!fsx.exists(CSS_OUT) || fsx.read(CSS_OUT) !== renderCss(src)) p.push(`${CSS_OUT} differs from the generator output`);
       if (!fsx.exists(TS_OUT) || fsx.read(TS_OUT) !== renderTs(src)) p.push(`${TS_OUT} differs from the generator output`);
+      // The hand-written breakpoint table must equal the approved breakpoints (name, px lower bound, em = px / 16).
+      const bpFile = `${FOUNDATION_DIR}/lib/layout/breakpoints.ts`;
+      const impl = [...(fsx.exists(bpFile) ? fsx.read(bpFile) : '').matchAll(/\{ name: '(\w+)', minEm: ([\d.]+), minPx: (\d+), columns: \d+ \}/g)].map((m) => `${m[1]}:${m[3]}:${m[2]}`);
+      const approved = (src.breakpoints || []).map((b) => `${b.name}:${b.minPx}:${b.minPx / 16}`);
+      if (JSON.stringify(impl) !== JSON.stringify(approved)) p.push(`PAEP_BREAKPOINTS ${impl.join(', ')} != approved ${approved.join(', ')}`);
     } catch (e) { p.push(String(e.message || e)); }
-    add('S02', 'Token stylesheet and catalogue equal the generator output from the approved token values', p, 'no drift');
+    add('S02', 'Token stylesheet and catalogue equal the generator output from the approved token values; PAEP_BREAKPOINTS equals the approved breakpoints', p, 'no drift');
   }
 
   // S03: component census and public API.
@@ -185,6 +227,7 @@ export function runChecks(fsx) {
           const l = line.trim();
           if (!l) return;
           if (COLOUR_LITERAL.test(l)) p.push(`${f}: colour literal "${l}"`);
+          for (const m of l.matchAll(/--paep-ref-[\w-]+/g)) if (!REF_TOKEN_ALLOWLIST.some(([af, tok]) => af === f && tok === m[0])) p.push(`${f}: foundation-internal reference token ${m[0]} (components use semantic tokens)`);
           if (PHYSICAL.test(` ${l}`)) p.push(`${f}: physical property "${l}"`);
           for (const m of l.matchAll(PX)) if (!['1', '2', '3'].includes(m[1]) && !/^0?\.?0+$/.test(m[1])) p.push(`${f}: raw length ${m[0]} in "${l}"`);
           if (/\d(rem|em)\b/.test(l) && !/^@(media|container)|max-inline-size|min-inline-size|inline-size|max-block-size|min-block-size|block-size/.test(l)) p.push(`${f}: raw rem/em length in "${l}"`);
@@ -197,12 +240,19 @@ export function runChecks(fsx) {
     for (const f of fsx.list(`${FOUNDATION_DIR}/styles`).filter((x) => x.endsWith('paep-foundation.css'))) {
       for (const line of stripComments(fsx.read(f)).split('\n')) if (PHYSICAL.test(` ${line.trim()}`)) p.push(`${f}: physical property "${line.trim()}"`);
     }
-    add('S04', 'Component styles use only --paep-* tokens (no colour, raw length, shadow or duration literals) and logical properties only', p, `${blocks} style blocks in ${files.length} files clean`);
+    add('S04', 'Component styles use only semantic --paep-* tokens (no colour, raw length, shadow or duration literals; reference tokens only where the handoff names them) and logical properties only', p, `${blocks} style blocks in ${files.length} files clean`);
   }
 
   // S05: import boundaries.
   {
     const p = [];
+    // CSS @import: the only package path allowed is the foundation stylesheet.
+    for (const f of [...fsx.list('packages/components/src'), ...fsx.list('packages/foundation/src'), ...fsx.list('apps/ui-lab/src')].filter((x) => x.endsWith('.css'))) {
+      for (const m of stripComments(fsx.read(f)).matchAll(/@import\s+(?:url\(\s*)?(['"])([^'"]+)\1/g)) {
+        if (m[2].startsWith('.')) continue;
+        if (m[2] !== FOUNDATION_STYLESHEET || !f.startsWith('apps/')) p.push(`${f}: CSS @import ${m[2]} (only apps may import ${FOUNDATION_STYLESHEET})`);
+      }
+    }
     const tsFiles = [...fsx.list('packages/components/src'), ...fsx.list('packages/foundation/src'), ...fsx.list('apps/ui-lab/src')].filter((f) => f.endsWith('.ts'));
     for (const f of tsFiles) {
       const spec = f.endsWith('.spec.ts');
@@ -220,7 +270,7 @@ export function runChecks(fsx) {
         if (f.startsWith('apps/') && spec_.startsWith('.') && path.posix.normalize(path.posix.join(path.posix.dirname(f), spec_)).startsWith('packages/')) p.push(`${f}: relative import into packages (${spec_})`);
       }
     }
-    add('S05', 'Import boundaries: foundation imports only @angular/core; components only Angular and the foundation entry point; no deep, Frappe, domain or later-milestone imports; test tooling only in specs', p, `${tsFiles.length} TypeScript files`);
+    add('S05', 'Import boundaries: foundation imports only @angular/core; components only Angular and the foundation entry point; no deep, Frappe, domain or later-milestone imports; test tooling only in specs; CSS @import of a package only for the foundation stylesheet in apps', p, `${tsFiles.length} TypeScript files`);
   }
 
   // S06: clean-room terms in UI source.
@@ -250,7 +300,7 @@ export function runChecks(fsx) {
       if (!/<lab-specimen-page\b/.test(t) || !/<lab-example\b/.test(t)) p.push(`${id}: no specimen page or live example`);
       if (!/from '@proseit\/paep-components'/.test(t)) p.push(`${id}: specimen does not use the public entry point`);
     }
-    add('S07', 'UI laboratory: every one of the 25 components has a registered specimen page with purpose, variants, states, keyboard, accessibility, responsive, RTL, content keys and evidence', p, `${COMPONENTS.length} specimens registered`);
+    add('S07', 'UI laboratory: every one of the 25 components has a registered specimen page with purpose, variants, states, keyboard, accessibility, responsive, RTL, content keys and its unit-test reference', p, `${COMPONENTS.length} specimens registered`);
   }
 
   // S08: content keys: the message catalogue is exactly the handoff's key list.
@@ -274,7 +324,7 @@ export function runChecks(fsx) {
     for (const f of specs) {
       const t = stripComments(fsx.read(f));
       if (/\b(it|test|describe)\.(only|skip|todo|fails)\b|\b(fit|fdescribe|xit|xdescribe)\s*\(/.test(t)) p.push(`${f}: focused or skipped test`);
-      const n = (t.match(/\b(it|test)\s*\(/g) || []).length;
+      const n = (t.match(/(?<![.\w])(it|test)\s*\(/g) || []).length;
       tests += n;
       if (n < 3 && f.startsWith(COMPONENTS_DIR)) p.push(`${f}: only ${n} tests`);
     }

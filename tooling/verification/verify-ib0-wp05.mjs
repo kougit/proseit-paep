@@ -143,6 +143,25 @@ if (want('W01')) {
 const needsBaseline = ['W02', 'W05', 'W06', 'W07', 'W08', 'W11', 'W12', 'W16', 'W17', 'W18', 'W20', 'W21', 'W22', 'W23', 'W26'].some(want);
 const gov = needsBaseline ? evaluateBaseline(root) : null;
 const BASE = gov?.base || null;
+
+// The dev dependencies the PO/SA approved for IB2, at their exact pins. Relative to the active accepted baseline,
+// package.json dependencies must be unchanged, devDependencies may gain only these entries, and every lockfile
+// entry that is not in the baseline lockfile must be dev-only.
+const IB2_APPROVED_DEV_DEPENDENCIES = { '@vitest/browser-playwright': '4.1.11', 'axe-core': '4.13.0', playwright: '1.63.0', vitest: '4.1.11' };
+function approvedDependencyDelta() {
+  try {
+    const basePkg = JSON.parse(git('show', `${BASE}:package.json`).stdout);
+    const baseLock = JSON.parse(git('show', `${BASE}:package-lock.json`).stdout);
+    const lock = readJson('package-lock.json');
+    const sorted = (o) => JSON.stringify(Object.entries(o || {}).sort(([a], [b]) => a.localeCompare(b)));
+    const devWanted = { ...(basePkg.devDependencies || {}), ...IB2_APPROVED_DEV_DEPENDENCIES };
+    return sorted(pkg.dependencies) === sorted(basePkg.dependencies)
+      && sorted(pkg.devDependencies) === sorted(devWanted)
+      && sorted(lock.packages?.['']?.dependencies) === sorted(pkg.dependencies)
+      && sorted(lock.packages?.['']?.devDependencies) === sorted(pkg.devDependencies)
+      && Object.entries(lock.packages || {}).every(([k, v]) => k === '' || k in (baseLock.packages || {}) || (v.dev === true && !v.optional && !v.devOptional));
+  } catch { return false; }
+}
 const changedPaths = gov ? gov.changedPaths : [];
 const inScope = (f) => Boolean(gov) && gov.inScope(f);
 const noBase = 'no valid accepted baseline in the baseline registry (see W26)';
@@ -231,8 +250,16 @@ if (want('W05')) {
 // W06: no unauthorised dependency change: lockfile and non-script package.json fields equal the accepted
 // baseline unless package-lock.json is in scope; accepted scripts unchanged; new scripts only with package.json in scope.
 if (want('W06')) {
-  const p = gov ? gov.packageProblems : [noBase];
-  add('W06', 'No unauthorised dependency change: package-lock.json and every non-script package.json field equal the accepted baseline (unless the CANDIDATE scope holds package-lock.json); accepted scripts unchanged; script additions only with package.json in scope',
+  const p = gov ? [...gov.packageProblems] : [noBase];
+  // IB2: a CANDIDATE scope holding package-lock.json admits only the PO/SA-approved dependency delta, and the lockfile
+  // must be exactly the one recorded in the toolchain manifest (no unreviewed lockfile drift).
+  if (gov && BASE && git('diff', '--quiet', BASE, '--', 'package-lock.json').status !== 0) {
+    if (!approvedDependencyDelta()) p.push('dependency change beyond the PO/SA-approved IB2 dev dependencies (or a non-dev lockfile entry)');
+    let recorded = null;
+    try { recorded = readJson('docs/architecture/toolchain-version-manifest.json').lockfile?.sha256; } catch { /* reported below */ }
+    if (recorded !== sha256('package-lock.json')) p.push('package-lock.json differs from the lockfile sha256 recorded in docs/architecture/toolchain-version-manifest.json');
+  }
+  add('W06', 'No unauthorised dependency change: package-lock.json and every non-script package.json field equal the accepted baseline (unless the CANDIDATE scope holds package-lock.json, and then only the PO/SA-approved IB2 dev dependencies with the lockfile recorded in the toolchain manifest); accepted scripts unchanged; script additions only with package.json in scope',
     p.length === 0, p.length ? p.join('; ') : `lockfile sha256 ${sha256('package-lock.json')}`);
 }
 
@@ -360,6 +387,8 @@ if (want('W11') && wf) {
     if (j.name !== mj.name) p.push(`${mj.id} name "${j.name}" != "${mj.name}"`);
     if (j['runs-on'] !== policy.workflow.runner) p.push(`${mj.id} runs-on ${j['runs-on']}`);
     if (!Number.isInteger(j['timeout-minutes']) || j['timeout-minutes'] < 1 || j['timeout-minutes'] > 30) p.push(`${mj.id} timeout-minutes ${j['timeout-minutes']}`);
+    // RR14 (accepted LOW): PAEP / negative-ci keeps its 20-minute timeout until the PO/SA authorises a change.
+    if (mj.id === 'negative-ci' && j['timeout-minutes'] !== 20) p.push(`negative-ci timeout-minutes ${j['timeout-minutes']} (RR14 fixes it at 20)`);
     const steps = Array.isArray(j.steps) ? j.steps : [];
     const [co, su, ...rest] = steps;
     const up = rest.pop();
@@ -375,7 +404,7 @@ if (want('W11') && wf) {
     if (JSON.stringify(cmds) !== JSON.stringify(policy.requiredCommands[mj.id])) p.push(`${mj.id}: commands ${JSON.stringify(cmds)} != ${JSON.stringify(policy.requiredCommands[mj.id])}`);
     for (const r of runs) if (r.split('\n').filter(Boolean).length !== 2) p.push(`${mj.id}: run step has extra lines`);
   }
-  add('W11', 'Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention',
+  add('W11', 'Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention; PAEP / negative-ci keeps its 20-minute timeout (RR14)',
     p.length === 0, p.length ? p.join('; ') : `${mandatoryIds.length} parallel jobs: ${mandatoryIds.join(', ')}`);
 }
 
@@ -570,7 +599,8 @@ function wp02V17Bounded(c) {
 // V13: only the lockfile-vs-IB0-WP01 finding, with a clean tree and package-lock.json changed in scope or accepted history.
 const WP02_V13_BOUND = `working tree vs HEAD: clean; lockfile vs ${HISTORICAL_VERIFIER_BASELINE.wp02.slice(0, 7)}: different`;
 function wp02V13Bounded(c) {
-  return Boolean(c) && (c.pass || (c.details === WP02_V13_BOUND && Boolean(gov) && gov.packageProblems.length === 0 && since('wp02')('package-lock.json')));
+  return Boolean(c) && (c.pass || (c.details === WP02_V13_BOUND && Boolean(gov) && Boolean(BASE) && gov.packageProblems.length === 0
+    && since('wp02')('package-lock.json') && approvedDependencyDelta()));
 }
 // V15: only axe-core (MPL-2.0), dev scope, with the L5 review row recorded; any other licence finding fails.
 const WP02_V15_BOUND = 'node_modules/axe-core: MPL-2.0 allowed only for review L1 packages';
@@ -764,7 +794,7 @@ if (['W20', 'W21', 'W22', 'W23'].some(want)) {
   const summary = (j) => (j ? `${j.checks.filter((c) => c.pass).length}/${j.checks.length} pass; bounded: ${j.checks.filter((c) => !c.pass).map((c) => c.id).join(', ') || 'none'}` : '');
   add('W20', 'IB0-WP04 regression (full, with both builds): every check passes except V07 (only entry points filled inside the CANDIDATE scope), V16/V17 (only accepted-history or in-scope package/path changes) and V22/V23 (re-evaluated in W21/W22)', p20.length === 0, p20.length ? p20.join('; ') : `WP04 ${summary(wp04)}`);
   add('W21', 'IB0-WP03 regression: every check passes except the accepted V05/V08 (WP04 tsconfig change, exact), V09 (only entry points filled inside the CANDIDATE scope), V06 (only the ui-lab test target in angular.json) and V10/V12/V17, whose findings are only accepted-history or in-scope change; accepted records unchanged', p21.length === 0, p21.length ? p21.join('; ') : `WP03 ${summary(wp03)}`);
-  add('W22', 'IB0-WP02 regression: every check (toolchain, pins, lockfile provenance, install scripts, licences, controlled sources, secrets) passes except V13 (approved lockfile change), V15 (axe-core under review L5 only) and V17, whose findings are only accepted-history or in-scope change', p22.length === 0, p22.length ? p22.join('; ') : `WP02 ${summary(wp02)}`);
+  add('W22', 'IB0-WP02 regression: every check (toolchain, pins, lockfile provenance, install scripts, licences, controlled sources, secrets) passes except V13 (lockfile change limited to the PO/SA-approved IB2 dev dependencies at their pins, no runtime dependency change, new lockfile entries dev-only), V15 (axe-core under review L5 only) and V17, whose findings are only accepted-history or in-scope change', p22.length === 0, p22.length ? p22.join('; ') : `WP02 ${summary(wp02)}`);
   add('W23', 'IB0-WP01 regression passes', p23.length === 0, p23.length ? p23.join('; ') : `WP01 ${summary(wp01)}`);
 }
 
@@ -788,7 +818,7 @@ if (want('W16')) {
       for (const id of ['V13', 'V15', 'V17']) if (!wp02Bounded(wp02.checks.find((c) => c.id === id))) p.push(`${id} outside the bound: ${wp02.checks.find((c) => c.id === id)?.details}`);
     }
   }
-  add('W16', 'WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15, with only axe-core under review L5 bounded); only V13/V15/V17 bounded',
+  add('W16', 'WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15, with only axe-core under review L5 bounded); only V13 (the approved IB2 dev dependencies, exactly), V15 and V17 bounded',
     p.length === 0, p.length ? p.join('; ') : `WP02 ${wp02.checks.filter((c) => c.pass).length}/${wp02.checks.length} pass; bounded: ${wp02.checks.filter((c) => !c.pass).map((c) => c.id).join(', ') || 'none'}`);
 }
 

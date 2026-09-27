@@ -35,11 +35,11 @@ export const LIST_META: LabSpecimenMeta = {
 };
 
 const ITEMS: readonly PaepListItem[] = [
-  { id: '1', primary: 'Sample item Alpha', href: '#alpha', secondary: 'North depot · Updated 2026-09-21', icon: 'contents', status: { tone: 'success', label: 'Approved' } },
+  { id: '1', primary: 'Sample item Alpha', href: '/components/list', secondary: 'North depot · Updated 2026-09-21', icon: 'contents', status: { tone: 'success', label: 'Approved' } },
   {
     id: '2',
     primary: 'Sample item Beta with a longer descriptive name that wraps onto a second line',
-    href: '#beta',
+    href: '/components/list',
     secondary: 'Reference REC-2026-000185-ATTACHMENT-ARCHIVE-0001',
     icon: 'contents',
     status: { tone: 'warning', label: 'Awaiting review' },
@@ -92,7 +92,7 @@ const ITEMS: readonly PaepListItem[] = [
     }
     button[aria-pressed='true'] {
       font-weight: var(--paep-font-weight-label);
-      outline: 2px solid var(--paep-color-selected-indicator);
+      box-shadow: inset 0 -3px 0 var(--paep-color-selected-indicator);
     }
     .list-heading {
       margin: 0 0 var(--paep-space-2);

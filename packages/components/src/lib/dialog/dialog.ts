@@ -78,6 +78,8 @@ export abstract class PaepModalBase {
   protected readonly titleId = `paep-modal-${nextModalId}-title`;
   protected readonly descriptionId = `paep-modal-${nextModalId++}-description`;
   protected readonly scrolled = signal(false);
+  /** True while the body overflows: it then becomes a named, focusable region so keyboard users can scroll it. */
+  protected readonly bodyScrollable = signal(false);
   protected readonly footer = contentChild(PaepDialogFooter);
   private readonly closers = contentChildren(forwardRef(() => PaepDialogClose), { descendants: true });
   private readonly dialogRef = viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
@@ -85,6 +87,8 @@ export abstract class PaepModalBase {
   private readonly bodyRef = viewChild.required<ElementRef<HTMLElement>>('body');
   private invoker: HTMLElement | null = null;
   private dialogEl: HTMLDialogElement | null = null;
+  private bodyObserver: ResizeObserver | null = null;
+  private lockedOverflow: string | null = null;
 
   /** CSS classes of the `<dialog>` element for the concrete overlay. */
   protected abstract readonly modalClass: () => string;
@@ -100,6 +104,7 @@ export abstract class PaepModalBase {
     inject(DestroyRef).onDestroy(() => {
       if (this.dialogEl?.open) {
         this.dialogEl.close();
+        this.release();
         this.restoreFocus();
       }
     });
@@ -134,6 +139,7 @@ export abstract class PaepModalBase {
   protected onClose(): void {
     this.open.set(false);
     this.scrolled.set(false);
+    this.release();
     this.closed.emit();
     this.restoreFocus();
   }
@@ -146,17 +152,38 @@ export abstract class PaepModalBase {
     const active = dialog.ownerDocument.activeElement;
     this.invoker = active instanceof HTMLElement && active !== dialog.ownerDocument.body ? active : null;
     dialog.showModal();
+    // The page behind a modal must not scroll, so the invoker is still in view when focus returns to it.
+    const root = dialog.ownerDocument.documentElement;
+    this.lockedOverflow = root.style.overflow;
+    root.style.overflow = 'hidden';
     const body = this.bodyRef().nativeElement;
     body.scrollTop = 0;
+    const measure = () => this.bodyScrollable.set(body.scrollHeight > body.clientHeight + 1);
+    measure();
+    if (typeof ResizeObserver !== 'undefined') {
+      this.bodyObserver = new ResizeObserver(measure);
+      this.bodyObserver.observe(body);
+    }
     const field = body.querySelector<HTMLElement>(FIELD_SELECTOR);
     const cancel = this.destructiveEntry() ? this.closers()[0]?.element : undefined;
     (field ?? cancel ?? this.titleRef().nativeElement).focus();
   }
 
+  private release(): void {
+    this.bodyObserver?.disconnect();
+    this.bodyObserver = null;
+    this.bodyScrollable.set(false);
+    if (this.lockedOverflow !== null && this.dialogEl) this.dialogEl.ownerDocument.documentElement.style.overflow = this.lockedOverflow;
+    this.lockedOverflow = null;
+  }
+
   private restoreFocus(): void {
     const target = this.invoker?.isConnected ? this.invoker : this.returnFocusTo();
     this.invoker = null;
-    if (target?.isConnected) target.focus();
+    if (target?.isConnected) {
+      target.focus();
+      target.scrollIntoView({ block: 'nearest' });
+    }
   }
 }
 
@@ -199,7 +226,14 @@ export const PAEP_MODAL_TEMPLATE = `
         <svg paepIcon="close"></svg>
       </button>
     </div>
-    <div #body class="paep-modal__body" (scroll)="onScroll()">
+    <div
+      #body
+      class="paep-modal__body"
+      [attr.tabindex]="bodyScrollable() ? 0 : null"
+      [attr.role]="bodyScrollable() ? 'region' : null"
+      [attr.aria-labelledby]="bodyScrollable() ? titleId : null"
+      (scroll)="onScroll()"
+    >
       @if (description()) {
         <p class="paep-modal__description" [id]="descriptionId">{{ description() }}</p>
       }

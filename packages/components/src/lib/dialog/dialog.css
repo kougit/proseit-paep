@@ -48,7 +48,8 @@
   line-height: var(--paep-line-height-title);
   font-weight: var(--paep-font-weight-title);
 }
-.paep-modal__title:focus {
+/* Programmatic entry focus shows no ring; keyboard focus (focus-visible) keeps the foundation focus ring. */
+.paep-modal__title:focus:not(:focus-visible) {
   outline: none;
   box-shadow: none;
 }
@@ -75,6 +76,9 @@
   background: transparent;
   color: var(--paep-color-disabled-fg);
   cursor: not-allowed;
+}
+.paep-modal__body:focus-visible {
+  outline-offset: -2px;
 }
 .paep-modal__body {
   flex: 1 1 auto;

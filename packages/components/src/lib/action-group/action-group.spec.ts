@@ -9,6 +9,9 @@ import { PaepActionGroup, PaepActionGroupVariant } from './action-group';
   template: `
     <div [style.inline-size]="width()">
       <paep-action-group label="Record actions" [variant]="variant()">
+        @if (destructiveFirst()) {
+          <button paepButton variant="destructive" (click)="log.push('discard')">Discard draft</button>
+        }
         <button paepButton (click)="log.push('edit')">Edit</button>
         <button paepButton [disabled]="true" (click)="log.push('duplicate')">Duplicate</button>
         <button paepButton variant="tertiary" (click)="log.push('export')">Export</button>
@@ -22,11 +25,13 @@ import { PaepActionGroup, PaepActionGroupVariant } from './action-group';
 class GroupHost {
   readonly width = signal('60rem');
   readonly variant = signal<PaepActionGroupVariant>('toolbar');
+  readonly destructiveFirst = signal(false);
   readonly log: string[] = [];
 }
 
-async function setup(width = '60rem', variant: PaepActionGroupVariant = 'toolbar') {
+async function setup(width = '60rem', variant: PaepActionGroupVariant = 'toolbar', destructiveFirst = false) {
   const fixture = TestBed.createComponent(GroupHost);
+  fixture.componentInstance.destructiveFirst.set(destructiveFirst);
   fixture.componentInstance.width.set(width);
   fixture.componentInstance.variant.set(variant);
   fixture.detectChanges();
@@ -92,6 +97,14 @@ describe('PaepActionGroup', () => {
     expect(divider.nextElementSibling).toBe(items()[3]);
     expect(items()[1].getAttribute('aria-disabled')).toBe('true');
     expect(items().every((i) => i.tabIndex === -1)).toBe(true);
+  });
+
+  it('moves destructive actions after the others in the menu even when they come first in the markup', async () => {
+    const { more, menu, items } = await setup('20rem', 'toolbar', true);
+    more().focus();
+    await userEvent.keyboard('{ArrowDown}');
+    expect(items().map((i) => i.textContent?.trim())).toEqual(['Edit', 'Duplicate', 'Export', 'Discard draft', 'Delete record']);
+    expect((menu().querySelector('hr') as HTMLElement).nextElementSibling).toBe(items()[3]);
   });
 
   it('moves with ArrowDown/ArrowUp (wrapping), Home and End', async () => {

@@ -1,3 +1,4 @@
+import { RouterLink } from '@angular/router';
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { PaepButton } from '@proseit/paep-components';
 import { LabExample, LabSpecimenPage } from '../lab/specimen-page';
@@ -47,7 +48,7 @@ export const BUTTON_META: LabSpecimenMeta = {
 @Component({
   selector: 'lab-button-specimen',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LabSpecimenPage, LabExample, PaepButton],
+  imports: [LabSpecimenPage, LabExample, PaepButton, RouterLink],
   template: `
     <lab-specimen-page [meta]="meta">
       <lab-example heading="Variants">
@@ -62,7 +63,7 @@ export const BUTTON_META: LabSpecimenMeta = {
         <div class="row">
           <button paepButton variant="primary" icon="plus">Add record</button>
           <button paepButton icon="retry">Retry</button>
-          <a paepButton href="#lab-examples" trailingIcon="chevron-end">Next step</a>
+          <a paepButton routerLink="/components/icon-button" trailingIcon="chevron-end">Next step</a>
         </div>
       </lab-example>
       <lab-example heading="Loading (activate to start; focus stays on the button)">

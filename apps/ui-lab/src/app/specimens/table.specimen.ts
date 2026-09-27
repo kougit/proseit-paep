@@ -175,7 +175,7 @@ const ROWS: readonly PaepTableRow[] = [
     }
     button[aria-pressed='true'] {
       font-weight: var(--paep-font-weight-label);
-      outline: 2px solid var(--paep-color-selected-indicator);
+      box-shadow: inset 0 -3px 0 var(--paep-color-selected-indicator);
     }
     .medium {
       max-inline-size: 50rem;

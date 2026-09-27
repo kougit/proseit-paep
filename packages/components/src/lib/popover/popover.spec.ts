@@ -22,6 +22,12 @@ import { PaepPopover, PaepPopoverTrigger } from './popover';
         <button type="button" role="menuitem" id="m2">Archive</button>
         <button type="button" role="menuitem" id="m3">Export</button>
       </paep-popover>
+      <button type="button" id="long-trigger" [paepPopoverTrigger]="long">Retention details</button>
+      <paep-popover #long>
+        @for (n of lines; track n) {
+          <p>Retention rule {{ n }} keeps records for the period set by the record owner.</p>
+        }
+      </paep-popover>
       <button type="button" id="after">Next control</button>
     </div>
   `,
@@ -30,6 +36,7 @@ class PopoverHost {
   readonly dir = signal<'ltr' | 'rtl'>('ltr');
   readonly placeStyle = signal('');
   readonly events: boolean[] = [];
+  readonly lines = Array.from({ length: 40 }, (_, i) => i + 1);
 }
 
 const settle = async (f: ComponentFixture<unknown>) => {
@@ -183,6 +190,41 @@ describe('PaepPopover', () => {
     await settle(fixture);
     expect(panel('#links-trigger').matches(':popover-open')).toBe(false);
     expect(document.activeElement).toBe(q('#menu-trigger'));
+  });
+
+  it('closes an informational panel when Tab moves on from the trigger it describes', async () => {
+    const trigger = q('#info-trigger');
+    trigger.focus();
+    await userEvent.keyboard('{Enter}');
+    await settle(fixture);
+    expect(panel('#info-trigger').matches(':popover-open')).toBe(true);
+    expect(document.activeElement).toBe(trigger);
+    await userEvent.keyboard('{Tab}');
+    await settle(fixture);
+    expect(panel('#info-trigger').matches(':popover-open')).toBe(false);
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    expect(document.activeElement).toBe(q('#links-trigger'));
+  });
+
+  it('makes long content without controls a focusable region named by the trigger, scrollable with the keyboard', async () => {
+    const trigger = q('#long-trigger');
+    trigger.focus();
+    await userEvent.keyboard('{Enter}');
+    await settle(fixture);
+    const p = panel('#long-trigger');
+    expect(p.scrollHeight).toBeGreaterThan(p.clientHeight);
+    expect(document.activeElement).toBe(p);
+    expect(p.getAttribute('tabindex')).toBe('0');
+    expect(p.getAttribute('role')).toBe('region');
+    expect(p.getAttribute('aria-labelledby')).toBe(trigger.id);
+    expect(trigger.getAttribute('aria-describedby')).toBeNull();
+    await userEvent.keyboard('{PageDown}');
+    await settle(fixture);
+    expect(p.scrollTop).toBeGreaterThan(0);
+    await userEvent.keyboard('{Escape}');
+    await settle(fixture);
+    expect(document.activeElement).toBe(trigger);
+    expect(p.hasAttribute('role')).toBe(false);
   });
 
   it('closes on an outside click (light dismiss)', async () => {

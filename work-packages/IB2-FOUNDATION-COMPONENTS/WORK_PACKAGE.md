@@ -33,12 +33,12 @@
 ## 3. Authorised change scope (registry generation 4 `authorisedScope`)
 
 * `packages/foundation/`, `packages/components/`, `apps/ui-lab/`
-* `angular.json` (ui-lab `test` target and ui-lab foundation stylesheet only)
+* `angular.json` (the ui-lab `test` target only; the foundation stylesheet is imported from `apps/ui-lab/src/styles.css`, so the build options are unchanged)
 * `package.json`, `package-lock.json` (the four approved dev dependencies and IB2 scripts)
 * `tooling/design-system/` (IB2 static, browser, visual and negative checks)
 * `docs/architecture/IB2-FOUNDATION-COMPONENTS-DESIGN.md`, `docs/architecture/toolchain-version-manifest.json`
 * `docs/licences/THIRD-PARTY-LICENCE-REVIEW.md`, `docs/licences/THIRD-PARTY-NOTICES.md`, `docs/provenance/PROVENANCE-REGISTER.md`
-* `.github/workflows/paep-ci.yml`, `tooling/verification/ib0-wp05-ci-policy.json`, `tooling/verification/verify-ib0-wp05.mjs`, `tooling/verification/negative-ib0-wp05.mjs` (policy change: new jobs and the bounds in §7)
+* `.github/workflows/paep-ci.yml`, `tooling/verification/ib0-wp05-ci-policy.json`, `tooling/verification/verify-ib0-wp05.mjs` (policy change: new jobs and the bounds in §7). The WP05 negative suite `tooling/verification/negative-ib0-wp05.mjs` is not changed and is outside the scope.
 * `tooling/governance/baseline-registry.json` (append generation 4 CANDIDATE)
 * `tooling/governance/negative-baseline-governance.mjs` (fixture repair, added during implementation: the generation 2 lifecycle fixture restores `package.json` dependency fields to their generation 2 form, so IB2's approved dev dependencies do not break the historical simulation; every case and expectation is unchanged)
 * `evidence/design-handoff/HOF-IB2-001/` (the approved handoff, DCH controlled evidence structure)
@@ -74,6 +74,12 @@ The accepted registry-bound mechanism (accepted history up to the active accepte
 | Historical finding | Why it appears | Bound applied in `verify-ib0-wp05.mjs` |
 | --- | --- | --- |
 | WP04 V07 / WP03 V09 "entry point is a placeholder" for `packages/foundation` or `packages/components` | IB2 replaces the IB0 `export {}` placeholders with real public APIs | The IB1 filled-entry bound, extended to these two entry points |
-| WP02 V13 "lockfile differs from the IB0-WP01 baseline" | The PO/SA approved four dev dependencies | Accepted only with a clean working tree, `package-lock.json` changed in scope (or accepted history) and W06 passing |
+| WP02 V13 "lockfile differs from the IB0-WP01 baseline" | The PO/SA approved four dev dependencies | Accepted only with a clean working tree, `package-lock.json` changed in scope (or accepted history), W06 passing and the exact approved delta: `dependencies` equal to the accepted baseline, `devDependencies` equal to the baseline plus exactly the four approved exact pins, the lockfile root matching `package.json`, and every new lockfile entry `dev: true` (not optional) |
 | WP02 V15 `node_modules/axe-core: MPL-2.0 allowed only for review L1 packages` | axe-core is MPL-2.0; its review is L5 (`docs/licences/THIRD-PARTY-LICENCE-REVIEW.md`) | Accepted only for `axe-core` at dev scope, with the L5 review row present; any other licence finding fails |
-| WP03 V06 "angular.json changed" | IB2 adds the ui-lab `test` target and the foundation stylesheet | Accepted only while `angular.json` is in scope or accepted history, and only if every other `angular.json` property equals the accepted baseline |
+| WP03 V06 "angular.json changed" | IB2 adds the ui-lab `test` target | Accepted only while `angular.json` is in scope or accepted history, and only if every other `angular.json` property equals the accepted baseline |
+
+The WP05 verifier itself is tightened, not loosened, for IB2:
+
+* W06: when `package-lock.json` differs from the accepted baseline, it passes only with the exact approved delta above and with the `lockfile.sha256` in `docs/architecture/toolchain-version-manifest.json` equal to the committed lockfile.
+* W11: the `negative-ci` job timeout must be exactly 20 minutes (review rule RR14). Before, it only had to be present.
+* The IB2 CI-governance negatives (`qa:ib2:ci-negative`) prove both: raising the timeout to 30 fails W11 (I05), and an unapproved dev dependency (I10) or `axe-core` moved to runtime dependencies (I11) fails the V13 bound.

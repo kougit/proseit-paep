@@ -23,7 +23,8 @@
   align-items: center;
   gap: var(--paep-space-2);
   min-block-size: var(--paep-density-tab-height);
-  max-inline-size: 18rem;
+  /* The approved 18 rem limit, but never wider than the tab list between its two scroll buttons. */
+  max-inline-size: min(18rem, 100cqi - 2 * var(--paep-space-8));
   padding: var(--paep-space-2) var(--paep-space-3);
   border: 0;
   border-start-start-radius: var(--paep-radius-sm);
@@ -53,6 +54,12 @@
   background: var(--paep-color-selected-indicator);
   border-start-start-radius: var(--paep-radius-xs);
   border-start-end-radius: var(--paep-radius-xs);
+}
+@media (forced-colors: active) {
+  .paep-tabs__tab[aria-selected='true']::after {
+    forced-color-adjust: none;
+    background: Highlight;
+  }
 }
 .paep-tabs__tab[aria-disabled='true'] {
   background: transparent;

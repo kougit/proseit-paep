@@ -3,12 +3,13 @@
  * Negative suite for the IB2 browser gate (npm run qa:accessibility:negative). Each case injects one defect into
  * a served ui-lab page and requires auditPage() or the protected-token check to report it; a positive control
  * requires the unmutated page to pass. Proves the gate can fail: axe violations, overflow, console errors,
- * heading/landmark structure and a brand override of a protected token.
+ * heading/landmark structure, a brand override of a protected token, and O1: a defect inside an open overlay,
+ * and an overlay that fails to open.
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { auditPage, launch, open, serve } from './browser-qa.mjs';
+import { auditOverlay, auditPage, launch, open, serve } from './browser-qa.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const tokens = [...fs.readFileSync(path.join(ROOT, 'packages/foundation/src/lib/tokens/token-catalogue.generated.ts'), 'utf8').matchAll(/^ {2}(\{.*\})/gm)].map((m) => JSON.parse(m[1]));
@@ -24,6 +25,8 @@ const cases = [
   ['B06', 'runtime console error', inject(() => console.error('injected failure')), /A3 console: injected failure/],
   ['B07', 'second h1', inject(() => document.querySelector('main').insertAdjacentHTML('beforeend', '<h1>Second</h1>')), /A4 2 h1 elements/],
   ['B08', 'brand profile overriding a protected status token', 'protected', /--paep-color-status-error-fg/],
+  ['B09', 'O1: unnamed button inside an open dialog', ['/components/dialog', 'Delete Record 1', () => document.querySelector('dialog[open]').insertAdjacentHTML('beforeend', '<button type="button"></button>')], /button-name/],
+  ['B10', 'O1: overlay trigger that opens nothing', ['/components/dialog', 'Delete Record 1', null, true], /nothing opened/],
 ];
 
 const server = await serve();
@@ -33,9 +36,14 @@ try {
   for (const [id, label, mutate, expect] of cases) {
     const ctx = await browser.newContext({ viewport: { width: 320, height: 720 } });
     try {
-      const { page, errors } = await open(ctx, `${server.url}/components/button`);
+      const overlay = Array.isArray(mutate) ? mutate : null;
+      const { page, errors } = await open(ctx, `${server.url}${overlay ? overlay[0] : '/components/button'}`);
       let problems;
-      if (mutate === 'protected') {
+      if (overlay) {
+        // B10 removes the dialog element first, so pressing its trigger can open nothing.
+        if (overlay[3]) await page.evaluate(() => document.querySelectorAll('paep-dialog').forEach((d) => d.remove()));
+        problems = await auditOverlay(page, overlay[1], overlay[2]);
+      } else if (mutate === 'protected') {
         await page.evaluate(() => document.documentElement.style.setProperty('--paep-color-status-error-fg', '#FF0000'));
         problems = [];
         for (const t of tokens.filter((x) => x.protected)) {

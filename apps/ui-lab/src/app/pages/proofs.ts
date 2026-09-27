@@ -50,10 +50,10 @@ const ROWS: readonly PaepTableRow[] = [
 ];
 
 const TRAIL: readonly PaepBreadcrumbItem[] = [
-  { label: 'Home', href: '#' },
-  { label: 'Operations', href: '#' },
-  { label: 'Records', href: '#' },
-  { label: 'Site 3', href: '#' },
+  { label: 'Home', link: '/proofs/responsive' },
+  { label: 'Operations', link: '/proofs/responsive' },
+  { label: 'Records', link: '/proofs/responsive' },
+  { label: 'Site 3', link: '/proofs/responsive' },
   { label: 'REC-2026-000184' },
 ];
 
@@ -298,10 +298,10 @@ export class LabProofRtlSample {
   protected readonly page = signal(8);
   protected readonly icons = ['chevron-start', 'chevron-end', 'page-first', 'page-last', 'external', 'retry', 'success'] as const;
   protected readonly trail: readonly PaepBreadcrumbItem[] = [
-    { label: 'الرئيسية', href: '#' },
-    { label: 'العمليات', href: '#' },
-    { label: 'السجلات', href: '#' },
-    { label: 'الموقع 3', href: '#' },
+    { label: 'الرئيسية', link: '/proofs/responsive' },
+    { label: 'العمليات', link: '/proofs/responsive' },
+    { label: 'السجلات', link: '/proofs/responsive' },
+    { label: 'الموقع 3', link: '/proofs/responsive' },
     { label: 'REC-2026-000184' },
   ];
   protected readonly columns: readonly PaepTableColumn[] = [

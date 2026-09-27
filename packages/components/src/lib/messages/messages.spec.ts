@@ -15,6 +15,15 @@ describe('PAEP messages', () => {
     expect(paepFormat(PAEP_DEFAULT_MESSAGES['paep.form.containsErrors'], { count: 1200 }, 'en')).toBe('Contains 1,200 errors');
   });
 
+  it('formats plain numeric placeholders and plural forms with the given locale', () => {
+    expect(paepFormat(PAEP_DEFAULT_MESSAGES['paep.table.count'], { shown: 1234, total: 5000 }, 'en-US')).toBe('1,234 of 5,000 records');
+    expect(paepFormat('{shown}', { shown: 1234 }, 'de')).toBe('1.234');
+    expect(paepFormat('{page}', { page: 12 }, 'ar-EG')).toBe('١٢');
+    const pl = '{count, plural, one {# błąd} few {# błędy} many {# błędów} other {# błędu}}';
+    expect(paepFormat(pl, { count: 3 }, 'pl')).toBe('3 błędy');
+    expect(paepFormat(pl, { count: 5 }, 'pl')).toBe('5 błędów');
+  });
+
   it('formats percentages through Intl and the given locale', () => {
     expect(paepFormat(PAEP_DEFAULT_MESSAGES['paep.progress.percent'], { value: 0.42 })).toBe('42%');
     expect(paepFormat(PAEP_DEFAULT_MESSAGES['paep.progress.percent'], { value: 0.42 }, 'de')).toBe('42\u00a0%');

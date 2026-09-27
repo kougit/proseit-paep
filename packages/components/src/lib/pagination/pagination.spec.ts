@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, LOCALE_ID, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { userEvent } from 'vitest/browser';
 import { PaepPagination } from './pagination';
@@ -14,6 +14,8 @@ import { PaepPagination } from './pagination';
         [pageCount]="count()"
         [pageHref]="href()"
         [focusTarget]="heading"
+        [previousLabel]="previousLabel()"
+        [nextLabel]="nextLabel()"
         (pageChange)="changes.push($event)"
       />
     </div>
@@ -24,6 +26,8 @@ class Host {
   readonly count = signal(20);
   readonly width = signal(800);
   readonly href = signal<((p: number) => string) | null>(null);
+  readonly previousLabel = signal('');
+  readonly nextLabel = signal('');
   readonly changes: number[] = [];
 }
 
@@ -54,6 +58,19 @@ describe('PaepPagination', () => {
     expect(nav.querySelector('ul > li')).not.toBeNull();
   });
 
+  it('uses overridden Previous and Next texts as their accessible names (label in name)', async () => {
+    const { el, byName } = await setup();
+    expect(byName('Previous page')).toBeTruthy();
+    const custom = await setup((h) => {
+      h.previousLabel.set('Earlier');
+      h.nextLabel.set('Later');
+    });
+    expect(custom.byName('Earlier')?.textContent).toContain('Earlier');
+    expect(custom.byName('Later')?.textContent).toContain('Later');
+    expect(custom.byName('Previous page')).toBeUndefined();
+    expect(el).toBeTruthy();
+  });
+
   it('shows first, last and current ± 1 with gaps, and marks the current page', async () => {
     const { visibleText, byName } = await setup();
     expect(visibleText()).toEqual(['Previous', '1', '…', '7', '8', '9', '…', '20', 'Next', 'Page 8 of 20']);
@@ -64,10 +81,24 @@ describe('PaepPagination', () => {
     expect(getComputedStyle(current).borderTopWidth).toBe('2px');
   });
 
+  it("formats page numbers with the application's LOCALE_ID", async () => {
+    TestBed.configureTestingModule({ providers: [{ provide: LOCALE_ID, useValue: 'de' }] });
+    const { visibleText } = await setup((h) => {
+      h.page.set(1500);
+      h.count.set(2000);
+    });
+    expect(visibleText()).toEqual(['Previous', '1', '…', '1.499', '1.500', '1.501', '…', '2.000', 'Next', 'Page 1.500 of 2.000']);
+  });
+
   it('hides the gap marks from assistive technology and shows a single skipped page instead of a gap', async () => {
     const { el, visibleText } = await setup((h) => h.page.set(3));
     expect(visibleText()).toEqual(['Previous', '1', '2', '3', '4', '…', '20', 'Next', 'Page 3 of 20']);
     for (const gap of Array.from(el.querySelectorAll('.paep-pagination__gap'))) expect(gap.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  it('shows page 2 itself, not a gap, when it is the only page skipped', async () => {
+    const { visibleText } = await setup((h) => h.page.set(4));
+    expect(visibleText()).toEqual(['Previous', '1', '2', '3', '4', '5', '…', '20', 'Next', 'Page 4 of 20']);
   });
 
   it('keeps Previous at the first page but marks it aria-disabled and inert', async () => {
@@ -120,6 +151,10 @@ describe('PaepPagination', () => {
     });
     expect(controls().every((c) => c.tagName === 'A')).toBe(true);
     expect(byName('Page 2').getAttribute('href')).toBe('#records-page-2');
+    const current = byName('Page 1, current page');
+    expect(current.tagName).toBe('A');
+    expect(current.getAttribute('aria-current')).toBe('page');
+    expect(byName('Page 2').getAttribute('aria-current')).toBeNull();
     const prev = byName('Previous page');
     expect(prev.hasAttribute('href')).toBe(false);
     expect(prev.getAttribute('aria-disabled')).toBe('true');

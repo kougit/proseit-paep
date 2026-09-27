@@ -90,5 +90,5 @@ export class PaginationSpecimen {
   protected readonly linkPage = signal(2);
   protected readonly compactPage = signal(8);
   protected readonly longPage = signal(5);
-  protected readonly href = (p: number): string => `#records-page-${p}`;
+  protected readonly href = (p: number): string => `/components/pagination?page=${p}`;
 }

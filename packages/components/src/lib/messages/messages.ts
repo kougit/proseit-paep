@@ -72,7 +72,8 @@ export function providePaepMessages(messages: Partial<PaepMessages>): Provider {
 
 /**
  * Formats a message: {name} placeholders, "{n, plural, one {...} other {...}}" (# is the number) and
- * "{n, number, percent}". Numbers use Intl with the given locale. Unknown placeholders stay visible.
+ * "{n, number, percent}". Every number, plain placeholders included, is formatted with Intl for the given
+ * locale (components pass Angular's LOCALE_ID). Unknown placeholders stay visible.
  */
 export function paepFormat(template: string, params: Readonly<Record<string, string | number>> = {}, locale = 'en'): string {
   const plural = /\{(\w+), plural, ((?:\w+ \{[^{}]*\}\s*)+)\}/g;
@@ -87,5 +88,9 @@ export function paepFormat(template: string, params: Readonly<Record<string, str
   out = out.replace(/\{(\w+), number, percent\}/g, (_m, name: string) =>
     new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 0 }).format(Number(params[name])),
   );
-  return out.replace(/\{(\w+)\}/g, (m, name: string) => (name in params ? String(params[name]) : m));
+  return out.replace(/\{(\w+)\}/g, (m, name: string) => {
+    if (!(name in params)) return m;
+    const value = params[name];
+    return typeof value === 'number' ? new Intl.NumberFormat(locale).format(value) : value;
+  });
 }

@@ -7,8 +7,7 @@
  * mutates a disposable scratch copy of the repository (with .git; node_modules hard-linked read-only, as in
  * negative-ib0-wp05.mjs), commits nothing in the real tree, and runs the provenance gate, expecting the stated
  * failure. P00 is the positive control on the unmutated copy.
- *   node tooling/design-system/ci-governance-negative.mjs            provenance cases (CI)
- *   node tooling/design-system/ci-governance-negative.mjs --full     also the regression-gate cases (local)
+ *   node tooling/design-system/ci-governance-negative.mjs            every case (CI)
  */
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -17,7 +16,6 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-const full = process.argv.includes('--full');
 const WORKFLOW = '.github/workflows/paep-ci.yml';
 const POLICY = 'tooling/verification/ib0-wp05-ci-policy.json';
 const REVIEW = 'docs/licences/THIRD-PARTY-LICENCE-REVIEW.md';
@@ -53,13 +51,14 @@ const cases = [
   ['I02', 'accessibility job dropped from the gate needs and MANDATORY_JOBS', [[WORKFLOW, (t) => replace('      - accessibility\n      - build-reference-app\n', '      - build-reference-app\n')(t).replace(' accessibility build-reference-app', ' build-reference-app')]], 'provenance', [/FAIL W12/]],
   ['I03', 'component tests replaced by a no-op in the workflow', [[WORKFLOW, replace('          npm run test:components 2>&1', '          echo skipped 2>&1')]], 'provenance', [/FAIL W11/]],
   ['I04', 'axe-core browser gate removed from the accessibility job', [[WORKFLOW, replace('          npm run qa:accessibility 2>&1', '          echo skipped 2>&1')]], 'provenance', [/FAIL W11/]],
+  ['I05', 'PAEP / negative-ci timeout raised from 20 to 30 minutes (RR14)', [[WORKFLOW, (t) => { const i = t.indexOf('  negative-ci:\n'); const j = t.indexOf('timeout-minutes: 20', i); if (i < 0 || j < 0) throw new Error('negative-ci timeout anchor not found'); return `${t.slice(0, j)}timeout-minutes: 30${t.slice(j + 'timeout-minutes: 20'.length)}`; }]], 'provenance', [/FAIL W11/, /negative-ci timeout-minutes 30/]],
   ['I06', 'axe-core licence review row L5 removed (V15 bound requires it)', [[REVIEW, replace('| L5 | axe-core |', '| LX | axe-core |')]], 'provenance', [/FAIL W16/, /V15 outside the bound/]],
   ['I07', 'a second MPL-2.0 package outside the reviewed set (V15 bound is axe-core only)', [['package-lock.json', jsonEdit((o) => { o.packages['node_modules/pngjs'].license = 'MPL-2.0'; })]], 'provenance', [/FAIL W16/, /V15 outside the bound/]],
   ['I08', 'axe-core moved to runtime scope (V15 bound is dev scope only)', [['package-lock.json', jsonEdit((o) => { delete o.packages['node_modules/axe-core'].dev; })]], 'provenance', [/FAIL W16/]],
+  ['I10', 'an unapproved dev dependency added with package.json and the lockfile (V13 bound is the four approved packages only)', [['package.json', jsonEdit((o) => { o.devDependencies['left-pad'] = '1.3.0'; })], ['package-lock.json', jsonEdit((o) => { o.packages[''].devDependencies['left-pad'] = '1.3.0'; })]], 'provenance', [/FAIL W16/, /V13 outside the bound/]],
+  ['I11', 'an approved package declared as a runtime dependency (V13 bound is dev scope only)', [['package.json', jsonEdit((o) => { o.dependencies['axe-core'] = o.devDependencies['axe-core']; delete o.devDependencies['axe-core']; })], ['package-lock.json', jsonEdit((o) => { const r = o.packages['']; r.dependencies['axe-core'] = r.devDependencies['axe-core']; delete r.devDependencies['axe-core']; })]], 'provenance', [/FAIL W16/, /V13 outside the bound/]],
+  ['I09', 'angular.json changed beyond the ui-lab test target (WP03 V06 bound)', [['angular.json', jsonEdit((o) => { o.projects['ui-lab'].architect.build.options.sourceMap = true; })]], 'regression', [/FAIL W20/, /FAIL W21/, /V06 outside/]],
 ];
-if (full) {
-  cases.push(['I09', 'angular.json changed beyond the ui-lab test target (WP03 V06 bound)', [['angular.json', jsonEdit((o) => { o.projects['ui-lab'].architect.build.options.sourceMap = true; })]], 'regression', [/FAIL W21/, /V06 outside/]]);
-}
 
 const results = [];
 for (const [id, name, edits, g, expect] of cases) {

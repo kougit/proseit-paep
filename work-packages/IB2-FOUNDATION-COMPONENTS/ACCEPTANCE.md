@@ -24,7 +24,7 @@ All criteria are mandatory. PASS is technical; ACCEPTED is the PO/SA's decision.
 | IB2-AC18 | IB0/IB1 regressions: `qa:ib0-wp05` full with only the bounds in `WORK_PACKAGE.md` §7; WP05 negatives; `qa:ib1`; `qa:ib1:negative`; `qa:baseline`; `qa:baseline:negative` | logs under `evidence/IB2-FOUNDATION-COMPONENTS/logs/` |
 | IB2-AC19 | Strict typecheck, both production builds and `qa:architecture` pass; no Nx; Angular 22.1.8 / TypeScript 6.0.3 unchanged | `qa:types`; builds; W04 |
 | IB2-AC20 | Generation 4 CANDIDATE with exact scope; every change in scope; generation 3 unchanged; no self-promotion | `qa:baseline` B01–B13 |
-| IB2-AC21 | Independent QA lanes Q1–Q11: High 0, Medium 0 | `evidence/IB2-FOUNDATION-COMPONENTS/reports/independent-qa.md` |
+| IB2-AC21 | Independent QA lanes Q1–Q10 (authorising instruction §21): High 0, Medium 0 | `evidence/IB2-FOUNDATION-COMPONENTS/reports/independent-qa.md` |
 | IB2-AC22 | Complete, untracked PO/SA governance diff for `.github/**` and `tooling/verification/**` | `evidence/IB2-FOUNDATION-COMPONENTS/review/PO-SA-GOVERNANCE-DIFF.txt` (not committed) |
 | IB2-AC23 | Exact-head GitHub Actions run green including `PAEP / gate`; PR mergeable | CI report |
 | IB2-AC24 | No secret in source, fixtures, logs or evidence; controlled sources and CLAUDE.md unchanged | W02, W08 |

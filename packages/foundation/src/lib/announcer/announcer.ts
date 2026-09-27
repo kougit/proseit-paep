@@ -10,14 +10,14 @@ export type PaepPoliteness = 'polite' | 'assertive';
 export class PaepAnnouncer implements OnDestroy {
   private readonly document = inject(DOCUMENT);
   private readonly regions = new Map<PaepPoliteness, HTMLElement>();
-  private timer: ReturnType<typeof setTimeout> | undefined;
+  private readonly timers = new Map<PaepPoliteness, ReturnType<typeof setTimeout>>();
 
   /** Announces a message. The region is cleared first so repeating the same text is announced again. */
   announce(message: string, politeness: PaepPoliteness = 'polite'): void {
     const region = this.region(politeness);
     region.textContent = '';
-    clearTimeout(this.timer);
-    this.timer = setTimeout(() => (region.textContent = message), 50);
+    clearTimeout(this.timers.get(politeness));
+    this.timers.set(politeness, setTimeout(() => (region.textContent = message), 50));
   }
 
   /** The live region element for a politeness level (created on first use). */
@@ -36,7 +36,8 @@ export class PaepAnnouncer implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    clearTimeout(this.timer);
+    for (const timer of this.timers.values()) clearTimeout(timer);
+    this.timers.clear();
     for (const el of this.regions.values()) el.remove();
     this.regions.clear();
   }

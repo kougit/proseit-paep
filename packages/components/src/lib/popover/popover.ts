@@ -28,7 +28,9 @@ export type PaepPopoverFocus = 'auto' | 'first' | 'last';
     '[attr.popover]': "supported ? 'auto' : null",
     '[attr.hidden]': '!supported && !isOpen() ? "" : null',
     '[class.paep-popover--fallback]': '!supported',
-    '[attr.role]': "variant() === 'menu' ? 'menu' : null",
+    '[attr.role]': "variant() === 'menu' ? 'menu' : scrollable() ? 'region' : null",
+    '[attr.tabindex]': 'scrollable() ? 0 : null',
+    '[attr.aria-labelledby]': 'scrollable() ? triggerId() : null',
     '[attr.data-placement]': 'placement()',
     '(toggle)': 'onToggle($event)',
     '(keydown)': 'onKeydown($event)',
@@ -82,6 +84,9 @@ export class PaepPopover {
   readonly isOpen = signal(false);
   /** True while an open informational panel has no interactive content (it then describes the trigger). */
   readonly describesTrigger = signal(false);
+  /** True while an informational panel without interactive content overflows: it becomes a focusable, named region. */
+  protected readonly scrollable = signal(false);
+  protected readonly triggerId = signal<string | null>(null);
   protected readonly placement = signal<'below' | 'above'>('below');
   protected readonly supported = typeof HTMLElement !== 'undefined' && 'popover' in HTMLElement.prototype;
   private trigger: HTMLElement | null = null;
@@ -94,6 +99,8 @@ export class PaepPopover {
   /** Opens the panel anchored to the trigger. Menus focus their first (or last) item. */
   show(trigger: HTMLElement, focus: PaepPopoverFocus = 'auto'): void {
     this.trigger = trigger;
+    if (!trigger.id) trigger.id = `${this.id}-trigger`;
+    this.triggerId.set(trigger.id);
     if (!this.isOpen()) {
       if (this.supported) {
         if (!this.host.matches(':popover-open')) this.host.showPopover();
@@ -144,6 +151,14 @@ export class PaepPopover {
     }
   }
 
+  /**
+   * @internal Called by the trigger when it loses focus: an open informational panel that focus never entered
+   * (it describes the trigger) closes once focus moves on, as Tab past the end does for a panel with content.
+   */
+  triggerFocusout(to: Node | null): void {
+    if (this.isOpen() && this.variant() !== 'menu' && to && !this.host.contains(to)) this.close('keep');
+  }
+
   protected onFocusout(event: FocusEvent): void {
     const to = event.relatedTarget as Node | null;
     // Tab past the last element: close and let focus continue in page order.
@@ -170,6 +185,7 @@ export class PaepPopover {
     const focusWasInside = !active || active === this.host.ownerDocument.body || this.host.contains(active);
     this.isOpen.set(false);
     this.describesTrigger.set(false);
+    this.scrollable.set(false);
     this.stopTracking();
     this.openChange.emit(false);
     const refocus = focus === 'return' || (focus === 'auto' && focusWasInside);
@@ -188,8 +204,16 @@ export class PaepPopover {
       return;
     }
     const first = this.host.querySelector<HTMLElement>(FOCUSABLE);
-    this.describesTrigger.set(!first);
-    first?.focus();
+    // Long content without controls: the panel itself takes focus so it can be scrolled with the keyboard.
+    const overflowing = !first && this.host.scrollHeight > this.host.clientHeight + 1;
+    this.scrollable.set(overflowing);
+    this.describesTrigger.set(!first && !overflowing);
+    if (overflowing) {
+      this.host.tabIndex = 0;
+      this.host.focus();
+    } else {
+      first?.focus();
+    }
   }
 
   /** Anchors the panel to the trigger: below and aligned to its inline-start edge, flipped and shifted as needed. */
@@ -227,6 +251,7 @@ export class PaepPopover {
     '(pointerdown)': 'wasOpen = paepPopoverTrigger().isOpen()',
     '(click)': 'onClick()',
     '(keydown)': 'onKeydown($event)',
+    '(focusout)': 'onFocusout($event)',
   },
 })
 export class PaepPopoverTrigger {
@@ -242,6 +267,10 @@ export class PaepPopoverTrigger {
     this.wasOpen = null;
     if (open) popover.hide();
     else popover.show(this.element);
+  }
+
+  protected onFocusout(event: FocusEvent): void {
+    this.paepPopoverTrigger().triggerFocusout(event.relatedTarget as Node | null);
   }
 
   protected onKeydown(event: KeyboardEvent): void {

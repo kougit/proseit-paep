@@ -163,6 +163,18 @@ describe('brand profile validator', () => {
     expect(getComputedStyle(el).getPropertyValue('--paep-brand-primary').trim()).toBe('#24364B');
     el.remove();
   });
+
+  it('applies exactly the values it validated, even when a value changes between reads', () => {
+    const el = document.createElement('div');
+    let reads = 0;
+    const shifting = { ...PETROL };
+    Object.defineProperty(shifting, 'on-primary', { enumerable: true, get: () => (++reads === 1 ? '#FFFFFF' : PETROL.primary) });
+    applyBrandProfile(el, shifting);
+    expect(reads).toBe(1);
+    expect(el.style.getPropertyValue('--paep-brand-on-primary')).toBe('#FFFFFF');
+    const nullProto = Object.assign(Object.create(null), PETROL);
+    expect(() => applyBrandProfile(el, nullProto)).toThrow(PaepBrandProfileError);
+  });
 });
 
 @Component({
@@ -203,5 +215,18 @@ describe('announcer', () => {
     await new Promise((r) => setTimeout(r, 100));
     expect(a.region('assertive').textContent).toBe('Records could not be loaded');
     expect(document.querySelectorAll('[data-paep-announcer]').length).toBe(2);
+  });
+
+  it('clears the region before repeating a message, and keeps polite and assertive messages independent', async () => {
+    const a = TestBed.inject(PaepAnnouncer);
+    const polite = a.region('polite');
+    a.announce('Saved');
+    await new Promise((r) => setTimeout(r, 100));
+    a.announce('Saved');
+    expect(polite.textContent).toBe('');
+    a.announce('Records could not be loaded', 'assertive');
+    await new Promise((r) => setTimeout(r, 100));
+    expect(polite.textContent).toBe('Saved');
+    expect(a.region('assertive').textContent).toBe('Records could not be loaded');
   });
 });

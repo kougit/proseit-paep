@@ -16,7 +16,7 @@
 | ISC | 23 | 0 | Permissive: accept |
 | MPL-2.0 | 12 | 0 | Review item L1 |
 | BSD-2-Clause | 11 | 0 | Permissive: accept |
-| Apache-2.0 | 8 | 1 (`rxjs`) | Permissive: accept. No installed package ships a NOTICE file. |
+| Apache-2.0 | 8 | 1 (`rxjs`) | Permissive: accept. No installed package ships a NOTICE file (true at this review; see §8 for the IB2 packages that do). |
 | BSD-3-Clause | 5 | 0 | Permissive: accept |
 | CC-BY-4.0 | 1 | 0 | Review item L2 |
 | BlueOak-1.0.0 | 1 (`lru-cache`, dev) | 0 | Permissive (OSI-approved): accept |
@@ -108,6 +108,8 @@ The L1 and L2 triggers in §3(iv) and §4(iv); any `package-lock.json` change; a
 **Trigger:** lockfile change (§6). The PO/SA approved four exact-pinned dev dependencies on 2026-09-27: `vitest` 4.1.11, `@vitest/browser-playwright` 4.1.11, `playwright` 1.63.0 and `axe-core` 4.13.0. New lockfile sha256 `fc31123bea83fa64273b34af32248707430650998bce6ad1b0057de06adfa600` (recorded in `docs/architecture/toolchain-version-manifest.json`).
 
 **Delta:** 40 new third-party entries, all dev scope, all from `https://registry.npmjs.org/` with sha512 integrity, none with an install script, `npm audit` 0 vulnerabilities. New totals: 474 entries (MIT 407, ISC 24, MPL-2.0 13, Apache-2.0 11, BSD-2-Clause 11, BSD-3-Clause 5, CC-BY-4.0 1, BlueOak-1.0.0 1, 0BSD 1). Every new entry is in the §1 permissive set except `axe-core` (MPL-2.0), reviewed as L5. `playwright` and `playwright-core` (Apache-2.0) ship no browser: CI and local runs use an already-installed Chromium or Chrome (`CHROME_BIN`); `playwright install` is never run. No new runtime-scope dependency; the shipped bundles are unchanged in composition (§5).
+
+**Apache-2.0 NOTICE files.** The three new Apache-2.0 entries are `playwright`, `playwright-core` and `expect-type`. `playwright` and `playwright-core` ship a `NOTICE` file and a `ThirdPartyNotices.txt` (for components embedded in `playwright-core`). Apache-2.0 §4(d) requires passing a NOTICE on only when the work is redistributed. PAEP uses both packages only at dev time from `node_modules`, and neither is vendored, bundled or shipped, so there is no obligation today. The §1 statement "no installed package ships a NOTICE file" held for the IB0-WP02 dependency set and no longer holds for this delta. Re-review if any PAEP artefact that contains `node_modules` is ever distributed.
 
 | ID | Package | Licence | Dependency path | Scope | Shipped in `dist/`? | Disposition |
 | --- | --- | --- | --- | --- | --- | --- |

@@ -89,6 +89,33 @@
   border-end-end-radius: var(--paep-radius-sm);
 }
 
+/* With adornments the focus ring and the invalid border surround the whole control box (control + prefix/suffix). */
+.paep-field__control:has(.paep-field__affix):has(:focus-visible) {
+  outline: var(--paep-focus-ring-width) solid var(--paep-color-focus-ring);
+  outline-offset: var(--paep-focus-ring-offset);
+  box-shadow: 0 0 0 var(--paep-focus-ring-offset) var(--paep-color-focus-halo);
+  border-radius: var(--paep-radius-sm);
+}
+.paep-field__control:has(.paep-field__affix) > :focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+.paep-field__control:has([aria-invalid='true']) > .paep-field__affix {
+  border-block-width: 2px;
+  border-color: var(--paep-color-invalid-border);
+}
+.paep-field__control:has([aria-invalid='true']) > .paep-field__affix--prefix {
+  border-inline-start-width: 2px;
+}
+.paep-field__control:has([aria-invalid='true']) > .paep-field__affix--suffix {
+  border-inline-end-width: 2px;
+}
+@media (forced-colors: active) {
+  .paep-field__control:has(.paep-field__affix):has(:focus-visible) {
+    outline-color: Highlight;
+  }
+}
+
 /* Disabled: label in secondary colour (the control carries the dashed border). */
 .paep-field:has(.paep-field__control :disabled) .paep-field__label {
   color: var(--paep-color-text-secondary);

@@ -70,25 +70,25 @@ export class BreadcrumbSpecimen {
   protected readonly meta = BREADCRUMB_META;
   protected readonly short: readonly PaepBreadcrumbItem[] = [
     { label: 'Laboratory home', link: '/' },
-    { label: 'Records', href: '#lab-examples' },
+    { label: 'Records', link: '/components/breadcrumb' },
     { label: 'Record 1' },
   ];
   protected readonly four: readonly PaepBreadcrumbItem[] = [
     { label: 'Laboratory home', link: '/' },
-    { label: 'North depot', href: '#lab-examples' },
-    { label: 'Records', href: '#lab-examples' },
+    { label: 'North depot', link: '/components/breadcrumb' },
+    { label: 'Records', link: '/components/breadcrumb' },
     { label: 'Record 1' },
   ];
   protected readonly long: readonly PaepBreadcrumbItem[] = [
     { label: 'Laboratory home', link: '/' },
-    { label: 'North depot', href: '#lab-examples' },
-    { label: 'Records', href: '#lab-examples' },
-    { label: 'Record group 4', href: '#lab-examples' },
+    { label: 'North depot', link: '/components/breadcrumb' },
+    { label: 'Records', link: '/components/breadcrumb' },
+    { label: 'Record group 4', link: '/components/breadcrumb' },
     { label: 'Record 1' },
   ];
   protected readonly wordy: readonly PaepBreadcrumbItem[] = [
     { label: 'Laboratory home', link: '/' },
-    { label: 'A long parent segment name that wraps onto more than one line', href: '#lab-examples' },
+    { label: 'A long parent segment name that wraps onto more than one line', link: '/components/breadcrumb' },
     { label: 'A long current page title that also wraps without being truncated' },
   ];
 }

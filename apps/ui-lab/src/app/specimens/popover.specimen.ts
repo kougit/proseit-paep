@@ -1,3 +1,4 @@
+import { RouterLink } from '@angular/router';
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { PaepButton, PaepPopover, PaepPopoverTrigger } from '@proseit/paep-components';
 import { LabExample, LabSpecimenPage } from '../lab/specimen-page';
@@ -40,7 +41,7 @@ export const POPOVER_META: LabSpecimenMeta = {
 @Component({
   selector: 'lab-popover-specimen',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LabSpecimenPage, LabExample, PaepPopover, PaepPopoverTrigger, PaepButton],
+  imports: [LabSpecimenPage, LabExample, PaepPopover, PaepPopoverTrigger, PaepButton, RouterLink],
   template: `
     <lab-specimen-page [meta]="meta">
       <lab-example heading="Informational (focus stays on the trigger)">
@@ -54,8 +55,8 @@ export const POPOVER_META: LabSpecimenMeta = {
         <button paepButton trailingIcon="chevron-down" [paepPopoverTrigger]="related">Related records</button>
         <paep-popover #related>
           <ul class="links">
-            <li><a href="#lab-examples">Record 2</a></li>
-            <li><a href="#lab-examples">Record 3</a></li>
+            <li><a routerLink="/components/list">Record 2</a></li>
+            <li><a routerLink="/components/table">Record 3</a></li>
           </ul>
         </paep-popover>
       </lab-example>

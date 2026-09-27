@@ -3,6 +3,7 @@ import {
   Component,
   DestroyRef,
   ElementRef,
+  LOCALE_ID,
   afterNextRender,
   afterRenderEffect,
   booleanAttribute,
@@ -89,6 +90,7 @@ export class PaepTab {
 })
 export class PaepTabs {
   private readonly messages = inject(PAEP_MESSAGES);
+  private readonly locale = inject(LOCALE_ID);
 
   /** Accessible name of the tab list. */
   readonly label = input.required<string>();
@@ -126,7 +128,7 @@ export class PaepTabs {
   }
 
   protected errorText(count: number): string {
-    return paepFormat(this.messages['paep.form.containsErrors'], { count });
+    return paepFormat(this.messages['paep.form.containsErrors'], { count }, this.locale);
   }
 
   protected activate(index: number): void {

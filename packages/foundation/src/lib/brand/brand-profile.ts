@@ -108,9 +108,14 @@ export interface PaepStyleTarget {
  * document.documentElement or a subtree root). A rejected profile throws and changes nothing.
  */
 export function applyBrandProfile(target: PaepStyleTarget, profile: unknown): void {
-  const result = validateBrandProfile(profile);
+  // Each value is read once into a frozen snapshot, so the values applied are exactly the values validated.
+  const snapshot =
+    profile !== null && typeof profile === 'object' && Object.getPrototypeOf(profile) === Object.prototype
+      ? Object.freeze(Object.fromEntries(Object.keys(profile).map((k) => [k, (profile as Record<string, unknown>)[k]])))
+      : profile;
+  const result = validateBrandProfile(snapshot);
   if (!result.valid) throw new PaepBrandProfileError(result.violations);
-  const p = profile as PaepBrandProfile;
+  const p = snapshot as PaepBrandProfile;
   for (const k of PAEP_BRAND_KEYS) target.style.setProperty(`--paep-brand-${k}`, p[k]);
 }
 

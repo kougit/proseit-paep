@@ -47,6 +47,10 @@ const cases = [
   ['N23', 'S08', 'content key removed', [['packages/components/src/lib/messages/messages.ts', (t) => t.replace(/^\s+'paep\.table\.detailsFor':.*\n/m, '')]], /paep\.table\.detailsFor missing/],
   ['N24', 'S09', 'focused test', [['packages/components/src/lib/tabs/tabs.spec.ts', (t) => t.replace(/\bit\(/, 'it.only(')]], /focused or skipped/],
   ['N25', 'S09', 'skipped test', [['packages/components/src/lib/button/button.spec.ts', (t) => t.replace(/\bit\(/, 'it.skip(')]], /focused or skipped/],
+  ['N26', 'S05', 'double-quoted later-milestone import', [['packages/components/src/lib/button/button.ts', (t) => `import { createClient } from "frappe-js-sdk";\n${t}`]], /later milestone/],
+  ['N27', 'S04', 'literal in the second element of a styles array', [['packages/components/src/lib/dialog/dialog.ts', (t) => t.replace(/styles: `([\s\S]*?)`/, (_m, css) => `styles: [\`${css}\`, \`:host { color: #ff0000; margin-left: var(--paep-space-2); }\`]`)]], /colour literal[\s\S]*physical property|physical property[\s\S]*colour literal/],
+  ['N28', 'S04', 'colour literal in a host style binding', [['packages/components/src/lib/button/button.ts', (t) => t.replace("'[style.min-inline-size.px]': 'lockedWidth()',", `$&\n    '[style.color]': '"#ff0000"',`)]], /colour literal "color: #ff0000;"/],
+  ['N29', 'S09', 'expected-to-fail test', [['packages/components/src/lib/card/card.spec.ts', (t) => t.replace(/\bit\(/, 'it.fails(')]], /focused or skipped/],
 ];
 
 let failures = 0;

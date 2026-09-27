@@ -5,6 +5,7 @@ import {
   Directive,
   ElementRef,
   Injector,
+  LOCALE_ID,
   TemplateRef,
   afterNextRender,
   computed,
@@ -94,6 +95,7 @@ type PaepTableMode = 'wide' | 'medium' | 'narrow';
 export class PaepTable {
   private static nextId = 0;
   private readonly messages = inject(PAEP_MESSAGES);
+  private readonly locale = inject(LOCALE_ID);
   private readonly injector = inject(Injector);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private retryPending = false;
@@ -170,15 +172,15 @@ export class PaepTable {
     const total = this.total();
     if (total === null) return '';
     const shown = this.effectiveState() === 'populated' ? this.rows().length : 0;
-    return paepFormat(this.messages['paep.table.count'], { shown, total });
+    return paepFormat(this.messages['paep.table.count'], { shown, total }, this.locale);
   });
-  protected readonly scrollLabel = computed(() => paepFormat(this.messages['paep.table.scrollRegion'], { caption: this.caption() }));
+  protected readonly scrollLabel = computed(() => paepFormat(this.messages['paep.table.scrollRegion'], { caption: this.caption() }, this.locale));
   protected readonly detailsText = computed(() => this.messages['paep.table.details']);
   protected readonly retryText = computed(() => this.messages['paep.common.retry']);
   protected readonly errorHeadingText = computed(() => this.errorHeading() || this.messages['paep.table.errorTitle']);
   protected readonly errorMessageText = computed(() => this.errorMessage() || this.messages['paep.table.errorBody']);
   protected readonly errorReferenceText = computed(() =>
-    this.errorReference() ? paepFormat(this.messages['paep.table.errorReference'], { reference: this.errorReference() }) : '',
+    this.errorReference() ? paepFormat(this.messages['paep.table.errorReference'], { reference: this.errorReference() }, this.locale) : '',
   );
   protected readonly liveText = computed(() => {
     switch (this.effectiveState()) {
@@ -249,7 +251,7 @@ export class PaepTable {
 
   protected detailsName(row: PaepTableRow): string {
     const key = this.rowNameKey() || this.columns()[0]?.key || '';
-    return paepFormat(this.messages['paep.table.detailsFor'], { rowName: this.text(row[key]) });
+    return paepFormat(this.messages['paep.table.detailsFor'], { rowName: this.text(row[key]) }, this.locale);
   }
 
   protected text(v: unknown): string {

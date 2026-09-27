@@ -88,12 +88,37 @@ export function makeFs(root = ROOT, overlay = new Map()) {
 /** Removes comments from CSS/TS text (keeps strings roughly intact; good enough for token checks). */
 const stripComments = (t) => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"])\/\/.*$/gm, '$1');
 
-/** Extracts component CSS: .css files, and `styles:` template literals inside .ts files. */
+/**
+ * Extracts component CSS: .css files; every template literal of a `styles:` value inside .ts files (a single
+ * literal or an array of them); and host `[style.prop]` bindings, rendered as `prop: value` lines so the same
+ * token and logical-property checks apply to them.
+ */
 function cssBlocks(fsx, file) {
   const t = fsx.read(file);
   if (file.endsWith('.css')) return [stripComments(t)];
   const blocks = [];
-  for (const m of t.matchAll(/styles:\s*(?:\[\s*)?`([\s\S]*?)`/g)) blocks.push(stripComments(m[1]));
+  for (const m of t.matchAll(/styles:\s*/g)) {
+    let i = m.index + m[0].length;
+    const array = t[i] === '[';
+    if (array) i++;
+    for (;;) {
+      while (/[\s,]/.test(t[i] ?? '')) i++;
+      if (t[i] !== '`') break;
+      const end = t.indexOf('`', i + 1);
+      if (end < 0) break;
+      blocks.push(stripComments(t.slice(i + 1, end)));
+      i = end + 1;
+      if (!array) break;
+    }
+  }
+  const host = [];
+  for (const m of t.matchAll(/['"]\[style\.([\w-]+)(?:\.(\w+|%))?\]['"]\s*:\s*'([^']*)'/g)) {
+    const [, prop, unit = '', expr] = m;
+    const literal = /^\s*(["`])(.*)\1\s*$/.exec(expr);
+    const value = literal ? literal[2] : /^\s*-?\d*\.?\d+\s*$/.test(expr) ? `${expr.trim()}${unit}` : 'var(--paep-bound)';
+    host.push(`${prop}: ${value};`);
+  }
+  if (host.length) blocks.push(host.join('\n'));
   return blocks;
 }
 
@@ -181,8 +206,8 @@ export function runChecks(fsx) {
     const tsFiles = [...fsx.list('packages/components/src'), ...fsx.list('packages/foundation/src'), ...fsx.list('apps/ui-lab/src')].filter((f) => f.endsWith('.ts'));
     for (const f of tsFiles) {
       const spec = f.endsWith('.spec.ts');
-      for (const m of stripComments(fsx.read(f)).matchAll(/(?:import|export)\s[^'"`]*?from\s*'([^']+)'|import\s*\(\s*'([^']+)'\s*\)|import\s*'([^']+)'/g)) {
-        const spec_ = m[1] || m[2] || m[3];
+      for (const m of stripComments(fsx.read(f)).matchAll(/(?:import|export)\s[^'"`]*?from\s*(['"])([^'"]+)\1|import\s*\(\s*(['"])([^'"]+)\3\s*\)|import\s*(['"])([^'"]+)\5/g)) {
+        const spec_ = m[2] || m[4] || m[6];
         const inComponents = f.startsWith('packages/components/');
         const inFoundation = f.startsWith('packages/foundation/');
         if (/^@proseit\/[^/]+\/./.test(spec_)) p.push(`${f}: deep import ${spec_}`);
@@ -248,12 +273,12 @@ export function runChecks(fsx) {
     let tests = 0;
     for (const f of specs) {
       const t = stripComments(fsx.read(f));
-      if (/\b(it|test|describe)\.(only|skip|todo)\b|\b(fit|fdescribe|xit|xdescribe)\s*\(/.test(t)) p.push(`${f}: focused or skipped test`);
+      if (/\b(it|test|describe)\.(only|skip|todo|fails)\b|\b(fit|fdescribe|xit|xdescribe)\s*\(/.test(t)) p.push(`${f}: focused or skipped test`);
       const n = (t.match(/\b(it|test)\s*\(/g) || []).length;
       tests += n;
       if (n < 3 && f.startsWith(COMPONENTS_DIR)) p.push(`${f}: only ${n} tests`);
     }
-    add('S09', 'Test hygiene: no focused, skipped or todo tests; every component spec has at least three behaviour tests', p, `${specs.length} spec files, ${tests} tests`);
+    add('S09', 'Test hygiene: no focused, skipped, todo or expected-to-fail tests; every component spec has at least three behaviour tests', p, `${specs.length} spec files, ${tests} tests`);
   }
 
   return results;

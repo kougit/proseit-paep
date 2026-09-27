@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, Component, Injector, afterNextRender, computed, inject, input, model } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Injector,
+  LOCALE_ID,
+  afterNextRender,
+  computed,
+  inject,
+  input,
+  model,
+} from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { PaepIcon } from '@proseit/paep-foundation';
 import { PAEP_MESSAGES, paepFormat } from '../messages/messages';
@@ -90,7 +100,7 @@ type PaepPageEntry = { readonly kind: 'page'; readonly page: number } | { readon
           <span class="paep-pagination__text">{{ nextText() }}</span><svg paepIcon="chevron-end"></svg>
         }
         @default {
-          {{ target }}
+          {{ pageNumber(target) }}
         }
       }
     </ng-template>
@@ -99,6 +109,7 @@ type PaepPageEntry = { readonly kind: 'page'; readonly page: number } | { readon
 })
 export class PaepPagination {
   private readonly messages = inject(PAEP_MESSAGES);
+  private readonly locale = inject(LOCALE_ID);
   private readonly injector = inject(Injector);
 
   /** Current page (1-based). Two-way bindable; changes emit pageChange. */
@@ -119,13 +130,14 @@ export class PaepPagination {
   protected readonly navLabel = computed(() => this.label() || this.messages['paep.pagination.label']);
   protected readonly previousText = computed(() => this.previousLabel() || this.messages['paep.pagination.previous']);
   protected readonly nextText = computed(() => this.nextLabel() || this.messages['paep.pagination.next']);
-  protected readonly previousName = computed(() => this.messages['paep.pagination.previousPage']);
-  protected readonly nextName = computed(() => this.messages['paep.pagination.nextPage']);
+  // A consumer override of the visible text also becomes the accessible name, so the name contains the label (WCAG 2.5.3).
+  protected readonly previousName = computed(() => this.previousLabel() || this.messages['paep.pagination.previousPage']);
+  protected readonly nextName = computed(() => this.nextLabel() || this.messages['paep.pagination.nextPage']);
   protected readonly summaryText = computed(() =>
-    paepFormat(this.messages['paep.pagination.summary'], { page: this.current(), pageCount: this.count() }),
+    paepFormat(this.messages['paep.pagination.summary'], { page: this.current(), pageCount: this.count() }, this.locale),
   );
   protected readonly compactText = computed(() =>
-    paepFormat(this.messages['paep.pagination.compact'], { page: this.current(), pageCount: this.count() }),
+    paepFormat(this.messages['paep.pagination.compact'], { page: this.current(), pageCount: this.count() }, this.locale),
   );
 
   /** First, last and current ± 1; a gap replaces two or more skipped pages (a single skipped page is shown). */
@@ -145,8 +157,13 @@ export class PaepPagination {
     return out;
   });
 
+  /** Visible page number in the active locale's digits and grouping. */
+  protected pageNumber(p: number): string {
+    return new Intl.NumberFormat(this.locale).format(p);
+  }
+
   protected pageName(p: number): string {
-    return paepFormat(this.messages[p === this.current() ? 'paep.pagination.currentPage' : 'paep.pagination.page'], { page: p });
+    return paepFormat(this.messages[p === this.current() ? 'paep.pagination.currentPage' : 'paep.pagination.page'], { page: p }, this.locale);
   }
 
   protected go(target: number): void {

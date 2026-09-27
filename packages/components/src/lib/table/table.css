@@ -80,7 +80,7 @@ thead th {
 tbody tr:last-child > * {
   border-block-end: 0;
 }
-.paep-table__num {
+:is(th, td).paep-table__num {
   font-variant-numeric: tabular-nums lining-nums;
   text-align: end;
   white-space: nowrap;
@@ -151,9 +151,6 @@ dt {
 dd {
   margin: 0;
 }
-dd.paep-table__num {
-  text-align: start;
-}
 .paep-table__foot {
   border-block-start: 1px solid var(--paep-color-border-subtle);
 }
@@ -165,7 +162,6 @@ dd.paep-table__num {
 .paep-table__region--scroll .paep-table__head {
   position: sticky;
   inset-inline-start: 0;
-  box-sizing: border-box;
   max-inline-size: var(--_viewport, 100%);
 }
 .paep-table__region--scroll :is(th, td):first-child {
@@ -188,6 +184,7 @@ dd.paep-table__num {
     white-space: normal;
   }
   .paep-table__toggle {
+    margin-inline: calc(var(--paep-space-2) * -1);
     justify-content: center;
     inline-size: var(--paep-density-control-height);
     padding: 0;

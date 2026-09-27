@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  LOCALE_ID,
+  computed,
+  inject,
+  input,
+} from '@angular/core';
 import { PAEP_MESSAGES, paepFormat } from '../messages/messages';
 
 /**
@@ -34,6 +41,7 @@ import { PAEP_MESSAGES, paepFormat } from '../messages/messages';
 export class PaepProgress {
   private static nextId = 0;
   private readonly messages = inject(PAEP_MESSAGES);
+  private readonly locale = inject(LOCALE_ID);
   protected readonly id = `paep-progress-${PaepProgress.nextId++}`;
 
   /** Visible label naming the operation (required: a percentage without a label is prohibited). */
@@ -58,9 +66,9 @@ export class PaepProgress {
   protected readonly valueDisplay = computed(() => {
     if (this.valueText()) return this.valueText();
     if (this.mode() === 'step') {
-      return paepFormat(this.messages['paep.progress.step'], { step: this.clampedValue(), total: this.effectiveMax() });
+      return paepFormat(this.messages['paep.progress.step'], { step: this.clampedValue(), total: this.effectiveMax() }, this.locale);
     }
-    return paepFormat(this.messages['paep.progress.percent'], { value: this.clampedValue() / this.effectiveMax() });
+    return paepFormat(this.messages['paep.progress.percent'], { value: this.clampedValue() / this.effectiveMax() }, this.locale);
   });
   protected readonly inProgressText = computed(() => this.inProgressLabel() || this.messages['paep.common.inProgress']);
 }

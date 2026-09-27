@@ -299,7 +299,6 @@
         "tooling/governance/baseline-registry.json",
         "tooling/governance/negative-baseline-governance.mjs",
         "tooling/verification/ib0-wp05-ci-policy.json",
-        "tooling/verification/negative-ib0-wp05.mjs",
         "tooling/verification/verify-ib0-wp05.mjs",
         "work-packages/IB2-FOUNDATION-COMPONENTS/"
       ],

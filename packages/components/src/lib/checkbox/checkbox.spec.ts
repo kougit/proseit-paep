@@ -91,6 +91,7 @@ describe('PaepCheckbox', () => {
     expect(box.getAttribute('aria-readonly')).toBe('true');
     expect(getComputedStyle(box).borderTopStyle).toBe('dashed');
     await userEvent.click(box);
+    expect(box.checked).toBe(true);
     box.focus();
     await userEvent.keyboard(' ');
     expect(box.checked).toBe(true);

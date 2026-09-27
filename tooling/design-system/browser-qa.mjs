@@ -13,6 +13,8 @@
  *   C1 computed styles match the approved tokens (brand primary, surfaces, focus ring)
  *   B1 a brand profile changes only the brand layer: every protected token keeps its approved value
  *   F1 keyboard focus shows the 2 px focus ring
+ *   O1 every overlay specimen (dialogs, drawers, popovers, the action-group More menu) is opened and its open
+ *      content passes axe-core, at 1440 and 320 CSS px
  *
  *   node tooling/design-system/browser-qa.mjs [--capture <dir>] [--json <file>] [--pages <regex>]
  * --capture writes full-page screenshots (CANDIDATE visual evidence; never self-approved).
@@ -63,16 +65,55 @@ export async function open(context, url) {
   return { page, errors };
 }
 
+/** Runs axe-core on the document, or on the first element matching `selector`. Returns violation strings. */
+export async function axeViolations(page, selector = null) {
+  if (!(await page.evaluate(() => 'axe' in window))) await page.addScriptTag({ path: AXE });
+  return page.evaluate(async ([tags, sel]) => {
+    const target = sel ? document.querySelector(sel) : document;
+    if (!target) return [`no element matches ${sel}`];
+    // eslint-disable-next-line no-undef
+    const r = await window.axe.run(target, { runOnly: { type: 'tag', values: tags }, resultTypes: ['violations'] });
+    return r.violations.map((v) => `${v.id} (${v.impact}): ${v.nodes.slice(0, 3).map((n) => n.target.join(' ')).join(' | ')}`);
+  }, [AXE_TAGS, selector]);
+}
+
+/** Overlay specimens opened by O1: [page, name of the button that opens it]. */
+export const OVERLAYS = [
+  ['/components/dialog', 'Delete Record 1'],
+  ['/components/dialog', 'Read the retention rules'],
+  ['/components/dialog', 'Rename depot'],
+  ['/components/dialog', 'Open right-to-left dialog'],
+  ['/components/drawer', 'Show Record 1 details'],
+  ['/components/drawer', 'Edit Record 1'],
+  ['/components/drawer', 'Open right-to-left drawer'],
+  ['/components/popover', 'About the Pending status'],
+  ['/components/popover', 'Related records'],
+  ['/components/popover', 'More actions'],
+  ['/components/popover', 'Retention details'],
+  ['/components/action-group', 'More actions'],
+];
+const OPEN_OVERLAY = 'dialog[open], :popover-open';
+
+/**
+ * O1 for one overlay: presses the named button, requires an open dialog or popover, then runs axe-core on the
+ * open overlay. `mutate` (negative suite only) runs after opening. Returns problems (strings).
+ */
+export async function auditOverlay(page, name, mutate = null) {
+  await page.getByRole('button', { name, exact: true }).locator('visible=true').first().click();
+  try {
+    await page.waitForSelector(OPEN_OVERLAY, { timeout: 5000 });
+  } catch {
+    return ['nothing opened'];
+  }
+  await page.waitForTimeout(400);
+  if (mutate) await page.evaluate(mutate);
+  return axeViolations(page, OPEN_OVERLAY);
+}
+
 /** A1-A4 on an open page. Returns problems (strings). */
 export async function auditPage(page, errors) {
   const p = [];
-  await page.addScriptTag({ path: AXE });
-  const axe = await page.evaluate(async (tags) => {
-    // eslint-disable-next-line no-undef
-    const r = await window.axe.run(document, { runOnly: { type: 'tag', values: tags }, resultTypes: ['violations'] });
-    return r.violations.map((v) => `${v.id} (${v.impact}): ${v.nodes.slice(0, 3).map((n) => n.target.join(' ')).join(' | ')}`);
-  }, AXE_TAGS);
-  for (const v of axe) p.push(`A1 axe ${v}`);
+  for (const v of await axeViolations(page)) p.push(`A1 axe ${v}`);
   const layout = await page.evaluate(() => ({
     scroll: document.documentElement.scrollWidth,
     client: document.documentElement.clientWidth,
@@ -183,6 +224,15 @@ export async function globalChecks(browser, base, tokens) {
       if (!s.btn) p.push('Tab never reached a paepButton');
       else if (s.style === 'none' || s.width !== '2px' || s.color !== 'rgb(45, 79, 209)') p.push(`focus ring ${s.style} ${s.width} ${s.color}`);
     });
+  });
+  await check('O1', 'Open overlays (dialogs, drawers, popovers, the More menu) pass axe-core at 1440 and 320 CSS px', async (p) => {
+    for (const width of [1440, 320]) {
+      for (const [pth, name] of OVERLAYS) {
+        await withPage(`${base}${pth}`, { viewport: { width, height: width === 320 ? 720 : 900 } }, async (page) => {
+          for (const v of await auditOverlay(page, name)) p.push(`${width}px ${pth} "${name}": ${v}`);
+        });
+      }
+    }
   });
   return out;
 }

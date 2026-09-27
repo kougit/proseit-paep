@@ -83,3 +83,20 @@ progress:indeterminate:dir(rtl) {
 :host-context([data-paep-motion='reduce']) .paep-progress__value--reduced {
   display: inline;
 }
+/* Forced colours: keep the track outline and the fill visible with system colours. */
+@media (forced-colors: active) {
+  progress {
+    forced-color-adjust: none;
+    border: 1px solid CanvasText;
+    background-color: Canvas;
+  }
+  progress::-webkit-progress-value {
+    background: Highlight;
+  }
+  progress::-moz-progress-bar {
+    background: Highlight;
+  }
+  progress:indeterminate {
+    background-image: linear-gradient(Highlight, Highlight);
+  }
+}

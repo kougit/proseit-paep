@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, booleanAttribute, computed, inject, input, model } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  LOCALE_ID,
+  booleanAttribute,
+  computed,
+  inject,
+  input,
+  model,
+} from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { PaepIcon } from '@proseit/paep-foundation';
 import { PaepCardHeadingLevel } from '../card/card';
@@ -21,6 +30,7 @@ let nextPanelId = 0;
 })
 export class PaepPanel {
   private readonly messages = inject(PAEP_MESSAGES);
+  private readonly locale = inject(LOCALE_ID);
 
   /** Title text (the section's accessible name). */
   readonly heading = input.required<string>();
@@ -38,7 +48,7 @@ export class PaepPanel {
   protected readonly errorsId = `paep-panel-${nextPanelId++}-errors`;
   protected readonly collapsed = computed(() => this.collapsible() && !this.expanded());
   protected readonly errorText = computed(() =>
-    paepFormat(this.messages['paep.form.containsErrors'], { count: this.errorCount() }),
+    paepFormat(this.messages['paep.form.containsErrors'], { count: this.errorCount() }, this.locale),
   );
 
   protected toggle(): void {

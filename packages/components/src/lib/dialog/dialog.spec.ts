@@ -238,6 +238,33 @@ describe('PaepDialog', () => {
     expect(foot.bottom).toBeLessThanOrEqual(rect.bottom + 1);
   });
 
+  it('makes an overflowing body a focusable region named by the title, and locks page scroll while open', async () => {
+    const shortOpen = async () => {
+      await openFromInvoker();
+      return dialog().querySelector('.paep-modal__body') as HTMLElement;
+    };
+    let body = await shortOpen();
+    expect(body.hasAttribute('tabindex')).toBe(false);
+    expect(body.hasAttribute('role')).toBe(false);
+    expect(document.documentElement.style.overflow).toBe('hidden');
+    await userEvent.keyboard('{Escape}');
+    await settle(fixture);
+    expect(document.documentElement.style.overflow).toBe('');
+    host.long.set(true);
+    host.destructive.set(false);
+    body = await shortOpen();
+    expect(body.getAttribute('tabindex')).toBe('0');
+    expect(body.getAttribute('role')).toBe('region');
+    expect(body.getAttribute('aria-labelledby')).toBe(dialog().getAttribute('aria-labelledby'));
+    body.focus();
+    await userEvent.keyboard('{PageDown}');
+    await settle(fixture);
+    expect(body.scrollTop).toBeGreaterThan(0);
+    await userEvent.keyboard('{Escape}');
+    await settle(fixture);
+    expect(document.activeElement).toBe(q('#invoker'));
+  });
+
   it('insets 16 px and stacks the footer actions in DOM order below 600 px; lg becomes full screen', async () => {
     await page.viewport(375, 700);
     await openFromInvoker();

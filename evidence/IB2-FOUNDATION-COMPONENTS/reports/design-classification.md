@@ -34,5 +34,5 @@ The first draft of `WORK_PACKAGE.md` line 8 and `work-package.json` had the labe
 | DCH §24 status | IB2 position | Evidence |
 | --- | --- | --- |
 | APPROVED FOR IMPLEMENTATION | HOF-IB2-001 v1.1, PO/SA, 2026-09-27 | `handoff.manifest.yaml` `status`, `dchStatus`, `designApproval` |
-| IMPLEMENTED / PASS | Technical gates are run by Claude Code; `qa:design-system` 10/10 and `qa:design-system:negative` 47/47 PASS (technical) on the final code commit | `npm run qa:design-system` |
+| IMPLEMENTED / PASS | Technical gates are run by Claude Code; `qa:design-system` 10/10 and `qa:design-system:negative` 49/49 PASS (technical) on the final code commit | `npm run qa:design-system` |
 | ACCEPTED | Not claimed. PO/SA decision | ACCEPTANCE.md header |

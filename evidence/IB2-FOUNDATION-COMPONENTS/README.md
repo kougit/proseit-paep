@@ -38,6 +38,6 @@ Other records:
 | `logs/preflight/` | Pre-flight command logs |
 | `logs/verification-<commit>/` | Full verification on a fresh clone with a clean `npm ci`: every command and its exit code, lockfile hash before and after, tree status after install and after the run (`summary.txt`). The newest folder is for the final code commit; the earlier folder is kept as history |
 | `visual/` | 120 full-page captures (40 pages at 1440, 834 and 320 CSS px) and 36 open-overlay captures (12 overlays × 3 viewports). CANDIDATE baselines; none is self-approved |
-| `review/PO-SA-GOVERNANCE-DIFF.txt` | **Not committed.** The PO/SA governance diff for `.github/**`, `tooling/verification/**` and `tooling/governance/**` (base and head SHAs, inventory, modes, hashes, full unified diff, explanations and CI timing). It is kept out of git on purpose (`review/` is untracked) |
+| `review/PO-SA-GOVERNANCE-DIFF.txt` | **Not committed.** The PO/SA governance diff for `.github/**`, `tooling/verification/**` and `tooling/governance/**` (base and head SHAs, inventory, modes, hashes, full unified diff, explanations and CI timing). It is kept out of git on purpose (`review/` is untracked). Add `evidence/IB2-FOUNDATION-COMPONENTS/review/` to `.git/info/exclude` before running local gates, because `qa:baseline` counts any untracked file as a change |
 
 Design: `docs/architecture/IB2-FOUNDATION-COMPONENTS-DESIGN.md`. Work-package records: `work-packages/IB2-FOUNDATION-COMPONENTS/` (WORK_PACKAGE, ACCEPTANCE, TRACEABILITY, ACCEPTANCE_REPORT, work-package.json).

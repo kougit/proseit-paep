@@ -1,6 +1,6 @@
 # IB2-FOUNDATION-COMPONENTS — UI Laboratory Coverage (IB2-AC13)
 
-Measured on the final code commit (`logs/verification-6dc71cc/`) on 2026-09-27 from `apps/ui-lab/src/app/app.routes.ts`, `specimens/registry.ts`, `specimens/specimen-index.ts`, `lab/specimen-page.ts`, `pages/*.ts|html` and each specimen's `*_META`. Status: PASS (technical) for S07 (`qa:design-system` 10/10 and `qa:design-system:negative` 47/47). Browser-gate results are not re-run here.
+Measured on the final code commit (`logs/verification-6dc71cc/`) on 2026-09-27 from `apps/ui-lab/src/app/app.routes.ts`, `specimens/registry.ts`, `specimens/specimen-index.ts`, `lab/specimen-page.ts`, `pages/*.ts|html` and each specimen's `*_META`. Status: PASS (technical) for S07 (`qa:design-system` 10/10 and `qa:design-system:negative` 49/49). Browser-gate results are not re-run here.
 
 ## 1. Routes
 

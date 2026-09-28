@@ -45,6 +45,11 @@ const gate = (g) => {
   return { status: r.status, out: `${r.stdout || ''}${r.stderr || ''}` };
 };
 
+function angularJsonInCandidateScope() {
+  const reg = JSON.parse(fs.readFileSync(path.join(copy, 'tooling/governance/baseline-registry.json'), 'utf8'));
+  return reg.generations.some((g) => g.status === 'CANDIDATE' && (g.authorisedScope || []).includes('angular.json'));
+}
+
 const cases = [
   ['P00', 'positive control: unmutated copy passes the provenance gate', [], 'provenance', null],
   ['I01', 'components job dropped from the gate needs', [[WORKFLOW, replace('      - components\n      - accessibility\n', '      - accessibility\n')]], 'provenance', [/FAIL W12/]],
@@ -61,7 +66,9 @@ const cases = [
   ['I13', 'responsive/visual browser gate removed from the policy and the workflow together', [[POLICY, jsonEdit((o) => { o.requiredCommands.accessibility = o.requiredCommands.accessibility.filter((c) => c !== 'npm run qa:accessibility'); })], [WORKFLOW, (t) => { const a = t.indexOf('      - name: IB2 axe-core'); const b = t.indexOf('      - name: IB2 accessibility negative suite'); if (a < 0 || b < 0) throw new Error('anchor not found'); return t.slice(0, a) + t.slice(b); }]], 'provenance', [/FAIL W11/, /IB2 command "npm run qa:accessibility" dropped from accessibility/]],
   ['I14', 'component test command removed from the policy and the workflow together', [[POLICY, jsonEdit((o) => { o.requiredCommands.components = o.requiredCommands.components.filter((c) => c !== 'npm run test:components'); })], [WORKFLOW, (t) => { const a = t.indexOf('      - name: IB2 foundation and component behaviour tests'); const b = t.indexOf('      - name: ', a + 10); if (a < 0 || b < 0) throw new Error('anchor not found'); return t.slice(0, a) + t.slice(b); }]], 'provenance', [/FAIL W11/, /IB2 command "npm run test:components" dropped from components/]],
   ['I15', 'candidate scope bypass: a governed file outside the generation 4 scope changed', [['tooling/architecture-boundaries/check-boundaries.mjs', (t) => `${t}// drift\n`]], 'governance', [/FAIL W07/, /FAIL W26/, /unauthorised change: tooling\/architecture-boundaries/]],
-  ['I09', 'angular.json changed beyond the ui-lab test target (WP03 V06 bound)', [['angular.json', jsonEdit((o) => { o.projects['ui-lab'].architect.build.options.sourceMap = true; })]], 'regression', [/FAIL W20/, /FAIL W21/, /V06 outside/]],
+  // While a CANDIDATE holds angular.json in its scope, WP02's protected-path finding (V17) is bounded and only W20/W21
+  // fail; once no open CANDIDATE scope holds it (after promotion, or a later work package without it), W22 fails too.
+  ['I09', 'angular.json changed beyond the ui-lab test target (WP03 V06 bound)', [['angular.json', jsonEdit((o) => { o.projects['ui-lab'].architect.build.options.sourceMap = true; })]], 'regression', [/FAIL W20/, /FAIL W21/, ...(angularJsonInCandidateScope() ? [] : [/FAIL W22/]), /V06 outside/]],
 ];
 
 const results = [];

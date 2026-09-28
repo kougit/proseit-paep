@@ -109,6 +109,23 @@ Round 2 result: 19 items checked, 19 VERIFIED, 0 not fixed. No regression: form 
 
 While closing the findings, the gates gained the §18 negatives that were still missing: S10 and N35 (clickable non-interactive element); K1 and B11 (keyboard trap); O1 dismissal and B13 (focus lost after dismissal); U1 and B14 (status by colour alone); B12 and B15 (reduced motion); S07 state coverage and N36 (required lab state removed); and I12–I15 with the W11 IB2 command floor (job skipped, commands dropped from the policy and the workflow together, candidate scope bypass). `negative-test-report.md` maps every §18 item to its case.
 
-## 5. Q10 evidence completeness
+## 5. Q10 evidence completeness and acceptance rehearsal (lane E)
 
-See the section appended below after the evidence-completeness lane completes.
+A separate reviewer traced all 27 traceability rows and IB2-AC01–AC24 to their gates, logs and files on `f2d4fba`, checked about 40 concrete claims against the code and logs, and verified every negative case ID. It also rehearsed acceptance, the `--no-ff` merge and the generation 4 promotion in a scratch clone, running the gates at each point.
+
+| ID | Sev | Finding | Disposition | Proof of fix |
+| --- | --- | --- | --- | --- |
+| Q10-1 | High | After promotion, `qa:ib2:ci-negative` case I09 failed (15/16): with no open CANDIDATE holding `angular.json`, W22 also fails, and the case expected exactly W20/W21. `PAEP / components` would have gone red on main after promotion (like D-IB1-01) | Fixed: I09 expects W22 as well whenever no open CANDIDATE scope holds `angular.json` | Re-rehearsed in a scratch clone: accept, merge, `promote --generation 4`, then `qa:baseline` 13/13 (active G4) and `qa:ib2:ci-negative` 16/16; also 16/16 on the CANDIDATE state |
+| Q10-2 | Medium | AC22 marked PASS before the governance diff existed | Fixed: AC22 is PENDING until the diff is generated after the final CI run | ACCEPTANCE_REPORT, TRACEABILITY |
+| Q10-3 | Medium | AC23 and "24/24" claimed before exact-head CI passed | Fixed: 22/24 with AC22/AC23 PENDING until CI | ACCEPTANCE_REPORT, work-package.json, acceptance-readiness |
+| Q10-4 | Medium | "54 required pairs" claimed from tests that recompute 30 | Fixed: S02 now recomputes all 54 required pairs of `token-values.md` §1.7 from token values and fails if any colour is not a token value or a pair misses its target | `qa:design-system` S02 "54 contrast pairs meet their targets"; negative N48 |
+| Q10-5 | Medium | Q10 claimed complete while running | Fixed: this section | — |
+| Q10-6 | Low | No negative imports a domain package | Fixed: N47 (`@proseit/paep-domain-sales`) | S05 |
+| Q10-7 | Low | ACCEPTANCE.md AC04 cited `qa:design-system:negative` | Fixed: verification column names the browser B1 check and negative B08 (criterion text unchanged) | ACCEPTANCE.md |
+| Q10-8 | Low | An untracked governance diff inside the working tree makes a local `qa:baseline` fail | Documented: the file is never committed; exclude it locally (`.git/info/exclude`) before running local gates. CI is unaffected | README |
+| Q10-9, Q10-10 | Info | Cross-reference and section-number slips | Fixed | negative-test-report, accessibility-report |
+| Q10-11 | Info | `evidence/design-handoff/HOF-IB2-001/` is not in the G4 `protectedRecords`; S01 hash pins protect it | PO/SA awareness | — |
+
+Other results: 23/23 §24 items present (CI report and timing complete after CI); every §18 case exists and targets its check; nothing claims ACCEPTED or promoted; no secret in the committed evidence or logs; nothing under `review/` is tracked. In the rehearsal every other suite passed at every point, including `qa:ib0-wp05:negative` 100/100 and `qa:accessibility` after promotion.
+
+**Open after Q10: High 0, Medium 0.**

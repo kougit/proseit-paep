@@ -6,7 +6,7 @@ Status: PASS (technical). Every suite below runs in CI and was re-run on the fin
 
 | Suite (command) | CI job | Cases | What a case does |
 | --- | --- | --- | --- |
-| Design-system static gate (`qa:design-system:negative`) | `PAEP / components` | 46 negatives + 1 positive control (N01–N46, C00) | Mutates one file in a scratch copy and requires the named S check (S01–S10) to fail |
+| Design-system static gate (`qa:design-system:negative`) | `PAEP / components` | 48 negatives + 1 positive control (N01–N48, C00) | Mutates one file in a scratch copy and requires the named S check (S01–S10) to fail |
 | Browser accessibility gate (`qa:accessibility:negative`) | `PAEP / accessibility` | 15 negatives + 1 positive control (B01–B15, B00) | Injects one defect into a served ui-lab page and requires A1–A4, O1, U1, K1, M1 or the protected-token check to report it |
 | IB2 CI governance (`qa:ib2:ci-negative`) | `PAEP / components` | 15 negatives + 1 positive control (I01–I15, P00) | Mutates the workflow, CI policy, lockfile, licence review, angular.json or a governed file in a scratch git copy and requires the named `verify-ib0-wp05` W checks, and only those, to fail |
 | Baseline governance (`qa:baseline:negative`) | `PAEP / negative-ci` | 92 negatives + 13 positives | Inherited from IB1; unchanged by IB2 |
@@ -19,9 +19,10 @@ Behaviour tests are also mutation-checked: the independent reviewers ran 58 muta
 
 | §18 required negative | Case(s) | Gate that fails |
 | --- | --- | --- |
+| Contrast below target (IB2-AC05) | N48 (approved colour changed in the token catalogue) | S02 |
 | Raw design literals | N07 hex colour, N08 named colour, N11 raw px, N12 raw shadow, N13 duration literal, N27/N37 styles array and quote styles, N28/N38 host bindings, N43 template binding, N44 `.style` in code, N39–N42 unchecked style channels | S04 |
 | Deep import | N14 (package deep import), N31 (CSS `@import` of a package path) | S05 |
-| Product/domain dependency | N15 (later-milestone package, including `@proseit/paep-domain-*`), N26 (double-quoted), N45 (template-literal dynamic import), N46 (computed dynamic import) | S05 |
+| Product/domain dependency | N15 (`@proseit/frappe-sdk`), N47 (`@proseit/paep-domain-sales`), N26 (double-quoted), N45 (template-literal dynamic import), N46 (computed dynamic import) | S05 |
 | Frappe dependency | N15 and N45 (`@proseit/frappe-sdk`; any specifier containing `frappe` or `erpnext` is rejected) | S05 |
 | Inaccessible clickable non-interactive element | N35 (`(click)` on a `<div>` in a component template) | S10 |
 | Missing accessible name | B02 (button), B04 (form control), B09 (button inside an open dialog) | A1 / O1 (axe) |
@@ -40,11 +41,11 @@ Behaviour tests are also mutation-checked: the independent reviewers ran 58 muta
 
 ## 3. Negative cases added by IB2
 
-- Design system: N01–N46. N26–N34 were added for round-1 findings, N35–N36 for §18, and N37–N46 for round-2 finding R2-1/R2-2.
+- Design system: N01–N48. N26–N34 were added for round-1 findings, N35–N36 and N47 for §18, N48 for the Q10 contrast finding, and N37–N46 for round-2 findings R2-1/R2-2.
 - Browser: B01–B15. B09–B10 were added for Q3 (O1), and B11–B15 for §18.
 - CI governance: I01–I15. I10–I11 were added for C1, I05 for C2, and I12–I15 for §18.
 
-No inherited case was removed, skipped or weakened: the baseline and WP05 suites are unchanged (`git diff d33ab91 -- tooling/governance/negative-baseline-governance.mjs tooling/verification/negative-ib0-wp05.mjs` shows no change to the WP05 suite and only the 9-line fixture reset in the baseline suite, recorded in lane P/C/G/Q finding G1 as weakening no case).
+No inherited case was removed, skipped or weakened: the baseline and WP05 suites are unchanged (`git diff d33ab91 -- tooling/governance/negative-baseline-governance.mjs tooling/verification/negative-ib0-wp05.mjs` shows no change to the WP05 suite and only the 9-line fixture reset in the baseline suite, reviewed by lane P/C/G/Q in round 1 (it resets the fixture's non-script package.json fields and changes no case or expectation)).
 
 ## 4. Known gaps
 

@@ -50,6 +50,7 @@ export const HANDOFF = {
   manifestSha256: '24e7049dd675e2025ae75c099637fd3f0a9eb9f24ff2958d1ce88607d040ac53',
   contentKeys: 'evidence/design-handoff/HOF-IB2-001/design-export/content-keys.md',
   componentSpecs: 'evidence/design-handoff/HOF-IB2-001/design-export/component-specs.md',
+  tokenValues: 'evidence/design-handoff/HOF-IB2-001/design-export/foundation/token-values.md',
   // Every retained handoff file (design export and requirements source) is pinned by sha256 in this list.
   root: 'evidence/design-handoff/HOF-IB2-001',
   fileHashes: 'evidence/design-handoff/HOF-IB2-001/HANDOFF-FILES.sha256',
@@ -223,6 +224,7 @@ export function runChecks(fsx) {
   // S02: generated token files match the approved values (no drift, no hand edits).
   {
     const p = [];
+    let contrastPairs = 0;
     try {
       const src = JSON.parse(fsx.read(SOURCE));
       if (!fsx.exists(CSS_OUT) || fsx.read(CSS_OUT) !== renderCss(src)) p.push(`${CSS_OUT} differs from the generator output`);
@@ -232,8 +234,27 @@ export function runChecks(fsx) {
       const impl = [...(fsx.exists(bpFile) ? fsx.read(bpFile) : '').matchAll(/\{ name: '(\w+)', minEm: ([\d.]+), minPx: (\d+), columns: \d+ \}/g)].map((m) => `${m[1]}:${m[3]}:${m[2]}`);
       const approved = (src.breakpoints || []).map((b) => `${b.name}:${b.minPx}:${b.minPx / 16}`);
       if (JSON.stringify(impl) !== JSON.stringify(approved)) p.push(`PAEP_BREAKPOINTS ${impl.join(', ')} != approved ${approved.join(', ')}`);
+      // Contrast evidence (token-values.md §1.7): recompute every row from its colours. Each colour must be a value of the
+      // generated catalogue; every required pair (PASS) must meet its target and every PROHIBITED pair must fail it.
+      const tv = fsx.exists(HANDOFF.tokenValues) ? fsx.read(HANDOFF.tokenValues) : '';
+      const section = tv.slice(tv.indexOf('### 1.7'), tv.indexOf('## 2.'));
+      const values = new Set([...fsx.read(TS_OUT).matchAll(/"value":\s*"(#[0-9A-Fa-f]{6})"/g)].map((m) => m[1].toUpperCase()));
+      const lum = (hex) => { const c = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((x) => (x <= 0.04045 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4)); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
+      const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05); };
+      let required = 0;
+      for (const m of section.matchAll(/^\| ([^|]+) \| `(#[0-9A-Fa-f]{6})` \| `(#[0-9A-Fa-f]{6})` \| [\d.]+:1 \| (?:≥ ([\d.]+):1|n\/a) \| ([^|]+) \|$/gm)) {
+        const [, pair, fg, bg, need, result] = m;
+        const r = ratio(fg.toUpperCase(), bg.toUpperCase());
+        if (/^PASS/.test(result.trim())) {
+          required++;
+          for (const hex of [fg, bg]) if (!values.has(hex.toUpperCase())) p.push(`contrast pair "${pair}": ${hex} is not a token value`);
+          if (r + 1e-9 < Number(need)) p.push(`contrast pair "${pair}": ${r.toFixed(2)}:1 < ${need}:1`);
+        } else if (/^PROHIBITED/.test(result.trim()) && r >= Number(need)) p.push(`prohibited pair "${pair}" unexpectedly passes`);
+      }
+      if (required !== 54) p.push(`${required} required contrast pairs parsed from token-values.md §1.7, expected 54`);
+      contrastPairs = required;
     } catch (e) { p.push(String(e.message || e)); }
-    add('S02', 'Token stylesheet and catalogue equal the generator output from the approved token values; PAEP_BREAKPOINTS equals the approved breakpoints', p, 'no drift');
+    add('S02', 'Token stylesheet and catalogue equal the generator output from the approved token values; PAEP_BREAKPOINTS equals the approved breakpoints; every required contrast pair of the handoff is recomputed from token values and meets its WCAG target', p, `no drift; ${contrastPairs} contrast pairs meet their targets`);
   }
 
   // S03: component census and public API.

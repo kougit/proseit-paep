@@ -6,11 +6,11 @@
 
 | Area | State | Evidence |
 | --- | --- | --- |
-| Acceptance criteria IB2-AC01–AC24 | 24/24 PASS (technical) | `work-packages/IB2-FOUNDATION-COMPONENTS/ACCEPTANCE_REPORT.md` |
+| Acceptance criteria IB2-AC01–AC24 | 22/24 PASS (technical); AC22 (governance diff) and AC23 (exact-head CI) PENDING | `work-packages/IB2-FOUNDATION-COMPONENTS/ACCEPTANCE_REPORT.md` |
 | Independent QA Q1–Q10 | High 0, Medium 0 open, after two rounds and the Q10 evidence lane | `independent-qa.md` |
 | §18 negatives | Every item mapped to a case that fails its gate | `negative-test-report.md` §2 |
 | Full verification | Fresh clone, clean `npm ci`, every suite exit 0, lockfile unchanged | `logs/verification-6dc71cc/summary.txt` |
-| GitHub Actions | Exact-head run with `PAEP / gate` success | `ci-report.md` |
+| GitHub Actions | PENDING: `PAEP / negative-ci` timed out on the first run (RR14 flag; PO/SA decision) | `ci-report.md` |
 | Generation 4 | CANDIDATE, exact scope, generation 3 unchanged, self-promotion refused | `qa:baseline` 13/13 |
 | Visual captures | Recaptured on the final code; CANDIDATE, not self-approved | `visual-conformance.md`; `visual/` |
 

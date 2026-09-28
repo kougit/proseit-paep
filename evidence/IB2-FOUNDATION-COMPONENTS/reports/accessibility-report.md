@@ -60,7 +60,7 @@ Open accessibility findings: **High 0, Medium 0**.
 
 ## 4. Contrast and non-colour cues
 
-- Token pairs: the handoff's 54 required pairs pass (`token-values.md` §7). Foundation contrast tests recompute the protected pairs from the generated catalogue.
+- Token pairs: the handoff records its 54 required pairs as passing (`token-values.md` §1.7). The foundation contrast tests recompute 30 of them (22 text, 8 non-text) from the generated catalogue, and the brand validator enforces the brand pairs for any override.
 - Brand validator rules 1–7 reject any profile that would lower the approved contrast (see `token-governance.md`).
 - Status is never conveyed by colour alone: the badge and alert carry an icon and text. Invalid fields carry an icon, text and `aria-invalid`.
 - Forced colours: the focus ring, the tabs selected indicator, progress and the field control box use system colours.

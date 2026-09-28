@@ -1,6 +1,6 @@
 # IB2-FOUNDATION-COMPONENTS — Clean-Room and Provenance (IB2-AC15)
 
-Measured on the final code commit (`logs/verification-6dc71cc/`) on 2026-09-27. Status: PASS (technical) for S06 (`qa:design-system` 10/10 and `qa:design-system:negative` 47/47). Provenance approvals are the PO/SA's and are quoted from the register, not made here.
+Measured on the final code commit (`logs/verification-6dc71cc/`) on 2026-09-27. Status: PASS (technical) for S06 (`qa:design-system` 10/10 and `qa:design-system:negative` 49/49). Provenance approvals are the PO/SA's and are quoted from the register, not made here.
 
 ## 1. Rules applied
 

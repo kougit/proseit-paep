@@ -1,6 +1,6 @@
 # IB2-FOUNDATION-COMPONENTS — Token Governance (authorising instruction §13; IB2-AC03, AC04, AC05, AC06, AC09, AC12)
 
-Measured on the final code commit (`logs/verification-6dc71cc/`) on 2026-09-27. Every mechanism below was read in the code named in the row. Status: PASS (technical) for `qa:design-system` 10/10 and `qa:design-system:negative` 47/47. The browser gate, its negative suite (16 cases, B00–B15) and the component tests are cited by check and case ID; they were not re-run here.
+Measured on the final code commit (`logs/verification-6dc71cc/`) on 2026-09-27. Every mechanism below was read in the code named in the row. Status: PASS (technical) for `qa:design-system` 10/10 and `qa:design-system:negative` 49/49. The browser gate, its negative suite (16 cases, B00–B15) and the component tests are cited by check and case ID; they were not re-run here.
 
 The twelve rows are the twelve items of the authorising instruction §13 ("Verify that: …"), quoted as given by the PO/SA instruction text relayed to this session.
 

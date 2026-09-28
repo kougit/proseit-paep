@@ -38,7 +38,7 @@ The value equals `HANDOFF.manifestSha256` in `tooling/design-system/design-syste
 
 Result on the working tree: `PASS S01 … manifest sha256 24e7049dd675…, APPROVED_FOR_IMPLEMENTATION; 176 handoff files pinned`. An independent `sha256sum -c HANDOFF-FILES.sha256` also passes, and the 174 `design-export/` lines equal the hashes in §5 below.
 
-| Negative (`qa:design-system:negative`, 47/47 PASS) | Mutation | Required result |
+| Negative (`qa:design-system:negative`, 49/49 PASS) | Mutation | Required result |
 | --- | --- | --- |
 | N01 | manifest status set to `DRAFT` | S01 fails |
 | N03 | `token-values.candidate.json` primary `#24364B` → `#24364C` | S01 fails (file no longer matches its pin); S02 must fail with it |

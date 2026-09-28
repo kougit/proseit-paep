@@ -6,7 +6,7 @@
 | --- | --- |
 | Technical status | PASS (local gates, independent QA, GitHub Actions in `evidence/IB2-FOUNDATION-COMPONENTS/reports/ci-report.md`) |
 | Acceptance status | NOT ACCEPTED (awaiting PO/SA) |
-| Acceptance criteria | 24/24 PASS (technical) |
+| Acceptance criteria | 22/24 PASS (technical); AC22 and AC23 PENDING the final CI run |
 | High findings open | 0 |
 | Medium findings open | 0 |
 | Design handoff | HOF-IB2-001 v1.1, APPROVED_FOR_IMPLEMENTATION (PO/SA, 2026-09-27) |
@@ -26,7 +26,7 @@ Code commit verified: see `evidence/IB2-FOUNDATION-COMPONENTS/logs/verification-
 | IB2-AC02 | PASS | `qa:design-system` S01 (manifest and 176 handoff files pinned); `reports/design-handoff-reference.md`, `design-classification.md` |
 | IB2-AC03 | PASS | S02 (generator `--check`, breakpoints); foundation tests; `reports/token-catalogue.md` |
 | IB2-AC04 | PASS | brand validator tests (rules 1–7, Navy/Gold, synthetic petrol, rejected yellow); browser B1; negative B08; `reports/token-governance.md` |
-| IB2-AC05 | PASS | foundation contrast tests (54 required pairs) |
+| IB2-AC05 | PASS | `qa:design-system` S02 recomputes all 54 required pairs of `token-values.md` §1.7 from token values (negative N48); foundation contrast tests recompute 30 pairs from the catalogue |
 | IB2-AC06 | PASS | browser M1 (media and simulation); component tests; negatives B12, B15 |
 | IB2-AC07 | PASS | S03, S05; `qa:architecture` 0 violations; `reports/component-catalogue.md`, `component-api.md` |
 | IB2-AC08 | PASS | `test:components` 254 tests in 27 spec files; zero-test guard; S09; `reports/unit-component-test-report.md`, `keyboard-focus.md` |
@@ -42,9 +42,9 @@ Code commit verified: see `evidence/IB2-FOUNDATION-COMPONENTS/logs/verification-
 | IB2-AC18 | PASS | `qa:ib0-wp05` full; WP05 negatives; `qa:ib1`; `qa:ib1:negative`; `qa:baseline`; `qa:baseline:negative` (logs) |
 | IB2-AC19 | PASS | `qa:types`; both production builds; `qa:architecture`; W04; Angular 22.1.8 / TypeScript 6.0.3 |
 | IB2-AC20 | PASS | `qa:baseline` 13/13 (active G3, candidate G4 NOT ACCEPTED); W07, W26; negative I15 |
-| IB2-AC21 | PASS | `reports/independent-qa.md`: rounds 1 and 2, Q10; High 0, Medium 0 |
-| IB2-AC22 | PASS | `evidence/IB2-FOUNDATION-COMPONENTS/review/PO-SA-GOVERNANCE-DIFF.txt` (untracked, delivered separately) |
-| IB2-AC23 | PASS | `reports/ci-report.md` |
+| IB2-AC21 | PASS | `reports/independent-qa.md`: rounds 1 and 2 and Q10 (with its fixes); High 0, Medium 0 |
+| IB2-AC22 | PENDING (generated after the final CI run) | `evidence/IB2-FOUNDATION-COMPONENTS/review/PO-SA-GOVERNANCE-DIFF.txt` (untracked, delivered separately) |
+| IB2-AC23 | PENDING CI | `reports/ci-report.md` |
 | IB2-AC24 | PASS | W02, W08; WP02–WP04 secret scans |
 
 ## 2. Decisions recorded for the PO/SA

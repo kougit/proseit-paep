@@ -6,7 +6,8 @@
  * Proves that the IB2 jobs are mandatory and that the IB2 bounds in verify-ib0-wp05.mjs are narrow. Each case
  * mutates a disposable scratch copy of the repository (with .git; node_modules hard-linked read-only, as in
  * negative-ib0-wp05.mjs), commits nothing in the real tree, and runs the provenance gate, expecting the stated
- * failure. P00 is the positive control on the unmutated copy.
+ * failure. P00 is the positive control on the unmutated copy. I16–I23 cover the PAEP / negative-ci split (PO/SA,
+ * 2026-09-28); I23 runs the WP05 negative harness itself with an invalid --part.
  *   node tooling/design-system/ci-governance-negative.mjs            every case (CI)
  */
 import { spawnSync } from 'node:child_process';
@@ -41,7 +42,8 @@ snapshot();
 const replace = (from, to) => (t) => { if (!t.includes(from)) throw new Error(`mutation anchor not found: ${from.slice(0, 60)}`); return t.replace(from, to); };
 const jsonEdit = (fn) => (t) => { const o = JSON.parse(t); fn(o); return `${JSON.stringify(o, null, 2)}\n`; };
 const gate = (g) => {
-  const r = spawnSync(process.execPath, ['tooling/verification/verify-ib0-wp05.mjs', '--gate', g], { cwd: copy, encoding: 'utf8', env, maxBuffer: 256 * 1024 * 1024 });
+  const cmd = g === 'part-x' ? ['tooling/verification/negative-ib0-wp05.mjs', '--part', 'x'] : ['tooling/verification/verify-ib0-wp05.mjs', '--gate', g];
+  const r = spawnSync(process.execPath, cmd, { cwd: copy, encoding: 'utf8', env, maxBuffer: 256 * 1024 * 1024 });
   return { status: r.status, out: `${r.stdout || ''}${r.stderr || ''}` };
 };
 
@@ -53,7 +55,7 @@ function angularJsonInCandidateScope() {
 const cases = [
   ['P00', 'positive control: unmutated copy passes the provenance gate', [], 'provenance', null],
   ['I01', 'components job dropped from the gate needs', [[WORKFLOW, replace('      - components\n      - accessibility\n', '      - accessibility\n')]], 'provenance', [/FAIL W12/]],
-  ['I02', 'accessibility job dropped from the gate needs and MANDATORY_JOBS', [[WORKFLOW, (t) => replace('      - accessibility\n      - build-reference-app\n', '      - build-reference-app\n')(t).replace(' accessibility build-reference-app', ' build-reference-app')]], 'provenance', [/FAIL W12/]],
+  ['I02', 'accessibility job dropped from the gate needs and MANDATORY_JOBS', [[WORKFLOW, (t) => replace('      - accessibility\n      - negative-ci-b\n', '      - negative-ci-b\n')(t).replace(' accessibility negative-ci-b', ' negative-ci-b')]], 'provenance', [/FAIL W12/]],
   ['I03', 'component tests replaced by a no-op in the workflow', [[WORKFLOW, replace('          npm run test:components 2>&1', '          echo skipped 2>&1')]], 'provenance', [/FAIL W11/]],
   ['I04', 'axe-core browser gate removed from the accessibility job', [[WORKFLOW, replace('          npm run qa:accessibility 2>&1', '          echo skipped 2>&1')]], 'provenance', [/FAIL W11/]],
   ['I05', 'PAEP / negative-ci timeout raised from 20 to 30 minutes (RR14)', [[WORKFLOW, (t) => { const i = t.indexOf('  negative-ci:\n'); const j = t.indexOf('timeout-minutes: 20', i); if (i < 0 || j < 0) throw new Error('negative-ci timeout anchor not found'); return `${t.slice(0, j)}timeout-minutes: 30${t.slice(j + 'timeout-minutes: 20'.length)}`; }]], 'provenance', [/FAIL W11/, /negative-ci timeout-minutes 30/]],
@@ -65,6 +67,16 @@ const cases = [
   ['I12', 'accessibility job silently skipped (if: false on the job)', [[WORKFLOW, replace('    name: PAEP / accessibility\n', '    name: PAEP / accessibility\n    if: ${{ false }}\n')]], 'provenance', [/FAIL W11/, /FAIL W13/]],
   ['I13', 'responsive/visual browser gate removed from the policy and the workflow together', [[POLICY, jsonEdit((o) => { o.requiredCommands.accessibility = o.requiredCommands.accessibility.filter((c) => c !== 'npm run qa:accessibility'); })], [WORKFLOW, (t) => { const a = t.indexOf('      - name: IB2 axe-core'); const b = t.indexOf('      - name: IB2 accessibility negative suite'); if (a < 0 || b < 0) throw new Error('anchor not found'); return t.slice(0, a) + t.slice(b); }]], 'provenance', [/FAIL W11/, /IB2 command "npm run qa:accessibility" dropped from accessibility/]],
   ['I14', 'component test command removed from the policy and the workflow together', [[POLICY, jsonEdit((o) => { o.requiredCommands.components = o.requiredCommands.components.filter((c) => c !== 'npm run test:components'); })], [WORKFLOW, (t) => { const a = t.indexOf('      - name: IB2 foundation and component behaviour tests'); const b = t.indexOf('      - name: ', a + 10); if (a < 0 || b < 0) throw new Error('anchor not found'); return t.slice(0, a) + t.slice(b); }]], 'provenance', [/FAIL W11/, /IB2 command "npm run test:components" dropped from components/]],
+  // IB2 CI-performance split (PO/SA, 2026-09-28): either half of the WP05 negative suite removed, skipped, weakened or
+  // left out of PAEP / gate fails; the harness refuses any part other than a or b.
+  ['I16', 'negative-ci-b dropped from the gate needs and MANDATORY_JOBS', [[WORKFLOW, (t) => replace('      - accessibility\n      - negative-ci-b\n', '      - accessibility\n')(t).replace(' accessibility negative-ci-b build-reference-app', ' accessibility build-reference-app')]], 'provenance', [/FAIL W12/]],
+  ['I17', 'negative-ci-b removed from the policy, the workflow and the gate together', [[POLICY, jsonEdit((o) => { o.mandatoryJobs = o.mandatoryJobs.filter((j) => j.id !== 'negative-ci-b'); delete o.requiredCommands['negative-ci-b']; })], [WORKFLOW, (t) => { const a = t.indexOf('  # IB2 CI-performance split'); const b = t.indexOf('  regression:\n', a); if (a < 0 || b < 0) throw new Error('negative-ci-b anchor not found'); return replace('      - accessibility\n      - negative-ci-b\n', '      - accessibility\n')(t.slice(0, a) + t.slice(b)).replace(' accessibility negative-ci-b build-reference-app', ' accessibility build-reference-app'); }]], 'provenance', [/FAIL W11/, /IB2 mandatory job negative-ci-b removed or renamed/, /accepted commands of negative-ci changed/]],
+  ['I18', 'negative-ci-b silently skipped (if: false on the job)', [[WORKFLOW, replace('    name: PAEP / negative-ci-b\n', '    name: PAEP / negative-ci-b\n    if: ${{ false }}\n')]], 'provenance', [/FAIL W11/, /FAIL W13/]],
+  ['I19', 'both halves run part a (part b never runs), in the policy and the workflow together', [[POLICY, jsonEdit((o) => { o.requiredCommands['negative-ci-b'] = ['npm run qa:ib0-wp05:negative -- --part a']; })], [WORKFLOW, replace('npm run qa:ib0-wp05:negative -- --part b 2>&1', 'npm run qa:ib0-wp05:negative -- --part a 2>&1')]], 'provenance', [/FAIL W11/, /IB2 command "npm run qa:ib0-wp05:negative -- --part b" dropped from negative-ci-b/]],
+  ['I20', 'PAEP / negative-ci-b timeout raised from 20 to 30 minutes (RR14)', [[WORKFLOW, (t) => { const i = t.indexOf('  negative-ci-b:\n'); const j = t.indexOf('timeout-minutes: 20', i); if (i < 0 || j < 0) throw new Error('negative-ci-b timeout anchor not found'); return `${t.slice(0, j)}timeout-minutes: 30${t.slice(j + 'timeout-minutes: 20'.length)}`; }]], 'provenance', [/FAIL W11/, /negative-ci-b timeout-minutes 30/]],
+  ['I21', 'part a dropped from negative-ci in the policy and the workflow together', [[POLICY, jsonEdit((o) => { o.requiredCommands['negative-ci'] = o.requiredCommands['negative-ci'].filter((c) => !c.includes('--part a')); })], [WORKFLOW, (t) => { const a = t.indexOf('      - name: CI-control negative tests, part a of 2'); const b = t.indexOf('      - name: ', a + 10); if (a < 0 || b < 0) throw new Error('part a anchor not found'); return t.slice(0, a) + t.slice(b); }]], 'provenance', [/FAIL W11/, /accepted commands of negative-ci changed/]],
+  ['I22', 'part b replaced by a no-op in the workflow', [[WORKFLOW, replace('          npm run qa:ib0-wp05:negative -- --part b 2>&1', '          echo skipped 2>&1')]], 'provenance', [/FAIL W11/]],
+  ['I23', 'the WP05 negative harness run with an unknown part (fails closed before any case)', [], 'part-x', [/FAIL --part must be a or b/]],
   ['I15', 'candidate scope bypass: a governed file outside the generation 4 scope changed', [['tooling/architecture-boundaries/check-boundaries.mjs', (t) => `${t}// drift\n`]], 'governance', [/FAIL W07/, /FAIL W26/, /unauthorised change: tooling\/architecture-boundaries/]],
   // While a CANDIDATE holds angular.json in its scope, WP02's protected-path finding (V17) is bounded and only W20/W21
   // fail; once no open CANDIDATE scope holds it (after promotion, or a later work package without it), W22 fails too.
@@ -75,20 +87,22 @@ const results = [];
 for (const [id, name, edits, g, expect] of cases) {
   const saved = new Map();
   let r;
+  let snapped = false;
   try {
     for (const [f, fn] of edits) {
       const p = path.join(copy, f);
       saved.set(p, fs.readFileSync(p));
       fs.writeFileSync(p, fn(fs.readFileSync(p, 'utf8')));
     }
-    if (edits.length) snapshot();
+    if (edits.length) { snapshot(); snapped = true; }
     r = gate(g);
   } catch (e) {
     r = { status: null, out: `harness error: ${e.stack || e}` };
   } finally {
     if (edits.length) {
       for (const [p, c] of saved) fs.writeFileSync(p, c);
-      git('reset', '-q', '--hard', 'HEAD~1');
+      // Drop only this case's own snapshot: a mutation that throws before its snapshot must not reset the base copy.
+      if (snapped) git('reset', '-q', '--hard', 'HEAD~1');
     }
   }
   // A failure case passes only when exactly the expected W checks fail (nothing else is broken) with the expected text.
@@ -98,7 +112,7 @@ for (const [id, name, edits, g, expect] of cases) {
     ? r.status !== 0 && r.status !== null && expect.every((re) => re.test(r.out)) && JSON.stringify(failedW) === JSON.stringify(wantW)
     : r.status === 0 && failedW.length === 0;
   results.push({ id, name, gate: g, expected: expect ? `exit != 0 matching ${expect.map(String).join(', ')}` : 'exit 0', exit: r.status, pass });
-  const fails = r.out.split('\n').filter((l) => /^FAIL W/.test(l)).map((l) => (process.argv.includes('--verbose') ? l : l.slice(0, 220)));
+  const fails = r.out.split('\n').filter((l) => /^FAIL W/.test(l) || /^harness error/.test(l)).map((l) => (process.argv.includes('--verbose') ? l : l.slice(0, 220)));
   console.log(`${pass ? 'PASS' : 'FAIL'} ${id} ${name} (gate ${g}, exit ${r.status})${fails.length ? `\n    ${fails.join('\n    ')}` : ''}`);
 }
 fs.rmSync(scratch, { recursive: true, force: true });

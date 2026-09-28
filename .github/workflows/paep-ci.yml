@@ -188,10 +188,10 @@ jobs:
       - name: PAEP setup
         uses: ./.github/actions/paep-setup
 
-      - name: CI-control negative tests (qa:ib0-wp05:negative)
+      - name: CI-control negative tests, part a of 2 (qa:ib0-wp05:negative --part a)
         run: |
           set -euo pipefail
-          npm run qa:ib0-wp05:negative 2>&1 | tee "$PAEP_EVIDENCE_DIR/negative-ci-1.log"
+          npm run qa:ib0-wp05:negative -- --part a 2>&1 | tee "$PAEP_EVIDENCE_DIR/negative-ci-1.log"
 
       - name: Baseline-governance positive, negative and promotion tests (qa:baseline:negative)
         run: |
@@ -203,6 +203,36 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: paep-negative-ci-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/paep-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
+  # IB2 CI-performance split (PO/SA, 2026-09-28): the other half of the unchanged IB0-WP05 negative suite runs in
+  # parallel with PAEP / negative-ci, so neither job carries the whole suite on the critical path (RR14).
+  negative-ci-b:
+    name: PAEP / negative-ci-b
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out (full history for baseline comparisons)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: PAEP setup
+        uses: ./.github/actions/paep-setup
+
+      - name: CI-control negative tests, part b of 2 (qa:ib0-wp05:negative --part b)
+        run: |
+          set -euo pipefail
+          npm run qa:ib0-wp05:negative -- --part b 2>&1 | tee "$PAEP_EVIDENCE_DIR/negative-ci-b-1.log"
+
+      - name: Upload evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: paep-negative-ci-b-attempt-${{ github.run_attempt }}
           path: ${{ runner.temp }}/paep-evidence/
           if-no-files-found: warn
           retention-days: 30
@@ -487,6 +517,7 @@ jobs:
       - runtime-config-negative
       - components
       - accessibility
+      - negative-ci-b
       - build-reference-app
       - build-ui-lab
     runs-on: ubuntu-24.04
@@ -496,7 +527,7 @@ jobs:
       - name: Evaluate every mandatory job result
         env:
           NEEDS_JSON: ${{ toJSON(needs) }}
-          MANDATORY_JOBS: governance provenance architecture strictness negative-architecture negative-ci regression contracts runtime-config runtime-config-negative components accessibility build-reference-app build-ui-lab
+          MANDATORY_JOBS: governance provenance architecture strictness negative-architecture negative-ci regression contracts runtime-config runtime-config-negative components accessibility negative-ci-b build-reference-app build-ui-lab
         run: |
           set -euo pipefail
           fail=0

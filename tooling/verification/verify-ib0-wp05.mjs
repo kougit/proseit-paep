@@ -362,7 +362,20 @@ const POLICY_FLOOR_FREE = ['policyVersion', 'workPackage', 'note', 'mandatoryJob
 const IB2_REQUIRED_JOBS = {
   components: { name: 'PAEP / components', commands: ['npm run test:components', 'npm run qa:design-system', 'npm run qa:design-system:negative', 'npm run qa:ib2:ci-negative'] },
   accessibility: { name: 'PAEP / accessibility', commands: ['npm run build:ui-lab', 'npm run qa:accessibility', 'npm run qa:accessibility:negative'] },
+  'negative-ci-b': { name: 'PAEP / negative-ci-b', commands: ['npm run qa:ib0-wp05:negative -- --part b'] },
 };
+// IB2 CI-performance split (PO/SA, 2026-09-28; RR14): the accepted negative-ci command `npm run qa:ib0-wp05:negative`
+// may be replaced only by exactly its two halves, part a in negative-ci (keeping every other accepted command in order)
+// and part b in the mandatory negative-ci-b job, so the two parallel jobs run exactly the accepted suite.
+const WP05_NEGATIVE = 'npm run qa:ib0-wp05:negative';
+const NEGATIVE_CI_SPLIT = { 'negative-ci': `${WP05_NEGATIVE} -- --part a`, 'negative-ci-b': `${WP05_NEGATIVE} -- --part b` };
+function splitNegativeCi(accepted) {
+  const expected = (accepted || []).map((c) => (c === WP05_NEGATIVE ? NEGATIVE_CI_SPLIT['negative-ci'] : c));
+  return (accepted || []).includes(WP05_NEGATIVE)
+    && JSON.stringify(policy.requiredCommands?.['negative-ci']) === JSON.stringify(expected)
+    && JSON.stringify(policy.requiredCommands?.['negative-ci-b']) === JSON.stringify([NEGATIVE_CI_SPLIT['negative-ci-b']])
+    && policy.mandatoryJobs?.some((x) => x.id === 'negative-ci-b' && x.name === 'PAEP / negative-ci-b');
+}
 function acceptedPolicyFloor() {
   const jobs = []; const other = [];
   for (const [id, r] of Object.entries(IB2_REQUIRED_JOBS)) {
@@ -377,7 +390,8 @@ function acceptedPolicyFloor() {
   for (const j of a.mandatoryJobs) {
     const c = policy.mandatoryJobs.find((x) => x.id === j.id);
     if (!c || c.name !== j.name) jobs.push(`accepted mandatory job ${j.id} removed or renamed`);
-    if (JSON.stringify(policy.requiredCommands?.[j.id]) !== JSON.stringify(a.requiredCommands?.[j.id])) jobs.push(`accepted commands of ${j.id} changed`);
+    const same = JSON.stringify(policy.requiredCommands?.[j.id]) === JSON.stringify(a.requiredCommands?.[j.id]);
+    if (!same && !(j.id === 'negative-ci' && splitNegativeCi(a.requiredCommands?.[j.id]))) jobs.push(`accepted commands of ${j.id} changed`);
   }
   for (const k of new Set([...Object.keys(a), ...Object.keys(policy)])) {
     if (!POLICY_FLOOR_FREE.includes(k) && JSON.stringify(a[k]) !== JSON.stringify(policy[k])) other.push(`policy ${k} differs from the accepted baseline ${BASE.slice(0, 7)}`);
@@ -400,7 +414,7 @@ if (want('W11') && wf) {
     if (j['runs-on'] !== policy.workflow.runner) p.push(`${mj.id} runs-on ${j['runs-on']}`);
     if (!Number.isInteger(j['timeout-minutes']) || j['timeout-minutes'] < 1 || j['timeout-minutes'] > 30) p.push(`${mj.id} timeout-minutes ${j['timeout-minutes']}`);
     // RR14 (accepted LOW): PAEP / negative-ci keeps its 20-minute timeout until the PO/SA authorises a change.
-    if (mj.id === 'negative-ci' && j['timeout-minutes'] !== 20) p.push(`negative-ci timeout-minutes ${j['timeout-minutes']} (RR14 fixes it at 20)`);
+    if ((mj.id === 'negative-ci' || mj.id === 'negative-ci-b') && j['timeout-minutes'] !== 20) p.push(`${mj.id} timeout-minutes ${j['timeout-minutes']} (RR14 fixes it at 20)`);
     const steps = Array.isArray(j.steps) ? j.steps : [];
     const [co, su, ...rest] = steps;
     const up = rest.pop();
@@ -416,7 +430,7 @@ if (want('W11') && wf) {
     if (JSON.stringify(cmds) !== JSON.stringify(policy.requiredCommands[mj.id])) p.push(`${mj.id}: commands ${JSON.stringify(cmds)} != ${JSON.stringify(policy.requiredCommands[mj.id])}`);
     for (const r of runs) if (r.split('\n').filter(Boolean).length !== 2) p.push(`${mj.id}: run step has extra lines`);
   }
-  add('W11', 'Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention; PAEP / negative-ci keeps its 20-minute timeout (RR14)',
+  add('W11', 'Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention; PAEP / negative-ci and PAEP / negative-ci-b (its split half) keep the 20-minute timeout (RR14)',
     p.length === 0, p.length ? p.join('; ') : `${mandatoryIds.length} parallel jobs: ${mandatoryIds.join(', ')}`);
 }
 

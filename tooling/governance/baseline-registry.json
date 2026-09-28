@@ -299,6 +299,7 @@
         "tooling/governance/baseline-registry.json",
         "tooling/governance/negative-baseline-governance.mjs",
         "tooling/verification/ib0-wp05-ci-policy.json",
+        "tooling/verification/negative-ib0-wp05.mjs",
         "tooling/verification/verify-ib0-wp05.mjs",
         "work-packages/IB2-FOUNDATION-COMPONENTS/"
       ],
@@ -310,7 +311,7 @@
       "acceptedTree": null,
       "acceptance": null,
       "fingerprints": null,
-      "notes": "CANDIDATE only. Prepared by Claude Code under the PO/SA instruction authorising IB2 (project thread, 2026-09-26T20:30Z), the PO/SA design approval of HOF-IB2-001 v1.1 (2026-09-27) and the PO/SA dependency approval of vitest, @vitest/browser-playwright, playwright and axe-core (2026-09-27). policyChange is true because IB2 adds mandatory CI jobs and bounds the IB0-WP05 regression for IB2 entry points, the approved dependency change and the ui-lab test target (.github/ and tooling/verification/). It becomes ACCEPTED only through the promote command after PO/SA acceptance and merge."
+      "notes": "CANDIDATE only. Prepared by Claude Code under the PO/SA instruction authorising IB2 (project thread, 2026-09-26T20:30Z), the PO/SA CI-performance remediation authorising the negative-ci split (2026-09-28T05:02Z), the PO/SA design approval of HOF-IB2-001 v1.1 (2026-09-27) and the PO/SA dependency approval of vitest, @vitest/browser-playwright, playwright and axe-core (2026-09-27). policyChange is true because IB2 adds mandatory CI jobs and bounds the IB0-WP05 regression for IB2 entry points, the approved dependency change and the ui-lab test target (.github/ and tooling/verification/). It becomes ACCEPTED only through the promote command after PO/SA acceptance and merge."
     }
   ]
 }

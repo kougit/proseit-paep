@@ -44,6 +44,7 @@ const cases = [
   ['N19', 'S06', 'Angular favicon restored', [['apps/ui-lab/public/favicon.ico', 'x']], /favicon\.ico/],
   ['N20', 'S07', 'specimen removed', [['apps/ui-lab/src/app/specimens/pagination.specimen.ts', null]], /pagination: specimen file missing/],
   ['N21', 'S07', 'specimen not registered', [['apps/ui-lab/src/app/specimens/registry.ts', (t) => t.replace(/import \{[^}]*\} from '\.\/tabs\.specimen';\n/, '')]], /tabs: not registered/],
+  ['N36', 'S07', 'required UI-lab state removed from a specimen', [['apps/ui-lab/src/app/specimens/checkbox.specimen.ts', (t) => t.replace(/\n\s*'indeterminate[^\n]*/, '')]], /checkbox: required state "indeterminate" not documented/],
   ['N22', 'S07', 'specimen without accessibility notes', [['apps/ui-lab/src/app/specimens/alert.specimen.ts', (t) => t.replace(/\baccessibility:/, 'a11yNotes:')]], /alert: meta\.accessibility missing/],
   ['N23', 'S08', 'content key removed', [['packages/components/src/lib/messages/messages.ts', (t) => t.replace(/^\s+'paep\.table\.detailsFor':.*\n/m, '')]], /paep\.table\.detailsFor missing/],
   ['N24', 'S09', 'focused test', [['packages/components/src/lib/tabs/tabs.spec.ts', (t) => t.replace(/\bit\(/, 'it.only(')]], /focused or skipped/],

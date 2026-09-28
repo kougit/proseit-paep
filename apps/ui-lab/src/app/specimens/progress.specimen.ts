@@ -17,6 +17,8 @@ export const PROGRESS_META: LabSpecimenMeta = {
     'reduced-motion (indeterminate becomes a static hatched fill with "In progress"; determinate changes without transition)',
     'complete (the consumer replaces it with a success alert or status text)',
     'long-label (label wraps, value text moves below)',
+    'loading (= indeterminate)',
+    'narrow-width (unchanged)',
   ],
   keyboard: ['None: progress is not focusable.'],
   accessibility: [

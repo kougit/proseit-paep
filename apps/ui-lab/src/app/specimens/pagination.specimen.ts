@@ -21,6 +21,8 @@ export const PAGINATION_META: LabSpecimenMeta = {
     'selected (current page: aria-current="page", selected fill, 2 px indicator border, bold)',
     'long-label (Previous / Next wrap; numbers never wrap)',
     'narrow-width (compact variant)',
+    'active/pressed (neutral active fill)',
+    'disabled (Previous / Next at the ends: aria-disabled, not removed)',
   ],
   keyboard: ['Tab: moves between Previous, page numbers and Next.', 'Enter (and Space on buttons): activates.'],
   accessibility: [

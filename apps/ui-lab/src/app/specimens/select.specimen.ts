@@ -22,6 +22,7 @@ export const SELECT_META: LabSpecimenMeta = {
     'invalid (2px error border via the field)',
     'long-label (closed control truncates; the platform list shows the full text)',
     'narrow-width (full width)',
+    'selected (platform-rendered option list)',
   ],
   keyboard: ['Native: Alt+ArrowDown or Space opens the platform list; arrow keys change the value.'],
   accessibility: [

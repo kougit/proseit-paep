@@ -49,6 +49,7 @@ export const HANDOFF = {
   manifest: 'evidence/design-handoff/HOF-IB2-001/handoff.manifest.yaml',
   manifestSha256: '24e7049dd675e2025ae75c099637fd3f0a9eb9f24ff2958d1ce88607d040ac53',
   contentKeys: 'evidence/design-handoff/HOF-IB2-001/design-export/content-keys.md',
+  componentSpecs: 'evidence/design-handoff/HOF-IB2-001/design-export/component-specs.md',
   // Every retained handoff file (design export and requirements source) is pinned by sha256 in this list.
   root: 'evidence/design-handoff/HOF-IB2-001',
   fileHashes: 'evidence/design-handoff/HOF-IB2-001/HANDOFF-FILES.sha256',
@@ -292,6 +293,11 @@ export function runChecks(fsx) {
   {
     const p = [];
     const reg = fsx.exists('apps/ui-lab/src/app/specimens/registry.ts') ? fsx.read('apps/ui-lab/src/app/specimens/registry.ts') : '';
+    // The handoff's component specs list the states per component, in the same order as COMPONENTS. Every state not
+    // marked "Not applicable" must be documented (by name, at the start of an entry) in the specimen's meta.states.
+    const specs = fsx.exists(HANDOFF.componentSpecs) ? fsx.read(HANDOFF.componentSpecs).split(/^### /m).slice(1) : [];
+    if (specs.length !== COMPONENTS.length) p.push(`component-specs.md has ${specs.length} component sections, expected ${COMPONENTS.length}`);
+    let requiredStates = 0;
     for (const [id, family] of COMPONENTS) {
       const f = `apps/ui-lab/src/app/specimens/${id}.specimen.ts`;
       if (!fsx.exists(f)) { p.push(`${id}: specimen file missing`); continue; }
@@ -302,8 +308,16 @@ export function runChecks(fsx) {
       for (const field of ['purpose', 'variants', 'states', 'keyboard', 'accessibility', 'responsive', 'rtl', 'contentKeys', 'unitTests']) if (!new RegExp(`\\b${field}:`).test(t)) p.push(`${id}: meta.${field} missing`);
       if (!/<lab-specimen-page\b/.test(t) || !/<lab-example\b/.test(t)) p.push(`${id}: no specimen page or live example`);
       if (!/from '@proseit\/paep-components'/.test(t)) p.push(`${id}: specimen does not use the public entry point`);
+      const row = specs[COMPONENTS.findIndex((c) => c[0] === id)]?.match(/^\| States \| (.*) \|$/m)?.[1] ?? '';
+      const required = [...row.matchAll(/\*\*([^*]+)\*\*:\s*([^<]*)/g)].filter((m) => !/^Not applicable/.test(m[2].trim())).map((m) => m[1].trim().toLowerCase());
+      if (!required.length) p.push(`${id}: no states found in component-specs.md`);
+      const open = t.search(/\bstates:\s*\[/);
+      const entries = [];
+      if (open >= 0) for (const m of t.slice(open).matchAll(/'((?:[^'\\]|\\.)*)'|\]/g)) { if (m[0] === ']') break; entries.push(m[1].toLowerCase()); }
+      for (const s of required) if (!entries.some((e) => e.startsWith(s))) p.push(`${id}: required state "${s}" not documented in the specimen`);
+      requiredStates += required.length;
     }
-    add('S07', 'UI laboratory: every one of the 25 components has a registered specimen page with purpose, variants, states, keyboard, accessibility, responsive, RTL, content keys and its unit-test reference', p, `${COMPONENTS.length} specimens registered`);
+    add('S07', 'UI laboratory: every one of the 25 components has a registered specimen page with purpose, variants, states, keyboard, accessibility, responsive, RTL, content keys and its unit-test reference; every applicable handoff state documented', p, `${COMPONENTS.length} specimens registered; ${requiredStates} required states documented`);
   }
 
   // S08: content keys: the message catalogue is exactly the handoff's key list.

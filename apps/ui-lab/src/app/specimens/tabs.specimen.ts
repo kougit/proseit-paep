@@ -20,6 +20,7 @@ export const TABS_META: LabSpecimenMeta = {
     'long-label (wraps within 18 rem; no truncation)',
     'narrow-width (list scrolls inside its own box; edge scroll buttons)',
     'invalid (error icon + "Contains 2 errors" text in the tab)',
+    'loading (the panel content handles loading; the tab itself is unchanged)',
   ],
   keyboard: [
     'Tab: moves into the list to the selected tab, then into the panel.',

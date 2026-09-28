@@ -20,6 +20,7 @@ export const LIST_META: LabSpecimenMeta = {
     'focus-visible (links and actions)',
     'long-label (primary and secondary text wrap; meta max 45% width)',
     'narrow-width (meta moves below the text under 20 rem)',
+    'hover (not used: items are not interactive)',
   ],
   keyboard: ['Tab: reaches links and item actions only.', 'Enter / Space: activates an action.'],
   accessibility: [

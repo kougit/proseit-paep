@@ -22,6 +22,8 @@ export const CHECKBOX_META: LabSpecimenMeta = {
     'read-only (dashed border; checked shows a secondary-text fill; not toggleable; value still submitted)',
     'invalid (2px error border + message)',
     'long-label (wraps; the box aligns with the first line)',
+    'narrow-width (unchanged)',
+    'selected (= checked)',
   ],
   keyboard: ['Space: toggles.', 'Read-only: Space and clicks do nothing; focus still works.'],
   accessibility: [

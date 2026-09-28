@@ -19,6 +19,7 @@ export const POPOVER_META: LabSpecimenMeta = {
     'long-label (content wraps; max-height 60% of the viewport, then inner scroll)',
     'focus-visible (trigger and content controls)',
     'disabled (trigger disabled)',
+    'hover (hover never opens a popover)',
   ],
   keyboard: [
     'Enter / Space on the trigger: toggles.',

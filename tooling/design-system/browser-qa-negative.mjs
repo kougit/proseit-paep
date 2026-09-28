@@ -4,12 +4,13 @@
  * a served ui-lab page and requires auditPage() or the protected-token check to report it; a positive control
  * requires the unmutated page to pass. Proves the gate can fail: axe violations, overflow, console errors,
  * heading/landmark structure, a brand override of a protected token, and O1: a defect inside an open overlay,
- * and an overlay that fails to open; K1: a keyboard trap; M1: a motion duration left running under reduced motion.
+ * and an overlay that fails to open; K1: a keyboard trap; M1: a motion duration left running under reduced motion,
+ * and the reduced-motion rules removed; O1: focus lost after dismissal; U1: status by colour alone.
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { auditOverlay, auditPage, keyboardTrapProblems, launch, open, reducedMotionProblems, serve } from './browser-qa.mjs';
+import { auditOverlay, auditPage, dismissOverlayProblems, keyboardTrapProblems, launch, open, reducedMotionProblems, serve, statusCueProblems } from './browser-qa.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const tokens = [...fs.readFileSync(path.join(ROOT, 'packages/foundation/src/lib/tokens/token-catalogue.generated.ts'), 'utf8').matchAll(/^ {2}(\{.*\})/gm)].map((m) => JSON.parse(m[1]));
@@ -29,6 +30,9 @@ const cases = [
   ['B10', 'O1: overlay trigger that opens nothing', ['/components/dialog', 'Delete Record 1', null, true], /nothing opened/],
   ['B11', 'K1: control that swallows Tab (keyboard trap)', 'trap', /K1 keyboard trap/],
   ['B12', 'M1: motion duration left at 150 ms under reduced motion', 'motion', /--paep-motion-duration-base = 150ms/],
+  ['B13', 'O1: focus lost after a dialog is dismissed', 'focus-lost', /focus lost after dismissal/],
+  ['B14', 'U1: status badge shown by colour alone (icon hidden)', 'colour-only', /U1 paep-status-badge .*no visible icon/],
+  ['B15', 'M1: reduced-motion rules removed from the stylesheets', 'no-reduce-rule', /--paep-motion-duration-\w+ = [1-9]/],
 ];
 
 const server = await serve();
@@ -52,6 +56,24 @@ try {
         await page.goto(`${server.url}/foundations/motion`, { waitUntil: 'networkidle' });
         await page.addStyleTag({ content: ':root { --paep-motion-duration-base: 150ms !important; }' });
         problems = await reducedMotionProblems(page, tokens);
+      } else if (mutate === 'no-reduce-rule') {
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await page.goto(`${server.url}/foundations/motion`, { waitUntil: 'networkidle' });
+        await page.evaluate(() => {
+          const strip = (list) => { for (let i = list.cssRules.length - 1; i >= 0; i--) { const r = list.cssRules[i]; if (r.conditionText?.includes('prefers-reduced-motion')) list.deleteRule(i); else if (r.cssRules) strip(r); } };
+          for (const s of document.styleSheets) strip(s);
+        });
+        problems = await reducedMotionProblems(page, tokens);
+      } else if (mutate === 'focus-lost') {
+        await page.goto(`${server.url}/components/dialog`, { waitUntil: 'networkidle' });
+        problems = await auditOverlay(page, 'Delete Record 1');
+        problems.push(...(await dismissOverlayProblems(page, () => {
+          document.querySelector('dialog[open]').addEventListener('close', () => setTimeout(() => document.activeElement?.blur(), 0));
+        })));
+      } else if (mutate === 'colour-only') {
+        await page.goto(`${server.url}/components/status-badge`, { waitUntil: 'networkidle' });
+        await page.addStyleTag({ content: '.paep-status-badge > svg { display: none !important; }' });
+        problems = (await statusCueProblems(page)).problems;
       } else if (overlay) {
         // B10 removes the dialog element first, so pressing its trigger can open nothing.
         if (overlay[3]) await page.evaluate(() => document.querySelectorAll('paep-dialog').forEach((d) => d.remove()));

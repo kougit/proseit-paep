@@ -34,6 +34,7 @@ export const TABLE_META: LabSpecimenMeta = {
     'read-only (by nature)',
     'long-label (headers wrap below 40 rem; IDs break anywhere)',
     'narrow-width (priority columns move to the row detail)',
+    'hover (row hover is not used: rows are not interactive in IB2)',
   ],
   keyboard: [
     'Tab: reaches links, Details buttons and actions only.',

@@ -23,6 +23,7 @@ export const TEXTAREA_META: LabSpecimenMeta = {
     'dirty ("Unsaved change" meta text in the field)',
     'long content (vertical scroll inside the control)',
     'narrow-width (full width)',
+    'long-label (handled by the field wrapper)',
   ],
   keyboard: ['Native: Enter inserts a new line; Tab leaves the textarea.'],
   accessibility: [

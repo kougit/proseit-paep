@@ -13,9 +13,10 @@
  *   C1 computed styles match the approved tokens (brand primary, surfaces, focus ring)
  *   B1 a brand profile changes only the brand layer: every protected token keeps its approved value
  *   F1 keyboard focus shows the 2 px focus ring
+ *   U1 status never by colour alone: badges, alerts and field errors carry an icon and text
  *   K1 no keyboard trap: Tab keeps moving focus on every component page
  *   O1 every overlay specimen (dialogs, drawers, popovers, the action-group More menu) is opened and its open
- *      content passes axe-core, at 1440 and 320 CSS px
+ *      content passes axe-core, at 1440 and 320 CSS px; Escape then closes it and focus returns to its trigger
  *
  *   node tooling/design-system/browser-qa.mjs [--capture <dir>] [--json <file>] [--pages <regex>]
  * --capture writes full-page screenshots of every page and viewport captures of every open overlay (CANDIDATE
@@ -101,7 +102,9 @@ const OPEN_OVERLAY = 'dialog[open], :popover-open';
  * open overlay. `mutate` (negative suite only) runs after opening. Returns problems (strings).
  */
 export async function auditOverlay(page, name, mutate = null) {
-  await page.getByRole('button', { name, exact: true }).locator('visible=true').first().click();
+  const trigger = page.getByRole('button', { name, exact: true }).locator('visible=true').first();
+  await trigger.evaluate((el) => { el.dataset.o1Trigger = ''; });
+  await trigger.click();
   try {
     await page.waitForSelector(OPEN_OVERLAY, { timeout: 5000 });
   } catch {
@@ -110,6 +113,43 @@ export async function auditOverlay(page, name, mutate = null) {
   await page.waitForTimeout(400);
   if (mutate) await page.evaluate(mutate);
   return axeViolations(page, OPEN_OVERLAY);
+}
+
+/**
+ * O1 dismissal, after auditOverlay: Escape must close the overlay and return focus to the trigger that opened it
+ * (focus is never lost to the page). `mutate` (negative suite only) runs before Escape. Returns problems (strings).
+ */
+export async function dismissOverlayProblems(page, mutate = null) {
+  if (mutate) await page.evaluate(mutate);
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(400);
+  const state = await page.evaluate((sel) => ({
+    open: !!document.querySelector(sel),
+    onTrigger: document.activeElement?.hasAttribute('data-o1-trigger') ?? false,
+    active: document.activeElement ? `${document.activeElement.tagName.toLowerCase()}${document.activeElement.className ? `.${String(document.activeElement.className).split(' ')[0]}` : ''}` : 'none',
+  }), OPEN_OVERLAY);
+  if (state.open) return ['still open after Escape'];
+  return state.onTrigger ? [] : [`focus lost after dismissal: focus is on ${state.active}, not the trigger`];
+}
+
+/**
+ * U1 on an open page: every status badge, alert and field error shows a visible icon and visible text, so status is
+ * never communicated by colour alone (WCAG 1.4.1). Returns { count, problems }.
+ */
+export async function statusCueProblems(page) {
+  return page.evaluate(() => {
+    const problems = [];
+    const shown = (el) => { const r = el.getBoundingClientRect(); const s = getComputedStyle(el); return r.width > 0 && r.height > 0 && s.visibility !== 'hidden' && s.display !== 'none'; };
+    const items = [...document.querySelectorAll('.paep-status-badge, .paep-alert, .paep-field__error')].filter(shown);
+    for (const el of items) {
+      const icon = [...el.querySelectorAll(':scope > svg, :scope > .paep-alert__icon')].some(shown);
+      const text = (el.querySelector('.paep-status-badge__text, .paep-alert__body, span')?.textContent ?? '').trim();
+      const what = `${el.className.split(' ')[0]} "${(el.textContent ?? '').trim().slice(0, 30)}"`;
+      if (!icon) problems.push(`U1 ${what}: no visible icon (status by colour alone)`);
+      if (!text) problems.push(`U1 ${what}: no text`);
+    }
+    return { count: items.length, problems };
+  });
 }
 
 /** A1-A4 on an open page. Returns problems (strings). */
@@ -257,14 +297,29 @@ export async function globalChecks(browser, base, tokens, paths = []) {
       else if (s.style === 'none' || s.width !== '2px' || s.color !== 'rgb(45, 79, 209)') p.push(`focus ring ${s.style} ${s.width} ${s.color}`);
     });
   });
-  await check('O1', 'Open overlays (dialogs, drawers, popovers, the More menu) pass axe-core at 1440 and 320 CSS px', async (p) => {
+  await check('O1', 'Open overlays (dialogs, drawers, popovers, the More menu) pass axe-core at 1440 and 320 CSS px; Escape closes each and returns focus to its trigger', async (p) => {
     for (const width of [1440, 320]) {
       for (const [pth, name] of OVERLAYS) {
         await withPage(`${base}${pth}`, { viewport: { width, height: width === 320 ? 720 : 900 } }, async (page) => {
-          for (const v of await auditOverlay(page, name)) p.push(`${width}px ${pth} "${name}": ${v}`);
+          const found = await auditOverlay(page, name);
+          if (!found.includes('nothing opened')) found.push(...(await dismissOverlayProblems(page)));
+          for (const v of found) p.push(`${width}px ${pth} "${name}": ${v}`);
         });
       }
     }
+  });
+  await check('U1', 'Status is never colour alone: every visible status badge, alert and field error has an icon and text', async (p) => {
+    const pages = ['/components/status-badge', '/components/alert', '/components/field', '/components/table'];
+    let count = 0;
+    for (const pth of pages) {
+      await withPage(`${base}${pth}`, {}, async (page) => {
+        const r = await statusCueProblems(page);
+        count += r.count;
+        if (!r.count) p.push(`${pth}: no status element found`);
+        for (const x of r.problems) p.push(`${pth}: ${x}`);
+      });
+    }
+    if (count < 10) p.push(`only ${count} status elements checked`);
   });
   await check('K1', 'No keyboard trap: Tab moves focus on every component page (60 presses from the top, 1440 px)', async (p) => {
     const pages = paths.filter((x) => x.startsWith('/components/'));

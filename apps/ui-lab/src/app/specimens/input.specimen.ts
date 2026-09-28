@@ -26,6 +26,7 @@ export const INPUT_META: LabSpecimenMeta = {
     'read-only (dashed read-only border, value at full contrast)',
     'invalid (2px error border via the field wrapper or the invalid input)',
     'narrow-width (full width; adornments keep nowrap and the input shrinks)',
+    'long-label (handled by the field wrapper: label, help and error wrap)',
   ],
   keyboard: ['Native text entry keys; Tab moves on.'],
   accessibility: [

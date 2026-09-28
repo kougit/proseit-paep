@@ -24,6 +24,8 @@ export const ACTION_GROUP_META: LabSpecimenMeta = {
     'long-label (items wrap to a new row; nothing truncated)',
     'narrow-width (container < 30rem: primary + More)',
     'menu open',
+    'focus-visible (per item and on the More button)',
+    'active/pressed (per item)',
   ],
   keyboard: [
     'Tab: moves between visible items.',

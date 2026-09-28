@@ -1,0 +1,56 @@
+
+> @proseit/paep-workspace@0.0.0 qa:ib2:ci-negative
+> node tooling/design-system/ci-governance-negative.mjs
+
+PASS P00 positive control: unmutated copy passes the provenance gate (gate provenance, exit 0)
+PASS I01 components job dropped from the gate needs (gate provenance, exit 1)
+    FAIL W12 Aggregate gate "PAEP / gate" (gate, workflow and action policy byte-identical to the accepted baseline): needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the manda
+PASS I02 accessibility job dropped from the gate needs and MANDATORY_JOBS (gate provenance, exit 1)
+    FAIL W12 Aggregate gate "PAEP / gate" (gate, workflow and action policy byte-identical to the accepted baseline): needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the manda
+PASS I03 component tests replaced by a no-op in the workflow (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS I04 axe-core browser gate removed from the accessibility job (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS I05 PAEP / negative-ci timeout raised from 20 to 30 minutes (RR14) (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS I06 axe-core licence review row L5 removed (V15 bound requires it) (gate provenance, exit 1)
+    FAIL W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15, with only a
+PASS I07 a second MPL-2.0 package outside the reviewed set (V15 bound is axe-core only) (gate provenance, exit 1)
+    FAIL W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15, with only a
+PASS I08 axe-core moved to runtime scope (V15 bound is dev scope only) (gate provenance, exit 1)
+    FAIL W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15, with only a
+PASS I10 an unapproved dev dependency added with package.json and the lockfile (V13 bound is the four approved packages only) (gate provenance, exit 1)
+    FAIL W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15, with only a
+PASS I11 an approved package declared as a runtime dependency (V13 bound is dev scope only) (gate provenance, exit 1)
+    FAIL W16 WP02 supply-chain controls hold: running toolchain (V04/V05), .npmrc (V06), registry + sha512 lockfile provenance (V12), every install script denied and none unreviewed (V14), licences reviewed (V15, with only a
+PASS I12 accessibility job silently skipped (if: false on the job) (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+    FAIL W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — workflow.jobs.accessibility.if: expression 
+PASS I13 responsive/visual browser gate removed from the policy and the workflow together (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS I14 component test command removed from the policy and the workflow together (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS I16 negative-ci-b dropped from the gate needs and MANDATORY_JOBS (gate provenance, exit 1)
+    FAIL W12 Aggregate gate "PAEP / gate" (gate, workflow and action policy byte-identical to the accepted baseline): needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the manda
+PASS I17 negative-ci-b removed from the policy, the workflow and the gate together (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS I18 negative-ci-b silently skipped (if: false on the job) (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+    FAIL W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — workflow.jobs.negative-ci-b.if: expression 
+PASS I19 both halves run part a (part b never runs), in the policy and the workflow together (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS I20 PAEP / negative-ci-b timeout raised from 20 to 30 minutes (RR14) (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS I21 part a dropped from negative-ci in the policy and the workflow together (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS I22 part b replaced by a no-op in the workflow (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS I23 the WP05 negative harness run with an unknown part (fails closed before any case) (gate part-x, exit 1)
+PASS I15 candidate scope bypass: a governed file outside the generation 4 scope changed (gate governance, exit 1)
+    FAIL W07 Every path changed since the accepted baseline is inside the CANDIDATE's authorised scope (B11); no lint/format/unit-test configuration outside that scope — unauthorised change: tooling/architecture-boundaries/c
+    FAIL W26 Controlled baseline governance: the registry is valid and append-only, the active ACCEPTED generation is a PO/SA-accepted mainline merge, immutable sources and accepted records are unchanged, and every change si
+PASS I09 angular.json changed beyond the ui-lab test target (WP03 V06 bound) (gate regression, exit 1)
+    FAIL W20 IB0-WP04 regression (full, with both builds): every check passes except V07 (only entry points filled inside the CANDIDATE scope), V16/V17 (only accepted-history or in-scope package/path changes) and V22/V23 (re
+    FAIL W21 IB0-WP03 regression: every check passes except the accepted V05/V08 (WP04 tsconfig change, exact), V09 (only entry points filled inside the CANDIDATE scope), V06 (only the ui-lab test target in angular.json) and
+
+PAEP IB2 CI-governance negative suite: PASS (24/24)

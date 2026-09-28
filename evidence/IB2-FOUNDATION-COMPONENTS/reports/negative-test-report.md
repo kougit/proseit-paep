@@ -1,6 +1,6 @@
 # IB2-FOUNDATION-COMPONENTS — Negative Test Report
 
-Status: PASS (technical). Every suite below runs in CI and was re-run on the final commit; the logs are in `evidence/IB2-FOUNDATION-COMPONENTS/logs/verification-6dc71cc/` (see `ci-report.md` for the commit). A negative case passes only when the gate it targets fails with the expected message; each suite also has a positive control that must pass unmutated.
+Status: PASS (technical). Every suite below runs in CI and was re-run on the final commit; the logs are in `evidence/IB2-FOUNDATION-COMPONENTS/logs/verification-1b8882a/` (see `ci-report.md` for the commit). A negative case passes only when the gate it targets fails with the expected message; each suite also has a positive control that must pass unmutated.
 
 ## 1. Suites
 
@@ -8,9 +8,9 @@ Status: PASS (technical). Every suite below runs in CI and was re-run on the fin
 | --- | --- | --- | --- |
 | Design-system static gate (`qa:design-system:negative`) | `PAEP / components` | 48 negatives + 1 positive control (N01–N48, C00) | Mutates one file in a scratch copy and requires the named S check (S01–S10) to fail |
 | Browser accessibility gate (`qa:accessibility:negative`) | `PAEP / accessibility` | 15 negatives + 1 positive control (B01–B15, B00) | Injects one defect into a served ui-lab page and requires A1–A4, O1, U1, K1, M1 or the protected-token check to report it |
-| IB2 CI governance (`qa:ib2:ci-negative`) | `PAEP / components` | 15 negatives + 1 positive control (I01–I15, P00) | Mutates the workflow, CI policy, lockfile, licence review, angular.json or a governed file in a scratch git copy and requires the named `verify-ib0-wp05` W checks, and only those, to fail |
+| IB2 CI governance (`qa:ib2:ci-negative`) | `PAEP / components` | 26 negatives + 1 positive control (I01–I26, P00; I16–I26 cover the negative-ci split) | Mutates the workflow, CI policy, lockfile, licence review, angular.json or a governed file in a scratch git copy and requires the named `verify-ib0-wp05` W checks, and only those, to fail |
 | Baseline governance (`qa:baseline:negative`) | `PAEP / negative-ci` | 92 negatives + 13 positives | Inherited from IB1; unchanged by IB2 |
-| IB0-WP05 CI controls (`negative-ib0-wp05.mjs`) | `PAEP / negative-ci` | 90 negatives + 10 controls | Inherited; unchanged by IB2 (runs against the IB2 verifier, including the new W06/W11 bounds) |
+| IB0-WP05 CI controls (`negative-ib0-wp05.mjs`) | `PAEP / negative-ci` (part a: 50 cases) and `PAEP / negative-ci-b` (part b: 51 cases), in parallel | 91 negatives + 10 controls (101; one more gate case than before, GJ15, because the gate has one more mandatory job) | Inherited cases and expectations unchanged; split by the PO/SA CI-performance remediation (2026-09-28). Every run must declare exactly the 101 pinned case ids and run exactly its half; each part lists the ids it leaves to the other |
 | IB1 runtime configuration (`qa:runtime-config:negative`, `:portability`) | `PAEP / runtime-config-negative` | 40 mutations + control; 17 portability checks | Inherited; unchanged by IB2 |
 
 Behaviour tests are also mutation-checked: the independent reviewers ran 58 mutations against the component specs in round 1 and re-ran the T1–T3 and R2-3/R2-4 mutations in round 2. Each was killed (`independent-qa.md`).
@@ -37,15 +37,16 @@ Behaviour tests are also mutation-checked: the independent reviewers ran 58 muta
 | Visual/responsive job silently skipped | I12 (`if: false` on the accessibility job), I04 (browser gate replaced by a no-op), I13 (browser gate removed from the policy and the workflow together) | W11 (and W13 for I12) |
 | Candidate scope bypass | I15 (governed file outside the generation 4 scope), baseline B01–B04, B10 | W07 + W26 (B11) |
 | Accepted policy weakened together with workflow | WP05 K05–K07 (accepted command, gate script, gate name), I13/I14 (IB2 command floor) | W11 / W12 |
+| Split negative-ci half removed, skipped, weakened or left out of the gate (PO/SA remediation 2026-09-28, condition 8) | I16 (negative-ci-b out of the gate `needs` and `MANDATORY_JOBS`), I17 (negative-ci-b removed from policy, workflow and gate together), I18 (`if: false` on negative-ci-b), I19 (both halves run part a), I20 (negative-ci-b timeout 30), I21 (part a dropped from negative-ci), I22 (part b replaced by a no-op), I23 (harness run with `--part x`), I26 (`--part` twice), I24 (harness part b delegates its own cases), I25 (a case declaration renamed) | W12 (I16); W11 (I17, I19–I22; and W13 for I18); harness exit 1 before any case (I23, I26); harness pinned-coverage check (I24, I25) |
 | Selected verifier check silently not run | WP05 K08 (empty workflow parses to null: "Check did not run"), inherited WP05 G10–G18 (skipped, cancelled or missing mandatory jobs fail the gate) | W09 / gate |
 
 ## 3. Negative cases added by IB2
 
 - Design system: N01–N48. N26–N34 were added for round-1 findings, N35–N36 and N47 for §18, N48 for the Q10 contrast finding, and N37–N46 for round-2 findings R2-1/R2-2.
 - Browser: B01–B15. B09–B10 were added for Q3 (O1), and B11–B15 for §18.
-- CI governance: I01–I15. I10–I11 were added for C1, I05 for C2, and I12–I15 for §18.
+- CI governance: I01–I23. I10–I11 were added for C1, I05 for C2, I12–I15 for §18, and I16–I26 for the negative-ci split (I24–I26 after the split review).
 
-No inherited case was removed, skipped or weakened: the baseline and WP05 suites are unchanged (`git diff d33ab91 -- tooling/governance/negative-baseline-governance.mjs tooling/verification/negative-ib0-wp05.mjs` shows no change to the WP05 suite and only the 9-line fixture reset in the baseline suite, reviewed by lane P/C/G/Q in round 1 (it resets the fixture's non-script package.json fields and changes no case or expectation)).
+No inherited case was removed, skipped or weakened (`git diff d33ab91 -- tooling/governance/negative-baseline-governance.mjs tooling/verification/negative-ib0-wp05.mjs` shows, in the WP05 suite, only the `--part a|b` option added for the PO/SA-authorised split: the case selector at the top of `caseRun`, `gateCase` and `npmCase`, the pinned case list with its coverage check, and the report fields; no case, mutation or expectation changed. In the baseline suite it shows only the 9-line fixture reset in the baseline suite, reviewed by lane P/C/G/Q in round 1 (it resets the fixture's non-script package.json fields and changes no case or expectation)).
 
 ## 4. Known gaps
 

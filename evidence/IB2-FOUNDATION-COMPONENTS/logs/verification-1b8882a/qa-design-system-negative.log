@@ -1,0 +1,55 @@
+
+> @proseit/paep-workspace@0.0.0 qa:design-system:negative
+> node tooling/design-system/design-system-negative.mjs
+
+PASS C00 positive control: unmutated repository passes every check
+PASS N01 manifest status changed: S01 failed
+PASS N02 generated token value edited by hand: S02 failed
+PASS N03 approved token source edited (handoff file no longer matches its pin): S01 failed
+PASS N33 breakpoint table edited by hand: S02 failed
+PASS N04 component spec removed: S03 failed
+PASS N05 component not exported from the entry point: S03 failed
+PASS N06 extra component outside the tranche: S03 failed
+PASS N07 raw hex colour in component CSS: S04 failed
+PASS N08 named colour in component CSS: S04 failed
+PASS N09 physical margin-left: S04 failed
+PASS N10 text-align right: S04 failed
+PASS N11 raw pixel spacing: S04 failed
+PASS N12 raw shadow: S04 failed
+PASS N13 transition duration literal: S04 failed
+PASS N14 deep import of another package: S05 failed
+PASS N15 component imports a later-milestone package: S05 failed
+PASS N16 foundation imports @angular/common: S05 failed
+PASS N17 axe-core imported by an app: S05 failed
+PASS N18 PrimeNG class in a component: S06 failed
+PASS N19 Angular favicon restored: S06 failed
+PASS N20 specimen removed: S07 failed
+PASS N21 specimen not registered: S07 failed
+PASS N36 required UI-lab state removed from a specimen: S07 failed
+PASS N22 specimen without accessibility notes: S07 failed
+PASS N23 content key removed: S08 failed
+PASS N24 focused test: S09 failed
+PASS N25 skipped test: S09 failed
+PASS N26 double-quoted later-milestone import: S05 failed
+PASS N27 literal in the second element of a styles array: S04 failed
+PASS N28 colour literal in a host style binding: S04 failed
+PASS N37 colour literal in a single-quoted styles element: S04 failed
+PASS N38 colour literal in a double-quoted host style binding: S04 failed
+PASS N39 host '[style]' object binding: S04 failed
+PASS N40 static host style key: S04 failed
+PASS N41 @HostBinding on a style property: S04 failed
+PASS N42 static style attribute in a component .html template: S04 failed
+PASS N43 colour literal in a template style binding: S04 failed
+PASS N44 colour literal assigned through element.style in code: S04 failed
+PASS N45 template-literal dynamic import of a later-milestone package: S05 failed
+PASS N46 dynamic import with a computed specifier: S05 failed
+PASS N47 component imports a domain kit package: S05 failed
+PASS N48 approved status colour lightened in the token catalogue (contrast pair no longer backed by a token): S02 failed
+PASS N34 handoff file and its pin line edited together: S01 failed
+PASS N35 clickable non-interactive element in a component template: S10 failed
+PASS N30 component reads a foundation-internal reference token: S04 failed
+PASS N31 component stylesheet imports a package path: S05 failed
+PASS N32 unpinned file added to the approved handoff: S01 failed
+PASS N29 expected-to-fail test: S09 failed
+
+PAEP design-system negative suite: PASS (49/49)

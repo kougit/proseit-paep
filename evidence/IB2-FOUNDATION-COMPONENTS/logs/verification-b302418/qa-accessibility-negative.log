@@ -1,0 +1,22 @@
+
+> @proseit/paep-workspace@0.0.0 qa:accessibility:negative
+> node tooling/design-system/browser-qa-negative.mjs
+
+PASS B00 positive control: unmutated button page
+PASS B01 image without a text alternative
+PASS B02 button without an accessible name
+PASS B03 text below contrast minimum
+PASS B04 form control without a label
+PASS B05 fixed-width element forcing page overflow at 320 px
+PASS B06 runtime console error
+PASS B07 second h1
+PASS B08 brand profile overriding a protected status token
+PASS B09 O1: unnamed button inside an open dialog
+PASS B10 O1: overlay trigger that opens nothing
+PASS B11 K1: control that swallows Tab (keyboard trap)
+PASS B12 M1: motion duration left at 150 ms under reduced motion
+PASS B13 O1: focus lost after a dialog is dismissed
+PASS B14 U1: status badge shown by colour alone (icon hidden)
+PASS B15 M1: reduced-motion rules removed from the stylesheets
+
+PAEP accessibility negative suite: PASS (16/16)

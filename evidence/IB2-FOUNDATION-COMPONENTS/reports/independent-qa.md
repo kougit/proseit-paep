@@ -129,3 +129,16 @@ A separate reviewer traced all 27 traceability rows and IB2-AC01–AC24 to their
 Other results: 23/23 §24 items present (CI report and timing complete after CI); every §18 case exists and targets its check; nothing claims ACCEPTED or promoted; no secret in the committed evidence or logs; nothing under `review/` is tracked. In the rehearsal every other suite passed at every point, including `qa:ib0-wp05:negative` 100/100 and `qa:accessibility` after promotion.
 
 **Open after Q10: High 0, Medium 0.**
+
+## 6. negative-ci split review (PO/SA CI-performance remediation, 2026-09-28)
+
+An independent read-only reviewer checked the split commit `b302418` against the nine PO/SA conditions. The reviewer tried to abuse the verifier bound (extra or reordered commands, swapped or repeated part letters, part b followed by an early exit, argument injection, reverting negative-ci while keeping negative-ci-b); every attempt failed W11. The reviewer also confirmed the negative-ci-b job structure, the gate `needs` and `MANDATORY_JOBS`, I16–I23 and the snapshot-reset fix, and enumerated the 101 case ids statically (51 + 50, no gaps or duplicates).
+
+| ID | Severity | Finding | Disposition | Proof |
+| --- | --- | --- | --- | --- |
+| S-1 | Medium | Nothing checked that the two parts together cover the whole suite: the run + delegated accounting could not fail, and a harness edit (in the CANDIDATE scope) could make part b skip cases with both jobs green | Fixed: `DECLARED_CASE_IDS` pins the 101 case ids in order; every run fails unless it declares exactly that list and runs exactly its half of it, computed from the list and not from the selector | `qa:ib2:ci-negative` I24 (part b delegates its own cases), I25 (a declaration renamed) |
+| S-2 | Low | `--part a --part b` and a dangling second `--part` were accepted (not reachable in CI, where W11 pins the exact commands) | Fixed: `--part` given more than once fails before any case | I26 |
+| S-3 | Low | Controls now run in a different job from some negatives they guard, so one job's PASS is not self-supporting | Not changed: both jobs are mandatory on the same commit and `PAEP / gate` requires both, so every control and every negative still runs against that commit. Running the controls in both parts would add about ten scratch gate runs to each job on the critical path this remediation shortens | PO/SA awareness |
+| S-4 | Low | `PAEP / negative-ci` kept the heavier half plus `qa:baseline:negative`, so it stayed the critical path | Fixed: part a (negative-ci) now takes the odd case indexes (50 cases) and part b (negative-ci-b) the even ones (51 cases), moving the heavier half to the job without `qa:baseline:negative` | `performance-timing.md` |
+
+**Open after the split review: High 0, Medium 0.**

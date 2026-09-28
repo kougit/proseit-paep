@@ -6,17 +6,17 @@
 | --- | --- |
 | Technical status | PASS (local gates, independent QA, GitHub Actions in `evidence/IB2-FOUNDATION-COMPONENTS/reports/ci-report.md`) |
 | Acceptance status | NOT ACCEPTED (awaiting PO/SA) |
-| Acceptance criteria | 22/24 PASS (technical); AC22 and AC23 PENDING the final CI run |
+| Acceptance criteria | 23/24 PASS (technical); AC23 (exact-head run of the final commit) is confirmed in the PR readiness report, because a commit cannot record its own CI result |
 | High findings open | 0 |
 | Medium findings open | 0 |
 | Design handoff | HOF-IB2-001 v1.1, APPROVED_FOR_IMPLEMENTATION (PO/SA, 2026-09-27) |
 | Design deviations | 6 proposed adaptations pending PO/SA decision; 2 defects resolved, closure pending PO/SA confirmation |
 | Visual baselines | CANDIDATE (not self-approved) |
 | RR6 | Open: PO/SA line-by-line review of the governance diff |
-| RR14 | ACCEPTED LOW (carried); negative-ci timeout 20 minutes, no IB2 workload |
+| RR14 | Triggered on the first CI run (timeout); remediated by the PO/SA-authorised split into `PAEP / negative-ci` and `PAEP / negative-ci-b`, both 20 minutes, no IB2 workload; a CI-performance risk until proven on real Actions (`residual-risk.md`) |
 | Registry generation 4 | CANDIDATE |
 
-Code commit verified: see `evidence/IB2-FOUNDATION-COMPONENTS/logs/verification-6dc71cc/summary.txt` (fresh clone, clean `npm ci`, Node 24.21.0, npm 11.19.0).
+Code commit verified: see `evidence/IB2-FOUNDATION-COMPONENTS/logs/verification-1b8882a/summary.txt` (fresh clone, clean `npm ci`, Node 24.21.0, npm 11.19.0).
 
 ## 1. Criteria
 
@@ -38,21 +38,21 @@ Code commit verified: see `evidence/IB2-FOUNDATION-COMPONENTS/logs/verification-
 | IB2-AC14 | PASS (baselines CANDIDATE) | `visual/` (156 captures); `reports/visual-conformance.md` (49 rows: 37 conform, 12 conform with a recorded deviation, 0 do not conform) |
 | IB2-AC15 | PASS | S06; `reports/clean-room-provenance.md` |
 | IB2-AC16 | PASS | W06, W16, W22; negatives I06–I08, I10, I11; `reports/dependency-review.md` |
-| IB2-AC17 | PASS | W11, W12 (IB2 command floor); negatives I01–I05, I12–I14; `reports/ci-report.md`, `performance-timing.md` |
+| IB2-AC17 | PASS | W11, W12 (IB2 command floor and the exact negative-ci split); negatives I01–I05, I12–I14, I16–I26; `PAEP / negative-ci` keeps its 20-minute timeout and runs no IB2 workload (the WP05 suite it shares with `PAEP / negative-ci-b` is inherited); `reports/ci-report.md`, `performance-timing.md` |
 | IB2-AC18 | PASS | `qa:ib0-wp05` full; WP05 negatives; `qa:ib1`; `qa:ib1:negative`; `qa:baseline`; `qa:baseline:negative` (logs) |
 | IB2-AC19 | PASS | `qa:types`; both production builds; `qa:architecture`; W04; Angular 22.1.8 / TypeScript 6.0.3 |
 | IB2-AC20 | PASS | `qa:baseline` 13/13 (active G3, candidate G4 NOT ACCEPTED); W07, W26; negative I15 |
 | IB2-AC21 | PASS | `reports/independent-qa.md`: rounds 1 and 2 and Q10 (with its fixes); High 0, Medium 0 |
-| IB2-AC22 | PENDING (generated after the final CI run) | `evidence/IB2-FOUNDATION-COMPONENTS/review/PO-SA-GOVERNANCE-DIFF.txt` (untracked, delivered separately) |
-| IB2-AC23 | PENDING CI | `reports/ci-report.md` |
+| IB2-AC22 | PASS | `evidence/IB2-FOUNDATION-COMPONENTS/review/PO-SA-GOVERNANCE-DIFF.txt` (untracked, delivered separately): base `d33ab91`, inventory, modes, hashes, full unified diff of `.github/**`, `tooling/verification/**` and `tooling/governance/**`, explanations and CI timing |
+| IB2-AC23 | PENDING the exact-head run of the final commit (run 36392688454 on code commit `1b8882a`: 15/15 mandatory jobs and `PAEP / gate` success) | `reports/ci-report.md` |
 | IB2-AC24 | PASS | W02, W08; WP02–WP04 secret scans |
 
 ## 2. Decisions recorded for the PO/SA
 
 1. Design classification: D1 (Design Significant) for the foundation and the 25 components; D2 (Design Extension) for the UI laboratory; tooling, CI and governance are not UI work and are not classified (`reports/design-classification.md`).
 2. Component tests use Angular's `@angular/build:unit-test` with Vitest browser mode in the installed Chromium (the approved dependency set; RR11 re-evaluation for UI tests).
-3. The IB2 browser and static gates run in the new parallel `PAEP / components` and `PAEP / accessibility` jobs, both mandatory in `PAEP / gate`. `PAEP / negative-ci` is unchanged (RR14).
-4. The WP05 verifier is tightened for IB2 (exact dependency delta, lockfile hash, negative-ci timeout exactly 20, IB2 command floor). Bounded historical findings are listed in `WORK_PACKAGE.md` §7.
+3. The IB2 browser and static gates run in the new parallel `PAEP / components` and `PAEP / accessibility` jobs, both mandatory in `PAEP / gate`. After the first CI run timed out (RR14), the PO/SA authorised splitting the inherited WP05 negative suite (2026-09-28T05:02Z): part a stays in `PAEP / negative-ci` with `qa:baseline:negative`, part b runs in the new mandatory `PAEP / negative-ci-b`, both with a 20-minute timeout and every case kept.
+4. The WP05 verifier is tightened for IB2 (exact dependency delta, lockfile hash, negative-ci and negative-ci-b timeouts exactly 20, IB2 command floor, and only the exact negative-ci split accepted). Bounded historical findings are listed in `WORK_PACKAGE.md` §7.
 
 ## 3. Items for PO/SA review before acceptance
 

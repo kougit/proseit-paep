@@ -4,12 +4,12 @@
  * a served ui-lab page and requires auditPage() or the protected-token check to report it; a positive control
  * requires the unmutated page to pass. Proves the gate can fail: axe violations, overflow, console errors,
  * heading/landmark structure, a brand override of a protected token, and O1: a defect inside an open overlay,
- * and an overlay that fails to open.
+ * and an overlay that fails to open; K1: a keyboard trap; M1: a motion duration left running under reduced motion.
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { auditOverlay, auditPage, launch, open, serve } from './browser-qa.mjs';
+import { auditOverlay, auditPage, keyboardTrapProblems, launch, open, reducedMotionProblems, serve } from './browser-qa.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const tokens = [...fs.readFileSync(path.join(ROOT, 'packages/foundation/src/lib/tokens/token-catalogue.generated.ts'), 'utf8').matchAll(/^ {2}(\{.*\})/gm)].map((m) => JSON.parse(m[1]));
@@ -27,6 +27,8 @@ const cases = [
   ['B08', 'brand profile overriding a protected status token', 'protected', /--paep-color-status-error-fg/],
   ['B09', 'O1: unnamed button inside an open dialog', ['/components/dialog', 'Delete Record 1', () => document.querySelector('dialog[open]').insertAdjacentHTML('beforeend', '<button type="button"></button>')], /button-name/],
   ['B10', 'O1: overlay trigger that opens nothing', ['/components/dialog', 'Delete Record 1', null, true], /nothing opened/],
+  ['B11', 'K1: control that swallows Tab (keyboard trap)', 'trap', /K1 keyboard trap/],
+  ['B12', 'M1: motion duration left at 150 ms under reduced motion', 'motion', /--paep-motion-duration-base = 150ms/],
 ];
 
 const server = await serve();
@@ -39,7 +41,18 @@ try {
       const overlay = Array.isArray(mutate) ? mutate : null;
       const { page, errors } = await open(ctx, `${server.url}${overlay ? overlay[0] : '/components/button'}`);
       let problems;
-      if (overlay) {
+      if (mutate === 'trap') {
+        await page.evaluate(() => {
+          document.querySelector('main').insertAdjacentHTML('afterbegin', '<button type="button" id="k1-trap">Trap</button>');
+          document.getElementById('k1-trap').addEventListener('keydown', (e) => { if (e.key === 'Tab') e.preventDefault(); });
+        });
+        problems = await keyboardTrapProblems(page);
+      } else if (mutate === 'motion') {
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await page.goto(`${server.url}/foundations/motion`, { waitUntil: 'networkidle' });
+        await page.addStyleTag({ content: ':root { --paep-motion-duration-base: 150ms !important; }' });
+        problems = await reducedMotionProblems(page, tokens);
+      } else if (overlay) {
         // B10 removes the dialog element first, so pressing its trigger can open nothing.
         if (overlay[3]) await page.evaluate(() => document.querySelectorAll('paep-dialog').forEach((d) => d.remove()));
         problems = await auditOverlay(page, overlay[1], overlay[2]);

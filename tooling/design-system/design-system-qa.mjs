@@ -334,6 +334,27 @@ export function runChecks(fsx) {
     add('S09', 'Test hygiene: no focused, skipped, todo or expected-to-fail tests; every component spec has at least three behaviour tests', p, `${specs.length} spec files, ${tests} tests`);
   }
 
+  // S10: interactive semantics: a (click) handler in a component template sits on a natively interactive element
+  // or one with an interactive role (no clickable div/span a keyboard or screen-reader user cannot reach).
+  {
+    const p = [];
+    const INTERACTIVE = /^(button|a|input|select|textarea|summary|option)$/;
+    const ROLE = /\brole="(button|link|menuitem|menuitemcheckbox|menuitemradio|tab|option|checkbox|radio|switch)"/;
+    let handlers = 0;
+    for (const f of fsx.list(COMPONENTS_DIR).filter((x) => (x.endsWith('.ts') && !x.endsWith('.spec.ts')) || x.endsWith('.html'))) {
+      const src = fsx.read(f);
+      const templates = f.endsWith('.html') ? [src] : [...src.matchAll(/template:\s*`([\s\S]*?)`/g)].map((m) => m[1]);
+      for (const tpl of templates) {
+        for (const m of tpl.matchAll(/<([a-zA-Z][\w-]*)\b((?:[^>"']|"[^"]*"|'[^']*')*)>/g)) {
+          if (!/\(click\)=/.test(m[2])) continue;
+          handlers++;
+          if (!INTERACTIVE.test(m[1].toLowerCase()) && !ROLE.test(m[2])) p.push(`${f}: (click) on <${m[1]}> without native interactive semantics or an interactive role`);
+        }
+      }
+    }
+    add('S10', 'Interactive semantics: every (click) handler in a component template is on a native interactive element or one with an interactive role', p, `${handlers} click handlers, all on interactive elements`);
+  }
+
   return results;
 }
 

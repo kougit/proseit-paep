@@ -13,6 +13,7 @@
  *   C1 computed styles match the approved tokens (brand primary, surfaces, focus ring)
  *   B1 a brand profile changes only the brand layer: every protected token keeps its approved value
  *   F1 keyboard focus shows the 2 px focus ring
+ *   K1 no keyboard trap: Tab keeps moving focus on every component page
  *   O1 every overlay specimen (dialogs, drawers, popovers, the action-group More menu) is opened and its open
  *      content passes axe-core, at 1440 and 320 CSS px
  *
@@ -152,8 +153,43 @@ const canon = (page, value) => page.evaluate((v) => {
   return s.replace(/-?\d*\.?\d+/g, (n) => String(Number(n))).toLowerCase();
 }, value);
 
-/** M1, D1, C1, B1, F1. Returns [{ id, name, problems }]. */
-export async function globalChecks(browser, base, tokens) {
+/** M1 on an open page under reduced motion: every motion duration token is 0 ms and the spinner loop is stopped. */
+export async function reducedMotionProblems(page, tokens) {
+  const p = [];
+  for (const t of tokens.filter((x) => x.name.startsWith('--paep-motion-duration-'))) {
+    const v = await rootVar(page, t.name);
+    if ((await canon(page, v)) !== '0ms') p.push(`${t.name} = ${v}`);
+  }
+  const spin = await page.$eval('svg.paep-icon--spin', (el) => { const s = getComputedStyle(el); return `${s.animationName}|${s.animationDuration}|${s.animationPlayState}`; });
+  if (!/^none\|/.test(spin) && !/\|0s\|/.test(spin) && !/paused$/.test(spin)) p.push(`spinner still animates (${spin})`);
+  return p;
+}
+
+/**
+ * K1 on an open page: presses Tab repeatedly from the top of the page and reports a keyboard trap, i.e. an element
+ * that keeps focus when Tab is pressed (WCAG 2.1.2). Returns problems (strings).
+ */
+export async function keyboardTrapProblems(page, presses = 60) {
+  await page.evaluate(() => { document.activeElement?.blur?.(); window.scrollTo(0, 0); });
+  let previous = null;
+  let moved = 0;
+  for (let i = 0; i < presses; i++) {
+    await page.keyboard.press('Tab');
+    const now = await page.evaluate(() => {
+      const e = document.activeElement;
+      if (!e || e === document.body) return null;
+      if (!e.dataset.k1) e.dataset.k1 = String(Math.random());
+      return `${e.tagName.toLowerCase()}#${e.id || ''}.${e.getAttribute('aria-label') || e.textContent?.trim().slice(0, 30) || ''}|${e.dataset.k1}`;
+    });
+    if (now && now === previous) return [`K1 keyboard trap: Tab does not move focus from ${now.split('|')[0]}`];
+    if (now) moved++;
+    previous = now;
+  }
+  return moved ? [] : ['K1 Tab never focused anything'];
+}
+
+/** M1, D1, C1, B1, F1, O1, K1. Returns [{ id, name, problems }]. `paths` are the discovered lab pages (for K1). */
+export async function globalChecks(browser, base, tokens, paths = []) {
   const out = [];
   const check = async (id, name, fn) => {
     const problems = [];
@@ -168,12 +204,7 @@ export async function globalChecks(browser, base, tokens) {
   await check('M1', 'Reduced motion zeroes every motion duration and stops loops (media emulation and lab simulation)', async (p) => {
     for (const [label, url, opts] of [['media', `${base}/foundations/motion`, { reducedMotion: 'reduce' }], ['simulation', `${base}/foundations/motion?motion=reduce`, {}]]) {
       await withPage(url, opts, async (page) => {
-        for (const t of tokens.filter((x) => x.name.startsWith('--paep-motion-duration-'))) {
-          const v = await rootVar(page, t.name);
-          if ((await canon(page, v)) !== '0ms') p.push(`${label}: ${t.name} = ${v}`);
-        }
-        const spin = await page.$eval('svg.paep-icon--spin', (el) => { const s = getComputedStyle(el); return `${s.animationName}|${s.animationDuration}|${s.animationPlayState}`; });
-        if (!/^none\|/.test(spin) && !/\|0s\|/.test(spin) && !/paused$/.test(spin)) p.push(`${label}: spinner still animates (${spin})`);
+        for (const x of await reducedMotionProblems(page, tokens)) p.push(`${label}: ${x}`);
       });
     }
     await withPage(`${base}/foundations/motion`, {}, async (page) => {
@@ -235,6 +266,15 @@ export async function globalChecks(browser, base, tokens) {
       }
     }
   });
+  await check('K1', 'No keyboard trap: Tab moves focus on every component page (60 presses from the top, 1440 px)', async (p) => {
+    const pages = paths.filter((x) => x.startsWith('/components/'));
+    if (!pages.length) p.push('no component pages to walk');
+    await pool(pages, 4, async (pth) => {
+      await withPage(`${base}${pth}`, {}, async (page) => {
+        for (const x of await keyboardTrapProblems(page)) p.push(`${pth}: ${x}`);
+      });
+    });
+  });
   return out;
 }
 
@@ -293,7 +333,7 @@ async function main() {
     }
     console.log(`\npages: ${paths.length}; page audits: ${res.length}; failed: ${failed}`);
     if (!only) {
-      report.checks = await globalChecks(browser, server.url, tokens);
+      report.checks = await globalChecks(browser, server.url, tokens, paths);
       for (const c of report.checks) {
         console.log(`${c.problems.length ? 'FAIL' : 'PASS'} ${c.id} ${c.name}${c.problems.length ? ` — ${c.problems.join('; ')}` : ''}`);
         if (c.problems.length) failed++;

@@ -12,7 +12,7 @@
 | `@proseit/paep-components` | L2 | Angular (`core`, `common`, `forms`, `router`, `platform-browser`) and `@proseit/paep-foundation` | The 25 components of IR-01 §6.4 and the message catalogue |
 | `apps/ui-lab` | app | every package through its public entry point | The permanent UI laboratory |
 
-Enforced by `qa:architecture` (TypeScript graph, unchanged) and `qa:design-system` S05 (the stricter IB2 rules the architecture checker does not apply: test-tooling imports, later-milestone imports, and CSS `@import`, where only the UI laboratory may import the foundation stylesheet `@proseit/paep-foundation/src/styles/paep-foundation.css`). No package imports a later-milestone package (enterprise, Frappe SDK, offline, analytics, domain kits).
+Enforced by `qa:architecture` (TypeScript graph, unchanged) and `qa:design-system` S05 (the stricter IB2 rules the architecture checker does not apply: test-tooling imports, later-milestone imports, template-literal dynamic imports (computed dynamic-import specifiers are rejected), and CSS `@import`, where only the UI laboratory may import the foundation stylesheet `@proseit/paep-foundation/src/styles/paep-foundation.css`). No package imports a later-milestone package (enterprise, Frappe SDK, offline, analytics, domain kits).
 
 ## 2. Tokens
 

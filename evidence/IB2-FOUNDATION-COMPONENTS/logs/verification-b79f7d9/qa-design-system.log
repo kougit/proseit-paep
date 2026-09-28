@@ -1,0 +1,15 @@
+
+> @proseit/paep-workspace@0.0.0 qa:design-system
+> node tooling/design-system/design-system-qa.mjs
+
+PASS S01 HOF-IB2-001 v1.1 APPROVED_FOR_IMPLEMENTATION is retained with the approved manifest hash — sha256 24e7049dd675…, APPROVED_FOR_IMPLEMENTATION
+PASS S02 Token stylesheet and catalogue equal the generator output from the approved token values — no drift
+PASS S03 Exactly the 25 IR-01 §6.4 components, each with behaviour tests, exported through the public entry point only — 25 components; 44 public exports
+PASS S04 Component styles use only --paep-* tokens (no colour, raw length, shadow or duration literals) and logical properties only — 29 style blocks in 43 files clean
+PASS S05 Import boundaries: foundation imports only @angular/core; components only Angular and the foundation entry point; no deep, Frappe, domain or later-milestone imports; test tooling only in specs — 102 TypeScript files
+PASS S06 Clean-room: no Ultima, PrimeNG, SAP Fiori/UI5, Angular Material/CDK or commercial-theme terms in UI source; Angular favicon replaced — 138 files scanned
+PASS S07 UI laboratory: every one of the 25 components has a registered specimen page with purpose, variants, states, keyboard, accessibility, responsive, RTL, content keys and evidence — 25 specimens registered
+PASS S08 Message catalogue holds exactly the approved content keys — 48 keys
+PASS S09 Test hygiene: no focused, skipped, todo or expected-to-fail tests; every component spec has at least three behaviour tests — 27 spec files, 253 tests
+
+PAEP design-system QA: PASS (9/9)

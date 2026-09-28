@@ -1,0 +1,16 @@
+
+> @proseit/paep-workspace@0.0.0 build:reference-app
+> ng build reference-app --configuration production
+
+❯ Building...
+✔ Building...
+Initial chunk files | Names         |  Raw size | Estimated transfer size
+main-D5EQQVHA.js    | main          | 221.65 kB |                59.44 kB
+styles-5INURTSO.css | styles        |   0 bytes |                 0 bytes
+
+                    | Initial total | 221.65 kB |                59.44 kB
+
+Application bundle generation complete. [3.492 seconds] - 2026-09-28T00:28:50.067Z
+
+Output location: /tmp/claude-0/-home-claude-proseit-paep/f41e9675-a989-55f1-b1c4-5136e4f1c67e/scratchpad/verify-clone/dist/reference-app
+

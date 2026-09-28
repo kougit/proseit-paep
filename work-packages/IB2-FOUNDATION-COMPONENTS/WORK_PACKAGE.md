@@ -82,4 +82,5 @@ The WP05 verifier itself is tightened, not loosened, for IB2:
 
 * W06: when `package-lock.json` differs from the accepted baseline, it passes only with the exact approved delta above and with the `lockfile.sha256` in `docs/architecture/toolchain-version-manifest.json` equal to the committed lockfile.
 * W11: the `negative-ci` job timeout must be exactly 20 minutes (review rule RR14). Before, it only had to be present.
-* The IB2 CI-governance negatives (`qa:ib2:ci-negative`) prove both: raising the timeout to 30 fails W11 (I05), and an unapproved dev dependency (I10) or `axe-core` moved to runtime dependencies (I11) fails the V13 bound.
+* W11: the `components` and `accessibility` jobs and their IB2 commands (`test:components`, `qa:design-system`, `qa:design-system:negative`, `qa:ib2:ci-negative`, `build:ui-lab`, `qa:accessibility`, `qa:accessibility:negative`) are a floor even while the CI policy is a CANDIDATE, so removing one from the policy and the workflow together fails (authorising instruction §18). Later changes may add commands, never drop these.
+* The IB2 CI-governance negatives (`qa:ib2:ci-negative`) prove each: raising the timeout to 30 fails W11 (I05); an unapproved dev dependency (I10) or `axe-core` moved to runtime dependencies (I11) fails the V13 bound; dropping an IB2 command from the policy and the workflow together fails W11 (I13, I14).

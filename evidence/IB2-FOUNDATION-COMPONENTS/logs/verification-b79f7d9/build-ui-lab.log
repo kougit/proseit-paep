@@ -1,0 +1,21 @@
+
+> @proseit/paep-workspace@0.0.0 build:ui-lab
+> ng build ui-lab --configuration production
+
+❯ Building...
+✔ Building...
+Initial chunk files | Names         |  Raw size | Estimated transfer size
+main-767HUS5G.js    | main          | 324.00 kB |                82.11 kB
+styles-OMJ6ZA5A.css | styles        |  12.70 kB |                 2.53 kB
+
+                    | Initial total | 336.69 kB |                84.64 kB
+
+Lazy chunk files    | Names         |  Raw size | Estimated transfer size
+chunk-ed2a7qDn.js   | registry      | 158.80 kB |                34.56 kB
+chunk-BxIm6tFS.js   | -             | 145.15 kB |                24.18 kB
+chunk-B-SgGLeh.js   | proofs        |  24.10 kB |                 6.60 kB
+
+Application bundle generation complete. [9.821 seconds] - 2026-09-27T19:18:40.052Z
+
+Output location: /tmp/claude-0/-home-claude-proseit-paep/f41e9675-a989-55f1-b1c4-5136e4f1c67e/scratchpad/verify-clone/dist/ui-lab
+

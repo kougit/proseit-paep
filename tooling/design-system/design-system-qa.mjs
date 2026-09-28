@@ -115,37 +115,71 @@ export function makeFs(root = ROOT, overlay = new Map()) {
 const stripComments = (t) => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"])\/\/.*$/gm, '$1');
 
 /**
- * Extracts component CSS: .css files; every template literal of a `styles:` value inside .ts files (a single
- * literal or an array of them); and host `[style.prop]` bindings, rendered as `prop: value` lines so the same
- * token and logical-property checks apply to them.
+ * Extracts every way a component can style itself, so the token and logical-property checks apply to all of them:
+ * .css files; every `styles:` value inside .ts files (one string or an array of strings, in any quote style);
+ * `[style.prop]` bindings in host metadata and in templates (inline or .html), rendered as `prop: value` lines
+ * with every string literal of the bound expression; and string literals assigned through `.style.x =` or
+ * `.style.setProperty(...)` in code. Channels that cannot be checked this way are reported in `banned`: a static
+ * `style` attribute or host key, `[style]`/`[ngStyle]` object bindings and `@HostBinding('style…')`.
+ * Returns { blocks: string[], banned: string[] }.
  */
-function cssBlocks(fsx, file) {
-  const t = fsx.read(file);
-  if (file.endsWith('.css')) return [stripComments(t)];
+function styleSources(fsx, file) {
+  const raw = fsx.read(file);
+  if (file.endsWith('.css')) return { blocks: [stripComments(raw)], banned: [] };
+  const t = file.endsWith('.html') ? raw.replace(/<!--[\s\S]*?-->/g, '') : stripComments(raw);
   const blocks = [];
-  for (const m of t.matchAll(/styles:\s*/g)) {
-    let i = m.index + m[0].length;
-    const array = t[i] === '[';
-    if (array) i++;
-    for (;;) {
-      while (/[\s,]/.test(t[i] ?? '')) i++;
-      if (t[i] !== '`') break;
-      const end = t.indexOf('`', i + 1);
-      if (end < 0) break;
-      blocks.push(stripComments(t.slice(i + 1, end)));
-      i = end + 1;
-      if (!array) break;
+  const banned = [];
+  const readString = (i) => {
+    const q = t[i];
+    if (!['`', "'", '"'].includes(q)) return null;
+    let j = i + 1;
+    while (j < t.length && t[j] !== q) j += t[j] === '\\' ? 2 : 1;
+    return j < t.length ? { value: t.slice(i + 1, j), end: j + 1 } : null;
+  };
+  if (file.endsWith('.ts')) {
+    for (const m of t.matchAll(/\bstyles:\s*/g)) {
+      let i = m.index + m[0].length;
+      const array = t[i] === '[';
+      if (array) i++;
+      for (;;) {
+        while (/[\s,]/.test(t[i] ?? '')) i++;
+        const s = readString(i);
+        if (!s) break;
+        blocks.push(s.value);
+        i = s.end;
+        if (!array) break;
+      }
     }
   }
-  const host = [];
-  for (const m of t.matchAll(/['"]\[style\.([\w-]+)(?:\.(\w+|%))?\]['"]\s*:\s*'([^']*)'/g)) {
-    const [, prop, unit = '', expr] = m;
-    const literal = /^\s*(["`])(.*)\1\s*$/.exec(expr);
-    const value = literal ? literal[2] : /^\s*-?\d*\.?\d+\s*$/.test(expr) ? `${expr.trim()}${unit}` : 'var(--paep-bound)';
-    host.push(`${prop}: ${value};`);
+  const lines = [];
+  const literals = (expr) => [...expr.matchAll(/'([^']*)'|"([^"]*)"|`([^`]*)`/g)].map((x) => x[1] ?? x[2] ?? x[3]);
+  const bound = (prop, unit, expr) => {
+    const lits = literals(expr);
+    if (/^\s*-?\d*\.?\d+\s*$/.test(expr)) lines.push(`${prop}: ${expr.trim()}${unit};`);
+    for (const v of lits) lines.push(`${prop}: ${v};`);
+    if (!lits.length && !/^\s*-?\d*\.?\d+\s*$/.test(expr)) lines.push(`${prop}: var(--paep-bound);`);
+  };
+  // Host metadata: '[style.prop]': 'expr' or "[style.prop]": "expr" (either quote style for key and value).
+  for (const m of t.matchAll(/(['"])\[style\.([\w-]+)(?:\.(\w+|%))?\]\1\s*:\s*/g)) {
+    const s = readString(m.index + m[0].length);
+    if (s) bound(m[2], m[3] ?? '', s.value);
   }
-  if (host.length) blocks.push(host.join('\n'));
-  return blocks;
+  // Template bindings (inline templates and .html): [style.prop]="expr" / [style.prop.unit]='expr'.
+  for (const m of t.matchAll(/\s\[style\.([\w-]+)(?:\.(\w+|%))?\]=(["'])/g)) {
+    const end = t.indexOf(m[3], m.index + m[0].length);
+    if (end > 0) bound(m[1], m[2] ?? '', t.slice(m.index + m[0].length, end));
+  }
+  // Code: el.style.x = 'literal' / `template`, and el.style.setProperty('--x', 'literal').
+  for (const m of t.matchAll(/\.style\.([A-Za-z]+)\s*=\s*([^;\n]+)/g)) for (const v of literals(m[2])) lines.push(`${m[1].replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`)}: ${v};`);
+  for (const m of t.matchAll(/\.style\.setProperty\(([^)]*)\)/g)) { const [k, ...v] = literals(m[1]); lines.push(`${k ?? 'property'}: ${v.join(' ')};`); }
+  if (lines.length) blocks.push(lines.join('\n'));
+  // Unchecked channels.
+  if (/\sstyle=["']/.test(t)) banned.push('static style attribute in a template');
+  if (/\[(style|ngStyle)\]\s*=/.test(t)) banned.push('[style]/[ngStyle] object binding in a template');
+  if (/(['"])\[style\]\1\s*:/.test(t)) banned.push("host '[style]' object binding");
+  if (/\bhost\s*:\s*\{[^}]*(^|[\s,{])(['"]?)style\2\s*:/ms.test(t)) banned.push("static host 'style' key");
+  if (/@HostBinding\(\s*['"`](style|attr\.style)\b/.test(t)) banned.push("@HostBinding('style…')");
+  return { blocks: blocks.map(stripComments), banned };
 }
 
 const PHYSICAL = /(^|[\s;{])((left|right|margin-left|margin-right|padding-left|padding-right|border-left[\w-]*|border-right[\w-]*|border-top-left-radius|border-top-right-radius|border-bottom-left-radius|border-bottom-right-radius)\s*:|(float|text-align|clear)\s*:\s*(left|right)\b)/;
@@ -222,10 +256,12 @@ export function runChecks(fsx) {
   // S04: token-only, logical-property styling in components (and the foundation base stylesheet).
   {
     const p = [];
-    const files = fsx.list(COMPONENTS_DIR).filter((f) => (f.endsWith('.css') || f.endsWith('.ts')) && !f.endsWith('.spec.ts'));
+    const files = fsx.list(COMPONENTS_DIR).filter((f) => /\.(css|ts|html)$/.test(f) && !f.endsWith('.spec.ts'));
     let blocks = 0;
     for (const f of files) {
-      for (const css of cssBlocks(fsx, f)) {
+      const src = styleSources(fsx, f);
+      for (const b of src.banned) p.push(`${f}: ${b} (style through a styles block or a checked [style.prop] binding)`);
+      for (const css of src.blocks) {
         blocks++;
         css.split('\n').forEach((line, i) => {
           const l = line.trim();
@@ -260,7 +296,8 @@ export function runChecks(fsx) {
     const tsFiles = [...fsx.list('packages/components/src'), ...fsx.list('packages/foundation/src'), ...fsx.list('apps/ui-lab/src')].filter((f) => f.endsWith('.ts'));
     for (const f of tsFiles) {
       const spec = f.endsWith('.spec.ts');
-      for (const m of stripComments(fsx.read(f)).matchAll(/(?:import|export)\s[^'"`]*?from\s*(['"])([^'"]+)\1|import\s*\(\s*(['"])([^'"]+)\3\s*\)|import\s*(['"])([^'"]+)\5/g)) {
+      for (const m of stripComments(fsx.read(f)).matchAll(/\bimport\s*\(\s*(?!(['"`])[^'"`$]+\1\s*\))/g)) void m, p.push(`${f}: dynamic import with a computed specifier (use a literal so the boundary can be checked)`);
+      for (const m of stripComments(fsx.read(f)).matchAll(/(?:import|export)\s[^'"`]*?from\s*(['"])([^'"]+)\1|import\s*\(\s*(['"`])([^'"`$]+)\3\s*\)|import\s*(['"])([^'"]+)\5/g)) {
         const spec_ = m[2] || m[4] || m[6];
         const inComponents = f.startsWith('packages/components/');
         const inFoundation = f.startsWith('packages/foundation/');

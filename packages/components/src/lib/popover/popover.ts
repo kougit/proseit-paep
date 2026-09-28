@@ -156,7 +156,16 @@ export class PaepPopover {
    * (it describes the trigger) closes once focus moves on, as Tab past the end does for a panel with content.
    */
   triggerFocusout(to: Node | null): void {
-    if (this.isOpen() && this.variant() !== 'menu' && to && !this.host.contains(to)) this.close('keep');
+    if (!this.isOpen() || this.variant() === 'menu') return;
+    if (to) {
+      if (!this.host.contains(to)) this.close('keep');
+      return;
+    }
+    // No related target: focus may have left the document (Tab past the last control into the browser UI).
+    // Close once focus has settled outside the document; a click inside the page keeps the panel open.
+    setTimeout(() => {
+      if (this.isOpen() && !this.host.ownerDocument.hasFocus()) this.close('keep');
+    });
   }
 
   protected onFocusout(event: FocusEvent): void {
@@ -189,7 +198,11 @@ export class PaepPopover {
     this.stopTracking();
     this.openChange.emit(false);
     const refocus = focus === 'return' || (focus === 'auto' && focusWasInside);
-    if (refocus && this.trigger?.isConnected) this.trigger.focus();
+    if (refocus && this.trigger?.isConnected) {
+      this.trigger.focus();
+      // The native popover may already have restored focus without scrolling; keep the trigger in view.
+      this.trigger.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
+    }
   }
 
   private stopTracking(): void {

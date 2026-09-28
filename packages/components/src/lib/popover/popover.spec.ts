@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 import { page, userEvent } from 'vitest/browser';
 import { PaepPopover, PaepPopoverTrigger } from './popover';
 
@@ -204,6 +205,41 @@ describe('PaepPopover', () => {
     expect(panel('#info-trigger').matches(':popover-open')).toBe(false);
     expect(trigger.getAttribute('aria-expanded')).toBe('false');
     expect(document.activeElement).toBe(q('#links-trigger'));
+  });
+
+  it('closes an informational panel when focus leaves the document from its trigger, not on a click inside the page', async () => {
+    const trigger = q('#info-trigger');
+    trigger.focus();
+    await userEvent.keyboard('{Enter}');
+    await settle(fixture);
+    const leave = async (documentHasFocus: boolean) => {
+      const spy = vi.spyOn(document, 'hasFocus').mockReturnValue(documentHasFocus);
+      try {
+        trigger.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: null }));
+        await new Promise((r) => setTimeout(r, 20));
+        await settle(fixture);
+      } finally {
+        spy.mockRestore();
+      }
+    };
+    await leave(true);
+    expect(panel('#info-trigger').matches(':popover-open')).toBe(true);
+    await leave(false);
+    expect(panel('#info-trigger').matches(':popover-open')).toBe(false);
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('keeps the trigger in view when Escape returns focus to it', async () => {
+    const trigger = q('#long-trigger');
+    trigger.focus();
+    await userEvent.keyboard('{Enter}');
+    await settle(fixture);
+    const spy = vi.spyOn(trigger, 'scrollIntoView');
+    await userEvent.keyboard('{Escape}');
+    await settle(fixture);
+    expect(document.activeElement).toBe(trigger);
+    expect(spy).toHaveBeenCalledWith({ block: 'nearest', inline: 'nearest' });
+    spy.mockRestore();
   });
 
   it('makes long content without controls a focusable region named by the trigger, scrollable with the keyboard', async () => {

@@ -356,12 +356,24 @@ if (want('W10') && wf) {
 // and every other policy field (gate, workflow, actions, retention, setup) stays byte-identical, so a CANDIDATE cannot drop,
 // weaken or rename an accepted control while editing the workflow and the policy together.
 const POLICY_FLOOR_FREE = ['policyVersion', 'workPackage', 'note', 'mandatoryJobs', 'requiredCommands'];
+// IB2-FOUNDATION-COMPONENTS (authorising instruction §18): the IB2 jobs are mandatory and keep these commands even while
+// the policy is a CANDIDATE, so dropping a component, design-system or browser (visual/responsive/accessibility) command
+// from the policy and the workflow together fails W11. Later changes may add commands to these jobs, never drop these.
+const IB2_REQUIRED_JOBS = {
+  components: { name: 'PAEP / components', commands: ['npm run test:components', 'npm run qa:design-system', 'npm run qa:design-system:negative', 'npm run qa:ib2:ci-negative'] },
+  accessibility: { name: 'PAEP / accessibility', commands: ['npm run build:ui-lab', 'npm run qa:accessibility', 'npm run qa:accessibility:negative'] },
+};
 function acceptedPolicyFloor() {
   const jobs = []; const other = [];
-  if (!BASE) return { jobs: [noBase], other: [noBase] };
+  for (const [id, r] of Object.entries(IB2_REQUIRED_JOBS)) {
+    const c = policy.mandatoryJobs?.find((x) => x.id === id);
+    if (!c || c.name !== r.name) jobs.push(`IB2 mandatory job ${id} removed or renamed`);
+    for (const cmd of r.commands) if (!(policy.requiredCommands?.[id] || []).includes(cmd)) jobs.push(`IB2 command "${cmd}" dropped from ${id}`);
+  }
+  if (!BASE) return { jobs: [...jobs, noBase], other: [noBase] };
   let a = null;
   try { a = JSON.parse(git('show', `${BASE}:tooling/verification/ib0-wp05-ci-policy.json`).stdout); } catch { /* reported */ }
-  if (!a || !Array.isArray(a.mandatoryJobs)) return { jobs: ['accepted CI policy unreadable'], other: ['accepted CI policy unreadable'] };
+  if (!a || !Array.isArray(a.mandatoryJobs)) return { jobs: [...jobs, 'accepted CI policy unreadable'], other: ['accepted CI policy unreadable'] };
   for (const j of a.mandatoryJobs) {
     const c = policy.mandatoryJobs.find((x) => x.id === j.id);
     if (!c || c.name !== j.name) jobs.push(`accepted mandatory job ${j.id} removed or renamed`);

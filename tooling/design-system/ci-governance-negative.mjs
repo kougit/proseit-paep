@@ -6,8 +6,9 @@
  * Proves that the IB2 jobs are mandatory and that the IB2 bounds in verify-ib0-wp05.mjs are narrow. Each case
  * mutates a disposable scratch copy of the repository (with .git; node_modules hard-linked read-only, as in
  * negative-ib0-wp05.mjs), commits nothing in the real tree, and runs the provenance gate, expecting the stated
- * failure. P00 is the positive control on the unmutated copy. I16–I23 cover the PAEP / negative-ci split (PO/SA,
- * 2026-09-28); I23 runs the WP05 negative harness itself with an invalid --part.
+ * failure. P00 is the positive control on the unmutated copy. I16–I26 cover the PAEP / negative-ci split (PO/SA,
+ * 2026-09-28); I23 and I26 run the WP05 negative harness itself with an invalid --part, and I24/I25 run a
+ * weakened copy of it (part b only).
  *   node tooling/design-system/ci-governance-negative.mjs            every case (CI)
  */
 import { spawnSync } from 'node:child_process';
@@ -39,10 +40,13 @@ const snapshot = () => {
 };
 snapshot();
 
+const WP05_HARNESS = 'tooling/verification/negative-ib0-wp05.mjs';
 const replace = (from, to) => (t) => { if (!t.includes(from)) throw new Error(`mutation anchor not found: ${from.slice(0, 60)}`); return t.replace(from, to); };
+const ONLY_G01_IN_B = (t) => replace('  declared.push(id);\n', "  declared.push(id);\n  if (PART === 'b' && id !== 'G01') { delegated.push(id); return false; }\n")(t);
 const jsonEdit = (fn) => (t) => { const o = JSON.parse(t); fn(o); return `${JSON.stringify(o, null, 2)}\n`; };
 const gate = (g) => {
-  const cmd = g === 'part-x' ? ['tooling/verification/negative-ib0-wp05.mjs', '--part', 'x'] : ['tooling/verification/verify-ib0-wp05.mjs', '--gate', g];
+  const HARNESS = { 'part-x': ['--part', 'x'], 'part-twice': ['--part', 'a', '--part', 'b'], 'wp05-part-b': ['--part', 'b'] };
+  const cmd = HARNESS[g] ? ['tooling/verification/negative-ib0-wp05.mjs', ...HARNESS[g]] : ['tooling/verification/verify-ib0-wp05.mjs', '--gate', g];
   const r = spawnSync(process.execPath, cmd, { cwd: copy, encoding: 'utf8', env, maxBuffer: 256 * 1024 * 1024 });
   return { status: r.status, out: `${r.stdout || ''}${r.stderr || ''}` };
 };
@@ -77,6 +81,11 @@ const cases = [
   ['I21', 'part a dropped from negative-ci in the policy and the workflow together', [[POLICY, jsonEdit((o) => { o.requiredCommands['negative-ci'] = o.requiredCommands['negative-ci'].filter((c) => !c.includes('--part a')); })], [WORKFLOW, (t) => { const a = t.indexOf('      - name: CI-control negative tests, part a of 2'); const b = t.indexOf('      - name: ', a + 10); if (a < 0 || b < 0) throw new Error('part a anchor not found'); return t.slice(0, a) + t.slice(b); }]], 'provenance', [/FAIL W11/, /accepted commands of negative-ci changed/]],
   ['I22', 'part b replaced by a no-op in the workflow', [[WORKFLOW, replace('          npm run qa:ib0-wp05:negative -- --part b 2>&1', '          echo skipped 2>&1')]], 'provenance', [/FAIL W11/]],
   ['I23', 'the WP05 negative harness run with an unknown part (fails closed before any case)', [], 'part-x', [/FAIL --part must be a or b/]],
+  // The harness itself weakened: part b silently delegating its own cases (I24), or a declaration dropped or renamed
+  // (I25), fails the pinned-coverage check. Both mutations keep part b to one cheap case so the case stays fast.
+  ['I24', 'WP05 harness part b delegates its own cases (runs only G01)', [[WP05_HARNESS, ONLY_G01_IN_B]], 'wp05-part-b', [/FAIL part b ran 1 of 101 declared cases; expected exactly its 51/]],
+  ['I25', 'WP05 harness case K07 renamed (declared list differs from the pinned list)', [[WP05_HARNESS, (t) => replace("caseRun('K07',", "caseRun('K07x',")(ONLY_G01_IN_B(t))]], 'wp05-part-b', [/FAIL declared case list differs from the pinned list: missing K07; extra K07x/]],
+  ['I26', 'the WP05 negative harness run with --part given twice (fails closed before any case)', [], 'part-twice', [/FAIL --part given more than once/]],
   ['I15', 'candidate scope bypass: a governed file outside the generation 4 scope changed', [['tooling/architecture-boundaries/check-boundaries.mjs', (t) => `${t}// drift\n`]], 'governance', [/FAIL W07/, /FAIL W26/, /unauthorised change: tooling\/architecture-boundaries/]],
   // While a CANDIDATE holds angular.json in its scope, WP02's protected-path finding (V17) is bounded and only W20/W21
   // fail; once no open CANDIDATE scope holds it (after promotion, or a later work package without it), W22 fails too.

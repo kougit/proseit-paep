@@ -7,7 +7,7 @@
 | Screen/flow | SCR-IB2-C03, SCR-IB2-C03N, SCR-IB2-R01, SCR-IB2-R03 (also the F06 density comparison) |
 | Implementing work package | IB2-FOUNDATION-COMPONENTS (working tree after `80bbb8d`) |
 | Detected during | QA (accessibility/responsive QA; visual conformance review 2026-09-27) |
-| Classification (DCH §19.2(iii)) | **Acceptable adaptation: proposed, pending PO/SA decision** |
+| Classification (DCH §19.2(iii)) | **Acceptable adaptation: ACCEPTED WITH FOLLOW-UP by the PO/SA (2026-09-29)** |
 | Reason | Responsive adaptation / technical constraint |
 
 ## Description
@@ -49,5 +49,5 @@ Accept the adaptation. It stays within the responsive-rules §6 trade-off, and t
 
 | Decision authority | Product Owner / Solutions Architect |
 | --- | --- |
-| Decision | PENDING (not APPROVED, REJECTED or BLOCKED) |
+| Decision | **ACCEPTED WITH FOLLOW-UP** (PO/SA final acceptance decision, 2026-09-29T06:57Z). Follow-up: widen the responsive-rules §6 wording in a later handoff version ("any cell below 40 rem may break mid-word at 320 px with extreme values"). No code change. |
 | Resulting handoff version | unchanged (v1.1) if accepted as within §6; otherwise per PO/SA |

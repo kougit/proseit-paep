@@ -2,7 +2,7 @@
 
 Reviewed 2026-09-27 against handoff **HOF-IB2-001 v1.1 (APPROVED_FOR_IMPLEMENTATION)**, standard PAEP-DCH-01 v1.0 §20–§21. First review: HEAD `80bbb8d` with an uncommitted working tree (captures of 2026-09-27 19:25). **Re-review (§4):** the six DOES NOT CONFORM rows were rechecked against the regenerated captures (same file names, 2026-09-27 19:52) at commit `0132ff6` ("IB2: visual conformance fixes"). All 156 captures (120 page + 36 overlay) were then recaptured on the final code commit (`logs/verification-6dc71cc/`); source line numbers cited below are as at `0132ff6`.
 
-**Status of the captures: CANDIDATE.** Every capture under `evidence/IB2-FOUNDATION-COMPONENTS/visual/` is a CANDIDATE visual baseline awaiting the Product Owner / Solutions Architect's acceptance. Nothing in this report is self-approved. The verdicts here are the reviewer's technical assessment. They are not the design acceptance, and they do not resolve any deviation record (DDR).
+**Status of the captures: ACCEPTED.** The PO/SA accepted all 156 captures under `evidence/IB2-FOUNDATION-COMPONENTS/visual/` on 2026-09-29 as the initial controlled IB2 visual baseline set. They were CANDIDATE baselines at the time of this review.
 
 ## 1. Method
 
@@ -180,14 +180,14 @@ Deviation records (in `evidence/design-handoff/HOF-IB2-001/deviations/`):
 
 | DDR | Subject | Classification |
 | --- | --- | --- |
-| DDR-IB2-01 | Table < 40 rem: `overflow-wrap: anywhere`; long words break mid-word at 320 px | proposed acceptable adaptation, pending PO/SA decision |
-| DDR-IB2-02 | Action-group overflow menu is its own `popover="manual"` menu, not `PaepPopover variant="menu"` | proposed acceptable adaptation, pending PO/SA decision |
-| DDR-IB2-03 | Overflow menu drops the destructive item's delete icon | defect: **RESOLVED** by correction in `0132ff6`, verified in re-review (closure pending PO/SA confirmation) |
-| DDR-IB2-04 | Overflowing dialog/drawer body becomes a focusable named region; document scroll locked while modal | proposed acceptable adaptation, pending PO/SA decision |
-| DDR-IB2-05 | Informational popover with overflowing plain content takes focus as a named region | proposed acceptable adaptation, pending PO/SA decision |
-| DDR-IB2-06 | UI-lab specimens compose native / hand-rolled controls instead of PAEP components | defect: **RESOLVED** by correction in `0132ff6`, verified in re-review (closure pending PO/SA confirmation); Low residual note on lab-only switchers |
-| DDR-IB2-07 | Foundation and R03 lab pages reproduce the tokens but not all board demonstrations | proposed acceptable adaptation, pending PO/SA decision |
-| DDR-IB2-08 | Dialog/drawer footer is `paep-dialog-footer`, not an action group (footer variant) | proposed acceptable adaptation, pending PO/SA decision |
+| DDR-IB2-01 | Table < 40 rem: `overflow-wrap: anywhere`; long words break mid-word at 320 px | **ACCEPTED WITH FOLLOW-UP** (PO/SA, 2026-09-29) |
+| DDR-IB2-02 | Action-group overflow menu is its own `popover="manual"` menu, not `PaepPopover variant="menu"` | **ACCEPTED WITH FOLLOW-UP** (PO/SA, 2026-09-29) |
+| DDR-IB2-03 | Overflow menu drops the destructive item's delete icon | defect: **RESOLVED** by correction in `0132ff6`, verified in re-review (**CLOSED** by the PO/SA, 2026-09-29) |
+| DDR-IB2-04 | Overflowing dialog/drawer body becomes a focusable named region; document scroll locked while modal | **ACCEPTED WITH FOLLOW-UP** (PO/SA, 2026-09-29) |
+| DDR-IB2-05 | Informational popover with overflowing plain content takes focus as a named region | **ACCEPTED WITH FOLLOW-UP** (PO/SA, 2026-09-29) |
+| DDR-IB2-06 | UI-lab specimens compose native / hand-rolled controls instead of PAEP components | defect: **RESOLVED** by correction in `0132ff6`, verified in re-review (**CLOSED** by the PO/SA, 2026-09-29); Low residual note on lab-only switchers |
+| DDR-IB2-07 | Foundation and R03 lab pages reproduce the tokens but not all board demonstrations | **ACCEPTED WITH FOLLOW-UP** (PO/SA, 2026-09-29) |
+| DDR-IB2-08 | Dialog/drawer footer is `paep-dialog-footer`, not an action group (footer variant) | **ACCEPTED WITH FOLLOW-UP** (PO/SA, 2026-09-29) |
 
 Verified as conforming, with no DDR:
 - Progress and skeleton use `--paep-ref-color-neutral-200` / `-100`. The handoff names exactly these foundation-internal tokens (component-specs "Progress" and "Skeleton" token usage; component-map rows 16–17).

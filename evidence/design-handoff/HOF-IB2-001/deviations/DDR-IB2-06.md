@@ -7,7 +7,7 @@
 | Screen/flow | SCR-IB2-C03, SCR-IB2-C05, SCR-IB2-C06C, SCR-IB2-C06D, SCR-IB2-C02 (checkbox) |
 | Implementing work package | IB2-FOUNDATION-COMPONENTS (working tree after `80bbb8d`) |
 | Detected during | review (visual conformance review 2026-09-27) |
-| Classification (DCH §19.2(iii)) | **Defect: correction required** (UI-lab composition; the 25 components themselves are not affected). Status: **RESOLVED (corrected in `0132ff6`, verified 2026-09-27); closure pending PO/SA confirmation.** Low residual note below. |
+| Classification (DCH §19.2(iii)) | **Defect: correction required** (UI-lab composition; the 25 components themselves are not affected). Status: **RESOLVED (corrected in `0132ff6`, verified 2026-09-27); CLOSED by the PO/SA (2026-09-29).** Low residual note below. |
 | Reason | Defect correction |
 
 ## Description
@@ -44,7 +44,7 @@ In the same pattern, but not in any render (lab-only controls), these are browse
 
 | Decision authority | Product Owner / Solutions Architect |
 | --- | --- |
-| Decision | Correction made and verified by the reviewer. The PO/SA confirms closure (APPROVED) with visual acceptance. |
+| Decision | **ACCEPT: defect fixed; record CLOSED** (PO/SA final acceptance decision, 2026-09-29T06:57Z) |
 | Resulting handoff version | unchanged (v1.1) |
 
 ## Resolution

@@ -7,7 +7,7 @@
 | Screen/flow | SCR-IB2-C01, SCR-IB2-R03 (Action group) |
 | Implementing work package | IB2-FOUNDATION-COMPONENTS (working tree after `80bbb8d`) |
 | Detected during | review (visual conformance review 2026-09-27) |
-| Classification (DCH §19.2(iii)) | **Acceptable adaptation: proposed, pending PO/SA decision** |
+| Classification (DCH §19.2(iii)) | **Acceptable adaptation: ACCEPTED WITH FOLLOW-UP by the PO/SA (2026-09-29)** |
 | Reason | Technical constraint |
 
 ## Description
@@ -48,5 +48,5 @@ Accept the adaptation, or, if the PO/SA prefers the handoff's single-base intent
 
 | Decision authority | Product Owner / Solutions Architect |
 | --- | --- |
-| Decision | PENDING |
+| Decision | **ACCEPTED WITH FOLLOW-UP** (PO/SA final acceptance decision, 2026-09-29T06:57Z). Follow-up: either give `PaepPopover` an inline-end alignment and rebuild the overflow menu on it in a later work package, or reword the component map in a later handoff version. |
 | Resulting handoff version | v1.1 unchanged if accepted (update component-map wording in a later version) |

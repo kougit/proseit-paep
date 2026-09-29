@@ -7,7 +7,7 @@
 | Screen/flow | SCR-IB2-C06A, C06B, C06C, C06D, R02D |
 | Implementing work package | IB2-FOUNDATION-COMPONENTS (working tree after `80bbb8d`) |
 | Detected during | review (visual conformance review 2026-09-27) |
-| Classification (DCH §19.2(iii)) | **Acceptable adaptation: proposed, pending PO/SA decision** |
+| Classification (DCH §19.2(iii)) | **Acceptable adaptation: ACCEPTED WITH FOLLOW-UP by the PO/SA (2026-09-29)** |
 | Reason | Technical constraint (API shape) |
 
 ## Description
@@ -36,5 +36,5 @@ Accept the elements as sub-elements of Dialog/Drawer (like "Row-detail disclosur
 
 | Decision authority | Product Owner / Solutions Architect |
 | --- | --- |
-| Decision | PENDING |
+| Decision | **ACCEPTED WITH FOLLOW-UP** (PO/SA final acceptance decision, 2026-09-29T06:57Z). Follow-up: record `PaepDialogFooter` and `PaepDialogClose` as Dialog/Drawer sub-elements in the component map of a later handoff version; consider `role="group"` with a label on the footer. |
 | Resulting handoff version | v1.1 unchanged if accepted |

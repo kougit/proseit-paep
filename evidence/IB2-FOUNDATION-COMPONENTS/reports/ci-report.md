@@ -9,8 +9,9 @@ Pull request: #10 (`claude/project-thread-1n3qf4` → `main`). Workflow: PAEP CI
 | 36364175864 | `f2d4fba` | 13 of 14 mandatory jobs success; `PAEP / negative-ci` cancelled at its 20-minute timeout | failure | RR14 triggered; PO/SA decision requested (PR comment 5861650601) |
 | 36384635620 | `b302418` (the negative-ci split) | 15 of 15 mandatory jobs success | success | First run with `PAEP / negative-ci-b`; durations in `performance-timing.md` |
 | 36392688454 | `1b8882a` (split review fixes) | 15 of 15 mandatory jobs success | success | Wall clock 14:17; longest job `PAEP / negative-ci-b` 14:07 |
+| 36398913581 | `e8bbf60` (accepted implementation head) | 15 of 15 mandatory jobs success | success | Exact-head run for IB2-AC23; `PAEP / negative-ci` 13:22, `PAEP / negative-ci-b` 14:59 |
 
-The exact-head run of the final commit (this evidence commit) is recorded in the PR readiness report, because a commit cannot contain its own CI result.
+Run 36398913581 is the exact-head run of the accepted implementation head `e8bbf60`. The acceptance-closeout commit changes records only; its own run cannot be recorded inside it.
 
 ## 2. Mandatory jobs (15, all feeding `PAEP / gate`)
 

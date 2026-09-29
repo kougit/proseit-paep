@@ -1,5 +1,7 @@
 # IB2-FOUNDATION-COMPONENTS — Acceptance Readiness
 
+> **Outcome (2026-09-29):** the PO/SA ACCEPTED IB2 at `e8bbf60`. The decisions are recorded in `work-packages/IB2-FOUNDATION-COMPONENTS/ACCEPTANCE_REPORT.md` §3 and `evidence/design-handoff/HOF-IB2-001/acceptance.md`. The text below is the readiness state before that decision.
+
 **IB2 STATUS: READY FOR AUTHORIZATION.** Technical status is PASS. IB2 is NOT ACCEPTED: acceptance, the visual baselines, the proposed design deviations and the governance review are the PO/SA's decisions. Generation 4 stays CANDIDATE, and nothing was merged or promoted.
 
 ## 1. What is ready

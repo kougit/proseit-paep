@@ -7,7 +7,7 @@
 | Screen/flow | SCR-IB2-F04, F05, F06, F07, F08, SCR-IB2-R03 |
 | Implementing work package | IB2-FOUNDATION-COMPONENTS (working tree after `80bbb8d`) |
 | Detected during | review (visual conformance review 2026-09-27) |
-| Classification (DCH §19.2(iii)) | **Acceptable adaptation: proposed, pending PO/SA decision.** The PO/SA may instead classify it as correction-required. |
+| Classification (DCH §19.2(iii)) | **Acceptable adaptation: ACCEPTED WITH FOLLOW-UP by the PO/SA (2026-09-29).** The PO/SA accepted it rather than classifying it as correction-required. |
 | Reason | Design change (lab documentation scope) |
 
 ## Description
@@ -40,5 +40,5 @@ The reviewer recommends (b) for F07 and R03, the two boards whose missing parts 
 
 | Decision authority | Product Owner / Solutions Architect |
 | --- | --- |
-| Decision | PENDING |
+| Decision | **ACCEPTED WITH FOLLOW-UP** (PO/SA final acceptance decision, 2026-09-29T06:57Z). Follow-up (PO/SA deadline): The F07 focus/state examples and the full R03 320 px board must be added before whichever occurs first: (a) acceptance of the enterprise-shell milestone; or (b) the next controlled PAEP design-system release. The F04, F05, F06 and F08 omissions are accepted as they are. |
 | Resulting handoff version | v1.1 unchanged |

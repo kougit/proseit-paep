@@ -7,7 +7,7 @@
 | Screen/flow | SCR-IB2-C01 (Action group, "Overflow menu open"), SCR-IB2-R03 |
 | Implementing work package | IB2-FOUNDATION-COMPONENTS (working tree after `80bbb8d`) |
 | Detected during | review (visual conformance review 2026-09-27) |
-| Classification (DCH §19.2(iii)) | **Defect: correction required.** Status: **RESOLVED (corrected in `0132ff6`, verified 2026-09-27); closure pending PO/SA confirmation** |
+| Classification (DCH §19.2(iii)) | **Defect: correction required.** Status: **RESOLVED (corrected in `0132ff6`, verified 2026-09-27); CLOSED by the PO/SA (2026-09-29)** |
 | Reason | Defect correction |
 
 ## Description
@@ -37,7 +37,7 @@ In `action-group.ts`:
 
 | Decision authority | Product Owner / Solutions Architect |
 | --- | --- |
-| Decision | Correction made and verified by the reviewer. The PO/SA confirms closure (APPROVED) with visual acceptance. |
+| Decision | **ACCEPT: defect fixed; record CLOSED** (PO/SA final acceptance decision, 2026-09-29T06:57Z) |
 | Resulting handoff version | unchanged (v1.1) |
 
 ## Resolution

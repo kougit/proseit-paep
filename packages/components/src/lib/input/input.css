@@ -1,0 +1,73 @@
+/* Native text control box (Input, Textarea; shared by Native select). Tokens and logical properties only. */
+:host {
+  box-sizing: border-box;
+  display: block;
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: var(--paep-density-control-height);
+  margin: 0;
+  padding-block: var(--paep-space-1);
+  padding-inline: var(--paep-density-control-padding-inline);
+  border: 1px solid var(--paep-color-border-default);
+  border-radius: var(--paep-radius-sm);
+  background-color: var(--paep-color-surface);
+  color: var(--paep-color-text-primary);
+  font: inherit;
+  font-size: var(--paep-font-size-body);
+  line-height: var(--paep-line-height-body);
+  transition: border-color var(--paep-motion-duration-fast) var(--paep-motion-easing-standard);
+}
+
+:host(:hover) {
+  border-color: var(--paep-color-border-strong);
+}
+
+:host::placeholder {
+  color: var(--paep-color-text-placeholder);
+  opacity: 1;
+}
+
+:host(textarea) {
+  min-block-size: calc(var(--paep-space-9) + var(--paep-space-8));
+  padding-block: var(--paep-space-2);
+  resize: vertical;
+}
+
+/* Read-only: dashed read-only border on the read-only surface; value keeps full contrast. */
+:host(input:read-only),
+:host(textarea:read-only) {
+  border-style: dashed;
+  border-color: var(--paep-color-readonly-border);
+  background-color: var(--paep-color-readonly-bg);
+}
+
+/* Disabled: dashed disabled border and disabled fill. */
+:host(:disabled) {
+  border-style: dashed;
+  border-color: var(--paep-color-disabled-border);
+  background-color: var(--paep-color-disabled-bg);
+  color: var(--paep-color-disabled-fg);
+  cursor: not-allowed;
+}
+
+/* Invalid: the 2px thickness is the non-colour cue (with the field's icon and message). */
+:host([aria-invalid='true']) {
+  border-width: 2px;
+  border-color: var(--paep-color-invalid-border);
+}
+
+:host(.paep-control--prefixed) {
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+}
+
+:host(.paep-control--suffixed) {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+@media (forced-colors: active) {
+  :host(:disabled) {
+    border-color: GrayText;
+  }
+}

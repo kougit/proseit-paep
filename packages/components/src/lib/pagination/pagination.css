@@ -1,0 +1,85 @@
+:host {
+  display: block;
+  container-type: inline-size;
+}
+ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--paep-space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+li {
+  display: flex;
+}
+.paep-pagination__control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--paep-space-1);
+  min-inline-size: var(--paep-density-control-height);
+  min-block-size: var(--paep-density-control-height);
+  padding: 0 var(--paep-space-2);
+  color: var(--paep-color-text-primary);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--paep-radius-sm);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--paep-motion-duration-fast) var(--paep-motion-easing-standard);
+}
+.paep-pagination__control:hover:not([aria-disabled='true']) {
+  background: var(--paep-color-hover-neutral);
+  border-color: var(--paep-color-border-default);
+}
+.paep-pagination__control:active:not([aria-disabled='true']) {
+  background: var(--paep-color-active-neutral);
+}
+.paep-pagination__control[aria-current='page'] {
+  color: var(--paep-color-selected-fg);
+  background: var(--paep-color-selected-bg);
+  border: 2px solid var(--paep-color-selected-indicator);
+  font-weight: 700;
+}
+.paep-pagination__control[aria-disabled='true'] {
+  color: var(--paep-color-disabled-fg);
+  cursor: not-allowed;
+}
+.paep-pagination__num {
+  white-space: nowrap;
+}
+.paep-pagination__gap {
+  min-inline-size: var(--paep-space-6);
+  justify-content: center;
+}
+.paep-pagination__status {
+  display: none;
+  flex: 1 1 auto;
+  justify-content: center;
+  padding-inline: var(--paep-space-2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.paep-pagination__summary {
+  margin-inline-start: auto;
+  padding-inline-start: var(--paep-space-3);
+  color: var(--paep-color-text-secondary);
+}
+@container (max-width: 36rem) {
+  ul {
+    flex-wrap: nowrap;
+  }
+  .paep-pagination__num,
+  .paep-pagination__gap,
+  .paep-pagination__summary,
+  .paep-pagination__text {
+    display: none;
+  }
+  .paep-pagination__status {
+    display: flex;
+  }
+}

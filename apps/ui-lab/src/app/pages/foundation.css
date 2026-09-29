@@ -1,0 +1,96 @@
+.lab-swatches,
+.lab-bars,
+.lab-icons {
+  display: grid;
+  gap: var(--paep-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lab-swatches {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+}
+.lab-swatches li,
+.lab-bars li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--paep-space-2);
+  min-inline-size: 0;
+}
+.lab-status {
+  display: flex;
+  align-items: center;
+  gap: var(--paep-space-2);
+  padding: var(--paep-space-3);
+  border: 1px solid;
+  border-radius: var(--paep-radius-md);
+}
+.lab-stack {
+  display: grid;
+  gap: var(--paep-space-3);
+}
+.lab-type {
+  margin: 0;
+}
+.lab-bar {
+  display: inline-block;
+  block-size: var(--paep-space-3);
+  background: var(--paep-brand-primary);
+}
+.lab-radius {
+  display: inline-block;
+  inline-size: var(--paep-space-7);
+  block-size: var(--paep-space-6);
+  vertical-align: middle;
+  border: 2px solid var(--paep-color-border-strong);
+}
+.lab-elevation {
+  padding: var(--paep-space-5);
+  background: var(--paep-color-surface);
+  border: 1px solid var(--paep-color-border-subtle);
+  border-radius: var(--paep-radius-md);
+}
+.lab-control {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--paep-density-control-height);
+  padding-inline: var(--paep-density-control-padding-inline);
+  border: 1px solid var(--paep-color-border-default);
+  border-radius: var(--paep-radius-sm);
+}
+.lab-density-demo {
+  margin-block-start: var(--paep-space-4);
+}
+.lab-focus-demo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--paep-space-5);
+}
+.lab-plain-button {
+  min-block-size: var(--paep-size-target-touch);
+  padding-inline: var(--paep-space-4);
+  font: inherit;
+  color: var(--paep-color-text-primary);
+  background: var(--paep-color-surface);
+  border: 1px solid var(--paep-color-border-default);
+  border-radius: var(--paep-radius-md);
+}
+.lab-focusable {
+  padding: var(--paep-space-2);
+  border: 1px dashed var(--paep-color-border-default);
+}
+.lab-icons {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 9rem), 1fr));
+}
+.lab-icons li {
+  display: grid;
+  justify-items: center;
+  gap: var(--paep-space-2);
+  padding: var(--paep-space-3);
+  background: var(--paep-color-surface);
+  border: 1px solid var(--paep-color-border-subtle);
+  border-radius: var(--paep-radius-md);
+  --paep-icon-size: var(--paep-size-icon-lg);
+}

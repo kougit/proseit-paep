@@ -1,0 +1,175 @@
+<div class="lab-page">
+  <header>
+    <h1 tabindex="-1">{{ title() }}</h1>
+    <p class="lab-lead">{{ lead() }}</p>
+  </header>
+
+  @switch (topic()) {
+    @case ('colour') {
+      <section aria-labelledby="f-neutral">
+        <h2 id="f-neutral">Neutral reference ramp (foundation-internal)</h2>
+        <ul class="lab-swatches">
+          @for (t of byPrefix('--paep-ref-color-neutral-'); track t.name) {
+            <li><span class="lab-swatch" [style.background]="'var(' + t.name + ')'" aria-hidden="true"></span><code>{{ t.name }}</code> {{ t.value }}</li>
+          }
+        </ul>
+      </section>
+      <section aria-labelledby="f-semantic">
+        <h2 id="f-semantic">Semantic colours (protected)</h2>
+        <ul class="lab-swatches">
+          @for (t of byPrefix('--paep-color-'); track t.name) {
+            @if (!t.name.includes('status')) {
+              <li><span class="lab-swatch" [style.background]="'var(' + t.name + ')'" aria-hidden="true"></span><code>{{ t.name }}</code> {{ t.value }}</li>
+            }
+          }
+        </ul>
+      </section>
+      <section aria-labelledby="f-status">
+        <h2 id="f-status">Status colours (protected; always with an icon and text)</h2>
+        <div class="lab-grid">
+          @for (s of statuses; track s) {
+            <div class="lab-status" [style.color]="'var(--paep-color-status-' + s + '-fg)'" [style.background]="'var(--paep-color-status-' + s + '-bg)'" [style.border-color]="'var(--paep-color-status-' + s + '-border)'">
+              <svg [paepIcon]="s"></svg> <strong>{{ s }}</strong>
+            </div>
+          }
+        </div>
+      </section>
+      <section aria-labelledby="f-brand">
+        <h2 id="f-brand">Brand layer (the only overridable group)</h2>
+        <ul class="lab-swatches">
+          @for (t of byPrefix('--paep-brand-'); track t.name) {
+            <li><span class="lab-swatch" [style.background]="'var(' + t.name + ')'" aria-hidden="true"></span><code>{{ t.name }}</code> default {{ t.value }}</li>
+          }
+        </ul>
+      </section>
+      <section aria-labelledby="f-contrast">
+        <h2 id="f-contrast">Contrast evidence (approved defaults, WCAG 2.2)</h2>
+        <div class="lab-scroll" role="region" aria-labelledby="f-contrast-caption" tabindex="0">
+          <table class="lab-table">
+            <caption id="f-contrast-caption">Governing contrast pairs</caption>
+            <thead><tr><th scope="col">Pair</th><th scope="col">Ratio</th><th scope="col">Needed</th><th scope="col">Result</th></tr></thead>
+            <tbody>
+              @for (p of contrastPairs; track p.label) {
+                <tr>
+                  <th scope="row">{{ p.label }}</th>
+                  <td class="paep-numeric">{{ ratio(p.fg, p.bg) }}:1</td>
+                  <td class="paep-numeric">{{ p.min }}:1</td>
+                  <td>{{ passes(p.fg, p.bg, p.min) ? 'Pass' : 'Fail' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    }
+    @case ('typography') {
+      <section aria-labelledby="f-type">
+        <h2 id="f-type">Type scale</h2>
+        <div class="lab-panel lab-stack">
+          @for (r of typeRoles; track r) {
+            <p class="lab-type" [style.font-size]="'var(--paep-font-size-' + r + ')'" [style.line-height]="'var(--paep-line-height-' + r + ')'" [style.font-weight]="'var(--paep-font-weight-' + r + ')'" [style.letter-spacing]="'var(--paep-letter-spacing-' + r + ')'" [style.font-family]="r === 'code' ? 'var(--paep-font-family-mono)' : null">
+              <span class="lab-meta">{{ r }}</span> Maintenance order 1024 scheduled for review
+            </p>
+          }
+        </div>
+      </section>
+      <section aria-labelledby="f-families">
+        <h2 id="f-families">Families</h2>
+        <ul class="lab-list">
+          @for (t of byPrefix('--paep-font-family-'); track t.name) {
+            <li><code>{{ t.name }}</code>: {{ t.value }}</li>
+          }
+        </ul>
+      </section>
+    }
+    @case ('spacing') {
+      <section aria-labelledby="f-space">
+        <h2 id="f-space">Spacing</h2>
+        <ul class="lab-bars">
+          @for (t of byPrefix('--paep-space-'); track t.name) {
+            <li><code>{{ t.name }}</code> {{ t.value }} <span class="lab-bar" [style.inline-size]="'var(' + t.name + ')'" aria-hidden="true"></span></li>
+          }
+        </ul>
+      </section>
+      <section aria-labelledby="f-size">
+        <h2 id="f-size">Size and radius</h2>
+        <ul class="lab-list">
+          @for (t of byPrefix('--paep-size-'); track t.name) {
+            <li><code>{{ t.name }}</code> {{ t.value }}</li>
+          }
+          @for (t of byPrefix('--paep-radius-'); track t.name) {
+            <li><code>{{ t.name }}</code> {{ t.value }} <span class="lab-radius" [style.border-radius]="'var(' + t.name + ')'" aria-hidden="true"></span></li>
+          }
+        </ul>
+      </section>
+    }
+    @case ('surfaces') {
+      <section aria-labelledby="f-elevation">
+        <h2 id="f-elevation">Elevation levels</h2>
+        <div class="lab-grid">
+          @for (t of byPrefix('--paep-elevation-'); track t.name) {
+            <div class="lab-elevation" [style.box-shadow]="'var(' + t.name + ')'"><code>{{ t.name }}</code></div>
+          }
+        </div>
+      </section>
+    }
+    @case ('motion') {
+      <section aria-labelledby="f-motion">
+        <h2 id="f-motion">Durations, easings and loops</h2>
+        <ul class="lab-list">
+          @for (t of byPrefix('--paep-motion-'); track t.name) {
+            <li><code>{{ t.name }}</code> {{ t.value }}</li>
+          }
+        </ul>
+        <p>Current spinner (stops under reduced motion): <svg paepIcon="spinner" class="lab-spin"></svg></p>
+      </section>
+    }
+    @case ('density') {
+      <section aria-labelledby="f-density">
+        <h2 id="f-density">Density tokens</h2>
+        <div class="lab-scroll" role="region" aria-labelledby="f-density-caption" tabindex="0">
+          <table class="lab-table">
+            <caption id="f-density-caption">Comfortable and compact values</caption>
+            <thead><tr><th scope="col">Token</th><th scope="col">Comfortable</th><th scope="col">Compact</th></tr></thead>
+            <tbody>
+              @for (t of byPrefix('--paep-density-'); track t.name) {
+                <tr><th scope="row"><code>{{ t.name }}</code></th><td>{{ t.value }}</td><td>{{ t.compact }}</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <div class="lab-grid lab-density-demo">
+          <div class="lab-panel" data-paep-density="comfortable"><h3>Comfortable</h3><span class="lab-control">Control height</span></div>
+          <div class="lab-panel" data-paep-density="compact"><h3>Compact</h3><span class="lab-control">Control height</span></div>
+        </div>
+      </section>
+    }
+    @case ('focus') {
+      <section aria-labelledby="f-focus">
+        <h2 id="f-focus">Focus ring</h2>
+        <p>Tab through these elements; each shows the 2 px ring with a white halo.</p>
+        <div class="lab-panel lab-focus-demo">
+          <a href="#f-focus">A link</a>
+          <button type="button" class="lab-plain-button">A native button</button>
+          <span tabindex="0" class="lab-focusable">A focusable region</span>
+        </div>
+        <ul class="lab-list">
+          @for (t of byPrefix('--paep-focus-'); track t.name) {
+            <li><code>{{ t.name }}</code> {{ t.value }}</li>
+          }
+          <li><code>--paep-color-focus-ring</code> {{ focusRing }}</li>
+        </ul>
+      </section>
+    }
+    @case ('icons') {
+      <section aria-labelledby="f-icons">
+        <h2 id="f-icons">Icon set ({{ iconNames.length }})</h2>
+        <ul class="lab-icons">
+          @for (n of iconNames; track n) {
+            <li><svg [paepIcon]="n"></svg><code>{{ n }}</code></li>
+          }
+        </ul>
+      </section>
+    }
+  }
+</div>

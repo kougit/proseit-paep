@@ -15,6 +15,12 @@
  * - npm cases run `npm ci --dry-run` in a separate scratch folder that holds
  *   only the manifests, so no install can reach the linked node_modules.
  *
+ * --part a | --part b (IB2 CI-performance split, PO/SA 2026-09-28): runs every second case, in declaration order,
+ * so PAEP / negative-ci (part a) and PAEP / negative-ci-b (part b) together run exactly the full suite in
+ * parallel. Without --part every case runs. Any other --part value, or --part given twice, fails. Every run
+ * must declare exactly the pinned DECLARED_CASE_IDS and run exactly its half of them; each part lists the ids
+ * it left to the other part.
+ *
  * PAEP_EVIDENCE_DIR is removed from the environment of every scratch run.
  * Writes negative-ci-tests.log and negative-ci-tests.json to PAEP_EVIDENCE_DIR
  * (CI) or, locally, to the git-ignored tmp/paep-evidence/ib0-wp05-negative/
@@ -27,6 +33,45 @@ import path from 'node:path';
 import process from 'node:process';
 import { spawnSync } from 'node:child_process';
 import { parseYaml } from './yaml-subset.mjs';
+
+const partArg = process.argv.indexOf('--part');
+const PART = partArg < 0 ? null : process.argv[partArg + 1];
+if (process.argv.filter((a) => a === '--part').length > 1) {
+  console.log(`FAIL --part given more than once: ${process.argv.slice(2).join(' ')}`);
+  process.exit(1);
+}
+if (partArg >= 0 && !['a', 'b'].includes(PART)) {
+  console.log(`FAIL --part must be a or b, got ${PART === undefined ? 'nothing' : JSON.stringify(PART)}`);
+  process.exit(1);
+}
+if (process.argv.slice(2).some((a, i, all) => a !== '--part' && all[i - 1] !== '--part')) {
+  console.log(`FAIL unknown arguments: ${process.argv.slice(2).join(' ')}`);
+  process.exit(1);
+}
+// Case k (0-based, in declaration order) belongs to part a when k is odd and to part b when k is even (part a
+// shares PAEP / negative-ci with qa:baseline:negative, so it takes the half without the first case).
+// Every run, full or split, must declare exactly DECLARED_CASE_IDS in this order, and a part must run exactly its
+// half of it (checked at the end, independently of mine()), so neither part can drop, add or reorder a case
+// without a reviewable edit to this list. A new case, or a new mandatory job (one more GJ case), updates the list.
+const DECLARED_CASE_IDS = [
+  'C06', 'G00', 'G01', 'G02', 'G03', 'G04', 'G05', 'G06', 'G07', 'G08', 'G09', 'GJ10', 'GJ11', 'GJ12', 'GJ13',
+  'GJ14', 'GJ15', 'G10', 'G11', 'G12', 'G13', 'G14', 'G15', 'G16', 'G17', 'G18', 'C01', 'C02', 'C03', 'C04', 'C05',
+  'C07', 'C08', 'A01', 'A02', 'A03', 'A04', 'S01', 'S02', 'S03', 'S04', 'B01', 'H01', 'H02', 'L00', 'L01', 'L02',
+  'L03', 'T01', 'T02', 'T03', 'T04', 'T05', 'T06', 'I01', 'I02', 'I03', 'I04', 'F01', 'F02', 'F03', 'F04', 'X01',
+  'X02', 'X03', 'X04', 'P01', 'P02', 'P03', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P13',
+  'P14', 'P15', 'P16', 'P17', 'P18', 'P19', 'P21', 'P22', 'P23', 'P24', 'P20', 'N01', 'N02', 'N03', 'K01', 'K02',
+  'K03', 'K08', 'K04', 'K05', 'K06', 'K07'
+];
+let caseIndex = 0;
+const declared = [];
+const delegated = [];
+const mine = (id) => {
+  const k = caseIndex++;
+  declared.push(id);
+  if (PART === null || (k % 2 === 1) === (PART === 'a')) return true;
+  delegated.push(id);
+  return false;
+};
 
 const root = process.cwd();
 const evidenceOut = process.env.PAEP_EVIDENCE_DIR || '';
@@ -100,6 +145,7 @@ function record(id, name, control, expected, r, pass, detail) {
 
 // A case passes when the command exits 0 (control) or exits non-zero and the output matches every `expect` pattern.
 function caseRun(id, name, edits, runFn, expect = null) {
+  if (!mine(id)) return;
   let restore = () => {};
   let r;
   try { restore = mutate(edits); r = runFn(); } catch (e) { r = { status: null, out: `harness error: ${e.stack || e}` }; } finally { restore(); }
@@ -124,6 +170,7 @@ const needsWith = (overrides = {}, drop = [], extra = {}) => {
   return { ...n, ...extra };
 };
 function gateCase(id, name, needs, expectPass) {
+  if (!mine(id)) return;
   const r = gateRun(needs);
   const pass = expectPass ? r.status === 0 && /PAEP gate: PASS/.test(r.out) : r.status !== 0 && !/PAEP gate: PASS/.test(r.out);
   record(id, name, expectPass, expectPass ? 'exit 0, PAEP gate: PASS' : 'non-zero exit, no PASS', r, pass, r.out.trim().split('\n').slice(-12).join('\n'));
@@ -200,6 +247,7 @@ try {
     fs.copyFileSync(path.join(root, 'packages', d, 'package.json'), path.join(npmDir, 'packages', d, 'package.json'));
   }
   const npmCase = (id, name, fn, expect) => {
+    if (!mine(id)) return;
     const p = path.join(npmDir, 'package.json');
     const saved = fs.readFileSync(p);
     if (fn) fs.writeFileSync(p, jsonEdit(fn)(saved.toString()));
@@ -306,13 +354,25 @@ try {
 }
 
 // Case ids must be unique, so a report can never hide one case behind another (IB1-CONTRACTS-CONFIG).
-const duplicateIds = results.map((r) => r.id).filter((id, i, a) => a.indexOf(id) !== i);
+const duplicateIds = [...results.map((r) => r.id), ...delegated].filter((id, i, a) => a.indexOf(id) !== i);
 if (duplicateIds.length) console.log(`FAIL duplicate case ids: ${[...new Set(duplicateIds)].join(', ')}`);
-const passed = results.length > 0 && results.every((r) => r.pass) && duplicateIds.length === 0;
+const total = results.length + delegated.length;
+const coverage = [];
+if (total !== caseIndex) coverage.push(`case accounting: ${results.length} run + ${delegated.length} delegated != ${caseIndex} declared`);
+if (JSON.stringify(declared) !== JSON.stringify(DECLARED_CASE_IDS)) {
+  coverage.push(`declared case list differs from the pinned list: missing ${DECLARED_CASE_IDS.filter((id) => !declared.includes(id)).join(' ') || 'none'}; extra ${declared.filter((id) => !DECLARED_CASE_IDS.includes(id)).join(' ') || 'none'}; ${declared.length} declared, ${DECLARED_CASE_IDS.length} pinned`);
+}
+const expectedRun = DECLARED_CASE_IDS.filter((id, k) => PART === null || (PART === 'a' ? k % 2 === 1 : k % 2 === 0));
+if (JSON.stringify(results.map((r) => r.id)) !== JSON.stringify(expectedRun)) {
+  coverage.push(`part ${PART || 'full'} ran ${results.length} of ${DECLARED_CASE_IDS.length} declared cases; expected exactly its ${expectedRun.length}`);
+}
+for (const c of coverage) console.log(`FAIL ${c}`);
+const passed = results.length > 0 && results.every((r) => r.pass) && duplicateIds.length === 0 && coverage.length === 0;
 const head = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).stdout.trim();
 const report = {
   workPackage: 'IB0-WP05', generatedAt: new Date().toISOString(), commit: head, node: process.versions.node,
   result: passed ? 'PASS' : 'FAIL',
+  part: PART || 'full', declaredCases: caseIndex, delegatedToOtherPart: delegated,
   controls: results.filter((r) => r.control).length,
   negatives: results.filter((r) => !r.control).length,
   cases: results
@@ -331,5 +391,6 @@ if (evidenceOut) {
 }
 
 for (const r of results) console.log(`${r.pass ? 'PASS' : 'FAIL'} ${r.id} ${r.name} — exit ${r.exit}`);
-console.log(`\nIB0-WP05 negative CI-control tests: ${passed ? 'PASS' : 'FAIL'} (${results.filter((r) => r.pass).length}/${results.length}; ${report.controls} controls, ${report.negatives} negatives)`);
+if (PART) console.log(`\npart ${PART}: ran ${results.length} of ${caseIndex} declared cases; the other ${delegated.length} run in part ${PART === 'a' ? 'b' : 'a'}: ${delegated.join(' ')}`);
+console.log(`\nIB0-WP05 negative CI-control tests${PART ? ` (part ${PART})` : ''}: ${passed ? 'PASS' : 'FAIL'} (${results.filter((r) => r.pass).length}/${results.length}; ${report.controls} controls, ${report.negatives} negatives)`);
 process.exit(passed ? 0 : 1);

@@ -1,0 +1,108 @@
+/* Choice controls (Checkbox, Radio). Unencapsulated so the wrapping label row gets the ≥24px hit area;
+ * every selector targets .paep-choice or a label that directly wraps one. */
+label:has(> .paep-choice) {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--paep-space-2);
+  min-block-size: var(--paep-size-target-min);
+  padding-block: var(--paep-space-0-5);
+  color: var(--paep-color-text-primary);
+  line-height: var(--paep-line-height-body);
+  text-align: start;
+  overflow-wrap: break-word;
+  cursor: pointer;
+}
+
+label:has(> .paep-choice:disabled) {
+  color: var(--paep-color-disabled-fg);
+  cursor: not-allowed;
+}
+
+.paep-choice {
+  appearance: none;
+  box-sizing: border-box;
+  display: inline-grid;
+  place-content: center;
+  flex: none;
+  inline-size: var(--paep-density-choice-size);
+  block-size: var(--paep-density-choice-size);
+  margin: 0;
+  margin-block-start: calc((var(--paep-line-height-body) - var(--paep-density-choice-size)) / 2);
+  border: 1px solid var(--paep-color-border-default);
+  background: var(--paep-color-surface);
+  vertical-align: middle;
+  cursor: pointer;
+  transition:
+    background-color var(--paep-motion-duration-fast) var(--paep-motion-easing-standard),
+    border-color var(--paep-motion-duration-fast) var(--paep-motion-easing-standard);
+}
+.paep-choice:hover {
+  border-color: var(--paep-color-border-strong);
+}
+.paep-choice::after {
+  content: '';
+}
+
+/* Checkbox: fill + tick (checked) or fill + dash (indeterminate) — distinct shapes, not colour alone. */
+.paep-checkbox {
+  border-radius: var(--paep-radius-xs);
+}
+.paep-checkbox:checked,
+.paep-checkbox--mixed {
+  background: var(--paep-brand-primary);
+  border-color: var(--paep-brand-primary);
+}
+.paep-checkbox:checked::after {
+  inline-size: var(--paep-density-choice-size);
+  block-size: var(--paep-density-choice-size);
+  background: var(--paep-brand-on-primary);
+  clip-path: polygon(14% 52%, 24% 42%, 41% 59%, 76% 24%, 86% 34%, 41% 79%);
+}
+.paep-checkbox--mixed::after,
+.paep-checkbox--mixed:checked::after {
+  inline-size: calc(var(--paep-density-choice-size) / 2);
+  block-size: 2px;
+  background: var(--paep-brand-on-primary);
+  clip-path: none;
+}
+
+/* Invalid: 2px error border. */
+.paep-choice[aria-invalid='true'] {
+  border-width: 2px;
+  border-color: var(--paep-color-invalid-border);
+}
+
+/* Read-only: dashed read-only border; a checked box shows a secondary-text fill. */
+.paep-choice[aria-readonly='true'],
+.paep-radio--readonly {
+  border-style: dashed;
+  border-color: var(--paep-color-readonly-border);
+  background: var(--paep-color-readonly-bg);
+  cursor: default;
+}
+.paep-checkbox[aria-readonly='true']:checked,
+.paep-checkbox--mixed[aria-readonly='true'] {
+  border-color: var(--paep-color-text-secondary);
+  background: var(--paep-color-text-secondary);
+}
+
+/* Disabled: dashed disabled border; checked disabled uses a solid disabled fill. */
+.paep-choice:disabled {
+  border-style: dashed;
+  border-color: var(--paep-color-disabled-border);
+  background: var(--paep-color-disabled-bg);
+  cursor: not-allowed;
+}
+.paep-checkbox:disabled:checked,
+.paep-checkbox--mixed:disabled {
+  border-style: solid;
+  border-color: var(--paep-color-disabled-fg);
+  background: var(--paep-color-disabled-fg);
+}
+
+@media (forced-colors: active) {
+  .paep-checkbox:checked::after,
+  .paep-checkbox--mixed::after {
+    background: CanvasText;
+  }
+}

@@ -1,0 +1,58 @@
+
+> @proseit/paep-workspace@0.0.0 qa:ib0-wp05:negative
+> node tooling/verification/negative-ib0-wp05.mjs --part a
+
+PASS G00 control: every mandatory job succeeded — exit 0
+PASS G02 mandatory job provenance failed — exit 1
+PASS G04 mandatory job strictness failed — exit 1
+PASS G06 mandatory job negative-ci failed — exit 1
+PASS G08 mandatory job contracts failed — exit 1
+PASS GJ10 mandatory job runtime-config-negative failed — exit 1
+PASS GJ12 mandatory job accessibility failed — exit 1
+PASS GJ14 mandatory job build-reference-app failed — exit 1
+PASS G10 mandatory job cancelled (negative-ci) — exit 1
+PASS G12 mandatory job timed out (regression; GitHub reports timeouts as failure) — exit 1
+PASS G14 unexpected extra job in needs — exit 1
+PASS G16 empty needs context — exit 1
+PASS G18 unknown result value (neutral) — exit 1
+PASS C02 control: provenance gate passes unmutated — exit 0
+PASS C04 control: qa:architecture passes unmutated — exit 0
+PASS C07 control: strictness gate passes unmutated — exit 0
+PASS A01 (i) forbidden upward dependency contracts -> foundation fails qa:architecture — exit 1
+PASS A03 (xii) prohibited change: deep import into another package fails qa:architecture — exit 1
+PASS S01 (ii) TypeScript strict violation (implicit any, null to string) fails qa:types — exit 1
+PASS S03 (ii) strictTemplates false fails the strictness gate — exit 1
+PASS B01 (iii) type error fails the reference-app production build — exit 1
+PASS H02 (iv) checker that stops reporting cycles makes WP04 negative cases fail, failing the negative-architecture gate — exit 1
+PASS L01 (v) package.json dependency changed without a lockfile update fails npm ci — exit 1
+PASS L03 (v) lockfile drift from the accepted baseline fails the governance gate — exit 1
+PASS T02 (vi) running Node differs from a consistent pin (all pins 24.20.0) fails the toolchain gate — exit 1
+PASS T04 (vii) packageManager pin drift fails the toolchain gate — exit 1
+PASS T06 (vii) devEngines npm pin not met fails npm ci (EBADDEVENGINES) — exit 1
+PASS I02 (viii) install script allowed (esbuild: true) fails the provenance gate — exit 1
+PASS I04 (viii) npm install with scripts enabled in a workflow step fails the provenance gate — exit 1
+PASS F02 (ix) CLAUDE.md changed fails the governance gate — exit 1
+PASS F04 (ix) accepted WP04 record moved into work-packages/IB0-WP05 (committed rename) fails the governance gate — exit 1
+PASS X02 (x) mandatory job dropped from gate needs fails the provenance gate — exit 1
+PASS X04 (x) mandatory job made conditional (if) fails the provenance gate — exit 1
+PASS P02 (xi) action referenced by a floating tag fails the provenance gate — exit 1
+PASS P04 (xi) contents: write fails the provenance gate — exit 1
+PASS P06 (xi) pull_request_target trigger fails the provenance gate — exit 1
+PASS P08 (xi) secrets reference fails the provenance gate — exit 1
+PASS P10 (xi) node_modules cached with actions/cache fails the provenance gate — exit 1
+PASS P12 (xi) floating Node version in setup-node fails the provenance gate — exit 1
+PASS P14 (xi) invalid workflow YAML (unquoted ": " in a step name, which GitHub rejects) fails the provenance gate — exit 1
+PASS P16 (xi) top-level defaults replacing the run shell fails the provenance gate — exit 1
+PASS P18 (xi) env re-enabling install scripts on the setup npm ci step fails the provenance gate — exit 1
+PASS P21 (viii) "|| true" on the setup toolchain gate fails the provenance gate — exit 1
+PASS P23 (xi) top-level defaults hidden behind U+0085 (NEL) in a comment fails the provenance gate — exit 1
+PASS P20 (xi) evidence upload widened with include-hidden-files fails the provenance gate — exit 1
+PASS N02 successor artefact outside the CANDIDATE scope (packages/frappe-sdk source) fails the governance gate — exit 1
+PASS K01 IB1 contracts job dropped from gate needs fails the provenance gate — exit 1
+PASS K03 IB1 portability proof removed from the runtime-config-negative job fails the provenance gate — exit 1
+PASS K04 accepted job build-ui-lab dropped from the CI policy fails the provenance gate — exit 1
+PASS K06 gate script made to pass (exit 0) in the policy and the workflow together fails the provenance gate — exit 1
+
+part a: ran 50 of 101 declared cases; the other 51 run in part b: C06 G01 G03 G05 G07 G09 GJ11 GJ13 GJ15 G11 G13 G15 G17 C01 C03 C05 C08 A02 A04 S02 S04 H01 L00 L02 T01 T03 T05 I01 I03 F01 F03 X01 X03 P01 P03 P05 P07 P09 P11 P13 P15 P17 P19 P22 P24 N01 N03 K02 K08 K05 K07
+
+IB0-WP05 negative CI-control tests (part a): PASS (50/50; 4 controls, 46 negatives)

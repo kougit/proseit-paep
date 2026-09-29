@@ -1,0 +1,23 @@
+
+> @proseit/paep-workspace@0.0.0 qa:runtime-config:portability
+> node tooling/config-validation/portability-proof.mjs
+
+PASS B0 headless Chromium available - /opt/pw-browsers/chromium-1194/chrome-linux/chrome
+PASS B1 reference-app production build (built once) - sha256 of build output 95a7e7c147e1b042e9c55654cf6063d7f8de37053eccf6e3c022edaaffa32ad2
+PASS B2 build output embeds no environment endpoint - none of the example endpoints appear in the bundle
+PASS S1 cloud-saas production configuration starts the application - status=ready profile=cloud-saas appRendered=true
+PASS S2 private-cloud staging configuration starts the same build - status=ready profile=private-cloud appRendered=true
+PASS S3 on-premise production configuration (no external telemetry or analytics) starts the same build - status=ready profile=on-premise appRendered=true
+PASS F1 malformed JSON fails safe - status=failed code=CFG_PARSE_SYNTAX appRendered=false appRootPresent=false contentEchoed=false
+PASS F2 unsupported future schema version fails safe - status=failed code=CFG_VERSION_UNSUPPORTED appRendered=false appRootPresent=false contentEchoed=false
+PASS F3 incompatible PAEP range fails safe - status=failed code=CFG_COMPAT_PAEP appRendered=false appRootPresent=false contentEchoed=false
+PASS F4 configuration for another product fails safe - status=failed code=CFG_COMPAT_PRODUCT appRendered=false appRootPresent=false contentEchoed=false
+PASS F5 secret-bearing configuration fails safe - status=failed code=CFG_CONTENT_SECRET appRendered=false appRootPresent=false contentEchoed=false
+PASS F6 unsafe endpoint scheme fails safe - status=failed code=CFG_CONTENT_MARKUP appRendered=false appRootPresent=false contentEchoed=false
+PASS F7 missing configuration (404) fails safe; no localhost or default fallback - status=failed code=CFG_LOAD_STATUS appRendered=false appRootPresent=false contentEchoed=false
+PASS F8 SPA fallback HTML instead of JSON fails safe - status=failed code=CFG_LOAD_CONTENT_TYPE appRendered=false appRootPresent=false contentEchoed=false
+PASS F9 insecure http endpoint in production fails safe - status=failed code=CFG_URL_INSECURE appRendered=false appRootPresent=false contentEchoed=false
+PASS S4 the same bundle served under /erp/ (only <base href> set at deploy time) starts with basePath /erp/ - bundle identical except index.html=true status=ready appRendered=true
+PASS B3 every scenario ran against the identical build output - sha256 before 95a7e7c147e1b042 after 95a7e7c147e1b042
+
+PAEP IB1 same-build portability and fail-safe startup proof: PASS (17/17)

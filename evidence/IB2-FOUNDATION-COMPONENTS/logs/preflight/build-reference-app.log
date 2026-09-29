@@ -1,0 +1,13 @@
+❯ Building...
+✔ Building...
+Initial chunk files | Names         |  Raw size | Estimated transfer size
+main-D5EQQVHA.js    | main          | 221.65 kB |                59.44 kB
+styles-5INURTSO.css | styles        |   0 bytes |                 0 bytes
+
+                    | Initial total | 221.65 kB |                59.44 kB
+
+Application bundle generation complete. [11.086 seconds] - 2026-09-26T20:02:17.362Z
+
+Output location: /home/claude/proseit-paep/dist/reference-app
+
+EXIT 0

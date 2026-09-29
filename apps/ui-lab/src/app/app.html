@@ -1,5 +1,68 @@
-<main>
-  <h1>{{ title() }}</h1>
-  <p>Workspace bootstrap placeholder (IB0-WP01). No product, shell or design-system features are implemented.</p>
-</main>
-<router-outlet />
+<a class="lab-skip" href="#lab-main">Skip to content</a>
+<header class="lab-header">
+  <p class="lab-header__title"><a routerLink="/" queryParamsHandling="preserve">PAEP UI laboratory</a></p>
+  <p class="lab-header__status">Implementation of HOF-IB2-001 v1.1 · IB2 CANDIDATE</p>
+  <form class="lab-settings" aria-label="Specimen settings" (submit)="$event.preventDefault()">
+    <div class="lab-field">
+      <label for="lab-density">Density</label>
+      <select id="lab-density" [value]="settings.density()" (change)="setDensity($event)">
+        <option value="comfortable">Comfortable</option>
+        <option value="compact">Compact</option>
+      </select>
+    </div>
+    <div class="lab-field">
+      <label for="lab-dir">Direction</label>
+      <select id="lab-dir" [value]="settings.direction()" (change)="setDirection($event)">
+        <option value="ltr">LTR</option>
+        <option value="rtl">RTL</option>
+      </select>
+    </div>
+    <div class="lab-field">
+      <label for="lab-brand">Brand profile</label>
+      <select id="lab-brand" [value]="settings.brand()" (change)="setBrand($event)">
+        <option value="proseit-default">proseit-default</option>
+        <option value="synthetic-demo-petrol">synthetic-demo-petrol</option>
+      </select>
+    </div>
+    <label class="lab-settings__check">
+      <input type="checkbox" [checked]="settings.reducedMotion()" (change)="setReducedMotion($event)" />
+      Simulate reduced motion
+    </label>
+  </form>
+</header>
+
+<div class="lab-body">
+  <nav class="lab-contents" aria-label="Laboratory contents">
+    <button
+      type="button"
+      class="lab-contents__toggle"
+      [attr.aria-expanded]="contentsOpen()"
+      aria-controls="lab-contents-list"
+      (click)="contentsOpen.set(!contentsOpen())"
+    >
+      Contents
+    </button>
+    <div id="lab-contents-list" class="lab-contents__list" [class.lab-contents__list--open]="contentsOpen()">
+      @for (group of nav; track group.heading) {
+        <h2 class="lab-contents__heading">{{ group.heading }}</h2>
+        <ul>
+          @for (item of group.items; track item.path) {
+            <li>
+              <a
+                [routerLink]="item.path"
+                queryParamsHandling="preserve"
+                routerLinkActive="lab-contents__link--active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                ariaCurrentWhenActive="page"
+                >{{ item.label }}</a
+              >
+            </li>
+          }
+        </ul>
+      }
+    </div>
+  </nav>
+  <main id="lab-main" class="lab-main" tabindex="-1">
+    <router-outlet />
+  </main>
+</div>

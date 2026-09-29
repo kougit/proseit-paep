@@ -56,6 +56,15 @@ const FIXTURE_ACCEPTANCE_ROW = /(Acceptance Status[^\n|]*\|\s*[*_`]*\s*)accepted
   git('clean', '-q', '-f', '-d');
   for (const f of listed(g1.acceptedCommit).filter(inScope)) fs.rmSync(path.join(copy, f), { force: true });
   for (const [f, data] of keep) { fs.mkdirSync(path.dirname(path.join(copy, f)), { recursive: true }); fs.writeFileSync(path.join(copy, f), data); }
+  // package.json is in the generation 2 scope for its scripts only. A later generation may change its dependency
+  // fields together with package-lock.json (for example IB2's approved test tooling); the fixture keeps the current
+  // scripts and restores every non-script field to its generation 2 form, so the lockfile of the generation 1
+  // commit still matches.
+  if (keep.has('package.json')) {
+    const current = JSON.parse(fs.readFileSync(path.join(copy, 'package.json'), 'utf8'));
+    const atG2 = JSON.parse(git('show', `${g2.acceptedCommit}:package.json`).out);
+    fs.writeFileSync(path.join(copy, 'package.json'), `${JSON.stringify({ ...atG2, scripts: current.scripts }, null, 2)}\n`);
+  }
   Object.assign(g2, { status: 'CANDIDATE', acceptedCommit: null, acceptedTree: null, acceptance: null, fingerprints: null });
   live.generations = live.generations.filter((x) => x.generation <= 2);
   fs.writeFileSync(path.join(copy, REG), `${JSON.stringify(live, null, 2)}\n`);

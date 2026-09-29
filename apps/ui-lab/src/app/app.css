@@ -1,0 +1,174 @@
+:host {
+  display: block;
+  min-block-size: 100vh;
+}
+
+.lab-skip {
+  position: absolute;
+  inset-inline-start: var(--paep-space-2);
+  inset-block-start: calc(-1 * var(--paep-space-10));
+  z-index: 10;
+  padding: var(--paep-space-2) var(--paep-space-3);
+  background: var(--paep-color-surface);
+  border-radius: var(--paep-radius-sm);
+}
+
+.lab-skip:focus {
+  inset-block-start: var(--paep-space-2);
+}
+
+.lab-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--paep-space-3) var(--paep-space-5);
+  padding: var(--paep-space-3) var(--paep-layout-page-margin);
+  background: var(--paep-color-surface);
+  border-block-end: 3px solid var(--paep-brand-accent);
+}
+
+.lab-header__title {
+  margin: 0;
+  font-size: var(--paep-font-size-title);
+  line-height: var(--paep-line-height-title);
+  font-weight: var(--paep-font-weight-title);
+}
+
+.lab-header__title a {
+  color: var(--paep-color-text-primary);
+  text-decoration: none;
+}
+
+.lab-header__status {
+  margin: 0;
+  padding: var(--paep-space-0-5) var(--paep-space-2);
+  color: var(--paep-color-status-warning-fg);
+  background: var(--paep-color-status-warning-bg);
+  border: 1px dashed var(--paep-color-status-warning-border);
+  border-radius: var(--paep-radius-sm);
+  font-size: var(--paep-font-size-caption);
+  line-height: var(--paep-line-height-caption);
+  font-weight: var(--paep-font-weight-label);
+}
+
+.lab-settings {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--paep-space-3);
+  margin-inline-start: auto;
+}
+
+.lab-settings__check {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--paep-space-2);
+  min-block-size: var(--paep-size-target-min);
+  font-size: var(--paep-font-size-body-sm);
+}
+
+.lab-settings__check input {
+  inline-size: var(--paep-size-icon-sm);
+  block-size: var(--paep-size-icon-sm);
+  margin: 0;
+}
+
+.lab-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--paep-space-5);
+  padding: var(--paep-space-5) var(--paep-layout-page-margin) var(--paep-space-10);
+}
+
+.lab-main {
+  min-inline-size: 0;
+}
+
+.lab-main:focus {
+  outline: none;
+}
+
+.lab-contents__toggle {
+  min-block-size: var(--paep-size-target-touch);
+  padding-inline: var(--paep-space-4);
+  font: inherit;
+  font-weight: var(--paep-font-weight-label);
+  color: var(--paep-color-text-primary);
+  background: var(--paep-color-surface);
+  border: 1px solid var(--paep-color-border-default);
+  border-radius: var(--paep-radius-md);
+  cursor: pointer;
+}
+
+.lab-contents__list {
+  display: none;
+  margin-block-start: var(--paep-space-3);
+  padding: var(--paep-space-3);
+  background: var(--paep-color-surface);
+  border: 1px solid var(--paep-color-border-subtle);
+  border-radius: var(--paep-radius-lg);
+}
+
+.lab-contents__list--open {
+  display: block;
+}
+
+.lab-contents__heading {
+  margin: var(--paep-space-4) 0 var(--paep-space-1);
+  color: var(--paep-color-text-secondary);
+  font-size: var(--paep-font-size-body-sm);
+  line-height: var(--paep-line-height-body-sm);
+  font-weight: var(--paep-font-weight-label);
+}
+
+.lab-contents__heading:first-child {
+  margin-block-start: 0;
+}
+
+.lab-contents ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lab-contents a {
+  display: block;
+  padding-block: var(--paep-space-1);
+  padding-inline: var(--paep-space-2);
+  color: var(--paep-color-text-primary);
+  text-decoration: none;
+  border-inline-start: 3px solid transparent;
+  border-radius: var(--paep-radius-sm);
+}
+
+.lab-contents a:hover {
+  background: var(--paep-color-hover-neutral);
+}
+
+.lab-contents a.lab-contents__link--active {
+  color: var(--paep-color-selected-fg);
+  background: var(--paep-color-selected-bg);
+  border-inline-start-color: var(--paep-color-selected-indicator);
+  font-weight: var(--paep-font-weight-label);
+}
+
+@media (min-width: 64em) {
+  .lab-body {
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: var(--paep-space-7);
+  }
+
+  .lab-contents__toggle {
+    display: none;
+  }
+
+  .lab-contents__list {
+    display: block;
+    position: sticky;
+    inset-block-start: var(--paep-space-4);
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: 0;
+  }
+}

@@ -1,4 +1,5 @@
-# PAEP CI - IB0-WP05 automated quality gates, extended by IB1 (contracts and runtime configuration).
+# PAEP CI - IB0-WP05 automated quality gates, extended by IB1 (contracts and runtime configuration)
+# and IB2 (design foundations, components and UI laboratory).
 # Design: docs/architecture/IB0-WP05-CI-DESIGN.md. Policy checked by
 # tooling/verification/verify-ib0-wp05.mjs against tooling/verification/ib0-wp05-ci-policy.json.
 # Security rules: pull_request only (never pull_request_target), read-only token,
@@ -187,10 +188,10 @@ jobs:
       - name: PAEP setup
         uses: ./.github/actions/paep-setup
 
-      - name: CI-control negative tests (qa:ib0-wp05:negative)
+      - name: CI-control negative tests, part a of 2 (qa:ib0-wp05:negative --part a)
         run: |
           set -euo pipefail
-          npm run qa:ib0-wp05:negative 2>&1 | tee "$PAEP_EVIDENCE_DIR/negative-ci-1.log"
+          npm run qa:ib0-wp05:negative -- --part a 2>&1 | tee "$PAEP_EVIDENCE_DIR/negative-ci-1.log"
 
       - name: Baseline-governance positive, negative and promotion tests (qa:baseline:negative)
         run: |
@@ -202,6 +203,36 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: paep-negative-ci-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/paep-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
+  # IB2 CI-performance split (PO/SA, 2026-09-28): the other half of the unchanged IB0-WP05 negative suite runs in
+  # parallel with PAEP / negative-ci, so neither job carries the whole suite on the critical path (RR14).
+  negative-ci-b:
+    name: PAEP / negative-ci-b
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out (full history for baseline comparisons)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: PAEP setup
+        uses: ./.github/actions/paep-setup
+
+      - name: CI-control negative tests, part b of 2 (qa:ib0-wp05:negative --part b)
+        run: |
+          set -euo pipefail
+          npm run qa:ib0-wp05:negative -- --part b 2>&1 | tee "$PAEP_EVIDENCE_DIR/negative-ci-b-1.log"
+
+      - name: Upload evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: paep-negative-ci-b-attempt-${{ github.run_attempt }}
           path: ${{ runner.temp }}/paep-evidence/
           if-no-files-found: warn
           retention-days: 30
@@ -323,6 +354,87 @@ jobs:
           if-no-files-found: warn
           retention-days: 30
 
+  components:
+    name: PAEP / components
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out (full history for baseline comparisons)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: PAEP setup
+        uses: ./.github/actions/paep-setup
+
+      - name: IB2 foundation and component behaviour tests in Chrome (test:components)
+        run: |
+          set -euo pipefail
+          npm run test:components 2>&1 | tee "$PAEP_EVIDENCE_DIR/components-1.log"
+
+      - name: IB2 design-system static gate - handoff, tokens, census, styling, imports, clean-room, lab coverage (qa:design-system)
+        run: |
+          set -euo pipefail
+          npm run qa:design-system 2>&1 | tee "$PAEP_EVIDENCE_DIR/components-2.log"
+
+      - name: IB2 design-system negative suite (qa:design-system:negative)
+        run: |
+          set -euo pipefail
+          npm run qa:design-system:negative 2>&1 | tee "$PAEP_EVIDENCE_DIR/components-3.log"
+
+      - name: IB2 CI-governance negative suite - IB2 jobs mandatory, IB2 regression bounds narrow (qa:ib2:ci-negative)
+        run: |
+          set -euo pipefail
+          npm run qa:ib2:ci-negative 2>&1 | tee "$PAEP_EVIDENCE_DIR/components-4.log"
+
+      - name: Upload evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: paep-components-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/paep-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
+  accessibility:
+    name: PAEP / accessibility
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out (full history for baseline comparisons)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: PAEP setup
+        uses: ./.github/actions/paep-setup
+
+      - name: Production build (ui-lab) for browser QA
+        run: |
+          set -euo pipefail
+          npm run build:ui-lab 2>&1 | tee "$PAEP_EVIDENCE_DIR/accessibility-1.log"
+
+      - name: IB2 axe-core, 320/834/1440 px, RTL, reduced motion, density, brand and focus checks (qa:accessibility)
+        run: |
+          set -euo pipefail
+          npm run qa:accessibility 2>&1 | tee "$PAEP_EVIDENCE_DIR/accessibility-2.log"
+
+      - name: IB2 accessibility negative suite (qa:accessibility:negative)
+        run: |
+          set -euo pipefail
+          npm run qa:accessibility:negative 2>&1 | tee "$PAEP_EVIDENCE_DIR/accessibility-3.log"
+
+      - name: Upload evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: paep-accessibility-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/paep-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
   build-reference-app:
     name: PAEP / build-reference-app
     runs-on: ubuntu-24.04
@@ -403,6 +515,9 @@ jobs:
       - contracts
       - runtime-config
       - runtime-config-negative
+      - components
+      - accessibility
+      - negative-ci-b
       - build-reference-app
       - build-ui-lab
     runs-on: ubuntu-24.04
@@ -412,7 +527,7 @@ jobs:
       - name: Evaluate every mandatory job result
         env:
           NEEDS_JSON: ${{ toJSON(needs) }}
-          MANDATORY_JOBS: governance provenance architecture strictness negative-architecture negative-ci regression contracts runtime-config runtime-config-negative build-reference-app build-ui-lab
+          MANDATORY_JOBS: governance provenance architecture strictness negative-architecture negative-ci regression contracts runtime-config runtime-config-negative components accessibility negative-ci-b build-reference-app build-ui-lab
         run: |
           set -euo pipefail
           fail=0

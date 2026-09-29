@@ -1,0 +1,120 @@
+/* Action group (HOF-IB2-001 component-specs "Action group"). Unencapsulated so it can order the projected
+ * paepButtons; every selector is scoped under .paep-action-group. */
+.paep-action-group {
+  display: block;
+  container-type: inline-size;
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.paep-action-group__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--paep-space-2);
+}
+
+/* Visual order: secondary · separator · destructive · primary (inline-end) · More. */
+.paep-action-group__row > .paep-button--destructive {
+  order: 2;
+}
+.paep-action-group__sep {
+  order: 1;
+  align-self: stretch;
+  inline-size: 1px;
+  margin-inline: var(--paep-space-1);
+  background: var(--paep-color-border-subtle);
+}
+.paep-action-group__row > .paep-button--primary {
+  order: 10;
+}
+.paep-action-group .paep-action-group__row > .paep-action-group__more {
+  order: 11;
+  display: none;
+}
+
+@container (width < 30rem) {
+  .paep-action-group--toolbar .paep-action-group__row > .paep-button:not(.paep-button--primary, .paep-action-group__more),
+  .paep-action-group--toolbar .paep-action-group__sep {
+    display: none;
+  }
+  .paep-action-group--toolbar .paep-action-group__row > .paep-action-group__more {
+    display: inline-flex;
+  }
+  .paep-action-group--toolbar .paep-action-group__row > .paep-button--primary {
+    flex: 1 1 auto;
+  }
+  /* Footer: stacked full width in DOM order. */
+  .paep-action-group--footer .paep-action-group__row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .paep-action-group--footer .paep-action-group__row > * {
+    order: 0;
+  }
+  .paep-action-group--footer .paep-action-group__sep {
+    display: none;
+  }
+}
+
+/* Overflow menu: a top-layer popover positioned below More at its inline-end. */
+.paep-action-group__menu {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  box-sizing: border-box;
+  min-inline-size: calc(var(--paep-space-10) * 3);
+  max-inline-size: min(20rem, calc(100vw - var(--paep-space-7)));
+  max-block-size: 60vh;
+  overflow: auto;
+  padding: var(--paep-space-1);
+  background: var(--paep-color-surface-overlay);
+  color: var(--paep-color-text-primary);
+  border: 1px solid var(--paep-color-border-subtle);
+  border-radius: var(--paep-radius-md);
+  box-shadow: var(--paep-elevation-3);
+  opacity: 1;
+  transition: opacity var(--paep-motion-duration-moderate) var(--paep-motion-easing-enter);
+}
+@starting-style {
+  .paep-action-group__menu:popover-open {
+    opacity: 0;
+  }
+}
+
+.paep-action-group__item {
+  display: flex;
+  align-items: center;
+  gap: var(--paep-space-2);
+  inline-size: 100%;
+  min-block-size: var(--paep-density-control-height);
+  padding-block: var(--paep-space-1);
+  padding-inline: var(--paep-space-3);
+  border: 0;
+  border-radius: var(--paep-radius-sm);
+  background: transparent;
+  color: var(--paep-color-text-primary);
+  font: inherit;
+  text-align: start;
+  overflow-wrap: break-word;
+  cursor: pointer;
+}
+.paep-action-group__item:hover,
+.paep-action-group__item:focus-visible {
+  background: var(--paep-color-hover-neutral);
+}
+.paep-action-group__item--destructive {
+  color: var(--paep-color-status-error-fg);
+  font-weight: var(--paep-font-weight-label);
+}
+.paep-action-group__item[aria-disabled='true'] {
+  color: var(--paep-color-disabled-fg);
+  cursor: not-allowed;
+}
+
+.paep-action-group__divider {
+  margin: var(--paep-space-1) 0;
+  border: 0;
+  border-block-start: 1px solid var(--paep-color-border-subtle);
+}

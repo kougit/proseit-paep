@@ -1,0 +1,21 @@
+/* Icon button: square target of control height; icon 20 px comfortable / 16 px compact. */
+:host {
+  align-items: center;
+  flex: none;
+  padding: 0;
+  inline-size: var(--paep-density-control-height);
+  min-inline-size: var(--paep-density-control-height);
+  block-size: var(--paep-density-control-height);
+}
+
+:host(.paep-button--tertiary) {
+  color: var(--paep-color-icon-default);
+  padding-inline: 0;
+}
+:host(.paep-button--tertiary:hover) {
+  background: var(--paep-color-hover-neutral);
+}
+
+.paep-button__icon {
+  margin-block: 0;
+}

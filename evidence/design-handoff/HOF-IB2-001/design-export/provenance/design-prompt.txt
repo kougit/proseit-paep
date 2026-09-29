@@ -1,0 +1,1113 @@
+Design prompt of record for HOF-IB2-001 v1.0 / DWP-IB2-001 v1.0.
+Source: project thread root message by Kouga (PO/SA), 2026-09-26T20:40:40Z, message id cmsg_015JNYb1yCBBK4iDi5L77KSoX4XP9XhDe1jUi9yybeyrVk.
+Copied verbatim below (HTML entities decoded).
+-----BEGIN PROMPT-----
+PAEP IB2 — CLAUDE DESIGN EXECUTION
+DWP-IB2-001 + HOF-IB2-001 REVIEW CANDIDATE
+
+You are working on the ProSEIT Angular Experience Platform (PAEP).
+
+This is a CONTROLLED DESIGN STAGE.
+
+You are NOT implementing Angular production code.
+
+You are NOT approving your own design.
+
+You are creating the formal design candidate that will later be reviewed by
+the Product Owner / Solutions Architect and, only if accepted, handed to
+Claude Code for implementation.
+
+==================================================
+1. GOVERNING CONTEXT
+==================================================
+
+Use the supplied:
+
+01-DESIGN-PREPARATION.md
+
+as the immediate design-preparation input.
+
+Also consult the current controlled PAEP sources available to you, especially:
+
+- PAEP controlled platform specification;
+- PAEP Implementation Architecture / Repository Baseline;
+- PAEP Design-to-Code Handoff Standard;
+- PAEP Claude Engineering Execution & QA Protocol;
+- current approved ProSEIT branding sources if available.
+
+Do not substitute remembered product conventions for controlled sources.
+
+If a controlled source conflicts materially with the preparation artifact:
+
+STOP.
+
+Report:
+
+IB2 DESIGN STATUS: CONTROLLED-SOURCE CONFLICT
+
+and identify the exact conflict.
+
+==================================================
+2. DESIGN WORK PACKAGE
+==================================================
+
+Create:
+
+DWP-IB2-001
+PAEP Design Foundations, Core Components and UI Laboratory
+
+The design objective is to establish the first independent PAEP visual and
+interaction language for:
+
+- @proseit/paep-foundation;
+- the approved first @proseit/paep-components tranche;
+- apps/ui-lab.
+
+This design must be:
+
+- product-neutral;
+- enterprise-grade;
+- clean and professional;
+- suitable for data-heavy applications;
+- responsive;
+- accessible;
+- suitable for African enterprise operating environments;
+- independently designed;
+- reusable across manufacturing, agriculture, construction and other future
+  ProSEIT products.
+
+Do NOT imitate:
+
+- Ultima;
+- PrimeNG commercial templates;
+- SAP Fiori;
+- Material commercial themes;
+- any proprietary dashboard/template product;
+- screenshots of existing commercial enterprise systems.
+
+Capability inspiration is acceptable.
+Visual or implementation imitation is not.
+
+==================================================
+3. DESIGN STATUS
+==================================================
+
+The output of this task must be:
+
+REVIEW CANDIDATE
+
+NOT:
+
+APPROVED_FOR_IMPLEMENTATION
+
+Claude Design cannot grant final approval.
+
+The Product Owner / Solutions Architect will review the result separately.
+
+==================================================
+4. FOUNDATION DESIGN
+==================================================
+
+Design the complete candidate foundation system.
+
+You must explicitly define candidate values and rationale for:
+
+A. COLOUR
+
+- neutral palette;
+- page background;
+- surface backgrounds;
+- raised surfaces;
+- text hierarchy;
+- borders/dividers;
+- brand accent;
+- accent foreground/on-accent;
+- success;
+- warning;
+- error;
+- information;
+- focus;
+- selected;
+- disabled;
+- read-only.
+
+Separate:
+
+BRAND TOKENS
+
+from:
+
+SEMANTIC STATE TOKENS.
+
+Brand overrides must never redefine:
+
+- success;
+- warning;
+- error;
+- information;
+- focus;
+- disabled;
+- validation semantics;
+- text contrast rules.
+
+For every important foreground/background pair, provide contrast evidence.
+
+Target WCAG 2.2 AA.
+
+--------------------------------------------------
+B. TYPOGRAPHY
+--------------------------------------------------
+
+Define:
+
+- font strategy;
+- body font;
+- heading hierarchy;
+- type scale;
+- weights;
+- line heights;
+- letter spacing where required;
+- numeric/data presentation;
+- tabular numeral strategy;
+- truncation/wrapping rules.
+
+ZERO-NEW-DEPENDENCY PREFERENCE:
+
+Prefer a high-quality system font stack unless there is a compelling
+controlled reason to introduce a self-hosted open-licence font.
+
+If you propose a third-party font:
+
+do not treat it as approved.
+
+Create:
+
+DEPENDENCY / ASSET DECISION REQUIRED
+
+with licence, source and rationale.
+
+--------------------------------------------------
+C. SPACING
+--------------------------------------------------
+
+Define:
+
+- base spacing unit;
+- spacing scale;
+- inline spacing;
+- block spacing;
+- component padding;
+- page/container spacing;
+- responsive adjustments.
+
+Avoid arbitrary one-off spacing.
+
+--------------------------------------------------
+D. SIZE
+--------------------------------------------------
+
+Define:
+
+- control heights;
+- icon dimensions;
+- minimum interactive dimensions;
+- density-specific dimensions.
+
+Preserve accessibility target-size requirements.
+
+--------------------------------------------------
+E. RADIUS
+--------------------------------------------------
+
+Define a restrained radius scale.
+
+Do not produce decorative excess.
+
+==================================================
+5. SURFACES AND ELEVATION
+==================================================
+
+Define semantic layers for:
+
+- page;
+- panel;
+- card;
+- raised card where justified;
+- popover;
+- drawer;
+- dialog/modal.
+
+Elevation communicates hierarchy, not decoration.
+
+Prefer clarity and restrained depth.
+
+==================================================
+6. MOTION
+==================================================
+
+Define:
+
+- which interactions use motion;
+- durations;
+- easing;
+- entry/exit behaviour;
+- loading motion;
+- progress motion;
+- skeleton motion.
+
+Also define the complete:
+
+prefers-reduced-motion: reduce
+
+experience.
+
+Under reduced motion:
+
+- non-essential transitions disappear;
+- shimmer becomes static;
+- indefinite decorative animation disappears;
+- essential state change remains understandable.
+
+==================================================
+7. RESPONSIVE SYSTEM
+==================================================
+
+Define candidate breakpoint/layout rules for:
+
+- wide desktop;
+- constrained desktop;
+- tablet;
+- mobile/narrow;
+- 320 CSS-pixel reflow.
+
+Also test conceptually at:
+
+- 200% zoom;
+- 400% zoom;
+- long labels;
+- approximately 2× text expansion;
+- RTL.
+
+Do not design a desktop layout and simply shrink it.
+
+Design adaptive behaviour.
+
+==================================================
+8. DENSITY
+==================================================
+
+Design two density profiles:
+
+COMFORTABLE
+and
+COMPACT
+
+Define:
+
+- spacing;
+- control heights;
+- row heights;
+- component padding;
+- intended usage.
+
+Compact mode must not sacrifice:
+
+- focus visibility;
+- labels;
+- accessibility;
+- practical target size.
+
+Choose one candidate default and justify it.
+
+==================================================
+9. FOCUS AND INTERACTION STATES
+==================================================
+
+Define a consistent visible focus system.
+
+Specify:
+
+- focus colour;
+- thickness;
+- offset;
+- geometry;
+- behaviour against light/dark surfaces.
+
+Design interaction states for:
+
+- default;
+- hover;
+- focus-visible;
+- active/pressed;
+- selected;
+- disabled;
+- read-only;
+- invalid;
+- loading.
+
+No essential meaning may rely on colour alone.
+
+==================================================
+10. ICONOGRAPHY
+==================================================
+
+Define the desired icon vocabulary characteristics:
+
+- stroke/fill model;
+- optical weight;
+- standard sizes;
+- alignment;
+- semantic use;
+- directional mirroring;
+- accessible-name rules.
+
+ZERO-NEW-DEPENDENCY PREFERENCE:
+
+Do not assume a third-party icon dependency is approved.
+
+Either:
+
+A. define an independently controlled PAEP icon approach;
+
+or
+
+B. recommend a named open-source icon set and produce a formal
+DEPENDENCY / ASSET DECISION REQUIRED section containing:
+
+- package/source;
+- exact licence;
+- self-hostability;
+- reason;
+- alternatives;
+- implications.
+
+Do not silently bind the design to a third-party icon library.
+
+==================================================
+11. BRAND PROFILE
+==================================================
+
+Design:
+
+proseit-default
+
+as the candidate default PAEP visual profile.
+
+If an authoritative current ProSEIT brand specification is available, use it.
+
+If not, clearly mark any proposed brand values as:
+
+CANDIDATE DESIGN VALUE — REQUIRES PO/SA APPROVAL.
+
+Also define the product override boundary.
+
+Products may override approved brand-accent values but not semantic
+accessibility/status values.
+
+Create one clearly synthetic alternate brand profile solely to demonstrate
+the override architecture.
+
+Do not use a real ProSEIT product brand for that demonstration.
+
+==================================================
+12. COMPONENT SET
+==================================================
+
+Design the complete IB2 first tranche identified in the preparation artifact.
+
+The controlled set contains 25 components across 7 families.
+
+ACTIONS
+
+- Button
+- Icon button
+- Action group
+
+FORMS
+
+- Field wrapper
+- Input
+- Native select
+- Textarea
+- Checkbox
+- Radio group
+
+DATA
+
+- Table shell
+- List
+- Pagination
+- Empty state
+
+FEEDBACK
+
+- Alert
+- Status badge
+- Progress
+- Skeleton
+
+OVERLAYS
+
+- Dialog
+- Drawer
+- Popover
+
+NAVIGATION
+
+- Tabs
+- Breadcrumb
+
+STRUCTURE
+
+- Card
+- Panel
+- Divider
+
+Do not expand this component inventory without a controlled reason.
+
+==================================================
+13. COMPONENT DESIGN REQUIREMENTS
+==================================================
+
+For each component provide:
+
+- purpose;
+- anatomy;
+- visual hierarchy;
+- variants;
+- applicable states;
+- keyboard intent;
+- focus intent;
+- semantics intent;
+- responsive behaviour;
+- long-content behaviour;
+- RTL behaviour where applicable;
+- density behaviour;
+- token usage;
+- prohibited usage;
+- accessibility notes.
+
+Where a state is not applicable, say so rather than manufacturing a specimen.
+
+==================================================
+14. BUTTONS / ACTIONS
+==================================================
+
+Design candidate variants:
+
+- primary;
+- secondary;
+- tertiary;
+- destructive.
+
+Include:
+
+- default;
+- hover;
+- focus-visible;
+- active;
+- disabled;
+- loading;
+- long-label;
+- narrow-width.
+
+Loading buttons must remain understandable and prevent repeated activation.
+
+Destructive actions must use explicit text, not colour alone.
+
+==================================================
+15. FORMS
+==================================================
+
+Design field anatomy covering:
+
+- visible label;
+- required indication;
+- help text;
+- error text;
+- control;
+- optional prefix/suffix;
+- disabled;
+- read-only;
+- invalid;
+- focus;
+- long label/help/error.
+
+Placeholder text must never replace a label.
+
+Design validation for programmatic error association.
+
+==================================================
+16. TABLE SHELL — IMPORTANT DESIGN DECISION
+==================================================
+
+This is a D1 design decision.
+
+Create and compare at least three narrow-screen strategies:
+
+A. PRIORITY COLUMNS + ROW DETAIL
+
+B. RESPONSIVE CARD/SUMMARY TRANSFORMATION
+
+C. BOUNDED INTERNAL HORIZONTAL SCROLL
+
+Evaluate each against:
+
+- enterprise usability;
+- 320 CSS-pixel reflow;
+- information loss;
+- keyboard access;
+- accessibility;
+- implementation complexity;
+- scalability to data-heavy products.
+
+Select one PRIMARY PAEP strategy.
+
+You may retain another as a controlled fallback where genuinely justified.
+
+Do not permit page-wide horizontal scrolling.
+
+The table shell itself remains backend-neutral.
+
+==================================================
+17. ACTION GROUP RESPONSIVE DESIGN
+==================================================
+
+At wide widths:
+
+show appropriate actions directly.
+
+At narrow widths:
+
+- preserve the primary action;
+- move secondary actions into overflow where appropriate;
+- retain destructive-action clarity;
+- preserve keyboard accessibility;
+- do not make hover the only discovery mechanism.
+
+==================================================
+18. TABS
+==================================================
+
+Design:
+
+- selected;
+- unselected;
+- focus;
+- disabled;
+- long-label;
+- narrow overflow.
+
+Decide:
+
+AUTOMATIC ACTIVATION
+
+or:
+
+MANUAL ACTIVATION
+
+for keyboard navigation.
+
+Document the rationale.
+
+==================================================
+19. BREADCRUMB
+==================================================
+
+Design:
+
+- normal path;
+- current page;
+- long hierarchy;
+- narrow collapse;
+- RTL behaviour.
+
+The current item remains programmatically identifiable.
+
+==================================================
+20. DIALOG
+==================================================
+
+Design:
+
+- desktop;
+- tablet;
+- narrow/mobile;
+- long-content;
+- destructive confirmation.
+
+Specify:
+
+- sizing;
+- margins;
+- scrolling;
+- header;
+- body;
+- action placement;
+- focus entry;
+- Escape behaviour;
+- focus return.
+
+==================================================
+21. DRAWER
+==================================================
+
+Decide:
+
+- inline-start vs inline-end default;
+- RTL mirroring;
+- desktop width;
+- tablet width;
+- mobile behaviour;
+- whether mobile becomes full-width.
+
+Document the rationale.
+
+==================================================
+22. POPOVER
+==================================================
+
+Design:
+
+- anchor relationship;
+- preferred placement;
+- edge flipping;
+- narrow-screen fallback;
+- focus/escape behaviour.
+
+Do not place essential content behind hover-only interaction.
+
+==================================================
+23. ALERT / STATUS
+==================================================
+
+Design:
+
+- information;
+- success;
+- warning;
+- error.
+
+Each state must combine colour with:
+
+- icon;
+- text;
+- or another non-colour semantic cue.
+
+Differentiate:
+
+persistent inline feedback
+
+from:
+
+transient announcements.
+
+==================================================
+24. PROGRESS / SKELETON
+==================================================
+
+Design:
+
+- determinate progress;
+- indeterminate progress;
+- static reduced-motion version;
+- skeleton;
+- reduced-motion skeleton.
+
+Avoid distracting motion.
+
+==================================================
+25. CARD / PANEL
+==================================================
+
+Design these as restrained structural primitives.
+
+Provide:
+
+- default;
+- header;
+- actions;
+- long title;
+- long content.
+
+Panel may include collapsibility only if justified.
+
+Do not invent unnecessary interaction.
+
+==================================================
+26. 320 CSS-PIXEL DESIGN PROOF
+==================================================
+
+Create explicit 320 CSS-pixel specimens for the components/patterns where
+layout changes materially.
+
+At minimum:
+
+- button/action group;
+- field/input;
+- alert;
+- tabs;
+- breadcrumb;
+- table shell;
+- pagination;
+- dialog;
+- drawer;
+- popover;
+- card/panel;
+- UI-lab specimen page.
+
+Prove that:
+
+- no critical action disappears;
+- no information becomes inaccessible;
+- labels and errors remain visible;
+- page-wide horizontal scrolling is avoided;
+- focus remains visible.
+
+==================================================
+27. LONG-CONTENT DESIGN PROOF
+==================================================
+
+Include examples with:
+
+- button label ~2× normal length;
+- tab label ~2× normal length;
+- three-line field label;
+- three-line help;
+- three-line validation error;
+- long IDs/URLs;
+- long alert content;
+- dialog content exceeding viewport height;
+- many breadcrumb segments;
+- long status label;
+- two-line card/panel title.
+
+==================================================
+28. RTL DESIGN PROOF
+==================================================
+
+Show representative RTL behaviour for:
+
+- forms;
+- tabs;
+- breadcrumb;
+- drawer;
+- directional icons;
+- pagination;
+- UI-lab specimen.
+
+Use neutral sample content.
+
+Do not require actual product/domain data.
+
+==================================================
+29. UI LAB DESIGN
+==================================================
+
+Design the UI laboratory as engineering documentation.
+
+It is NOT a marketing website.
+
+Define its information architecture.
+
+At minimum include:
+
+- Foundations
+  - Colour
+  - Typography
+  - Spacing
+  - Surfaces/elevation
+  - Motion
+  - Density
+  - Focus
+  - Icons
+- Components
+  - Actions
+  - Forms
+  - Data
+  - Feedback
+  - Overlays
+  - Navigation
+  - Structure
+- Responsive / 320
+- Accessibility
+- RTL
+- Brand override demonstration
+
+Each component specimen must include:
+
+- purpose;
+- variants;
+- states;
+- keyboard guidance;
+- accessibility notes;
+- responsive behaviour;
+- localisation/RTL note;
+- usage guidance;
+- future evidence link placeholder.
+
+==================================================
+30. CLEAN-ROOM REQUIREMENTS
+==================================================
+
+Do not use as visual source material:
+
+- Ultima;
+- PrimeNG template screenshots;
+- SAP Fiori screens;
+- proprietary enterprise application screenshots;
+- commercial dashboard kits;
+- commercial design-system screenshots.
+
+Do not trace or recreate a distinctive external design.
+
+Create the PAEP visual language independently from:
+
+- controlled requirements;
+- enterprise UX principles;
+- accessibility;
+- responsive behaviour;
+- ProSEIT-controlled branding where available.
+
+==================================================
+31. DESIGN ALTERNATIVES
+==================================================
+
+For material decisions, especially:
+
+- font strategy;
+- icon strategy;
+- palette direction;
+- density default;
+- table narrow strategy;
+- tabs activation;
+- action overflow;
+- breadcrumb collapse;
+- dialog sizing;
+- drawer sizing;
+- UI-lab navigation;
+
+record:
+
+OPTION A
+OPTION B
+OPTION C where useful
+
+then state:
+
+RECOMMENDED CANDIDATE
+
+with concise rationale.
+
+Do not pretend alternatives were reviewed if they were not.
+
+==================================================
+32. REQUIRED OUTPUT BUNDLE
+==================================================
+
+Create the review-candidate bundle:
+
+handoff/HOF-IB2-001/
+
+with:
+
+handoff.manifest.yaml
+
+design-brief.md
+
+foundation/token-values.md
+
+screens/
+
+interaction-notes.md
+
+component-map.md
+
+accessibility-intent.md
+
+responsive-rules.md
+
+content-keys.md
+
+assets/
+
+provenance.md
+
+approvals.md
+
+deviations/
+
+Use:
+
+handoffId: HOF-IB2-001
+
+designWorkPackage:
+DWP-IB2-001
+
+version:
+1.0
+
+status:
+READY_FOR_PO_SA_REVIEW
+
+NOT:
+
+APPROVED_FOR_IMPLEMENTATION
+
+==================================================
+33. HANDOFF MANIFEST
+==================================================
+
+The manifest must contain:
+
+- handoffId;
+- version;
+- status;
+- dwpId;
+- controlled requirements;
+- screens/specimens;
+- componentMap;
+- tokenMap;
+- assets;
+- asset provenance;
+- design tool;
+- design prompt/provenance reference;
+- open decisions;
+- unresolved deviations;
+- review status.
+
+At this stage:
+
+designApproval.approvedBy = null
+designApproval.approvedDate = null
+
+unless a human approval is explicitly supplied later.
+
+==================================================
+34. PROVENANCE
+==================================================
+
+Record:
+
+- exact design brief version;
+- this exact prompt;
+- controlled sources consulted;
+- design tool/model;
+- external capability references if any;
+- font/icon asset source if proposed;
+- licence information;
+- candidate alternatives;
+- rejected alternatives where material;
+- statement of independent composition.
+
+==================================================
+35. APPROVALS FILE
+==================================================
+
+Create the gate table:
+
+Requirement coverage
+Design-system conformity
+Responsive intent
+Accessibility intent
+Security/trust
+State completeness
+Content/i18n
+Provenance
+Open decisions
+PO/SA approval
+
+All technical/design-review gates may be marked:
+
+READY FOR REVIEW
+
+where evidence is complete.
+
+PO/SA approval must remain:
+
+PENDING
+
+Do not self-approve.
+
+==================================================
+36. OPEN DECISIONS
+==================================================
+
+The design candidate must attempt to close, with a recommended candidate:
+
+1. font strategy;
+2. icon strategy;
+3. neutral/accent/status palettes;
+4. whether dark mode belongs in IB2;
+5. type scale;
+6. spacing scale;
+7. radius;
+8. elevation;
+9. motion;
+10. breakpoint values;
+11. container/grid values;
+12. density values/default;
+13. focus style;
+14. table narrow strategy;
+15. action overflow;
+16. tabs overflow;
+17. breadcrumb collapse;
+18. drawer side/mobile sizing;
+19. dialog mobile sizing;
+20. tabs activation;
+21. UI-lab information architecture.
+
+If any decision requires a third-party dependency that has not already been
+authorised:
+
+mark it:
+
+DEPENDENCY DECISION REQUIRED
+
+Do not hide it.
+
+==================================================
+37. REVIEW PACKAGE
+==================================================
+
+At the end, produce a concise design review report:
+
+PAEP IB2 DESIGN REVIEW CANDIDATE
+
+DWP: DWP-IB2-001
+Handoff: HOF-IB2-001
+Status: READY FOR PO/SA REVIEW
+
+Foundation decisions: <n>/<n> COMPLETE
+Components covered: 25/25
+Desktop specimens: PASS / FAIL
+Tablet specimens: PASS / FAIL
+320px specimens: PASS / FAIL
+Long-content specimens: PASS / FAIL
+RTL specimens: PASS / FAIL
+Reduced-motion specimens: PASS / FAIL
+Accessibility intent: PASS / FAIL
+Responsive intent: PASS / FAIL
+Token map: PASS / FAIL
+Component map: PASS / FAIL
+Content keys: PASS / FAIL
+Provenance: PASS / FAIL
+Clean-room declaration: PASS / FAIL
+Third-party dependency decisions: NONE / <details>
+Open design decisions: NONE / <details>
+Design deviations: NONE / <details>
+PO/SA approval: PENDING
+
+DESIGN STATUS:
+READY FOR PO/SA REVIEW
+/ DEPENDENCY DECISION REQUIRED
+/ BLOCKED
+
+Do not implement Angular production code.
+
+Do not mark APPROVED_FOR_IMPLEMENTATION.
+
+Do not begin Generation 4 implementation.
+
+Stop after producing the review candidate.
+-----END PROMPT-----

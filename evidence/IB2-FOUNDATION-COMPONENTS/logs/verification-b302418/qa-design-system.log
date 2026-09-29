@@ -1,0 +1,16 @@
+
+> @proseit/paep-workspace@0.0.0 qa:design-system
+> node tooling/design-system/design-system-qa.mjs
+
+PASS S01 HOF-IB2-001 v1.1 APPROVED_FOR_IMPLEMENTATION is retained with the approved manifest hash, and every retained handoff file matches its pinned sha256 — manifest sha256 24e7049dd675…, APPROVED_FOR_IMPLEMENTATION; 176 handoff files pinned
+PASS S02 Token stylesheet and catalogue equal the generator output from the approved token values; PAEP_BREAKPOINTS equals the approved breakpoints; every required contrast pair of the handoff is recomputed from token values and meets its WCAG target — no drift; 54 contrast pairs meet their targets
+PASS S03 Exactly the 25 IR-01 §6.4 components, each with behaviour tests, exported through the public entry point only — 25 components; 44 public exports
+PASS S04 Component styles use only semantic --paep-* tokens (no colour, raw length, shadow or duration literals; reference tokens only where the handoff names them) and logical properties only — 34 style blocks in 47 files clean
+PASS S05 Import boundaries: foundation imports only @angular/core; components only Angular and the foundation entry point; no deep, Frappe, domain or later-milestone imports; test tooling only in specs; CSS @import of a package only for the foundation stylesheet in apps — 102 TypeScript files
+PASS S06 Clean-room: no Ultima, PrimeNG, SAP Fiori/UI5, Angular Material/CDK or commercial-theme terms in UI source; Angular favicon replaced — 138 files scanned
+PASS S07 UI laboratory: every one of the 25 components has a registered specimen page with purpose, variants, states, keyboard, accessibility, responsive, RTL, content keys and its unit-test reference; every applicable handoff state documented — 25 specimens registered; 185 required states documented
+PASS S08 Message catalogue holds exactly the approved content keys — 48 keys
+PASS S09 Test hygiene: no focused, skipped, todo or expected-to-fail tests; every component spec has at least three behaviour tests — 27 spec files, 254 tests
+PASS S10 Interactive semantics: every (click) handler in a component template is on a native interactive element or one with an interactive role — 15 click handlers, all on interactive elements
+
+PAEP design-system QA: PASS (10/10)

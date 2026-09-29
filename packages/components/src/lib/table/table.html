@@ -1,0 +1,156 @@
+<div class="paep-table__shell" #shell [style.--_viewport]="viewportPx() === null ? null : viewportPx() + 'px'">
+  <div
+    class="paep-table__region"
+    [class.paep-table__region--scroll]="variant() === 'scroll'"
+    [attr.role]="variant() === 'scroll' ? 'region' : null"
+    [attr.aria-label]="variant() === 'scroll' ? scrollLabel() : null"
+    [attr.tabindex]="variant() === 'scroll' ? 0 : null"
+  >
+    <table [attr.aria-labelledby]="uid + '-title'" [attr.aria-busy]="effectiveState() === 'loading' ? 'true' : null">
+      <caption #captionEl tabindex="-1">
+        <span class="paep-table__head">
+          <span class="paep-table__titles">
+            <span class="paep-table__title" [id]="uid + '-title'">{{ caption() }}</span>
+            @if (countText()) {
+              <span class="paep-table__count">{{ countText() }}</span>
+            }
+          </span>
+          <span class="paep-table__actions"><ng-content select="[paepTableActions]" /></span>
+        </span>
+      </caption>
+      <thead>
+        <tr>
+          @for (col of visibleColumns(); track col.key) {
+            <th scope="col" [class.paep-table__num]="col.numeric">{{ col.header }}</th>
+          }
+          @if (hasDetails()) {
+            <th scope="col" class="paep-table__detail-col"><span class="paep-visually-hidden">{{ detailsText() }}</span></th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @switch (effectiveState()) {
+          @case ('loading') {
+            @for (i of skeletonRows(); track i) {
+              <tr aria-hidden="true">
+                @for (col of visibleColumns(); track col.key) {
+                  <td><paep-skeleton shape="cell" /></td>
+                }
+                @if (hasDetails()) {
+                  <td></td>
+                }
+              </tr>
+            }
+          }
+          @case ('empty') {
+            <tr>
+              <td class="paep-table__state" [attr.colspan]="colspan()">
+                <paep-empty-state
+                  kind="empty"
+                  [headingLevel]="headingLevel()"
+                  [heading]="emptyHeading()"
+                  [description]="emptyDescription()"
+                  [actionLabel]="emptyActionLabel() || ''"
+                  (action)="emptyAction.emit()"
+                />
+              </td>
+            </tr>
+          }
+          @case ('no-results') {
+            <tr>
+              <td class="paep-table__state" [attr.colspan]="colspan()">
+                <paep-empty-state
+                  kind="no-results"
+                  [headingLevel]="headingLevel()"
+                  [heading]="noResultsHeading()"
+                  [description]="noResultsDescription()"
+                  (action)="clearFilters.emit()"
+                />
+              </td>
+            </tr>
+          }
+          @case ('error') {
+            <tr>
+              <td class="paep-table__state paep-table__state--error" [attr.colspan]="colspan()">
+                <paep-alert status="error" live [heading]="errorHeadingText()">
+                  <span>{{ errorMessageText() }}</span>
+                  @if (errorReferenceText()) {
+                    <span class="paep-table__reference"> {{ errorReferenceText() }}</span>
+                  }
+                  <button paepAlertActions type="button" class="paep-table__button" (click)="onRetry()">
+                    <svg paepIcon="retry"></svg>{{ retryText() }}
+                  </button>
+                </paep-alert>
+              </td>
+            </tr>
+          }
+          @default {
+            @for (row of rows(); track rowId(row, $index); let i = $index) {
+              @let id = rowId(row, i);
+              @let open = isExpanded(id);
+              <tr>
+                @for (col of visibleColumns(); track col.key; let first = $first) {
+                  @if (first) {
+                    <th scope="row" [class.paep-table__num]="col.numeric">
+                      <ng-container [ngTemplateOutlet]="cell" [ngTemplateOutletContext]="{ row, col }" />
+                    </th>
+                  } @else {
+                    <td [class.paep-table__num]="col.numeric">
+                      <ng-container [ngTemplateOutlet]="cell" [ngTemplateOutletContext]="{ row, col }" />
+                    </td>
+                  }
+                }
+                @if (hasDetails()) {
+                  <td class="paep-table__detail-col">
+                    <button
+                      type="button"
+                      class="paep-table__button paep-table__toggle"
+                      [attr.aria-expanded]="open"
+                      [attr.aria-controls]="detailId(i)"
+                      [attr.aria-label]="detailsName(row)"
+                      (click)="toggle(id)"
+                    >
+                      <svg [paepIcon]="open ? 'chevron-up' : 'chevron-down'"></svg>
+                      <span class="paep-table__toggle-text">{{ detailsText() }}</span>
+                    </button>
+                  </td>
+                }
+              </tr>
+              @if (hasDetails()) {
+                <tr class="paep-table__detail" [id]="detailId(i)" [hidden]="!open">
+                  <td [attr.colspan]="colspan()">
+                    <dl>
+                      @for (col of hiddenColumns(); track col.key) {
+                        <div>
+                          <dt>{{ col.header }}</dt>
+                          <dd [class.paep-table__num]="col.numeric">
+                            <ng-container [ngTemplateOutlet]="cell" [ngTemplateOutletContext]="{ row, col }" />
+                          </dd>
+                        </div>
+                      }
+                    </dl>
+                  </td>
+                </tr>
+              }
+            }
+          }
+        }
+      </tbody>
+    </table>
+    <p class="paep-visually-hidden" aria-live="polite" aria-atomic="true">{{ liveText() }}</p>
+  </div>
+  <div class="paep-table__foot"><ng-content select="[paepTableFooter]" /></div>
+</div>
+
+<ng-template #cell let-row="row" let-col="col">
+  @if (templates().get(col.key); as tpl) {
+    <ng-container [ngTemplateOutlet]="tpl" [ngTemplateOutletContext]="{ $implicit: row, value: row[col.key] }" />
+  } @else if (col.identifier) {
+    <span class="paep-table__id" dir="ltr">{{ text(row[col.key]) }}</span>
+  } @else {
+    <span [class.paep-table__primary]="!!col.secondaryKey">{{ text(row[col.key]) }}</span>
+  }
+  @if (col.secondaryKey) {
+    <span class="paep-table__secondary paep-table__id" dir="ltr">{{ text(row[col.secondaryKey]) }}</span>
+  }
+</ng-template>

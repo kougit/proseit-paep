@@ -97,6 +97,18 @@
       "name": "PAEP / runtime-config-negative"
     },
     {
+      "id": "components",
+      "name": "PAEP / components"
+    },
+    {
+      "id": "accessibility",
+      "name": "PAEP / accessibility"
+    },
+    {
+      "id": "negative-ci-b",
+      "name": "PAEP / negative-ci-b"
+    },
+    {
       "id": "build-reference-app",
       "name": "PAEP / build-reference-app"
     },
@@ -124,7 +136,7 @@
       "node tooling/verification/verify-ib0-wp05.mjs --gate negative-architecture"
     ],
     "negative-ci": [
-      "npm run qa:ib0-wp05:negative",
+      "npm run qa:ib0-wp05:negative -- --part a",
       "npm run qa:baseline:negative"
     ],
     "regression": [
@@ -139,6 +151,20 @@
     "runtime-config-negative": [
       "npm run qa:runtime-config:negative",
       "npm run qa:runtime-config:portability"
+    ],
+    "components": [
+      "npm run test:components",
+      "npm run qa:design-system",
+      "npm run qa:design-system:negative",
+      "npm run qa:ib2:ci-negative"
+    ],
+    "accessibility": [
+      "npm run build:ui-lab",
+      "npm run qa:accessibility",
+      "npm run qa:accessibility:negative"
+    ],
+    "negative-ci-b": [
+      "npm run qa:ib0-wp05:negative -- --part b"
     ],
     "build-reference-app": [
       "npm run build:reference-app",

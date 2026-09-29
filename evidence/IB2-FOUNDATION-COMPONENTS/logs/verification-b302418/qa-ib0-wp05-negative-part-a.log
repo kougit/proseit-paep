@@ -1,0 +1,59 @@
+
+> @proseit/paep-workspace@0.0.0 qa:ib0-wp05:negative
+> node tooling/verification/negative-ib0-wp05.mjs --part a
+
+PASS C06 control: tracked-tree check passes after an unchanged install — exit 0
+PASS G01 mandatory job governance failed — exit 1
+PASS G03 mandatory job architecture failed — exit 1
+PASS G05 mandatory job negative-architecture failed — exit 1
+PASS G07 mandatory job regression failed — exit 1
+PASS G09 mandatory job runtime-config failed — exit 1
+PASS GJ11 mandatory job components failed — exit 1
+PASS GJ13 mandatory job negative-ci-b failed — exit 1
+PASS GJ15 mandatory job build-ui-lab failed — exit 1
+PASS G11 mandatory job skipped (architecture) — exit 1
+PASS G13 mandatory job missing from needs (strictness) — exit 1
+PASS G15 every mandatory job skipped — exit 1
+PASS G17 malformed needs context — exit 5
+PASS C01 control: governance gate passes unmutated — exit 0
+PASS C03 control: qa:types passes unmutated — exit 0
+PASS C05 control: toolchain gate passes unmutated — exit 0
+PASS C08 control: negative-architecture gate passes unmutated — exit 0
+PASS A02 (xii) prohibited change: domain-quality -> domain-fiscal (same category, not allowlisted) fails qa:architecture — exit 1
+PASS A04 (xii) prohibited change: nested package.json boundary fails the governance gate — exit 1
+PASS S02 (ii) Angular template strict violation ($event as number) fails qa:types — exit 1
+PASS S04 (ii) noCheck true fails the strictness gate — exit 1
+PASS H01 (iv) crashed WP04 negative harness fails the negative-architecture gate — exit 1
+PASS L00 control: npm ci --dry-run accepts the committed manifests — exit 0
+PASS L02 (v) lockfile modified by installation fails the tracked-tree check — exit 1
+PASS T01 (vi) .nvmrc pin drift fails the toolchain gate — exit 1
+PASS T03 (vii) running npm differs from the pin fails the toolchain gate — exit 1
+PASS T05 (vi) devEngines Node pin not met fails npm ci (EBADDEVENGINES) — exit 1
+PASS I01 (viii) new lockfile package with an unreviewed install script fails the provenance gate — exit 1
+PASS I03 (viii) strict-allow-scripts removed from .npmrc fails the toolchain gate — exit 1
+PASS F01 (ix) one byte changed in a controlled source fails the governance gate — exit 1
+PASS F03 (ix) unlisted file under .paep-control fails the governance gate — exit 1
+PASS X01 (x) gate condition changed from always() to success() fails the provenance gate — exit 1
+PASS X03 (x) continue-on-error on a mandatory job fails the provenance gate — exit 1
+PASS P01 (xi) unapproved third-party action fails the provenance gate — exit 1
+PASS P03 (xi) approved action at a different SHA fails the provenance gate — exit 1
+PASS P05 (xi) job-level permission escalation fails the provenance gate — exit 1
+PASS P07 (xi) untrusted PR title interpolated into a run script fails the provenance gate — exit 1
+PASS P09 (xi) checkout persisting credentials fails the provenance gate — exit 1
+PASS P11 (xi) new unapproved dependency fails the governance gate — exit 1
+PASS P13 (xi) second, unreviewed workflow file fails the provenance gate — exit 1
+PASS P15 (x) early "exit 0" in the gate script fails the provenance gate — exit 1
+PASS P17 (xi) escaped "${{" (\x24) in a double-quoted value fails the provenance gate — exit 1
+PASS P19 (xi) extra install line in the setup action ("npm  install", two spaces) fails the provenance gate — exit 1
+PASS P22 (viii) continue-on-error on the setup npm ci step fails the provenance gate — exit 1
+PASS P24 (xi) gate job moved to another runner fails the provenance gate — exit 1
+PASS N01 Nx introduced (nx.json) fails the governance gate — exit 1
+PASS N03 lint configuration introduced fails the governance gate — exit 1
+PASS K02 IB1 runtime-config job command replaced fails the provenance gate — exit 1
+PASS K08 empty workflow file (parses to null) fails the provenance gate instead of skipping its checks — exit 1
+PASS K05 accepted regression command weakened in the policy and the workflow together fails the provenance gate — exit 1
+PASS K07 gate check context renamed in the policy and the workflow together fails the provenance gate — exit 1
+
+part a: ran 51 of 101 declared cases; the other 50 run in part b: G00 G02 G04 G06 G08 GJ10 GJ12 GJ14 G10 G12 G14 G16 G18 C02 C04 C07 A01 A03 S01 S03 B01 H02 L01 L03 T02 T04 T06 I02 I04 F02 F04 X02 X04 P02 P04 P06 P08 P10 P12 P14 P16 P18 P21 P23 P20 N02 K01 K03 K04 K06
+
+IB0-WP05 negative CI-control tests (part a): PASS (51/51; 6 controls, 45 negatives)

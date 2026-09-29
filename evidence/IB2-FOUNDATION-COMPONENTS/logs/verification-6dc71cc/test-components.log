@@ -1,0 +1,67 @@
+
+> @proseit/paep-workspace@0.0.0 test:components
+> node tooling/design-system/run-component-tests.mjs
+
+browser: /opt/pw-browsers/chromium
+❯ Building...
+✔ Building...
+Initial chunk files                                           | Names                                                      |  Raw size
+spec-packages-components-src-lib-table-table.js               | spec-packages-components-src-lib-table-table               |  72.47 kB | 
+chunk-PRFJJXMP.js                                             | -                                                          |  46.74 kB | 
+spec-packages-components-src-lib-action-group-action-group.js | spec-packages-components-src-lib-action-group-action-group |  39.10 kB | 
+spec-packages-components-src-lib-tabs-tabs.js                 | spec-packages-components-src-lib-tabs-tabs                 |  39.02 kB | 
+spec-packages-components-src-lib-radio-radio.js               | spec-packages-components-src-lib-radio-radio               |  37.98 kB | 
+spec-packages-components-src-lib-list-list.js                 | spec-packages-components-src-lib-list-list                 |  37.61 kB | 
+spec-packages-components-src-lib-popover-popover.js           | spec-packages-components-src-lib-popover-popover           |  32.95 kB | 
+chunk-HV5XXP5M.js                                             | -                                                          |  26.32 kB | 
+spec-packages-components-src-lib-panel-panel.js               | spec-packages-components-src-lib-panel-panel               |  25.38 kB | 
+chunk-GKSX6VZ3.js                                             | -                                                          |  25.13 kB | 
+chunk-AXZR6Y6B.js                                             | -                                                          |  24.34 kB | 
+spec-packages-components-src-lib-drawer-drawer.js             | spec-packages-components-src-lib-drawer-drawer             |  23.92 kB | 
+spec-packages-components-src-lib-breadcrumb-breadcrumb.js     | spec-packages-components-src-lib-breadcrumb-breadcrumb     |  21.24 kB | 
+spec-packages-components-src-lib-checkbox-checkbox.js         | spec-packages-components-src-lib-checkbox-checkbox         |  21.06 kB | 
+spec-packages-components-src-lib-card-card.js                 | spec-packages-components-src-lib-card-card                 |  20.24 kB | 
+spec-packages-components-src-lib-progress-progress.js         | spec-packages-components-src-lib-progress-progress         |  19.75 kB | 
+spec-packages-components-src-lib-icon-button-icon-button.js   | spec-packages-components-src-lib-icon-button-icon-button   |  18.70 kB | 
+spec-packages-components-src-lib-dialog-dialog.js             | spec-packages-components-src-lib-dialog-dialog             |  16.95 kB | 
+chunk-PV2Z5IWL.js                                             | -                                                          |  15.61 kB | 
+chunk-MCE3MSWI.js                                             | -                                                          |  14.67 kB | 
+chunk-DUOGOUFB.js                                             | -                                                          |  14.48 kB | 
+styles.css                                                    | styles                                                     |  14.42 kB | 
+spec-packages-foundation-src-lib-foundation.js                | spec-packages-foundation-src-lib-foundation                |  13.00 kB | 
+spec-packages-components-src-lib-divider-divider.js           | spec-packages-components-src-lib-divider-divider           |  12.86 kB | 
+spec-packages-components-src-lib-field-field.js               | spec-packages-components-src-lib-field-field               |  12.19 kB | 
+spec-packages-components-src-lib-pagination-pagination.js     | spec-packages-components-src-lib-pagination-pagination     |  11.03 kB | 
+spec-packages-components-src-lib-input-input.js               | spec-packages-components-src-lib-input-input               |  10.13 kB | 
+spec-packages-components-src-lib-select-select.js             | spec-packages-components-src-lib-select-select             |  10.02 kB | 
+spec-packages-components-src-lib-button-button.js             | spec-packages-components-src-lib-button-button             |   9.44 kB | 
+spec-packages-components-src-lib-alert-alert.js               | spec-packages-components-src-lib-alert-alert               |   8.75 kB | 
+chunk-IZJEK5IO.js                                             | -                                                          |   8.19 kB | 
+spec-packages-components-src-lib-textarea-textarea.js         | spec-packages-components-src-lib-textarea-textarea         |   7.42 kB | 
+spec-packages-components-src-lib-empty-state-empty-state.js   | spec-packages-components-src-lib-empty-state-empty-state   |   6.52 kB | 
+chunk-CF7ACJMS.js                                             | -                                                          |   6.28 kB | 
+chunk-Z3HP3EWP.js                                             | -                                                          |   5.64 kB | 
+chunk-CIBE7TOB.js                                             | -                                                          |   5.29 kB | 
+chunk-RSTWSNOR.js                                             | -                                                          |   4.80 kB | 
+spec-packages-components-src-lib-status-badge-status-badge.js | spec-packages-components-src-lib-status-badge-status-badge |   4.56 kB | 
+spec-packages-components-src-lib-skeleton-skeleton.js         | spec-packages-components-src-lib-skeleton-skeleton         |   4.06 kB | 
+chunk-6BWGTT4S.js                                             | -                                                          |   3.96 kB | 
+spec-packages-components-src-lib-messages-messages.js         | spec-packages-components-src-lib-messages-messages         |   2.70 kB | 
+init-testbed.js                                               | init-testbed                                               |   2.27 kB | 
+vitest-mock-patch.js                                          | vitest-mock-patch                                          |   1.02 kB | 
+
+                                                              | Initial total                                              | 758.20 kB
+
+Application bundle generation complete. [4.787 seconds] - 2026-09-28T00:30:41.632Z
+
+
+ RUN  v4.1.11 /tmp/claude-0/-home-claude-proseit-paep/f41e9675-a989-55f1-b1c4-5136e4f1c67e/scratchpad/verify-clone
+
+12:30:42 AM [vite] (client) [optimizer] bundling dependencies...
+
+ Test Files  27 passed (27)
+      Tests  254 passed (254)
+   Start at  00:30:41
+   Duration  13.88s (transform 0ms, setup 3.47s, import 721ms, tests 25.87s, environment 0ms)
+
+component tests: PASS (254 tests)

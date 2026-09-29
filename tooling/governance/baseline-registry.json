@@ -264,6 +264,54 @@
         "work-packages/IB1-CONTRACTS-CONFIG/": "aef2c3a209ecdde501579df12a152a4eadd087c9"
       },
       "notes": "CANDIDATE only. Prepared by Claude Code under the PO/SA instruction authorising substantive IB1 (project thread, 2026-09-26T13:52Z). policyChange is true because IB1 adds three mandatory CI jobs and bounds the IB0-WP05 regression for IB1 entry points and dependency edges (.github/ and tooling/verification/). It becomes ACCEPTED only through the promote command after PO/SA acceptance and merge."
+    },
+    {
+      "generation": 4,
+      "name": "IB2 design foundations, core components and UI laboratory",
+      "milestone": "IB2",
+      "workPackages": [
+        "IB2-FOUNDATION-COMPONENTS"
+      ],
+      "status": "CANDIDATE",
+      "predecessorGeneration": 3,
+      "authorisation": {
+        "authority": "Product Owner / Solutions Architect",
+        "date": "2026-09-26",
+        "reference": "work-packages/IB2-FOUNDATION-COMPONENTS/WORK_PACKAGE.md"
+      },
+      "policyChange": true,
+      "authorisedScope": [
+        ".github/workflows/paep-ci.yml",
+        "angular.json",
+        "apps/ui-lab/",
+        "docs/architecture/IB2-FOUNDATION-COMPONENTS-DESIGN.md",
+        "docs/architecture/toolchain-version-manifest.json",
+        "docs/licences/THIRD-PARTY-LICENCE-REVIEW.md",
+        "docs/licences/THIRD-PARTY-NOTICES.md",
+        "docs/provenance/PROVENANCE-REGISTER.md",
+        "evidence/IB2-FOUNDATION-COMPONENTS/",
+        "evidence/design-handoff/HOF-IB2-001/",
+        "package-lock.json",
+        "package.json",
+        "packages/components/",
+        "packages/foundation/",
+        "tooling/design-system/",
+        "tooling/governance/baseline-registry.json",
+        "tooling/governance/negative-baseline-governance.mjs",
+        "tooling/verification/ib0-wp05-ci-policy.json",
+        "tooling/verification/negative-ib0-wp05.mjs",
+        "tooling/verification/verify-ib0-wp05.mjs",
+        "work-packages/IB2-FOUNDATION-COMPONENTS/"
+      ],
+      "protectedRecords": [
+        "evidence/IB2-FOUNDATION-COMPONENTS/",
+        "work-packages/IB2-FOUNDATION-COMPONENTS/"
+      ],
+      "acceptedCommit": null,
+      "acceptedTree": null,
+      "acceptance": null,
+      "fingerprints": null,
+      "notes": "CANDIDATE only. Prepared by Claude Code under the PO/SA instruction authorising IB2 (project thread, 2026-09-26T20:30Z), the PO/SA CI-performance remediation authorising the negative-ci split (2026-09-28T05:02Z), the PO/SA design approval of HOF-IB2-001 v1.1 (2026-09-27) and the PO/SA dependency approval of vitest, @vitest/browser-playwright, playwright and axe-core (2026-09-27). policyChange is true because IB2 adds mandatory CI jobs and bounds the IB0-WP05 regression for IB2 entry points, the approved dependency change and the ui-lab test target (.github/ and tooling/verification/). It becomes ACCEPTED only through the promote command after PO/SA acceptance and merge."
     }
   ]
 }

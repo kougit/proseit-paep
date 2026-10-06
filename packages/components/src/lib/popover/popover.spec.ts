@@ -256,7 +256,8 @@ describe('PaepPopover', () => {
     expect(trigger.getAttribute('aria-describedby')).toBeNull();
     await userEvent.keyboard('{PageDown}');
     await settle(fixture);
-    expect(p.scrollTop).toBeGreaterThan(0);
+    // Chrome animates keyboard scrolling, so the region may still be moving when the frame settles.
+    await expect.poll(() => p.scrollTop, { timeout: 2000 }).toBeGreaterThan(0);
     await userEvent.keyboard('{Escape}');
     await settle(fixture);
     expect(document.activeElement).toBe(trigger);

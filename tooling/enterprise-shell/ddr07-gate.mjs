@@ -101,7 +101,8 @@ function composition(src, where) {
     detail = `DDR-IB2-07 open; foundation and components equal generation 4 (${g4.acceptedCommit.slice(0, 7)})`;
   } else {
     const dirty = [...lines(git('diff', '--name-only', 'HEAD', '--', ...PACKAGES).stdout), ...lines(git('ls-files', '--others', '--exclude-standard', '--', ...PACKAGES).stdout)];
-    const closureCommit = lines(git('log', '--diff-filter=A', '--format=%H', `${g4.acceptedCommit}..HEAD`, '--', CLOSURE).stdout).at(-1);
+    // The newest commit that adds the record: a record removed and added again counts from its re-addition.
+    const closureCommit = lines(git('log', '--diff-filter=A', '--format=%H', `${g4.acceptedCommit}..HEAD`, '--', CLOSURE).stdout).at(0);
     const touching = lines(git('log', '--format=%H', `${g4.acceptedCommit}..HEAD`, '--', ...PACKAGES).stdout);
     if (!closureCommit) {
       if (touching.length || dirty.length) p.push('foundation or components changed but the DDR-IB2-07 closure record is not committed');

@@ -3,7 +3,9 @@
  * Seeded negatives for the IB3 DDR-IB2-07 gate (npm run qa:ddr07:negative).
  *
  * Each case mutates a disposable copy of the repository (with .git, without node_modules), runs
- * ddr07-gate.mjs --root <copy> and expects the stated result. P00 and P10 are positive controls.
+ * ddr07-gate.mjs --root <copy> and expects the stated result. P00 runs the repository as it is; every other case
+ * starts from a committed copy in which DDR-IB2-07 is reopened (status OPEN, closure record and section removed), so
+ * the cases hold whichever state the repository is in. P00, P01 and P10 are positive controls.
  *   node tooling/enterprise-shell/ddr07-gate-negative.mjs
  */
 import { spawnSync } from 'node:child_process';
@@ -30,6 +32,7 @@ function fresh(name) {
 }
 const io = (copy) => ({
   read: (f) => fs.readFileSync(path.join(copy, f), 'utf8'),
+  remove: (f) => fs.rmSync(path.join(copy, f), { force: true }),
   write: (f, s) => (fs.mkdirSync(path.dirname(path.join(copy, f)), { recursive: true }), fs.writeFileSync(path.join(copy, f), s)),
   replace(f, a, b) {
     const s = this.read(f);
@@ -50,11 +53,20 @@ const closeIt = (f) => {
   f.write(CLOSURE, '# DDR-IB2-07 closure\n\nStatus: CLOSED\nDate: 2026-10-06\n');
   f.write(DDR, `${f.read(DDR)}\n## Closure\n\n2026-10-06: CLOSED.\n`);
 };
+const reopen = (f) => {
+  const wp = JSON.parse(f.read(WP_JSON));
+  wp.ib2DdrFollowUps['DDR-IB2-07'] = 'OPEN (reopened by the negative harness)';
+  f.write(WP_JSON, JSON.stringify(wp, null, 2) + '\n');
+  f.remove(CLOSURE);
+  f.write(DDR, f.read(DDR).replace(/\n## Closure\n[\s\S]*$/, '\n'));
+  f.commit('negative harness: reopen DDR-IB2-07');
+};
 const touchComponents = (f) => f.write('packages/components/src/lib/button/button.ts', `${f.read('packages/components/src/lib/button/button.ts')}\n// seeded change\n`);
 
 /** id, description, mutation(f), expected exit, patterns the output must contain. */
 const CASES = [
-  ['P00', 'positive control: the repository as it is', () => {}, 0, [/PASS \(4\/4\)/]],
+  ['P00', 'positive control: the repository as it is', null, 0, [/PASS \(4\/4\)/]],
+  ['P01', 'positive control: DDR-IB2-07 reopened, nothing else changed', () => {}, 0, [/PASS \(4\/4\)/, /DDR-IB2-07 OPEN/]],
   ['N01', 'an F07 surface marker removed', (f) => f.replace(F07_FILE, 'data-f07-surface="dark"', ''), 1, [/FAIL G1/, /surface "dark" missing/]],
   ['N02', 'an F07 state row removed', (f) => f.replace(F07_FILE, 'data-f07-state="loading"', ''), 1, [/FAIL G1/, /state "loading" missing/]],
   ['N03', 'an R03 section removed', (f) => f.replace(R03_FILE, 'data-r03-section="overlays"', ''), 1, [/FAIL G1/, /section "overlays" missing/]],
@@ -82,7 +94,11 @@ for (const [id, name, mutate, exit, patterns] of CASES) {
   let out = '';
   let status = null;
   try {
-    mutate(io(copy));
+    const f = io(copy);
+    if (mutate) {
+      reopen(f);
+      mutate(f);
+    }
     const r = spawnSync(process.execPath, [GATE, '--root', copy], { encoding: 'utf8' });
     out = `${r.stdout}${r.stderr}`;
     status = r.status;
@@ -98,4 +114,4 @@ for (const [id, name, mutate, exit, patterns] of CASES) {
 fs.rmSync(scratch, { recursive: true, force: true });
 const failed = results.filter((r) => !r.pass).length;
 console.log(`\nPAEP DDR-IB2-07 gate negatives: ${failed ? 'FAIL' : 'PASS'} (${results.length - failed}/${results.length}; expected ${CASES.length})`);
-process.exit(failed || results.length !== 17 ? 1 : 0);
+process.exit(failed || results.length !== 18 ? 1 : 0);

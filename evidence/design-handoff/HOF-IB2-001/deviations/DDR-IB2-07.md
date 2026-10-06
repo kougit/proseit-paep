@@ -42,3 +42,7 @@ The reviewer recommends (b) for F07 and R03, the two boards whose missing parts 
 | --- | --- |
 | Decision | **ACCEPTED WITH FOLLOW-UP** (PO/SA final acceptance decision, 2026-09-29T06:57Z). Follow-up (PO/SA deadline): The F07 focus/state examples and the full R03 320 px board must be added before whichever occurs first: (a) acceptance of the enterprise-shell milestone; or (b) the next controlled PAEP design-system release. The F04, F05, F06 and F08 omissions are accepted as they are. |
 | Resulting handoff version | v1.1 unchanged |
+
+## Closure
+
+2026-10-06: **CLOSED** under IB3-ENTERPRISE-SHELL stage S1a. The F07 focus/state examples and the full R03 320 px board are in the UI lab, with new IB3 captures at 1440, 834 and 320 and the G-DDR07 gates passing. Record: `evidence/IB3-ENTERPRISE-SHELL/ddr-ib2-07/CLOSURE.md`. The deviation and its 2026-09-29 disposition above are kept unchanged; the accepted IB2 baselines are not rewritten.

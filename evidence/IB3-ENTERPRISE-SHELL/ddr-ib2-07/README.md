@@ -25,7 +25,7 @@ These are new IB3 captures. The 156 accepted IB2 baselines under `evidence/IB2-F
 | Gate | Command | Result |
 | --- | --- | --- |
 | G-DDR07-1 sequence, G-DDR07-2 content, G-DDR07-3 release guard, closure record | `npm run qa:ddr07` | PASS 4/4 |
-| Seeded negatives (15 negatives, 2 positive controls) | `npm run qa:ddr07:negative` | PASS 17/17 |
+| Seeded negatives (15 negatives, 3 positive controls; each case starts from a reopened copy) | `npm run qa:ddr07:negative` | PASS 18/18 |
 | UI-lab accessibility and reflow, both pages at 1440 / 834 / 320 in LTR and RTL | `node tooling/design-system/browser-qa.mjs --pages …` | PASS, 12 page audits (`browser-qa.json`) |
 | Full UI-lab accessibility gate | `npm run qa:accessibility` | PASS |
 | Design-system static gate | `npm run qa:design-system` | PASS 10/10 |

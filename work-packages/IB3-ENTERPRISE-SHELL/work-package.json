@@ -32,7 +32,7 @@
   "enterprise_shell": "IN PROGRESS",
   "nx_disposition": "NOT REQUIRED",
   "ib2DdrFollowUps": {
-    "DDR-IB2-07": "OPEN: closure is stage S1a, before any foundation/components change",
+    "DDR-IB2-07": "CLOSED 2026-10-06 (stage S1a; evidence/IB3-ENTERPRISE-SHELL/ddr-ib2-07/CLOSURE.md)",
     "HOF-IB2-001 v1.2": "NOT STARTED: required before the Q-02 component code lands and before IB3 acceptance (DDR-IB2-01, -02, -04, -05, -08 and the Q-02 change)"
   },
   "native_copy_review": {

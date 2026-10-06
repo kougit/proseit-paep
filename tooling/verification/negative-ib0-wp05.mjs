@@ -60,9 +60,7 @@ const DECLARED_CASE_IDS = [
   'L03', 'T01', 'T02', 'T03', 'T04', 'T05', 'T06', 'I01', 'I02', 'I03', 'I04', 'F01', 'F02', 'F03', 'F04', 'X01',
   'X02', 'X03', 'X04', 'P01', 'P02', 'P03', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P13',
   'P14', 'P15', 'P16', 'P17', 'P18', 'P19', 'P21', 'P22', 'P23', 'P24', 'P20', 'N01', 'N02', 'N03', 'K01', 'K02',
-  'K03', 'K08', 'K04', 'K05', 'K06', 'K07',
-  // IB3-ENTERPRISE-SHELL: appended last so that the a/b split of every earlier case is unchanged.
-  'H03'
+  'K03', 'K08', 'K04', 'K05', 'K06', 'K07'
 ];
 let caseIndex = 0;
 const declared = [];
@@ -302,7 +300,7 @@ try {
 
   // ---- (x) skipped/cancelled: see G10-G18; plus the gate must keep always() and full needs ------------
   caseRun('X01', '(x) gate condition changed from always() to success() fails the provenance gate', [[WORKFLOW, replace("  gate:\n    name: PAEP / gate\n    if: ${{ always() }}", "  gate:\n    name: PAEP / gate\n    if: ${{ success() }}")]], () => verifyGate('provenance'), [/FAIL W12/]);
-  caseRun('X02', '(x) mandatory job dropped from gate needs fails the provenance gate', [[WORKFLOW, replace('      - build-ui-lab\n    runs-on', '    runs-on')]], () => verifyGate('provenance'), [/FAIL W12/]);
+  caseRun('X02', '(x) mandatory job dropped from gate needs fails the provenance gate', [[WORKFLOW, replace('      - build-ui-lab\n      - enterprise-shell\n', '      - enterprise-shell\n')]], () => verifyGate('provenance'), [/FAIL W12/]);
   caseRun('X03', '(x) continue-on-error on a mandatory job fails the provenance gate', [[WORKFLOW, replace('    name: PAEP / architecture\n', '    name: PAEP / architecture\n    continue-on-error: true\n')]], () => verifyGate('provenance'), [/FAIL W11/]);
   caseRun('X04', '(x) mandatory job made conditional (if) fails the provenance gate', [[WORKFLOW, replace('    name: PAEP / regression\n', "    name: PAEP / regression\n    if: ${{ github.event_name == 'push' }}\n")]], () => verifyGate('provenance'), [/FAIL W11/]);
 
@@ -351,9 +349,6 @@ try {
   caseRun('K05', 'accepted regression command weakened in the policy and the workflow together fails the provenance gate', [[POLICY, jsonEdit((o) => { o.requiredCommands.regression = ['node tooling/verification/verify-ib0-wp05.mjs --gate toolchain']; })], [WORKFLOW, replace('verify-ib0-wp05.mjs --gate regression 2>&1', 'verify-ib0-wp05.mjs --gate toolchain 2>&1')]], () => verifyGate('provenance'), [/FAIL W11/, /accepted commands of regression changed/]);
   caseRun('K06', 'gate script made to pass (exit 0) in the policy and the workflow together fails the provenance gate', [[POLICY, jsonEdit((o) => { o.gate.run = o.gate.run.replace('exit 1', 'exit 0'); })], [WORKFLOW, replace('            exit 1\n', '            exit 0\n')]], () => verifyGate('provenance'), [/FAIL W12/, /policy gate differs from the accepted baseline/]);
   caseRun('K07', 'gate check context renamed in the policy and the workflow together fails the provenance gate', [[POLICY, jsonEdit((o) => { o.gate.name = 'PAEP / gate2'; o.gate.requiredCheckContext = 'PAEP / gate2'; })], [WORKFLOW, replace('    name: PAEP / gate\n', '    name: PAEP / gate2\n')]], () => verifyGate('provenance'), [/FAIL W12/, /policy gate differs from the accepted baseline/]);
-  // IB3-ENTERPRISE-SHELL: W18 counts only the named edges the unmutated graph lacks; a control that names an edge it
-  // no longer injects must still fail.
-  caseRun('H03', '(iv) an edge-count control that names an edge it does not inject fails the negative-architecture gate', [['tooling/verification/negative-ib0-wp04.mjs', replace(`  [entry('frappe-sdk'), append("import '@proseit/paep-offline';")],\n`, '')]], () => verifyGate('negative-architecture'), [/FAIL W18/, /C1 failed/]);
 } finally {
   fs.rmSync(scratch, { recursive: true, force: true });
 }

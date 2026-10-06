@@ -62,7 +62,7 @@ The UI lab keeps its own chrome. Under "Enterprise shell" it has one page per bu
 | `qa:design-system` S03, S05, S07, S08, S11, S12 | Approved component, icon, token and key extensions; S05 admits the enterprise entry point only in the lab showcase | `design-system-extension-negative.mjs` (27 + control) |
 | `qa:accessibility` A1 | axe also runs inside the framed showcase previews | B16, B17 |
 | `qa:ib0-wp05` W02 | An in-scope CLAUDE.md change must be exactly the approved amendment | F02 |
-| `qa:ib0-wp05` floor, W18 | The two IB3 jobs and their negatives cannot be dropped or moved; the W18 edge bound uses the base graph | H03, `qa:ib3:ci-negative` (10 + control) |
+| `qa:ib0-wp05` floor, W18 | The two IB3 jobs and their negatives cannot be dropped or moved; the W18 edge bound uses the base graph | `qa:ib3:ci-negative` (11 + control; J11 is the W18 edge-bound negative, kept out of `PAEP / negative-ci` for its 20-minute budget) |
 
 ## 6. Known limits
 

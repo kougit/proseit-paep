@@ -4,9 +4,10 @@
  * PAEP / negative-ci and negative-ci-b keep their accepted workload and 20-minute timeout (RR14, AC-IB3-21).
  *
  * Proves that the two IB3 jobs are mandatory, keep their commands and feed PAEP / gate, and that the IB3 negative
- * suites cannot move into other jobs. Same harness as the IB2 suite (tooling/design-system/ci-governance-negative.mjs):
+ * suites cannot move into other jobs, and that the IB3 W18 edge bound still rejects a WP04 control that no longer
+ * injects the edge it names (J11). Same harness as the IB2 suite (tooling/design-system/ci-governance-negative.mjs):
  * each case mutates a disposable scratch copy of the repository (with .git; node_modules hard-linked read-only),
- * commits the mutation in the copy only, and runs the provenance gate, expecting exactly the stated W checks to
+ * commits the mutation in the copy only (J11 leaves it uncommitted), and runs the provenance gate, expecting exactly the stated W checks to
  * fail. P00 is the positive control on the unmutated copy.
  *   node tooling/enterprise-shell/ib3-ci-governance-negative.mjs
  */
@@ -85,10 +86,15 @@ const cases = [
   ['J08', 'enterprise-shell silently skipped (if: false on the job)', [[WORKFLOW, replace('    name: PAEP / enterprise-shell\n', '    name: PAEP / enterprise-shell\n    if: ${{ false }}\n')]], 'provenance', [/FAIL W11/, /FAIL W13/]],
   ['J09', 'shell-browser timeout raised above the 30-minute ceiling', [[WORKFLOW, timeoutOf('shell-browser', 45)]], 'provenance', [/FAIL W11/, /shell-browser timeout-minutes 45/]],
   ['J10', 'an IB3 negative suite moved into PAEP / regression (policy and workflow together)', [[POLICY, jsonEdit((o) => { o.requiredCommands['shell-browser'] = o.requiredCommands['shell-browser'].filter((c) => c !== 'npm run qa:shell:negative'); o.requiredCommands.regression.push('npm run qa:shell:negative'); })], [WORKFLOW, (t) => { const step = t.slice(t.indexOf('      - name: IB3 shell browser negative suite'), t.indexOf('\n      - name: ', t.indexOf('      - name: IB3 shell browser negative suite') + 1) + 1); const moved = dropStep('IB3 shell browser negative suite')(t); const i = moved.indexOf('  regression:\n'); const u = moved.indexOf('      - name: Upload evidence', i); return moved.slice(0, u) + step.replace('shell-browser-3.log', 'regression-9.log') + moved.slice(u); }]], 'provenance', [/FAIL W11/, /IB3 negative "npm run qa:shell:negative" outside the IB3 jobs \(regression\)/]],
+  // W18 counts only the named edges the unmutated graph lacks; a WP04 edge-count control that names an edge it no
+  // longer injects must still fail. The edit stays uncommitted, as it was in the WP05 suite; any change to the WP04
+  // suite also fails its static integrity check (W17), so W17 is expected with W18. The case runs here, not in the WP05 suite, because one
+  // more WP04 negative run does not fit the 20-minute PAEP / negative-ci budget (RR14, AC-IB3-21).
+  ['J11', 'a WP04 edge-count control that names an edge it does not inject fails the negative-architecture gate', [['tooling/verification/negative-ib0-wp04.mjs', replace("  [entry('frappe-sdk'), append(\"import '@proseit/paep-offline';\")],\n", '')]], 'negative-architecture', [/FAIL W17/, /FAIL W18/, /C1 failed: allowed-edge control/], { commit: false }],
 ];
 
 const results = [];
-for (const [id, name, edits, g, expect] of cases) {
+for (const [id, name, edits, g, expect, { commit = true } = {}] of cases) {
   const saved = new Map();
   let r;
   let snapped = false;
@@ -98,7 +104,7 @@ for (const [id, name, edits, g, expect] of cases) {
       saved.set(p, fs.readFileSync(p));
       fs.writeFileSync(p, fn(fs.readFileSync(p, 'utf8')));
     }
-    if (edits.length) { snapshot(); snapped = true; }
+    if (edits.length && commit) { snapshot(); snapped = true; }
     r = gate(g);
   } catch (e) {
     r = { status: null, out: `harness error: ${e.stack || e}` };

@@ -501,7 +501,7 @@ jobs:
           if-no-files-found: warn
           retention-days: 30
 
-  # IB3-ENTERPRISE-SHELL (authorising instruction §17): the enterprise-shell behaviour tests, static gate and seeded
+  # IB3-ENTERPRISE-SHELL (authorising instruction section 17): the enterprise-shell behaviour tests, static gate and seeded
   # negatives, and the IB3 CI-governance negative; then the reference-app browser gate. Both feed PAEP / gate.
   enterprise-shell:
     name: PAEP / enterprise-shell

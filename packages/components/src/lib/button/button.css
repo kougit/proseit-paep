@@ -85,6 +85,43 @@
   background: var(--paep-color-destructive-active);
 }
 
+/* Field-style trigger (HOF-IB3-001 P-05): field surface and border, start-aligned one-line label, keyboard hint. */
+:host(.paep-button--field) {
+  align-items: center;
+  justify-content: flex-start;
+  padding-inline: var(--paep-space-3);
+  background: var(--paep-color-surface);
+  border-color: var(--paep-color-border-default);
+  color: var(--paep-color-text-secondary);
+  font-weight: var(--paep-font-weight-body);
+  text-align: start;
+  cursor: text;
+}
+:host(.paep-button--field:hover:not(:disabled)) {
+  border-color: var(--paep-color-border-strong);
+}
+:host(.paep-button--field:active:not(:disabled)) {
+  background: var(--paep-color-surface-subtle);
+}
+:host(.paep-button--field) .paep-button__label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.paep-button__hint {
+  flex: none;
+  padding-inline: var(--paep-space-1);
+  border: 1px solid var(--paep-color-border-subtle);
+  border-radius: var(--paep-radius-xs);
+  color: var(--paep-color-text-secondary);
+  font-family: var(--paep-font-family-mono);
+  font-size: var(--paep-font-size-caption);
+  line-height: var(--paep-line-height-caption);
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
 /* Disabled: disabled palette plus a dashed border as the non-colour cue. */
 :host(:disabled) {
   background: var(--paep-color-disabled-bg);
@@ -116,3 +153,4 @@
     color: GrayText;
   }
 }
+

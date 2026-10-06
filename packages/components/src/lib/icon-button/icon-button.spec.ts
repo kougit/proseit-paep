@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { page, userEvent } from 'vitest/browser';
+import { PaepCount } from '../count-badge/count-badge';
 import { PaepIconButton, PaepIconButtonVariant } from './icon-button';
 
 @Component({
@@ -16,6 +17,26 @@ class IconButtonHost {
   readonly loading = signal(false);
   readonly disabled = signal(false);
   clicks = 0;
+}
+
+@Component({
+  imports: [PaepIconButton],
+  template: `<button paepIconButton icon="bell" label="Notifications" [count]="count()" countLabel="{count} unread"></button>`,
+})
+class CountHost {
+  readonly count = signal<PaepCount | null>(3);
+}
+
+async function setupCount() {
+  const fixture = TestBed.createComponent(CountHost);
+  fixture.detectChanges();
+  await fixture.whenStable();
+  const button = (fixture.nativeElement as HTMLElement).querySelector('button') as HTMLButtonElement;
+  const settle = async () => {
+    fixture.detectChanges();
+    await fixture.whenStable();
+  };
+  return { host: fixture.componentInstance, button, settle };
 }
 
 async function setup() {
@@ -109,5 +130,51 @@ describe('PaepIconButton', () => {
     el.setAttribute('dir', 'rtl');
     await settle();
     expect(getComputedStyle(icon).transform).not.toBe('none');
+  });
+
+  it('count: a decorative badge at the inline-end corner and the count appended to the name', async () => {
+    const { button } = await setupCount();
+    await expect.element(page.getByRole('button', { name: 'Notifications, 3 unread' })).toBeInTheDocument();
+    const wrap = button.querySelector('.paep-icon-button__count') as HTMLElement;
+    expect(wrap.getAttribute('aria-hidden')).toBe('true');
+    expect(wrap.querySelector('.paep-count-badge__value')?.getAttribute('dir')).toBe('ltr');
+    expect(wrap.querySelector('.paep-count-badge__value')?.textContent?.trim()).toBe('3');
+    const b = button.getBoundingClientRect();
+    const r = wrap.getBoundingClientRect();
+    // Inside the 1px button border, at the inline-end corner.
+    expect(Math.abs(r.top - b.top)).toBeLessThanOrEqual(1.5);
+    expect(Math.abs(r.right - b.right)).toBeLessThanOrEqual(1.5);
+    expect(Math.round(b.width)).toBe(40);
+  });
+
+  it('count: capped at 99+; zero or null shows no badge; loading and unknown are named', async () => {
+    const { button, host, settle } = await setupCount();
+    host.count.set(120);
+    await settle();
+    expect(button.getAttribute('aria-label')).toBe('Notifications, 99+ unread');
+    expect(button.querySelector('.paep-count-badge__value')?.textContent?.trim()).toBe('99+');
+    for (const none of [0, null]) {
+      host.count.set(none);
+      await settle();
+      expect(button.getAttribute('aria-label')).toBe('Notifications');
+      expect(button.querySelector('paep-count-badge')).toBeNull();
+    }
+    host.count.set('loading');
+    await settle();
+    expect(button.getAttribute('aria-label')).toBe('Notifications, Loading count');
+    expect(button.querySelector('paep-count-badge svg.paep-icon--spin')).not.toBeNull();
+    host.count.set('unknown');
+    await settle();
+    expect(button.getAttribute('aria-label')).toBe('Notifications, Count not available');
+    expect(button.querySelector('.paep-count-badge__value')?.textContent?.trim()).toBe('–');
+  });
+
+  it('count: the badge mirrors to the inline-end corner in RTL', async () => {
+    const { button, settle } = await setupCount();
+    button.parentElement!.setAttribute('dir', 'rtl');
+    await settle();
+    const b = button.getBoundingClientRect();
+    const r = (button.querySelector('.paep-icon-button__count') as HTMLElement).getBoundingClientRect();
+    expect(Math.abs(r.left - b.left)).toBeLessThanOrEqual(1.5);
   });
 });

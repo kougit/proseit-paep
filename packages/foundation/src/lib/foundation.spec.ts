@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import {
   PAEP_BRAND_KEYS,
   PAEP_DEFAULT_BRAND,
+  PAEP_DIRECTIONAL_ICONS,
   PAEP_ICONS,
   PAEP_TOKENS,
   PaepAnnouncer,
@@ -29,7 +30,9 @@ const token = (name: string) => rootStyle().getPropertyValue(name).trim().replac
 
 describe('foundation tokens', () => {
   it('loads every catalogued token with its approved value into the document', () => {
-    const wrong = PAEP_TOKENS.filter((t) => token(t.name).toLowerCase() !== t.value.toLowerCase() && !t.value.startsWith('var('));
+    // A value built from other tokens (the shell sticky offset) is compared with those tokens' values substituted.
+    const resolved = (v: string) => v.replace(/var\((--[\w-]+)\)/g, (m, n: string) => PAEP_TOKENS.find((x) => x.name === n)?.value ?? m);
+    const wrong = PAEP_TOKENS.filter((t) => token(t.name).toLowerCase() !== resolved(t.value).toLowerCase() && !t.value.startsWith('var('));
     expect(wrong.map((t) => `${t.name}=${token(t.name)} expected ${t.value}`)).toEqual([]);
     expect(PAEP_TOKENS.length).toBeGreaterThan(150);
   });
@@ -183,6 +186,15 @@ describe('brand profile validator', () => {
 })
 class IconHost {}
 
+@Component({
+  imports: [PaepIcon],
+  template: `<div dir="rtl"><svg paepIcon="panel-start"></svg><svg paepIcon="sign-out"></svg><svg paepIcon="bell"></svg></div>`,
+})
+class ShellIconHost {}
+
+@Component({ template: `<a class="paep-skip-link" href="#main">Skip to main content</a><main id="main" tabindex="-1"></main>` })
+class SkipLinkHost {}
+
 describe('icons', () => {
   it('renders decorative, non-focusable SVG from PAEP-owned data and mirrors directional icons in RTL', async () => {
     const f = TestBed.createComponent(IconHost);
@@ -199,7 +211,70 @@ describe('icons', () => {
     expect(svgs[1].querySelectorAll('circle, path').length).toBe(2);
     expect(getComputedStyle(svgs[0]).transform).toBe('none');
     expect(getComputedStyle(svgs[2]).transform).not.toBe('none');
-    expect(Object.keys(PAEP_ICONS).length).toBe(25);
+    expect(Object.keys(PAEP_ICONS).length).toBe(49);
+  });
+
+  it('adds the 24 approved HOF-IB3-001 shell icons on the same grid; panel-start and sign-out mirror in RTL', async () => {
+    const shell = ['menu', 'panel-start', 'bell', 'user', 'help', 'globe', 'building', 'lock', 'edition', 'sliders', 'device', 'signal', 'signal-low', 'cloud-off', 'unknown', 'impersonate', 'environment', 'home', 'list', 'tasks', 'document', 'shield', 'sign-out', 'keyboard'];
+    const names = Object.keys(PAEP_ICONS);
+    expect(names.slice(25)).toEqual(shell);
+    for (const n of shell) {
+      for (const s of PAEP_ICONS[n as keyof typeof PAEP_ICONS] as readonly { type: string; d?: string; cx?: number; cy?: number; r?: number }[]) {
+        expect(['path', 'circle']).toContain(s.type);
+        const nums = s.type === 'circle' ? [s.cx!, s.cy!, s.r!] : (s.d!.match(/-?\d*\.?\d+/g) ?? []).map(Number);
+        expect(nums.every((v) => Math.abs(v) <= 24), n).toBe(true);
+      }
+    }
+    expect(PAEP_DIRECTIONAL_ICONS.filter((n) => shell.includes(n))).toEqual(['panel-start', 'sign-out']);
+    const f = TestBed.createComponent(ShellIconHost);
+    f.detectChanges();
+    await f.whenStable();
+    const [panel, out, bell] = [...(f.nativeElement as HTMLElement).querySelectorAll('svg')];
+    expect(getComputedStyle(panel).transform).not.toBe('none');
+    expect(getComputedStyle(out).transform).not.toBe('none');
+    expect(getComputedStyle(bell).transform).toBe('none');
+    expect(bell.getAttribute('stroke')).toBe('currentColor');
+    expect(bell.getAttribute('stroke-width')).toBe('2');
+  });
+});
+
+describe('shell tokens and skip link (HOF-IB3-001)', () => {
+  it('loads the 12 approved shell and layer tokens, and not the rejected content-max alias', () => {
+    const expected: Record<string, string> = {
+      '--paep-shell-topbar-block-size': '3.5rem',
+      '--paep-shell-sidebar-inline-size': '16rem',
+      '--paep-shell-rail-inline-size': '5.5rem',
+      '--paep-shell-sheet-inline-size': '20rem',
+      '--paep-shell-status-block-size': '2.5rem',
+      '--paep-shell-sticky-offset': 'calc(var(--paep-shell-topbar-block-size) + var(--paep-space-2))',
+      '--paep-layer-sticky': '30',
+      '--paep-layer-flyout': '40',
+      '--paep-layer-popup': '45',
+      '--paep-layer-overlay-scrim': '60',
+      '--paep-layer-overlay': '61',
+      '--paep-layer-skip-link': '80',
+    };
+    const shell = PAEP_TOKENS.filter((t) => /^--paep-(shell|layer)-/.test(t.name));
+    expect(Object.fromEntries(shell.map((t) => [t.name, t.value]))).toEqual(expected);
+    for (const [name, value] of Object.entries(expected)) expect(token(name)).toBe(name.endsWith('sticky-offset') ? 'calc(3.5rem + 0.5rem)' : value);
+    expect(token('--paep-shell-content-max-inline-size')).toBe('');
+    expect(shell.every((t) => !t.overridable && t.category === 'layout')).toBe(true);
+  });
+
+  it('.paep-skip-link is visually hidden until focused, then shown above every layer', async () => {
+    const f = TestBed.createComponent(SkipLinkHost);
+    f.detectChanges();
+    await f.whenStable();
+    const link = (f.nativeElement as HTMLElement).querySelector('a') as HTMLAnchorElement;
+    expect(link.getBoundingClientRect().width).toBeLessThanOrEqual(1);
+    expect(getComputedStyle(link).clipPath).toBe('inset(50%)');
+    link.focus();
+    const s = getComputedStyle(link);
+    expect(link.getBoundingClientRect().width).toBeGreaterThan(24);
+    expect(s.clipPath).toBe('none');
+    expect(s.zIndex).toBe('80');
+    expect(s.position).toBe('absolute');
+    expect(s.textDecorationLine).toBe('underline');
   });
 });
 

@@ -4,6 +4,7 @@ import {
   DestroyRef,
   ElementRef,
   booleanAttribute,
+  computed,
   effect,
   inject,
   input,
@@ -12,7 +13,8 @@ import {
 } from '@angular/core';
 import { PaepIcon, PaepIconName } from '@proseit/paep-foundation';
 
-export type PaepButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'destructive';
+/** `field`: a button presented like a field (search trigger, HOF-IB3-001 P-05); it opens something, it is not an input. */
+export type PaepButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'destructive' | 'field';
 export type PaepButtonType = 'button' | 'submit' | 'reset';
 
 /**
@@ -36,7 +38,9 @@ export function suppressActivationWhile(host: HTMLElement, busy: () => boolean):
  * link-styled-as-button `<a paepButton href="…">`. Native semantics, keyboard and form behaviour are kept;
  * the size comes from density. `disabled` is the native attribute (buttons only). While `loading`, a
  * spinner replaces the leading icon, the button is aria-busy + aria-disabled, stays focusable, keeps its
- * width and ignores activation.
+ * width and ignores activation. `variant="field"` presents the button like a field: a leading search icon (or
+ * `icon`), the label truncated on one line (the accessible name keeps it in full) and an optional decorative keyboard
+ * hint (`keyHint`, e.g. "Ctrl K"); the host states the shortcut itself with aria-keyshortcuts.
  */
 @Component({
   selector: 'button[paepButton], a[paepButton]',
@@ -49,6 +53,7 @@ export function suppressActivationWhile(host: HTMLElement, busy: () => boolean):
     '[class.paep-button--secondary]': 'variant() === "secondary"',
     '[class.paep-button--tertiary]': 'variant() === "tertiary"',
     '[class.paep-button--destructive]': 'variant() === "destructive"',
+    '[class.paep-button--field]': 'variant() === "field"',
     '[class.paep-button--block]': 'block()',
     '[attr.type]': 'isButton ? type() : null',
     '[attr.aria-busy]': 'loading() ? "true" : null',
@@ -58,10 +63,13 @@ export function suppressActivationWhile(host: HTMLElement, busy: () => boolean):
   template: `
     @if (loading()) {
       <svg class="paep-button__icon" paepIcon="spinner"></svg>
-    } @else if (icon(); as leading) {
+    } @else if (leadingIcon(); as leading) {
       <svg class="paep-button__icon" [paepIcon]="leading"></svg>
     }
     <span class="paep-button__label"><ng-content /></span>
+    @if (variant() === 'field' && keyHint()) {
+      <kbd class="paep-button__hint" aria-hidden="true">{{ keyHint() }}</kbd>
+    }
     @if (trailingIcon(); as trailing) {
       <svg class="paep-button__icon" [paepIcon]="trailing"></svg>
     }
@@ -73,7 +81,7 @@ export class PaepButton {
   readonly variant = input<PaepButtonVariant>('secondary');
   /** Native button type. Defaults to "button" so a button never submits a form by accident. Ignored on links. */
   readonly type = input<PaepButtonType>('button');
-  /** Optional decorative leading icon (the label always stays visible). */
+  /** Optional decorative leading icon (the label always stays visible). The field variant defaults to search. */
   readonly icon = input<PaepIconName | undefined>(undefined);
   /** Optional decorative trailing icon, e.g. chevron-down or external. */
   readonly trailingIcon = input<PaepIconName | undefined>(undefined);
@@ -81,11 +89,14 @@ export class PaepButton {
   readonly loading = input(false, { transform: booleanAttribute });
   /** Full-width layout option (narrow widths, footers). */
   readonly block = input(false, { transform: booleanAttribute });
+  /** Field variant only: visible keyboard hint, decorative (aria-hidden), e.g. "Ctrl K". */
+  readonly keyHint = input<string>('');
 
   /** Host element (used by the action group to mirror the action into its overflow menu). */
   readonly element: HTMLElement = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   protected readonly isButton = this.element.tagName === 'BUTTON';
   protected readonly lockedWidth = signal<number | null>(null);
+  protected readonly leadingIcon = computed(() => this.icon() ?? (this.variant() === 'field' ? 'search' : undefined));
 
   constructor() {
     suppressActivationWhile(this.element, () => this.loading());

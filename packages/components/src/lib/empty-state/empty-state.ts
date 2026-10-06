@@ -1,16 +1,21 @@
 import { ChangeDetectionStrategy, Component, booleanAttribute, computed, inject, input, numberAttribute, output } from '@angular/core';
-import { PaepIcon } from '@proseit/paep-foundation';
+import { PaepIcon, PaepIconName } from '@proseit/paep-foundation';
 import { PAEP_MESSAGES } from '../messages/messages';
 
-/** `empty`: the collection genuinely has no data. `no-results`: filters or search exclude every item. */
-export type PaepEmptyStateKind = 'empty' | 'no-results';
+/**
+ * `empty`: the collection genuinely has no data. `no-results`: filters or search exclude every item.
+ * `unavailable`: the content cannot be shown here (HOF-IB3-001 P-06); the host supplies the icon, the heading and the
+ * reason line, and the state explains only (it never grants or denies access).
+ */
+export type PaepEmptyStateKind = 'empty' | 'no-results' | 'unavailable';
 export type PaepHeadingLevel = 2 | 3 | 4 | 5 | 6;
 
 /**
  * Explains why a collection has nothing to show and what to do next:
  * `<paep-empty-state kind="no-results" (action)="clearFilters()" />`.
- * The two kinds differ in icon, heading and action. Focus is never moved automatically; the host
- * collection announces the state through its own live region.
+ * The kinds differ in icon, heading and action; `unavailable` has no default text or action and adds a reason line
+ * (`<paep-empty-state kind="unavailable" icon="lock" heading="Archive" reason="Not available to your role" />`).
+ * Focus is never moved automatically; the host collection announces the state through its own live region.
  */
 @Component({
   selector: 'paep-empty-state',
@@ -18,13 +23,18 @@ export type PaepHeadingLevel = 2 | 3 | 4 | 5 | 6;
   imports: [PaepIcon],
   host: { class: 'paep-empty-state', '[attr.data-kind]': 'kind()' },
   template: `
-    <svg [paepIcon]="kind() === 'no-results' ? 'no-results' : 'empty'"></svg>
+    @if (iconName(); as name) {
+      <svg [paepIcon]="name"></svg>
+    }
     @switch (headingLevel()) {
       @case (2) { <h2 class="paep-empty-state__heading">{{ headingText() }}</h2> }
       @case (4) { <h4 class="paep-empty-state__heading">{{ headingText() }}</h4> }
       @case (5) { <h5 class="paep-empty-state__heading">{{ headingText() }}</h5> }
       @case (6) { <h6 class="paep-empty-state__heading">{{ headingText() }}</h6> }
       @default { <h3 class="paep-empty-state__heading">{{ headingText() }}</h3> }
+    }
+    @if (kind() === 'unavailable' && reason()) {
+      <p class="paep-empty-state__unavailable-reason">{{ reason() }}</p>
     }
     @if (descriptionText()) {
       <p class="paep-empty-state__description">{{ descriptionText() }}</p>
@@ -94,6 +104,10 @@ export type PaepHeadingLevel = 2 | 3 | 4 | 5 | 6;
       border-color: var(--paep-color-disabled-border);
       cursor: not-allowed;
     }
+    .paep-empty-state__unavailable-reason {
+      color: var(--paep-color-text-primary);
+      font-weight: var(--paep-font-weight-label);
+    }
     .paep-empty-state__reason {
       font-size: var(--paep-font-size-body-sm);
       line-height: var(--paep-line-height-body-sm);
@@ -115,9 +129,12 @@ export class PaepEmptyState {
   readonly headingLevel = input<PaepHeadingLevel, unknown>(3, {
     transform: (v: unknown) => Math.min(6, Math.max(2, numberAttribute(v, 3))) as PaepHeadingLevel,
   });
-  /** Overrides the heading (defaults paep.empty.title / paep.noResults.title). */
+  /** Overrides the heading (defaults paep.empty.title / paep.noResults.title); required for `unavailable`. */
   readonly heading = input<string>('');
-  /** Overrides the description (defaults paep.empty.body / paep.noResults.body); an empty string hides it. */
+  /**
+   * Overrides the description (defaults paep.empty.body / paep.noResults.body; none for `unavailable`); an empty
+   * string hides it.
+   */
   readonly description = input<string | undefined>(undefined);
   /**
    * Action text. Undefined uses the default for the kind (no-results: "Clear filters"; empty: no action);
@@ -127,16 +144,26 @@ export class PaepEmptyState {
   /** Disables the action (show why with actionDisabledReason); a usability hint, never the authorisation control. */
   readonly actionDisabled = input(false, { transform: booleanAttribute });
   readonly actionDisabledReason = input<string>('');
+  /** `unavailable` only: the decorative icon of the reason, supplied by the host (e.g. lock, edition). */
+  readonly icon = input<PaepIconName | undefined>(undefined);
+  /** `unavailable` only: the reason line, e.g. "Not included in your edition". */
+  readonly reason = input<string>('');
 
   /** Emits when the action button is activated. */
   readonly action = output<void>();
 
-  protected readonly headingText = computed(
-    () => this.heading() || this.messages[this.kind() === 'no-results' ? 'paep.noResults.title' : 'paep.empty.title'],
-  );
+  protected readonly iconName = computed<PaepIconName | undefined>(() => {
+    const kind = this.kind();
+    return kind === 'unavailable' ? this.icon() : kind === 'no-results' ? 'no-results' : 'empty';
+  });
+  protected readonly headingText = computed(() => {
+    if (this.heading() || this.kind() === 'unavailable') return this.heading();
+    return this.messages[this.kind() === 'no-results' ? 'paep.noResults.title' : 'paep.empty.title'];
+  });
   protected readonly descriptionText = computed(() => {
     const d = this.description();
     if (d !== undefined) return d;
+    if (this.kind() === 'unavailable') return '';
     return this.messages[this.kind() === 'no-results' ? 'paep.noResults.body' : 'paep.empty.body'];
   });
   protected readonly actionText = computed(() => {

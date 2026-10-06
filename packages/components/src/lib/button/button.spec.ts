@@ -29,6 +29,32 @@ class ButtonHost {
   }
 }
 
+@Component({
+  imports: [PaepButton],
+  template: `
+    <div [style.inline-size.px]="width()">
+      <button paepButton variant="field" keyHint="Ctrl K" aria-keyshortcuts="Control+K Meta+K" (click)="clicks = clicks + 1">{{ label() }}</button>
+    </div>
+  `,
+})
+class FieldHost {
+  readonly width = signal(320);
+  readonly label = signal('Search or go to…');
+  clicks = 0;
+}
+
+async function setupField() {
+  const fixture = TestBed.createComponent(FieldHost);
+  fixture.detectChanges();
+  await fixture.whenStable();
+  const button = (fixture.nativeElement as HTMLElement).querySelector('button') as HTMLButtonElement;
+  const settle = async () => {
+    fixture.detectChanges();
+    await fixture.whenStable();
+  };
+  return { host: fixture.componentInstance, button, settle };
+}
+
 async function setup() {
   const fixture = TestBed.createComponent(ButtonHost);
   fixture.detectChanges();
@@ -157,5 +183,44 @@ describe('PaepButton', () => {
     const icon = button.querySelector('svg') as SVGElement;
     const label = button.querySelector('.paep-button__label') as HTMLElement;
     expect(icon.getBoundingClientRect().left).toBeGreaterThan(label.getBoundingClientRect().left);
+  });
+
+  it('field: a button presented like a field with a leading search icon and a decorative keyboard hint', async () => {
+    const { button } = await setupField();
+    await expect.element(page.getByRole('button', { name: 'Search or go to…' })).toBeInTheDocument();
+    expect(button.classList).toContain('paep-button--field');
+    expect(button.getAttribute('type')).toBe('button');
+    expect(button.getAttribute('aria-keyshortcuts')).toBe('Control+K Meta+K');
+    const [icon] = [...button.querySelectorAll('svg')];
+    expect(icon.getAttribute('aria-hidden')).toBe('true');
+    expect(icon.querySelector('path')).not.toBeNull();
+    const hint = button.querySelector('kbd') as HTMLElement;
+    expect(hint.textContent?.trim()).toBe('Ctrl K');
+    expect(hint.getAttribute('aria-hidden')).toBe('true');
+    const s = getComputedStyle(button);
+    expect(s.borderTopStyle).toBe('solid');
+    expect(s.borderTopColor).toBe('rgb(106, 115, 126)');
+    expect(s.backgroundColor).toBe('rgb(255, 255, 255)');
+    expect(s.color).toBe('rgb(84, 93, 104)');
+  });
+
+  it('field: activates like any button with Enter and Space', async () => {
+    const { button, host } = await setupField();
+    button.focus();
+    await userEvent.keyboard('{Enter}');
+    await userEvent.keyboard(' ');
+    expect(host.clicks).toBe(2);
+  });
+
+  it('field: a long label truncates on one line inside a narrow container while the name keeps it in full', async () => {
+    const { button, host, settle } = await setupField();
+    host.width.set(200);
+    host.label.set('Search records, pages, commands and recently viewed destinations');
+    await settle();
+    const label = button.querySelector('.paep-button__label') as HTMLElement;
+    expect(getComputedStyle(label).textOverflow).toBe('ellipsis');
+    expect(button.getBoundingClientRect().height).toBeLessThanOrEqual(41);
+    expect(button.scrollWidth).toBeLessThanOrEqual(button.clientWidth + 1);
+    await expect.element(page.getByRole('button', { name: 'Search records, pages, commands and recently viewed destinations' })).toBeInTheDocument();
   });
 });

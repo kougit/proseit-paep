@@ -19,3 +19,18 @@
 .paep-button__icon {
   margin-block: 0;
 }
+
+/* Count badge (HOF-IB3-001 P-04): at the inline-end corner, separated from the icon by a surface ring. */
+:host {
+  position: relative;
+}
+.paep-icon-button__count {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  display: inline-flex;
+  border-radius: var(--paep-radius-full);
+  background: var(--paep-color-surface);
+  box-shadow: 0 0 0 2px var(--paep-color-surface);
+  pointer-events: none;
+}

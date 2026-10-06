@@ -501,6 +501,89 @@ jobs:
           if-no-files-found: warn
           retention-days: 30
 
+  # IB3-ENTERPRISE-SHELL (authorising instruction §17): the enterprise-shell behaviour tests, static gate and seeded
+  # negatives, and the IB3 CI-governance negative; then the reference-app browser gate. Both feed PAEP / gate.
+  enterprise-shell:
+    name: PAEP / enterprise-shell
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out (full history for baseline comparisons)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: PAEP setup
+        uses: ./.github/actions/paep-setup
+
+      - name: IB3 enterprise-shell behaviour tests in Chrome (test:enterprise)
+        run: |
+          set -euo pipefail
+          npm run test:enterprise 2>&1 | tee "$PAEP_EVIDENCE_DIR/enterprise-shell-1.log"
+
+      - name: IB3 enterprise-shell static gate - scope, imports, public API, messages, security, routes (qa:enterprise)
+        run: |
+          set -euo pipefail
+          npm run qa:enterprise 2>&1 | tee "$PAEP_EVIDENCE_DIR/enterprise-shell-2.log"
+
+      - name: IB3 enterprise-shell and design-system extension negative suites (qa:enterprise:negative)
+        run: |
+          set -euo pipefail
+          npm run qa:enterprise:negative 2>&1 | tee "$PAEP_EVIDENCE_DIR/enterprise-shell-3.log"
+
+      - name: IB3 CI-governance negative suite - IB3 jobs mandatory, IB3 regression bounds narrow (qa:ib3:ci-negative)
+        run: |
+          set -euo pipefail
+          npm run qa:ib3:ci-negative 2>&1 | tee "$PAEP_EVIDENCE_DIR/enterprise-shell-4.log"
+
+      - name: Upload evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: paep-enterprise-shell-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/paep-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
+  shell-browser:
+    name: PAEP / shell-browser
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out (full history for baseline comparisons)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: PAEP setup
+        uses: ./.github/actions/paep-setup
+
+      - name: Production build (reference-app) for the shell browser gate
+        run: |
+          set -euo pipefail
+          npm run build:reference-app 2>&1 | tee "$PAEP_EVIDENCE_DIR/shell-browser-1.log"
+
+      - name: IB3 shell browser gate - 1440 to 320x256 px, LTR and RTL, axe-core, keyboard, focus, reduced motion (qa:shell)
+        run: |
+          set -euo pipefail
+          npm run qa:shell 2>&1 | tee "$PAEP_EVIDENCE_DIR/shell-browser-2.log"
+
+      - name: IB3 shell browser negative suite (qa:shell:negative)
+        run: |
+          set -euo pipefail
+          npm run qa:shell:negative 2>&1 | tee "$PAEP_EVIDENCE_DIR/shell-browser-3.log"
+
+      - name: Upload evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: paep-shell-browser-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/paep-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
   gate:
     name: PAEP / gate
     if: ${{ always() }}
@@ -520,6 +603,8 @@ jobs:
       - negative-ci-b
       - build-reference-app
       - build-ui-lab
+      - enterprise-shell
+      - shell-browser
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions: {}
@@ -527,7 +612,7 @@ jobs:
       - name: Evaluate every mandatory job result
         env:
           NEEDS_JSON: ${{ toJSON(needs) }}
-          MANDATORY_JOBS: governance provenance architecture strictness negative-architecture negative-ci regression contracts runtime-config runtime-config-negative components accessibility negative-ci-b build-reference-app build-ui-lab
+          MANDATORY_JOBS: governance provenance architecture strictness negative-architecture negative-ci regression contracts runtime-config runtime-config-negative components accessibility negative-ci-b build-reference-app build-ui-lab enterprise-shell shell-browser
         run: |
           set -euo pipefail
           fail=0

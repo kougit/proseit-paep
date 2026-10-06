@@ -365,6 +365,14 @@ const IB2_REQUIRED_JOBS = {
   accessibility: { name: 'PAEP / accessibility', commands: ['npm run build:ui-lab', 'npm run qa:accessibility', 'npm run qa:accessibility:negative'] },
   'negative-ci-b': { name: 'PAEP / negative-ci-b', commands: ['npm run qa:ib0-wp05:negative -- --part b'] },
 };
+// IB3-ENTERPRISE-SHELL (authorising instruction §17, ACCEPTANCE AC-IB3-21): the two IB3 jobs are mandatory and keep these
+// commands, and the IB3 negative suites run only in them, so PAEP / negative-ci and negative-ci-b keep their accepted
+// workload and 20-minute timeout.
+const IB3_REQUIRED_JOBS = {
+  'enterprise-shell': { name: 'PAEP / enterprise-shell', commands: ['npm run test:enterprise', 'npm run qa:enterprise', 'npm run qa:enterprise:negative', 'npm run qa:ib3:ci-negative'] },
+  'shell-browser': { name: 'PAEP / shell-browser', commands: ['npm run build:reference-app', 'npm run qa:shell', 'npm run qa:shell:negative'] },
+};
+const IB3_NEGATIVES = ['npm run qa:enterprise:negative', 'npm run qa:shell:negative', 'npm run qa:ib3:ci-negative'];
 // IB2 CI-performance split (PO/SA, 2026-09-28; RR14): the accepted negative-ci command `npm run qa:ib0-wp05:negative`
 // may be replaced only by exactly its two halves, part a in negative-ci (keeping every other accepted command in order)
 // and part b in the mandatory negative-ci-b job, so the two parallel jobs run exactly the accepted suite.
@@ -383,6 +391,15 @@ function acceptedPolicyFloor() {
     const c = policy.mandatoryJobs?.find((x) => x.id === id);
     if (!c || c.name !== r.name) jobs.push(`IB2 mandatory job ${id} removed or renamed`);
     for (const cmd of r.commands) if (!(policy.requiredCommands?.[id] || []).includes(cmd)) jobs.push(`IB2 command "${cmd}" dropped from ${id}`);
+  }
+  for (const [id, r] of Object.entries(IB3_REQUIRED_JOBS)) {
+    const c = policy.mandatoryJobs?.find((x) => x.id === id);
+    if (!c || c.name !== r.name) jobs.push(`IB3 mandatory job ${id} removed or renamed`);
+    for (const cmd of r.commands) if (!(policy.requiredCommands?.[id] || []).includes(cmd)) jobs.push(`IB3 command "${cmd}" dropped from ${id}`);
+  }
+  for (const [id, cmds] of Object.entries(policy.requiredCommands || {})) {
+    if (IB3_REQUIRED_JOBS[id]) continue;
+    for (const cmd of cmds) if (IB3_NEGATIVES.some((n) => cmd.startsWith(n))) jobs.push(`IB3 negative "${cmd}" outside the IB3 jobs (${id})`);
   }
   if (!BASE) return { jobs: [...jobs, noBase], other: [noBase] };
   let a = null;

@@ -54,7 +54,8 @@
     "qa:enterprise": "node tooling/enterprise-shell/enterprise-qa.mjs",
     "qa:enterprise:negative": "node tooling/enterprise-shell/enterprise-qa-negative.mjs && node tooling/enterprise-shell/design-system-extension-negative.mjs",
     "qa:shell": "node tooling/enterprise-shell/shell-qa.mjs",
-    "qa:shell:negative": "node tooling/enterprise-shell/shell-qa-negative.mjs"
+    "qa:shell:negative": "node tooling/enterprise-shell/shell-qa-negative.mjs",
+    "qa:ib3:ci-negative": "node tooling/enterprise-shell/ib3-ci-governance-negative.mjs"
   },
   "dependencies": {
     "@angular/common": "22.1.8",

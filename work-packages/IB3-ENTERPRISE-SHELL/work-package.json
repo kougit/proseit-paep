@@ -1,0 +1,46 @@
+{
+  "id": "IB3-ENTERPRISE-SHELL",
+  "title": "IB3: enterprise application shell",
+  "milestone": "IB3",
+  "design_classification": "D1 (enterprise shell, from the approved HOF-IB3-001); S1a D3 (DDR-IB2-07 lab closure)",
+  "design_handoff": {
+    "id": "HOF-IB3-001",
+    "version": "1.0",
+    "status": "APPROVED_FOR_IMPLEMENTATION",
+    "approved_by": "Dr Kamulegeya Grace B (PhD), Product Owner / Solutions Architect",
+    "date": "2026-10-05",
+    "manifest_sha256": "645dd2e9bb4274c9b787bbbcc52cf53eb4f08dc21d733b5985aa3ab572f4fce5"
+  },
+  "status": "IN PROGRESS",
+  "acceptance": null,
+  "predecessor": {
+    "id": "IB2-FOUNDATION-COMPONENTS",
+    "status": "ACCEPTED",
+    "baseline_commit": "81c223c",
+    "promotion_merge": "929387b"
+  },
+  "baseline_registry": "tooling/governance/baseline-registry.json",
+  "baseline_generation": {
+    "active_accepted": 4,
+    "candidate": 5,
+    "candidate_status": "CANDIDATE"
+  },
+  "new_dependencies": [],
+  "evidence_path": "evidence/IB3-ENTERPRISE-SHELL/",
+  "human_acceptance_required": true,
+  "claude_md_disposition": "PROTECTED GOVERNED ARTIFACT: narrow amendment permitting IB3-ENTERPRISE-SHELL only (policyChange)",
+  "enterprise_shell": "IN PROGRESS",
+  "nx_disposition": "NOT REQUIRED",
+  "ib2DdrFollowUps": {
+    "DDR-IB2-07": "OPEN: closure is stage S1a, before any foundation/components change",
+    "HOF-IB2-001 v1.2": "NOT STARTED: required before the Q-02 component code lands and before IB3 acceptance (DDR-IB2-01, -02, -04, -05, -08 and the Q-02 change)"
+  },
+  "native_copy_review": {
+    "ar": "PENDING - REQUIRED BEFORE IB3 ACCEPTANCE",
+    "he": "PENDING - REQUIRED BEFORE IB3 ACCEPTANCE"
+  },
+  "findings_open": {
+    "high": 0,
+    "medium": 0
+  }
+}

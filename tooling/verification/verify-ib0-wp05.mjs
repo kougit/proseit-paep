@@ -592,8 +592,19 @@ const pkgFinding = (key) => [/^(package\.json scripts differ from baseline \+ th
 const IB1_FILLED_ENTRIES = ['packages/contracts/src/index.ts', 'packages/platform/src/index.ts', 'packages/foundation/src/index.ts', 'packages/components/src/index.ts'];
 const filledEntry = (key) => (f) => IB1_FILLED_ENTRIES.includes(f) && since(key)(f);
 
-// Bounded WP04 V07 (filled entry points) and V16/V17 (static checks).
+// IB3-ENTERPRISE-SHELL: the WP03 V13 / WP04 V18 integrity finding is accepted only when CLAUDE.md is the one controlled
+// path that differs from that verifier's baseline and it changed inside the CANDIDATE scope (or, once promoted, in
+// accepted history). .paep-control, .gitignore and PACK_MANIFEST.json stay exact (W02 also checks them).
+const CONTROLLED_FINDING = 'controlled files or CLAUDE.md differ from the baseline';
+function claudeMdBounded(key, d) {
+  if (d !== CONTROLLED_FINDING || !BASE) return false;
+  const changed = lines(git('diff', '--name-only', HISTORICAL_VERIFIER_BASELINE[key], '--', '.paep-control', '.gitignore', 'PACK_MANIFEST.json', 'CLAUDE.md').out);
+  return changed.length === 1 && changed[0] === 'CLAUDE.md' && since(key)('CLAUDE.md');
+}
+
+// Bounded WP04 V07 (filled entry points), V16/V17 (static checks) and V18 (CLAUDE.md only, IB3).
 function wp04StaticBounded(check) {
+  if (check.id === 'V18') return claudeMdBounded('wp04', check.details);
   if (check.id === 'V07') return segmentsOk(check.details, [[/^(.+) is not a placeholder$/, (m) => filledEntry('wp04')(m[1])]]);
   if (check.id === 'V16') return segmentsOk(check.details, [pkgFinding('wp04')]);
   if (check.id === 'V17') {
@@ -675,7 +686,7 @@ if (want('W17')) {
     }
   }
   const fails = wp04Static ? wp04Static.checks.filter((c) => !c.pass).map((c) => c.id) : [];
-  add('W17', 'Strict configuration: WP04 static verifier passes V04-V07 (strict, noImplicitAny, strictTemplates, noCheck and suppression protection, aliases, entry points) and every other static check; V07 reports only entry points filled inside the CANDIDATE scope; V16/V17 report only accepted-history or in-scope change',
+  add('W17', 'Strict configuration: WP04 static verifier passes V04-V07 (strict, noImplicitAny, strictTemplates, noCheck and suppression protection, aliases, entry points) and every other static check; V07 reports only entry points filled inside the CANDIDATE scope; V16/V17 report only accepted-history or in-scope change; V18 reports only an in-scope CLAUDE.md change',
     p.length === 0, p.length ? p.join('; ') : `WP04 static ${19 - fails.length}/19 pass; bounded: ${fails.join(', ') || 'none'}`);
 }
 
@@ -715,7 +726,7 @@ if (want('W18')) {
       };
       for (const c of neg.cases) {
         if (c.pass) continue;
-        if (c.id === 'C3' && c.exit === 1 && (sameSet(c.failedChecks || [], ['V16', 'V17']) || sameSet(c.failedChecks || [], ['V07', 'V16', 'V17']))) continue;
+        if (c.id === 'C3' && c.exit === 1 && [['V16', 'V17'], ['V07', 'V16', 'V17'], ['V16', 'V17', 'V18'], ['V07', 'V16', 'V17', 'V18']].some((set) => sameSet(c.failedChecks || [], set))) continue;
         if (edgeBounded(c)) continue;
         p.push(`${c.id} failed: ${c.name} (exit ${c.exit}; ${JSON.stringify(c.failedChecks || c.rules || c.codesFound)})`);
       }
@@ -723,12 +734,12 @@ if (want('W18')) {
       const c3 = neg.cases.find((c) => c.id === 'C3');
       if (c3 && !c3.pass) {
         const st = wp04Static?.checks || [];
-        if (!['V07', 'V16', 'V17'].every((id) => { const c = st.find((x) => x.id === id); return c && (c.pass || wp04StaticBounded(c)); })) p.push('C3 V07/V16/V17 findings are not the bounded ones (see W17)');
+        if (!['V07', 'V16', 'V17', 'V18'].every((id) => { const c = st.find((x) => x.id === id); return c && (c.pass || wp04StaticBounded(c)); })) p.push('C3 V07/V16/V17/V18 findings are not the bounded ones (see W17)');
       }
     }
   }
   const failed = neg ? neg.cases.filter((c) => !c.pass).map((c) => c.id) : [];
-  add('W18', 'WP04 negative architecture/strictness suite: every case passes except positive control C3, which fails only V16/V17 (and V07 for entry points filled in scope) with accepted-history or in-scope findings, and edge-count controls that differ only by the edges of the unmutated graph',
+  add('W18', 'WP04 negative architecture/strictness suite: every case passes except positive control C3, which fails only V16/V17 (and V07 for entry points filled in scope, V18 for an in-scope CLAUDE.md change) with accepted-history or in-scope findings, and edge-count controls that differ only by the edges of the unmutated graph',
     p.length === 0, p.length ? p.join('; ') : `${neg.cases.length - failed.length}/${neg.cases.length} pass; bounded: ${failed.join(', ') || 'none'}`);
 }
 
@@ -789,6 +800,7 @@ if (['W20', 'W21', 'W22', 'W23'].some(want)) {
         [/^(changed outside WORK_PACKAGE §4|apps changed): (.+)$/, (m) => fileList(m).every((f) => since('wp03')(f))]
       ]),
       V06: wp03V06Bounded,
+      V13: (d) => claudeMdBounded('wp03', d),
       // WP03 V17 relays every failing WP02 check; each must be one W22 bounds (V13/V15 as "failed", V17 as outside).
       V17: (d) => {
         const failing = (wp02?.checks || []).filter((c) => !c.pass);
@@ -811,15 +823,15 @@ if (['W20', 'W21', 'W22', 'W23'].some(want)) {
     if (wp04.mode !== 'full' || wp04.checks.length !== 24) p20.push(`WP04 mode ${wp04.mode}, ${wp04.checks.length} checks`);
     for (const c of wp04.checks) {
       if (c.pass) continue;
-      if (c.id === 'V07' || c.id === 'V16' || c.id === 'V17') { if (!wp04StaticBounded(c)) p20.push(`${c.id} outside the accepted-history/CANDIDATE bound: ${c.details.slice(0, 300)}`); continue; }
+      if (c.id === 'V07' || c.id === 'V16' || c.id === 'V17' || c.id === 'V18') { if (!wp04StaticBounded(c)) p20.push(`${c.id} outside the accepted-history/CANDIDATE bound: ${c.details.slice(0, 300)}`); continue; }
       if (c.id === 'V22') { if (p21.length) p20.push('V22 not explained by the bound (see W21)'); continue; }
       if (c.id === 'V23') { if (p22.length) p20.push('V23 not explained by the bound (see W22)'); continue; }
       p20.push(`${c.id} failed: ${c.details.split('\n')[0]}`);
     }
   } else if (!dirty) p20.push('no WP04 report');
   const summary = (j) => (j ? `${j.checks.filter((c) => c.pass).length}/${j.checks.length} pass; bounded: ${j.checks.filter((c) => !c.pass).map((c) => c.id).join(', ') || 'none'}` : '');
-  add('W20', 'IB0-WP04 regression (full, with both builds): every check passes except V07 (only entry points filled inside the CANDIDATE scope), V16/V17 (only accepted-history or in-scope package/path changes) and V22/V23 (re-evaluated in W21/W22)', p20.length === 0, p20.length ? p20.join('; ') : `WP04 ${summary(wp04)}`);
-  add('W21', 'IB0-WP03 regression: every check passes except the accepted V05/V08 (WP04 tsconfig change, exact), V09 (only entry points filled inside the CANDIDATE scope), V06 (only the ui-lab test target in angular.json) and V10/V12/V17, whose findings are only accepted-history or in-scope change; accepted records unchanged', p21.length === 0, p21.length ? p21.join('; ') : `WP03 ${summary(wp03)}`);
+  add('W20', 'IB0-WP04 regression (full, with both builds): every check passes except V07 (only entry points filled inside the CANDIDATE scope), V16/V17 (only accepted-history or in-scope package/path changes), V18 (only an in-scope CLAUDE.md change) and V22/V23 (re-evaluated in W21/W22)', p20.length === 0, p20.length ? p20.join('; ') : `WP04 ${summary(wp04)}`);
+  add('W21', 'IB0-WP03 regression: every check passes except the accepted V05/V08 (WP04 tsconfig change, exact), V09 (only entry points filled inside the CANDIDATE scope), V06 (only the ui-lab test target in angular.json), V13 (only an in-scope CLAUDE.md change) and V10/V12/V17, whose findings are only accepted-history or in-scope change; accepted records unchanged', p21.length === 0, p21.length ? p21.join('; ') : `WP03 ${summary(wp03)}`);
   add('W22', 'IB0-WP02 regression: every check (toolchain, pins, lockfile provenance, install scripts, licences, controlled sources, secrets) passes except V13 (lockfile change limited to the PO/SA-approved IB2 dev dependencies at their pins, no runtime dependency change, new lockfile entries dev-only), V15 (axe-core under review L5 only) and V17, whose findings are only accepted-history or in-scope change', p22.length === 0, p22.length ? p22.join('; ') : `WP02 ${summary(wp02)}`);
   add('W23', 'IB0-WP01 regression passes', p23.length === 0, p23.length ? p23.join('; ') : `WP01 ${summary(wp01)}`);
 }

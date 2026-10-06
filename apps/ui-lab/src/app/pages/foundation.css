@@ -94,3 +94,72 @@
   border-radius: var(--paep-radius-md);
   --paep-icon-size: var(--paep-size-icon-lg);
 }
+
+/* F07 (DDR-IB2-07): static specimens of the focus ring on each surface and of the hover and pressed states. */
+.lab-f07-frames {
+  display: grid;
+  gap: var(--paep-space-4);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+}
+.lab-f07-frame {
+  display: grid;
+  align-content: start;
+  gap: var(--paep-space-2);
+  min-inline-size: 0;
+}
+.lab-f07-cap {
+  font-size: var(--paep-font-size-body-sm);
+  color: var(--paep-color-text-secondary);
+}
+.lab-f07-body {
+  padding: var(--paep-space-5);
+  border: 1px solid var(--paep-color-border-subtle);
+  border-radius: var(--paep-radius-md);
+  min-inline-size: 0;
+}
+.lab-f07-white {
+  background: var(--paep-color-surface);
+}
+.lab-f07-page {
+  background: var(--paep-color-bg-page);
+}
+.lab-f07-status {
+  background: var(--paep-color-status-warning-bg);
+}
+.lab-f07-dark {
+  background: var(--paep-ref-color-neutral-900);
+}
+.lab-f07-ring {
+  outline: var(--paep-focus-ring-width) solid var(--paep-color-focus-ring);
+  outline-offset: var(--paep-focus-ring-offset);
+  box-shadow: 0 0 0 var(--paep-focus-ring-offset) var(--paep-color-focus-halo);
+}
+.lab-f07-hover.paep-button--primary {
+  background: var(--paep-brand-primary-hover);
+}
+.lab-f07-hover.paep-button--secondary {
+  background: var(--paep-color-hover-neutral);
+}
+.lab-f07-active.paep-button--primary {
+  background: var(--paep-brand-primary-active);
+}
+.lab-f07-active.paep-button--secondary {
+  background: var(--paep-color-active-neutral);
+}
+.lab-f07-choice {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--paep-space-2);
+  min-block-size: var(--paep-size-target-min);
+}
+/* Inset ring on the selected tab: the tab list clips an outset ring. The tab buttons belong to paep-tabs' view. */
+.lab-f07-inset ::ng-deep .paep-tabs__tab[aria-selected='true'] {
+  outline: var(--paep-focus-ring-width) solid var(--paep-color-focus-ring);
+  outline-offset: calc(var(--paep-focus-ring-width) * -1);
+}
+@media (forced-colors: active) {
+  .lab-f07-ring,
+  .lab-f07-inset ::ng-deep .paep-tabs__tab[aria-selected='true'] {
+    outline-color: Highlight;
+  }
+}

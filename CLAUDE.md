@@ -27,7 +27,7 @@ The controlled implementation baseline is Angular 22.x with TypeScript 6.0.x and
 
 - Do not implement product-specific screens or domain workflows.
 - Do not implement Frappe/ERPNext integration in this work package.
-- Do not implement analytics/reporting UI, offline queues, the enterprise shell, or domain kits.
+- Do not implement analytics/reporting UI, offline queues, or domain kits. Do not implement the enterprise shell, except under the PO/SA-authorised work package `IB3-ENTERPRISE-SHELL` (PO/SA authorisation 2026-10-06), within its `WORK_PACKAGE.md`, `ACCEPTANCE.md` and the Generation 5 `authorisedScope`; this exception grants no permission for any later milestone, for self-acceptance, or for baseline promotion.
 - Do not copy proprietary template source, theme files, assets, or distinctive implementation artefacts.
 - Do not introduce secrets, credentials, private keys, database credentials, or bearer tokens into source, examples, runtime configuration, logs, or evidence.
 - Do not delete, weaken, bypass, suppress, or rewrite a mandatory acceptance criterion to obtain PASS.

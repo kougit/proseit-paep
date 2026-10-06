@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { PaepButton, PaepCheckbox, PaepField, PaepInput, PaepTab, PaepTabs } from '@proseit/paep-components';
 import { PAEP_ICONS, PAEP_TOKENS, PaepIcon, PaepIconName, contrastRatio } from '@proseit/paep-foundation';
 
 export type LabFoundationTopic = 'colour' | 'typography' | 'spacing' | 'surfaces' | 'motion' | 'density' | 'focus' | 'icons';
@@ -18,7 +19,7 @@ const value = (name: string) => PAEP_TOKENS.find((t) => t.name === name)?.value 
 
 @Component({
   selector: 'lab-foundation',
-  imports: [PaepIcon],
+  imports: [PaepButton, PaepCheckbox, PaepField, PaepIcon, PaepInput, PaepTab, PaepTabs],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './foundation.html',
   styleUrl: './foundation.css',

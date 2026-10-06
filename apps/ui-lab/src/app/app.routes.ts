@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { LabNavGroup } from './lab/lab-nav';
 import { LabFamily } from './lab/specimen-meta';
-import { LabFoundationPage, LabFoundationTopic } from './pages/foundation';
+import type { LabFoundationTopic } from './pages/foundation';
 import { LabHomePage } from './pages/home';
 import { LabTokensPage } from './pages/tokens';
 import { LAB_SPECIMEN_INDEX } from './specimens/specimen-index';
@@ -33,7 +33,7 @@ export const routes: Routes = [
   { path: 'tokens', component: LabTokensPage, title: 'Token catalogue · PAEP UI laboratory' },
   ...FOUNDATIONS.map(([topic, label]) => ({
     path: `foundations/${topic}`,
-    component: LabFoundationPage,
+    loadComponent: () => import('./pages/foundation').then((m) => m.LabFoundationPage),
     data: { topic },
     title: `${label} · PAEP UI laboratory`,
   })),

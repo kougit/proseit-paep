@@ -160,6 +160,131 @@
           <li><code>--paep-color-focus-ring</code> {{ focusRing }}</li>
         </ul>
       </section>
+      <section aria-labelledby="f-focus-surfaces">
+        <h2 id="f-focus-surfaces">Focus ring on every surface</h2>
+        <p>
+          Static specimens of the focus-visible ring (the real ring appears on keyboard focus). The ring is 2 px with a
+          2 px offset and a white halo filling the gap, so it stays at least 3:1 on dark surfaces too. It is inset only
+          inside scroll containers that would clip it, such as a tab list. Forced colours use the system Highlight.
+        </p>
+        <div class="lab-f07-frames">
+          <div class="lab-f07-frame" data-f07-surface="white">
+            <span class="lab-f07-cap">On white surface</span>
+            <div class="lab-f07-body lab-f07-white"><button paepButton variant="primary" class="lab-f07-ring">Save</button></div>
+          </div>
+          <div class="lab-f07-frame" data-f07-surface="page">
+            <span class="lab-f07-cap">On page background</span>
+            <div class="lab-f07-body lab-f07-page"><button paepButton class="lab-f07-ring">Cancel</button></div>
+          </div>
+          <div class="lab-f07-frame" data-f07-surface="status">
+            <span class="lab-f07-cap">On status tint</span>
+            <div class="lab-f07-body lab-f07-status"><button paepButton variant="tertiary" class="lab-f07-ring">Review</button></div>
+          </div>
+          <div class="lab-f07-frame" data-f07-surface="dark">
+            <span class="lab-f07-cap">On dark surface (the halo keeps at least 3:1)</span>
+            <div class="lab-f07-body lab-f07-dark"><button paepButton variant="primary" class="lab-f07-ring">Continue</button></div>
+          </div>
+          <div class="lab-f07-frame" data-f07-surface="inset">
+            <span class="lab-f07-cap">Inside a tab list (inset)</span>
+            <div class="lab-f07-body lab-f07-white lab-f07-inset">
+              <paep-tabs label="Record views">
+                <paep-tab label="Summary"><p>Panel content for the selected view.</p></paep-tab>
+                <paep-tab label="History"><p>History panel.</p></paep-tab>
+              </paep-tabs>
+            </div>
+          </div>
+          <div class="lab-f07-frame" data-f07-surface="compact">
+            <span class="lab-f07-cap">Compact density</span>
+            <div class="lab-f07-body lab-f07-white" data-paep-density="compact"><button paepButton variant="primary" class="lab-f07-ring">Save</button></div>
+          </div>
+        </div>
+      </section>
+      <section aria-labelledby="f-states">
+        <h2 id="f-states">Interaction state matrix</h2>
+        <p>Every state has a cue that does not rely on colour alone. Hover, focus and pressed rows are static specimens.</p>
+        <div class="lab-scroll" role="region" aria-labelledby="f-states-caption" tabindex="0">
+          <table class="lab-table lab-f07-matrix">
+            <caption id="f-states-caption">Interaction states of the primary and secondary button, input and checkbox</caption>
+            <thead>
+              <tr><th scope="col">State</th><th scope="col">Primary</th><th scope="col">Secondary</th><th scope="col">Input</th><th scope="col">Checkbox</th><th scope="col">Non-colour cue</th></tr>
+            </thead>
+            <tbody>
+              <tr data-f07-state="default">
+                <th scope="row">Default</th>
+                <td><button paepButton variant="primary">Save</button></td>
+                <td><button paepButton>Cancel</button></td>
+                <td><paep-field label="Default input"><input paepInput value="Value" /></paep-field></td>
+                <td><label class="lab-f07-choice"><input type="checkbox" paepCheckbox /> Default option</label></td>
+                <td>None needed</td>
+              </tr>
+              <tr data-f07-state="hover">
+                <th scope="row">Hover</th>
+                <td><button paepButton variant="primary" class="lab-f07-hover">Save</button></td>
+                <td><button paepButton class="lab-f07-hover">Cancel</button></td>
+                <td>Strong border</td>
+                <td>Strong border</td>
+                <td>Pointer only, never essential</td>
+              </tr>
+              <tr data-f07-state="focus">
+                <th scope="row">Focus-visible</th>
+                <td><button paepButton variant="primary" class="lab-f07-ring">Save</button></td>
+                <td><button paepButton class="lab-f07-ring">Cancel</button></td>
+                <td><paep-field label="Focused input"><input paepInput class="lab-f07-ring" value="Value" /></paep-field></td>
+                <td><label class="lab-f07-choice"><input type="checkbox" paepCheckbox class="lab-f07-ring" /> Focused option</label></td>
+                <td>2 px ring and 2 px halo gap</td>
+              </tr>
+              <tr data-f07-state="active">
+                <th scope="row">Active / pressed</th>
+                <td><button paepButton variant="primary" class="lab-f07-active">Save</button></td>
+                <td><button paepButton class="lab-f07-active">Cancel</button></td>
+                <td>Not applicable</td>
+                <td>Not applicable</td>
+                <td>Darker step</td>
+              </tr>
+              <tr data-f07-state="selected">
+                <th scope="row">Selected</th>
+                <td>Not applicable</td>
+                <td>Not applicable</td>
+                <td>Not applicable</td>
+                <td><label class="lab-f07-choice"><input type="checkbox" paepCheckbox checked /> Selected option</label></td>
+                <td>Check glyph, indicator bar or aria-selected</td>
+              </tr>
+              <tr data-f07-state="disabled">
+                <th scope="row">Disabled</th>
+                <td><button paepButton variant="primary" disabled>Save</button></td>
+                <td><button paepButton disabled>Cancel</button></td>
+                <td><paep-field label="Disabled input"><input paepInput value="Value" disabled /></paep-field></td>
+                <td><label class="lab-f07-choice"><input type="checkbox" paepCheckbox disabled /> Disabled option</label></td>
+                <td>Dashed border and native disabled</td>
+              </tr>
+              <tr data-f07-state="read-only">
+                <th scope="row">Read-only</th>
+                <td>Not applicable</td>
+                <td>Not applicable</td>
+                <td><paep-field label="Read-only input" readonly><input paepInput value="Value" readonly /></paep-field></td>
+                <td><label class="lab-f07-choice"><input type="checkbox" paepCheckbox checked readonly /> Read-only option</label></td>
+                <td>Dashed border, full-contrast value</td>
+              </tr>
+              <tr data-f07-state="invalid">
+                <th scope="row">Invalid</th>
+                <td>Not applicable</td>
+                <td>Not applicable</td>
+                <td><paep-field label="Invalid input" error="Enter a valid value."><input paepInput value="Value" /></paep-field></td>
+                <td><label class="lab-f07-choice"><input type="checkbox" paepCheckbox invalid /> Invalid option</label></td>
+                <td>2 px border, icon and text</td>
+              </tr>
+              <tr data-f07-state="loading">
+                <th scope="row">Loading</th>
+                <td><button paepButton variant="primary" loading>Saving…</button></td>
+                <td><button paepButton loading>Checking…</button></td>
+                <td>Not applicable</td>
+                <td>Not applicable</td>
+                <td>Spinner and busy label (aria-busy)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
     }
     @case ('icons') {
       <section aria-labelledby="f-icons">

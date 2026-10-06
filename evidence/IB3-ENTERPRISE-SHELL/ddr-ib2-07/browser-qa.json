@@ -1,0 +1,81 @@
+{
+  "browser": "141.0.7390.37",
+  "axe": "4.13.0",
+  "pages": [
+    {
+      "page": "/foundations/focus",
+      "viewport": "desktop",
+      "dir": "ltr",
+      "problems": []
+    },
+    {
+      "page": "/foundations/focus",
+      "viewport": "desktop",
+      "dir": "rtl",
+      "problems": []
+    },
+    {
+      "page": "/foundations/focus",
+      "viewport": "tablet",
+      "dir": "ltr",
+      "problems": []
+    },
+    {
+      "page": "/foundations/focus",
+      "viewport": "tablet",
+      "dir": "rtl",
+      "problems": []
+    },
+    {
+      "page": "/foundations/focus",
+      "viewport": "narrow320",
+      "dir": "ltr",
+      "problems": []
+    },
+    {
+      "page": "/foundations/focus",
+      "viewport": "narrow320",
+      "dir": "rtl",
+      "problems": []
+    },
+    {
+      "page": "/proofs/responsive",
+      "viewport": "desktop",
+      "dir": "ltr",
+      "problems": []
+    },
+    {
+      "page": "/proofs/responsive",
+      "viewport": "desktop",
+      "dir": "rtl",
+      "problems": []
+    },
+    {
+      "page": "/proofs/responsive",
+      "viewport": "tablet",
+      "dir": "ltr",
+      "problems": []
+    },
+    {
+      "page": "/proofs/responsive",
+      "viewport": "tablet",
+      "dir": "rtl",
+      "problems": []
+    },
+    {
+      "page": "/proofs/responsive",
+      "viewport": "narrow320",
+      "dir": "ltr",
+      "problems": []
+    },
+    {
+      "page": "/proofs/responsive",
+      "viewport": "narrow320",
+      "dir": "rtl",
+      "problems": []
+    }
+  ],
+  "checks": [],
+  "durationSeconds": 6,
+  "result": "PASS"
+}

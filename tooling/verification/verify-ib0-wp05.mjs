@@ -32,6 +32,7 @@
  */
 
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import process from 'node:process';
 import crypto from 'node:crypto';
@@ -715,16 +716,31 @@ if (want('W18')) {
       // E0 edges (measured here, and it must equal what C0 reports); a control is accepted only if it still exits 0 with no
       // violation or cycle and reports exactly its own edges plus E0 (optional edges likewise). E0 > 0 requires an entry point
       // filled inside the CANDIDATE scope.
-      const live = run(process.execPath, ['tooling/architecture-boundaries/check-boundaries.mjs', '--json']);
+      // IB3-ENTERPRISE-SHELL: the unmutated graph can already hold an edge a control injects (enterprise -> components,
+      // reference-app -> enterprise), and an existing edge is not counted twice. The base edge set is therefore read
+      // too, and a control that names its edges ("a -> b", exactly as many as it expects) adds only the named edges
+      // the base graph lacks (optional edges likewise).
+      const graphFile = path.join(os.tmpdir(), `paep-wp05-base-graph-${process.pid}.json`);
+      const live = run(process.execPath, ['tooling/architecture-boundaries/check-boundaries.mjs', '--json', '--graph', graphFile]);
       let base0 = null;
       try { const j = JSON.parse(live.stdout); if (live.status === 0 && j.ok === true) base0 = { edges: j.summary.edges, optional: j.summary.optionalEdges }; } catch { /* fails below */ }
+      let baseGraph = null;
+      try { baseGraph = JSON.parse(fs.readFileSync(graphFile, 'utf8')); } catch { /* fails below */ } finally { fs.rmSync(graphFile, { force: true }); }
+      const baseEdges = new Map((baseGraph?.edges || []).map((e) => [`${e.source} -> ${e.target}`, e.matrix]));
+      const nodeOf = (short) => [short, `@proseit/paep-${short}`, `@proseit/${short}`].find((n) => Object.hasOwn(baseGraph?.nodes || {}, n)) ?? null;
+      const namedEdges = (name) => [...name.matchAll(/([a-z][a-z0-9-]*) -> ([a-z][a-z0-9-]*)/g)].map((m) => [nodeOf(m[1]), nodeOf(m[2])]);
       const summaryOf = (id) => { const m = new RegExp(`^## ${id} [^\\n]*\\nexpected: [^\\n]*\\nsummary: (\\{[^\\n]*\\})$`, 'm').exec(negLog); try { return m ? JSON.parse(m[1]) : null; } catch { return null; } };
       const graphGrew = Boolean(base0) && (base0.edges === 0 || IB1_FILLED_ENTRIES.some(filledEntry('wp04'))) && summaryOf('C0')?.edges === base0.edges;
       const edgeBounded = (c) => {
         const want = /^exit 0, no violations, (\d+) edges \((\d+) optional\)$/.exec(c.expected || '');
         const got = summaryOf(c.id);
-        return graphGrew && base0.edges > 0 && c.tool === 'arch:check' && Boolean(want) && c.exit === 0 && (c.rules || []).length === 0 && Boolean(got)
-          && got.violations === 0 && got.cycles === 0 && got.edges === Number(want[1]) + base0.edges && got.optionalEdges === Number(want[2]) + base0.optional;
+        if (!(graphGrew && base0.edges > 0 && baseGraph && c.tool === 'arch:check' && Boolean(want) && c.exit === 0 && (c.rules || []).length === 0 && Boolean(got))) return false;
+        const named = namedEdges(c.name || '');
+        if (named.length !== Number(want[1]) || named.some(([a, b]) => !a || !b)) return false;
+        const present = named.filter(([a, b]) => baseEdges.has(`${a} -> ${b}`));
+        const presentOptional = present.filter(([a, b]) => baseEdges.get(`${a} -> ${b}`) === 'Optional').length;
+        return got.violations === 0 && got.cycles === 0 && got.edges === base0.edges + named.length - present.length
+          && got.optionalEdges === base0.optional + Number(want[2]) - presentOptional;
       };
       for (const c of neg.cases) {
         if (c.pass) continue;

@@ -56,7 +56,7 @@ if (process.argv.slice(2).some((a, i, all) => a !== '--part' && all[i - 1] !== '
 const DECLARED_CASE_IDS = [
   'C06', 'G00', 'G01', 'G02', 'G03', 'G04', 'G05', 'G06', 'G07', 'G08', 'G09', 'GJ10', 'GJ11', 'GJ12', 'GJ13',
   'GJ14', 'GJ15', 'G10', 'G11', 'G12', 'G13', 'G14', 'G15', 'G16', 'G17', 'G18', 'C01', 'C02', 'C03', 'C04', 'C05',
-  'C07', 'C08', 'A01', 'A02', 'A03', 'A04', 'S01', 'S02', 'S03', 'S04', 'B01', 'H01', 'H02', 'L00', 'L01', 'L02',
+  'C07', 'C08', 'A01', 'A02', 'A03', 'A04', 'S01', 'S02', 'S03', 'S04', 'B01', 'H01', 'H02', 'H03', 'L00', 'L01', 'L02',
   'L03', 'T01', 'T02', 'T03', 'T04', 'T05', 'T06', 'I01', 'I02', 'I03', 'I04', 'F01', 'F02', 'F03', 'F04', 'X01',
   'X02', 'X03', 'X04', 'P01', 'P02', 'P03', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P13',
   'P14', 'P15', 'P16', 'P17', 'P18', 'P19', 'P21', 'P22', 'P23', 'P24', 'P20', 'N01', 'N02', 'N03', 'K01', 'K02',
@@ -238,6 +238,9 @@ try {
   // ---- (iv) negative harness --------------------------------------------------------------------------
   caseRun('H01', '(iv) crashed WP04 negative harness fails the negative-architecture gate', [['tooling/verification/negative-ib0-wp04.mjs', (t) => t.replace('#!/usr/bin/env node\n', "#!/usr/bin/env node\nthrow new Error('WP05 negative test: harness crash');\n")]], () => verifyGate('negative-architecture'), [/FAIL W18/]);
   caseRun('H02', '(iv) checker that stops reporting cycles makes WP04 negative cases fail, failing the negative-architecture gate', [['tooling/architecture-boundaries/check-boundaries.mjs', replace("for (const c of cycles) flag('CYCLE'", "for (const c of []) flag('CYCLE'")]], () => verifyGate('negative-architecture'), [/FAIL W18/, /failed/]);
+  // IB3-ENTERPRISE-SHELL: W18 counts only the named edges the unmutated graph lacks; a control that names an edge it
+  // no longer injects must still fail.
+  caseRun('H03', '(iv) an edge-count control that names an edge it does not inject fails the negative-architecture gate', [['tooling/verification/negative-ib0-wp04.mjs', replace(`  [entry('frappe-sdk'), append("import '@proseit/paep-offline';")],\n`, '')]], () => verifyGate('negative-architecture'), [/FAIL W18/, /C1 failed/]);
 
   // ---- (v) lockfile ----------------------------------------------------------------------------------
   fs.mkdirSync(npmDir, { recursive: true });

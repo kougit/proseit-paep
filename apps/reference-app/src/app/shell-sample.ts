@@ -3,6 +3,8 @@ import type { IdentityContext, RuntimeConfigStore } from '@proseit/paep-contract
 import type {
   PaepShellAccessInfo,
   PaepShellAvailability,
+  PaepShellCommandProvider,
+  PaepShellCommandResult,
   PaepShellContext,
   PaepShellContextProvider,
   PaepShellNavCounts,
@@ -81,6 +83,31 @@ function sampleContext(): PaepShellContextProvider {
   };
 }
 
+const SAMPLE_RECORDS: readonly PaepShellCommandResult[] = Array.from({ length: 6 }, (_, i) => ({
+  id: `sample-record-${i + 1}`,
+  group: 'records' as const,
+  label: `Sample record ${String(i + 1).padStart(3, '0')}`,
+  description: 'Record · Sample data',
+  route: '/workspace',
+}));
+
+/**
+ * A sample command source: one action, and a record search over neutral sample data after a short delay. The query
+ * "unavailable" shows the provider error state and "partial" the partial-results state.
+ */
+const commands: PaepShellCommandProvider = {
+  actions: signal([{ id: 'not-found-example', group: 'actions', label: 'Open the not-found example', route: '/no-such-page' }]),
+  search: (query, abort) =>
+    new Promise((resolve, reject) => {
+      const timer = setTimeout(() => {
+        const q = query.toLocaleLowerCase();
+        if (q.includes('unavailable')) reject(new Error('sample provider unavailable'));
+        else resolve({ results: SAMPLE_RECORDS.filter((r) => r.label.toLocaleLowerCase().includes(q) || q.includes('partial')), partial: q.includes('partial') });
+      }, 300);
+      abort.addEventListener('abort', () => clearTimeout(timer));
+    }),
+};
+
 function sampleSession(): PaepShellSession {
   const identity = signal<IdentityContext | null>({
     principalId: 'sample-user',
@@ -103,6 +130,7 @@ export function referenceShellOptions(store: RuntimeConfigStore): PaepShellOptio
     navigation: REFERENCE_NAVIGATION,
     access,
     counts,
+    commands,
     context: sampleContext(),
     session: sampleSession(),
   };

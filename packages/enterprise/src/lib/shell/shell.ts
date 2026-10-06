@@ -16,6 +16,7 @@ import {
 import { NavigationStart, Router } from '@angular/router';
 import { PaepStatusBadge } from '@proseit/paep-components';
 import { PaepContextSwitcher } from '../context/context-switcher';
+import { PaepCommandPalette } from '../palette/command-palette';
 import { PaepShellNav } from '../nav/nav';
 import { PaepShellNavSheet } from '../nav/nav-sheet';
 import { PAEP_SHELL_RUNTIME_CONFIG } from '../ports/ports';
@@ -37,7 +38,7 @@ import { PaepShellText } from './shell-text';
 @Component({
   selector: 'paep-shell',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [PaepContextSwitcher, PaepShellNav, PaepShellNavSheet, PaepShellStatusStrip, PaepShellTopbar, PaepStatusBadge],
+  imports: [PaepCommandPalette, PaepContextSwitcher, PaepShellNav, PaepShellNavSheet, PaepShellStatusStrip, PaepShellTopbar, PaepStatusBadge],
   host: { class: 'paep-shell', '(document:keydown)': 'onKeydown($event)' },
   template: `
     <a class="paep-skip-link" [attr.href]="'#' + skipTarget()" (click)="skipToMain($event)">{{ text.t('paep.shell.skipLink.main') }}</a>
@@ -68,6 +69,9 @@ import { PaepShellText } from './shell-text';
         <paep-shell-nav mode="sheet" />
       </paep-shell-nav-sheet>
     }
+    @defer (when layout.paletteOpen()) {
+      <paep-command-palette [(open)]="paletteOpen" [heading]="text.t('paep.shell.search.dialog')" />
+    }
     <ng-content select="[paepShellOverlay]" />
   `,
   styleUrl: './shell.css',
@@ -86,6 +90,7 @@ export class PaepShell {
   private readonly persistentNav = viewChild(PaepShellNav);
   private readonly topbar = viewChild.required(PaepShellTopbar);
   protected readonly sheetOpen = this.layout.sheetOpen;
+  protected readonly paletteOpen = this.layout.paletteOpen;
   protected readonly environment = () => (this.env === 'production' ? null : this.text.t('paep.shell.env.badge', { environment: environmentLabel(this.env) }));
 
   constructor() {

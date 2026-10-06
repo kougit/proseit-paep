@@ -52,7 +52,9 @@
     "qa:ddr07": "node tooling/enterprise-shell/ddr07-gate.mjs",
     "qa:ddr07:negative": "node tooling/enterprise-shell/ddr07-gate-negative.mjs",
     "qa:enterprise": "node tooling/enterprise-shell/enterprise-qa.mjs",
-    "qa:enterprise:negative": "node tooling/enterprise-shell/enterprise-qa-negative.mjs && node tooling/enterprise-shell/design-system-extension-negative.mjs"
+    "qa:enterprise:negative": "node tooling/enterprise-shell/enterprise-qa-negative.mjs && node tooling/enterprise-shell/design-system-extension-negative.mjs",
+    "qa:shell": "node tooling/enterprise-shell/shell-qa.mjs",
+    "qa:shell:negative": "node tooling/enterprise-shell/shell-qa-negative.mjs"
   },
   "dependencies": {
     "@angular/common": "22.1.8",

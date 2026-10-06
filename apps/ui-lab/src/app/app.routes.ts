@@ -4,6 +4,7 @@ import { LabFamily } from './lab/specimen-meta';
 import type { LabFoundationTopic } from './pages/foundation';
 import { LabHomePage } from './pages/home';
 import { LabTokensPage } from './pages/tokens';
+import { LAB_SHOWCASE_PARTS } from './showcase/showcase-pages';
 import { LAB_SPECIMEN_INDEX } from './specimens/specimen-index';
 
 const FOUNDATIONS: readonly [LabFoundationTopic, string][] = [
@@ -43,6 +44,7 @@ export const routes: Routes = [
     title: `${label} · PAEP UI laboratory`,
   })),
   { path: 'components', loadChildren: () => import('./specimens/registry').then((m) => m.LAB_SPECIMEN_ROUTES) },
+  { path: 'enterprise-shell', loadChildren: () => import('./showcase/showcase-pages').then((m) => m.LAB_SHOWCASE_ROUTES) },
   { path: '**', redirectTo: '' },
 ];
 
@@ -54,5 +56,6 @@ export const LAB_NAV: readonly LabNavGroup[] = [
     heading: `Components: ${family}`,
     items: LAB_SPECIMEN_INDEX.filter((s) => s.family === family).map((s) => ({ path: `/components/${s.id}`, label: s.name })),
   })).filter((g) => g.items.length > 0),
+  { heading: 'Enterprise shell', items: LAB_SHOWCASE_PARTS.map((p) => ({ path: `/enterprise-shell/${p.id}`, label: p.name })) },
   { heading: 'Proofs', items: PROOFS.map(([path, label]) => ({ path: `/proofs/${path}`, label })) },
 ];

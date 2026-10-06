@@ -5,7 +5,8 @@
  * requires the unmutated page to pass. Proves the gate can fail: axe violations, overflow, console errors,
  * heading/landmark structure, a brand override of a protected token, and O1: a defect inside an open overlay,
  * and an overlay that fails to open; K1: a keyboard trap; M1: a motion duration left running under reduced motion,
- * and the reduced-motion rules removed; O1: focus lost after dismissal; U1: status by colour alone.
+ * and the reduced-motion rules removed; O1: focus lost after dismissal; U1: status by colour alone; A1 (IB3): a defect
+ * inside a framed shell-showcase preview, with its positive control.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -33,6 +34,8 @@ const cases = [
   ['B13', 'O1: focus lost after a dialog is dismissed', 'focus-lost', /focus lost after dismissal/],
   ['B14', 'U1: status badge shown by colour alone (icon hidden)', 'colour-only', /U1 paep-status-badge .*no visible icon/],
   ['B15', 'M1: reduced-motion rules removed from the stylesheets', 'no-reduce-rule', /--paep-motion-duration-\w+ = [1-9]/],
+  ['B16', 'A1: positive control: shell-showcase page with its framed preview, unmutated', 'frame-ok', null],
+  ['B17', 'A1: unnamed button inside the framed shell-showcase preview', 'frame-defect', /A1 axe button-name .*: iframe\[title="Shell preview/],
 ];
 
 const server = await serve();
@@ -74,6 +77,15 @@ try {
         await page.goto(`${server.url}/components/status-badge`, { waitUntil: 'networkidle' });
         await page.addStyleTag({ content: '.paep-status-badge > svg { display: none !important; }' });
         problems = (await statusCueProblems(page)).problems;
+      } else if (mutate === 'frame-ok' || mutate === 'frame-defect') {
+        const errs = [];
+        const p2 = await ctx.newPage();
+        p2.on('console', (m) => { if (m.type() === 'error') errs.push(m.text()); });
+        await p2.goto(`${server.url}/enterprise-shell/topbar`, { waitUntil: 'networkidle' });
+        const frame = p2.frames().find((f) => f !== p2.mainFrame());
+        await frame.waitForSelector('main h1', { timeout: 15000 });
+        if (mutate === 'frame-defect') await frame.evaluate(() => document.querySelector('main').insertAdjacentHTML('beforeend', '<button type="button"></button>'));
+        problems = await auditPage(p2, errs);
       } else if (overlay) {
         // B10 removes the dialog element first, so pressing its trigger can open nothing.
         if (overlay[3]) await page.evaluate(() => document.querySelectorAll('paep-dialog').forEach((d) => d.remove()));

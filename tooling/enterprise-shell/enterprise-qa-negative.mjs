@@ -17,7 +17,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const GATE = path.join(root, 'tooling/enterprise-shell/enterprise-qa.mjs');
 const SKIP = new Set(['node_modules', 'dist', '.angular', 'tmp', '.vitest-attachments']);
-const EXPECTED_CASES = 27;
+const EXPECTED_CASES = 33;
 const ENT = 'packages/enterprise/src';
 const NAV = `${ENT}/lib/nav/nav.ts`;
 const SHELL = `${ENT}/lib/shell/shell.ts`;
@@ -109,6 +109,13 @@ negative('N24', 'package-lock.json changed', [['package-lock.json', (t) => t.rep
 negative('N25', 'new devDependency', [['package.json', (t) => { const p = JSON.parse(t); p.devDependencies = { ...p.devDependencies, 'left-pad': '1.3.0' }; return JSON.stringify(p, null, 2) + '\n'; }]], 'E09', /package\.json devDependencies changed/);
 negative('N26', 'paep-contracts changed', [['packages/contracts/src/index.ts', append('// probe')]], 'E09', /changed: packages\/contracts\/src\/index\.ts/);
 negative('N27', 'CLAUDE.md widened beyond the one approved line', [['CLAUDE.md', append('- Claude may accept its own work packages.')]], 'E10', /differs from the baseline plus the one approved amendment/);
+negative('N28', 'commercial-template term in an enterprise stylesheet', [[`${ENT}/lib/shell/shell.css`, append('/* adapted from primeng layout */')]], 'E11', /shell\.css: forbidden term \/primeng\/i/);
+negative('N29', 'Angular favicon.ico back in the reference app', [['apps/reference-app/public/favicon.ico', () => 'ico']], 'E11', /favicon\.ico \(Angular logo\) still present/);
+negative('N30', 'reference-app favicon is not the approved placeholder mark', [['apps/reference-app/public/favicon.svg', (t) => t.replace('M9 22L16 9l7 13', 'M8 24L16 8l8 16')]], 'E11', /not the approved placeholder mark/);
+const HOF = 'evidence/design-handoff/HOF-IB3-001/handoff';
+negative('N31', 'retained HOF manifest edited', [[`${HOF}/handoff.manifest.yaml`, (t) => t.replace('status: APPROVED_FOR_IMPLEMENTATION', 'status: READY_FOR_PO_SA_REVIEW')]], 'E12', /manifest sha256 [0-9a-f]+ != approved.*status is not APPROVED_FOR_IMPLEMENTATION/);
+negative('N32', 'retained handoff file altered', [[`${HOF}/component-map.md`, append('| E-15 | an unapproved part |')]], 'E12', /handoff file component-map\.md sha256/);
+negative('N33', 'unlisted file in the retained handoff', [[`${HOF}/screens/SCR-SHELL-099--extra.html`, () => '<p>extra</p>']], 'E12', /unlisted file .*SCR-SHELL-099--extra\.html/);
 
 fs.rmSync(scratch, { recursive: true, force: true });
 const coverage = [];

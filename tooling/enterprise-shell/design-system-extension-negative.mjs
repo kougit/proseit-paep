@@ -2,7 +2,8 @@
 /**
  * Seeded negatives for the IB3 extension of the design-system static gate (tooling/design-system/design-system-qa.mjs):
  * the component census and public API (S03), the UI-lab coverage of the approved HOF-IB3-001 primitives and variants
- * (S07), the message catalogue (S08), the icon set (S11) and the shell tokens (S12).
+ * (S07), the message catalogue (S08), the icon set (S11), the shell tokens (S12) and the bounded UI-lab shell-showcase
+ * import exception (S05).
  *
  * Each case mutates a disposable copy of the repository (without node_modules; the gate needs none), optionally
  * regenerates the token files in the copy with the repository's own generator (so that only the token policy, not
@@ -18,7 +19,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-const EXPECTED_CASES = 24;
+const EXPECTED_CASES = 27;
 const SKIP = new Set(['node_modules', 'dist', '.angular', 'tmp', '.vitest-attachments', '.git']);
 const GATE = 'tooling/design-system/design-system-qa.mjs';
 const GENERATOR = 'tooling/design-system/generate-tokens.mjs';
@@ -78,6 +79,10 @@ const cases = [
   ['E22', 'new colour token added through the generator', [[GENERATOR, replace("  add('--paep-layout-form-max'", "  add('--paep-color-shell-accent', '#2D6A4F', 'color', 'semantic');\n  add('--paep-layout-form-max'")]], true, ['S12'], [/non-shell tokens differ from the accepted IB2 catalogue/]],
   ['E23', 'rejected alias used in a component stylesheet', [['packages/components/src/lib/card/card.ts', replace('styles: `', 'styles: `\n    :host { max-inline-size: var(--paep-shell-content-max-inline-size); }')]], false, ['S12'], [/card\.ts: rejected token --paep-shell-content-max-inline-size/]],
   ['E24', 'approved layer token removed from the generator', [[GENERATOR, replace("  'skip-link': '80',\n", '')]], true, ['S12'], [/approved token --paep-layer-skip-link missing/]],
+  // S05: only the bounded showcase may import the enterprise entry point; every later-package prohibition still holds there.
+  ['E25', 'enterprise imported by a UI-lab page outside the showcase', [['apps/ui-lab/src/app/pages/home.ts', (t) => `import '@proseit/paep-enterprise';\n${t}`]], false, ['S05'], [/pages\/home\.ts: imports @proseit\/paep-enterprise \(later milestone; only apps\/ui-lab\/src\/app\/showcase\/ may import/]],
+  ['E26', 'deep enterprise import inside the showcase', [['apps/ui-lab/src/app/showcase/showcase-preview.ts', (t) => `import '@proseit/paep-enterprise/src/lib/shell/shell';\n${t}`]], false, ['S05'], [/showcase-preview\.ts: deep import @proseit\/paep-enterprise\/src/]],
+  ['E27', 'later-milestone import inside the showcase', [['apps/ui-lab/src/app/showcase/showcase-sample.ts', (t) => `import '@proseit/frappe-sdk';\n${t}`]], false, ['S05'], [/showcase-sample\.ts: imports @proseit\/frappe-sdk \(later milestone\)/]],
 ];
 
 const results = [];

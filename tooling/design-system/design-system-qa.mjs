@@ -157,6 +157,7 @@ export const FORBIDDEN_TERMS = [/\bultima\b/i, /primeng/i, /primeicons/i, /prime
 
 const COMPONENTS_DIR = 'packages/components/src/lib';
 const FOUNDATION_DIR = 'packages/foundation/src';
+const SHOWCASE_DIR = 'apps/ui-lab/src/app/showcase/';
 
 /** Real file system rooted at the repository; `overlay` maps path -> content (null = deleted). */
 export function makeFs(root = ROOT, overlay = new Map()) {
@@ -413,14 +414,16 @@ export function runChecks(fsx) {
         if (/^@proseit\/[^/]+\/./.test(spec_)) p.push(`${f}: deep import ${spec_}`);
         if (/^(axe-core|playwright|@vitest\/browser-playwright)$/.test(spec_)) p.push(`${f}: imports test tooling ${spec_}`);
         if (/^vitest/.test(spec_) && !spec) p.push(`${f}: imports ${spec_} outside a spec`);
-        if (/frappe|erpnext/i.test(spec_) || /^@proseit\/(paep-domain-|frappe-sdk|paep-enterprise|paep-analytics|paep-offline)/.test(spec_)) p.push(`${f}: imports ${spec_} (later milestone)`);
+        // IB3 (AC-IB3-14): only the bounded UI-lab enterprise-shell showcase may import the enterprise entry point.
+        const showcase = f.startsWith(SHOWCASE_DIR) && spec_ === '@proseit/paep-enterprise';
+        if (!showcase && (/frappe|erpnext/i.test(spec_) || /^@proseit\/(paep-domain-|frappe-sdk|paep-enterprise|paep-analytics|paep-offline)/.test(spec_))) p.push(`${f}: imports ${spec_} (later milestone${spec_.startsWith('@proseit/paep-enterprise') ? `; only ${SHOWCASE_DIR} may import the enterprise entry point` : ''})`);
         if (inFoundation && !(spec_.startsWith('.') || spec_ === '@angular/core' || spec_ === '@angular/core/testing' || spec_ === '@proseit/paep-foundation' || (spec && /^vitest/.test(spec_)))) p.push(`${f}: foundation may import only @angular/core and itself, not ${spec_}`);
         if (inComponents && !(spec_.startsWith('.') || /^@angular\/(core|common|forms|router|platform-browser)(\/testing)?$/.test(spec_) || spec_ === '@proseit/paep-foundation' || (spec && /^vitest/.test(spec_)))) p.push(`${f}: components may import only Angular and @proseit/paep-foundation, not ${spec_}`);
         if (inComponents && spec_.startsWith('.') && path.posix.normalize(path.posix.join(path.posix.dirname(f), spec_)).split('/').slice(0, 2).join('/') !== 'packages/components') p.push(`${f}: relative import leaves the package (${spec_})`);
         if (f.startsWith('apps/') && spec_.startsWith('.') && path.posix.normalize(path.posix.join(path.posix.dirname(f), spec_)).startsWith('packages/')) p.push(`${f}: relative import into packages (${spec_})`);
       }
     }
-    add('S05', 'Import boundaries: foundation imports only @angular/core; components only Angular and the foundation entry point; no deep, Frappe, domain or later-milestone imports; test tooling only in specs; CSS @import of a package only for the foundation stylesheet in apps', p, `${tsFiles.length} TypeScript files`);
+    add('S05', 'Import boundaries: foundation imports only @angular/core; components only Angular and the foundation entry point; no deep, Frappe, domain or later-milestone imports (the enterprise entry point only in the bounded UI-lab shell showcase); test tooling only in specs; CSS @import of a package only for the foundation stylesheet in apps', p, `${tsFiles.length} TypeScript files`);
   }
 
   // S06: clean-room terms in UI source.

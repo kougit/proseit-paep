@@ -1,15 +1,19 @@
 #!/usr/bin/env node
 /**
  * IB3 enterprise-shell static gate (npm run qa:enterprise): milestone scope, package and import rules, the public-API
- * census, the shell message catalogue, unsafe-HTML, storage, guard and route rules, and the narrow CLAUDE.md
- * amendment (ACCEPTANCE AC-IB3-01, -04, -11, -12, -15, -22, -23). Read-only.
+ * census, the shell message catalogue, unsafe-HTML, storage, guard and route rules, the narrow CLAUDE.md amendment
+ * the clean-room scan of enterprise and the reference app, and the retained approved HOF-IB3-001 handoff (ACCEPTANCE
+ * AC-IB3-01, -02, -04, -11, -12, -15, -19, -22, -23).
+ * Read-only.
  *   node tooling/enterprise-shell/enterprise-qa.mjs [--root <dir>] [--json]
  * The baseline is the active ACCEPTED generation of tooling/governance/baseline-registry.json.
  */
 import { spawnSync } from 'node:child_process';
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { FORBIDDEN_TERMS } from '../design-system/design-system-qa.mjs';
 
 const args = process.argv.slice(2);
 const root = args.includes('--root') ? path.resolve(args[args.indexOf('--root') + 1]) : path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -39,6 +43,12 @@ const FROZEN = [/^packages\/(analytics|offline|frappe-sdk|contracts|domain-[^/]+
 const CLAUDE_OLD = '- Do not implement analytics/reporting UI, offline queues, the enterprise shell, or domain kits.';
 const CLAUDE_NEW = '- Do not implement analytics/reporting UI, offline queues, or domain kits. Do not implement the enterprise shell, except under the PO/SA-authorised work package `IB3-ENTERPRISE-SHELL` (PO/SA authorisation 2026-10-06), within its `WORK_PACKAGE.md`, `ACCEPTANCE.md` and the Generation 5 `authorisedScope`; this exception grants no permission for any later milestone, for self-acceptance, or for baseline promotion.';
 const MESSAGE_COUNT = 121;
+/** The approved HOF-IB3-001 v1.0 handoff, retained verbatim (PO/SA approval 2026-10-06). */
+const HOF_ROOT = 'evidence/design-handoff/HOF-IB3-001/handoff';
+const HOF_MANIFEST_SHA256 = '645dd2e9bb4274c9b787bbbcc52cf53eb4f08dc21d733b5985aa3ab572f4fce5';
+const HOF_FILE_COUNT = 577;
+/** Drawing of the approved neutral placeholder mark (HOF-IB3-001 P-09, assets/placeholder-mark.svg), the reference-app favicon. */
+const PLACEHOLDER_MARK = ['<rect width="32" height="32" rx="6" fill="#24364B"/>', '<path d="M9 22L16 9l7 13" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>', '<path d="M12 18h8" stroke="#D4A62A" stroke-width="2.5" stroke-linecap="round"/>'];
 
 const rel = (p) => path.relative(root, p).split(path.sep).join('/');
 const read = (f) => fs.readFileSync(path.join(root, f), 'utf8');
@@ -235,6 +245,48 @@ let base = null;
     }
   } else f.push('accepted baseline commit not available');
   check('E10', 'CLAUDE.md differs from the accepted baseline only by the one approved IB3-ENTERPRISE-SHELL exception line', f);
+}
+
+// E11 clean-room scan of enterprise and the reference app (AC-IB3-19), extending design-system S06.
+{
+  const f = [];
+  const files = [...walk('packages/enterprise'), ...walk('apps/reference-app')].filter((x) => /\.(ts|css|html|json|svg|md)$/.test(x));
+  for (const x of files) for (const re of FORBIDDEN_TERMS) if (re.test(read(x))) f.push(`${x}: forbidden term ${re}`);
+  if (exists('apps/reference-app/public/favicon.ico')) f.push('apps/reference-app/public/favicon.ico (Angular logo) still present');
+  const icon = exists('apps/reference-app/public/favicon.svg') ? read('apps/reference-app/public/favicon.svg') : '';
+  if (!icon) f.push('apps/reference-app/public/favicon.svg missing');
+  else {
+    if (!PLACEHOLDER_MARK.every((d) => icon.includes(d))) f.push('favicon.svg is not the approved placeholder mark');
+    if (/<metadata|c2pa|<script|<foreignObject|xlink:href|\bhref=/i.test(icon)) f.push('favicon.svg carries metadata, script or a reference');
+  }
+  if (exists(`${APP}/index.html`) && !/<link rel="icon" type="image\/svg\+xml" href="favicon\.svg">/.test(read(`${APP}/index.html`))) f.push(`${APP}/index.html does not link favicon.svg`);
+  check('E11', 'Clean-room: no Ultima, PrimeNG, SAP Fiori/UI5, Angular Material/CDK or commercial-theme terms in enterprise or the reference app; the reference-app favicon is the approved placeholder mark', f, `${files.length} files scanned`);
+}
+
+// E12 retained approved handoff (AC-IB3-02, AC-IB3-19): exact manifest, every listed file intact, nothing unlisted.
+{
+  const f = [];
+  let listed = [];
+  const manifest = `${HOF_ROOT}/handoff.manifest.yaml`;
+  if (!exists(manifest)) f.push(`${manifest} missing`);
+  else {
+    const bytes = fs.readFileSync(path.join(root, manifest));
+    const sha = crypto.createHash('sha256').update(bytes).digest('hex');
+    if (sha !== HOF_MANIFEST_SHA256) f.push(`manifest sha256 ${sha} != approved ${HOF_MANIFEST_SHA256}`);
+    const t = bytes.toString('utf8');
+    if (!/^status: APPROVED_FOR_IMPLEMENTATION$/m.test(t)) f.push('manifest status is not APPROVED_FOR_IMPLEMENTATION');
+    const at = t.indexOf('\nfiles:\n');
+    listed = at < 0 ? [] : [...t.slice(at).matchAll(/^- path: (\S+)\n\s+sha256: ([0-9a-f]{64})$/gm)].map((m) => [m[1], m[2]]);
+    if (listed.length !== HOF_FILE_COUNT) f.push(`${listed.length} files listed, expected ${HOF_FILE_COUNT}`);
+    for (const [file, want] of listed) {
+      if (!exists(`${HOF_ROOT}/${file}`)) { f.push(`handoff file ${file} missing`); continue; }
+      const got = crypto.createHash('sha256').update(fs.readFileSync(path.join(root, HOF_ROOT, file))).digest('hex');
+      if (got !== want) f.push(`handoff file ${file} sha256 ${got.slice(0, 12)}… != manifest ${want.slice(0, 12)}…`);
+    }
+    const known = new Set([...listed.map(([x]) => `${HOF_ROOT}/${x}`), manifest]);
+    for (const x of walk(HOF_ROOT)) if (!known.has(x)) f.push(`unlisted file ${x}`);
+  }
+  check('E12', 'The approved HOF-IB3-001 v1.0 handoff is retained verbatim: approved manifest hash and status, every listed file matches its sha256, no unlisted file', f, `manifest ${HOF_MANIFEST_SHA256.slice(0, 12)}…; ${listed.length}/${HOF_FILE_COUNT} files intact`);
 }
 
 const failed = checks.filter((c) => !c.pass);

@@ -1,0 +1,3786 @@
+# PAEP handoff manifest (PAEP-DCH-01 §9; E11 §2). HOF-IB3-001 v1.0, revision 3 - APPROVED_FOR_IMPLEMENTATION (PO/SA, 2026-10-05).
+# Human similarity review PASS. Arabic/Hebrew native-copy review remains an IB3 acceptance follow-up.
+handoffId: HOF-IB3-001
+version: '1.0'
+status: APPROVED_FOR_IMPLEMENTATION
+dchStatus: APPROVED FOR IMPLEMENTATION
+candidateRevision:
+  revision: 3
+  reason: Human similarity review PASS and PO/SA design approval recorded
+  previousManifestSha256: b2056fe27e180ecfecc9d9881a59cfe8cd0aeb5289fd3c27620d86b6188ec9be
+  previousIntegrity: 576/576 PASS
+  delta: provenance/candidate-delta-r3.md
+  history:
+  - revision: 1
+    manifestSha256: 7cc8d8c9cedc9115eacb9a25168fbd60ec953d3b82a5c08cc76eaf1f0ff2f3bd
+    integrity: 575/575 PASS
+    note: original review candidate
+  - revision: 2
+    manifestSha256: b2056fe27e180ecfecc9d9881a59cfe8cd0aeb5289fd3c27620d86b6188ec9be
+    integrity: 576/576 PASS
+    note: PO/SA decisions recorded 2026-10-05
+    delta: provenance/candidate-delta-r2.md
+dwpId: DWP-IB3-001
+dwpVersion: '1.0'
+dwpStatus: APPROVED FOR DESIGN (2026-09-30; not implementation acceptance)
+title: PAEP Enterprise Application Shell
+created: '2026-09-30'
+designSystemBaseline:
+  description: HOF-IB2-001 v1.1 + accepted DDR-IB2-01/02/04/05/07/08 @ Gen 4 81c223c
+  hofIb2ManifestSha256: 24e7049dd675e2025ae75c099637fd3f0a9eb9f24ff2958d1ce88607d040ac53
+  closedDdrs:
+  - DDR-IB2-03
+  - DDR-IB2-06
+  generation4Commit: 81c223c
+  registryCommit: 929387b
+repositoryBase:
+  repo: kougit/proseit-paep
+  commit: 929387b
+  changed: false
+  generation5: NOT CREATED
+requirements:
+- REQ-IB3-SHELL-01
+- REQ-IB3-SHELL-02
+- REQ-IB3-SHELL-03
+- REQ-IB3-SHELL-04
+- REQ-IB3-SHELL-05
+- REQ-IB3-SHELL-06
+- REQ-IB3-SHELL-07
+- REQ-IB3-SHELL-08
+- REQ-IB3-SHELL-09
+- REQ-IB3-SHELL-10
+- REQ-IB3-SHELL-11
+- REQ-IB3-SHELL-12
+- REQ-IB3-SHELL-13
+- REQ-IB3-SHELL-14
+- REQ-IB3-SHELL-15
+- REQ-IB3-SHELL-16
+- REQ-IB3-NAV-01
+- REQ-IB3-NAV-02
+- REQ-IB3-NAV-03
+- REQ-IB3-NAV-04
+- REQ-IB3-NAV-05
+- REQ-IB3-NAV-06
+- REQ-IB3-NAV-07
+- REQ-IB3-NAV-08
+- REQ-IB3-NAV-09
+- REQ-IB3-NAV-10
+- REQ-IB3-NAV-11
+- REQ-IB3-NAV-12
+- REQ-IB3-NAV-13
+- REQ-IB3-NAV-14
+- REQ-IB3-NAV-15
+- REQ-IB3-WORKSPACE-01
+- REQ-IB3-WORKSPACE-02
+- REQ-IB3-WORKSPACE-03
+- REQ-IB3-WORKSPACE-04
+- REQ-IB3-WORKSPACE-05
+- REQ-IB3-WORKSPACE-06
+- REQ-IB3-WORKSPACE-07
+- REQ-IB3-WORKSPACE-08
+- REQ-IB3-CMD-01
+- REQ-IB3-CMD-02
+- REQ-IB3-CMD-03
+- REQ-IB3-CMD-04
+- REQ-IB3-CMD-05
+- REQ-IB3-CMD-06
+- REQ-IB3-CMD-07
+- REQ-IB3-CMD-08
+- REQ-IB3-CMD-09
+- REQ-IB3-CMD-10
+- REQ-IB3-CMD-11
+- REQ-IB3-NOTIFY-01
+- REQ-IB3-NOTIFY-02
+- REQ-IB3-NOTIFY-03
+- REQ-IB3-NOTIFY-04
+- REQ-IB3-NOTIFY-05
+- REQ-IB3-NOTIFY-06
+- REQ-IB3-ERROR-01
+- REQ-IB3-ERROR-02
+- REQ-IB3-ERROR-03
+- REQ-IB3-ERROR-04
+- REQ-IB3-ERROR-05
+- REQ-IB3-ERROR-06
+- REQ-IB3-ERROR-07
+- REQ-IB3-ERROR-08
+- REQ-IB3-ERROR-09
+- REQ-IB3-LOCKED-01
+- REQ-IB3-LOCKED-02
+- REQ-IB3-LOCKED-03
+- REQ-IB3-LOCKED-04
+- REQ-IB3-LOCKED-05
+- REQ-IB3-LOCKED-06
+- REQ-IB3-CONNECTIVITY-01
+- REQ-IB3-CONNECTIVITY-02
+- REQ-IB3-CONNECTIVITY-03
+- REQ-IB3-CONNECTIVITY-04
+- REQ-IB3-CONNECTIVITY-05
+- REQ-IB3-CONNECTIVITY-06
+- REQ-IB3-CONNECTIVITY-07
+- REQ-IB3-RESP-01
+- REQ-IB3-RESP-02
+- REQ-IB3-RESP-03
+- REQ-IB3-RESP-04
+- REQ-IB3-RESP-05
+- REQ-IB3-A11Y-01
+- REQ-IB3-A11Y-02
+- REQ-IB3-A11Y-03
+- REQ-IB3-A11Y-04
+- REQ-IB3-A11Y-05
+- REQ-IB3-A11Y-06
+- REQ-IB3-I18N-01
+- REQ-IB3-I18N-02
+- REQ-IB3-I18N-03
+- REQ-IB3-I18N-04
+- REQ-IB3-I18N-05
+- REQ-IB3-SEC-01
+- REQ-IB3-SEC-02
+- REQ-IB3-SEC-03
+- REQ-IB3-SEC-04
+- REQ-IB3-SEC-05
+- REQ-IB3-SEC-06
+- REQ-IB3-SEC-07
+- REQ-IB3-SEC-08
+- REQ-IB3-SEC-09
+- REQ-IB3-SEC-10
+- REQ-IB3-SEC-11
+- REQ-IB3-SEC-12
+- REQ-IB3-SEC-13
+- REQ-IB3-SEC-14
+- REQ-IB3-SEC-15
+- REQ-IB3-SEC-16
+- REQ-IB3-SEC-17
+- REQ-IB3-SEC-18
+- REQ-IB3-SEC-19
+- REQ-IB3-SEC-20
+- REQ-IB3-SEC-21
+- REQ-IB3-SEC-22
+- REQ-IB3-STATE-01
+- REQ-IB3-STATE-02
+- REQ-IB3-STATE-03
+- REQ-IB3-STATE-04
+- REQ-IB3-STATE-05
+- REQ-IB3-TEST-01
+- REQ-IB3-TEST-02
+- REQ-IB3-TEST-03
+- REQ-IB3-TEST-04
+- REQ-IB3-TEST-05
+- REQ-IB3-TEST-06
+- REQ-IB3-TEST-07
+- REQ-IB3-TEST-08
+- REQ-IB3-TEST-09
+- REQ-IB3-TEST-10
+- REQ-IB3-TEST-11
+- REQ-IB3-TEST-12
+- REQ-IB3-PROV-01
+- REQ-IB3-PROV-02
+- REQ-IB3-PROV-03
+- REQ-IB3-PROV-04
+- REQ-IB3-PROV-05
+- REQ-IB3-PROV-06
+- REQ-IB3-PROV-07
+- REQ-IB3-PROV-08
+- REQ-IB3-PROV-09
+- REQ-IB3-PROV-10
+- REQ-IB3-PROV-11
+- REQ-IB3-PROV-12
+- REQ-IB3-PROV-13
+- REQ-IB3-PROV-14
+- REQ-IB3-PROV-15
+- REQ-IB3-PROV-16
+- REQ-IB3-REPORT-01
+- REQ-IB3-REPORT-05
+- REQ-IB3-PREF-01
+- REQ-IB3-PREF-02
+viewportProfiles:
+  desktop: 1440x900
+  tablet: 834x1112
+  zoom200: 640x900 (200% of 1280)
+  narrow320: 320x640 (400% of 1280)
+  narrow375: 375x812
+  desktop1024: 1024x768 (audit)
+  short320x256: 320x256 (audit)
+screens:
+- id: SCR-SHELL-001
+  states:
+  - state: populated
+    title: Desktop expanded shell, populated
+    html: screens/SCR-SHELL-001--populated.html
+    htmlSha256: fc8c6a8b6174b271e5e323d2a5e1b900b05e0b6786e8091b249d6d5e685e3fd3
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-001--populated--desktop.png
+    - screens/renders/SCR-SHELL-001--populated--tablet.png
+    - screens/renders/SCR-SHELL-001--populated--zoom200.png
+    - screens/renders/SCR-SHELL-001--populated--narrow320.png
+  - state: loading
+    title: Desktop expanded shell, loading after config
+    html: screens/SCR-SHELL-001--loading.html
+    htmlSha256: e72726ce75f52e343cb3fddb0af13473503df1d3fdb12a00d7ef0bd2dc0de3d4
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-001--loading--desktop.png
+    - screens/renders/SCR-SHELL-001--loading--tablet.png
+    - screens/renders/SCR-SHELL-001--loading--zoom200.png
+    - screens/renders/SCR-SHELL-001--loading--narrow320.png
+  - state: default
+    title: Desktop expanded shell, default (Home)
+    html: screens/SCR-SHELL-001--default.html
+    htmlSha256: 399005434b0306ab5f0ae55407d201949247e4024cfb28092b067a856b2f0494
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-001--default--desktop.png
+    - screens/renders/SCR-SHELL-001--default--tablet.png
+    - screens/renders/SCR-SHELL-001--default--zoom200.png
+    - screens/renders/SCR-SHELL-001--default--narrow320.png
+- id: SCR-SHELL-002
+  states:
+  - state: collapsed
+    title: Desktop collapsed navigation (rail with visible short labels, Q-03)
+    html: screens/SCR-SHELL-002--collapsed.html
+    htmlSha256: 3d78e51b59bdafc7606033953f8f4293f7761131024406a828e5c30397714910
+    viewports:
+    - desktop
+    - tablet
+    renders:
+    - screens/renders/SCR-SHELL-002--collapsed--desktop.png
+    - screens/renders/SCR-SHELL-002--collapsed--tablet.png
+  - state: group-flyout
+    title: 'Collapsed rail: group flyout on the governed menu base'
+    html: screens/SCR-SHELL-002--group-flyout.html
+    htmlSha256: d3ee418f75de8490c90641e0d22ccba42f532bea0ac5863d5a14764ec5550098
+    viewports:
+    - desktop
+    renders:
+    - screens/renders/SCR-SHELL-002--group-flyout--desktop.png
+  - state: re-expanded
+    title: 'Re-expanded: focus returns to the collapse toggle'
+    html: screens/SCR-SHELL-002--re-expanded.html
+    htmlSha256: 3682064fbfefac17fa98c0f65ec3ad178fb23bcac4261ae7e11c16deb8f919b1
+    viewports:
+    - desktop
+    renders:
+    - screens/renders/SCR-SHELL-002--re-expanded--desktop.png
+- id: SCR-SHELL-003
+  states:
+  - state: nav-closed
+    title: Tablet and 640 px shell, navigation closed
+    html: screens/SCR-SHELL-003--nav-closed.html
+    htmlSha256: fc8c6a8b6174b271e5e323d2a5e1b900b05e0b6786e8091b249d6d5e685e3fd3
+    viewports:
+    - tablet
+    - zoom200
+    renders:
+    - screens/renders/SCR-SHELL-003--nav-closed--tablet.png
+    - screens/renders/SCR-SHELL-003--nav-closed--zoom200.png
+  - state: nav-open
+    title: Tablet and 640 px shell, modal navigation open (Q-09)
+    html: screens/SCR-SHELL-003--nav-open.html
+    htmlSha256: 5d53dca792a45523c249ff161a082985278bfe44f9e7ded8598cfde96802abd3
+    viewports:
+    - tablet
+    - zoom200
+    renders:
+    - screens/renders/SCR-SHELL-003--nav-open--tablet.png
+    - screens/renders/SCR-SHELL-003--nav-open--zoom200.png
+- id: SCR-SHELL-004
+  states:
+  - state: nav-closed
+    title: Narrow shell, navigation closed
+    html: screens/SCR-SHELL-004--nav-closed.html
+    htmlSha256: 08b14f18eaa00722dfa3040eee43e8a2e40eae583b24d7333ac776f5cc2634c3
+    viewports:
+    - narrow375
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-004--nav-closed--narrow375.png
+    - screens/renders/SCR-SHELL-004--nav-closed--narrow320.png
+  - state: nav-open
+    title: Narrow shell, navigation open (full width)
+    html: screens/SCR-SHELL-004--nav-open.html
+    htmlSha256: 5d53dca792a45523c249ff161a082985278bfe44f9e7ded8598cfde96802abd3
+    viewports:
+    - narrow375
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-004--nav-open--narrow375.png
+    - screens/renders/SCR-SHELL-004--nav-open--narrow320.png
+  - state: long-labels
+    title: Narrow shell, navigation open with long names and labels
+    html: screens/SCR-SHELL-004--long-labels.html
+    htmlSha256: 66e9d036009917f755871252f49945f767bc0a431716d1e03db1a2e2d94c313f
+    viewports:
+    - narrow375
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-004--long-labels--narrow375.png
+    - screens/renders/SCR-SHELL-004--long-labels--narrow320.png
+- id: SCR-SHELL-005
+  states:
+  - state: overflow-sequence
+    title: Topbar overflow sequence 1440 → 320 (never-hidden set)
+    html: screens/SCR-SHELL-005--overflow-sequence.html
+    htmlSha256: 08b14f18eaa00722dfa3040eee43e8a2e40eae583b24d7333ac776f5cc2634c3
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    - desktop1024
+    - narrow375
+    renders:
+    - screens/renders/SCR-SHELL-005--overflow-sequence--desktop.png
+    - screens/renders/SCR-SHELL-005--overflow-sequence--tablet.png
+    - screens/renders/SCR-SHELL-005--overflow-sequence--zoom200.png
+    - screens/renders/SCR-SHELL-005--overflow-sequence--narrow320.png
+    - screens/renders/SCR-SHELL-005--overflow-sequence--desktop1024.png
+    - screens/renders/SCR-SHELL-005--overflow-sequence--narrow375.png
+  - state: long-names
+    title: Topbar with long product, tenant and user names
+    html: screens/SCR-SHELL-005--long-names.html
+    htmlSha256: f4b43defdd439c5f98f6fc69c1da4af813471c0e354716e8c5a529c2d2add964
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    - desktop1024
+    renders:
+    - screens/renders/SCR-SHELL-005--long-names--desktop.png
+    - screens/renders/SCR-SHELL-005--long-names--tablet.png
+    - screens/renders/SCR-SHELL-005--long-names--zoom200.png
+    - screens/renders/SCR-SHELL-005--long-names--narrow320.png
+    - screens/renders/SCR-SHELL-005--long-names--desktop1024.png
+- id: SCR-SHELL-006
+  states:
+  - state: current-nested
+    title: 'Navigation: current item, nested child, counts'
+    html: screens/SCR-SHELL-006--current-nested.html
+    htmlSha256: 84812de6344caa4b1b3a5e3b5c0b3563afba98ecfbcc4c49d431e030a4c2a90b
+    viewports:
+    - desktop
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-006--current-nested--desktop.png
+    - screens/renders/SCR-SHELL-006--current-nested--narrow320.png
+  - state: count-loading-unknown
+    title: 'Navigation: count badge loading and unknown'
+    html: screens/SCR-SHELL-006--count-loading-unknown.html
+    htmlSha256: 74a43aa76534786d4439a4d6e59c414781cd7d2ce14c1d6fe636ebcf4b371e71
+    viewports:
+    - desktop
+    renders:
+    - screens/renders/SCR-SHELL-006--count-loading-unknown--desktop.png
+  - state: locked-hidden
+    title: 'Navigation: locked × 3 reasons shown; permission-denied hidden (Q-10 recommended)'
+    html: screens/SCR-SHELL-006--locked-hidden.html
+    htmlSha256: 08b14f18eaa00722dfa3040eee43e8a2e40eae583b24d7333ac776f5cc2634c3
+    viewports:
+    - desktop
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-006--locked-hidden--desktop.png
+    - screens/renders/SCR-SHELL-006--locked-hidden--narrow320.png
+  - state: locked-shown-alt
+    title: 'Navigation: Q-10 alternative, permission-denied shown locked'
+    html: screens/SCR-SHELL-006--locked-shown-alt.html
+    htmlSha256: 958c326d73edcacc959be3090ed11ccaa287109659590b12a1412fdbb9fdbc9d
+    viewports:
+    - desktop
+    renders:
+    - screens/renders/SCR-SHELL-006--locked-shown-alt--desktop.png
+  - state: long-labels
+    title: 'Navigation: long labels wrap (never truncate)'
+    html: screens/SCR-SHELL-006--long-labels.html
+    htmlSha256: f4b43defdd439c5f98f6fc69c1da4af813471c0e354716e8c5a529c2d2add964
+    viewports:
+    - desktop
+    - tablet
+    renders:
+    - screens/renders/SCR-SHELL-006--long-labels--desktop.png
+    - screens/renders/SCR-SHELL-006--long-labels--tablet.png
+  - state: current-nested-sheet
+    title: Navigation current-nested inside the mobile navigation container (below 1024 px)
+    html: screens/SCR-SHELL-006--current-nested-sheet.html
+    htmlSha256: 01955d73a1e8ca28cc5c35e19a830f4a9fbb0955659a35a5962675220f800544
+    viewports:
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-006--current-nested-sheet--tablet.png
+    - screens/renders/SCR-SHELL-006--current-nested-sheet--zoom200.png
+    - screens/renders/SCR-SHELL-006--current-nested-sheet--narrow320.png
+  - state: count-loading-unknown-sheet
+    title: Navigation count-loading-unknown inside the mobile navigation container (below 1024 px)
+    html: screens/SCR-SHELL-006--count-loading-unknown-sheet.html
+    htmlSha256: 4b2ebdb055e08100228b717fbc3b5ad62b74e1dea4b3640112b2e11b4230787b
+    viewports:
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-006--count-loading-unknown-sheet--tablet.png
+    - screens/renders/SCR-SHELL-006--count-loading-unknown-sheet--zoom200.png
+    - screens/renders/SCR-SHELL-006--count-loading-unknown-sheet--narrow320.png
+  - state: locked-hidden-sheet
+    title: Navigation locked-hidden inside the mobile navigation container (below 1024 px)
+    html: screens/SCR-SHELL-006--locked-hidden-sheet.html
+    htmlSha256: 8d3c9a70850ead5234427fe9a303031c0b127ca40eccc01876f2dfd8fe3e4d9c
+    viewports:
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-006--locked-hidden-sheet--tablet.png
+    - screens/renders/SCR-SHELL-006--locked-hidden-sheet--zoom200.png
+    - screens/renders/SCR-SHELL-006--locked-hidden-sheet--narrow320.png
+  - state: locked-shown-alt-sheet
+    title: Navigation locked-shown-alt inside the mobile navigation container (below 1024 px)
+    html: screens/SCR-SHELL-006--locked-shown-alt-sheet.html
+    htmlSha256: 705456f85a5fdae94b7ebe92d7d05812ae5356645320582ed32fac226cd0848a
+    viewports:
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-006--locked-shown-alt-sheet--tablet.png
+    - screens/renders/SCR-SHELL-006--locked-shown-alt-sheet--zoom200.png
+    - screens/renders/SCR-SHELL-006--locked-shown-alt-sheet--narrow320.png
+  - state: long-labels-sheet
+    title: Navigation long-labels inside the mobile navigation container (below 1024 px)
+    html: screens/SCR-SHELL-006--long-labels-sheet.html
+    htmlSha256: 90d546f6ba42ad93475a94bebe73cf01d8767f077d110fd1281bf566c8cccc3d
+    viewports:
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-006--long-labels-sheet--tablet.png
+    - screens/renders/SCR-SHELL-006--long-labels-sheet--zoom200.png
+    - screens/renders/SCR-SHELL-006--long-labels-sheet--narrow320.png
+- id: SCR-SHELL-007
+  states:
+  - state: long-names
+    title: 'Context: long tenant and site names'
+    html: screens/SCR-SHELL-007--long-names.html
+    htmlSha256: f4b43defdd439c5f98f6fc69c1da4af813471c0e354716e8c5a529c2d2add964
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-007--long-names--desktop.png
+    - screens/renders/SCR-SHELL-007--long-names--tablet.png
+    - screens/renders/SCR-SHELL-007--long-names--zoom200.png
+    - screens/renders/SCR-SHELL-007--long-names--narrow320.png
+  - state: single-context
+    title: 'Context: one context only, no switcher (Q-11)'
+    html: screens/SCR-SHELL-007--single-context.html
+    htmlSha256: f2777bdbbd02f61f18bb7d84faebde49b08acdc3993a9341d3aef5c2a556c972
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-007--single-context--desktop.png
+    - screens/renders/SCR-SHELL-007--single-context--tablet.png
+    - screens/renders/SCR-SHELL-007--single-context--zoom200.png
+    - screens/renders/SCR-SHELL-007--single-context--narrow320.png
+  - state: switch-dialog
+    title: Context switch request dialog (Q-11)
+    html: screens/SCR-SHELL-007--switch-dialog.html
+    htmlSha256: 4bbac15fd3de36cb58e492fff33c7e5c3728cb116bdb807107b430f593c53d35
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-007--switch-dialog--desktop.png
+    - screens/renders/SCR-SHELL-007--switch-dialog--tablet.png
+    - screens/renders/SCR-SHELL-007--switch-dialog--zoom200.png
+    - screens/renders/SCR-SHELL-007--switch-dialog--narrow320.png
+  - state: switch-pending
+    title: Context switch request pending
+    html: screens/SCR-SHELL-007--switch-pending.html
+    htmlSha256: 3a5835222aa16857bfcb9bf5830173426c0111178edb931767197de42c1e4b06
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-007--switch-pending--desktop.png
+    - screens/renders/SCR-SHELL-007--switch-pending--tablet.png
+    - screens/renders/SCR-SHELL-007--switch-pending--zoom200.png
+    - screens/renders/SCR-SHELL-007--switch-pending--narrow320.png
+  - state: switch-rejected
+    title: Context switch request rejected
+    html: screens/SCR-SHELL-007--switch-rejected.html
+    htmlSha256: d09c5ea7a482c1ab3bc368539d09635a7ab71ae67d071628034482db61f59271
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-007--switch-rejected--desktop.png
+    - screens/renders/SCR-SHELL-007--switch-rejected--tablet.png
+    - screens/renders/SCR-SHELL-007--switch-rejected--zoom200.png
+    - screens/renders/SCR-SHELL-007--switch-rejected--narrow320.png
+  - state: deep-link-mismatch
+    title: 'Deep link to another tenant: never switches silently'
+    html: screens/SCR-SHELL-007--deep-link-mismatch.html
+    htmlSha256: 434bf227b52aedb9f808f19287300db75a6d6bb1b9c4223707d59d8bbf6749a3
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-007--deep-link-mismatch--desktop.png
+    - screens/renders/SCR-SHELL-007--deep-link-mismatch--tablet.png
+    - screens/renders/SCR-SHELL-007--deep-link-mismatch--zoom200.png
+    - screens/renders/SCR-SHELL-007--deep-link-mismatch--narrow320.png
+  - state: impersonation
+    title: Support impersonation always visible
+    html: screens/SCR-SHELL-007--impersonation.html
+    htmlSha256: b7446ff9a20cb5fe41df1f6448fe8bba209cc40f94516be5541f12af2156d42e
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-007--impersonation--desktop.png
+    - screens/renders/SCR-SHELL-007--impersonation--tablet.png
+    - screens/renders/SCR-SHELL-007--impersonation--zoom200.png
+    - screens/renders/SCR-SHELL-007--impersonation--narrow320.png
+- id: SCR-SHELL-008
+  states:
+  - state: idle
+    title: 'Command palette: idle'
+    html: screens/SCR-SHELL-008--idle.html
+    htmlSha256: d3fd60221b1d4a426e25aab5b5fbd2c530920d2b1f0e33d79e0a9a439389e2aa
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-008--idle--desktop.png
+    - screens/renders/SCR-SHELL-008--idle--tablet.png
+    - screens/renders/SCR-SHELL-008--idle--zoom200.png
+    - screens/renders/SCR-SHELL-008--idle--narrow320.png
+  - state: typing
+    title: 'Command palette: typing'
+    html: screens/SCR-SHELL-008--typing.html
+    htmlSha256: ee5bbec39e2364590db5860be81579164969bcb74367be5b6b0f34f2fc517e25
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-008--typing--desktop.png
+    - screens/renders/SCR-SHELL-008--typing--tablet.png
+    - screens/renders/SCR-SHELL-008--typing--zoom200.png
+    - screens/renders/SCR-SHELL-008--typing--narrow320.png
+  - state: loading
+    title: 'Command palette: loading'
+    html: screens/SCR-SHELL-008--loading.html
+    htmlSha256: c014f42b098366c32302d91d46cd05e47fdd54dadaa83b7899170c7699471b46
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-008--loading--desktop.png
+    - screens/renders/SCR-SHELL-008--loading--tablet.png
+    - screens/renders/SCR-SHELL-008--loading--zoom200.png
+    - screens/renders/SCR-SHELL-008--loading--narrow320.png
+  - state: results
+    title: 'Command palette: results'
+    html: screens/SCR-SHELL-008--results.html
+    htmlSha256: 447677983b5e31fde976d1252d0b84055ae53c9eefc5c3db6b397be09ff1a86f
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-008--results--desktop.png
+    - screens/renders/SCR-SHELL-008--results--tablet.png
+    - screens/renders/SCR-SHELL-008--results--zoom200.png
+    - screens/renders/SCR-SHELL-008--results--narrow320.png
+  - state: none
+    title: 'Command palette: none'
+    html: screens/SCR-SHELL-008--none.html
+    htmlSha256: fbe5badcbabce0fe571514ef77b2bb2d28bacf257238fb50fc181aece05d4f70
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-008--none--desktop.png
+    - screens/renders/SCR-SHELL-008--none--tablet.png
+    - screens/renders/SCR-SHELL-008--none--zoom200.png
+    - screens/renders/SCR-SHELL-008--none--narrow320.png
+  - state: error
+    title: 'Command palette: error'
+    html: screens/SCR-SHELL-008--error.html
+    htmlSha256: 6f33890593781e6c120a337f6435e6a07c6c5c494f5a5d9ffbf7f80f66941704
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-008--error--desktop.png
+    - screens/renders/SCR-SHELL-008--error--tablet.png
+    - screens/renders/SCR-SHELL-008--error--zoom200.png
+    - screens/renders/SCR-SHELL-008--error--narrow320.png
+  - state: partial
+    title: 'Command palette: partial'
+    html: screens/SCR-SHELL-008--partial.html
+    htmlSha256: b50df8a9fc311a823d6162d7c8dc197630abc3f55af7bb42d825a4668fdc37ab
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-008--partial--desktop.png
+    - screens/renders/SCR-SHELL-008--partial--tablet.png
+    - screens/renders/SCR-SHELL-008--partial--zoom200.png
+    - screens/renders/SCR-SHELL-008--partial--narrow320.png
+  - state: locked
+    title: 'Command palette: locked'
+    html: screens/SCR-SHELL-008--locked.html
+    htmlSha256: c06ca0b32f92c16cc33b3f82dfe6b7afb4527a4a796c284faa1cfc0ab495fcfd
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-008--locked--desktop.png
+    - screens/renders/SCR-SHELL-008--locked--tablet.png
+    - screens/renders/SCR-SHELL-008--locked--zoom200.png
+    - screens/renders/SCR-SHELL-008--locked--narrow320.png
+  - state: full-screen-narrow
+    title: 'Command palette: narrow'
+    html: screens/SCR-SHELL-008--full-screen-narrow.html
+    htmlSha256: 447677983b5e31fde976d1252d0b84055ae53c9eefc5c3db6b397be09ff1a86f
+    viewports:
+    - narrow320
+    - narrow375
+    renders:
+    - screens/renders/SCR-SHELL-008--full-screen-narrow--narrow320.png
+    - screens/renders/SCR-SHELL-008--full-screen-narrow--narrow375.png
+- id: SCR-SHELL-009
+  states:
+  - state: access-none
+    title: 'Notification access: none'
+    html: screens/SCR-SHELL-009--access-none.html
+    htmlSha256: 6a71be7ca64cee4453242084c8b5d0500f3ce3577af8c4f5c754d32938b07651
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-009--access-none--desktop.png
+    - screens/renders/SCR-SHELL-009--access-none--tablet.png
+    - screens/renders/SCR-SHELL-009--access-none--zoom200.png
+    - screens/renders/SCR-SHELL-009--access-none--narrow320.png
+  - state: access-unread
+    title: 'Notification access: unread'
+    html: screens/SCR-SHELL-009--access-unread.html
+    htmlSha256: 08b14f18eaa00722dfa3040eee43e8a2e40eae583b24d7333ac776f5cc2634c3
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-009--access-unread--desktop.png
+    - screens/renders/SCR-SHELL-009--access-unread--tablet.png
+    - screens/renders/SCR-SHELL-009--access-unread--zoom200.png
+    - screens/renders/SCR-SHELL-009--access-unread--narrow320.png
+  - state: access-99plus
+    title: 'Notification access: 99plus'
+    html: screens/SCR-SHELL-009--access-99plus.html
+    htmlSha256: 9016d30cb5506b60fee6c2b350bd9311009485950abfaafcb5da18a9aa9e08b7
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-009--access-99plus--desktop.png
+    - screens/renders/SCR-SHELL-009--access-99plus--tablet.png
+    - screens/renders/SCR-SHELL-009--access-99plus--zoom200.png
+    - screens/renders/SCR-SHELL-009--access-99plus--narrow320.png
+  - state: access-count-loading
+    title: 'Notification access: count-loading'
+    html: screens/SCR-SHELL-009--access-count-loading.html
+    htmlSha256: b6b38e0cb6585627db0d45eb726bd4bbc7369daccbf23b6c6fbf54bd310d3645
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-009--access-count-loading--desktop.png
+    - screens/renders/SCR-SHELL-009--access-count-loading--tablet.png
+    - screens/renders/SCR-SHELL-009--access-count-loading--zoom200.png
+    - screens/renders/SCR-SHELL-009--access-count-loading--narrow320.png
+  - state: access-count-error
+    title: 'Notification access: count-error'
+    html: screens/SCR-SHELL-009--access-count-error.html
+    htmlSha256: de3f8fc19e7eac739f26549742cb6966dd21b0a97c353d4d9ef4ffa9d4066b5a
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-009--access-count-error--desktop.png
+    - screens/renders/SCR-SHELL-009--access-count-error--tablet.png
+    - screens/renders/SCR-SHELL-009--access-count-error--zoom200.png
+    - screens/renders/SCR-SHELL-009--access-count-error--narrow320.png
+  - state: access-provider-unavailable
+    title: 'Notification access: provider-unavailable'
+    html: screens/SCR-SHELL-009--access-provider-unavailable.html
+    htmlSha256: cfc8f933faaf3c37bedd265143a707ac58c0f0bc247e00ab8ae2e2a941d77f76
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-009--access-provider-unavailable--desktop.png
+    - screens/renders/SCR-SHELL-009--access-provider-unavailable--tablet.png
+    - screens/renders/SCR-SHELL-009--access-provider-unavailable--zoom200.png
+    - screens/renders/SCR-SHELL-009--access-provider-unavailable--narrow320.png
+  - state: panel-populated
+    title: 'Notification panel: populated'
+    html: screens/SCR-SHELL-009--panel-populated.html
+    htmlSha256: 47c92146c3446f954139165f031f9da9d26b306f279b6839163ed179763c8a9f
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-009--panel-populated--desktop.png
+    - screens/renders/SCR-SHELL-009--panel-populated--tablet.png
+    - screens/renders/SCR-SHELL-009--panel-populated--zoom200.png
+    - screens/renders/SCR-SHELL-009--panel-populated--narrow320.png
+  - state: panel-empty
+    title: 'Notification panel: empty'
+    html: screens/SCR-SHELL-009--panel-empty.html
+    htmlSha256: d4609ea0ec5180336bb6f5759c2537cb4e8b0d57cbe6b2e2c532f77c5aaa8139
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-009--panel-empty--desktop.png
+    - screens/renders/SCR-SHELL-009--panel-empty--tablet.png
+    - screens/renders/SCR-SHELL-009--panel-empty--zoom200.png
+    - screens/renders/SCR-SHELL-009--panel-empty--narrow320.png
+  - state: panel-loading
+    title: 'Notification panel: loading'
+    html: screens/SCR-SHELL-009--panel-loading.html
+    htmlSha256: b57a38b7ce45f0764e4ade1b7e22127dc654359be4bc26f9421109afd639d172
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-009--panel-loading--desktop.png
+    - screens/renders/SCR-SHELL-009--panel-loading--tablet.png
+    - screens/renders/SCR-SHELL-009--panel-loading--zoom200.png
+    - screens/renders/SCR-SHELL-009--panel-loading--narrow320.png
+  - state: panel-error
+    title: 'Notification panel: error'
+    html: screens/SCR-SHELL-009--panel-error.html
+    htmlSha256: 68083e1e7313b43ca0060d8925eba5a918b07d8de372fb9f925c8154ed1675e8
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-009--panel-error--desktop.png
+    - screens/renders/SCR-SHELL-009--panel-error--tablet.png
+    - screens/renders/SCR-SHELL-009--panel-error--zoom200.png
+    - screens/renders/SCR-SHELL-009--panel-error--narrow320.png
+  - state: panel-stale
+    title: 'Notification panel: stale'
+    html: screens/SCR-SHELL-009--panel-stale.html
+    htmlSha256: f9dd026b66209f1af57e74995242f204ad3b817f1e6d2e850551a9f675541df6
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-009--panel-stale--desktop.png
+    - screens/renders/SCR-SHELL-009--panel-stale--tablet.png
+    - screens/renders/SCR-SHELL-009--panel-stale--zoom200.png
+    - screens/renders/SCR-SHELL-009--panel-stale--narrow320.png
+  - state: panel-unavailable
+    title: 'Notification panel: unavailable'
+    html: screens/SCR-SHELL-009--panel-unavailable.html
+    htmlSha256: 306a8f5e2b8a34b973ced6285ecdd9157db3aba03df61194b41f84b3b6384a71
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-009--panel-unavailable--desktop.png
+    - screens/renders/SCR-SHELL-009--panel-unavailable--tablet.png
+    - screens/renders/SCR-SHELL-009--panel-unavailable--zoom200.png
+    - screens/renders/SCR-SHELL-009--panel-unavailable--narrow320.png
+  - state: transient-vs-persistent
+    title: Transient announcement vs persistent notification
+    html: screens/SCR-SHELL-009--transient-vs-persistent.html
+    htmlSha256: e7d7705a0dee1db4242dc3637ef21f2a5d427992cf1390eeaf4e68a33bbd66b5
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-009--transient-vs-persistent--desktop.png
+    - screens/renders/SCR-SHELL-009--transient-vs-persistent--tablet.png
+    - screens/renders/SCR-SHELL-009--transient-vs-persistent--zoom200.png
+    - screens/renders/SCR-SHELL-009--transient-vs-persistent--narrow320.png
+- id: SCR-SHELL-010
+  states:
+  - state: account-menu
+    title: Account menu with sign-out and language request
+    html: screens/SCR-SHELL-010--account-menu.html
+    htmlSha256: 2368ffc83d2368931d6fb8a14ef1c9119b8ab3ab0250985e69847e8d3145b6bd
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-010--account-menu--desktop.png
+    - screens/renders/SCR-SHELL-010--account-menu--tablet.png
+    - screens/renders/SCR-SHELL-010--account-menu--zoom200.png
+    - screens/renders/SCR-SHELL-010--account-menu--narrow320.png
+  - state: single-locale
+    title: 'Account menu, one locale: language shown, no language control in the topbar'
+    html: screens/SCR-SHELL-010--single-locale.html
+    htmlSha256: 40a3566df1c89faf06eb7359a7dee2d74027ab8d762e24a9ac26bca791edfe75
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-010--single-locale--desktop.png
+    - screens/renders/SCR-SHELL-010--single-locale--tablet.png
+    - screens/renders/SCR-SHELL-010--single-locale--zoom200.png
+    - screens/renders/SCR-SHELL-010--single-locale--narrow320.png
+  - state: locale-selector
+    title: 'Language selector (host supplies more than one locale, X-05 B): topbar language control opens a menuitemradio group on the governed menu at >= 600 px; below 600 px the group is in the account
+      menu; choosing sends a request to the app'
+    html: screens/SCR-SHELL-010--locale-selector.html
+    htmlSha256: c6145eb88cf2ee624872a7d131f13bfc88eef1b5433fbdfc78f541e81ac9e2c7
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-010--locale-selector--desktop.png
+    - screens/renders/SCR-SHELL-010--locale-selector--tablet.png
+    - screens/renders/SCR-SHELL-010--locale-selector--zoom200.png
+    - screens/renders/SCR-SHELL-010--locale-selector--narrow320.png
+  - state: signing-out
+    title: Sign-out in progress (state given by host)
+    html: screens/SCR-SHELL-010--signing-out.html
+    htmlSha256: 01c7d8297b72ea94ad7bc3e26c7ff5ae92ee24c2084d1a9139489897a3112400
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-010--signing-out--desktop.png
+    - screens/renders/SCR-SHELL-010--signing-out--tablet.png
+    - screens/renders/SCR-SHELL-010--signing-out--zoom200.png
+    - screens/renders/SCR-SHELL-010--signing-out--narrow320.png
+  - state: help
+    title: Help surface (app-configured hook)
+    html: screens/SCR-SHELL-010--help.html
+    htmlSha256: f7c66f4fca83d34a996f992469c648896f97c4936be2283aadcb54998aee9e75
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-010--help--desktop.png
+    - screens/renders/SCR-SHELL-010--help--tablet.png
+    - screens/renders/SCR-SHELL-010--help--zoom200.png
+    - screens/renders/SCR-SHELL-010--help--narrow320.png
+- id: SCR-SHELL-011
+  states:
+  - state: title-only
+    title: 'Page frame: title only'
+    html: screens/SCR-SHELL-011--title-only.html
+    htmlSha256: 0ae73ddb1e26540186e744913be73e544a0a5089b9805300948ef5122b60b201
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-011--title-only--desktop.png
+    - screens/renders/SCR-SHELL-011--title-only--tablet.png
+    - screens/renders/SCR-SHELL-011--title-only--zoom200.png
+    - screens/renders/SCR-SHELL-011--title-only--narrow320.png
+  - state: title-context-status
+    title: 'Page frame: title + context + status'
+    html: screens/SCR-SHELL-011--title-context-status.html
+    htmlSha256: 39de4e15879ad6aea72b8c9c71823ecbf9a3890debd2f4245416a4dcd99a515a
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-011--title-context-status--desktop.png
+    - screens/renders/SCR-SHELL-011--title-context-status--tablet.png
+    - screens/renders/SCR-SHELL-011--title-context-status--zoom200.png
+    - screens/renders/SCR-SHELL-011--title-context-status--narrow320.png
+  - state: actions-overflow
+    title: 'Page frame: primary + secondary actions + overflow'
+    html: screens/SCR-SHELL-011--actions-overflow.html
+    htmlSha256: 08b14f18eaa00722dfa3040eee43e8a2e40eae583b24d7333ac776f5cc2634c3
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-011--actions-overflow--desktop.png
+    - screens/renders/SCR-SHELL-011--actions-overflow--tablet.png
+    - screens/renders/SCR-SHELL-011--actions-overflow--zoom200.png
+    - screens/renders/SCR-SHELL-011--actions-overflow--narrow320.png
+  - state: breadcrumbs
+    title: 'Page frame: breadcrumbs (when justified)'
+    html: screens/SCR-SHELL-011--breadcrumbs.html
+    htmlSha256: 747d17565daaf5b72e2c711f822c2abd3406754fc1196c39739be1f408936c95
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-011--breadcrumbs--desktop.png
+    - screens/renders/SCR-SHELL-011--breadcrumbs--tablet.png
+    - screens/renders/SCR-SHELL-011--breadcrumbs--zoom200.png
+    - screens/renders/SCR-SHELL-011--breadcrumbs--narrow320.png
+  - state: filter-region
+    title: 'Page frame: filter region'
+    html: screens/SCR-SHELL-011--filter-region.html
+    htmlSha256: fc8c6a8b6174b271e5e323d2a5e1b900b05e0b6786e8091b249d6d5e685e3fd3
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-011--filter-region--desktop.png
+    - screens/renders/SCR-SHELL-011--filter-region--tablet.png
+    - screens/renders/SCR-SHELL-011--filter-region--zoom200.png
+    - screens/renders/SCR-SHELL-011--filter-region--narrow320.png
+  - state: extension-regions
+    title: 'Page frame: generic extension and action regions'
+    html: screens/SCR-SHELL-011--extension-regions.html
+    htmlSha256: 33daef10db06ceda2aacbc5c35d9cd4084339a4369fee6fac60521656acdd360
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-011--extension-regions--desktop.png
+    - screens/renders/SCR-SHELL-011--extension-regions--tablet.png
+    - screens/renders/SCR-SHELL-011--extension-regions--zoom200.png
+    - screens/renders/SCR-SHELL-011--extension-regions--narrow320.png
+  - state: aside
+    title: 'Page frame: aside (beside at ≥ 1440, below otherwise)'
+    html: screens/SCR-SHELL-011--aside.html
+    htmlSha256: f8f2b02226026cdee1c7f4f0fe2e7af91e095cb207f0a4e702e60488c2e3784f
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    - desktop1024
+    renders:
+    - screens/renders/SCR-SHELL-011--aside--desktop.png
+    - screens/renders/SCR-SHELL-011--aside--tablet.png
+    - screens/renders/SCR-SHELL-011--aside--zoom200.png
+    - screens/renders/SCR-SHELL-011--aside--narrow320.png
+    - screens/renders/SCR-SHELL-011--aside--desktop1024.png
+  - state: long-content
+    title: 'Page frame: long title and content'
+    html: screens/SCR-SHELL-011--long-content.html
+    htmlSha256: 7321eba9d3f2a08019c102c9a477bf47e84b94ad2e9584b4670e2fd9e1622815
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-011--long-content--desktop.png
+    - screens/renders/SCR-SHELL-011--long-content--tablet.png
+    - screens/renders/SCR-SHELL-011--long-content--zoom200.png
+    - screens/renders/SCR-SHELL-011--long-content--narrow320.png
+  - state: content-loading
+    title: 'Page frame: content loading'
+    html: screens/SCR-SHELL-011--content-loading.html
+    htmlSha256: e72726ce75f52e343cb3fddb0af13473503df1d3fdb12a00d7ef0bd2dc0de3d4
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-011--content-loading--desktop.png
+    - screens/renders/SCR-SHELL-011--content-loading--tablet.png
+    - screens/renders/SCR-SHELL-011--content-loading--zoom200.png
+    - screens/renders/SCR-SHELL-011--content-loading--narrow320.png
+  - state: content-empty
+    title: 'Page frame: content empty'
+    html: screens/SCR-SHELL-011--content-empty.html
+    htmlSha256: c3d328b5d33a7b1d0cc874c59e001ae1e66b43570532721031079d73c1aa3c67
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-011--content-empty--desktop.png
+    - screens/renders/SCR-SHELL-011--content-empty--tablet.png
+    - screens/renders/SCR-SHELL-011--content-empty--zoom200.png
+    - screens/renders/SCR-SHELL-011--content-empty--narrow320.png
+  - state: content-error
+    title: 'Page frame: content error'
+    html: screens/SCR-SHELL-011--content-error.html
+    htmlSha256: 11fef4163148fd32a33989b45aa16cfae0bf819b6de1b244a5ad8aea9f7ebeb7
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-011--content-error--desktop.png
+    - screens/renders/SCR-SHELL-011--content-error--tablet.png
+    - screens/renders/SCR-SHELL-011--content-error--zoom200.png
+    - screens/renders/SCR-SHELL-011--content-error--narrow320.png
+- id: SCR-SHELL-012
+  states:
+  - state: page-permission
+    title: 'Locked page: permission'
+    html: screens/SCR-SHELL-012--page-permission.html
+    htmlSha256: 4bf4177f6a84c40dfb5ccf22e5869dee01adaf561a421775fc96188a2b08821f
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-012--page-permission--desktop.png
+    - screens/renders/SCR-SHELL-012--page-permission--tablet.png
+    - screens/renders/SCR-SHELL-012--page-permission--zoom200.png
+    - screens/renders/SCR-SHELL-012--page-permission--narrow320.png
+  - state: page-edition
+    title: 'Locked page: edition'
+    html: screens/SCR-SHELL-012--page-edition.html
+    htmlSha256: 9e0fcb26de771531b0f6cfcbac6a513aef3feee37717ea104643a5b35ec23f35
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-012--page-edition--desktop.png
+    - screens/renders/SCR-SHELL-012--page-edition--tablet.png
+    - screens/renders/SCR-SHELL-012--page-edition--zoom200.png
+    - screens/renders/SCR-SHELL-012--page-edition--narrow320.png
+  - state: page-configuration
+    title: 'Locked page: configuration'
+    html: screens/SCR-SHELL-012--page-configuration.html
+    htmlSha256: 1ba7bc53d1fc0a3da1f18e2cb66382d033ce994f64de44174c9064b39512226d
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-012--page-configuration--desktop.png
+    - screens/renders/SCR-SHELL-012--page-configuration--tablet.png
+    - screens/renders/SCR-SHELL-012--page-configuration--zoom200.png
+    - screens/renders/SCR-SHELL-012--page-configuration--narrow320.png
+  - state: page-environment
+    title: 'Locked page: environment'
+    html: screens/SCR-SHELL-012--page-environment.html
+    htmlSha256: 6abca12f4b39de8970500bfe92d078eba4a245f64e5c09530d805f476019dc89
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-012--page-environment--desktop.png
+    - screens/renders/SCR-SHELL-012--page-environment--tablet.png
+    - screens/renders/SCR-SHELL-012--page-environment--zoom200.png
+    - screens/renders/SCR-SHELL-012--page-environment--narrow320.png
+  - state: three-levels
+    title: Locked × 4 reasons at page, navigation-item and action level
+    html: screens/SCR-SHELL-012--three-levels.html
+    htmlSha256: 0477ef4a374d59c243efa37b51f0e114e8b1b9fdaf3713f780b679559d149628
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-012--three-levels--desktop.png
+    - screens/renders/SCR-SHELL-012--three-levels--tablet.png
+    - screens/renders/SCR-SHELL-012--three-levels--zoom200.png
+    - screens/renders/SCR-SHELL-012--three-levels--narrow320.png
+- id: SCR-SHELL-013
+  states:
+  - state: recoverable
+    title: 'Error boundary: recoverable with correlation reference'
+    html: screens/SCR-SHELL-013--recoverable.html
+    htmlSha256: abe9f79c9d80ee5facdb61a6f6572304af929aedf1a078b2303f6cb5dfc466c8
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-013--recoverable--desktop.png
+    - screens/renders/SCR-SHELL-013--recoverable--tablet.png
+    - screens/renders/SCR-SHELL-013--recoverable--zoom200.png
+    - screens/renders/SCR-SHELL-013--recoverable--narrow320.png
+  - state: not-retryable
+    title: 'Error boundary: not retryable (safe navigation only)'
+    html: screens/SCR-SHELL-013--not-retryable.html
+    htmlSha256: 05a4ebf27d4af5f9a227479eb0ec0ea090326f4f47762dcd507b365c5d62a927
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-013--not-retryable--desktop.png
+    - screens/renders/SCR-SHELL-013--not-retryable--tablet.png
+    - screens/renders/SCR-SHELL-013--not-retryable--zoom200.png
+    - screens/renders/SCR-SHELL-013--not-retryable--narrow320.png
+  - state: lazy-load-failure
+    title: Route / lazy-load failure
+    html: screens/SCR-SHELL-013--lazy-load-failure.html
+    htmlSha256: 9c1b9411d80c020959375ec66d5a8f46ecac42bce536aaf92fe61a4b592e62ee
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-013--lazy-load-failure--desktop.png
+    - screens/renders/SCR-SHELL-013--lazy-load-failure--tablet.png
+    - screens/renders/SCR-SHELL-013--lazy-load-failure--zoom200.png
+    - screens/renders/SCR-SHELL-013--lazy-load-failure--narrow320.png
+  - state: incompatible-version
+    title: Incompatible version
+    html: screens/SCR-SHELL-013--incompatible-version.html
+    htmlSha256: ad0b41c841aed2b568eeff6389971834bf10aa494251fceb0c53a70ca9c42a90
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-013--incompatible-version--desktop.png
+    - screens/renders/SCR-SHELL-013--incompatible-version--tablet.png
+    - screens/renders/SCR-SHELL-013--incompatible-version--zoom200.png
+    - screens/renders/SCR-SHELL-013--incompatible-version--narrow320.png
+  - state: not-found
+    title: Not found
+    html: screens/SCR-SHELL-013--not-found.html
+    htmlSha256: 44b31ad61c76959e8cd74051793b78a92ae0eb14f454f85dd875854fc521eebf
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-013--not-found--desktop.png
+    - screens/renders/SCR-SHELL-013--not-found--tablet.png
+    - screens/renders/SCR-SHELL-013--not-found--zoom200.png
+    - screens/renders/SCR-SHELL-013--not-found--narrow320.png
+- id: SCR-SHELL-014
+  states:
+  - state: online
+    title: 'Connectivity: online'
+    html: screens/SCR-SHELL-014--online.html
+    htmlSha256: 08b14f18eaa00722dfa3040eee43e8a2e40eae583b24d7333ac776f5cc2634c3
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-014--online--desktop.png
+    - screens/renders/SCR-SHELL-014--online--tablet.png
+    - screens/renders/SCR-SHELL-014--online--zoom200.png
+    - screens/renders/SCR-SHELL-014--online--narrow320.png
+  - state: offline
+    title: 'Connectivity: offline'
+    html: screens/SCR-SHELL-014--offline.html
+    htmlSha256: 351f8ccc71207514cc74c8107e065078692d1784704d4ba9621adc1f9785415d
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-014--offline--desktop.png
+    - screens/renders/SCR-SHELL-014--offline--tablet.png
+    - screens/renders/SCR-SHELL-014--offline--zoom200.png
+    - screens/renders/SCR-SHELL-014--offline--narrow320.png
+  - state: degraded
+    title: 'Connectivity: degraded'
+    html: screens/SCR-SHELL-014--degraded.html
+    htmlSha256: 0a6edca89d58712cd4cee14cdf023949e40181d787454e0b7d9f6018f66028b2
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-014--degraded--desktop.png
+    - screens/renders/SCR-SHELL-014--degraded--tablet.png
+    - screens/renders/SCR-SHELL-014--degraded--zoom200.png
+    - screens/renders/SCR-SHELL-014--degraded--narrow320.png
+  - state: unknown
+    title: 'Connectivity: unknown'
+    html: screens/SCR-SHELL-014--unknown.html
+    htmlSha256: 790fe8f6e1ec60ff31820531a8a1daf90d6cbe65ea20c8e8b3e89cb259603539
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-014--unknown--desktop.png
+    - screens/renders/SCR-SHELL-014--unknown--tablet.png
+    - screens/renders/SCR-SHELL-014--unknown--zoom200.png
+    - screens/renders/SCR-SHELL-014--unknown--narrow320.png
+  - state: non-production
+    title: Non-production environment notice
+    html: screens/SCR-SHELL-014--non-production.html
+    htmlSha256: 875d66ad379ebc46ca2c244fb020836458c241e95de6c5cdf322b3f6e03b53b5
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-014--non-production--desktop.png
+    - screens/renders/SCR-SHELL-014--non-production--tablet.png
+    - screens/renders/SCR-SHELL-014--non-production--zoom200.png
+    - screens/renders/SCR-SHELL-014--non-production--narrow320.png
+  - state: stacked
+    title: 'Stacked status: impersonation + degraded + session expiring + environment'
+    html: screens/SCR-SHELL-014--stacked.html
+    htmlSha256: 25aa4178328f52e27673ce8ac741c40f973fa4fe1bfcc438485d1726152a92a1
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-014--stacked--desktop.png
+    - screens/renders/SCR-SHELL-014--stacked--tablet.png
+    - screens/renders/SCR-SHELL-014--stacked--zoom200.png
+    - screens/renders/SCR-SHELL-014--stacked--narrow320.png
+  - state: stacked-narrow-collapsed
+    title: 'Stacked status below 600 px (recommended): highest-priority message plus a disclosure for the rest'
+    html: screens/SCR-SHELL-014--stacked-narrow-collapsed.html
+    htmlSha256: 0463f69e789a4028ccbf642e65422c06c9d2af4ad358e0f0d28629722869bfdf
+    viewports:
+    - narrow320
+    - short320x256
+    renders:
+    - screens/renders/SCR-SHELL-014--stacked-narrow-collapsed--narrow320.png
+    - screens/renders/SCR-SHELL-014--stacked-narrow-collapsed--short320x256.png
+- id: SCR-SHELL-015
+  states:
+  - state: default
+    title: 'Generic hosting example: default'
+    html: screens/SCR-SHELL-015--default.html
+    htmlSha256: 7f0b52aefd77902345d0e2578695019476418717deffada9c7f46a4a1d0fff5b
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-015--default--desktop.png
+    - screens/renders/SCR-SHELL-015--default--tablet.png
+    - screens/renders/SCR-SHELL-015--default--zoom200.png
+    - screens/renders/SCR-SHELL-015--default--narrow320.png
+  - state: loading
+    title: 'Generic hosting example: loading'
+    html: screens/SCR-SHELL-015--loading.html
+    htmlSha256: 8fe5a0336449ee24d20c0838792f63d2dcd832e0053ae1c05f76668536a80118
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-015--loading--desktop.png
+    - screens/renders/SCR-SHELL-015--loading--tablet.png
+    - screens/renders/SCR-SHELL-015--loading--zoom200.png
+    - screens/renders/SCR-SHELL-015--loading--narrow320.png
+  - state: empty
+    title: 'Generic hosting example: empty'
+    html: screens/SCR-SHELL-015--empty.html
+    htmlSha256: b3b8a28143c2f410ba900e0e852dbe279b9e30546031292a7cc129e1530f6d86
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-015--empty--desktop.png
+    - screens/renders/SCR-SHELL-015--empty--tablet.png
+    - screens/renders/SCR-SHELL-015--empty--zoom200.png
+    - screens/renders/SCR-SHELL-015--empty--narrow320.png
+  - state: error
+    title: 'Generic hosting example: error'
+    html: screens/SCR-SHELL-015--error.html
+    htmlSha256: 776344821a702390e766389b43e0e968a3ebaf36eb60a8b8ebe490dccb370b65
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-015--error--desktop.png
+    - screens/renders/SCR-SHELL-015--error--tablet.png
+    - screens/renders/SCR-SHELL-015--error--zoom200.png
+    - screens/renders/SCR-SHELL-015--error--narrow320.png
+- id: SCR-SHELL-016
+  states:
+  - state: preferences
+    title: Shell-local preferences (session only)
+    html: screens/SCR-SHELL-016--preferences.html
+    htmlSha256: e16e20f13e65da6a2f4d8024dc7578e2e756dd3e24bd752ac4986b31bc953cc8
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-016--preferences--desktop.png
+    - screens/renders/SCR-SHELL-016--preferences--tablet.png
+    - screens/renders/SCR-SHELL-016--preferences--zoom200.png
+    - screens/renders/SCR-SHELL-016--preferences--narrow320.png
+  - state: applied-compact-collapsed
+    title: 'Preferences applied: collapsed navigation + compact content'
+    html: screens/SCR-SHELL-016--applied-compact-collapsed.html
+    htmlSha256: feca088710ee59b606660af34cdd417ab6ae6e3db8e3441340ab302630b90c26
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-016--applied-compact-collapsed--desktop.png
+    - screens/renders/SCR-SHELL-016--applied-compact-collapsed--tablet.png
+    - screens/renders/SCR-SHELL-016--applied-compact-collapsed--zoom200.png
+    - screens/renders/SCR-SHELL-016--applied-compact-collapsed--narrow320.png
+- id: SCR-SHELL-017
+  states:
+  - state: ar-001-shell
+    title: 'RTL (ar): expanded shell'
+    html: screens/SCR-SHELL-017--ar-001-shell.html
+    htmlSha256: 61b2fe79c6ca7ee41a531bb1230668a482fc52c014d1f0f532be4c222b6f6528
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-017--ar-001-shell--desktop.png
+    - screens/renders/SCR-SHELL-017--ar-001-shell--tablet.png
+    - screens/renders/SCR-SHELL-017--ar-001-shell--zoom200.png
+    - screens/renders/SCR-SHELL-017--ar-001-shell--narrow320.png
+  - state: ar-004-nav-open
+    title: 'RTL (ar): mobile navigation open'
+    html: screens/SCR-SHELL-017--ar-004-nav-open.html
+    htmlSha256: a872ec269da05b6a01dc06f4c6ca685c8cfd9cec2f81a3acf3e1afdf601a4f20
+    viewports:
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-017--ar-004-nav-open--narrow320.png
+  - state: ar-008-palette
+    title: 'RTL (ar): command palette'
+    html: screens/SCR-SHELL-017--ar-008-palette.html
+    htmlSha256: 19ead3becda0bdf86797471dc6c72095556c42d885abcedd695c9e98533a3412
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-017--ar-008-palette--desktop.png
+    - screens/renders/SCR-SHELL-017--ar-008-palette--tablet.png
+    - screens/renders/SCR-SHELL-017--ar-008-palette--zoom200.png
+    - screens/renders/SCR-SHELL-017--ar-008-palette--narrow320.png
+  - state: he-001-shell
+    title: 'RTL (he): expanded shell'
+    html: screens/SCR-SHELL-017--he-001-shell.html
+    htmlSha256: d4f3ebd097cc63a8f214a6f185fa3b71d6f70bcfb8ef3cac09a9c1d71a31395a
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-017--he-001-shell--desktop.png
+    - screens/renders/SCR-SHELL-017--he-001-shell--tablet.png
+    - screens/renders/SCR-SHELL-017--he-001-shell--zoom200.png
+    - screens/renders/SCR-SHELL-017--he-001-shell--narrow320.png
+  - state: he-004-nav-open
+    title: 'RTL (he): mobile navigation open'
+    html: screens/SCR-SHELL-017--he-004-nav-open.html
+    htmlSha256: 7157105c1183a3ba9a1a27ac2fe6411b3940ad7d816cb42dcf3959b29f2e3c65
+    viewports:
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-017--he-004-nav-open--narrow320.png
+  - state: he-008-palette
+    title: 'RTL (he): command palette'
+    html: screens/SCR-SHELL-017--he-008-palette.html
+    htmlSha256: bb6218fec78d4074b8697b5c4deb3c322d8b6eecaf1e04dc70858cf2d01a842b
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-017--he-008-palette--desktop.png
+    - screens/renders/SCR-SHELL-017--he-008-palette--tablet.png
+    - screens/renders/SCR-SHELL-017--he-008-palette--zoom200.png
+    - screens/renders/SCR-SHELL-017--he-008-palette--narrow320.png
+  - state: ar-006-nav-locked
+    title: 'RTL (ar): navigation states and locked items'
+    html: screens/SCR-SHELL-017--ar-006-nav-locked.html
+    htmlSha256: 6724b825da19cf630a8d37d6c9fe5aaf1dcf79a78b6b3620cd1ded4cd95aec2e
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-017--ar-006-nav-locked--desktop.png
+    - screens/renders/SCR-SHELL-017--ar-006-nav-locked--tablet.png
+    - screens/renders/SCR-SHELL-017--ar-006-nav-locked--zoom200.png
+    - screens/renders/SCR-SHELL-017--ar-006-nav-locked--narrow320.png
+  - state: ar-011-frame
+    title: 'RTL (ar): page frame with aside and mixed-direction identifiers'
+    html: screens/SCR-SHELL-017--ar-011-frame.html
+    htmlSha256: 9e84b387ba25482683c3db34d4bf462fb003097e3ed7f93312500db2d3650d06
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-017--ar-011-frame--desktop.png
+    - screens/renders/SCR-SHELL-017--ar-011-frame--tablet.png
+    - screens/renders/SCR-SHELL-017--ar-011-frame--zoom200.png
+    - screens/renders/SCR-SHELL-017--ar-011-frame--narrow320.png
+  - state: ar-012-locked
+    title: 'RTL (ar): locked page'
+    html: screens/SCR-SHELL-017--ar-012-locked.html
+    htmlSha256: fd6d25691577a41d68c4094058f8620d8564453824e1a52ae0fea49f35dc9c88
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-017--ar-012-locked--desktop.png
+    - screens/renders/SCR-SHELL-017--ar-012-locked--tablet.png
+    - screens/renders/SCR-SHELL-017--ar-012-locked--zoom200.png
+    - screens/renders/SCR-SHELL-017--ar-012-locked--narrow320.png
+  - state: he-006-nav-locked
+    title: 'RTL (he): navigation states and locked items'
+    html: screens/SCR-SHELL-017--he-006-nav-locked.html
+    htmlSha256: 4acaa08c1a9257aee046b94b657b5e87423cd6c446680e3305b796ae82d9002b
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-017--he-006-nav-locked--desktop.png
+    - screens/renders/SCR-SHELL-017--he-006-nav-locked--tablet.png
+    - screens/renders/SCR-SHELL-017--he-006-nav-locked--zoom200.png
+    - screens/renders/SCR-SHELL-017--he-006-nav-locked--narrow320.png
+  - state: he-011-frame
+    title: 'RTL (he): page frame with aside and mixed-direction identifiers'
+    html: screens/SCR-SHELL-017--he-011-frame.html
+    htmlSha256: a641700e715a7bee31221f3f39a3ddd64e329b3b4c58705c6fee174ee1f1fd11
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-017--he-011-frame--desktop.png
+    - screens/renders/SCR-SHELL-017--he-011-frame--tablet.png
+    - screens/renders/SCR-SHELL-017--he-011-frame--zoom200.png
+    - screens/renders/SCR-SHELL-017--he-011-frame--narrow320.png
+  - state: he-012-locked
+    title: 'RTL (he): locked page'
+    html: screens/SCR-SHELL-017--he-012-locked.html
+    htmlSha256: d014be57371d66d268233775d5d22ea1d67dc0d201ff17fc1727ec00d424175a
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-017--he-012-locked--desktop.png
+    - screens/renders/SCR-SHELL-017--he-012-locked--tablet.png
+    - screens/renders/SCR-SHELL-017--he-012-locked--zoom200.png
+    - screens/renders/SCR-SHELL-017--he-012-locked--narrow320.png
+- id: SCR-SHELL-018
+  states:
+  - state: long-text-2x
+    title: 'Long-text (2×) board: truncation vs wrap'
+    html: screens/SCR-SHELL-018--long-text-2x.html
+    htmlSha256: a347bc01afe560d91947d93dca475c5686ce957c33b6783f32f3a812a051d1d2
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-018--long-text-2x--desktop.png
+    - screens/renders/SCR-SHELL-018--long-text-2x--tablet.png
+    - screens/renders/SCR-SHELL-018--long-text-2x--zoom200.png
+    - screens/renders/SCR-SHELL-018--long-text-2x--narrow320.png
+  - state: zoom-400
+    title: 400 % zoom equivalent (1280 px at 400 % = 320 CSS px)
+    html: screens/SCR-SHELL-018--zoom-400.html
+    htmlSha256: f4b43defdd439c5f98f6fc69c1da4af813471c0e354716e8c5a529c2d2add964
+    viewports:
+    - narrow320
+    - short320x256
+    renders:
+    - screens/renders/SCR-SHELL-018--zoom-400--narrow320.png
+    - screens/renders/SCR-SHELL-018--zoom-400--short320x256.png
+- id: SCR-SHELL-020
+  states:
+  - state: focus-order
+    title: Focus order (numbered; stop 1 is the skip link, visible on focus as in SCR-SHELL-020 maps)
+    html: screens/SCR-SHELL-020--focus-order.html
+    htmlSha256: 052ef89130e15545a9ffd82113306fafbffea7b08c5a11f1e713716551ad0dab
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-020--focus-order--desktop.png
+    - screens/renders/SCR-SHELL-020--focus-order--tablet.png
+    - screens/renders/SCR-SHELL-020--focus-order--zoom200.png
+    - screens/renders/SCR-SHELL-020--focus-order--narrow320.png
+  - state: maps
+    title: Keyboard / focus maps and focus visibility
+    html: screens/SCR-SHELL-020--maps.html
+    htmlSha256: 72ce1397af541148eaa5858acad782eddfe780a00c89063cfde8077861289ad3
+    viewports:
+    - desktop
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-020--maps--desktop.png
+    - screens/renders/SCR-SHELL-020--maps--narrow320.png
+- id: SCR-SHELL-022
+  states:
+  - state: comfortable
+    title: 'Density: comfortable content in shell chrome'
+    html: screens/SCR-SHELL-022--comfortable.html
+    htmlSha256: fc8c6a8b6174b271e5e323d2a5e1b900b05e0b6786e8091b249d6d5e685e3fd3
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-022--comfortable--desktop.png
+    - screens/renders/SCR-SHELL-022--comfortable--tablet.png
+    - screens/renders/SCR-SHELL-022--comfortable--zoom200.png
+    - screens/renders/SCR-SHELL-022--comfortable--narrow320.png
+  - state: compact
+    title: 'Density: compact content, chrome unchanged (Q-14)'
+    html: screens/SCR-SHELL-022--compact.html
+    htmlSha256: 184cd0eaaf6d2accd9d28dde7fc219593ea8c194783decf73b6a05e418a06890
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-022--compact--desktop.png
+    - screens/renders/SCR-SHELL-022--compact--tablet.png
+    - screens/renders/SCR-SHELL-022--compact--zoom200.png
+    - screens/renders/SCR-SHELL-022--compact--narrow320.png
+- id: SCR-SHELL-021
+  states:
+  - state: nav-open-reduced
+    title: 'Reduced motion: navigation open without slide'
+    html: screens/SCR-SHELL-021--nav-open-reduced.html
+    htmlSha256: 5d53dca792a45523c249ff161a082985278bfe44f9e7ded8598cfde96802abd3
+    viewports:
+    - tablet
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-021--nav-open-reduced--tablet.png
+    - screens/renders/SCR-SHELL-021--nav-open-reduced--narrow320.png
+  - state: palette-reduced
+    title: 'Reduced motion: palette without animation; spinner static'
+    html: screens/SCR-SHELL-021--palette-reduced.html
+    htmlSha256: c014f42b098366c32302d91d46cd05e47fdd54dadaa83b7899170c7699471b46
+    viewports:
+    - desktop
+    renders:
+    - screens/renders/SCR-SHELL-021--palette-reduced--desktop.png
+  - state: board
+    title: Reduced-motion board
+    html: screens/SCR-SHELL-021--board.html
+    htmlSha256: 501ad3f0fa5f3ab0faf4ac19bcfbcdf8ca20277f7cd48303580aa0261408bc7a
+    viewports:
+    - desktop
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-021--board--desktop.png
+    - screens/renders/SCR-SHELL-021--board--narrow320.png
+- id: SCR-SHELL-023
+  states:
+  - state: board
+    title: Governed menu/positioning base
+    html: screens/SCR-SHELL-023--board.html
+    htmlSha256: ae15931eeb2e0de3bcbf7828f211368ac2cc33a65acce37cda0f47781ec9381c
+    viewports:
+    - desktop
+    - tablet
+    - zoom200
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-023--board--desktop.png
+    - screens/renders/SCR-SHELL-023--board--tablet.png
+    - screens/renders/SCR-SHELL-023--board--zoom200.png
+    - screens/renders/SCR-SHELL-023--board--narrow320.png
+- id: SCR-SHELL-019
+  states:
+  - state: board
+    title: 320 px board
+    html: screens/SCR-SHELL-019--board.html
+    htmlSha256: 1cab3f5fa7a215e6bbd97f2f703fe9aa203fab027d03998d6b2ff9ab0fb7c9b1
+    viewports:
+    - desktop
+    - narrow320
+    renders:
+    - screens/renders/SCR-SHELL-019--board--desktop.png
+    - screens/renders/SCR-SHELL-019--board--narrow320.png
+renderCheck:
+  file: screens/render-check.json
+  states: 114
+  renders: 402
+  withIssues: 0
+  pageWideHorizontalScroll: 0
+  offscreenControls: 0
+  targetsUnder24px: 0
+  notRun: 'axe-core or equivalent (implementation-stage gate: AC-IB3-07 of the IB3 acceptance-criteria draft, pre-flight file 14)'
+regions:
+- SHELL-REGION-SKIPLINK
+- SHELL-REGION-BANNER
+- SHELL-REGION-PRODUCT
+- SHELL-REGION-CONTEXT
+- SHELL-REGION-SEARCH
+- SHELL-REGION-GLOBAL-ACTIONS
+- SHELL-REGION-NOTIFICATIONS
+- SHELL-REGION-ACCOUNT
+- SHELL-REGION-NAV
+- SHELL-REGION-STATUS
+- SHELL-REGION-MAIN
+- SHELL-REGION-PAGE-HEADER
+- SHELL-REGION-PAGE-TOOLBAR
+- SHELL-REGION-CONTENT
+- SHELL-REGION-ASIDE
+- SHELL-REGION-OVERLAY
+- SHELL-REGION-LIVE
+componentMap:
+- designElement: Page actions
+  paepTarget: '@proseit/paep-components#PaepButton'
+  status: REUSE
+- designElement: Page overflow
+  paepTarget: '@proseit/paep-components#PaepActionGroup'
+  status: REUSE
+- designElement: Icon controls
+  paepTarget: '@proseit/paep-components#PaepIconButton'
+  status: REUSE
+- designElement: Breadcrumbs
+  paepTarget: '@proseit/paep-components#PaepBreadcrumb'
+  status: REUSE
+- designElement: Page status
+  paepTarget: '@proseit/paep-components#PaepStatusBadge'
+  status: REUSE
+- designElement: Tables in examples
+  paepTarget: '@proseit/paep-components#PaepTable'
+  status: REUSE
+- designElement: Filter fields
+  paepTarget: '@proseit/paep-components#PaepField'
+  status: REUSE
+- designElement: Dialogs
+  paepTarget: '@proseit/paep-components#PaepDialog'
+  status: REUSE
+- designElement: Dialog footer
+  paepTarget: '@proseit/paep-components#PaepDialogFooter'
+  status: REUSE
+- designElement: Radio choices
+  paepTarget: '@proseit/paep-components#PaepRadioGroup'
+  status: REUSE
+- designElement: Checkbox
+  paepTarget: '@proseit/paep-components#PaepCheckbox'
+  status: REUSE
+- designElement: Alerts
+  paepTarget: '@proseit/paep-components#PaepAlert'
+  status: REUSE
+- designElement: Skeleton
+  paepTarget: '@proseit/paep-components#PaepSkeleton'
+  status: REUSE
+- designElement: Empty state
+  paepTarget: '@proseit/paep-components#PaepEmptyState'
+  status: REUSE
+- designElement: Cards
+  paepTarget: '@proseit/paep-components#PaepCard'
+  status: REUSE
+- designElement: Help popover
+  paepTarget: '@proseit/paep-components#PaepPopover'
+  status: REUSE
+- designElement: Modal base
+  paepTarget: '@proseit/paep-components#PaepModalBase'
+  status: REUSE
+- designElement: Announcer
+  paepTarget: '@proseit/paep-foundation#PaepAnnouncer'
+  status: REUSE
+- designElement: Accepted icons
+  paepTarget: '@proseit/paep-foundation#PAEP_ICONS'
+  status: REUSE
+- id: P-01
+  designElement: 'Governed positioning base: PaepPopover align: start|end (logical), block flip, inline shift with the accepted 16 px viewport margin (RD-01), completed menu variant (Home/End, type-ahead,
+    link items, one open menu); action-group overflow rebuilt on it'
+  paepTarget: '@proseit/paep-components#PaepPopover'
+  additionalTargets: &id001
+  - '@proseit/paep-components#PaepActionGroup'
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: P-02
+  designElement: Menu-button pattern (PaepMenu + trigger) on P-01, with menuitem, menuitemradio groups (language) and link items
+  paepTarget: '@proseit/paep-components#PaepMenu'
+  additionalTargets: &id002 []
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: P-03
+  designElement: Combobox + listbox with aria-activedescendant and groups
+  paepTarget: '@proseit/paep-components#PaepCombobox'
+  additionalTargets: &id003 []
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: P-04
+  designElement: Count badge on icon buttons and nav items (count input; "99+" cap; hidden text; dir="ltr")
+  paepTarget: '@proseit/paep-components#PaepIconButton'
+  additionalTargets: &id004
+  - '@proseit/paep-components#PaepCountBadge'
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: P-05
+  designElement: 'Search-trigger presentation: a button styled as a field, with a leading search icon and a keyboard hint'
+  paepTarget: '@proseit/paep-components#PaepButton'
+  additionalTargets: &id005 []
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: P-06
+  designElement: 'Empty state unavailable kind: icon and heading supplied by the host, with a reason line'
+  paepTarget: '@proseit/paep-components#PaepEmptyState'
+  additionalTargets: &id006 []
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: P-07
+  designElement: Skip-link utility .paep-skip-link
+  paepTarget: '@proseit/paep-foundation'
+  additionalTargets: &id007 []
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: P-08
+  designElement: 24 shell icons (menu, panel-start, bell, user, help, globe, building, lock, edition, sliders, device, signal, signal-low, cloud-off, unknown, impersonate, environment, home, list, tasks,
+    document, shield, sign-out, keyboard)
+  paepTarget: '@proseit/paep-foundation#PAEP_ICONS'
+  additionalTargets: &id008 []
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: P-09
+  designElement: Neutral placeholder product mark (test content only)
+  paepTarget: '@proseit/paep-foundation'
+  additionalTargets: &id009 []
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: P-10
+  designElement: --paep-shell-* layout tokens and --paep-layer-* semantic layer tokens (12 approved; content-max alias rejected)
+  paepTarget: '@proseit/paep-foundation'
+  additionalTargets: &id010 []
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: E-01
+  designElement: 'PaepShell (frame: skip link, banner, status, nav, main slot, overlays, live regions)'
+  paepTarget: '@proseit/paep-enterprise#PaepShell'
+  additionalTargets: &id011 []
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: E-02
+  designElement: PaepShellTopbar (product, environment badge, context, search trigger, language control when more than one locale (X-05 B), global actions, notifications, account; overflow order)
+  paepTarget: '@proseit/paep-enterprise#PaepShellTopbar'
+  additionalTargets: &id012 []
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: E-03
+  designElement: PaepShellNav (groups as disclosures, links with aria-current, count, locked item, collapsed rail and flyout)
+  paepTarget: '@proseit/paep-enterprise#PaepShellNav'
+  additionalTargets: &id013 []
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: E-04
+  designElement: PaepShellNavSheet (modal mobile navigation on PaepModalBase; not paep-drawer)
+  paepTarget: '@proseit/paep-enterprise#PaepShellNavSheet'
+  additionalTargets: &id014 []
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: E-05
+  designElement: PaepPageFrame (page header with h1, breadcrumbs, context line, status, actions; toolbar/filter region; content; aside; generic extension regions)
+  paepTarget: '@proseit/paep-enterprise#PaepPageFrame'
+  additionalTargets: &id015 []
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: E-06
+  designElement: PaepCommandPalette (modal; composes P-03; groups Go to / Actions / Records; states)
+  paepTarget: '@proseit/paep-enterprise#PaepCommandPalette'
+  additionalTargets: &id016 []
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: E-07
+  designElement: PaepNotificationPanel (non-modal inset dialog on P-01, max 24 rem, 16 px viewport margin, never full screen (RD-02); states; untrusted text)
+  paepTarget: '@proseit/paep-enterprise#PaepNotificationPanel'
+  additionalTargets: &id017 []
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: E-08
+  designElement: PaepContextSwitcher (context button or static text; request dialog; pending/rejected; mismatch notice)
+  paepTarget: '@proseit/paep-enterprise#PaepContextSwitcher'
+  additionalTargets: &id018 []
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: E-09
+  designElement: 'PaepAccountMenu (composes P-02: identity header, preferences, help and the language group below 600 px (X-05 B), the active language when only one locale, sign-out)'
+  paepTarget: '@proseit/paep-enterprise#PaepAccountMenu'
+  additionalTargets: &id019 []
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: E-10
+  designElement: PaepLockedState (page / nav item / action levels; four reasons; composes P-06)
+  paepTarget: '@proseit/paep-enterprise#PaepLockedState'
+  additionalTargets: &id020 []
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: E-11
+  designElement: PaepErrorBoundary + PaepNotFound (two public symbols; the reviewed split E-11a / E-11b is kept)
+  paepTarget: '@proseit/paep-enterprise#PaepErrorBoundary'
+  additionalTargets: &id021
+  - '@proseit/paep-enterprise#PaepNotFound'
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: E-12
+  designElement: PaepStatusStrip + connectivity indicator (online / offline / degraded / unknown; impersonation; session; environment; narrow stack disclosure)
+  paepTarget: '@proseit/paep-enterprise#PaepStatusStrip'
+  additionalTargets: &id022 []
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: E-13
+  designElement: Shell preferences surface (session only)
+  paepTarget: '@proseit/paep-enterprise#PaepShellPreferences'
+  additionalTargets: &id023 []
+  status: NEW PATTERN (design intent approved 2026-10-05)
+- id: E-14
+  designElement: Route focus and announcement service (focus h1, announce title)
+  paepTarget: '@proseit/paep-enterprise#PaepRouteFocus'
+  additionalTargets: &id024 []
+  status: NEW PATTERN (design intent approved 2026-10-05)
+proposedPatterns:
+- id: P-01
+  pattern: 'Governed positioning base: PaepPopover align: start|end (logical), block flip, inline shift with the accepted 16 px viewport margin (RD-01), completed menu variant (Home/End, type-ahead, link
+    items, one open menu); action-group overflow rebuilt on it'
+  target: '@proseit/paep-components#PaepPopover'
+  additionalTargets: *id001
+  package: '@proseit/paep-components'
+  class: D2
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+- id: P-02
+  pattern: Menu-button pattern (PaepMenu + trigger) on P-01, with menuitem, menuitemradio groups (language) and link items
+  target: '@proseit/paep-components#PaepMenu'
+  additionalTargets: *id002
+  package: '@proseit/paep-components'
+  class: D1
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+- id: P-03
+  pattern: Combobox + listbox with aria-activedescendant and groups
+  target: '@proseit/paep-components#PaepCombobox'
+  additionalTargets: *id003
+  package: '@proseit/paep-components'
+  class: D1
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+- id: P-04
+  pattern: Count badge on icon buttons and nav items (count input; "99+" cap; hidden text; dir="ltr")
+  target: '@proseit/paep-components#PaepIconButton'
+  additionalTargets: *id004
+  package: '@proseit/paep-components'
+  class: D2
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+- id: P-05
+  pattern: 'Search-trigger presentation: a button styled as a field, with a leading search icon and a keyboard hint'
+  target: '@proseit/paep-components#PaepButton'
+  additionalTargets: *id005
+  package: '@proseit/paep-components'
+  class: D2
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+- id: P-06
+  pattern: 'Empty state unavailable kind: icon and heading supplied by the host, with a reason line'
+  target: '@proseit/paep-components#PaepEmptyState'
+  additionalTargets: *id006
+  package: '@proseit/paep-components'
+  class: D2
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+- id: P-07
+  pattern: Skip-link utility .paep-skip-link
+  target: '@proseit/paep-foundation'
+  additionalTargets: *id007
+  package: '@proseit/paep-foundation'
+  class: D2
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+- id: P-08
+  pattern: 24 shell icons (menu, panel-start, bell, user, help, globe, building, lock, edition, sliders, device, signal, signal-low, cloud-off, unknown, impersonate, environment, home, list, tasks, document,
+    shield, sign-out, keyboard)
+  target: '@proseit/paep-foundation#PAEP_ICONS'
+  additionalTargets: *id008
+  package: '@proseit/paep-foundation'
+  class: D2
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+- id: P-09
+  pattern: Neutral placeholder product mark (test content only)
+  target: '@proseit/paep-foundation'
+  additionalTargets: *id009
+  package: '@proseit/paep-foundation'
+  class: D2
+  rationale: see component-map.md §2
+  disposition: APPROVED only as design / reference-app / ui-lab test content; not a public foundation API (PO/SA 2026-10-05)
+- id: P-10
+  pattern: --paep-shell-* layout tokens and --paep-layer-* semantic layer tokens (12 approved; content-max alias rejected)
+  target: '@proseit/paep-foundation'
+  additionalTargets: *id010
+  package: '@proseit/paep-foundation'
+  class: D1
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+- id: E-01
+  pattern: 'PaepShell (frame: skip link, banner, status, nav, main slot, overlays, live regions)'
+  target: '@proseit/paep-enterprise#PaepShell'
+  additionalTargets: *id011
+  package: '@proseit/paep-enterprise'
+  class: D1
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+- id: E-02
+  pattern: PaepShellTopbar (product, environment badge, context, search trigger, language control when more than one locale (X-05 B), global actions, notifications, account; overflow order)
+  target: '@proseit/paep-enterprise#PaepShellTopbar'
+  additionalTargets: *id012
+  package: '@proseit/paep-enterprise'
+  class: D1
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+- id: E-03
+  pattern: PaepShellNav (groups as disclosures, links with aria-current, count, locked item, collapsed rail and flyout)
+  target: '@proseit/paep-enterprise#PaepShellNav'
+  additionalTargets: *id013
+  package: '@proseit/paep-enterprise'
+  class: D1
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+- id: E-04
+  pattern: PaepShellNavSheet (modal mobile navigation on PaepModalBase; not paep-drawer)
+  target: '@proseit/paep-enterprise#PaepShellNavSheet'
+  additionalTargets: *id014
+  package: '@proseit/paep-enterprise'
+  class: D1
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+- id: E-05
+  pattern: PaepPageFrame (page header with h1, breadcrumbs, context line, status, actions; toolbar/filter region; content; aside; generic extension regions)
+  target: '@proseit/paep-enterprise#PaepPageFrame'
+  additionalTargets: *id015
+  package: '@proseit/paep-enterprise'
+  class: D1
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+- id: E-06
+  pattern: PaepCommandPalette (modal; composes P-03; groups Go to / Actions / Records; states)
+  target: '@proseit/paep-enterprise#PaepCommandPalette'
+  additionalTargets: *id016
+  package: '@proseit/paep-enterprise'
+  class: D1
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+- id: E-07
+  pattern: PaepNotificationPanel (non-modal inset dialog on P-01, max 24 rem, 16 px viewport margin, never full screen (RD-02); states; untrusted text)
+  target: '@proseit/paep-enterprise#PaepNotificationPanel'
+  additionalTargets: *id017
+  package: '@proseit/paep-enterprise'
+  class: D1
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+- id: E-08
+  pattern: PaepContextSwitcher (context button or static text; request dialog; pending/rejected; mismatch notice)
+  target: '@proseit/paep-enterprise#PaepContextSwitcher'
+  additionalTargets: *id018
+  package: '@proseit/paep-enterprise'
+  class: D1
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+- id: E-09
+  pattern: 'PaepAccountMenu (composes P-02: identity header, preferences, help and the language group below 600 px (X-05 B), the active language when only one locale, sign-out)'
+  target: '@proseit/paep-enterprise#PaepAccountMenu'
+  additionalTargets: *id019
+  package: '@proseit/paep-enterprise'
+  class: D1
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+- id: E-10
+  pattern: PaepLockedState (page / nav item / action levels; four reasons; composes P-06)
+  target: '@proseit/paep-enterprise#PaepLockedState'
+  additionalTargets: *id020
+  package: '@proseit/paep-enterprise'
+  class: D1
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+- id: E-11
+  pattern: PaepErrorBoundary + PaepNotFound (two public symbols; the reviewed split E-11a / E-11b is kept)
+  target: '@proseit/paep-enterprise#PaepErrorBoundary'
+  additionalTargets: *id021
+  package: '@proseit/paep-enterprise'
+  class: D1
+  rationale: see component-map.md §2
+  disposition: 'APPROVED DESIGN INTENT; the reviewed split is kept: two symbols, PaepErrorBoundary and PaepNotFound (PO/SA 2026-10-05)'
+- id: E-12
+  pattern: PaepStatusStrip + connectivity indicator (online / offline / degraded / unknown; impersonation; session; environment; narrow stack disclosure)
+  target: '@proseit/paep-enterprise#PaepStatusStrip'
+  additionalTargets: *id022
+  package: '@proseit/paep-enterprise'
+  class: D1
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+- id: E-13
+  pattern: Shell preferences surface (session only)
+  target: '@proseit/paep-enterprise#PaepShellPreferences'
+  additionalTargets: *id023
+  package: '@proseit/paep-enterprise'
+  class: D1
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+- id: E-14
+  pattern: Route focus and announcement service (focus h1, announce title)
+  target: '@proseit/paep-enterprise#PaepRouteFocus'
+  additionalTargets: *id024
+  package: '@proseit/paep-enterprise'
+  class: D1
+  rationale: see component-map.md §2
+  disposition: APPROVED DESIGN INTENT (PO/SA 2026-10-05)
+approvedTokens:
+- name: --paep-shell-topbar-block-size
+  value: 3.5rem
+  rationale: 40 px target + padding; sticky chrome height
+  status: APPROVED (design intent, PO/SA 2026-10-05)
+- name: --paep-shell-sidebar-inline-size
+  value: 16rem
+  rationale: expanded navigation
+  status: APPROVED (design intent, PO/SA 2026-10-05)
+- name: --paep-shell-rail-inline-size
+  value: 5.5rem
+  rationale: collapsed rail with visible labels (Q-03)
+  status: APPROVED (design intent, PO/SA 2026-10-05)
+- name: --paep-shell-sheet-inline-size
+  value: 20rem
+  rationale: mobile navigation container 600-1023 px (Q-09)
+  status: APPROVED (design intent, PO/SA 2026-10-05)
+- name: --paep-shell-status-block-size
+  value: 2.5rem
+  rationale: status row minimum
+  status: APPROVED (design intent, PO/SA 2026-10-05)
+- name: --paep-shell-sticky-offset
+  value: calc(topbar + --paep-space-2)
+  rationale: scroll-padding for WCAG 2.4.11
+  status: APPROVED (design intent, PO/SA 2026-10-05)
+- name: --paep-layer-sticky
+  value: '30'
+  rationale: sticky topbar; collapsed rail column
+  status: APPROVED (design intent, PO/SA 2026-10-05)
+- name: --paep-layer-flyout
+  value: '40'
+  rationale: collapsed-rail group flyout
+  status: APPROVED (design intent, PO/SA 2026-10-05)
+- name: --paep-layer-popup
+  value: '45'
+  rationale: topbar menus and panels; implementation uses the top layer, this is the fallback value
+  status: APPROVED (design intent, PO/SA 2026-10-05)
+- name: --paep-layer-overlay-scrim
+  value: '60'
+  rationale: scrim behind modal overlays
+  status: APPROVED (design intent, PO/SA 2026-10-05)
+- name: --paep-layer-overlay
+  value: '61'
+  rationale: navigation sheet, command palette, dialogs
+  status: APPROVED (design intent, PO/SA 2026-10-05)
+- name: --paep-layer-skip-link
+  value: '80'
+  rationale: skip link when focused
+  status: APPROVED (design intent, PO/SA 2026-10-05)
+approvedTokensRule: Each --paep-layer-* value is attached to its reviewed semantic layer purpose; not an arbitrary numeric z-index ladder. No new colour or tone.
+approvedTokenCount: 12
+rejectedTokens:
+- name: --paep-shell-content-max-inline-size
+  value: 90rem
+  reason: duplicate alias; use the accepted --paep-layout-content-max
+  decidedBy: PO/SA 2026-10-05
+tokenContrastEvidence: token-use-map.md §2; SCR-SHELL-020
+assets:
+- id: ICON-SHELL-menu
+  file: assets/icons/paep-icon-menu.svg
+  sha256: 7e05027fa89339bbc3f39da402cbc251eb43d5a1a65520a53a3482958baa7fb3
+  authoredSha256: a71f1ea25de0bb72278a427567792810d4041e943e8fbd10051e666e99b71b80
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-panel-start
+  file: assets/icons/paep-icon-panel-start.svg
+  sha256: aa849b8e10df464ce9110c76d7d3989e31cf26ff88075d98b202066b0fa972bc
+  authoredSha256: 59467b85da0eb8365e8a643366e108a2d596d0bf3e64aa9d0be30109d8d7565b
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-bell
+  file: assets/icons/paep-icon-bell.svg
+  sha256: f75da7da1f40e9b72b5b7112be09bbcb3393d8add59c207f45c0dad5e9172b63
+  authoredSha256: 848c8d7e653549ddcb1f51b205f45bd37e4413a36b0a251388b1db4f635365f4
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-user
+  file: assets/icons/paep-icon-user.svg
+  sha256: 50f63e39948a36808c50ae4606f6616b1fdb9a463cb366e5d18bd5e40895fe7e
+  authoredSha256: 68611058735fe8f97dbec244eb811f1fd73ed8bc0a055d1b81cd3b411d2e42db
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-help
+  file: assets/icons/paep-icon-help.svg
+  sha256: 3999bed5452d74c07d45fb375abc13951549c3262fa14593e0a445a41b11f14a
+  authoredSha256: d903d6883d6021340513d0e7f55f8817e29e70adc586cd901096ce49cbd6d873
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-globe
+  file: assets/icons/paep-icon-globe.svg
+  sha256: 9f541f0d25e471ca254bd0a01a8dfd8c46c009ea4960c4fe4a12dc4e2c472304
+  authoredSha256: e68e127ea98d39cc430429742c7d5c9cdd34e09f7c84c7c08d66efb2afd2dfe7
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-building
+  file: assets/icons/paep-icon-building.svg
+  sha256: 92588eeb5388d1dec7ce7bc47721fcf642e46d8a701375977077f8a29aeaba58
+  authoredSha256: 5ff006a6e987e6bd22411822c49c4d6c838b4c51902d9a73644bb4ebeaaa2991
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-lock
+  file: assets/icons/paep-icon-lock.svg
+  sha256: e338409c02f0fa8c550afcd800caf82eccc4e534d605bfc7df8c8a1cd5f2223e
+  authoredSha256: 2b988caeb70352bf40e89dd0a6de34d36bd21340f11dbeef69267526fb68fec4
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-edition
+  file: assets/icons/paep-icon-edition.svg
+  sha256: c867b94b23880c7ebea8dfc68f3843df4f71e451dee264ca972c68bd53c6452b
+  authoredSha256: a89aa664d5a981f38f77578fcb0f017207f5fe2524180a5d51250d3664833ca7
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-sliders
+  file: assets/icons/paep-icon-sliders.svg
+  sha256: 4812c064af7f223b41544d7a4962f961ae2153a9d8f09191c7a03abef0a2b4c2
+  authoredSha256: e221d6fc62aacdd937fb01c0fc6e5de2a748e21dbdb52e246dc86789b9897296
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-device
+  file: assets/icons/paep-icon-device.svg
+  sha256: cc45febbac61cf402771aeae3a76e51c9bc3c261093801f16968ce14859d3957
+  authoredSha256: 72d4921bbc728cbef99b85469a197603dcf354d030143b0edf6a42566bc04769
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-signal
+  file: assets/icons/paep-icon-signal.svg
+  sha256: 4599f2bba10e3533097954dd5ce817394a32ca2d093581d7d34d714f421f235c
+  authoredSha256: 4c53210686ea86c7bc9725cf6a96a863d426a6bfa0a7066504be6e406d875dcd
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-signal-low
+  file: assets/icons/paep-icon-signal-low.svg
+  sha256: eb0e0d275df1394a2248c600a6e932c8a7f6e110352e7cbea19d47c0fe1ba5f8
+  authoredSha256: ae0c25efafba25251f40b063a90b824997835f667f642e6fc78e1c9e2ba6aa01
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-cloud-off
+  file: assets/icons/paep-icon-cloud-off.svg
+  sha256: adb9cec201c714b42376f8605fb5cb6f5528ef6ad22b683db17459d8117a3ecb
+  authoredSha256: 0ee89c4fd59dd7ed5692e4d6dfa6734529171cd4ebc2ac61dcf48606b1d35245
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-unknown
+  file: assets/icons/paep-icon-unknown.svg
+  sha256: 05b2f220f7c8b8e921e43e47426831c6c80172fba06e9519329047418669c701
+  authoredSha256: 3aafdd892e2a32fac141ee221a12c02b190831b4bc58f8371ea9a4a13603aba9
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-impersonate
+  file: assets/icons/paep-icon-impersonate.svg
+  sha256: 8d55edf40dcf335eceb173d3e9c178666486a98b4c7b92118308a88f83f78bf4
+  authoredSha256: 8319038088cedbaa3e1040fa6bd173c390282f0bfb18597153688218438a8586
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-environment
+  file: assets/icons/paep-icon-environment.svg
+  sha256: 3701895b47d573e4d9f06fed42c50e901be55d2aea5323777424f7a85728dcec
+  authoredSha256: 34c1f4fe16949b910fb1d773895a64ea061ab03385ecf317e8e353a81c360512
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-home
+  file: assets/icons/paep-icon-home.svg
+  sha256: 5ea226f52b351031071f7fb5ee2c548c8ddc3e8b3dbc3f8aa05ddeba01296bd7
+  authoredSha256: 0205c39cd34afca37956428307a7cfd61b98707f3e545d8d6a06ae0ef027bed4
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-list
+  file: assets/icons/paep-icon-list.svg
+  sha256: 1a47cd5a2cd1a5bcac2c0f7d7b703d61c41f7fba99ecf59369e6025fe56890f6
+  authoredSha256: 8b8b1d695ba64794a99f6e94deac8620e5027a70f1af0ba665b570b341dedbe7
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-tasks
+  file: assets/icons/paep-icon-tasks.svg
+  sha256: 662b76124488eecac2a6b36da3a0da934329505745d8113f607939ffc638a027
+  authoredSha256: d53dc27f8e8a4897da142f07acdaa431239c12fcf86ca8857083240be06e7c85
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-document
+  file: assets/icons/paep-icon-document.svg
+  sha256: fe2fa98d838fe9c638c752bf653a0d7c04244cd14bdb549992ae994221080931
+  authoredSha256: d263ec645947b8db7021f9cccd1f23ab3bdecd4f97368770eae5df03c8b8ad8d
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-shield
+  file: assets/icons/paep-icon-shield.svg
+  sha256: 963a12b2adabcd76154f7a77ab95bc311894bd6e7ea7db423941416d69b6e706
+  authoredSha256: e0295afca5ecad9856d2b74099b89e6a65cf3b706b50bf825b053fc5236deb6c
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-sign-out
+  file: assets/icons/paep-icon-sign-out.svg
+  sha256: f8dca91e318acb012b6698240d987892b861727a4b1c82125de46d164626871c
+  authoredSha256: 9b33dec97ed088ad9fd978a8e330c8d29bae137781d613352be7fe65331e632f
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: ICON-SHELL-keyboard
+  file: assets/icons/paep-icon-keyboard.svg
+  sha256: 55692e777fbc9fa02cecbe1cd39c70ed72d024ca359b6a658ce873c52e1d0093
+  authoredSha256: 86c9a1d777f88b436060731215c5a6a34d2f3c54b0abcf2d4cdd6d45a06cd6b1
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: MARK-PLACEHOLDER
+  file: assets/placeholder-mark.svg
+  sha256: 5a29bd3b6c74938b719aae5ecb7db02977ad3759770bd81382c461b711f1094b
+  authoredSha256: 9d7cc0c245fc64361e3d69436e4ad0f6850895f74437525fe615634031c0f224
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+- id: SPRITE-SHELL
+  file: assets/shell-sprite.svg
+  sha256: 2e68c1e568d5d8469d2197dc2a44dd6c3d45b2299bb389b3919644505f0c9f64
+  authoredSha256: 0fbb2a9d8f4ec73bd35844c9ddafb5e0bdd7077315e01af7a1fa8120018f5b8e
+  provenance: authored-in-HOF-IB3-001
+  licence: ProSEIT proprietary
+accessibility:
+  intent: accessibility-intent.md
+  interaction: interaction-notes.md
+  keyboardFocusMaps: SCR-SHELL-020
+  reducedMotion: SCR-SHELL-021
+  manualEvidenceAtImplementation: NVDA + current Chromium on Windows (15 journeys, mandatory); independent keyboard review; structured usability evaluation (8 tasks); HIGH 0 / MEDIUM 0
+ddrConstraints:
+- ddr: DDR-IB2-01
+  respected: true
+  how: container-based table rule kept; sidebar narrows the container
+- ddr: DDR-IB2-02
+  respected: true
+  how: 'one governed base (P-01/P-02; Q-02 A); SCR-SHELL-023; no third popover="manual"; changes accepted IB2 intent: HOF-IB2-001 v1.2 must incorporate it before affected component code lands'
+- ddr: DDR-IB2-04
+  respected: true
+  how: dialogs inherit focusable scroll body and html scroll lock; shell uses document scroll
+- ddr: DDR-IB2-05
+  respected: true
+  how: help popover kept short
+- ddr: DDR-IB2-07
+  respected: true
+  how: F07/R03 remain the references; S1a UI-lab completion is implementation work
+- ddr: DDR-IB2-08
+  respected: true
+  how: dialog footer as accepted; role="group" not proposed
+- ddr: DDR-IB2-06 residual
+  respected: true
+  how: checkbox error API not proposed
+- ddr: component-specs v1.1
+  respected: true
+  how: paep-drawer not used as application navigation
+deviations: []
+outOfScope:
+- backend search/notification/identity/permission/entitlement contracts and services
+- login and real session flows
+- offline queue, replay, service worker, conflict engine, sync authority
+- analytics datasets, reporting gateways, metrics, drill-down, saved views, report persistence
+- preference persistence
+- runtime-config schema change
+- secondary entry points
+- new dependencies
+- domain content
+- Angular production code
+- Toast (Q-08 decision)
+- Tooltip
+- paep-contracts changes
+openDecisions: []
+designDecisions:
+- id: Q-01
+  question: Topbar surface
+  status: RESOLVED
+  resolution: 'A: light topbar'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (Q-01)
+- id: Q-02
+  question: Governed menu/positioning base
+  status: RESOLVED
+  resolution: 'A: extend PaepPopover with inline-start/inline-end alignment, keeping the governed flip/shift positioning and the accepted 16 px viewport edge margin (RD-01); PaepMenu is the reusable menu
+    interaction component composed on that base, not a second positioning engine; rebuild the action-group overflow on that base where technically compatible. Changes accepted IB2 design intent: HOF-IB2-001
+    v1.2 must incorporate it before affected component code lands'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (Q-02)
+- id: Q-03
+  question: Collapsed navigation form
+  status: RESOLVED
+  resolution: 'A: 5.5 rem collapsed rail with visible authored short labels and link flyouts'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (Q-03)
+- id: Q-04
+  question: Notifications container
+  status: RESOLVED
+  resolution: 'A, governed by RD-02: non-modal inset panel anchored from the notification control, max inline size 24 rem, constrained to the viewport with the normal 16 px shell edge margin; not full screen'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (Q-04)
+- id: Q-05
+  question: Palette grouping / empty query / locked results
+  status: RESOLVED
+  resolution: 'A: Go to / Actions / Records groups; explanatory locked results may be shown; truly denied results omitted'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (Q-05)
+- id: Q-06
+  question: Connectivity at narrow widths
+  status: RESOLVED
+  resolution: 'A: non-online states always visible; ordinary Online may be hidden below 600 px'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (Q-06)
+- id: Q-07
+  question: Tenant name below 600 px
+  status: RESOLVED
+  resolution: 'A: page-header context line and navigation sheet'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (Q-07)
+- id: Q-08
+  question: Toast
+  status: RESOLVED
+  resolution: 'A: no Toast component in IB3; announcer/live region + inline alert'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (Q-08)
+- id: Q-09
+  question: Mobile navigation container
+  status: RESOLVED
+  resolution: 'A: inline-start modal navigation sheet, 20 rem maximum and viewport-constrained (effectively full width where the narrow viewport requires it); paep-drawer is not used as application navigation'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (Q-09)
+- id: Q-10
+  question: Permission-denied navigation items
+  status: RESOLVED
+  resolution: 'A: hidden; a direct link shows the explanatory locked/unavailable experience'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (Q-10)
+- id: Q-11
+  question: Context presentation / switcher
+  status: RESOLVED
+  resolution: 'A: context always visible; switch affordance only with multiple contexts; switching is an explicit request'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (Q-11)
+- id: Q-12
+  question: Palette keyboard shortcut
+  status: RESOLVED
+  resolution: 'A: Ctrl/Cmd+K plus the always-available visible trigger'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (Q-12)
+- id: Q-13
+  question: Locked-state tones
+  status: RESOLVED
+  resolution: 'A: existing neutral/info semantic tones; no new tone'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (Q-13)
+- id: Q-14
+  question: Chrome density
+  status: RESOLVED
+  resolution: 'A: comfortable shell chrome; content density independent'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (Q-14)
+- id: X-01
+  question: Rail short label
+  status: RESOLVED
+  resolution: 'APPROVED: optional authored shortLabel; a label is never automatically truncated or hyphenated into a short label; the full label remains the accessible name'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (X-01)
+- id: X-02
+  question: Narrow status stack
+  status: RESOLVED
+  resolution: 'APPROVED: top status + "n more"; the summary exposes an accessible, obvious mechanism to inspect the remaining statuses and never conceals a critical state permanently'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (X-02)
+- id: X-03
+  question: Status ordering
+  status: RESOLVED
+  resolution: 'APPROVED: 1 impersonation, 2 connectivity, 3 session, 4 environment'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (X-03)
+- id: X-04
+  question: RTL fixtures
+  status: RESOLVED
+  resolution: 'APPROVED: Arabic/Hebrew design fixtures are valid for mechanical RTL qualification; native-language copy review mandatory BEFORE IB3 ACCEPTANCE'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (X-04)
+- id: X-05
+  question: Active language location (REQ-IB3-SHELL-07)
+  status: RESOLVED
+  resolution: 'OPTION B: with more than one locale, an explicit language (globe) control in the topbar; it may move into an account/overflow surface at narrow widths (design: account menu below 600 px);
+    its accessible and visible labelling communicates the active locale; the direction (LTR/RTL) is not required as ordinary topbar text'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (X-05)
+- id: RD-01
+  question: PaepPopover viewport edge margin
+  status: RESOLVED
+  resolution: 'APPROVED: retain the accepted 16 px margin; not 8 px'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (RD-01)
+- id: RD-02
+  question: Notification panel form and width
+  status: RESOLVED
+  resolution: 'APPROVED: non-modal inset panel, max inline size 24 rem, viewport-constrained with the normal shell edge margin; not a full-screen experience'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (RD-02)
+- id: RD-03
+  question: Official similarity record
+  status: RESOLVED
+  resolution: 'APPROVED: the region-by-region human similarity-review form (provenance/similarity-review.md) is the official record'
+  resolvedBy: PO/SA (Kouga)
+  resolvedDate: '2026-10-05'
+  record: decision-record.md (RD-03)
+followUps:
+- id: FU-01
+  item: HOF-IB2-001 v1.2 incorporates the approved PaepPopover alignment / governed menu-base intent (Q-02)
+  due: BEFORE the affected component implementation lands
+  note: HOF-IB2-001 v1.1 is not overwritten
+- id: FU-02
+  item: HOF-IB2-001 v1.2 incorporates the other accepted DDR follow-ups (DDR-IB2-01, -04, -05, -07, -08; DDR-IB2-06 residual constraint)
+  due: BEFORE IB3 ACCEPTANCE (PD §3)
+- id: FU-03
+  item: Arabic native-copy review
+  status: PENDING
+  due: BEFORE IB3 ACCEPTANCE
+- id: FU-04
+  item: Hebrew native-copy review
+  status: PENDING
+  due: BEFORE IB3 ACCEPTANCE
+- id: FU-05
+  item: Human similarity review on the official region-by-region form
+  status: 'CLOSED: PASS (Dr Kamulegeya Grace B (PhD), 2026-10-05)'
+  due: BEFORE HOF APPROVAL
+rtl:
+  mechanics: PASS
+  nativeCopyReview:
+    ar: PENDING - REQUIRED BEFORE IB3 ACCEPTANCE
+    he: PENDING - REQUIRED BEFORE IB3 ACCEPTANCE
+similarityReview:
+  record: provenance/similarity-review.md
+  form: region-by-region (RD-03)
+  status: PASS
+  reviewer: Dr Kamulegeya Grace B (PhD), Product Owner / Solutions Architect
+  independentOfDesignAuthor: true
+  date: '2026-10-05'
+  manifestReviewed: b2056fe27e180ecfecc9d9881a59cfe8cd0aeb5289fd3c27620d86b6188ec9be
+  regions:
+    R-1: DISTINCT
+    R-2: DISTINCT
+    R-3: DISTINCT
+    R-4: DISTINCT
+    R-5: DISTINCT
+    R-6: DISTINCT
+    R-7: DISTINCT
+    R-8: DISTINCT
+    R-9: DISTINCT
+    R-10: DISTINCT
+    R-11: DISTINCT
+    R-12: DISTINCT
+contentCredentials: SVG and PNG files carry Anthropic content-credential (C2PA) metadata added by the project file store after writing. It is not design content. sha256 = file as stored; authoredSha256
+  (SVG assets) = the file with that metadata removed, which is what an implementation would import.
+designApproval:
+  approvedBy: Dr Kamulegeya Grace B (PhD), Product Owner / Solutions Architect
+  approvedDate: '2026-10-05'
+  approvedVersion: '1.0'
+  decision: 'PO/SA APPROVAL: GRANTED - APPROVED_FOR_IMPLEMENTATION'
+  basis:
+  - DWP-IB3-001 APPROVED FOR DESIGN
+  - 23 screens
+  - 114 designed states
+  - 402 renders
+  - Q-01..Q-14 RESOLVED
+  - X-01..X-05 RESOLVED
+  - RD-01..RD-03 RESOLVED
+  - DDR constraints respected
+  - RTL mechanics PASS
+  - clean-room provenance PASS
+  - human similarity review PASS
+  - design review HIGH 0
+  - design review MEDIUM 0
+  followUpsNotBlocking: Arabic/Hebrew native-copy validation remains an IB3 acceptance follow-up (FU-03, FU-04) and does not block implementation approval
+  authority: PO/SA "PAEP IB3 - FINAL DESIGN APPROVAL + GENERATION 5 IMPLEMENTATION AUTHORIZATION" (project thread, 2026-10-06T09:48Z)
+files:
+- path: accessibility-intent.md
+  sha256: 0661c145ad4cfc0663cd39f66f09a1fd5859a52070df20cacec7b3e5873279d5
+- path: approvals.md
+  sha256: b740e076c03360d9e62dffdea308d8bdad5ca67d5c4d60d378d26da3467c8559
+- path: assets/asset-register.md
+  sha256: d6a80b60ce172ac3f888b1d9d847f45483b7dcb29994f18a2f2d39d5aa99cffe
+- path: assets/icons/paep-icon-bell.svg
+  sha256: f75da7da1f40e9b72b5b7112be09bbcb3393d8add59c207f45c0dad5e9172b63
+- path: assets/icons/paep-icon-building.svg
+  sha256: 92588eeb5388d1dec7ce7bc47721fcf642e46d8a701375977077f8a29aeaba58
+- path: assets/icons/paep-icon-cloud-off.svg
+  sha256: adb9cec201c714b42376f8605fb5cb6f5528ef6ad22b683db17459d8117a3ecb
+- path: assets/icons/paep-icon-device.svg
+  sha256: cc45febbac61cf402771aeae3a76e51c9bc3c261093801f16968ce14859d3957
+- path: assets/icons/paep-icon-document.svg
+  sha256: fe2fa98d838fe9c638c752bf653a0d7c04244cd14bdb549992ae994221080931
+- path: assets/icons/paep-icon-edition.svg
+  sha256: c867b94b23880c7ebea8dfc68f3843df4f71e451dee264ca972c68bd53c6452b
+- path: assets/icons/paep-icon-environment.svg
+  sha256: 3701895b47d573e4d9f06fed42c50e901be55d2aea5323777424f7a85728dcec
+- path: assets/icons/paep-icon-globe.svg
+  sha256: 9f541f0d25e471ca254bd0a01a8dfd8c46c009ea4960c4fe4a12dc4e2c472304
+- path: assets/icons/paep-icon-help.svg
+  sha256: 3999bed5452d74c07d45fb375abc13951549c3262fa14593e0a445a41b11f14a
+- path: assets/icons/paep-icon-home.svg
+  sha256: 5ea226f52b351031071f7fb5ee2c548c8ddc3e8b3dbc3f8aa05ddeba01296bd7
+- path: assets/icons/paep-icon-impersonate.svg
+  sha256: 8d55edf40dcf335eceb173d3e9c178666486a98b4c7b92118308a88f83f78bf4
+- path: assets/icons/paep-icon-keyboard.svg
+  sha256: 55692e777fbc9fa02cecbe1cd39c70ed72d024ca359b6a658ce873c52e1d0093
+- path: assets/icons/paep-icon-list.svg
+  sha256: 1a47cd5a2cd1a5bcac2c0f7d7b703d61c41f7fba99ecf59369e6025fe56890f6
+- path: assets/icons/paep-icon-lock.svg
+  sha256: e338409c02f0fa8c550afcd800caf82eccc4e534d605bfc7df8c8a1cd5f2223e
+- path: assets/icons/paep-icon-menu.svg
+  sha256: 7e05027fa89339bbc3f39da402cbc251eb43d5a1a65520a53a3482958baa7fb3
+- path: assets/icons/paep-icon-panel-start.svg
+  sha256: aa849b8e10df464ce9110c76d7d3989e31cf26ff88075d98b202066b0fa972bc
+- path: assets/icons/paep-icon-shield.svg
+  sha256: 963a12b2adabcd76154f7a77ab95bc311894bd6e7ea7db423941416d69b6e706
+- path: assets/icons/paep-icon-sign-out.svg
+  sha256: f8dca91e318acb012b6698240d987892b861727a4b1c82125de46d164626871c
+- path: assets/icons/paep-icon-signal-low.svg
+  sha256: eb0e0d275df1394a2248c600a6e932c8a7f6e110352e7cbea19d47c0fe1ba5f8
+- path: assets/icons/paep-icon-signal.svg
+  sha256: 4599f2bba10e3533097954dd5ce817394a32ca2d093581d7d34d714f421f235c
+- path: assets/icons/paep-icon-sliders.svg
+  sha256: 4812c064af7f223b41544d7a4962f961ae2153a9d8f09191c7a03abef0a2b4c2
+- path: assets/icons/paep-icon-tasks.svg
+  sha256: 662b76124488eecac2a6b36da3a0da934329505745d8113f607939ffc638a027
+- path: assets/icons/paep-icon-unknown.svg
+  sha256: 05b2f220f7c8b8e921e43e47426831c6c80172fba06e9519329047418669c701
+- path: assets/icons/paep-icon-user.svg
+  sha256: 50f63e39948a36808c50ae4606f6616b1fdb9a463cb366e5d18bd5e40895fe7e
+- path: assets/placeholder-mark.svg
+  sha256: 5a29bd3b6c74938b719aae5ecb7db02977ad3759770bd81382c461b711f1094b
+- path: assets/shell-sprite.svg
+  sha256: 2e68c1e568d5d8469d2197dc2a44dd6c3d45b2299bb389b3919644505f0c9f64
+- path: component-map.md
+  sha256: 9165e40bc7b8c50c93353237173314e7ae11e28a004f84bf7a177758e9d2b810
+- path: content-keys.md
+  sha256: 46c036edce8a129f3be74b73147da66350fb3bbe2a89a14068dfeff648726b6b
+- path: decision-record.md
+  sha256: 13e8bb70046154bacf91890521faf456a7b968de140dff854f7c8aba756400f1
+- path: design-brief.md
+  sha256: 16ea4805944df6287b55dc9dc4f4fa0ad18bca143d475d88a3da18dad45f1a04
+- path: deviations/README.md
+  sha256: c509a28694f629107b8e315dc8c4e67e8deb47cd758344f3ce8ba59122390fe1
+- path: interaction-notes.md
+  sha256: 563761fae9bfc5544a1f081932656549ee21bf2b30dfcf8ec64ad44ef11b5dd0
+- path: provenance.md
+  sha256: 73f8ed4d007ed873821ab5e6bda31d1a9b1612155163cbe29c1489c5ff49d5b0
+- path: provenance/candidate-delta-r2.md
+  sha256: d5e47fd22d8d229cd392a69111143e2c3e1ec3ae3236ce143c17b06d46cb0476
+- path: provenance/candidate-delta-r3.md
+  sha256: 7352c99add45e493e10fd3f56eb0d0aa48ce0febba1dadb3101abb398da53c6a
+- path: provenance/design-prompt.txt
+  sha256: 671a6532baa5a5a5976bcc2dd8960d2f9fc54e920e14ac39b9f6a55254faae8e
+- path: provenance/generator/boards.py
+  sha256: c56761e687278f7e1a7d39135f0a54504220916ab27109ba805d4294be88dd56
+- path: provenance/generator/build.py
+  sha256: c95f617e610244d70e40643ed41f24a411391d390d7c687513fe7b8f4068d231
+- path: provenance/generator/capture.js
+  sha256: 53bc128b30ab2c61cfaed7cdeaaa3a66117263b899d69fce4247050b25c6b4e3
+- path: provenance/generator/compose.py
+  sha256: 29b16e87b0962a0189ba1e60061d09ab3a73333092e10e251732daa0833e73f8
+- path: provenance/generator/content.py
+  sha256: 83367c31f1eb5ea416e61de5f7172798a04fc91ce461ffaefcd1060d6de52066
+- path: provenance/generator/contrast.py
+  sha256: 029e7c8b2700e36fea930f3486e8537114f18dee1ef2016e71fc72737b913d91
+- path: provenance/generator/docs.py
+  sha256: 0b6ab08c417182b7b4a55b8782683acf47e96e8d3c2887c3622b585436555f22
+- path: provenance/generator/finish.py
+  sha256: 17bbc07253d130bd099e180b448d1307a94be909ceae9115024fde05d32b524e
+- path: provenance/generator/fo.js
+  sha256: 1ca89ffcf684d5d50c59d4014d77a0ab92524dbd5385a886f2141bcd7846042c
+- path: provenance/generator/icons.py
+  sha256: b6242ceaa24cd1d6149316b29fd98460a0bfb623950e1649242769490b9386eb
+- path: provenance/generator/keys.py
+  sha256: dce3ccc207e9e57f340edb94908d1009781b2982f3f4111f05bb06c952d524c4
+- path: provenance/generator/manifest.py
+  sha256: 6b0600684fdf0c872379cf299390446aee16a420aee6bf8478b9a9498b78de48
+- path: provenance/generator/run.sh
+  sha256: f743c99017fdb58d222bb0fb35797a2c4934a3f14f643e11b69b22941d5fca08
+- path: provenance/generator/screens.py
+  sha256: a85ffc8c434007956e2a7c88b216ac2f0f6782bc070a6bce00fdc8b19b1338c0
+- path: provenance/generator/shell.css
+  sha256: b560a5cd4ca9960bc8f5281092de286f0b46797017014b54ab821f2352ffd67a
+- path: provenance/similarity-review.md
+  sha256: e2803ac05e1fde43c0aed9fcebeaff197cba6ac31fa867cfcdcc891137bfbbba
+- path: responsive-rules.md
+  sha256: 41cb3f5cf71d083d75a5fbc7100c095a04f24ac798bcf25db0f6e11ed8e28fb2
+- path: screens/SCR-SHELL-001--default.html
+  sha256: 399005434b0306ab5f0ae55407d201949247e4024cfb28092b067a856b2f0494
+- path: screens/SCR-SHELL-001--loading.html
+  sha256: e72726ce75f52e343cb3fddb0af13473503df1d3fdb12a00d7ef0bd2dc0de3d4
+- path: screens/SCR-SHELL-001--populated.html
+  sha256: fc8c6a8b6174b271e5e323d2a5e1b900b05e0b6786e8091b249d6d5e685e3fd3
+- path: screens/SCR-SHELL-002--collapsed.html
+  sha256: 3d78e51b59bdafc7606033953f8f4293f7761131024406a828e5c30397714910
+- path: screens/SCR-SHELL-002--group-flyout.html
+  sha256: d3ee418f75de8490c90641e0d22ccba42f532bea0ac5863d5a14764ec5550098
+- path: screens/SCR-SHELL-002--re-expanded.html
+  sha256: 3682064fbfefac17fa98c0f65ec3ad178fb23bcac4261ae7e11c16deb8f919b1
+- path: screens/SCR-SHELL-003--nav-closed.html
+  sha256: fc8c6a8b6174b271e5e323d2a5e1b900b05e0b6786e8091b249d6d5e685e3fd3
+- path: screens/SCR-SHELL-003--nav-open.html
+  sha256: 5d53dca792a45523c249ff161a082985278bfe44f9e7ded8598cfde96802abd3
+- path: screens/SCR-SHELL-004--long-labels.html
+  sha256: 66e9d036009917f755871252f49945f767bc0a431716d1e03db1a2e2d94c313f
+- path: screens/SCR-SHELL-004--nav-closed.html
+  sha256: 08b14f18eaa00722dfa3040eee43e8a2e40eae583b24d7333ac776f5cc2634c3
+- path: screens/SCR-SHELL-004--nav-open.html
+  sha256: 5d53dca792a45523c249ff161a082985278bfe44f9e7ded8598cfde96802abd3
+- path: screens/SCR-SHELL-005--long-names.html
+  sha256: f4b43defdd439c5f98f6fc69c1da4af813471c0e354716e8c5a529c2d2add964
+- path: screens/SCR-SHELL-005--overflow-sequence.html
+  sha256: 08b14f18eaa00722dfa3040eee43e8a2e40eae583b24d7333ac776f5cc2634c3
+- path: screens/SCR-SHELL-006--count-loading-unknown-sheet.html
+  sha256: 4b2ebdb055e08100228b717fbc3b5ad62b74e1dea4b3640112b2e11b4230787b
+- path: screens/SCR-SHELL-006--count-loading-unknown.html
+  sha256: 74a43aa76534786d4439a4d6e59c414781cd7d2ce14c1d6fe636ebcf4b371e71
+- path: screens/SCR-SHELL-006--current-nested-sheet.html
+  sha256: 01955d73a1e8ca28cc5c35e19a830f4a9fbb0955659a35a5962675220f800544
+- path: screens/SCR-SHELL-006--current-nested.html
+  sha256: 84812de6344caa4b1b3a5e3b5c0b3563afba98ecfbcc4c49d431e030a4c2a90b
+- path: screens/SCR-SHELL-006--locked-hidden-sheet.html
+  sha256: 8d3c9a70850ead5234427fe9a303031c0b127ca40eccc01876f2dfd8fe3e4d9c
+- path: screens/SCR-SHELL-006--locked-hidden.html
+  sha256: 08b14f18eaa00722dfa3040eee43e8a2e40eae583b24d7333ac776f5cc2634c3
+- path: screens/SCR-SHELL-006--locked-shown-alt-sheet.html
+  sha256: 705456f85a5fdae94b7ebe92d7d05812ae5356645320582ed32fac226cd0848a
+- path: screens/SCR-SHELL-006--locked-shown-alt.html
+  sha256: 958c326d73edcacc959be3090ed11ccaa287109659590b12a1412fdbb9fdbc9d
+- path: screens/SCR-SHELL-006--long-labels-sheet.html
+  sha256: 90d546f6ba42ad93475a94bebe73cf01d8767f077d110fd1281bf566c8cccc3d
+- path: screens/SCR-SHELL-006--long-labels.html
+  sha256: f4b43defdd439c5f98f6fc69c1da4af813471c0e354716e8c5a529c2d2add964
+- path: screens/SCR-SHELL-007--deep-link-mismatch.html
+  sha256: 434bf227b52aedb9f808f19287300db75a6d6bb1b9c4223707d59d8bbf6749a3
+- path: screens/SCR-SHELL-007--impersonation.html
+  sha256: b7446ff9a20cb5fe41df1f6448fe8bba209cc40f94516be5541f12af2156d42e
+- path: screens/SCR-SHELL-007--long-names.html
+  sha256: f4b43defdd439c5f98f6fc69c1da4af813471c0e354716e8c5a529c2d2add964
+- path: screens/SCR-SHELL-007--single-context.html
+  sha256: f2777bdbbd02f61f18bb7d84faebde49b08acdc3993a9341d3aef5c2a556c972
+- path: screens/SCR-SHELL-007--switch-dialog.html
+  sha256: 4bbac15fd3de36cb58e492fff33c7e5c3728cb116bdb807107b430f593c53d35
+- path: screens/SCR-SHELL-007--switch-pending.html
+  sha256: 3a5835222aa16857bfcb9bf5830173426c0111178edb931767197de42c1e4b06
+- path: screens/SCR-SHELL-007--switch-rejected.html
+  sha256: d09c5ea7a482c1ab3bc368539d09635a7ab71ae67d071628034482db61f59271
+- path: screens/SCR-SHELL-008--error.html
+  sha256: 6f33890593781e6c120a337f6435e6a07c6c5c494f5a5d9ffbf7f80f66941704
+- path: screens/SCR-SHELL-008--full-screen-narrow.html
+  sha256: 447677983b5e31fde976d1252d0b84055ae53c9eefc5c3db6b397be09ff1a86f
+- path: screens/SCR-SHELL-008--idle.html
+  sha256: d3fd60221b1d4a426e25aab5b5fbd2c530920d2b1f0e33d79e0a9a439389e2aa
+- path: screens/SCR-SHELL-008--loading.html
+  sha256: c014f42b098366c32302d91d46cd05e47fdd54dadaa83b7899170c7699471b46
+- path: screens/SCR-SHELL-008--locked.html
+  sha256: c06ca0b32f92c16cc33b3f82dfe6b7afb4527a4a796c284faa1cfc0ab495fcfd
+- path: screens/SCR-SHELL-008--none.html
+  sha256: fbe5badcbabce0fe571514ef77b2bb2d28bacf257238fb50fc181aece05d4f70
+- path: screens/SCR-SHELL-008--partial.html
+  sha256: b50df8a9fc311a823d6162d7c8dc197630abc3f55af7bb42d825a4668fdc37ab
+- path: screens/SCR-SHELL-008--results.html
+  sha256: 447677983b5e31fde976d1252d0b84055ae53c9eefc5c3db6b397be09ff1a86f
+- path: screens/SCR-SHELL-008--typing.html
+  sha256: ee5bbec39e2364590db5860be81579164969bcb74367be5b6b0f34f2fc517e25
+- path: screens/SCR-SHELL-009--access-99plus.html
+  sha256: 9016d30cb5506b60fee6c2b350bd9311009485950abfaafcb5da18a9aa9e08b7
+- path: screens/SCR-SHELL-009--access-count-error.html
+  sha256: de3f8fc19e7eac739f26549742cb6966dd21b0a97c353d4d9ef4ffa9d4066b5a
+- path: screens/SCR-SHELL-009--access-count-loading.html
+  sha256: b6b38e0cb6585627db0d45eb726bd4bbc7369daccbf23b6c6fbf54bd310d3645
+- path: screens/SCR-SHELL-009--access-none.html
+  sha256: 6a71be7ca64cee4453242084c8b5d0500f3ce3577af8c4f5c754d32938b07651
+- path: screens/SCR-SHELL-009--access-provider-unavailable.html
+  sha256: cfc8f933faaf3c37bedd265143a707ac58c0f0bc247e00ab8ae2e2a941d77f76
+- path: screens/SCR-SHELL-009--access-unread.html
+  sha256: 08b14f18eaa00722dfa3040eee43e8a2e40eae583b24d7333ac776f5cc2634c3
+- path: screens/SCR-SHELL-009--panel-empty.html
+  sha256: d4609ea0ec5180336bb6f5759c2537cb4e8b0d57cbe6b2e2c532f77c5aaa8139
+- path: screens/SCR-SHELL-009--panel-error.html
+  sha256: 68083e1e7313b43ca0060d8925eba5a918b07d8de372fb9f925c8154ed1675e8
+- path: screens/SCR-SHELL-009--panel-loading.html
+  sha256: b57a38b7ce45f0764e4ade1b7e22127dc654359be4bc26f9421109afd639d172
+- path: screens/SCR-SHELL-009--panel-populated.html
+  sha256: 47c92146c3446f954139165f031f9da9d26b306f279b6839163ed179763c8a9f
+- path: screens/SCR-SHELL-009--panel-stale.html
+  sha256: f9dd026b66209f1af57e74995242f204ad3b817f1e6d2e850551a9f675541df6
+- path: screens/SCR-SHELL-009--panel-unavailable.html
+  sha256: 306a8f5e2b8a34b973ced6285ecdd9157db3aba03df61194b41f84b3b6384a71
+- path: screens/SCR-SHELL-009--transient-vs-persistent.html
+  sha256: e7d7705a0dee1db4242dc3637ef21f2a5d427992cf1390eeaf4e68a33bbd66b5
+- path: screens/SCR-SHELL-010--account-menu.html
+  sha256: 2368ffc83d2368931d6fb8a14ef1c9119b8ab3ab0250985e69847e8d3145b6bd
+- path: screens/SCR-SHELL-010--help.html
+  sha256: f7c66f4fca83d34a996f992469c648896f97c4936be2283aadcb54998aee9e75
+- path: screens/SCR-SHELL-010--locale-selector.html
+  sha256: c6145eb88cf2ee624872a7d131f13bfc88eef1b5433fbdfc78f541e81ac9e2c7
+- path: screens/SCR-SHELL-010--signing-out.html
+  sha256: 01c7d8297b72ea94ad7bc3e26c7ff5ae92ee24c2084d1a9139489897a3112400
+- path: screens/SCR-SHELL-010--single-locale.html
+  sha256: 40a3566df1c89faf06eb7359a7dee2d74027ab8d762e24a9ac26bca791edfe75
+- path: screens/SCR-SHELL-011--actions-overflow.html
+  sha256: 08b14f18eaa00722dfa3040eee43e8a2e40eae583b24d7333ac776f5cc2634c3
+- path: screens/SCR-SHELL-011--aside.html
+  sha256: f8f2b02226026cdee1c7f4f0fe2e7af91e095cb207f0a4e702e60488c2e3784f
+- path: screens/SCR-SHELL-011--breadcrumbs.html
+  sha256: 747d17565daaf5b72e2c711f822c2abd3406754fc1196c39739be1f408936c95
+- path: screens/SCR-SHELL-011--content-empty.html
+  sha256: c3d328b5d33a7b1d0cc874c59e001ae1e66b43570532721031079d73c1aa3c67
+- path: screens/SCR-SHELL-011--content-error.html
+  sha256: 11fef4163148fd32a33989b45aa16cfae0bf819b6de1b244a5ad8aea9f7ebeb7
+- path: screens/SCR-SHELL-011--content-loading.html
+  sha256: e72726ce75f52e343cb3fddb0af13473503df1d3fdb12a00d7ef0bd2dc0de3d4
+- path: screens/SCR-SHELL-011--extension-regions.html
+  sha256: 33daef10db06ceda2aacbc5c35d9cd4084339a4369fee6fac60521656acdd360
+- path: screens/SCR-SHELL-011--filter-region.html
+  sha256: fc8c6a8b6174b271e5e323d2a5e1b900b05e0b6786e8091b249d6d5e685e3fd3
+- path: screens/SCR-SHELL-011--long-content.html
+  sha256: 7321eba9d3f2a08019c102c9a477bf47e84b94ad2e9584b4670e2fd9e1622815
+- path: screens/SCR-SHELL-011--title-context-status.html
+  sha256: 39de4e15879ad6aea72b8c9c71823ecbf9a3890debd2f4245416a4dcd99a515a
+- path: screens/SCR-SHELL-011--title-only.html
+  sha256: 0ae73ddb1e26540186e744913be73e544a0a5089b9805300948ef5122b60b201
+- path: screens/SCR-SHELL-012--page-configuration.html
+  sha256: 1ba7bc53d1fc0a3da1f18e2cb66382d033ce994f64de44174c9064b39512226d
+- path: screens/SCR-SHELL-012--page-edition.html
+  sha256: 9e0fcb26de771531b0f6cfcbac6a513aef3feee37717ea104643a5b35ec23f35
+- path: screens/SCR-SHELL-012--page-environment.html
+  sha256: 6abca12f4b39de8970500bfe92d078eba4a245f64e5c09530d805f476019dc89
+- path: screens/SCR-SHELL-012--page-permission.html
+  sha256: 4bf4177f6a84c40dfb5ccf22e5869dee01adaf561a421775fc96188a2b08821f
+- path: screens/SCR-SHELL-012--three-levels.html
+  sha256: 0477ef4a374d59c243efa37b51f0e114e8b1b9fdaf3713f780b679559d149628
+- path: screens/SCR-SHELL-013--incompatible-version.html
+  sha256: ad0b41c841aed2b568eeff6389971834bf10aa494251fceb0c53a70ca9c42a90
+- path: screens/SCR-SHELL-013--lazy-load-failure.html
+  sha256: 9c1b9411d80c020959375ec66d5a8f46ecac42bce536aaf92fe61a4b592e62ee
+- path: screens/SCR-SHELL-013--not-found.html
+  sha256: 44b31ad61c76959e8cd74051793b78a92ae0eb14f454f85dd875854fc521eebf
+- path: screens/SCR-SHELL-013--not-retryable.html
+  sha256: 05a4ebf27d4af5f9a227479eb0ec0ea090326f4f47762dcd507b365c5d62a927
+- path: screens/SCR-SHELL-013--recoverable.html
+  sha256: abe9f79c9d80ee5facdb61a6f6572304af929aedf1a078b2303f6cb5dfc466c8
+- path: screens/SCR-SHELL-014--degraded.html
+  sha256: 0a6edca89d58712cd4cee14cdf023949e40181d787454e0b7d9f6018f66028b2
+- path: screens/SCR-SHELL-014--non-production.html
+  sha256: 875d66ad379ebc46ca2c244fb020836458c241e95de6c5cdf322b3f6e03b53b5
+- path: screens/SCR-SHELL-014--offline.html
+  sha256: 351f8ccc71207514cc74c8107e065078692d1784704d4ba9621adc1f9785415d
+- path: screens/SCR-SHELL-014--online.html
+  sha256: 08b14f18eaa00722dfa3040eee43e8a2e40eae583b24d7333ac776f5cc2634c3
+- path: screens/SCR-SHELL-014--stacked-narrow-collapsed.html
+  sha256: 0463f69e789a4028ccbf642e65422c06c9d2af4ad358e0f0d28629722869bfdf
+- path: screens/SCR-SHELL-014--stacked.html
+  sha256: 25aa4178328f52e27673ce8ac741c40f973fa4fe1bfcc438485d1726152a92a1
+- path: screens/SCR-SHELL-014--unknown.html
+  sha256: 790fe8f6e1ec60ff31820531a8a1daf90d6cbe65ea20c8e8b3e89cb259603539
+- path: screens/SCR-SHELL-015--default.html
+  sha256: 7f0b52aefd77902345d0e2578695019476418717deffada9c7f46a4a1d0fff5b
+- path: screens/SCR-SHELL-015--empty.html
+  sha256: b3b8a28143c2f410ba900e0e852dbe279b9e30546031292a7cc129e1530f6d86
+- path: screens/SCR-SHELL-015--error.html
+  sha256: 776344821a702390e766389b43e0e968a3ebaf36eb60a8b8ebe490dccb370b65
+- path: screens/SCR-SHELL-015--loading.html
+  sha256: 8fe5a0336449ee24d20c0838792f63d2dcd832e0053ae1c05f76668536a80118
+- path: screens/SCR-SHELL-016--applied-compact-collapsed.html
+  sha256: feca088710ee59b606660af34cdd417ab6ae6e3db8e3441340ab302630b90c26
+- path: screens/SCR-SHELL-016--preferences.html
+  sha256: e16e20f13e65da6a2f4d8024dc7578e2e756dd3e24bd752ac4986b31bc953cc8
+- path: screens/SCR-SHELL-017--ar-001-shell.html
+  sha256: 61b2fe79c6ca7ee41a531bb1230668a482fc52c014d1f0f532be4c222b6f6528
+- path: screens/SCR-SHELL-017--ar-004-nav-open.html
+  sha256: a872ec269da05b6a01dc06f4c6ca685c8cfd9cec2f81a3acf3e1afdf601a4f20
+- path: screens/SCR-SHELL-017--ar-006-nav-locked.html
+  sha256: 6724b825da19cf630a8d37d6c9fe5aaf1dcf79a78b6b3620cd1ded4cd95aec2e
+- path: screens/SCR-SHELL-017--ar-008-palette.html
+  sha256: 19ead3becda0bdf86797471dc6c72095556c42d885abcedd695c9e98533a3412
+- path: screens/SCR-SHELL-017--ar-011-frame.html
+  sha256: 9e84b387ba25482683c3db34d4bf462fb003097e3ed7f93312500db2d3650d06
+- path: screens/SCR-SHELL-017--ar-012-locked.html
+  sha256: fd6d25691577a41d68c4094058f8620d8564453824e1a52ae0fea49f35dc9c88
+- path: screens/SCR-SHELL-017--he-001-shell.html
+  sha256: d4f3ebd097cc63a8f214a6f185fa3b71d6f70bcfb8ef3cac09a9c1d71a31395a
+- path: screens/SCR-SHELL-017--he-004-nav-open.html
+  sha256: 7157105c1183a3ba9a1a27ac2fe6411b3940ad7d816cb42dcf3959b29f2e3c65
+- path: screens/SCR-SHELL-017--he-006-nav-locked.html
+  sha256: 4acaa08c1a9257aee046b94b657b5e87423cd6c446680e3305b796ae82d9002b
+- path: screens/SCR-SHELL-017--he-008-palette.html
+  sha256: bb6218fec78d4074b8697b5c4deb3c322d8b6eecaf1e04dc70858cf2d01a842b
+- path: screens/SCR-SHELL-017--he-011-frame.html
+  sha256: a641700e715a7bee31221f3f39a3ddd64e329b3b4c58705c6fee174ee1f1fd11
+- path: screens/SCR-SHELL-017--he-012-locked.html
+  sha256: d014be57371d66d268233775d5d22ea1d67dc0d201ff17fc1727ec00d424175a
+- path: screens/SCR-SHELL-018--long-text-2x.html
+  sha256: a347bc01afe560d91947d93dca475c5686ce957c33b6783f32f3a812a051d1d2
+- path: screens/SCR-SHELL-018--zoom-400.html
+  sha256: f4b43defdd439c5f98f6fc69c1da4af813471c0e354716e8c5a529c2d2add964
+- path: screens/SCR-SHELL-019--board.html
+  sha256: 1cab3f5fa7a215e6bbd97f2f703fe9aa203fab027d03998d6b2ff9ab0fb7c9b1
+- path: screens/SCR-SHELL-020--focus-order.html
+  sha256: 052ef89130e15545a9ffd82113306fafbffea7b08c5a11f1e713716551ad0dab
+- path: screens/SCR-SHELL-020--maps.html
+  sha256: 72ce1397af541148eaa5858acad782eddfe780a00c89063cfde8077861289ad3
+- path: screens/SCR-SHELL-021--board.html
+  sha256: 501ad3f0fa5f3ab0faf4ac19bcfbcdf8ca20277f7cd48303580aa0261408bc7a
+- path: screens/SCR-SHELL-021--nav-open-reduced.html
+  sha256: 5d53dca792a45523c249ff161a082985278bfe44f9e7ded8598cfde96802abd3
+- path: screens/SCR-SHELL-021--palette-reduced.html
+  sha256: c014f42b098366c32302d91d46cd05e47fdd54dadaa83b7899170c7699471b46
+- path: screens/SCR-SHELL-022--comfortable.html
+  sha256: fc8c6a8b6174b271e5e323d2a5e1b900b05e0b6786e8091b249d6d5e685e3fd3
+- path: screens/SCR-SHELL-022--compact.html
+  sha256: 184cd0eaaf6d2accd9d28dde7fc219593ea8c194783decf73b6a05e418a06890
+- path: screens/SCR-SHELL-023--board.html
+  sha256: ae15931eeb2e0de3bcbf7828f211368ac2cc33a65acce37cda0f47781ec9381c
+- path: screens/index.html
+  sha256: d25c0ebf0ec7e9b839fdc6bebf304953f6732666d4a608c8ed4d899e6359e25c
+- path: screens/plan.json
+  sha256: d39b1254b2b05163ec0e6b51393002529ad41c7bee64eae4c4cd0da65b240560
+- path: screens/render-check.json
+  sha256: d2373a0b22e6696d6699a0b7324b72c745d202268c6e7a288b259bee3a9001f6
+- path: screens/renders/SCR-SHELL-001--default--desktop.png
+  sha256: 81509230755d19356dce7f0da746e646f6ed11ff58ede3658506aabac59a6967
+- path: screens/renders/SCR-SHELL-001--default--narrow320.png
+  sha256: 7d06b110754dc8dd6e74889600e329574e80b0f2efcdda78800c8e65fbf4d3b6
+- path: screens/renders/SCR-SHELL-001--default--tablet.png
+  sha256: 3689710f03a17496c53f2befe98fe4cd1de3ffcc0bbb68fafd0bf7280bde36c0
+- path: screens/renders/SCR-SHELL-001--default--zoom200.png
+  sha256: 77b95b7b46d016d881c55d48f1f7b6a9073eee004c9eb3a4b0422559cc76492c
+- path: screens/renders/SCR-SHELL-001--loading--desktop.png
+  sha256: e00230e2982723a126c8475745205968c7cf3c3a9e15914fa65e850da9d5e417
+- path: screens/renders/SCR-SHELL-001--loading--narrow320.png
+  sha256: 6739d59866401c2d525a08e2d92acd1b8cff5de60d3720d6a9c298e2dee0a473
+- path: screens/renders/SCR-SHELL-001--loading--tablet.png
+  sha256: f208ee7ab94b418666c77e9e1c27c830ca0cb2050bf653262b67f80a8ee25ba2
+- path: screens/renders/SCR-SHELL-001--loading--zoom200.png
+  sha256: 937d5a3d1be6fbcfbe6e81304ccf9511f36bc7708c930fbbe2d8447515f59a3c
+- path: screens/renders/SCR-SHELL-001--populated--desktop.png
+  sha256: 13762ae8c8b4a172556f4fb69f78221d5d596a20cf116ba4742fb16d5839ca82
+- path: screens/renders/SCR-SHELL-001--populated--narrow320.png
+  sha256: e52312f8c409afcb2eb6aca5cd9aa0849735b63b6e07bebe3b8d28afbb5f8461
+- path: screens/renders/SCR-SHELL-001--populated--tablet.png
+  sha256: 9d1bd3c8c07dfbd332572522192b85790a0e62843130053fbfadd49040b58416
+- path: screens/renders/SCR-SHELL-001--populated--zoom200.png
+  sha256: 4ef146d8477dca15e0dfd238e8c4a6500e7ffd5a668303cb1b6c4f8b9cdef878
+- path: screens/renders/SCR-SHELL-002--collapsed--desktop.png
+  sha256: 285a09bf96a92672fca0a1240705e118c6b1fe961d7d9b654f6f6a5dda9a6f5e
+- path: screens/renders/SCR-SHELL-002--collapsed--tablet.png
+  sha256: e3a835924b62fc16dad7dfa6c63b70cf559ccbf87d0417cba49064044a93a56c
+- path: screens/renders/SCR-SHELL-002--group-flyout--desktop.png
+  sha256: b4417acbe5066459109c2225b630917cb6d261d7b3288daa7f15592c3e358eff
+- path: screens/renders/SCR-SHELL-002--re-expanded--desktop.png
+  sha256: 79dc919d559f2fcfbd514b9b7e0a9a831dc4cd276d52e590844bd206a13c63d3
+- path: screens/renders/SCR-SHELL-003--nav-closed--tablet.png
+  sha256: 8e575f733866d99be3667cc0f29fb44e270f58844933ed9e5d1ce67f89a1e906
+- path: screens/renders/SCR-SHELL-003--nav-closed--zoom200.png
+  sha256: 935c1ae027da319901cf9086b10248bcd0b2b5529394021471da237354626426
+- path: screens/renders/SCR-SHELL-003--nav-open--tablet.png
+  sha256: 990507f5e2c622bdb513c1f073139d8fd619e135123c4029d6a813ba223d2dc2
+- path: screens/renders/SCR-SHELL-003--nav-open--zoom200.png
+  sha256: c0805df905321fd8075d4cc1c2ac34d573da31828f71dbb7a1abcb3c9bcd3f11
+- path: screens/renders/SCR-SHELL-004--long-labels--narrow320.png
+  sha256: 8fae33ee8a0c36d5b20a1569f161373d71ab5a0781bdf3f33b1d5068c1ff14a4
+- path: screens/renders/SCR-SHELL-004--long-labels--narrow375.png
+  sha256: 855582ab6e99325fcbd0c826ef695daa67c744f45d5b8708dc2ec42c5974fecd
+- path: screens/renders/SCR-SHELL-004--nav-closed--narrow320.png
+  sha256: 1d4e6a6ae829549b146816becccfed6043b5fd708f2d8d6ce970d0339b235f14
+- path: screens/renders/SCR-SHELL-004--nav-closed--narrow375.png
+  sha256: c62b39b11e44b6f9529b6598c3e622e8923249cd29c926e464195b595673bac4
+- path: screens/renders/SCR-SHELL-004--nav-open--narrow320.png
+  sha256: f122253eef29c3f4f131f88cdd927b6a7db17b637023142209053b1dcbc0a166
+- path: screens/renders/SCR-SHELL-004--nav-open--narrow375.png
+  sha256: c053c0e2c36f87492fb5a3d194036836e309aa2fb48f16098922691a45cd0695
+- path: screens/renders/SCR-SHELL-005--long-names--desktop.png
+  sha256: 59af4a6de1db5d9e1eacb028537b7d0bb5cdeead6d3d72b6e042c34bbac7dcd1
+- path: screens/renders/SCR-SHELL-005--long-names--desktop1024.png
+  sha256: ac6fb61fc2605f94e602ed2bc47fcb080e40c7163b795df44f24911cccb0a0dd
+- path: screens/renders/SCR-SHELL-005--long-names--narrow320.png
+  sha256: 1e7ae74a8b47d8c847c0484a410d127db41203dc184f9540e3307cc95c4173d5
+- path: screens/renders/SCR-SHELL-005--long-names--tablet.png
+  sha256: 5bceb2c6b3e942108ddecb61b99676eaa70e431d3455d02d32847d64f0fd49f9
+- path: screens/renders/SCR-SHELL-005--long-names--zoom200.png
+  sha256: b31550b4b8fb08a4d018f6633a7d293852e7ae9dcaaabee51f26a0465e11a45b
+- path: screens/renders/SCR-SHELL-005--overflow-sequence--desktop.png
+  sha256: 5863d0c44a1f182e4d0b5263ce8ef82b90a654bbb87704f116092c880dea14df
+- path: screens/renders/SCR-SHELL-005--overflow-sequence--desktop1024.png
+  sha256: 6c7f0906afadb87f915059a93ddd11661c516ffe6c58f32a1d28931d74a9f7ee
+- path: screens/renders/SCR-SHELL-005--overflow-sequence--narrow320.png
+  sha256: 9210db647016961d63580713e4fb7500bd9e77d89ca5161a92523fbc2712e3ab
+- path: screens/renders/SCR-SHELL-005--overflow-sequence--narrow375.png
+  sha256: 9715b70292fd5d7cbd415bbd97ee4ca5ee64bdc91530313193b327f8bb30fcb4
+- path: screens/renders/SCR-SHELL-005--overflow-sequence--tablet.png
+  sha256: 53a4acfa789c8cae3093347f13baf3f9627cc42857e5d2465ac155ac24baa57d
+- path: screens/renders/SCR-SHELL-005--overflow-sequence--zoom200.png
+  sha256: e828de6cc1741e87d11f80528eee56ad7ec4a7d2cd6d9d6f34ef2461c09c3ac2
+- path: screens/renders/SCR-SHELL-006--count-loading-unknown--desktop.png
+  sha256: c749fffd9d9779b1c5f71ee5dfed1cf48887431a5c8e94ae26a810a504c2f72d
+- path: screens/renders/SCR-SHELL-006--count-loading-unknown-sheet--narrow320.png
+  sha256: c2001f4ec771d82641981f16b19bd46e955c9383668120bc89baf27e9f7d3b4c
+- path: screens/renders/SCR-SHELL-006--count-loading-unknown-sheet--tablet.png
+  sha256: 6701108deb42981dd41fbe8b3ca30256c3fb7e87af9d276f0bbcf6acdd642ea0
+- path: screens/renders/SCR-SHELL-006--count-loading-unknown-sheet--zoom200.png
+  sha256: 0819e7c2ada4b2bc0c8876247d629cdb3e53d02d1755f7981a5a69cdeca688c7
+- path: screens/renders/SCR-SHELL-006--current-nested--desktop.png
+  sha256: 6ce0e10ee2209d48ee87f8ac25668fdf5ab197991926ab8944859ce158b01723
+- path: screens/renders/SCR-SHELL-006--current-nested--narrow320.png
+  sha256: 84138e77b925bf77a9ba4b0e2a4a6cadb93906b3fd087962a72782c89ff28e57
+- path: screens/renders/SCR-SHELL-006--current-nested-sheet--narrow320.png
+  sha256: e7a6954a05d714ca9750325df4f5d49297e26ca180f8986812cc62fb4d42cf81
+- path: screens/renders/SCR-SHELL-006--current-nested-sheet--tablet.png
+  sha256: 2013036384b18c95f695fad5a9a2b40d4cf395e9c8a3c09e6fdc405a54b89378
+- path: screens/renders/SCR-SHELL-006--current-nested-sheet--zoom200.png
+  sha256: f1c7b5a5dd4376f0d41c48e73150c0fa5ee6ed8a87e2984943602e013605c2de
+- path: screens/renders/SCR-SHELL-006--locked-hidden--desktop.png
+  sha256: 5f02de2da6aee7b0c05a02249d321cdfb8fe1a474b03774635eb9d24dc4b5540
+- path: screens/renders/SCR-SHELL-006--locked-hidden--narrow320.png
+  sha256: a362741ff5ff60593ac949e7d0fb8e85ab2a25f86d61305c9c4f4889a11997c7
+- path: screens/renders/SCR-SHELL-006--locked-hidden-sheet--narrow320.png
+  sha256: dcf7e7f6c86679ff9328afafdffc040c22524ec45daecff3a8383aa1918cebe3
+- path: screens/renders/SCR-SHELL-006--locked-hidden-sheet--tablet.png
+  sha256: 394d4a723daf49c68d8e0f026032593d8f86055b2e6e360587a8ca88aafb1aeb
+- path: screens/renders/SCR-SHELL-006--locked-hidden-sheet--zoom200.png
+  sha256: ba39fb4940aadb47f8336268a0e676db9abe8320d0041faa633e0b12918190b9
+- path: screens/renders/SCR-SHELL-006--locked-shown-alt--desktop.png
+  sha256: 06aa80ad8f6dcc0b35c0eb6da81818321e9b1e9d1310ee4d7e3d0ab61fc7e57a
+- path: screens/renders/SCR-SHELL-006--locked-shown-alt-sheet--narrow320.png
+  sha256: 32039b72bd1e63cbd367ff5558cbd54cce99646805dd1e12cfff819081d7fb99
+- path: screens/renders/SCR-SHELL-006--locked-shown-alt-sheet--tablet.png
+  sha256: 0f9fbbbb731206aa94a0e2c60331ff68266da7ef061d910f6f8726cece9ef030
+- path: screens/renders/SCR-SHELL-006--locked-shown-alt-sheet--zoom200.png
+  sha256: b8b4f4ddd737c29d73fed79c6cf650ecee30f8a408624d7a4cffc24b1ab70d09
+- path: screens/renders/SCR-SHELL-006--long-labels--desktop.png
+  sha256: a9cbcb02a6fafd9a84be31153a279a4fabde04e260b6f58afa097dd38a4e2c9e
+- path: screens/renders/SCR-SHELL-006--long-labels--tablet.png
+  sha256: 15b895ee8602089b8dd65c46daf3fa00155494c70ee046140699d1266fb8644c
+- path: screens/renders/SCR-SHELL-006--long-labels-sheet--narrow320.png
+  sha256: 0e1d860f5e92b04ffb6447a8c4062cfbcfc68b2c5280ec66f4e477decdac3ccc
+- path: screens/renders/SCR-SHELL-006--long-labels-sheet--tablet.png
+  sha256: e1dc400767e5febd8802465129d7401e9467089c1e9e5785259125f29ec35aaf
+- path: screens/renders/SCR-SHELL-006--long-labels-sheet--zoom200.png
+  sha256: 9e2101416c4dc5235c82c33ed36467aef9d72b0b499f9c8864fc5d7ae7b4c653
+- path: screens/renders/SCR-SHELL-007--deep-link-mismatch--desktop.png
+  sha256: 2ecce40fe38e94751c9f08a491826b1222894ee6d62f3a5eb7c6a4bfb7c8e6a0
+- path: screens/renders/SCR-SHELL-007--deep-link-mismatch--narrow320.png
+  sha256: f71765499101eee305ae8695e436c80067bfe8347d04fabcaddc0c62b5c10aad
+- path: screens/renders/SCR-SHELL-007--deep-link-mismatch--tablet.png
+  sha256: 67e2ef2c2eebd2f2763ba439f31d5b7e1804e1422c8a8d39d8d7511ca65070cd
+- path: screens/renders/SCR-SHELL-007--deep-link-mismatch--zoom200.png
+  sha256: b9df3845d781fae8c31c660440775bc3b967b44ff6e04c069919dcab2cf52505
+- path: screens/renders/SCR-SHELL-007--impersonation--desktop.png
+  sha256: 51d3c04fea482f84071baa0a693eae0d37e6b43419ccba8310459ec89efdc9d6
+- path: screens/renders/SCR-SHELL-007--impersonation--narrow320.png
+  sha256: 3f2529de7c9b466b166c2dbb05cfb480e04ac7fe63eb3ccb2c4a242e885e7a17
+- path: screens/renders/SCR-SHELL-007--impersonation--tablet.png
+  sha256: 0fce5b7a2e71ecca5bfd7103cd28d4f6513cf80213ec87be6587b0f0fd8e8438
+- path: screens/renders/SCR-SHELL-007--impersonation--zoom200.png
+  sha256: b6bbdac819d15c9314dafe0835497827b9840eae9ebbacd7bb2cac31cfdab168
+- path: screens/renders/SCR-SHELL-007--long-names--desktop.png
+  sha256: f6f8f3b8f33e9078b077a1fe3fd5cbf7b2f3eac49d8eb6935374d9fc3918858a
+- path: screens/renders/SCR-SHELL-007--long-names--narrow320.png
+  sha256: d3dee8e9550a56bd7e375af621fc0b9d28c299da5d2ea2a41cd8d2b029cc55af
+- path: screens/renders/SCR-SHELL-007--long-names--tablet.png
+  sha256: b375efe7bfdb779772fc6f5c10a3088daf08bd14684f7fa6afceefcd2476d6a4
+- path: screens/renders/SCR-SHELL-007--long-names--zoom200.png
+  sha256: db70fd03757e214b7826f89d24258128773d023648aab356daf70858f8c9ff8e
+- path: screens/renders/SCR-SHELL-007--single-context--desktop.png
+  sha256: 220a15d43ca884916278a6937f680c2e3b923128d16502efdc699111fa2d2525
+- path: screens/renders/SCR-SHELL-007--single-context--narrow320.png
+  sha256: 0bbcdcbc98d995e116614e6698c169a9b20415228084dcdcf6fe13b40f0fae83
+- path: screens/renders/SCR-SHELL-007--single-context--tablet.png
+  sha256: 9f45c5d4ccc02eff718d973f73523d1cedf8ab41d057ce5b4f40d1560f2d227b
+- path: screens/renders/SCR-SHELL-007--single-context--zoom200.png
+  sha256: 0e797d06c55c776eecc569f0d5dcd646ee5aced7db5742c5c1c6abad74096580
+- path: screens/renders/SCR-SHELL-007--switch-dialog--desktop.png
+  sha256: 8775327e75f29d38c91052863c1b4153d95192c2d8da7f9f3a98e5d461579c44
+- path: screens/renders/SCR-SHELL-007--switch-dialog--narrow320.png
+  sha256: 20af03da3bf87474dfd91638b05a59134a7e07790010da1941f40cad5167c1d4
+- path: screens/renders/SCR-SHELL-007--switch-dialog--tablet.png
+  sha256: fbf9a8a23ed0b9782b2bd0b1311ed3ae17219c3c9da0aeedbca13b24d9c1f5bd
+- path: screens/renders/SCR-SHELL-007--switch-dialog--zoom200.png
+  sha256: 3bbd7dec3aba77e344f981519c681ed66beea34cc2841c036a0f3dbfc36f45e2
+- path: screens/renders/SCR-SHELL-007--switch-pending--desktop.png
+  sha256: a349ebf4f037308fce6de36492d73870ec62aedd83c1bde6539713f1a1fc9803
+- path: screens/renders/SCR-SHELL-007--switch-pending--narrow320.png
+  sha256: 9cb4d931bb7c24593bde0aec82c704cc9e8100e3a705cd4cf2f6f5a469a2b3d3
+- path: screens/renders/SCR-SHELL-007--switch-pending--tablet.png
+  sha256: a548511fced4b183e710e2c989fb9bc8e450c6555a62eb6ae9ea3ca3d25bc6df
+- path: screens/renders/SCR-SHELL-007--switch-pending--zoom200.png
+  sha256: 9b9332fefc5a2b6ed24d8d6f7b10f32ed5573f05858c22b230f5deec821b48c2
+- path: screens/renders/SCR-SHELL-007--switch-rejected--desktop.png
+  sha256: c3a0445e3bfb25fbcb0babbb3c0fe94ed62e4db5a928974a3f147a0fb6aa59b4
+- path: screens/renders/SCR-SHELL-007--switch-rejected--narrow320.png
+  sha256: fb4bcc7a9f2422ad34e9724e93bdf82dbf49cabd7c90afebeb557100a0630b5f
+- path: screens/renders/SCR-SHELL-007--switch-rejected--tablet.png
+  sha256: b6b3652412e1abfeaca171c4b6f8cdf64e4dbdd5503eaaa655952021cdebabb5
+- path: screens/renders/SCR-SHELL-007--switch-rejected--zoom200.png
+  sha256: 6436e34d6413885ca1ab7d4effe8dfe33ec73cb04ce89b2403982aabbbf06935
+- path: screens/renders/SCR-SHELL-008--error--desktop.png
+  sha256: bfd763d12f2aedfbe74716c200b4b21def39fea2d0e4e3ab73bb21cf3806111c
+- path: screens/renders/SCR-SHELL-008--error--narrow320.png
+  sha256: 3c85160c83e838209f6b246e6680b9020fdfad3ebc6a257b027aa0d2a4d19b58
+- path: screens/renders/SCR-SHELL-008--error--tablet.png
+  sha256: 0519eb71f32271a503771232d6a29c9f81311d6663623bb3f93bd779df7f0715
+- path: screens/renders/SCR-SHELL-008--error--zoom200.png
+  sha256: 95e968faa3d4991cfa57d91bb4ad1241641448e9b5b3c2907d4fd11770efc4a9
+- path: screens/renders/SCR-SHELL-008--full-screen-narrow--narrow320.png
+  sha256: 59a8a282fbfbb061698ce001d9f6f6f9d32dba6c65ca43d53ab33e3b11b40e32
+- path: screens/renders/SCR-SHELL-008--full-screen-narrow--narrow375.png
+  sha256: 3b2985d57872654ae1fb8d52a6618046fa3f1bce5433130106ca81fc381348d3
+- path: screens/renders/SCR-SHELL-008--idle--desktop.png
+  sha256: cee752002d1a5f7163cef8c5d8814065d9fcc15acceea18b05df6641cdd36423
+- path: screens/renders/SCR-SHELL-008--idle--narrow320.png
+  sha256: 3fd39545869d97d9b7dd8d34f24aee420f2a054bb189eccf1a299ad3e8d2f2a2
+- path: screens/renders/SCR-SHELL-008--idle--tablet.png
+  sha256: b6a16d62495070eef180abcdfa54416f009b89f7ca93b7fe5677e5a0bf6c6936
+- path: screens/renders/SCR-SHELL-008--idle--zoom200.png
+  sha256: 14f65ffda551691db4f6d56bc1aaaff92b7d89fb234f576343665cc884ececc3
+- path: screens/renders/SCR-SHELL-008--loading--desktop.png
+  sha256: 52ebec161cf7ad13af2cb45244aabd4580e6691589b4e7db685655deb8b048b4
+- path: screens/renders/SCR-SHELL-008--loading--narrow320.png
+  sha256: 4fc20f91a7f28dcd257ea68b7976876a0d1eb15276e3945707755ccf3a8b615f
+- path: screens/renders/SCR-SHELL-008--loading--tablet.png
+  sha256: 8c28a8c330b2484772e215163ab49f0235edb0b46e6aa6df50155b14e29ec18a
+- path: screens/renders/SCR-SHELL-008--loading--zoom200.png
+  sha256: 3ce882b16f231dc6212d4ab15eb9480082875bd46819543ed7077d99bfa6e0d8
+- path: screens/renders/SCR-SHELL-008--locked--desktop.png
+  sha256: 616f279b5524f55490fe9d9d58e60a32c644dcecf373e52da0666e584691f489
+- path: screens/renders/SCR-SHELL-008--locked--narrow320.png
+  sha256: 12bce122a4872f13ca5d5aa67eef021f3d0720e72b6a42b0d44c5f54664fa960
+- path: screens/renders/SCR-SHELL-008--locked--tablet.png
+  sha256: f0d65834927eca2e76ae710d2d33fd85bed30bff5ffc5cef3fc7288e08e6c90a
+- path: screens/renders/SCR-SHELL-008--locked--zoom200.png
+  sha256: fbabf7a8fe45e5e93e5b7cf814b82919e0abc29e0b6d7c1c8816fa6450540bbc
+- path: screens/renders/SCR-SHELL-008--none--desktop.png
+  sha256: dac5b6e19e6f236c34ac71ec3d78dbec012efe78c256fe8103dd6ffa6882c35e
+- path: screens/renders/SCR-SHELL-008--none--narrow320.png
+  sha256: af88360a585ddb3f86d9245efe45bfc17238efc8b2be45f89ef305e41b480f71
+- path: screens/renders/SCR-SHELL-008--none--tablet.png
+  sha256: 52d17c7b4978b2b8948c7e3d241fd006d18c197bc0613af26d54b39318ed5d5d
+- path: screens/renders/SCR-SHELL-008--none--zoom200.png
+  sha256: 11a9d29ea653bdbbe2cd6f64932c91639113092cbe16376d9ebb24082d88d78b
+- path: screens/renders/SCR-SHELL-008--partial--desktop.png
+  sha256: 093972c8ddda2262f65dfd2a68cc1f9cf6a9a8a7a1df4f3a7b316919c3c8ca0a
+- path: screens/renders/SCR-SHELL-008--partial--narrow320.png
+  sha256: 174ace63231d8c59f9ce5f2a49d538c05cb86f0bbb405f690ad2d0494743d211
+- path: screens/renders/SCR-SHELL-008--partial--tablet.png
+  sha256: 4980b18fbc0d04b69ce4d772053c4e0f0754e97aa2e6e4d242adbb5bd87af7e8
+- path: screens/renders/SCR-SHELL-008--partial--zoom200.png
+  sha256: 12cd9da9772f8fa487bf5267528dacde5a2f066b000cdf26ca4bd5c15d87b844
+- path: screens/renders/SCR-SHELL-008--results--desktop.png
+  sha256: 893c368a9eca3a3d8287857ab4fd939af7f863433930aabe98fb96262ff1fb51
+- path: screens/renders/SCR-SHELL-008--results--narrow320.png
+  sha256: c0fd802a7f4f03a7619606a1adf9c4b694edf178c98493430ec209055c2e5d0e
+- path: screens/renders/SCR-SHELL-008--results--tablet.png
+  sha256: a2ab2c106fb4e7e70dacb99ccba918ee706fa84d1b3f69110edd87ffd37d46d6
+- path: screens/renders/SCR-SHELL-008--results--zoom200.png
+  sha256: 75686e99d419d4daad323ea583cbf78ab8e494dda92574c6a3cc29149f6e2095
+- path: screens/renders/SCR-SHELL-008--typing--desktop.png
+  sha256: e68d4a1e37cbf297d8d34412c7bb92320407fc3cb92ed17ef4b56c233118fdd3
+- path: screens/renders/SCR-SHELL-008--typing--narrow320.png
+  sha256: 2fd88cf4010d88b4e16809fb25c6e942b3589ff7c7cff29e02c864fe4d92aabe
+- path: screens/renders/SCR-SHELL-008--typing--tablet.png
+  sha256: 52cec8e647c89195d3f3fbce8d9f9166b7ba4443b1bb10af3b00db47f8494f91
+- path: screens/renders/SCR-SHELL-008--typing--zoom200.png
+  sha256: d88d2bddfe8dc8e447a3db657bb9fa145c3b6d64ca78af4442cc7099cdb60053
+- path: screens/renders/SCR-SHELL-009--access-99plus--desktop.png
+  sha256: cb18224b1dcc21d689e69f0bb028ee116b3fb331cc846cee31b6d9c8ebc77cdc
+- path: screens/renders/SCR-SHELL-009--access-99plus--narrow320.png
+  sha256: 22f601c06ca5c079220c0d183461180278aad02ece4a616dc4f6a7ad0f756c29
+- path: screens/renders/SCR-SHELL-009--access-99plus--tablet.png
+  sha256: 92f7fda2ef13d2577ac87db220ff621d0bab00b84a0844888f68513620442c27
+- path: screens/renders/SCR-SHELL-009--access-99plus--zoom200.png
+  sha256: 58792170e3f458349415cbcfefbd2fbd7d652c22cdb87c22b58b7e41510edc84
+- path: screens/renders/SCR-SHELL-009--access-count-error--desktop.png
+  sha256: 1e865fe504255cbd3134f03ab4ad01757e1d2e665e30372ff4622c1f250310c5
+- path: screens/renders/SCR-SHELL-009--access-count-error--narrow320.png
+  sha256: b0f06223bdedd7ad6033c0309a0e8d10b9a17cdff6aab7a9fec9194c88b1e7e8
+- path: screens/renders/SCR-SHELL-009--access-count-error--tablet.png
+  sha256: 13bd2131146c00beffd8559dd71f41c1761f7ca14b4fd2ba1caba789eedccdea
+- path: screens/renders/SCR-SHELL-009--access-count-error--zoom200.png
+  sha256: 6d560e844bc8fb89108c741005c5e3b340ded5899aee251000e49472e8cd5287
+- path: screens/renders/SCR-SHELL-009--access-count-loading--desktop.png
+  sha256: b1190eed57d00b101960cd59632cca08e77e1c55dbbd125710ce217f3ced24eb
+- path: screens/renders/SCR-SHELL-009--access-count-loading--narrow320.png
+  sha256: 7a2cde28ae885df55543518d92a5c0eaad4112f04bba408de5ce6eefaf6eeb37
+- path: screens/renders/SCR-SHELL-009--access-count-loading--tablet.png
+  sha256: bfcd01c82049298683f894453205e4be539c7688fc21737940dad02f3c38df41
+- path: screens/renders/SCR-SHELL-009--access-count-loading--zoom200.png
+  sha256: 1583f5e07c5dfb97a4349a5361a87d166b932fbdcb13809bf2b52d9bea212d41
+- path: screens/renders/SCR-SHELL-009--access-none--desktop.png
+  sha256: d516b70ac16aceaf0c0dbb15fb3d43d8010960846fd8073ce35a3f008052708d
+- path: screens/renders/SCR-SHELL-009--access-none--narrow320.png
+  sha256: fe0c83883706edadc619aa1a5bb529c44bd3dbe2b981a36e040e972f644d89ae
+- path: screens/renders/SCR-SHELL-009--access-none--tablet.png
+  sha256: f192bffa63510110bcb2a8ec64c8a3e77ba9f044888f5539501b249b0d79c923
+- path: screens/renders/SCR-SHELL-009--access-none--zoom200.png
+  sha256: eb9c8baeb05795c5d00c5437b83212bf0b3e6a6bc8ad28184f4540b6d81cb27c
+- path: screens/renders/SCR-SHELL-009--access-provider-unavailable--desktop.png
+  sha256: 06e5248252f22a75a6f2a6b5387bf06abf92371005faa6d94fd78f3f4626f865
+- path: screens/renders/SCR-SHELL-009--access-provider-unavailable--narrow320.png
+  sha256: 5283af9a714c7efd01c470fbc36492428044f8438fa3bb19cc3353aac30dbd8d
+- path: screens/renders/SCR-SHELL-009--access-provider-unavailable--tablet.png
+  sha256: d6a71818c265a4257feeb831e6502d5a705fe45807a70591a88cddab02e19ec2
+- path: screens/renders/SCR-SHELL-009--access-provider-unavailable--zoom200.png
+  sha256: 618c14f0b76000bde40a0c9a071740be2003b49d3518c26bf5be18d5c051610f
+- path: screens/renders/SCR-SHELL-009--access-unread--desktop.png
+  sha256: 953133705dda3fe38ce67344cf711bd0feeabb54b75e8d02ec9e2d7a97a6122a
+- path: screens/renders/SCR-SHELL-009--access-unread--narrow320.png
+  sha256: 0b235b86f8c8a717af5c6f42a7e029e83756d4cb65d70cec318c79462ee048e7
+- path: screens/renders/SCR-SHELL-009--access-unread--tablet.png
+  sha256: 695f029405bac0f18445893a89a55b131b10aa8b9606971dd0d9a8c85f70ce07
+- path: screens/renders/SCR-SHELL-009--access-unread--zoom200.png
+  sha256: 3b7e453299c3319e84a366fb4baabfd1b5c756d389f1ccdfa9bd7b0a019a7e55
+- path: screens/renders/SCR-SHELL-009--panel-empty--desktop.png
+  sha256: e25bac9151cc73671886734fb8ee494165360e66e10d7adb0ede2f4065ffc31b
+- path: screens/renders/SCR-SHELL-009--panel-empty--narrow320.png
+  sha256: d5f8cb3c2727bdd7e5f03f140f0636b4a5fddc5ff80cb657c43545862a44c705
+- path: screens/renders/SCR-SHELL-009--panel-empty--tablet.png
+  sha256: e5fff2255fd42ce89decc466218c6fdb4e7b014056a5e9077d6353766d0276b5
+- path: screens/renders/SCR-SHELL-009--panel-empty--zoom200.png
+  sha256: b9b1f31788c046fad6b5aff21bdbcca43cf7ce542ab873195e8265f71f1a941a
+- path: screens/renders/SCR-SHELL-009--panel-error--desktop.png
+  sha256: e6eda64c3481e8eb0b75b166d1691bd8ea3fe63a81eea4235e775775cc2a54bb
+- path: screens/renders/SCR-SHELL-009--panel-error--narrow320.png
+  sha256: 26a9087da2b49cd5d8f557f1c217cf740afee12035e472273f865eea46e7a7f4
+- path: screens/renders/SCR-SHELL-009--panel-error--tablet.png
+  sha256: 84ee46f0093328b699f730fba6abe947eb9994cd8ffaa23e78c37455b96e1bc8
+- path: screens/renders/SCR-SHELL-009--panel-error--zoom200.png
+  sha256: 56a7045ad6f582b3f5157cead8f4b4dc25c4df7406acfd0950fde145d5285d88
+- path: screens/renders/SCR-SHELL-009--panel-loading--desktop.png
+  sha256: 4c4c0b53f29e47141afc20e14fccead40c45fabc710464b03c1639a2535ba3e9
+- path: screens/renders/SCR-SHELL-009--panel-loading--narrow320.png
+  sha256: 8407915b9d511ad3ae731b21b8a2a3c99f37a20c8a33fc986927b41513d382d1
+- path: screens/renders/SCR-SHELL-009--panel-loading--tablet.png
+  sha256: e6bfa44fa3bf48263deb1c392486035d37e586a62da288912a21b59fb96fd93d
+- path: screens/renders/SCR-SHELL-009--panel-loading--zoom200.png
+  sha256: d4f22cfb48426efafa3afad344f2680aa980b9fad0400abc7d18551b99d4e501
+- path: screens/renders/SCR-SHELL-009--panel-populated--desktop.png
+  sha256: 02c0cacf728d6f9aa74234edd5b59b9b96884687aa5db3e18fda5deacf03912a
+- path: screens/renders/SCR-SHELL-009--panel-populated--narrow320.png
+  sha256: b346434fea9766a4488c43bcc69dd398035527653f35ccfe25870395fd3bf8f0
+- path: screens/renders/SCR-SHELL-009--panel-populated--tablet.png
+  sha256: 8494e6ec3460e978222dc74c05d67a7c2f6e86d5441baee5e271afa187b12488
+- path: screens/renders/SCR-SHELL-009--panel-populated--zoom200.png
+  sha256: c49618ecc1fb71b24ca894c1bf010072df05b0b36c086f68ee06dfc07fec777f
+- path: screens/renders/SCR-SHELL-009--panel-stale--desktop.png
+  sha256: 326632411f04892c8b43b2aeb59cf23f45f12b4758cde9a711aacca8c8c51f78
+- path: screens/renders/SCR-SHELL-009--panel-stale--narrow320.png
+  sha256: 7d286ae289b1b7706bb74f247024c89fd0fa0130eb46b65cd342a1184b6435d1
+- path: screens/renders/SCR-SHELL-009--panel-stale--tablet.png
+  sha256: c4889e63ebe845f2bdb92bd8808cc677ab90fa42aeaef633eabd147bcce31a20
+- path: screens/renders/SCR-SHELL-009--panel-stale--zoom200.png
+  sha256: ea7e4d2e75d07701d02674a013c3964b376c4af6c40c63ae95a9233ad25fb012
+- path: screens/renders/SCR-SHELL-009--panel-unavailable--desktop.png
+  sha256: d3d3d61f2c3d44d1e04851f4f736319d2d61d4b6ce8c8ba45ce05995e411b6bb
+- path: screens/renders/SCR-SHELL-009--panel-unavailable--narrow320.png
+  sha256: 58f54f172fae916e27eea41fff0bd15d91515d1ed303524cdadc9b072c36bc06
+- path: screens/renders/SCR-SHELL-009--panel-unavailable--tablet.png
+  sha256: 8f2208521b1946269dce31d6131aa264888fad7a8c2f4e272922842406345656
+- path: screens/renders/SCR-SHELL-009--panel-unavailable--zoom200.png
+  sha256: 98c77fd161f5336a699ee104b14e0e77b5fc7489dc8839dfdcf93993943310f0
+- path: screens/renders/SCR-SHELL-009--transient-vs-persistent--desktop.png
+  sha256: 221d0c071c86df50d8040a2efc01e8f168d9fb0132db7f4e13197e7f3df746fb
+- path: screens/renders/SCR-SHELL-009--transient-vs-persistent--narrow320.png
+  sha256: ac710075eed62b2f26c9e2ae5d169595b5c101aded366818011134f9547d9bc6
+- path: screens/renders/SCR-SHELL-009--transient-vs-persistent--tablet.png
+  sha256: fc5cf0c25c2ea95e37cd8a43fca1511c80cdec6096224a8829e2fd92180d8fa7
+- path: screens/renders/SCR-SHELL-009--transient-vs-persistent--zoom200.png
+  sha256: 8f07922ede790e4c3e7c43b4d88d67e798485fa886cc01cf7cd5a4448f928838
+- path: screens/renders/SCR-SHELL-010--account-menu--desktop.png
+  sha256: d9ba29f0be69efbdd3a259e5883e2c209283b5fceced5deeb1cf4b3e71161133
+- path: screens/renders/SCR-SHELL-010--account-menu--narrow320.png
+  sha256: b229f89da51cb3304290ca467cc5ac3b63b44857a5b2d2b47fea8ac8246a38b1
+- path: screens/renders/SCR-SHELL-010--account-menu--tablet.png
+  sha256: e100a341abd075921a272fd5b5bb0fb3b92f42aa7365bfdae921b2457476beee
+- path: screens/renders/SCR-SHELL-010--account-menu--zoom200.png
+  sha256: d57cc1f68cc1e7050c45c407b6f97ef15f583a71ad56c6d3f7e6a90515007110
+- path: screens/renders/SCR-SHELL-010--help--desktop.png
+  sha256: 36cb8887b600ad4781e962e6499de72d1d455340237831ce04946a5d4caa1720
+- path: screens/renders/SCR-SHELL-010--help--narrow320.png
+  sha256: b500d094ea40800e2041d5e1dbf7c6f5c97e0d96189ea38ae241f7438b05df0b
+- path: screens/renders/SCR-SHELL-010--help--tablet.png
+  sha256: c3f3cd1d442b4714c11c7820b445eecb097ecb33a551fbdeaac66cd44f96306c
+- path: screens/renders/SCR-SHELL-010--help--zoom200.png
+  sha256: 16b019cf2e02dabc159fa1b04782abab1abd8b0e03e510c5d401b27c88d8c017
+- path: screens/renders/SCR-SHELL-010--locale-selector--desktop.png
+  sha256: ef7210a41e3730955174820e6e4f7dd9a58095eb22174de6d52cc3c87ad5c7ca
+- path: screens/renders/SCR-SHELL-010--locale-selector--narrow320.png
+  sha256: 29d20b8af5cb0f3a33f9f177dc483b35954cd31d224804d7087c86f79803a319
+- path: screens/renders/SCR-SHELL-010--locale-selector--tablet.png
+  sha256: 4bd38b0e236a59e1c9a5f1ef414cb5576c2e70a032a4f7f7a12b8b3efe2e83d7
+- path: screens/renders/SCR-SHELL-010--locale-selector--zoom200.png
+  sha256: 2eb7d71fc25bca966c5631744b936d01d2cf794c19602fc148954cf71c62e531
+- path: screens/renders/SCR-SHELL-010--signing-out--desktop.png
+  sha256: 6ba0b99aabe87d7be9302a13b33cd8a9502159c19aacefc9754e6f1a8bbece81
+- path: screens/renders/SCR-SHELL-010--signing-out--narrow320.png
+  sha256: fa31389bd211fcdb89400f29c44d03f643234e28e21671c5a3bdff125a6828c9
+- path: screens/renders/SCR-SHELL-010--signing-out--tablet.png
+  sha256: cad7e29117bae78e07c99593d034a339164f605fdb8a071c6f8da9bd037cf08a
+- path: screens/renders/SCR-SHELL-010--signing-out--zoom200.png
+  sha256: 48041938c59d0ddbc7ec24e157299db051cfe09667c8db139b34689e5277b86a
+- path: screens/renders/SCR-SHELL-010--single-locale--desktop.png
+  sha256: c46f160489b8d0bc42a84a3a0752500ffef773980f1c781e811dc8094024e576
+- path: screens/renders/SCR-SHELL-010--single-locale--narrow320.png
+  sha256: 5f99420295b5f7189d822f456e1ee4d5af4d204ba767d9e2c63bd6a9aa45b6d2
+- path: screens/renders/SCR-SHELL-010--single-locale--tablet.png
+  sha256: 6b0f8550bf97b8f23b64f65f4efb8b54cc07d9f03b0ac7da293f2bf682106cb4
+- path: screens/renders/SCR-SHELL-010--single-locale--zoom200.png
+  sha256: 9c9b9f7b4b6336946f12edbcb3515d74ee526ad012317a0abbe2fb2b32afd964
+- path: screens/renders/SCR-SHELL-011--actions-overflow--desktop.png
+  sha256: 410e13af87eb257af2034ab9faa3944f6d5da3fd1ca3b148918fd24c43119aef
+- path: screens/renders/SCR-SHELL-011--actions-overflow--narrow320.png
+  sha256: ff7754c97bd44d8723016d796ebb022b367703d877eec99f057df70e1f15c3f2
+- path: screens/renders/SCR-SHELL-011--actions-overflow--tablet.png
+  sha256: e87961aedc8d03d4a92e2f0544350096836632e3c985d5e1e0a9a584fc253ef1
+- path: screens/renders/SCR-SHELL-011--actions-overflow--zoom200.png
+  sha256: db56401cb445937d28dc1d181090352e91a3bd27e3cedd8812b4e353f97c3e61
+- path: screens/renders/SCR-SHELL-011--aside--desktop.png
+  sha256: 0e378c0d972d6ca2bf9402c8d9ec3924425d29ae5f5b0c36394a2b65b6fdc5b9
+- path: screens/renders/SCR-SHELL-011--aside--desktop1024.png
+  sha256: f7f089ac4bc3155bb507a0e66b92b11cac07457584a507926cf6eda9a8c14382
+- path: screens/renders/SCR-SHELL-011--aside--narrow320.png
+  sha256: cd465f4ff0af7faded96a0bd2a448f9a9f594b005db2111ff1f94f2f37daf9b0
+- path: screens/renders/SCR-SHELL-011--aside--tablet.png
+  sha256: 3cf69b23358fb8193593e0914d734a68687acfa4ccab3638a798c6b06332794f
+- path: screens/renders/SCR-SHELL-011--aside--zoom200.png
+  sha256: 0e1905867a5edb54b60d29858135e8ad3ecc8710d38d62e0a7d4020d6843fea9
+- path: screens/renders/SCR-SHELL-011--breadcrumbs--desktop.png
+  sha256: 105ddd9d7db01df362edf709676c486b12e5d0a00324cc14f11202dfbff40297
+- path: screens/renders/SCR-SHELL-011--breadcrumbs--narrow320.png
+  sha256: 6edc27c3b394b1f8e5b00120c025ee7e3075e332f3a3c9d046aed342f5f67e95
+- path: screens/renders/SCR-SHELL-011--breadcrumbs--tablet.png
+  sha256: f815533135d1ada01018db7c58aa147aca1e810a9e178f030a871dfbed657702
+- path: screens/renders/SCR-SHELL-011--breadcrumbs--zoom200.png
+  sha256: 690b6ec97cb02c026d12e738d231404b9717302e1402ab11768d2166d266bfe5
+- path: screens/renders/SCR-SHELL-011--content-empty--desktop.png
+  sha256: d6f1d63091f726d8e2a1469243e2bb0e002102f3fa5940195b4c9fbc0c1e3b60
+- path: screens/renders/SCR-SHELL-011--content-empty--narrow320.png
+  sha256: f2e13c8122f6465aa3984e9df61507fd234526c4a0ee3165509bdf430f6f6d06
+- path: screens/renders/SCR-SHELL-011--content-empty--tablet.png
+  sha256: ea2345f3f79904681830c531f830aba8bb2110727e46e37316888061b3f936cf
+- path: screens/renders/SCR-SHELL-011--content-empty--zoom200.png
+  sha256: 3531e60cc9611d58e2baf9b0c113fc589cc24ebe5e099e22b8469d2ce4872592
+- path: screens/renders/SCR-SHELL-011--content-error--desktop.png
+  sha256: eba4066c01eb4e34a76c8fff8298435fd6431d5da63dae6a9cb0d708d62784fb
+- path: screens/renders/SCR-SHELL-011--content-error--narrow320.png
+  sha256: 1bddf7958b170213f4aff7e63195bfb18bfcdbd6fb1ddc7d1e1ef4b68aca987b
+- path: screens/renders/SCR-SHELL-011--content-error--tablet.png
+  sha256: b43b62ad4dc081c93ef475e429b46837d49fbe5a82bb914da444032974232c7e
+- path: screens/renders/SCR-SHELL-011--content-error--zoom200.png
+  sha256: 4cc7d87648f877e504d9de2c4a619d1a75b476308592842556a4d35949c5d975
+- path: screens/renders/SCR-SHELL-011--content-loading--desktop.png
+  sha256: d24099a6263af010986b5cff8f5404f36e5789868e377ded4bd32a534710ec3d
+- path: screens/renders/SCR-SHELL-011--content-loading--narrow320.png
+  sha256: 61fcc815931e12440c99768f629eb230ec2cb18b8249039df68df343b6a8c343
+- path: screens/renders/SCR-SHELL-011--content-loading--tablet.png
+  sha256: ddbeb635618e9f93ea6c8b031545396359dae4c6b167ca451a8bf3d0d2b4e7da
+- path: screens/renders/SCR-SHELL-011--content-loading--zoom200.png
+  sha256: 804ad49b3776940d588541222fd8c5296016c27c55a3454a82ba4fcd3f2fc60e
+- path: screens/renders/SCR-SHELL-011--extension-regions--desktop.png
+  sha256: cd95eb8854b2ce7d599808171686eb42c56b9a69cfc630424a9ce76958e48e8f
+- path: screens/renders/SCR-SHELL-011--extension-regions--narrow320.png
+  sha256: 2fb5a13b5b5077586497e3550651544976327646c28283f2140438fddcc2a07d
+- path: screens/renders/SCR-SHELL-011--extension-regions--tablet.png
+  sha256: 6b19a464891205ac80271f91b2040f123306430e36716169611c24fb13b212a3
+- path: screens/renders/SCR-SHELL-011--extension-regions--zoom200.png
+  sha256: 82b6db410825b3594025cb83943a135ca8634908252844bd38c975f1cfe67e3d
+- path: screens/renders/SCR-SHELL-011--filter-region--desktop.png
+  sha256: 794243414b2915cf89415105c78f051b7e6be27149eece8cef490e651eecaec8
+- path: screens/renders/SCR-SHELL-011--filter-region--narrow320.png
+  sha256: b3af4eaf3f83dd62f98072463b89714bb3a7a16462909846a1a7a27c602796d2
+- path: screens/renders/SCR-SHELL-011--filter-region--tablet.png
+  sha256: 34a9383a6a7a3bf3c74c15a4fb414a4f4b6c6f81e2dcc22d05a986b1765c69db
+- path: screens/renders/SCR-SHELL-011--filter-region--zoom200.png
+  sha256: 0c485f79b5d0244394a794922810235d2297e44d606c5796f8f9e235b3adc8d1
+- path: screens/renders/SCR-SHELL-011--long-content--desktop.png
+  sha256: 183ec2230ac3d7e1797949994a98614f51e565c90ebbeb62f056036e10718261
+- path: screens/renders/SCR-SHELL-011--long-content--narrow320.png
+  sha256: 15508adbb2b41c17cd0203fd303d4fae10e685766b8fb76bbbc9ed664844026d
+- path: screens/renders/SCR-SHELL-011--long-content--tablet.png
+  sha256: 68c58697ef6c6512f6b6528e6042bb8c6062fb33b6fe5e2d64a2ce49d8b4b20c
+- path: screens/renders/SCR-SHELL-011--long-content--zoom200.png
+  sha256: a826f857afaebcd4f62f297da7a36b515b6009abc173de75c9778f74ac612d22
+- path: screens/renders/SCR-SHELL-011--title-context-status--desktop.png
+  sha256: a3ecbc61962dcd006fe82dc9c7f396cc35808eea4cc3d981adeead71cfeccae3
+- path: screens/renders/SCR-SHELL-011--title-context-status--narrow320.png
+  sha256: 96061b45bb497735484f952908f83ba815d54b8ce100a91929b693430c9257ae
+- path: screens/renders/SCR-SHELL-011--title-context-status--tablet.png
+  sha256: 58e9281a9e8b90553c5adda45c8c7325e9acc017164c5481156397d5aeb87061
+- path: screens/renders/SCR-SHELL-011--title-context-status--zoom200.png
+  sha256: 0a407ee7988ff8a60af5b59f9837ace1db6690140b2458ac9136298474e68755
+- path: screens/renders/SCR-SHELL-011--title-only--desktop.png
+  sha256: bd888a5cc545a4ce769d9e125c555e1073b1617535eb72794b1300c1500ecd44
+- path: screens/renders/SCR-SHELL-011--title-only--narrow320.png
+  sha256: f3255c1f53147de217067d7a384b2aefa8450622a05b0b30228fc66e6aeb6461
+- path: screens/renders/SCR-SHELL-011--title-only--tablet.png
+  sha256: 0cb998d3e1e9a9e5a389f356be91c65af16b2baaca5e8b91e10fba667d0ae004
+- path: screens/renders/SCR-SHELL-011--title-only--zoom200.png
+  sha256: bd981c0214028eae9e6d3f6e395a76bfe84d5f1957c6afcdc6efc16802d9513a
+- path: screens/renders/SCR-SHELL-012--page-configuration--desktop.png
+  sha256: 86374fc63f70629df4f18f48c20bae152d3022aaaf5d97cdcc724721d62085a0
+- path: screens/renders/SCR-SHELL-012--page-configuration--narrow320.png
+  sha256: a396b5c2fb623054a65c00b1b97f33bffeec964a92c1434a253d991f3144645c
+- path: screens/renders/SCR-SHELL-012--page-configuration--tablet.png
+  sha256: 8984ed47f3723007aad6378930c641dc7488deb59cfc0da2faeda0b2b6a01716
+- path: screens/renders/SCR-SHELL-012--page-configuration--zoom200.png
+  sha256: 0090ec28f033af7b5ccd9e2f0a30948d57646eebd0aa1295ca3e95c06617d74d
+- path: screens/renders/SCR-SHELL-012--page-edition--desktop.png
+  sha256: 422fcc28ae98905cdb5e0003c42e74970e8299a19fb90f288edc0ee670a8fa46
+- path: screens/renders/SCR-SHELL-012--page-edition--narrow320.png
+  sha256: 10ba9f4dcb832e0673f8d318c06546b5998a6369fc40b0831c2a40e71f46e58e
+- path: screens/renders/SCR-SHELL-012--page-edition--tablet.png
+  sha256: aecc2bee1112af15c32b764165f83a7e89470014a8f2892f514cca3e29dfc085
+- path: screens/renders/SCR-SHELL-012--page-edition--zoom200.png
+  sha256: 41812c6d5c44e62f9c937bd45287e9634587e094bde4d813a1570760b2391540
+- path: screens/renders/SCR-SHELL-012--page-environment--desktop.png
+  sha256: 7963087a31bc208d519e92de8de20e9fc1c07d2bb840f042265acaff1f838c8c
+- path: screens/renders/SCR-SHELL-012--page-environment--narrow320.png
+  sha256: e1b360a40b9b6f8565f35d86ae8c245fac160f3b1444070d3bdee3ccc6e094d0
+- path: screens/renders/SCR-SHELL-012--page-environment--tablet.png
+  sha256: 876b859dac1cb204531a4c25c3112d5a7ef912d2b537ed5862a7528365bb9f6d
+- path: screens/renders/SCR-SHELL-012--page-environment--zoom200.png
+  sha256: 92e5b7acb2432add9ceb723538556dbc9c7a6703c3cb7f4b94a5af5743450549
+- path: screens/renders/SCR-SHELL-012--page-permission--desktop.png
+  sha256: 0f06cd1b855fec4897be2edd092ae7bbdd055a6a5ff9edb6c42af930b4b7a4cd
+- path: screens/renders/SCR-SHELL-012--page-permission--narrow320.png
+  sha256: 374ef5498da86f69a02dd8ba24c6b99a9bcd9a37591059cd757b23201ae91da6
+- path: screens/renders/SCR-SHELL-012--page-permission--tablet.png
+  sha256: c2fc3f8b32a92d62d45d144daaf6c7316c728041e517bfc19de3b09448802adb
+- path: screens/renders/SCR-SHELL-012--page-permission--zoom200.png
+  sha256: 9bf55e65a8df3c49e145b9398d3d84d270fd663e2f4a11fa54e411864c4e740b
+- path: screens/renders/SCR-SHELL-012--three-levels--desktop.png
+  sha256: 451836e0d6e36904aeae08836631fa408b17b0e13d1e80e1cc65b305e885fef1
+- path: screens/renders/SCR-SHELL-012--three-levels--narrow320.png
+  sha256: 738650da1ba912fb02c4506a3e7832f7540b229b307a4d5b3a4ee7d63b9582e4
+- path: screens/renders/SCR-SHELL-012--three-levels--tablet.png
+  sha256: 2d3c67ab1f1a996ea6d89120aa2ef392c47266d2b4704b2245e0961fdf3bbf91
+- path: screens/renders/SCR-SHELL-012--three-levels--zoom200.png
+  sha256: ff393b5c8a14db1efdb9dc756ddb67a2c34fd833b48d486f9d666efd8124f348
+- path: screens/renders/SCR-SHELL-013--incompatible-version--desktop.png
+  sha256: 92b4ec342c23235862b180f0545515e199e31b6bc706b5623e783265794a5013
+- path: screens/renders/SCR-SHELL-013--incompatible-version--narrow320.png
+  sha256: 76bdd1c7a21078ba647f7a1906bb058866ee95fc4210e222e98a7f5b862ed91e
+- path: screens/renders/SCR-SHELL-013--incompatible-version--tablet.png
+  sha256: 79f864018724368d3c2d5904ec6d82024a8f2704392981baadb35f2a81ad0cf8
+- path: screens/renders/SCR-SHELL-013--incompatible-version--zoom200.png
+  sha256: 750b6feab030dff6c5b41ffd8edaeaac789f9f596f80a33aa2f0cd00925266e1
+- path: screens/renders/SCR-SHELL-013--lazy-load-failure--desktop.png
+  sha256: abc855cf5d0a8ca6e569b2d1feae3094474d6ef3a7541a88a869d19c0f1a883b
+- path: screens/renders/SCR-SHELL-013--lazy-load-failure--narrow320.png
+  sha256: 0bb0bbfa6bacf82bfbbcd729ba6eb938ddb33ef45ea19495fdbb9648f500b504
+- path: screens/renders/SCR-SHELL-013--lazy-load-failure--tablet.png
+  sha256: 929a93dda71fe174132a1536acc33ba819821df6db0cc5e0d2c6366ec707e46a
+- path: screens/renders/SCR-SHELL-013--lazy-load-failure--zoom200.png
+  sha256: 268588a387522c75f26c10fe1dad0854a7feb2401d8a1c1dafeb5c6e60ce63fa
+- path: screens/renders/SCR-SHELL-013--not-found--desktop.png
+  sha256: 26498cdf4b5c1ace07b4eda15775fcc324f3a7cd34132e178f4843afa9db2552
+- path: screens/renders/SCR-SHELL-013--not-found--narrow320.png
+  sha256: c4ae105dc2bf62a68cbb19e350264ee8db38693f806b49e2267cf615203eff20
+- path: screens/renders/SCR-SHELL-013--not-found--tablet.png
+  sha256: 38df75bbd019d98f7ffcedb3ea6639e12322200fa2083ea636b14114829736cc
+- path: screens/renders/SCR-SHELL-013--not-found--zoom200.png
+  sha256: fc60be9d2dc0bf54815977cfc33ac6330cc714c7837337f8e8ac422ec28d5b42
+- path: screens/renders/SCR-SHELL-013--not-retryable--desktop.png
+  sha256: 8e51d1f882cafa926eca5c9520c66c4234bbf47ff0d752ff357b5c1135ceea3e
+- path: screens/renders/SCR-SHELL-013--not-retryable--narrow320.png
+  sha256: 7ce547253c4b4be80abdf020bf022f14c34098b1beef7db34a702c5c125aa87d
+- path: screens/renders/SCR-SHELL-013--not-retryable--tablet.png
+  sha256: 5f79fce255861eb1881a0e65f9be2216aff32efc1d153d081568f44dac8dc9c6
+- path: screens/renders/SCR-SHELL-013--not-retryable--zoom200.png
+  sha256: e7e69f10932bb824c5a1a186157cb97f4712489d14f04de9d751bb5100f18935
+- path: screens/renders/SCR-SHELL-013--recoverable--desktop.png
+  sha256: 5e409972dcc29e6d320009fc3bca9ee26ba5280ea1d4d604322914747a6f49c5
+- path: screens/renders/SCR-SHELL-013--recoverable--narrow320.png
+  sha256: fcc4b0d377c741f47b200ff89b117bf296883006b37ef35b36d1406792141a62
+- path: screens/renders/SCR-SHELL-013--recoverable--tablet.png
+  sha256: c0bb9741e5917d01f8731aaad02e7f0789b5a6a2caf81591151a0f41502d0e75
+- path: screens/renders/SCR-SHELL-013--recoverable--zoom200.png
+  sha256: 2b95abd6fa5931ba93879bf043ee2ef311b11d846508c38f60580d2f39abab91
+- path: screens/renders/SCR-SHELL-014--degraded--desktop.png
+  sha256: a3fca5520373815ed8ddf836b6f3c8cadc36f8bbb5ff25598756a678e4b6ed71
+- path: screens/renders/SCR-SHELL-014--degraded--narrow320.png
+  sha256: 6b2c58a92aac98fe5138815ae809e62090c4c4cd2e1648d12b982b2066e66df6
+- path: screens/renders/SCR-SHELL-014--degraded--tablet.png
+  sha256: 1088b52f3ff3242c92a682955f1468b9e0892f6fb9cd310aaee9d91243de49c1
+- path: screens/renders/SCR-SHELL-014--degraded--zoom200.png
+  sha256: 7bd55a8650c243448ea0e832c54d7f68e42ed261d9523cfa265f25d52e3c568a
+- path: screens/renders/SCR-SHELL-014--non-production--desktop.png
+  sha256: 6e494fa8edc7119f74efc75645f62cbf5d351ba4bca504da40f26f3323dcce17
+- path: screens/renders/SCR-SHELL-014--non-production--narrow320.png
+  sha256: a9b6164f4f6a51aa6c651dfb075a765687a6b804aae9e305c49249e1ee0e10ce
+- path: screens/renders/SCR-SHELL-014--non-production--tablet.png
+  sha256: 06ee8b675b663b828424bd69053f58fe1750959cf63ed2b5ee2de273804406f5
+- path: screens/renders/SCR-SHELL-014--non-production--zoom200.png
+  sha256: 84367b4bcd6d81de5b74ece078aff6461f0f134bc0c0504c08099d887e03abe6
+- path: screens/renders/SCR-SHELL-014--offline--desktop.png
+  sha256: 85ae9e8b0b3243cee9cf76cf75106d5f0e08cc5424e7ed36307177865422d307
+- path: screens/renders/SCR-SHELL-014--offline--narrow320.png
+  sha256: cb73a50388b2fdb7119c0f3ea3fba4bdb37e95026f1281ea246e8da0ae6969ff
+- path: screens/renders/SCR-SHELL-014--offline--tablet.png
+  sha256: c0134560b5aeae5b66a2ee1dbc4db2b29e942547ae457652d1a9d79da5881da6
+- path: screens/renders/SCR-SHELL-014--offline--zoom200.png
+  sha256: 7fc49599138d03592f85fbf2e25240a32edc0795f3bf8b6b2726eef74e63daa1
+- path: screens/renders/SCR-SHELL-014--online--desktop.png
+  sha256: 085e9bd5b18cbb9a4afcd0449e97ccaddc454f0a05f4f823315214cf8ccf9c8e
+- path: screens/renders/SCR-SHELL-014--online--narrow320.png
+  sha256: f2c2b926568002413e73d0bc5038852fac2004d255aee43936f3304458fbd497
+- path: screens/renders/SCR-SHELL-014--online--tablet.png
+  sha256: 93ddd8c659045fb1612349410d39c1c5569a153ee6a1e6bc92c752f010c3e69a
+- path: screens/renders/SCR-SHELL-014--online--zoom200.png
+  sha256: b89c3554d76817686ee9e98e131d28c8770665199c716854b20e6119c882f904
+- path: screens/renders/SCR-SHELL-014--stacked--desktop.png
+  sha256: 80819345c79e4775df8b9ecf03921b75f673b900805228a093f33f79d3bf4231
+- path: screens/renders/SCR-SHELL-014--stacked--narrow320.png
+  sha256: aad1dc17917f1a3ec3d9acdfe563ae46bcc333b390f726aad2835d83ab5126c3
+- path: screens/renders/SCR-SHELL-014--stacked--tablet.png
+  sha256: 7957ef7d112518a09d47756b6b039f4aaa9fe6d4c6b8a4f04b20e1d171a1532f
+- path: screens/renders/SCR-SHELL-014--stacked--zoom200.png
+  sha256: 76bc14399391855db55d8000f6466f81e91c0a772bca92161cd358d44be67354
+- path: screens/renders/SCR-SHELL-014--stacked-narrow-collapsed--narrow320.png
+  sha256: 3b69ab2410bb22a7a2dc139bc1f247c8f0f50ef54d2eb7e320280a4de954b314
+- path: screens/renders/SCR-SHELL-014--stacked-narrow-collapsed--short320x256.png
+  sha256: d2b2af8c030bb58931bbe9a93dbe32806d45c5587f6caa3bf8c5a6bc033078b8
+- path: screens/renders/SCR-SHELL-014--unknown--desktop.png
+  sha256: 08a3668c3c8a170cf75c840bbdb948e5ed5b13db7381f6cbbb85bd3673ea495e
+- path: screens/renders/SCR-SHELL-014--unknown--narrow320.png
+  sha256: 47b5850ada8959ee546485e8c8c1c282abac574ce6decf18bd87feb977dfe537
+- path: screens/renders/SCR-SHELL-014--unknown--tablet.png
+  sha256: a6fe82bb7bd94b4ee7574265d38a70054b0966b915f6be5bbbc312a9980184f9
+- path: screens/renders/SCR-SHELL-014--unknown--zoom200.png
+  sha256: a3a7a61b1b389130df13790b5f9240ab5db219465f1acdc636aba934c8a876a2
+- path: screens/renders/SCR-SHELL-015--default--desktop.png
+  sha256: c3dc74f8da6b505f4fa98f45785c00f0fd996fad473d8990ba3dff27df83d261
+- path: screens/renders/SCR-SHELL-015--default--narrow320.png
+  sha256: 1c2155f280b9cccc544acafa6668ceb2d02344459698efa3694d7d0f686c2377
+- path: screens/renders/SCR-SHELL-015--default--tablet.png
+  sha256: 017388c46fe0e49e817ec054c747f3e932c94202b53a4e2e5239348a53d9e3cc
+- path: screens/renders/SCR-SHELL-015--default--zoom200.png
+  sha256: 08ed35960b0b2d53b88123476ef6ffef0189ec45e28897961e71b92330a29f27
+- path: screens/renders/SCR-SHELL-015--empty--desktop.png
+  sha256: c68e6e07467bb7ea8e91fb47808faf166245836e0d3d91c3cf5646da96088b36
+- path: screens/renders/SCR-SHELL-015--empty--narrow320.png
+  sha256: 27067f081767036df73ecd459586c6798cc2016f8d05360628494f9afba8e9d9
+- path: screens/renders/SCR-SHELL-015--empty--tablet.png
+  sha256: bfec166eb06d803a8d6f26133351b5c5bfa988fe5ec6cc4e91ee6b859a93a9bc
+- path: screens/renders/SCR-SHELL-015--empty--zoom200.png
+  sha256: e5ad6420248b6ecd2627f31a642d00f5b98c8867747985ce8540bf159ed13784
+- path: screens/renders/SCR-SHELL-015--error--desktop.png
+  sha256: 3b6eaf552401a185b3e185a6c452dbd182caa8120eecff105182998f270af096
+- path: screens/renders/SCR-SHELL-015--error--narrow320.png
+  sha256: 4502efd3b7d29b08063336c34dbbf82296c54bb2fcd2474dd2f582f8a88708e8
+- path: screens/renders/SCR-SHELL-015--error--tablet.png
+  sha256: 284887f9c36c0719e2ba34f94da50765a3357e73bec00dd3ff10e6c7edfbf757
+- path: screens/renders/SCR-SHELL-015--error--zoom200.png
+  sha256: b17085601145c82f21ddd33a03d8bed12f3dd30043f212d281ac1d044646e38c
+- path: screens/renders/SCR-SHELL-015--loading--desktop.png
+  sha256: 6c85642e0ddc1d40edf2a1298c4c1306e2cf7223b57b87869f4a72e0f4b5591f
+- path: screens/renders/SCR-SHELL-015--loading--narrow320.png
+  sha256: 20ade7681856b28ceee7331b3bd9fae8692cc682ce4e988776c35f0213a7ba1f
+- path: screens/renders/SCR-SHELL-015--loading--tablet.png
+  sha256: 210dad71f09b1dc40b52ab464a718d5aaa2267a297de4a0cbe466be9fdf433ae
+- path: screens/renders/SCR-SHELL-015--loading--zoom200.png
+  sha256: 6f5b263fbfb21819d5e0c6940359a14fcd3b9299598dfa7807d7111e6b287117
+- path: screens/renders/SCR-SHELL-016--applied-compact-collapsed--desktop.png
+  sha256: ba6ef90389f56fa156220d769ff7ba2419f98c89d9d242c8622e967d4c771d66
+- path: screens/renders/SCR-SHELL-016--applied-compact-collapsed--narrow320.png
+  sha256: 5fab225e90423da1cead9b11cd8467cbe3a0daf2ac79556ef9863c27d734b77d
+- path: screens/renders/SCR-SHELL-016--applied-compact-collapsed--tablet.png
+  sha256: 4acb02317a030898e48dab31a03da28794330c6e598a6b34c0fb2eee9bb550a9
+- path: screens/renders/SCR-SHELL-016--applied-compact-collapsed--zoom200.png
+  sha256: 0ec3ec6c03dabe7db0b9de12ae38ea5e6af86675cbb2c63ae692772c2c1fe662
+- path: screens/renders/SCR-SHELL-016--preferences--desktop.png
+  sha256: 2f4c108b8166307531a05a985fc13c07efcb03efa4db53a8f60fc1705a364adb
+- path: screens/renders/SCR-SHELL-016--preferences--narrow320.png
+  sha256: cd14479060516c60edf12a61f47549efdd915d706733ebf3e55f23ff0e8c07e8
+- path: screens/renders/SCR-SHELL-016--preferences--tablet.png
+  sha256: c3d004a6c818c14cf50e5d60fbe4a75118bfdcf0a3f6e5846d1c3ed3ed072628
+- path: screens/renders/SCR-SHELL-016--preferences--zoom200.png
+  sha256: 85f2874fd62dbecf896345b29e8afdc58b79e311f41394343380f74f22298c04
+- path: screens/renders/SCR-SHELL-017--ar-001-shell--desktop.png
+  sha256: 42510849e6d4eeef5064c7a8731ab3bd2fb0d81d7474a8ceb6ea958cf2a5a3bd
+- path: screens/renders/SCR-SHELL-017--ar-001-shell--narrow320.png
+  sha256: 47576caf49aa119b9db85c9488786862dc110a81b09fea559e2bccc026323ea3
+- path: screens/renders/SCR-SHELL-017--ar-001-shell--tablet.png
+  sha256: e89f3b2233fb718913860063cb35fcf82c7e599d8f5c42e5624444745e80b1dc
+- path: screens/renders/SCR-SHELL-017--ar-001-shell--zoom200.png
+  sha256: faca4ad42e825afd7bfbfa456a16eed1caa628f12452122b035a62a3d939d3b2
+- path: screens/renders/SCR-SHELL-017--ar-004-nav-open--narrow320.png
+  sha256: 8e9d148ed1def9fa78ae970d70e58f1bd4c4c73fae7b9ad2ffb8d19bfbe561ca
+- path: screens/renders/SCR-SHELL-017--ar-006-nav-locked--desktop.png
+  sha256: b8ccd37c95d657ecb98ec30f7ee731e942ab3bd62dc3b108e855acc0ea63f04e
+- path: screens/renders/SCR-SHELL-017--ar-006-nav-locked--narrow320.png
+  sha256: 1d8940a5ec4caa31d48dad5f11a3283384ef6cc141290ef0619882fb0e6717a7
+- path: screens/renders/SCR-SHELL-017--ar-006-nav-locked--tablet.png
+  sha256: 624a49b7e7758e1b9579b4b8ce097ac6d8faafd6a5721bb419e498ed45fdf6fc
+- path: screens/renders/SCR-SHELL-017--ar-006-nav-locked--zoom200.png
+  sha256: e44b21015863341c80657b87f15f65c787d929ceafcb5170b6c43fd4655c4efc
+- path: screens/renders/SCR-SHELL-017--ar-008-palette--desktop.png
+  sha256: 0e33ce83d5aaf4b8f09b68faaffe080b88600b3333c9706465c35b2a15dc2d13
+- path: screens/renders/SCR-SHELL-017--ar-008-palette--narrow320.png
+  sha256: 1de739379736555c9a2c4eee6c7ae330dde28efd3c022f2b001c76b17d41a7dd
+- path: screens/renders/SCR-SHELL-017--ar-008-palette--tablet.png
+  sha256: 8595916ba9af8f66b2f20687a024f7577299dc2f9d176cf0f266b324e455b1f4
+- path: screens/renders/SCR-SHELL-017--ar-008-palette--zoom200.png
+  sha256: 0a58c3b745c4b420ff696f89dc44a325151eeec4172525fd5bfc75a839d284a8
+- path: screens/renders/SCR-SHELL-017--ar-011-frame--desktop.png
+  sha256: 5c91a099e3c800d358722ed789ccec2304cf80e721c8073a584c9aef54140301
+- path: screens/renders/SCR-SHELL-017--ar-011-frame--narrow320.png
+  sha256: e7a6cfa466b83ef5a8861a24faa51a5adaf513e45661c818268b301bd6566c42
+- path: screens/renders/SCR-SHELL-017--ar-011-frame--tablet.png
+  sha256: 5c31854d443902997c09549fc89b4e1b57feb24d858a138aad14835bf7c8aca3
+- path: screens/renders/SCR-SHELL-017--ar-011-frame--zoom200.png
+  sha256: cf5435d6cf81bef60f9ab9a06abffaeaf62eadb1cf71001ca588b800d4f01cad
+- path: screens/renders/SCR-SHELL-017--ar-012-locked--desktop.png
+  sha256: 3eab1b3ce1a9af2951fa9148e2ab350cc2c589eb9f042155a23bc3c68a5354ff
+- path: screens/renders/SCR-SHELL-017--ar-012-locked--narrow320.png
+  sha256: 8fc26478ae9a2e6f43ead30c828b4dfdfc17c062dc59a2f19668eb533b5a53d7
+- path: screens/renders/SCR-SHELL-017--ar-012-locked--tablet.png
+  sha256: 35b93ac760b4d7624bd42f3210aec39a0f2b4af5e24bccbe338a2ff13dcd2b86
+- path: screens/renders/SCR-SHELL-017--ar-012-locked--zoom200.png
+  sha256: 2612a615a540dcaaee7d9156a18fbf56e6d6a5454146b9e1f8fddea081241db5
+- path: screens/renders/SCR-SHELL-017--he-001-shell--desktop.png
+  sha256: 2704a604f12aaaf8434cddf2a5b450d76c572805a937b2d514e786e22e3fabe2
+- path: screens/renders/SCR-SHELL-017--he-001-shell--narrow320.png
+  sha256: 0e728e118402be57c084ba56652e85dd3145ff4cbb8dfd62a1a06eaf595141d5
+- path: screens/renders/SCR-SHELL-017--he-001-shell--tablet.png
+  sha256: 680dfbeb9e35af7ece7f3472447a861a1af8387f69f73ce5d154ddbc87cfa76e
+- path: screens/renders/SCR-SHELL-017--he-001-shell--zoom200.png
+  sha256: d3055079bf8633beeaa625e58972ac762f171d97b9806ca415523a7119bf3e83
+- path: screens/renders/SCR-SHELL-017--he-004-nav-open--narrow320.png
+  sha256: 4f07c855e972d994456b7aca5733f9116bbd192dfcecfc6a8ec6c6cd5cfb2571
+- path: screens/renders/SCR-SHELL-017--he-006-nav-locked--desktop.png
+  sha256: 237ff2e3270caef4f43ad0a0ca857b6f54345d2ee4903f481caad07220c242df
+- path: screens/renders/SCR-SHELL-017--he-006-nav-locked--narrow320.png
+  sha256: 4132f8c5846ff01d29e6b25ec95f761685e29e819c32581330759875b54ec273
+- path: screens/renders/SCR-SHELL-017--he-006-nav-locked--tablet.png
+  sha256: d914c4068f8a14255a9192fe4ee5a8375630d4b8f78fb5b26cb2f44aa3271add
+- path: screens/renders/SCR-SHELL-017--he-006-nav-locked--zoom200.png
+  sha256: d864bc839429102b64b5dbad6a7fb52fa9071a1ce397491780e13235643f77c4
+- path: screens/renders/SCR-SHELL-017--he-008-palette--desktop.png
+  sha256: afe3bd7d6d4602185fbceffa6fc28154cea435ff71fda411e8963a9769c7672a
+- path: screens/renders/SCR-SHELL-017--he-008-palette--narrow320.png
+  sha256: 6fc44ca437bd28a8517e42a8109ad630c498c0285ee13bc93d6889f4df57cce7
+- path: screens/renders/SCR-SHELL-017--he-008-palette--tablet.png
+  sha256: 40690ce977aa1f462cc17e35d70eaa65d919d42fff2eadc311bfd476c284e318
+- path: screens/renders/SCR-SHELL-017--he-008-palette--zoom200.png
+  sha256: d6b62ac544bf7222c894f74902450be7b8fc8d0b0b62dbc687cf25ea4613561a
+- path: screens/renders/SCR-SHELL-017--he-011-frame--desktop.png
+  sha256: d9c4271be346b2d40a5f92b51b72920bc476d6187e46feed877052397ab6f528
+- path: screens/renders/SCR-SHELL-017--he-011-frame--narrow320.png
+  sha256: 2dfbce899ad71968aa47a63a2e22956cd5c42771d5f313467e174b621617d1ca
+- path: screens/renders/SCR-SHELL-017--he-011-frame--tablet.png
+  sha256: b4d3737b236a02031053ad6a8ee2ccfcf0cb1a614d61afa128b17d568360903c
+- path: screens/renders/SCR-SHELL-017--he-011-frame--zoom200.png
+  sha256: bd0e811c3ad3b0902ac73dc5940a72d230ecb8cbb263171a5e5f8ea95d3c2141
+- path: screens/renders/SCR-SHELL-017--he-012-locked--desktop.png
+  sha256: 2b6ebd10b1bf28753c6ae09334dd108dd5a531510513fd1460a5d4fe43d5b85a
+- path: screens/renders/SCR-SHELL-017--he-012-locked--narrow320.png
+  sha256: ef558707b6721ac0964957400f9d41943ec8a44ba3cffebb60939701caab5a37
+- path: screens/renders/SCR-SHELL-017--he-012-locked--tablet.png
+  sha256: f2b18a721b8b5c76e7bf6cfdc7cf2ef05a6bf15449a7bc8f8c124bfa56633923
+- path: screens/renders/SCR-SHELL-017--he-012-locked--zoom200.png
+  sha256: f79e099cb97186ae833c9b2464d40b7ac00b8827595760ce441c0176fafbdc26
+- path: screens/renders/SCR-SHELL-018--long-text-2x--desktop.png
+  sha256: d8534e0e29dd2ec09da663c350cac2d2c00947719871e916c62e4e40d63578ff
+- path: screens/renders/SCR-SHELL-018--long-text-2x--narrow320.png
+  sha256: d713d59d1ee2c18eef3371d3f351460059d0d1f5c0b891988c681576ea36f689
+- path: screens/renders/SCR-SHELL-018--long-text-2x--tablet.png
+  sha256: 7c9041f3cf8628d798e860fd53bdc7821d1614734d0eea6085d1fd41f2e1629d
+- path: screens/renders/SCR-SHELL-018--long-text-2x--zoom200.png
+  sha256: 87c3e76070bb5a22fcd04972193b6349e859e5820587891c51a5e8a853e0ce3b
+- path: screens/renders/SCR-SHELL-018--zoom-400--narrow320.png
+  sha256: e67461eb1d9c8e0a83e4c074540b68f4ae38b0c0f1bbb124e646df8035f067bb
+- path: screens/renders/SCR-SHELL-018--zoom-400--short320x256.png
+  sha256: 6bcaea3aae85968c207d454797a1524b9922635833a66d32f8bb2aa06706bb0d
+- path: screens/renders/SCR-SHELL-019--board--desktop.png
+  sha256: cea6317a6626d8554123da94ff56c10dcee0b1e11e3df2875c36ed7f76b4c48d
+- path: screens/renders/SCR-SHELL-019--board--narrow320.png
+  sha256: 457022ebcf44d7f342f48aabdeda2ee8e8662c6c35080a5cade5258e47d81a0b
+- path: screens/renders/SCR-SHELL-020--focus-order--desktop.png
+  sha256: e55914034b19c73e7a4a70226dca35673f7faabbe2dea60895a3b59392cd89ad
+- path: screens/renders/SCR-SHELL-020--focus-order--narrow320.png
+  sha256: e8ae281cd8762c72045c73c64bb9fb81bf76c3ac68f68275b27421c491b649a5
+- path: screens/renders/SCR-SHELL-020--focus-order--tablet.png
+  sha256: 058e325021a3eac1a3d3ccb198720b094c3d4201804eb2af747d05bc264f137d
+- path: screens/renders/SCR-SHELL-020--focus-order--zoom200.png
+  sha256: f2cd37ee543b425bb4acab173a910ab68621061b967fec29e61f7f335b976f3f
+- path: screens/renders/SCR-SHELL-020--maps--desktop.png
+  sha256: 916a27c67a31711b611a1b2b8af34d907ca124b081dbf827b1d134b200dfe61c
+- path: screens/renders/SCR-SHELL-020--maps--narrow320.png
+  sha256: 3940798526bc0b550b2c9d7793b2bd12cea668f09bbaeb2e7a50d5e6100209ca
+- path: screens/renders/SCR-SHELL-021--board--desktop.png
+  sha256: a8300204e252495d71057f9ec19d6aa6824200e442ea4f8e9c48e4efaed2849e
+- path: screens/renders/SCR-SHELL-021--board--narrow320.png
+  sha256: 474f9dba52aa5c111e16a34c8ccfcacb7ffa964ff33738e0b9f487f3716dc336
+- path: screens/renders/SCR-SHELL-021--nav-open-reduced--narrow320.png
+  sha256: 3c9faba05ea584c90646d13b235401e74e30765647f8cdf3fd9312aab35e8fd5
+- path: screens/renders/SCR-SHELL-021--nav-open-reduced--tablet.png
+  sha256: 22af4b990f541f30e3f5ae92895f57b77eace6bb5d12e8713fa444b863938e80
+- path: screens/renders/SCR-SHELL-021--palette-reduced--desktop.png
+  sha256: c76435430f360cebf433273eba4a60bae211090607aac18f9321ffa8cbcd7334
+- path: screens/renders/SCR-SHELL-022--comfortable--desktop.png
+  sha256: c3664cf6c365f745702a079994c751c0125a46fac2cd28006e9e3f68bfb18b8b
+- path: screens/renders/SCR-SHELL-022--comfortable--narrow320.png
+  sha256: 7ec59a58a60c9f1e39e58fbdb39850795341c3a41a9b0d808e20e04b844ac95b
+- path: screens/renders/SCR-SHELL-022--comfortable--tablet.png
+  sha256: d583713d1cfbb7af1add167d379777681be31157dd1492358e6d9d1c8c8517d9
+- path: screens/renders/SCR-SHELL-022--comfortable--zoom200.png
+  sha256: c4848d8024a2f6e9241720dd7ecc6c92bc31545acf73f84b3390ff53300311d2
+- path: screens/renders/SCR-SHELL-022--compact--desktop.png
+  sha256: cc8d46ec42f5274f63fb763da283c486387a51d1a56adda53add356bdbf9e4b4
+- path: screens/renders/SCR-SHELL-022--compact--narrow320.png
+  sha256: 91feed07e0bfec28fa71f4751d5dd051ae067b6900fb9d15a9bb1d57de8a0297
+- path: screens/renders/SCR-SHELL-022--compact--tablet.png
+  sha256: 55d7b3b15f8754f76435417f04bcd7d04589771cbfcd462370f69b351224a287
+- path: screens/renders/SCR-SHELL-022--compact--zoom200.png
+  sha256: 78f92d5b69c1bc92d7d80d35434d5453a95e72d3123c57f895b94300fa57df38
+- path: screens/renders/SCR-SHELL-023--board--desktop.png
+  sha256: 2bc3976e6dcdd67d65c2876ee468e180d36dfe24e91716d821362b96ba9c5be9
+- path: screens/renders/SCR-SHELL-023--board--narrow320.png
+  sha256: 9090752271ce7948829037e287ff06aee589b2142aa74ade1bcfece86656e051
+- path: screens/renders/SCR-SHELL-023--board--tablet.png
+  sha256: 235b17d637dfc6d0eb7ceece1ef6e5c5be0477d8f473edd4788d91d60046eccd
+- path: screens/renders/SCR-SHELL-023--board--zoom200.png
+  sha256: 7abad2f0fcef609ca74b020b6ec0851b07fc014456f846154ae66a4b0aa42361
+- path: shell-information-architecture.md
+  sha256: ada63c38c06726b58a72268104f765ace7c6acc7e3caef67ab8321264163751e
+- path: token-use-map.md
+  sha256: f1bc1a0c755c37d12ab067985f827b9d6652d901913181efdc0fbb9f27e8c566

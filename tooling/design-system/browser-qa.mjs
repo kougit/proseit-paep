@@ -5,7 +5,8 @@
  * Serves dist/ui-lab/browser locally, discovers every laboratory page from its contents list, and in an
  * installed Chrome/Chromium (browser.mjs; nothing is downloaded) checks at 1440, 834 and 320 CSS px, in LTR
  * and RTL:
- *   A1 axe-core: zero WCAG 2.0/2.1/2.2 A and AA violations        A2 no page-level horizontal overflow
+ *   A1 axe-core: zero WCAG 2.0/2.1/2.2 A and AA violations, framed  A2 no page-level horizontal overflow
+ *      shell-showcase previews included
  *   A3 no console error or page error                              A4 one h1 and one main landmark
  * and, once per run:
  *   M1 reduced motion (media emulation and the lab simulation) zeroes motion tokens and stops loops
@@ -68,8 +69,18 @@ export async function open(context, url) {
   return { page, errors };
 }
 
-/** Runs axe-core on the document, or on the first element matching `selector`. Returns violation strings. */
+/**
+ * Runs axe-core on the document, or on the first element matching `selector`. Returns violation strings. On the
+ * whole document, axe-core is also loaded into every child frame (the IB3 shell-showcase previews) once its h1 has
+ * rendered, so the audit covers the framed documents too.
+ */
 export async function axeViolations(page, selector = null) {
+  if (!selector) {
+    for (const frame of page.frames().filter((f) => f !== page.mainFrame())) {
+      await frame.waitForSelector('main h1', { timeout: 15000 });
+      if (!(await frame.evaluate(() => 'axe' in window))) await frame.addScriptTag({ path: AXE });
+    }
+  }
   if (!(await page.evaluate(() => 'axe' in window))) await page.addScriptTag({ path: AXE });
   return page.evaluate(async ([tags, sel]) => {
     const target = sel ? document.querySelector(sel) : document;

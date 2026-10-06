@@ -175,6 +175,17 @@ if (want('W26')) {
 }
 const allFiles = ['W03', 'W04'].some(want) ? walk('.') : [];
 
+/**
+ * The one approved CLAUDE.md amendment per authorised work package: [baseline line, amended line]. An in-scope
+ * CLAUDE.md change must be exactly this replacement (IB3 authorisation §7).
+ */
+const APPROVED_CLAUDE_AMENDMENTS = {
+  'IB3-ENTERPRISE-SHELL': [
+    '- Do not implement analytics/reporting UI, offline queues, the enterprise shell, or domain kits.',
+    '- Do not implement analytics/reporting UI, offline queues, or domain kits. Do not implement the enterprise shell, except under the PO/SA-authorised work package `IB3-ENTERPRISE-SHELL` (PO/SA authorisation 2026-10-06), within its `WORK_PACKAGE.md`, `ACCEPTANCE.md` and the Generation 5 `authorisedScope`; this exception grants no permission for any later milestone, for self-acceptance, or for baseline promotion.',
+  ],
+};
+
 // W02: controlled sources (PACK_MANIFEST fingerprints) and CLAUDE.md unchanged.
 if (want('W02')) {
   const p = [];
@@ -192,10 +203,21 @@ if (want('W02')) {
     if (!BASE) p.push(noBase);
     else {
       if (git('diff', '--quiet', BASE, '--', '.paep-control', '.gitignore', 'PACK_MANIFEST.json').status !== 0) p.push(`controlled files differ from the accepted baseline ${BASE.slice(0, 7)}`);
-      if (git('diff', '--quiet', BASE, '--', 'CLAUDE.md').status !== 0 && !inScope('CLAUDE.md')) p.push(`CLAUDE.md differs from the accepted baseline ${BASE.slice(0, 7)} without authorisation in the CANDIDATE scope`);
+      if (git('diff', '--quiet', BASE, '--', 'CLAUDE.md').status !== 0) {
+        if (!inScope('CLAUDE.md')) p.push(`CLAUDE.md differs from the accepted baseline ${BASE.slice(0, 7)} without authorisation in the CANDIDATE scope`);
+        else {
+          // An in-scope change is exactly the approved amendment of the candidate's work package, nothing more.
+          const amendment = (gov?.candidate?.workPackages ?? []).map((w) => APPROVED_CLAUDE_AMENDMENTS[w]).find(Boolean);
+          const was = git('show', `${BASE}:CLAUDE.md`).stdout.split('\n');
+          const now = exists('CLAUDE.md') ? read('CLAUDE.md').split('\n') : [];
+          const i = amendment ? was.indexOf(amendment[0]) : -1;
+          const expected = i < 0 ? null : [...was.slice(0, i), amendment[1], ...was.slice(i + 1)];
+          if (!expected || JSON.stringify(now) !== JSON.stringify(expected)) p.push(`CLAUDE.md differs from the accepted baseline ${BASE.slice(0, 7)} by more than the approved amendment of the CANDIDATE work package`);
+        }
+      }
     }
   } catch (e) { p.push(String(e)); }
-  add('W02', 'Controlled sources match PACK_MANIFEST.json sha256 and size; .paep-control, .gitignore and PACK_MANIFEST.json unchanged since the accepted baseline; CLAUDE.md unchanged unless the CANDIDATE scope authorises it',
+  add('W02', 'Controlled sources match PACK_MANIFEST.json sha256 and size; .paep-control, .gitignore and PACK_MANIFEST.json unchanged since the accepted baseline; CLAUDE.md unchanged unless the CANDIDATE scope authorises it, and then only by the approved amendment of its work package',
     n > 0 && p.length === 0, p.length ? p.join('; ') : `${n}/${n} controlled files match`);
 }
 

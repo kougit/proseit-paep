@@ -5,6 +5,10 @@
   },
   "include": [
     "../../packages/foundation/src/**/*.ts",
-    "../../packages/components/src/**/*.ts"
+    "../../packages/components/src/**/*.ts",
+    "../../packages/enterprise/src/**/*.ts",
+    "../../packages/platform/src/**/*.ts",
+    "../../packages/i18n/src/**/*.ts",
+    "../../packages/observability/src/**/*.ts"
   ]
 }

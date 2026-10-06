@@ -48,6 +48,7 @@
     "qa:accessibility": "node tooling/design-system/browser-qa.mjs",
     "qa:accessibility:negative": "node tooling/design-system/browser-qa-negative.mjs",
     "qa:ib2:ci-negative": "node tooling/design-system/ci-governance-negative.mjs",
+    "test:enterprise": "node tooling/enterprise-shell/run-enterprise-tests.mjs",
     "qa:ddr07": "node tooling/enterprise-shell/ddr07-gate.mjs",
     "qa:ddr07:negative": "node tooling/enterprise-shell/ddr07-gate-negative.mjs"
   },

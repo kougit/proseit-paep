@@ -588,8 +588,10 @@ const pkgFinding = (key) => [/^(package\.json scripts differ from baseline \+ th
 // IB1-CONTRACTS-CONFIG: the WP03/WP04 verifiers require the IB0 placeholder entry points. A package entry point that is
 // no longer a placeholder is accepted only when it changed inside the CANDIDATE scope (B11 passing) or, once promoted, in
 // accepted history after that verifier's baseline (the same bound as every other historical finding).
-// IB2-FOUNDATION-COMPONENTS adds the foundation and components entry points under the same bound.
-const IB1_FILLED_ENTRIES = ['packages/contracts/src/index.ts', 'packages/platform/src/index.ts', 'packages/foundation/src/index.ts', 'packages/components/src/index.ts'];
+// IB2-FOUNDATION-COMPONENTS adds the foundation and components entry points under the same bound, and
+// IB3-ENTERPRISE-SHELL the i18n, observability and enterprise entry points.
+const IB1_FILLED_ENTRIES = ['packages/contracts/src/index.ts', 'packages/platform/src/index.ts', 'packages/foundation/src/index.ts', 'packages/components/src/index.ts',
+  'packages/i18n/src/index.ts', 'packages/observability/src/index.ts', 'packages/enterprise/src/index.ts'];
 const filledEntry = (key) => (f) => IB1_FILLED_ENTRIES.includes(f) && since(key)(f);
 
 // IB3-ENTERPRISE-SHELL: the WP03 V13 / WP04 V18 integrity finding is accepted only when CLAUDE.md is the one controlled

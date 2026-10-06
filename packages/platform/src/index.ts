@@ -1,6 +1,6 @@
 // Public entry point of @proseit/paep-platform. Consumers import this package only through this entry point.
-// IB1 delivers the framework-neutral runtime-configuration boundary (PAEP-IR-01 §5.6 IB1-WP4/WP5); the remaining
-// platform abstractions are IB3.
+// IB1 delivers the framework-neutral runtime-configuration boundary (PAEP-IR-01 §5.6 IB1-WP4/WP5); IB3 adds the
+// framework-neutral connectivity signal seam used by the enterprise shell.
 export {
   MAX_RUNTIME_CONFIG_BYTES,
   MAX_RUNTIME_CONFIG_DEPTH,
@@ -16,3 +16,5 @@ export type { RuntimeConfigFetch, RuntimeConfigFetchResponse, RuntimeConfigLoadO
 export type { RuntimeConfigEnvironment } from './lib/runtime-config/semantic.js';
 export { describeRuntimeConfigFailure, startWithRuntimeConfig } from './lib/runtime-config/startup.js';
 export type { RuntimeConfigStartup } from './lib/runtime-config/startup.js';
+export { CONNECTIVITY_STATES, browserConnectivitySource } from './lib/connectivity/connectivity.js';
+export type { ConnectivityHost, ConnectivitySource, ConnectivityState } from './lib/connectivity/connectivity.js';

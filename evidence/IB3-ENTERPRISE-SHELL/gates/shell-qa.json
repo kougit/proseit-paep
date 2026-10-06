@@ -1,0 +1,81 @@
+{
+  "ok": true,
+  "seconds": 74,
+  "results": [
+    {
+      "id": "H",
+      "name": "H1-H4 shell states: 88 state × viewport × direction combinations (axe at 1440, 834, 640 and 320)",
+      "problems": []
+    },
+    {
+      "id": "N1",
+      "name": "Never-hidden set present and inside the viewport at 320 and 320×256 (LTR and RTL)",
+      "problems": []
+    },
+    {
+      "id": "T1",
+      "name": "Shell targets at least 24 × 24 CSS px at 1440 and 320 (chrome, sheet, palette)",
+      "problems": []
+    },
+    {
+      "id": "K1",
+      "name": "Skip link is the first Tab stop, visible when focused, and moves focus to main (1440, 320)",
+      "problems": []
+    },
+    {
+      "id": "K1b",
+      "name": "Skip link at 320",
+      "problems": []
+    },
+    {
+      "id": "K2",
+      "name": "Ctrl+K opens the palette with focus in the combobox; Escape returns focus to the trigger",
+      "problems": []
+    },
+    {
+      "id": "K3",
+      "name": "Navigation sheet takes focus and returns it to Open navigation on Escape (834)",
+      "problems": []
+    },
+    {
+      "id": "K4",
+      "name": "A route change focuses the new page h1",
+      "problems": []
+    },
+    {
+      "id": "K5",
+      "name": "No keyboard trap over the chrome and page (1440)",
+      "problems": []
+    },
+    {
+      "id": "F1",
+      "name": "Focused chrome controls show a focus indicator of at least 2 px (1440, 834)",
+      "problems": []
+    },
+    {
+      "id": "F1b",
+      "name": "Focus indicator at 834",
+      "problems": []
+    },
+    {
+      "id": "M1",
+      "name": "Reduced motion: motion tokens 0 ms; the sheet and the palette open without animation (834)",
+      "problems": []
+    },
+    {
+      "id": "R1",
+      "name": "RTL mirroring: navigation at the inline start, sheet on the right edge, directional icon mirrored",
+      "problems": []
+    },
+    {
+      "id": "L1",
+      "name": "200 % text keeps the workspace free of horizontal scroll (1440)",
+      "problems": []
+    },
+    {
+      "id": "L1b",
+      "name": "200 % text at 640 (400 % zoom is covered by the 320 px states)",
+      "problems": []
+    }
+  ]
+}

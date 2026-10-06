@@ -57,7 +57,7 @@ export { PaepShellNavSheet } from './lib/nav/nav-sheet';
 export { PaepCommandPalette } from './lib/palette/command-palette';
 export { PaepPageFrame } from './lib/page-frame/page-frame';
 export type { PaepPageState } from './lib/page-frame/page-frame';
-export { PaepShellStatusStrip } from './lib/status/status-strip';
+export { PaepStatusStrip } from './lib/status/status-strip';
 export { PaepContextSwitcher } from './lib/context/context-switcher';
 export { PaepLockedState } from './lib/locked/locked-state';
 export { PaepErrorBoundary } from './lib/error/error-boundary';

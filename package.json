@@ -50,7 +50,9 @@
     "qa:ib2:ci-negative": "node tooling/design-system/ci-governance-negative.mjs",
     "test:enterprise": "node tooling/enterprise-shell/run-enterprise-tests.mjs",
     "qa:ddr07": "node tooling/enterprise-shell/ddr07-gate.mjs",
-    "qa:ddr07:negative": "node tooling/enterprise-shell/ddr07-gate-negative.mjs"
+    "qa:ddr07:negative": "node tooling/enterprise-shell/ddr07-gate-negative.mjs",
+    "qa:enterprise": "node tooling/enterprise-shell/enterprise-qa.mjs",
+    "qa:enterprise:negative": "node tooling/enterprise-shell/enterprise-qa-negative.mjs && node tooling/enterprise-shell/design-system-extension-negative.mjs"
   },
   "dependencies": {
     "@angular/common": "22.1.8",

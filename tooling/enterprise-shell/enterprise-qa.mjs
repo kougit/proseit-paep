@@ -1,0 +1,246 @@
+#!/usr/bin/env node
+/**
+ * IB3 enterprise-shell static gate (npm run qa:enterprise): milestone scope, package and import rules, the public-API
+ * census, the shell message catalogue, unsafe-HTML, storage, guard and route rules, and the narrow CLAUDE.md
+ * amendment (ACCEPTANCE AC-IB3-01, -04, -11, -12, -15, -22, -23). Read-only.
+ *   node tooling/enterprise-shell/enterprise-qa.mjs [--root <dir>] [--json]
+ * The baseline is the active ACCEPTED generation of tooling/governance/baseline-registry.json.
+ */
+import { spawnSync } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const args = process.argv.slice(2);
+const root = args.includes('--root') ? path.resolve(args[args.indexOf('--root') + 1]) : path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const ENT = 'packages/enterprise/src';
+const APP = 'apps/reference-app/src';
+
+/** §12 / HOF-IB3-001 component map: the approved shell symbols of the one public entry point. */
+export const SHELL_SYMBOLS = [
+  'PaepShell', 'PaepShellTopbar', 'PaepShellNav', 'PaepShellNavSheet', 'PaepPageFrame', 'PaepCommandPalette', 'PaepNotificationPanel',
+  'PaepContextSwitcher', 'PaepAccountMenu', 'PaepLockedState', 'PaepErrorBoundary', 'PaepNotFound', 'PaepStatusStrip', 'PaepShellPreferences',
+  'PaepRouteFocus',
+];
+/** The provider function, the port tokens and the message defaults: the rest of the approved value exports. */
+export const SUPPORT_VALUES = [
+  'providePaepShell', 'PAEP_SHELL_DEFAULT_MESSAGES', 'PAEP_SHELL_LOCK_REASONS', 'PAEP_SHELL_ACCESS', 'PAEP_SHELL_COMMANDS', 'PAEP_SHELL_CONNECTIVITY',
+  'PAEP_SHELL_CONTEXT', 'PAEP_SHELL_COUNTS', 'PAEP_SHELL_ERROR_REPORTER', 'PAEP_SHELL_HOOKS', 'PAEP_SHELL_LOCALE', 'PAEP_SHELL_NAVIGATION',
+  'PAEP_SHELL_NOTIFICATIONS', 'PAEP_SHELL_RUNTIME_CONFIG', 'PAEP_SHELL_SESSION',
+];
+/** Packages the enterprise shell may depend on (HOF-IB3-001 package map; WORK_PACKAGE §5). */
+const ENT_IMPORTS = ['@angular/core', '@angular/common', '@angular/router', '@proseit/paep-components', '@proseit/paep-foundation', '@proseit/paep-contracts', '@proseit/paep-i18n', '@proseit/paep-observability', '@proseit/paep-platform'];
+const SPEC_IMPORTS = ['@angular/core/testing', 'vitest', 'vitest/browser'];
+const APP_IMPORTS = ['@angular/core', '@angular/router', '@angular/platform-browser', '@proseit/paep-enterprise', '@proseit/paep-components', '@proseit/paep-foundation', '@proseit/paep-contracts', '@proseit/paep-platform'];
+/** Reference-app routes (§15): workspace, the locked and error demonstrations, not found, and optional diagnostics. */
+const APP_ROUTES = ['', 'workspace', 'locked/:reason', 'error-demo', 'diagnostics', '**'];
+/** Paths IB3 may not change (§6, AC-IB3-22/23). */
+const FROZEN = [/^packages\/(analytics|offline|frappe-sdk|contracts|domain-[^/]+)\//, /^config\/runtime-config\.schema\.json$/, /^package-lock\.json$/];
+const CLAUDE_OLD = '- Do not implement analytics/reporting UI, offline queues, the enterprise shell, or domain kits.';
+const CLAUDE_NEW = '- Do not implement analytics/reporting UI, offline queues, or domain kits. Do not implement the enterprise shell, except under the PO/SA-authorised work package `IB3-ENTERPRISE-SHELL` (PO/SA authorisation 2026-10-06), within its `WORK_PACKAGE.md`, `ACCEPTANCE.md` and the Generation 5 `authorisedScope`; this exception grants no permission for any later milestone, for self-acceptance, or for baseline promotion.';
+const MESSAGE_COUNT = 121;
+
+const rel = (p) => path.relative(root, p).split(path.sep).join('/');
+const read = (f) => fs.readFileSync(path.join(root, f), 'utf8');
+const exists = (f) => fs.existsSync(path.join(root, f));
+function walk(dir, out = []) {
+  if (!fs.existsSync(path.join(root, dir))) return out;
+  for (const e of fs.readdirSync(path.join(root, dir), { withFileTypes: true })) {
+    const p = `${dir}/${e.name}`;
+    if (e.isDirectory()) walk(p, out);
+    else out.push(p);
+  }
+  return out;
+}
+const git = (...a) => spawnSync('git', a, { cwd: root, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+const isSpec = (f) => /\.spec\.ts$/.test(f) || f.includes('/lib/testing/');
+const stripComments = (s) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`])\/\/[^\n]*/g, '$1');
+const importsOf = (s) => [...s.matchAll(/(?:^|\n)\s*(?:import|export)\s[^'"`;]*?from\s*['"]([^'"]+)['"]|(?:^|\n)\s*import\s*['"]([^'"]+)['"]|import\(\s*['"]([^'"]+)['"]\s*\)/g)].map((m) => m[1] || m[2] || m[3]);
+
+const checks = [];
+const check = (id, name, findings, detail = '') => checks.push({ id, name, pass: findings.length === 0, detail: findings.length ? findings.slice(0, 12).join('; ') + (findings.length > 12 ? `; … ${findings.length - 12} more` : '') : detail });
+
+const entFiles = walk(ENT).filter((f) => f.endsWith('.ts'));
+const entTemplates = walk(ENT).filter((f) => /\.(ts|html|css)$/.test(f) && !isSpec(f));
+const appFiles = walk(APP).filter((f) => /\.(ts|html)$/.test(f));
+
+// E01 package and import rules (AC-IB3-01).
+{
+  const f = [];
+  if (!exists(`${ENT}/index.ts`)) f.push('packages/enterprise/src/index.ts missing');
+  const pkg = exists('packages/enterprise/package.json') ? JSON.parse(read('packages/enterprise/package.json')) : {};
+  if (pkg.exports && typeof pkg.exports === 'object' && Object.keys(pkg.exports).some((k) => k !== '.')) f.push('secondary entry point in packages/enterprise/package.json');
+  for (const file of entFiles) {
+    for (const spec of importsOf(stripComments(read(file)))) {
+      if (spec.startsWith('.')) {
+        const target = path.posix.normalize(path.posix.join(path.posix.dirname(file), spec));
+        if (!target.startsWith(`${ENT}/`)) f.push(`${file}: relative import leaves the package (${spec})`);
+        continue;
+      }
+      const allowed = ENT_IMPORTS.includes(spec) || (isSpec(file) && SPEC_IMPORTS.includes(spec));
+      if (!allowed) f.push(`${file}: ${spec}`);
+    }
+  }
+  for (const file of appFiles.filter((x) => x.endsWith('.ts'))) {
+    for (const spec of importsOf(stripComments(read(file)))) {
+      if (spec.startsWith('.')) {
+        const target = path.posix.normalize(path.posix.join(path.posix.dirname(file), spec));
+        if (!target.startsWith(`${APP}/`)) f.push(`${file}: relative import leaves the app (${spec})`);
+        continue;
+      }
+      if (!APP_IMPORTS.includes(spec)) f.push(`${file}: ${spec}`);
+    }
+  }
+  check('E01', 'Enterprise imports only its permitted packages through their single public entry points (no store framework, no deep import); the reference app composes only permitted packages', f, `${entFiles.length} enterprise and ${appFiles.length} app files`);
+}
+
+// E02 public-API census (AC-IB3-04, §12).
+{
+  const f = [];
+  const index = exists(`${ENT}/index.ts`) ? stripComments(read(`${ENT}/index.ts`)) : '';
+  const values = [];
+  for (const m of index.matchAll(/export\s+(type\s+)?\{([^}]*)\}\s*from\s*['"][^'"]+['"]/g)) {
+    if (m[1]) continue;
+    for (const part of m[2].split(',')) {
+      const t = part.trim();
+      if (!t) continue;
+      if (/^type\s/.test(t)) continue;
+      values.push(t.split(/\s+as\s+/).pop().trim());
+    }
+  }
+  if (/export\s+\*/.test(index)) f.push('export * in the entry point');
+  if (/export\s+(const|function|class|let|var|enum)\s/.test(index)) f.push('declaration in the entry point');
+  const want = [...SHELL_SYMBOLS, ...SUPPORT_VALUES];
+  for (const s of want) if (!values.includes(s)) f.push(`missing ${s}`);
+  for (const s of values) if (!want.includes(s)) f.push(`unapproved export ${s}`);
+  if (new Set(values).size !== values.length) f.push('duplicate export');
+  check('E02', `Public-API census: the entry point exports exactly the ${SHELL_SYMBOLS.length} approved shell symbols and the ${SUPPORT_VALUES.length} provider, token and message values`, f, `${values.length} value exports`);
+}
+
+// E03 duplication rules (AC-IB3-04): selectors, own dialogs only on PaepModalBase, no popover.
+{
+  const f = [];
+  for (const file of entTemplates.filter((x) => x.endsWith('.ts'))) {
+    const s = stripComments(read(file));
+    for (const m of s.matchAll(/selector:\s*'([^']+)'/g)) {
+      if (!/^(paep-shell(-[a-z-]+)?|paep-page-frame|paep-command-palette|paep-notification-panel|paep-context-switcher|paep-account-menu|paep-locked-state|paep-error-boundary|paep-not-found|paep-status-strip|\[paepShell[A-Za-z]*\])$/.test(m[1])) f.push(`${file}: selector ${m[1]}`);
+    }
+    if (/<dialog\b/.test(s) && !/extends\s+PaepModalBase\b/.test(s)) f.push(`${file}: own <dialog> outside PaepModalBase`);
+  }
+  for (const file of entTemplates) {
+    const s = read(file);
+    if (/\bpopover\s*=|\.showPopover\(|\.togglePopover\(|\bpopovertarget\b/i.test(s)) f.push(`${file}: popover used directly (menus use the governed component base)`);
+    if (/\banchor-name\b|\bposition-anchor\b/.test(s)) f.push(`${file}: private anchor positioning`);
+  }
+  check('E03', 'No generic primitive reimplemented in enterprise: shell selectors only, native dialogs only on PaepModalBase, no popover="manual" or private positioning', f);
+}
+
+// E04 shell message catalogue (content-keys.md, 121 keys).
+{
+  const f = [];
+  const file = `${ENT}/lib/messages/shell-messages.ts`;
+  const s = exists(file) ? read(file) : '';
+  const keys = [...s.matchAll(/^\s*'(paep\.[^']+)':\s*'/gm)].map((m) => m[1]);
+  if (keys.length !== MESSAGE_COUNT) f.push(`${keys.length} keys (expected ${MESSAGE_COUNT})`);
+  if (keys.some((k) => !/^paep\.shell\.[a-z0-9.]+$/i.test(k))) f.push('a key outside paep.shell.*');
+  if (new Set(keys).size !== keys.length) f.push('duplicate key');
+  const known = new Set(keys);
+  for (const src of entTemplates.filter((x) => x.endsWith('.ts') && x !== file)) {
+    for (const m of stripComments(read(src)).matchAll(/'(paep\.shell\.[a-z0-9.]+)'/gi)) if (!known.has(m[1]) && !m[1].endsWith('.')) f.push(`${src}: unknown key ${m[1]}`);
+  }
+  check('E04', `Shell messages: exactly ${MESSAGE_COUNT} approved paep.shell.* keys with English defaults; every key the shell names exists`, f, `${keys.length} keys`);
+}
+
+// E05 security rules (AC-IB3-12): no unsafe HTML, script evaluation or open redirect primitives.
+{
+  const f = [];
+  const unsafe = [/\[innerHTML\]/i, /\.innerHTML\s*=/, /\.outerHTML\s*=/, /insertAdjacentHTML/, /bypassSecurityTrust/, /\bDomSanitizer\b/, /\beval\s*\(/, /new\s+Function\s*\(/, /document\.write/, /window\.open\s*\(/, /location\.(href|assign|replace)\s*[=(]/];
+  for (const file of [...entTemplates, ...appFiles]) {
+    const s = stripComments(read(file));
+    for (const re of unsafe) if (re.test(s)) f.push(`${file}: ${re.source}`);
+  }
+  check('E05', 'No unsafe HTML, script evaluation, window.open or location redirects in enterprise or the reference app', f);
+}
+
+// E06 no persistence (AC-IB3-23): preferences are session-only; no credentials in storage.
+{
+  const f = [];
+  const store = [/\blocalStorage\b/, /\bsessionStorage\b/, /\bindexedDB\b/, /document\.cookie/, /\bcaches\./, /serviceWorker/];
+  for (const file of [...entTemplates, ...appFiles]) {
+    const s = stripComments(read(file));
+    for (const re of store) if (re.test(s)) f.push(`${file}: ${re.source}`);
+  }
+  check('E06', 'No browser storage, cookies, cache storage or service worker in enterprise or the reference app (session-only preferences)', f);
+}
+
+// E07 backend authority (AC-IB3-11/15): no permission-granting guard exported or used.
+{
+  const f = [];
+  for (const file of entTemplates.filter((x) => x.endsWith('.ts'))) {
+    if (/\b(CanActivate|CanActivateChild|CanMatch|CanDeactivate|CanLoad)(Fn)?\b|\bcan(Activate|ActivateChild|Match|Load)\s*:/.test(stripComments(read(file)))) f.push(`${file}: route guard`);
+  }
+  for (const file of appFiles) if (/\bcan(Activate|ActivateChild|Match|Load)\s*:/.test(stripComments(read(file)))) f.push(`${file}: route guard`);
+  check('E07', 'No permission-granting route guard in enterprise or the reference app (the server decides)', f);
+}
+
+// E08 reference-app routes (§15).
+{
+  const f = [];
+  const file = `${APP}/app/app.routes.ts`;
+  const s = exists(file) ? stripComments(read(file)) : '';
+  const paths = [...s.matchAll(/path:\s*'([^']*)'/g)].map((m) => m[1]);
+  if (!paths.length) f.push('no routes found');
+  for (const p of paths) if (!APP_ROUTES.includes(p)) f.push(`unapproved route "${p}"`);
+  for (const p of ['workspace', 'locked/:reason', 'error-demo', '**']) if (!paths.includes(p)) f.push(`missing route "${p}"`);
+  for (const file2 of appFiles) if (/['"`]\/?(login|analytics[^'"`]*|offline-demo)['"`]/.test(read(file2))) f.push(`${file2}: excluded route named`);
+  check('E08', 'Reference-app routes are exactly the approved set: workspace, locked and error demonstrations, not found (optional diagnostics); no /login, /analytics* or /offline-demo', f, paths.map((p) => `"${p}"`).join(', '));
+}
+
+// E09 milestone scope and dependencies against the accepted baseline (AC-IB3-22/23).
+let base = null;
+{
+  const f = [];
+  try {
+    const reg = JSON.parse(read('tooling/governance/baseline-registry.json'));
+    base = [...reg.generations].reverse().find((g) => g.status === 'ACCEPTED')?.acceptedCommit ?? null;
+  } catch { /* reported below */ }
+  if (!base || git('cat-file', '-e', `${base}^{commit}`).status !== 0) f.push(`accepted baseline commit not available (${base})`);
+  else {
+    const changed = git('diff', '--name-only', base, '--').stdout.split('\n').filter(Boolean);
+    const untracked = git('ls-files', '--others', '--exclude-standard').stdout.split('\n').filter(Boolean);
+    for (const p of [...changed, ...untracked]) if (FROZEN.some((re) => re.test(p))) f.push(`changed: ${p}`);
+    const was = JSON.parse(git('show', `${base}:package.json`).stdout || '{}');
+    const now = JSON.parse(read('package.json'));
+    for (const k of ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies', 'overrides', 'workspaces', 'engines', 'packageManager']) {
+      if (JSON.stringify(was[k] ?? null) !== JSON.stringify(now[k] ?? null)) f.push(`package.json ${k} changed`);
+    }
+  }
+  check('E09', 'Milestone scope: package-lock.json, dependencies, runtime-config schema, paep-contracts, analytics, offline, frappe-sdk and domain packages unchanged since the accepted baseline', f, base ? `baseline ${base.slice(0, 12)}` : '');
+}
+
+// E10 narrow CLAUDE.md amendment (§7).
+{
+  const f = [];
+  if (base && git('cat-file', '-e', `${base}^{commit}`).status === 0) {
+    const was = git('show', `${base}:CLAUDE.md`).stdout.split('\n');
+    const now = exists('CLAUDE.md') ? read('CLAUDE.md').split('\n') : [];
+    const i = was.indexOf(CLAUDE_OLD);
+    if (i < 0) f.push('baseline CLAUDE.md lacks the amended line');
+    else {
+      const expected = [...was.slice(0, i), CLAUDE_NEW, ...was.slice(i + 1)];
+      if (JSON.stringify(now) !== JSON.stringify(expected)) {
+        const diff = now.findIndex((l, k) => l !== expected[k]);
+        f.push(`CLAUDE.md differs from the baseline plus the one approved amendment (first difference at line ${diff < 0 ? Math.min(now.length, expected.length) + 1 : diff + 1})`);
+      }
+    }
+  } else f.push('accepted baseline commit not available');
+  check('E10', 'CLAUDE.md differs from the accepted baseline only by the one approved IB3-ENTERPRISE-SHELL exception line', f);
+}
+
+const failed = checks.filter((c) => !c.pass);
+if (args.includes('--json')) console.log(JSON.stringify({ ok: failed.length === 0, checks }, null, 2));
+else {
+  for (const c of checks) console.log(`${c.pass ? 'PASS' : 'FAIL'} ${c.id} ${c.name}${c.detail ? ` — ${c.detail}` : ''}`);
+  console.log(`\nPAEP enterprise-shell QA: ${failed.length ? 'FAIL' : 'PASS'} (${checks.length - failed.length}/${checks.length})`);
+}
+process.exit(failed.length ? 1 : 0);

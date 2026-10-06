@@ -71,7 +71,7 @@ export function connectivitySignal(): () => ConnectivityState {
   `,
   styleUrl: './status-strip.css',
 })
-export class PaepShellStatusStrip {
+export class PaepStatusStrip {
   protected readonly text = inject(PaepShellText);
   private readonly layout = inject(PaepShellLayout);
   private readonly session = inject(PAEP_SHELL_SESSION, { optional: true });

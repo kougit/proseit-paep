@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PaepShellLayout } from '../shell/shell-layout';
 import { provideTestShell, settle, testConnectivity, testRuntimeConfig, testSession, text } from '../testing/shell-testing';
-import { PaepShellStatusStrip } from './status-strip';
+import { PaepStatusStrip } from './status-strip';
 
-@Component({ imports: [PaepShellStatusStrip], template: '<paep-shell-status-strip />' })
+@Component({ imports: [PaepStatusStrip], template: '<paep-shell-status-strip />' })
 class StripHost {}
 
-describe('PaepShellStatusStrip', () => {
+describe('PaepStatusStrip', () => {
   let fixture: ComponentFixture<StripHost>;
   afterEach(() => fixture?.destroy());
   const rows = () => Array.from((fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>('[data-status]'));

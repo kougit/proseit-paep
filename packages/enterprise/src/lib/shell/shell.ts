@@ -21,7 +21,7 @@ import { PaepShellNav } from '../nav/nav';
 import { PaepShellNavSheet } from '../nav/nav-sheet';
 import { PAEP_SHELL_RUNTIME_CONFIG } from '../ports/ports';
 import { PaepRouteFocus } from '../route-focus/route-focus';
-import { PaepShellStatusStrip, environmentLabel } from '../status/status-strip';
+import { PaepStatusStrip, environmentLabel } from '../status/status-strip';
 import { PaepShellTopbar } from '../topbar/topbar';
 import { PaepShellLayout } from './shell-layout';
 import { PaepShellText } from './shell-text';
@@ -38,7 +38,7 @@ import { PaepShellText } from './shell-text';
 @Component({
   selector: 'paep-shell',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [PaepCommandPalette, PaepContextSwitcher, PaepShellNav, PaepShellNavSheet, PaepShellStatusStrip, PaepShellTopbar, PaepStatusBadge],
+  imports: [PaepCommandPalette, PaepContextSwitcher, PaepShellNav, PaepShellNavSheet, PaepStatusStrip, PaepShellTopbar, PaepStatusBadge],
   host: { class: 'paep-shell', '(document:keydown)': 'onKeydown($event)' },
   template: `
     <a class="paep-skip-link" [attr.href]="'#' + skipTarget()" (click)="skipToMain($event)">{{ text.t('paep.shell.skipLink.main') }}</a>

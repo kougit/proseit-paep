@@ -108,3 +108,10 @@
     inline-size: 100%;
   }
 }
+
+.paep-page-frame__reference {
+  display: block;
+}
+.paep-page-frame__reference code {
+  white-space: nowrap;
+}

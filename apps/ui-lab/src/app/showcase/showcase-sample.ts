@@ -75,6 +75,7 @@ const LOCKED: Readonly<Record<string, PaepShellAvailability>> = {
 
 const CONTEXTS: readonly PaepShellContext[] = [
   { tenant: { tenantId: 'sample-tenant-a', displayName: 'Sample Organisation A' }, site: 'Site 01' },
+  { tenant: { tenantId: 'sample-tenant-a', displayName: 'Sample Organisation A' }, site: 'Site 03' },
   { tenant: { tenantId: 'sample-tenant-b', displayName: 'Sample Organisation B' }, site: 'Site 02' },
 ];
 
@@ -83,13 +84,12 @@ function sampleContext(): PaepShellContextProvider {
   return {
     current,
     available: signal(CONTEXTS),
-    // Organisation B is accepted after a short delay; anything else is rejected with a sample reference.
-    requestSwitch: (tenantId) =>
+    // Organisation B is accepted after a short delay; anything else (such as Site 03) is rejected with a sample reference.
+    requestSwitch: (target) =>
       new Promise((resolve) =>
         setTimeout(() => {
-          const next = CONTEXTS.find((c) => c.tenant.tenantId === tenantId);
-          if (next && tenantId === 'sample-tenant-b') {
-            current.set(next);
+          if (target === CONTEXTS[2]) {
+            current.set(target);
             resolve({ status: 'accepted' });
           } else resolve({ status: 'rejected', reference: 'REF-SAMPLE-0001' });
         }, 400),

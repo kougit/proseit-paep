@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component, booleanAttribute, computed, inject, input } from '@angular/core';
-import { PaepBreadcrumb, PaepEmptyState, PaepSkeleton, type PaepBreadcrumbItem } from '@proseit/paep-components';
+import { ChangeDetectionStrategy, Component, booleanAttribute, computed, inject, input, output } from '@angular/core';
+import { PaepAlert, PaepBreadcrumb, PaepButton, PaepEmptyState, PaepSkeleton, type PaepBreadcrumbItem } from '@proseit/paep-components';
 import { PaepIcon } from '@proseit/paep-foundation';
 import { PAEP_SHELL_CONTEXT } from '../ports/ports';
 import { PaepShellText } from '../shell/shell-text';
 
 /** Content state of a page: the host renders its content only when `ready`. */
-export type PaepPageState = 'ready' | 'loading' | 'empty';
+export type PaepPageState = 'ready' | 'loading' | 'empty' | 'error';
 
 /**
  * Generic page frame (HOF-IB3-001 E-05, SCR-SHELL-011/-015): page header with breadcrumbs, the `h1` (tabindex −1, the
@@ -14,12 +14,17 @@ export type PaepPageState = 'ready' | 'loading' | 'empty';
  * below it otherwise. Below 600 px the context line also shows the current tenant context (Q-07). No analytics.
  *
  * Slots: `[paepPageStatus]`, `[paepPageContext]`, `[paepPageActions]`, `[paepPageToolbar]`, `[paepPageBefore]`,
- * default content, `[paepPageAfter]`, `[paepPageAside]` (set `aside` to show the aside region).
+ * default content, `[paepPageAfter]`, `[paepPageAside]` (set `aside` to show the aside region) and
+ * `[paepPageEmptyAction]` (the action of the empty state).
+ *
+ * Content states replace only the content, never the header: `loading`; `empty` (host heading, description and
+ * action); `error`, an error alert with the host's heading and message, the correlation reference and "Try again"
+ * when retryable (REQ-WORKSPACE-06). The error text comes from the host; raw error details never belong in it.
  */
 @Component({
   selector: 'paep-page-frame',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [PaepBreadcrumb, PaepEmptyState, PaepIcon, PaepSkeleton],
+  imports: [PaepAlert, PaepBreadcrumb, PaepButton, PaepEmptyState, PaepIcon, PaepSkeleton],
   host: { class: 'paep-page-frame' },
   template: `
     <div class="paep-page-frame__header">
@@ -59,7 +64,22 @@ export type PaepPageState = 'ready' | 'loading' | 'empty';
             </div>
           }
           @case ('empty') {
-            <paep-empty-state kind="empty" [heading]="emptyHeading() || text.t('paep.shell.page.empty')" [headingLevel]="2" />
+            <paep-empty-state kind="empty" [heading]="emptyHeading() || text.t('paep.shell.page.empty')" [description]="emptyDescription()" [headingLevel]="2">
+              <ng-content select="[paepPageEmptyAction]" />
+            </paep-empty-state>
+          }
+          @case ('error') {
+            <paep-alert class="paep-page-frame__error" status="error" live [heading]="errorHeading()">
+              @if (errorMessage()) {
+                {{ errorMessage() }}
+              }
+              @if (errorReference(); as ref) {
+                <span class="paep-page-frame__reference">{{ text.t('paep.shell.error.reference') }} <code dir="ltr">{{ ref }}</code>.</span>
+              }
+              @if (retryable()) {
+                <button paepButton paepAlertActions icon="retry" (click)="retry.emit()">{{ text.t('paep.shell.error.retry') }}</button>
+              }
+            </paep-alert>
           }
           @default {
             <ng-content />
@@ -87,6 +107,18 @@ export class PaepPageFrame {
   readonly state = input<PaepPageState>('ready');
   /** Heading of the empty state (default paep.shell.page.empty). */
   readonly emptyHeading = input<string>('');
+  /** Description of the empty state; undefined keeps the component default, an empty string hides it. */
+  readonly emptyDescription = input<string | undefined>(undefined);
+  /** Heading of the error state, from the host (e.g. "Records could not be loaded"). */
+  readonly errorHeading = input<string>('');
+  /** Plain-language message of the error state, from the host. */
+  readonly errorMessage = input<string>('');
+  /** Correlation reference of the failure (shown left to right). */
+  readonly errorReference = input<string>('');
+  /** Offers "Try again" in the error state (only for retryable failures). */
+  readonly retryable = input(true, { transform: booleanAttribute });
+  /** Emits when "Try again" is activated in the error state. */
+  readonly retry = output<void>();
   /** Shows the aside region. */
   readonly aside = input(false, { transform: booleanAttribute });
   /** Accessible name of the aside (default paep.shell.page.aside). */

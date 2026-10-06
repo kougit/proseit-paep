@@ -84,19 +84,6 @@
   gap: var(--paep-space-2);
   color: var(--paep-color-text-secondary);
 }
-.paep-palette__empty {
-  padding-block: var(--paep-space-4);
-  text-align: center;
-  color: var(--paep-color-text-secondary);
-}
-.paep-palette__empty p {
-  margin: var(--paep-space-1) 0 0;
-}
-.paep-palette__empty-title {
-  color: var(--paep-color-text-primary);
-  font-weight: var(--paep-font-weight-label);
-  overflow-wrap: anywhere;
-}
 .paep-palette__foot {
   margin: 0;
   padding: var(--paep-space-2) var(--paep-space-3);

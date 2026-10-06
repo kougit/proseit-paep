@@ -29,9 +29,11 @@ import { PaepShellErrors } from './shell-errors';
         <svg paepIcon="error"></svg>
         <h1 id="paep-error-title" class="paep-error-page__title" tabindex="-1">{{ copy().title }}</h1>
         <p>{{ copy().body }}</p>
-        <p class="paep-error-page__ref">
-          {{ text.t('paep.shell.error.reference') }}: <code dir="ltr">{{ e.correlationId }}</code>
-        </p>
+        @if (e.kind !== 'version') {
+          <p class="paep-error-page__ref">
+            {{ text.t('paep.shell.error.reference') }}: <code dir="ltr">{{ e.correlationId }}</code>
+          </p>
+        }
         <div class="paep-error-page__actions">
           @if (e.kind === 'render' && e.retryable) {
             <button paepButton variant="primary" icon="retry" (click)="retry()">{{ text.t('paep.shell.error.retry') }}</button>

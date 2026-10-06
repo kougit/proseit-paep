@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, DOCUMENT, DestroyRef, ElementRef, computed, inject, input, signal, viewChild } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { PaepCountBadge, PaepIconButton, PaepSkeleton } from '@proseit/paep-components';
+import { PAEP_MESSAGES, PaepCountBadge, PaepIconButton, PaepSkeleton, type PaepMessages } from '@proseit/paep-components';
 import { PaepIcon, type PaepIconName } from '@proseit/paep-foundation';
 import type { PaepShellLockReason } from '../ports/ports';
 import { PaepShellLayout } from '../shell/shell-layout';
@@ -19,6 +19,19 @@ export const PAEP_SHELL_LOCK_ICONS: Readonly<Record<PaepShellLockReason, PaepIco
 let nextNavId = 0;
 
 /**
+ * Component messages inside the navigation: the count badge's loading and unknown text come from the shell keys
+ * (`paep.shell.nav.count.loading`, `paep.shell.nav.count.unknown`) and follow the active shell locale.
+ */
+function navMessages(): PaepMessages {
+  const parent = inject(PAEP_MESSAGES, { skipSelf: true });
+  const text = inject(PaepShellText);
+  return Object.create(parent, {
+    'paep.count.loading': { enumerable: true, get: () => text.t('paep.shell.nav.count.loading') },
+    'paep.count.unknown': { enumerable: true, get: () => text.t('paep.shell.nav.count.unknown') },
+  }) as PaepMessages;
+}
+
+/**
  * Primary navigation (HOF-IB3-001 E-03, SCR-SHELL-002/-006): groups as disclosures, links with `aria-current="page"`,
  * counts and locked items, in manifest order. `mode="persistent"` (≥ 1024 px) can be collapsed by the user to the
  * rail, whose group buttons open a flyout of links; `mode="sheet"` is the same list inside the navigation sheet.
@@ -29,6 +42,7 @@ let nextNavId = 0;
   selector: 'paep-shell-nav',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NgTemplateOutlet, RouterLink, PaepIcon, PaepIconButton, PaepCountBadge, PaepSkeleton],
+  providers: [{ provide: PAEP_MESSAGES, useFactory: navMessages }],
   host: {
     class: 'paep-shell-nav',
     '[class.paep-shell-nav--rail]': 'rail()',

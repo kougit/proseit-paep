@@ -75,7 +75,8 @@ export interface PaepShellContextProvider {
   readonly current: Signal<PaepShellContext | null>;
   /** Contexts offered to the user; the switcher is shown only with more than one (Q-11). */
   readonly available: Signal<readonly PaepShellContext[]>;
-  requestSwitch(tenantId: string): Promise<PaepShellSwitchOutcome>;
+  /** Requests a switch to one of `available` (a site of the same tenant is its own context). The server decides. */
+  requestSwitch(context: PaepShellContext): Promise<PaepShellSwitchOutcome>;
 }
 
 /** Result group of the command palette. */

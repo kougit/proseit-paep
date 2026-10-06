@@ -5,12 +5,30 @@ import { PAEP_SHELL_CONTEXT, type PaepShellContext } from '../ports/ports';
 import { PaepRouteFocus } from '../route-focus/route-focus';
 import { PaepShellText } from '../shell/shell-text';
 
-/** Display text of a context: tenant plus optional site. */
+/** Accessible text of a context: tenant plus optional site ("Northwind Holdings, Site 04"). */
 export function contextText(c: PaepShellContext): string {
   return [c.tenant.displayName, c.site].filter(Boolean).join(', ');
 }
 
-type SwitchState = { readonly kind: 'idle' } | { readonly kind: 'pending'; readonly tenant: string } | { readonly kind: 'rejected'; readonly tenant: string; readonly reference: string };
+/** Visible name of a context in messages: tenant plus optional site ("Northwind Holdings · Site 04"). */
+export function contextName(c: PaepShellContext): string {
+  return [c.tenant.displayName, c.site].filter(Boolean).join(' · ');
+}
+
+/** Identity of a context: two sites of one tenant are different contexts. */
+export function contextKey(c: PaepShellContext): string {
+  return JSON.stringify([c.tenant.tenantId, c.site ?? null]);
+}
+
+/** Short name of `c` next to `other`: only the site when both share the tenant ("Site 07"), otherwise the full name. */
+function relativeName(c: PaepShellContext, other: PaepShellContext): string {
+  return c.site && c.tenant.tenantId === other.tenant.tenantId ? c.site : contextName(c);
+}
+
+type SwitchState =
+  | { readonly kind: 'idle' }
+  | { readonly kind: 'pending'; readonly target: PaepShellContext }
+  | { readonly kind: 'rejected'; readonly target: PaepShellContext; readonly reference: string };
 
 /**
  * Context display and switch request (HOF-IB3-001 E-08, SCR-SHELL-007, Q-11).
@@ -34,10 +52,10 @@ type SwitchState = { readonly kind: 'idle' } | { readonly kind: 'pending'; reado
       @if (mode() === 'mismatch') {
         @if (mismatchTarget(); as t) {
           <paep-alert status="warning" [heading]="text.t('paep.shell.context.mismatch.title')">
-            <p class="paep-context-switcher__body">{{ text.t('paep.shell.context.mismatch.body', { target: t.tenant.displayName, current: c.tenant.displayName }) }}</p>
+            <p class="paep-context-switcher__body">{{ text.t('paep.shell.context.mismatch.body', { target: contextName(t), current: contextName(c) }) }}</p>
             <div class="paep-context-switcher__actions">
-              <button paepButton variant="primary" (click)="openDialog(t.tenant.tenantId)">{{ text.t('paep.shell.context.mismatch.action', { target: t.tenant.displayName }) }}</button>
-              <button paepButton (click)="stay()">{{ text.t('paep.shell.context.mismatch.stay', { current: c.tenant.displayName }) }}</button>
+              <button paepButton variant="primary" (click)="openDialog(t)">{{ text.t('paep.shell.context.mismatch.action', { target: relativeName(t, c) }) }}</button>
+              <button paepButton (click)="stay()">{{ text.t('paep.shell.context.mismatch.stay', { current: relativeName(c, t) }) }}</button>
             </div>
           </paep-alert>
         }
@@ -48,7 +66,7 @@ type SwitchState = { readonly kind: 'idle' } | { readonly kind: 'pending'; reado
           class="paep-context-switcher__button"
           aria-haspopup="dialog"
           [attr.aria-label]="text.t('paep.shell.context.label') + ': ' + contextText(c) + '. ' + text.t('paep.shell.context.switch')"
-          (click)="openDialog(c.tenant.tenantId)"
+          (click)="openDialog(c)"
         >
           <svg paepIcon="building"></svg>
           <span class="paep-context-switcher__text">
@@ -84,24 +102,24 @@ type SwitchState = { readonly kind: 'idle' } | { readonly kind: 'pending'; reado
           @if (s.kind === 'rejected') {
             <div #rejected tabindex="-1" class="paep-context-switcher__outcome">
               <paep-alert status="error" live>
-                {{ text.t('paep.shell.context.switch.rejected', { tenant: s.tenant, current: c.tenant.displayName }) }}
+                {{ text.t('paep.shell.context.switch.rejected', { tenant: relativeName(s.target, c), current: contextName(c) }) }}
                 {{ text.t('paep.shell.error.reference') }}: <code dir="ltr">{{ s.reference }}</code>
               </paep-alert>
             </div>
           } @else if (s.kind === 'pending') {
-            <p class="paep-context-switcher__pending" role="status">{{ text.t('paep.shell.context.switch.pending', { tenant: s.tenant }) }}</p>
+            <p class="paep-context-switcher__pending" role="status">{{ text.t('paep.shell.context.switch.pending', { tenant: contextName(s.target) }) }}</p>
           }
         }
         <paep-radio-group class="paep-context-switcher__legend" [legend]="text.t('paep.shell.context.switch.legend')" [disabled]="state().kind === 'pending'">
-          @for (option of available(); track option.tenant.tenantId) {
+          @for (option of available(); track contextKey(option)) {
             <label>
               <input
                 type="radio"
                 paepRadio
                 name="paep-shell-context"
-                [value]="option.tenant.tenantId"
-                [checked]="selected() === option.tenant.tenantId"
-                (change)="selected.set(option.tenant.tenantId)"
+                [value]="contextKey(option)"
+                [checked]="selected() === contextKey(option)"
+                (change)="selected.set(contextKey(option))"
               />
               <span>
                 {{ option.tenant.displayName }}
@@ -128,6 +146,9 @@ export class PaepContextSwitcher {
   private readonly injector = inject(Injector);
   private readonly rejectedRef = viewChild<ElementRef<HTMLElement>>('rejected');
   protected readonly contextText = contextText;
+  protected readonly contextName = contextName;
+  protected readonly contextKey = contextKey;
+  protected readonly relativeName = relativeName;
 
   readonly mode = input<'topbar' | 'mismatch'>('topbar');
   /** The context a deep link belongs to (mismatch mode). */
@@ -142,8 +163,8 @@ export class PaepContextSwitcher {
   private readonly dismissedMismatch = signal(false);
   protected readonly mismatchTarget = computed(() => (this.dismissedMismatch() ? null : this.target()));
 
-  protected openDialog(tenantId: string): void {
-    this.selected.set(tenantId);
+  protected openDialog(context: PaepShellContext): void {
+    this.selected.set(contextKey(context));
     this.state.set({ kind: 'idle' });
     this.dialogOpen.set(true);
   }
@@ -153,18 +174,20 @@ export class PaepContextSwitcher {
   }
 
   protected async submit(): Promise<void> {
-    const id = this.selected();
+    const key = this.selected();
     const provider = this.provider;
-    if (!id || !provider || this.state().kind === 'pending') return;
-    const name = this.available().find((c) => c.tenant.tenantId === id)?.tenant.displayName ?? id;
-    if (id === this.current()?.tenant.tenantId) {
+    const current = this.current();
+    if (!key || !provider || this.state().kind === 'pending') return;
+    const target = this.available().find((c) => contextKey(c) === key) ?? this.target();
+    if (!target || contextKey(target) !== key) return;
+    if (current && key === contextKey(current)) {
       this.dialogOpen.set(false);
       return;
     }
-    this.state.set({ kind: 'pending', tenant: name });
+    this.state.set({ kind: 'pending', target });
     let outcome: Awaited<ReturnType<typeof provider.requestSwitch>>;
     try {
-      outcome = await provider.requestSwitch(id);
+      outcome = await provider.requestSwitch(target);
     } catch {
       outcome = { status: 'rejected', reference: '' };
     }
@@ -174,7 +197,7 @@ export class PaepContextSwitcher {
       afterNextRender({ read: () => this.routeFocus.focusPage() }, { injector: this.injector });
       return;
     }
-    this.state.set({ kind: 'rejected', tenant: name, reference: outcome.reference || '—' });
+    this.state.set({ kind: 'rejected', target, reference: outcome.reference || '—' });
     afterNextRender({ write: () => this.rejectedRef()?.nativeElement.focus() }, { injector: this.injector });
   }
 }

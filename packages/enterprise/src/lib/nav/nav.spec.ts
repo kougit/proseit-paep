@@ -78,6 +78,17 @@ describe('PaepShellNav', () => {
     expect(text(link('Activity'))).toMatch(/Loading count/);
   });
 
+  it('takes the loading and unknown count text from the shell keys, so the host can translate them', async () => {
+    fixture = await create({
+      counts: { count: (id) => (id === 'work' ? 'unknown' : id === 'activity' ? 'loading' : undefined) },
+      messages: { en: { 'paep.shell.nav.count.loading': 'Count on its way', 'paep.shell.nav.count.unknown': 'No count' } },
+    });
+    const work = link('Work items') as HTMLAnchorElement;
+    expect(text(work.querySelector('paep-count-badge [aria-hidden="true"]'))).toBe('–');
+    expect(text(work)).toMatch(/No count/);
+    expect(text(link('Activity'))).toMatch(/Count on its way/);
+  });
+
   it('toggles a group as a disclosure with aria-expanded', async () => {
     fixture = await create();
     const button = el().querySelector('.paep-shell-nav__group-btn') as HTMLButtonElement;
@@ -139,6 +150,34 @@ describe('PaepShellNav', () => {
     await settle(fixture);
     expect(el().querySelector('.paep-shell-nav__toggle')).toBeNull();
     expect(el().querySelectorAll('.paep-shell-nav__group').length).toBe(2);
+  });
+
+  it('shows nested items, the current page, counts and locked items the same way inside the sheet', async () => {
+    fixture = await create();
+    fixture.componentInstance.mode.set('sheet');
+    await settle(fixture);
+    const current = el().querySelectorAll('[aria-current="page"]');
+    expect(current.length).toBe(1);
+    expect(text(current[0])).toBe('Open records');
+    expect(current[0].closest('.paep-shell-nav__children')).not.toBeNull();
+    expect(text(link('Work items')?.querySelector('paep-count-badge [aria-hidden="true"]'))).toBe('99+');
+    expect(text(link('Activity'))).toMatch(/Loading count/);
+    expect(link('Archive')?.getAttribute('aria-label')).toBe('Archive, Not included in your edition');
+  });
+
+  it('wraps a long label instead of truncating it, persistent and in the sheet', async () => {
+    const long = 'Supplier qualification and onboarding requests awaiting regional compliance review';
+    fixture = await create({ navigation: { home: '/home', groups: [{ id: 'g', label: 'Operations', icon: 'tasks', items: [{ id: 'long', label: long, route: '/long' }] }] } });
+    for (const mode of ['persistent', 'sheet'] as const) {
+      fixture.componentInstance.mode.set(mode);
+      (el().querySelector('paep-shell-nav') as HTMLElement).style.inlineSize = '15rem';
+      await settle(fixture);
+      const label = link(long)?.querySelector('.paep-shell-nav__label') as HTMLElement;
+      expect(text(label)).toBe(long);
+      expect(getComputedStyle(label).textOverflow).not.toBe('ellipsis');
+      expect(label.scrollWidth).toBeLessThanOrEqual(label.clientWidth);
+      expect(label.getBoundingClientRect().height).toBeGreaterThan(parseFloat(getComputedStyle(label).lineHeight) * 1.5);
+    }
   });
 });
 

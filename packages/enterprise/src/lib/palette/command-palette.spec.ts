@@ -165,7 +165,10 @@ describe('PaepCommandPalette', () => {
     await type('<zz>');
     calls[1].resolve({ results: [] });
     await settle(fixture);
-    expect(text(dialog().querySelector('.paep-palette__empty'))).toContain('No results for “<zz>”');
+    // HOF-IB3-001 component map: the no-results state is PaepEmptyState kind="no-results", without its action.
+    expect(dialog().querySelector('paep-empty-state.paep-palette__empty')?.getAttribute('data-kind')).toBe('no-results');
+    expect(text(dialog().querySelector('.paep-palette__empty h3'))).toBe('No results for “<zz>”');
+    expect(dialog().querySelector('.paep-palette__empty button')).toBeNull();
     expect(text(dialog().querySelector('.paep-palette__empty'))).toContain('Check the spelling or try a shorter search.');
     expect(input().getAttribute('aria-expanded')).toBe('false');
   });

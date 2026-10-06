@@ -2,6 +2,7 @@ import { Component, ErrorHandler } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
 import { provideTestShell, settle as settleFixture, testReporter, text } from '../testing/shell-testing';
+import { PaepShellLayout } from '../shell/shell-layout';
 import { PaepErrorBoundary } from './error-boundary';
 import { PaepNotFound } from './not-found';
 import { PaepShellErrorHandler, PaepShellErrors } from './shell-errors';
@@ -95,6 +96,15 @@ describe('PaepErrorBoundary', () => {
     expect(document.activeElement).toBe(h1);
   });
 
+  it('offers only Go to Home, with the reference, for a render failure that is not retryable', async () => {
+    await create('/home');
+    TestBed.inject(PaepShellErrors).raise('render', { retryable: false });
+    await settle(fixture);
+    expect(text(el().querySelector('h1'))).toBe('Something went wrong on this page');
+    expect(el().querySelector('.paep-error-page__ref code')?.textContent).toMatch(/^ERR-/);
+    expect(Array.from(el().querySelectorAll('button, a')).map((b) => text(b))).toEqual(['Go to Home']);
+  });
+
   it('shows the load-failure text with "Reload page" (not "Try again") when a lazy route cannot be fetched', async () => {
     await create('/lazy');
     expect(text(el().querySelector('h1'))).toBe('Part of the application could not be loaded');
@@ -110,6 +120,9 @@ describe('PaepErrorBoundary', () => {
     TestBed.inject(PaepShellErrors).raise('version', { retryable: false });
     await settle(fixture);
     expect(text(el().querySelector('h1'))).toBe('A newer version is available');
+    // HOF-IB3-001 SCR-SHELL-013 incompatible-version: no reference line; Reload page and Go to Home.
+    expect(el().querySelector('.paep-error-page__ref')).toBeNull();
+    expect(Array.from(el().querySelectorAll('button, a')).map((b) => text(b))).toEqual(['Reload page', 'Go to Home']);
     await TestBed.inject(Router).navigateByUrl('/elsewhere');
     await settle(fixture);
     expect(text(el().querySelector('h1'))).toBe('Page not found');
@@ -117,7 +130,7 @@ describe('PaepErrorBoundary', () => {
 });
 
 describe('PaepNotFound', () => {
-  it('shows fixed text and Go to Home, and nothing from the requested address', async () => {
+  it('shows fixed text, Go to Home and Search or go to… (opens the palette), and nothing from the requested address', async () => {
     TestBed.configureTestingModule({ providers: [provideRouter([{ path: '**', component: PaepNotFound }]), ...provideTestShell()] });
     const fixture = TestBed.createComponent(BoundaryHost);
     await TestBed.inject(Router).navigateByUrl('/no/such/<script>page');
@@ -128,6 +141,10 @@ describe('PaepNotFound', () => {
     expect(text(el)).toContain('The address may be wrong, or the page may have moved.');
     expect(el.querySelector('a')?.getAttribute('href')).toBe('/home');
     expect(text(el)).not.toContain('script');
+    const search = Array.from(el.querySelectorAll('button')).find((b) => text(b) === 'Search or go to…') as HTMLButtonElement;
+    expect(search.getAttribute('aria-haspopup')).toBe('dialog');
+    search.click();
+    expect(TestBed.inject(PaepShellLayout).paletteOpen()).toBe(true);
     fixture.destroy();
   });
 });

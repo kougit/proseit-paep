@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, computed, effect, forwardRef, inject, signal, untracked } from '@angular/core';
 import { Router } from '@angular/router';
-import { PaepAlert, PaepButton, PaepCombobox, PaepModalBase, type PaepComboboxGroup, type PaepComboboxOption } from '@proseit/paep-components';
+import { PaepAlert, PaepButton, PaepCombobox, PaepEmptyState, PaepModalBase, type PaepComboboxGroup, type PaepComboboxOption } from '@proseit/paep-components';
 import { PaepAnnouncer, PaepIcon, type PaepIconName } from '@proseit/paep-foundation';
 import { sanitizeErrorReport } from '@proseit/paep-observability';
 import { PAEP_SHELL_LOCK_ICONS } from '../nav/nav';
@@ -39,7 +39,7 @@ function isInternalRoute(route: string | undefined): route is string {
 @Component({
   selector: 'paep-command-palette',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [PaepAlert, PaepButton, PaepCombobox, PaepIcon],
+  imports: [PaepAlert, PaepButton, PaepCombobox, PaepEmptyState, PaepIcon],
   providers: [{ provide: PaepModalBase, useExisting: forwardRef(() => PaepCommandPalette) }],
   template: `
     <dialog
@@ -83,11 +83,14 @@ function isInternalRoute(route: string | undefined): route is string {
             }
           }
           @if (noResults()) {
-            <div class="paep-palette__empty">
-              <svg paepIcon="no-results"></svg>
-              <p class="paep-palette__empty-title">{{ text.t('paep.shell.search.empty', { query: settledQuery() }) }}</p>
-              <p>{{ text.t('paep.shell.search.empty.hint') }}</p>
-            </div>
+            <paep-empty-state
+              class="paep-palette__empty"
+              kind="no-results"
+              [headingLevel]="3"
+              [heading]="text.t('paep.shell.search.empty', { query: settledQuery() })"
+              [description]="text.t('paep.shell.search.empty.hint')"
+              actionLabel=""
+            />
           }
         </div>
       </div>

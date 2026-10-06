@@ -8,7 +8,18 @@ import { PaepPageFrame, type PaepPageState } from './page-frame';
 @Component({
   imports: [PaepPageFrame],
   template: `
-    <paep-page-frame [heading]="heading()" [state]="state()" [breadcrumbs]="crumbs()" [aside]="aside()">
+    <paep-page-frame
+      [heading]="heading()"
+      [state]="state()"
+      [breadcrumbs]="crumbs()"
+      [aside]="aside()"
+      [emptyDescription]="emptyDescription()"
+      errorHeading="Records could not be loaded"
+      errorMessage="The service did not respond."
+      [errorReference]="reference()"
+      [retryable]="retryable()"
+      (retry)="retries = retries + 1"
+    >
       <span paepPageStatus class="status">Draft</span>
       <button paepPageActions type="button">Act</button>
       <div paepPageToolbar class="toolbar">Filters</div>
@@ -16,6 +27,7 @@ import { PaepPageFrame, type PaepPageState } from './page-frame';
       <p class="content">Content</p>
       <div paepPageAfter class="after">After</div>
       <p paepPageAside>Aside text</p>
+      <button paepPageEmptyAction type="button" class="empty-action">New record</button>
     </paep-page-frame>
   `,
 })
@@ -24,6 +36,10 @@ class FrameHost {
   readonly state = signal<PaepPageState>('ready');
   readonly crumbs = signal<{ label: string; href?: string }[]>([]);
   readonly aside = signal(false);
+  readonly emptyDescription = signal<string | undefined>(undefined);
+  readonly reference = signal('c0a8-7f3e-51d2');
+  readonly retryable = signal(true);
+  retries = 0;
 }
 
 describe('PaepPageFrame', () => {
@@ -70,6 +86,36 @@ describe('PaepPageFrame', () => {
     await settle(fixture);
     expect(text(el().querySelector('paep-empty-state h2'))).toBe('Nothing here yet');
     expect(text(el().querySelector('h1'))).toBe('All records');
+  });
+
+  it('shows the host empty description and action, or no description when it is empty text', async () => {
+    fixture.componentInstance.state.set('empty');
+    fixture.componentInstance.emptyDescription.set('Records you create appear here.');
+    await settle(fixture);
+    expect(text(el().querySelector('.paep-empty-state__description'))).toBe('Records you create appear here.');
+    expect(text(el().querySelector('paep-empty-state .empty-action'))).toBe('New record');
+    fixture.componentInstance.emptyDescription.set('');
+    await settle(fixture);
+    expect(el().querySelector('.paep-empty-state__description')).toBeNull();
+  });
+
+  it('replaces the content with an error alert: host text, the reference left to right and Try again only when retryable', async () => {
+    fixture.componentInstance.state.set('error');
+    await settle(fixture);
+    const alert = el().querySelector<HTMLElement>('paep-alert')!;
+    expect(el().querySelector('.content')).toBeNull();
+    expect(alert.getAttribute('role')).toBe('alert');
+    expect(text(alert)).toContain('Records could not be loaded');
+    expect(text(alert)).toContain('The service did not respond.');
+    expect(alert.querySelector('code')?.getAttribute('dir')).toBe('ltr');
+    expect(text(alert.querySelector('code'))).toBe('c0a8-7f3e-51d2');
+    const retry = [...alert.querySelectorAll('button')].find((b) => text(b) === 'Try again')!;
+    retry.click();
+    expect(fixture.componentInstance.retries).toBe(1);
+    expect(text(el().querySelector('h1'))).toBe('All records');
+    fixture.componentInstance.retryable.set(false);
+    await settle(fixture);
+    expect([...el().querySelectorAll('paep-alert button')].some((b) => text(b) === 'Try again')).toBe(false);
   });
 
   it('shows the aside as a complementary region named "Details" when enabled', async () => {

@@ -61,6 +61,7 @@ const counts: PaepShellNavCounts = {
 
 const SAMPLE_CONTEXTS: readonly PaepShellContext[] = [
   { tenant: { tenantId: 'sample-tenant-a', displayName: 'Sample Organisation A' }, site: 'Site 01' },
+  { tenant: { tenantId: 'sample-tenant-a', displayName: 'Sample Organisation A' }, site: 'Site 03' },
   { tenant: { tenantId: 'sample-tenant-b', displayName: 'Sample Organisation B' }, site: 'Site 02' },
 ];
 
@@ -69,13 +70,12 @@ function sampleContext(): PaepShellContextProvider {
   return {
     current,
     available: signal(SAMPLE_CONTEXTS),
-    // A sample server: organisation B accepts the request after a short delay; anything else is rejected.
-    requestSwitch: (tenantId) =>
+    // A sample server: organisation B is accepted after a short delay; anything else (such as Site 03) is rejected.
+    requestSwitch: (target) =>
       new Promise((resolve) =>
         setTimeout(() => {
-          const next = SAMPLE_CONTEXTS.find((c) => c.tenant.tenantId === tenantId);
-          if (next && tenantId === 'sample-tenant-b') {
-            current.set(next);
+          if (target === SAMPLE_CONTEXTS[2]) {
+            current.set(target);
             resolve({ status: 'accepted' });
           } else resolve({ status: 'rejected', reference: 'REF-SAMPLE-0001' });
         }, 400),

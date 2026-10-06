@@ -12,10 +12,10 @@ import { providePaepShell, type PaepShellOptions } from '../providers/provide-sh
 import { PaepShellLayout } from '../shell/shell-layout';
 
 /** A minimal validated-looking runtime configuration store (test double; the shell only reads it). */
-export function testRuntimeConfig(overrides: { environment?: RuntimeConfig['deployment']['environment']; locales?: readonly string[]; rtl?: readonly string[] } = {}): RuntimeConfigStore {
+export function testRuntimeConfig(overrides: { environment?: RuntimeConfig['deployment']['environment']; locales?: readonly string[]; rtl?: readonly string[]; productName?: string } = {}): RuntimeConfigStore {
   const config = {
     schemaVersion: '1.0',
-    product: { id: 'test-app', name: 'Test Product', release: '0.0.0' },
+    product: { id: 'test-app', name: overrides.productName ?? 'Test Product', release: '0.0.0' },
     deployment: { environment: overrides.environment ?? 'staging', profile: 'cloud-saas', basePath: '/' },
     localisation: { defaultLocale: 'en', supportedLocales: overrides.locales ?? ['en'], rtlLocales: overrides.rtl ?? ['ar'] },
   } as unknown as RuntimeConfig;

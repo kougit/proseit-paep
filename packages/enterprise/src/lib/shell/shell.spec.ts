@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
 import { userEvent } from 'vitest/browser';
 import { PaepErrorBoundary } from '../error/error-boundary';
+import type { PaepShellContext } from '../ports/ports';
 import { PaepShellLayout } from './shell-layout';
 import { PaepShell } from './shell';
 import { provideTestShell, settle, testRuntimeConfig, text } from '../testing/shell-testing';
@@ -23,6 +24,12 @@ class ActivityPage {}
   `,
 })
 class ShellHost {}
+
+const LONG_CONTEXT: PaepShellContext = {
+  tenant: { tenantId: 't-long', displayName: 'Northwind Holdings International Group (Southern Africa Regional Operations)' },
+  site: 'Site 04: Distribution Campus North-East Extension',
+};
+const LONG_CONTEXT_B: PaepShellContext = { tenant: LONG_CONTEXT.tenant, site: 'Site 07' };
 
 const ROUTES = [
   { path: 'home', component: HomePage },
@@ -149,6 +156,25 @@ describe('PaepShellTopbar', () => {
     expect(product.getAttribute('aria-label')).toBe('Test Product home');
     expect(product.getAttribute('href')).toBe('/home');
     expect(text(bar().querySelector('paep-status-badge'))).toContain('Staging');
+  });
+
+  it('keeps doubled-length text inside the viewport: the product name truncates, labels and context wrap or truncate', async () => {
+    const twice = (s: string) => `${s} ${s}`;
+    const product = twice('Regional Operations Management Platform');
+    // The layout follows the test runner's viewport width.
+    fixture = await create({
+      wide: window.innerWidth >= 1024,
+      medium: window.innerWidth >= 600,
+      runtimeConfig: testRuntimeConfig({ productName: product }),
+      navigation: { home: '/home', groups: [{ id: 'g', label: twice('Operations and compliance'), icon: 'tasks', items: [{ id: 'home', label: twice('Supplier qualification requests'), route: '/home' }] }] },
+      context: { current: signal(LONG_CONTEXT), available: signal([LONG_CONTEXT, LONG_CONTEXT_B]), requestSwitch: async () => ({ status: 'accepted' }) },
+    });
+    const name = bar().querySelector('.paep-shell-topbar__product') as HTMLAnchorElement;
+    expect(name.getAttribute('aria-label')).toBe(`${product} home`);
+    const visible = Array.from(name.querySelectorAll<HTMLElement>('*')).find((e) => getComputedStyle(e).textOverflow === 'ellipsis');
+    expect(visible).toBeDefined();
+    expect(bar().scrollWidth).toBeLessThanOrEqual(bar().clientWidth);
+    expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
   });
 
   it('shows no environment badge or notice in production', async () => {

@@ -52,7 +52,13 @@ const dropJob = (id) => (t) => {
   const m = /\n {2}(?:# [^\n]*\n {2})*[a-z][a-z0-9-]*:\n/.exec(rest.slice(1));
   return t.slice(0, a + 1) + (m ? rest.slice(m.index + 2) : '');
 };
-const dropNeed = (id) => (t) => replace(`      - ${id}\n`, '')(t).replace(` ${id}`, '');
+/** Removes a job from the gate needs and from MANDATORY_JOBS. */
+const dropNeed = (id) => (t) => {
+  const u = replace(`      - ${id}\n`, '')(t);
+  const m = /^( {10}MANDATORY_JOBS: [^\n]*)$/m.exec(u);
+  if (!m || !m[1].includes(` ${id}`)) throw new Error(`MANDATORY_JOBS does not list ${id}`);
+  return u.replace(m[1], m[1].replace(new RegExp(` ${id}(?= |$)`), ''));
+};
 /** Removes one step (its name line to the next step) from a job. */
 const dropStep = (stepName) => (t) => {
   const a = t.indexOf(`      - name: ${stepName}`);
@@ -73,7 +79,7 @@ const cases = [
   ['J02', 'shell-browser dropped from the gate needs and MANDATORY_JOBS', [[WORKFLOW, dropNeed('shell-browser')]], 'provenance', [/FAIL W12/]],
   ['J03', 'enterprise behaviour tests replaced by a no-op in the workflow', [[WORKFLOW, replace('          npm run test:enterprise 2>&1', '          echo skipped 2>&1')]], 'provenance', [/FAIL W11/]],
   ['J04', 'shell browser gate replaced by a no-op in the workflow', [[WORKFLOW, replace('          npm run qa:shell 2>&1', '          echo skipped 2>&1')]], 'provenance', [/FAIL W11/]],
-  ['J05', 'enterprise-shell removed from the policy, the workflow and the gate together', [[POLICY, jsonEdit((o) => { o.mandatoryJobs = o.mandatoryJobs.filter((j) => j.id !== 'enterprise-shell'); delete o.requiredCommands['enterprise-shell']; })], [WORKFLOW, (t) => dropNeed('enterprise-shell')(dropJob('enterprise-shell')(t))]], 'provenance', [/FAIL W11/, /IB3 mandatory job enterprise-shell removed or renamed/]],
+  ['J05', 'enterprise-shell removed from the policy, the workflow and the gate together', [[POLICY, jsonEdit((o) => { o.mandatoryJobs = o.mandatoryJobs.filter((j) => j.id !== 'enterprise-shell'); delete o.requiredCommands['enterprise-shell']; })], [WORKFLOW, (t) => dropNeed('enterprise-shell')(dropJob('enterprise-shell')(t))]], 'provenance', [/FAIL W11/, /FAIL W12/, /IB3 mandatory job enterprise-shell removed or renamed/]],
   ['J06', 'shell browser negative suite removed from the policy and the workflow together', [[POLICY, jsonEdit((o) => { o.requiredCommands['shell-browser'] = o.requiredCommands['shell-browser'].filter((c) => c !== 'npm run qa:shell:negative'); })], [WORKFLOW, dropStep('IB3 shell browser negative suite')]], 'provenance', [/FAIL W11/, /IB3 command "npm run qa:shell:negative" dropped from shell-browser/]],
   ['J07', 'IB3 CI-governance negative removed from the policy and the workflow together', [[POLICY, jsonEdit((o) => { o.requiredCommands['enterprise-shell'] = o.requiredCommands['enterprise-shell'].filter((c) => c !== 'npm run qa:ib3:ci-negative'); })], [WORKFLOW, dropStep('IB3 CI-governance negative suite')]], 'provenance', [/FAIL W11/, /IB3 command "npm run qa:ib3:ci-negative" dropped from enterprise-shell/]],
   ['J08', 'enterprise-shell silently skipped (if: false on the job)', [[WORKFLOW, replace('    name: PAEP / enterprise-shell\n', '    name: PAEP / enterprise-shell\n    if: ${{ false }}\n')]], 'provenance', [/FAIL W11/, /FAIL W13/]],

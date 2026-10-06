@@ -1,14 +1,15 @@
-import { describe, expect, it } from 'vitest';
-import { ConnectivityHost, browserConnectivitySource } from './connectivity';
+// The platform package stays framework- and test-runner-neutral (lib ES2022, no test files), so its browser
+// connectivity source is exercised here, where the shell consumes it.
+import { browserConnectivitySource, type ConnectivityHost } from '@proseit/paep-platform';
 
 function fakeHost(onLine: boolean | undefined) {
-  const handlers: Record<string, Set<() => void>> = { online: new Set(), offline: new Set() };
+  const handlers = { online: new Set<() => void>(), offline: new Set<() => void>() };
   const host: ConnectivityHost & { fire(t: 'online' | 'offline'): void; count(): number } = {
-    navigator: { onLine },
+    navigator: onLine === undefined ? {} : { onLine },
     addEventListener: (t, l) => void handlers[t].add(l),
     removeEventListener: (t, l) => void handlers[t].delete(l),
     fire: (t) => handlers[t].forEach((l) => l()),
-    count: () => handlers['online'].size + handlers['offline'].size,
+    count: () => handlers.online.size + handlers.offline.size,
   };
   return host;
 }

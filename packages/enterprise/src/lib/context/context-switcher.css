@@ -1,0 +1,92 @@
+:host {
+  display: contents;
+}
+:host([hidden]) {
+  display: none;
+}
+:host([data-mode='mismatch']) {
+  display: block;
+}
+svg {
+  --paep-icon-size: var(--paep-size-icon-md);
+  flex: none;
+}
+.paep-context-switcher__button,
+.paep-context-switcher__static {
+  display: flex;
+  align-items: center;
+  gap: var(--paep-space-2);
+  min-inline-size: 0;
+  max-inline-size: 22rem;
+  min-block-size: var(--paep-size-target-touch);
+  padding-inline: var(--paep-space-2);
+  box-sizing: border-box;
+  border: 1px solid var(--paep-color-border-subtle);
+  border-radius: var(--paep-radius-sm);
+  background: var(--paep-color-surface-subtle);
+  color: var(--paep-color-text-primary);
+  font: inherit;
+  text-align: start;
+}
+.paep-context-switcher__button {
+  cursor: pointer;
+}
+.paep-context-switcher__button:hover {
+  background: var(--paep-color-hover-neutral);
+}
+.paep-context-switcher__text {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+  line-height: var(--paep-line-height-caption);
+}
+.paep-context-switcher__tenant {
+  overflow: hidden;
+  font-weight: var(--paep-font-weight-label);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.paep-context-switcher__text .paep-context-switcher__site {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.paep-context-switcher__site {
+  display: block;
+  color: var(--paep-color-text-secondary);
+  font-size: var(--paep-font-size-body-sm);
+}
+.paep-context-switcher__body {
+  margin: 0 0 var(--paep-space-2);
+}
+.paep-context-switcher__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--paep-space-2);
+}
+.paep-context-switcher__outcome {
+  margin-block-end: var(--paep-space-3);
+}
+.paep-context-switcher__outcome:focus {
+  outline: none;
+}
+.paep-context-switcher__outcome:focus-visible {
+  outline: var(--paep-focus-ring-width) solid var(--paep-color-focus-ring);
+  outline-offset: var(--paep-focus-ring-offset);
+}
+.paep-context-switcher__pending {
+  margin: 0 0 var(--paep-space-3);
+}
+.paep-context-switcher__legend ::ng-deep legend {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+label {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--paep-space-2);
+}

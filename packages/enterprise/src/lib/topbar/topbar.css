@@ -1,0 +1,96 @@
+:host {
+  display: block;
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--paep-layer-sticky);
+}
+.paep-shell-topbar__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--paep-space-2);
+  min-block-size: var(--paep-shell-topbar-block-size);
+  padding-inline: var(--paep-space-3);
+  box-sizing: border-box;
+  border-block-end: 1px solid var(--paep-color-border-subtle);
+  background: var(--paep-color-surface);
+  color: var(--paep-color-text-primary);
+}
+.paep-shell-topbar__product {
+  display: flex;
+  flex: 0 1 auto;
+  align-items: center;
+  gap: var(--paep-space-2);
+  min-inline-size: 0;
+  min-block-size: var(--paep-size-target-touch);
+  padding-inline-end: var(--paep-space-1);
+  border-radius: var(--paep-radius-sm);
+  color: inherit;
+  text-decoration: none;
+}
+.paep-shell-topbar__mark {
+  display: inline-flex;
+  flex: none;
+  inline-size: var(--paep-space-7);
+  block-size: var(--paep-space-7);
+}
+.paep-shell-topbar__mark:empty {
+  display: none;
+}
+.paep-shell-topbar__name {
+  max-inline-size: 18rem;
+  overflow: hidden;
+  font-size: var(--paep-font-size-title-sm);
+  font-weight: var(--paep-font-weight-title-sm);
+  line-height: var(--paep-line-height-title-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.paep-shell-topbar__env {
+  flex: none;
+}
+.paep-shell-topbar__search {
+  display: flex;
+  flex: 1 1 16rem;
+  min-inline-size: 10rem;
+  max-inline-size: 32rem;
+}
+.paep-shell-topbar__search-field {
+  inline-size: 100%;
+}
+.paep-shell-topbar__spacer {
+  flex: 1 1 0;
+}
+.paep-shell-topbar__actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--paep-space-1);
+}
+.paep-shell-topbar__online {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--paep-space-1);
+  min-block-size: var(--paep-size-target-min);
+  padding-inline: var(--paep-space-2);
+  color: var(--paep-color-status-success-fg);
+  font-size: var(--paep-font-size-body-sm);
+  font-weight: var(--paep-font-weight-label);
+}
+.paep-shell-topbar__online svg {
+  --paep-icon-size: var(--paep-size-icon-sm);
+}
+@media (max-width: 63.9375em) {
+  .paep-shell-topbar__search {
+    flex: 0 0 auto;
+    min-inline-size: 0;
+  }
+}
+@media (max-width: 37.4375em) {
+  .paep-shell-topbar__bar {
+    gap: var(--paep-space-1);
+    padding-inline: var(--paep-space-1);
+  }
+  .paep-shell-topbar__name {
+    display: none;
+  }
+}

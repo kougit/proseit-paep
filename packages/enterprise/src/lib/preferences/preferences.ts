@@ -27,7 +27,7 @@ import { PaepShellText } from '../shell/shell-text';
         </paep-radio-group>
         @if (layout.wide()) {
           <label>
-            <input type="checkbox" paepCheckbox [checked]="layout.navCollapsed()" (change)="layout.navCollapsed.set($any($event.target).checked)" />
+            <input type="checkbox" paepCheckbox [checked]="layout.navCollapsed()" (change)="onCollapse($event)" />
             {{ text.t('paep.shell.preferences.navCollapsed') }}
           </label>
         }
@@ -58,5 +58,9 @@ export class PaepShellPreferences {
 
   protected setDensity(value: PaepShellDensity): void {
     this.layout.density.set(value);
+  }
+
+  protected onCollapse(event: Event): void {
+    this.layout.navCollapsed.set((event.target as HTMLInputElement).checked);
   }
 }

@@ -23,6 +23,7 @@ import { SkeletonSpecimen, SKELETON_META } from './skeleton.specimen';
 import { DialogSpecimen, DIALOG_META } from './dialog.specimen';
 import { DrawerSpecimen, DRAWER_META } from './drawer.specimen';
 import { PopoverSpecimen, POPOVER_META } from './popover.specimen';
+import { MenuSpecimen, MENU_META } from './menu.specimen';
 import { TabsSpecimen, TABS_META } from './tabs.specimen';
 import { BreadcrumbSpecimen, BREADCRUMB_META } from './breadcrumb.specimen';
 import { CardSpecimen, CARD_META } from './card.specimen';
@@ -30,8 +31,8 @@ import { PanelSpecimen, PANEL_META } from './panel.specimen';
 import { DividerSpecimen, DIVIDER_META } from './divider.specimen';
 
 /**
- * Every component specimen, in IR-01 §6.4 order with the approved HOF-IB3-001 primitives (combobox, count badge) in
- * their families. The coverage check requires exactly the 25 IB2 components plus those two.
+ * Every component specimen, in IR-01 §6.4 order with the approved IB3 primitives (combobox, count badge, menu) in
+ * their families. The coverage check requires exactly the 25 IB2 components plus those three.
  */
 export const LAB_SPECIMENS: readonly LabSpecimen[] = [
   { meta: BUTTON_META, component: ButtonSpecimen },
@@ -56,6 +57,7 @@ export const LAB_SPECIMENS: readonly LabSpecimen[] = [
   { meta: DIALOG_META, component: DialogSpecimen },
   { meta: DRAWER_META, component: DrawerSpecimen },
   { meta: POPOVER_META, component: PopoverSpecimen },
+  { meta: MENU_META, component: MenuSpecimen },
   { meta: TABS_META, component: TabsSpecimen },
   { meta: BREADCRUMB_META, component: BreadcrumbSpecimen },
   { meta: CARD_META, component: CardSpecimen },

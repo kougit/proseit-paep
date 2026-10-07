@@ -47,24 +47,31 @@ export const COMPONENTS = [
 ];
 
 /**
- * IB3-ENTERPRISE-SHELL extension (HOF-IB3-001 v1.0 component-map §2, PO/SA 2026-10-05). New generic primitives:
- * id, family, exported classes, and the states their specimen must document (P-03 combobox, P-04 count badge).
+ * IB3-ENTERPRISE-SHELL extension (HOF-IB3-001 v1.0 component-map §2, PO/SA 2026-10-05; HOF-IB2-001 v1.2 §2.2, PO/SA
+ * 2026-10-07). New generic primitives: id, family, exported classes, and the states their specimen must document
+ * (P-03 combobox, P-04 count badge, P-02 menu).
  */
 export const IB3_COMPONENTS = [
   ['combobox', 'Forms', ['PaepCombobox'], ['default', 'typing', 'active option', 'no options']],
   ['count-badge', 'Feedback', ['PaepCountBadge'], ['count', 'capped', 'loading', 'unknown']],
+  ['menu', 'Overlay', ['PaepMenu', 'PaepMenuTrigger', 'PaepMenuItem', 'PaepMenuItemRadio', 'PaepMenuGroup', 'PaepMenuSeparator'], ['closed', 'open', 'link item', 'radio group', 'disabled item', 'align end']],
 ];
 
-/** Approved HOF-IB3-001 variants of accepted components (P-04, P-05, P-06): component id and the state its specimen documents. */
+/**
+ * Approved variants of accepted components (HOF-IB3-001 P-04, P-05, P-06; HOF-IB2-001 v1.2 §2.1 P-01 popover
+ * alignment): component id and the state its specimen documents.
+ */
 export const IB3_EXTENDED = [
   ['icon-button', ['count', 'count capped', 'count loading', 'count unknown']],
   ['button', ['field']],
   ['empty-state', ['unavailable']],
+  ['popover', ['align end']],
 ];
 
 /**
  * The exact public API of @proseit/paep-components (values and types): the accepted IB2 exports plus the approved
- * HOF-IB3-001 combobox and count-badge symbols. Any other export fails S03.
+ * HOF-IB3-001 combobox and count-badge symbols and the HOF-IB2-001 v1.2 popover alignment and menu symbols. Any other
+ * export fails S03.
  */
 export const PUBLIC_EXPORTS = [
   'PAEP_DEFAULT_MESSAGES', 'PAEP_MESSAGES', 'paepFormat', 'providePaepMessages', 'PaepMessageKey', 'PaepMessages',
@@ -80,6 +87,8 @@ export const PUBLIC_EXPORTS = [
   'PaepDivider', 'PaepVerticalDivider',
   // HOF-IB3-001 P-03 / P-04.
   'PaepCombobox', 'PaepComboboxGroup', 'PaepComboboxOption', 'PaepCountBadge', 'PaepCount', 'PaepCountBadgeVariant',
+  // HOF-IB2-001 v1.2 P-01 / P-02.
+  'PaepPopoverAlign', 'PaepMenu', 'PaepMenuTrigger', 'PaepMenuItem', 'PaepMenuItemRadio', 'PaepMenuGroup', 'PaepMenuSeparator',
 ];
 
 /**
@@ -371,7 +380,7 @@ export function runChecks(fsx) {
     for (const n of api) if (!PUBLIC_EXPORTS.includes(n)) p.push(`unapproved public export ${n}`);
     for (const n of PUBLIC_EXPORTS) if (!api.includes(n)) p.push(`approved public export ${n} missing`);
     if (new Set(api).size !== api.length) p.push('a public symbol is exported twice');
-    add('S03', 'Exactly the 25 IR-01 §6.4 components plus the approved HOF-IB3-001 primitives (combobox, count badge), each with behaviour tests, exported through the public entry point only; the public API equals the approved export list', p, `${expected.length} components; ${api.length} public exports (approved list)`);
+    add('S03', 'Exactly the 25 IR-01 §6.4 components plus the approved IB3 primitives (combobox, count badge, menu), each with behaviour tests, exported through the public entry point only; the public API equals the approved export list', p, `${expected.length} components; ${api.length} public exports (approved list)`);
   }
 
   // S04: token-only, logical-property styling in components (and the foundation base stylesheet).

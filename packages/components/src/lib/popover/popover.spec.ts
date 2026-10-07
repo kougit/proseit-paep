@@ -29,6 +29,11 @@ import { PaepPopover, PaepPopoverTrigger } from './popover';
           <p>Retention rule {{ n }} keeps records for the period set by the record owner.</p>
         }
       </paep-popover>
+      <button type="button" id="end-trigger" [paepPopoverTrigger]="endMenu">Account</button>
+      <paep-popover #endMenu variant="menu" align="end">
+        <button type="button" role="menuitem" id="e1">Display preferences</button>
+        <button type="button" role="menuitem" id="e2">Sign out</button>
+      </paep-popover>
       <button type="button" id="after">Next control</button>
     </div>
   `,
@@ -130,6 +135,78 @@ describe('PaepPopover', () => {
     await settle(fixture);
     const t = q('#links-trigger').getBoundingClientRect();
     expect(Math.round(panel('#links-trigger').getBoundingClientRect().right)).toBe(Math.round(t.right));
+  });
+
+  it('align="end" aligns the panel to the trigger\'s inline-end edge in LTR and to its left edge in RTL', async () => {
+    host.placeStyle.set('padding: 40px 400px');
+    await settle(fixture);
+    const trigger = q('#end-trigger');
+    const p = panel('#end-trigger');
+    expect(p.getAttribute('data-align')).toBe('end');
+    await userEvent.click(trigger);
+    await settle(fixture);
+    expect(Math.round(p.getBoundingClientRect().right)).toBe(Math.round(trigger.getBoundingClientRect().right));
+    await userEvent.keyboard('{Escape}');
+    host.dir.set('rtl');
+    await settle(fixture);
+    await userEvent.click(trigger);
+    await settle(fixture);
+    expect(Math.round(p.getBoundingClientRect().left)).toBe(Math.round(trigger.getBoundingClientRect().left));
+  });
+
+  it('align="end" keeps its alignment when it flips above', async () => {
+    host.placeStyle.set('position: fixed; inset-block-end: 8px; inset-inline-start: 400px; display: flex; gap: 4px');
+    await settle(fixture);
+    const trigger = q('#end-trigger');
+    await userEvent.click(trigger);
+    await settle(fixture);
+    const p = panel('#end-trigger');
+    const r = p.getBoundingClientRect();
+    expect(p.getAttribute('data-placement')).toBe('above');
+    expect(r.bottom).toBeLessThanOrEqual(trigger.getBoundingClientRect().top);
+    expect(Math.round(r.right)).toBe(Math.round(trigger.getBoundingClientRect().right));
+  });
+
+  it('align="end" shifts along the inline axis to keep 16 px from the viewport edge, never clipped', async () => {
+    // The trigger sits at the inline-start edge: an end-aligned panel wider than it would cross that edge.
+    await page.viewport(360, 640);
+    host.placeStyle.set('position: fixed; inset-block-start: 8px; inset-inline-start: 0; display: flex; flex-direction: column; align-items: flex-start');
+    await settle(fixture);
+    await userEvent.click(q('#end-trigger'));
+    await settle(fixture);
+    const r = panel('#end-trigger').getBoundingClientRect();
+    expect(r.left).toBeGreaterThanOrEqual(16 - 0.5);
+    expect(r.right).toBeLessThanOrEqual(360 - 16 + 0.5);
+  });
+
+  it('below 600 px the panel may use the viewport width minus 2 × 16 px', async () => {
+    await page.viewport(500, 700);
+    host.placeStyle.set('padding: 8px 16px');
+    await settle(fixture);
+    await userEvent.click(q('#long-trigger'));
+    await settle(fixture);
+    const r = panel('#long-trigger').getBoundingClientRect();
+    expect(r.width).toBeGreaterThan(320);
+    expect(r.width).toBeLessThanOrEqual(500 - 32 + 0.5);
+  });
+
+  it('repositions on scroll and closes once the trigger has left the viewport', async () => {
+    host.placeStyle.set('padding: 40px 100px; block-size: 3000px');
+    await settle(fixture);
+    const trigger = q('#links-trigger');
+    await userEvent.click(trigger);
+    await settle(fixture);
+    const p = panel('#links-trigger');
+    window.scrollBy(0, 20);
+    window.dispatchEvent(new Event('scroll'));
+    await settle(fixture);
+    expect(p.matches(':popover-open')).toBe(true);
+    expect(Math.round(p.getBoundingClientRect().top)).toBeGreaterThanOrEqual(Math.round(trigger.getBoundingClientRect().bottom));
+    window.scrollBy(0, 1500);
+    window.dispatchEvent(new Event('scroll'));
+    await settle(fixture);
+    expect(p.matches(':popover-open')).toBe(false);
+    window.scrollTo(0, 0);
   });
 
   it('flips above when there is no room below and shifts to stay 16 px inside the viewport', async () => {

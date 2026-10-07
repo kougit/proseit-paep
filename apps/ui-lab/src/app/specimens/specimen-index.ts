@@ -1,7 +1,7 @@
 import { LabFamily } from '../lab/specimen-meta';
 
 /**
- * Light contents entries for the 27 specimens, so the lab frame can list them without loading the specimen
+ * Light contents entries for the 28 specimens, so the lab frame can list them without loading the specimen
  * pages: those load on demand from registry.ts (LAB_SPECIMEN_ROUTES). The registry reports any drift between
  * this list and the specimen metadata as a console error, which the browser gate (A3) fails on.
  */
@@ -28,6 +28,7 @@ export const LAB_SPECIMEN_INDEX: readonly { readonly id: string; readonly name: 
   { id: 'dialog', name: 'Dialog', family: 'Overlay' },
   { id: 'drawer', name: 'Drawer', family: 'Overlay' },
   { id: 'popover', name: 'Popover', family: 'Overlay' },
+  { id: 'menu', name: 'Menu', family: 'Overlay' },
   { id: 'tabs', name: 'Tabs', family: 'Navigation' },
   { id: 'breadcrumb', name: 'Breadcrumb', family: 'Navigation' },
   { id: 'card', name: 'Card', family: 'Structure' },

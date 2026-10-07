@@ -19,7 +19,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-const EXPECTED_CASES = 29;
+const EXPECTED_CASES = 33;
 const SKIP = new Set(['node_modules', 'dist', '.angular', 'tmp', '.vitest-attachments', '.git']);
 const GATE = 'tooling/design-system/design-system-qa.mjs';
 const GENERATOR = 'tooling/design-system/generate-tokens.mjs';
@@ -60,8 +60,12 @@ const cases = [
   ['E03', 'approved combobox type export removed', [[INDEX, replace('export type { PaepComboboxGroup, PaepComboboxOption }', 'export type { PaepComboboxGroup }')]], false, ['S03'], [/approved public export PaepComboboxOption missing/]],
   ['E04', 'approved primitive without its behaviour tests', [['packages/components/src/lib/combobox/combobox.spec.ts', null]], false, ['S03'], [/combobox: combobox\.spec\.ts missing/]],
   ['E05', 'symbol declared directly in the entry point', [[INDEX, (t) => `${t}export const PAEP_EXTRA = 1;\n`]], false, ['S03'], [/declares or star-exports symbols directly/]],
+  ['E30', 'approved menu primitive without its behaviour tests', [['packages/components/src/lib/menu/menu.spec.ts', null]], false, ['S03'], [/menu: menu\.spec\.ts missing/]],
+  ['E31', 'approved menu radio item no longer exported', [[INDEX, replace('PaepMenuItemRadio, ', '')]], false, ['S03'], [/PaepMenuItemRadio \(menu\) not exported/, /approved public export PaepMenuItemRadio missing/]],
   ['E06', 'approved count badge class no longer exported', [[INDEX, replace("export { PaepCountBadge } from './lib/count-badge/count-badge';\n", '')]], false, ['S03'], [/PaepCountBadge \(count-badge\) not exported/, /approved public export PaepCountBadge missing/]],
   // S07: UI-lab coverage.
+  ['E32', 'menu specimen no longer documents the radio group state', [[`${SPECIMENS}/menu.specimen.ts`, replace("    'radio group (one item", "    'single choice (one item")]], false, ['S07'], [/menu: required state "radio group" not documented/]],
+  ['E33', 'popover specimen no longer documents the v1.2 inline-end alignment', [[`${SPECIMENS}/popover.specimen.ts`, replace("    'align end (anchored", "    'end (anchored")]], false, ['S07'], [/popover: required HOF-IB3-001 state "align end" not documented/]],
   ['E07', 'count-badge specimen not registered', [[`${SPECIMENS}/registry.ts`, remove(/import \{[^}]*\} from '\.\/count-badge\.specimen';\n/)]], false, ['S07'], [/count-badge: not registered/]],
   ['E08', 'required combobox state removed from its specimen', [[`${SPECIMENS}/combobox.specimen.ts`, remove(/\n\s*'no options[^\n]*/)]], false, ['S07'], [/combobox: required state "no options" not documented/]],
   ['E09', 'icon-button count state removed from its specimen', [[`${SPECIMENS}/icon-button.specimen.ts`, remove(/\n\s*'count \(number[^\n]*/)]], false, ['S07'], [/icon-button: required HOF-IB3-001 state "count" not documented/]],

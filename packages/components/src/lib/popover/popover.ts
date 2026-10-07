@@ -4,19 +4,25 @@ let nextPopoverId = 0;
 
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
-const MENU_ITEM = '[role="menuitem"]:not([disabled]):not([aria-disabled="true"])';
+/** Menu items; aria-disabled items stay reachable with the arrow keys (announced as unavailable, not activatable). */
+const MENU_ITEM = ':is([role="menuitem"], [role="menuitemradio"]):not([disabled])';
+/** Typed characters within this interval form one type-ahead string. */
+const TYPEAHEAD_MS = 500;
 /** Gap between trigger and panel and minimum distance from the viewport edge, in CSS px (4 px and 16 px tokens). */
 const GAP = 4;
 const EDGE = 16;
 
 export type PaepPopoverVariant = 'info' | 'menu';
 export type PaepPopoverFocus = 'auto' | 'first' | 'last';
+/** Logical edge of the trigger the panel aligns to (HOF-IB2-001 v1.2 §2.1): inline-start or inline-end. */
+export type PaepPopoverAlign = 'start' | 'end';
 
 /**
  * Non-modal panel anchored to a trigger: `<button paepButton [paepPopoverTrigger]="info">Details</button>
  * <paep-popover #info>…</paep-popover>`. Uses the HTML popover attribute (light dismiss "auto") where the
- * browser supports it, and a script that anchors the panel below the trigger's inline-start edge, flips
- * above when there is not enough space below and shifts to stay 16 px inside the viewport.
+ * browser supports it, and a script that anchors the panel below the trigger's inline-start edge (or, with
+ * `align="end"`, its inline-end edge), flips above when there is not enough space below (keeping the alignment)
+ * and shifts along the inline axis to stay 16 px inside the viewport (HOF-IB2-001 v1.2 §2.1).
  * Never opened by hover. Escape closes and returns focus to the trigger; Tab past the end closes.
  */
 @Component({
@@ -32,6 +38,7 @@ export type PaepPopoverFocus = 'auto' | 'first' | 'last';
     '[attr.tabindex]': 'scrollable() ? 0 : null',
     '[attr.aria-labelledby]': 'scrollable() ? triggerId() : null',
     '[attr.data-placement]': 'placement()',
+    '[attr.data-align]': 'align()',
     '(toggle)': 'onToggle($event)',
     '(keydown)': 'onKeydown($event)',
     '(focusout)': 'onFocusout($event)',
@@ -52,6 +59,11 @@ export type PaepPopoverFocus = 'auto' | 'first' | 'last';
       border: 1px solid var(--paep-color-border-subtle);
       border-radius: var(--paep-radius-md);
       box-shadow: var(--paep-elevation-3);
+    }
+    @media (max-width: 37.4375em) {
+      :host {
+        max-inline-size: calc(100% - 2 * var(--paep-space-4));
+      }
     }
     :host(:popover-open) {
       animation: paep-popover-enter var(--paep-motion-duration-moderate) var(--paep-motion-easing-enter);
@@ -76,6 +88,8 @@ export class PaepPopover {
 
   /** info: short supplementary content; menu: a small set of role="menuitem" options (role="menu"). */
   readonly variant = input<PaepPopoverVariant>('info');
+  /** Edge of the trigger the panel aligns to: inline-start (default) or inline-end (topbar and "More" menus). */
+  readonly align = input<PaepPopoverAlign>('start');
   /** Emits true when the panel opens and false when it closes (including light dismiss). */
   readonly openChange = output<boolean>();
 
@@ -90,6 +104,8 @@ export class PaepPopover {
   protected readonly placement = signal<'below' | 'above'>('below');
   protected readonly supported = typeof HTMLElement !== 'undefined' && 'popover' in HTMLElement.prototype;
   private trigger: HTMLElement | null = null;
+  private typed = '';
+  private typedAt = 0;
   private readonly reposition = () => this.position();
 
   constructor() {
@@ -148,6 +164,22 @@ export class PaepPopover {
     if (event.key in next) {
       event.preventDefault();
       items[next[event.key]].focus();
+      return;
+    }
+    // Type-ahead: a printable character moves to the next item whose text starts with the typed string.
+    if (event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      const now = Date.now();
+      this.typed = now - this.typedAt < TYPEAHEAD_MS ? this.typed + event.key.toLocaleLowerCase() : event.key.toLocaleLowerCase();
+      this.typedAt = now;
+      const from = this.typed.length > 1 ? index : index + 1;
+      for (let i = 0; i < items.length; i++) {
+        const item = items[(Math.max(from, 0) + i) % items.length];
+        if ((item.textContent ?? '').trim().toLocaleLowerCase().startsWith(this.typed)) {
+          event.preventDefault();
+          item.focus();
+          return;
+        }
+      }
     }
   }
 
@@ -229,20 +261,26 @@ export class PaepPopover {
     }
   }
 
-  /** Anchors the panel to the trigger: below and aligned to its inline-start edge, flipped and shifted as needed. */
+  /** Anchors the panel to the trigger: below, aligned to its inline-start or inline-end edge, flipped and shifted. */
   private position(): void {
     const trigger = this.trigger;
     if (!trigger || !this.isOpen()) return;
     const t = trigger.getBoundingClientRect();
-    const p = this.host.getBoundingClientRect();
     const doc = this.host.ownerDocument.documentElement;
     const vw = doc.clientWidth;
     const vh = doc.clientHeight;
+    // Scroll and resize reposition; the panel closes only when its trigger has left the viewport (v1.2 §2.1).
+    if (t.bottom <= 0 || t.top >= vh || t.right <= 0 || t.left >= vw) {
+      this.close('keep');
+      return;
+    }
+    const p = this.host.getBoundingClientRect();
     const spaceBelow = vh - t.bottom - GAP;
     const flip = p.height > spaceBelow && t.top - GAP > spaceBelow;
     const top = flip ? Math.max(EDGE, t.top - GAP - p.height) : t.bottom + GAP;
     const rtl = getComputedStyle(this.host).direction === 'rtl';
-    const anchorStart = rtl ? vw - t.right : t.left;
+    // Inline-start offset from the viewport's inline-start edge (the right edge in RTL).
+    const anchorStart = this.align() === 'end' ? (rtl ? vw - t.left : t.right) - p.width : rtl ? vw - t.right : t.left;
     const start = Math.max(EDGE, Math.min(anchorStart, vw - EDGE - p.width));
     this.placement.set(flip ? 'above' : 'below');
     this.host.style.insetBlockStart = `${top}px`;

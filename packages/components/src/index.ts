@@ -1,5 +1,5 @@
 // Public entry point of @proseit/paep-components: the IB2 core component tranche (PAEP-IR-01 §6.4), the approved
-// HOF-IB3-001 primitives (combobox, count badge) and the message catalogue. Consumers import this package only
+// HOF-IB3-001 primitives (combobox, count badge), the HOF-IB2-001 v1.2 menu and the message catalogue. Consumers import this package only
 // through this entry point.
 
 // Messages
@@ -46,7 +46,8 @@ export type { PaepDialogSize } from './lib/dialog/dialog';
 export { PaepDrawer } from './lib/drawer/drawer';
 export type { PaepDrawerSide, PaepDrawerSize } from './lib/drawer/drawer';
 export { PaepPopover, PaepPopoverTrigger } from './lib/popover/popover';
-export type { PaepPopoverFocus, PaepPopoverVariant } from './lib/popover/popover';
+export type { PaepPopoverAlign, PaepPopoverFocus, PaepPopoverVariant } from './lib/popover/popover';
+export { PaepMenu, PaepMenuGroup, PaepMenuItem, PaepMenuItemRadio, PaepMenuSeparator, PaepMenuTrigger } from './lib/menu/menu';
 
 // Navigation
 export { PaepTab, PaepTabs } from './lib/tabs/tabs';

@@ -34,9 +34,13 @@
  *      H5 reports any CSP or Trusted Types violation. C1 also checks: the built index.html has no inline handler, style
  *      attribute or javascript: URL, and every inline script and style carries the placeholder; the emitted header is
  *      the profile with a nonce of at least 16 random bytes that differs per response and matches the page; the policy
- *      has no 'unsafe-inline', 'unsafe-eval', wildcard, data: or scheme source for scripts or styles, requires Trusted
- *      Types and allows only the `angular` policies (never angular#unsafe-bypass or angular#unsafe-jit); every Angular
- *      style element carries the response nonce and the component styles apply; and on a probe page an inline script
+ *      (directive names case-insensitive, no repeated directive) lets scripts and styles come only from 'self' or the
+ *      nonce in every directive that decides them (incl. the -elem and -attr overrides), has no wildcard, scheme-only
+ *      source, 'strict-dynamic' or unsafe keyword anywhere, keeps object-src, base-uri, form-action and frame-ancestors
+ *      closed, requires Trusted Types and allows only the `angular` policy (the AOT build needs no angular#bundler; never
+ *      angular#unsafe-bypass or -jit); every Angular
+ *      style element carries the response nonce and the component styles apply, also after following a navigation
+ *      link to a lazily loaded route; and on a probe page an inline script
  *      without a nonce or with a wrong nonce, an inline style without a nonce, eval and an HTML string sink are blocked
  *      while a nonced script and style run.
  * and first, on the build itself:
@@ -207,32 +211,49 @@ export async function auditState(page, errors, { axe = true, report = false } = 
   return p;
 }
 
-const has = (tokens, re) => tokens.some((t) => re.test(t));
-/** C1 policy rules on one emitted header; returns { problems, nonce }. */
+/** Directives that decide what script or style may run: only 'self', 'none' and the response nonce are allowed. */
+const SCRIPT_STYLE = ['default-src', 'script-src', 'script-src-elem', 'script-src-attr', 'style-src', 'style-src-elem', 'style-src-attr', 'worker-src', 'child-src', 'frame-src'];
+/** Other fetch directives: no wildcard, scheme-only source or unsafe keyword. */
+const FETCH = ['connect-src', 'font-src', 'img-src', 'manifest-src', 'media-src', 'object-src', 'prefetch-src', 'fenced-frame-src'];
+/**
+ * C1 policy rules on one emitted header; returns { problems, nonce }. Directive names are case-insensitive and a
+ * repeated directive is a problem (browsers enforce the first copy). Rules: every script- or style-deciding directive
+ * (including the -elem and -attr overrides, workers and frames) holds only 'self', 'none' or the one response nonce
+ * (-attr and default-src no nonce); no other fetch directive has a wildcard, a scheme-only source or an unsafe
+ * keyword; 'strict-dynamic' and every unsafe keyword are absent everywhere; object-src 'none'; base-uri, form-action
+ * and frame-ancestors are 'self' or 'none'; Trusted Types are required for scripts with only the `angular` policy.
+ */
 export function cspPolicyProblems(header) {
   const p = [];
-  const d = new Map(header.split(';').map((x) => x.trim().split(/\s+/)).filter((x) => x[0]).map(([k, ...v]) => [k.toLowerCase(), v]));
+  const d = new Map();
+  for (const [k, ...v] of header.split(';').map((x) => x.trim().split(/\s+/)).filter((x) => x[0])) {
+    const name = k.toLowerCase();
+    if (d.has(name)) p.push(`C1 directive ${name} is repeated (the first copy is enforced)`);
+    else d.set(name, v);
+  }
   const nonces = [];
-  for (const k of ['default-src', 'script-src', 'style-src']) {
+  for (const k of SCRIPT_STYLE) {
     const v = d.get(k);
-    if (!v) { p.push(`C1 policy has no ${k}`); continue; }
+    if (!v) continue;
     for (const t of v) {
-      const m = /^'nonce-([^']*)'$/.exec(t);
-      if (m) { if (k === 'default-src') p.push(`C1 ${k} carries a nonce`); else nonces.push(m[1]); continue; }
-      if (!["'self'", "'none'"].includes(t)) p.push(`C1 ${k} allows ${t}`);
+      const m = /^'nonce-([^']*)'$/i.exec(t);
+      if (m) { if (k === 'default-src' || k.endsWith('-attr') || !/^(script|style)-src/.test(k)) p.push(`C1 ${k} carries a nonce`); else nonces.push(m[1]); continue; }
+      if (!["'self'", "'none'"].includes(t.toLowerCase())) p.push(`C1 ${k} allows ${t}`);
     }
   }
-  if (d.get('default-src')?.join(' ') !== "'self'" && d.get('default-src')?.join(' ') !== "'none'") p.push(`C1 default-src is ${d.get('default-src')?.join(' ')}`);
-  if (d.get('object-src')?.join(' ') !== "'none'") p.push('C1 object-src is not \'none\'');
-  if (!["'self'", "'none'"].includes(d.get('base-uri')?.join(' '))) p.push('C1 base-uri is not \'self\' or \'none\'');
+  for (const k of FETCH) for (const t of d.get(k) ?? []) if (/\*|^[a-z][a-z0-9+.-]*:$|^'unsafe-|^'strict-dynamic'$/i.test(t)) p.push(`C1 ${k} allows ${t}`);
+  for (const k of ['default-src', 'script-src', 'style-src']) if (!d.get(k)) p.push(`C1 policy has no ${k}`);
+  if (!["'self'", "'none'"].includes(d.get('default-src')?.join(' '))) p.push(`C1 default-src is ${d.get('default-src')?.join(' ')}`);
+  if (d.get('object-src')?.join(' ') !== "'none'") p.push("C1 object-src is not 'none'");
+  for (const k of ['base-uri', 'form-action', 'frame-ancestors']) if (!["'self'", "'none'"].includes(d.get(k)?.join(' '))) p.push(`C1 ${k} is not 'self' or 'none'`);
   if (d.get('require-trusted-types-for')?.join(' ') !== "'script'") p.push('C1 Trusted Types are not required for scripts');
   const tt = d.get('trusted-types') ?? [];
   if (!tt.length) p.push('C1 no trusted-types allowlist');
-  for (const t of tt) if (!['angular', 'angular#bundler'].includes(t)) p.push(`C1 trusted-types allows ${t}`);
-  for (const k of d.keys()) if (has(d.get(k), /unsafe-(inline|eval|hashes)|wasm-unsafe-eval/)) p.push(`C1 ${k} allows ${d.get(k).find((t) => /unsafe/.test(t))}`);
-  if (has(d.get('script-src') ?? [], /^'strict-dynamic'$/)) p.push('C1 script-src allows \'strict-dynamic\'');
-  const nonce = nonces[0];
-  if (nonces.length !== 2 || nonces[1] !== nonce) p.push(`C1 script-src and style-src do not carry one nonce (${nonces.length} found)`);
+  for (const t of tt) if (t !== 'angular') p.push(`C1 trusted-types allows ${t}`);
+  for (const [k, v] of d) { const bad = v.find((t) => /unsafe-|^'strict-dynamic'$/i.test(t)); if (bad) p.push(`C1 ${k} allows ${bad}`); }
+  const nonce = d.get('script-src')?.map((t) => /^'nonce-([^']*)'$/i.exec(t)?.[1]).find(Boolean);
+  const styleNonce = d.get('style-src')?.map((t) => /^'nonce-([^']*)'$/i.exec(t)?.[1]).find(Boolean);
+  if (!nonce || styleNonce !== nonce || nonces.some((n) => n !== nonce)) p.push(`C1 script-src and style-src do not carry one nonce (${nonces.length} found)`);
   else if (!/^[A-Za-z0-9+/_-]+={0,2}$/.test(nonce) || Buffer.from(nonce, 'base64').length < 16) p.push(`C1 nonce "${nonce}" is not base64 of at least 16 bytes`);
   return { problems: [...new Set(p)], nonce };
 }
@@ -283,8 +304,14 @@ export async function cspProblems(context, server) {
     });
     await page.goto(`${server.url}/workspace`, { waitUntil: 'networkidle' });
     await page.waitForSelector('main h1', { timeout: 15000 }).catch(() => p.push('C1 the shell did not render under the policy'));
-    await page.locator('paep-shell-nav a[href]').filter({ hasNotText: /workspace/i }).first().click().catch(() => {});
-    await settle(page, 600);
+    const link = page.locator('paep-shell-nav a[href]:not([aria-current="page"])').filter({ visible: true }).first();
+    const target = await link.getAttribute('href').catch(() => null);
+    if (!target) p.push('C1 no navigation link to follow');
+    else {
+      await link.click();
+      await page.waitForURL((u) => u.pathname === new URL(target, server.url).pathname, { timeout: 5000 }).catch(() => p.push(`C1 navigation to ${target} did not happen`));
+      await settle(page, 600);
+    }
     const r = await page.evaluate(() => {
       const nonce = document.querySelector('[ngcspnonce]')?.getAttribute('ngcspnonce') ?? '';
       const styles = [...document.querySelectorAll('style')];
@@ -752,7 +779,12 @@ async function main() {
         const ctx = await browser.newContext({ viewport: { width: vp[0], height: vp[1] } });
         try {
           const { page } = await openApp(ctx, `${server.url}/workspace`);
-          if (act && !(await act(page))) continue;
+          if (act && !(await act(page))) {
+            // Only two controls are absent by design: the sheet at 1024 px and wider, the topbar language menu below 600 px.
+            const absent = (act === openSheet && vp[0] >= 1024) || (act === openLanguage && vp[0] < 600);
+            if (!absent) a1.push(`${vp[0]}/${act.name}: A1 could not open the control`);
+            continue;
+          }
           a1.push(...(await labelInNameProblems(page)).map((x) => `${vp[0]}${act ? `/${act.name}` : ''}: ${x}`));
         } finally {
           await ctx.close();

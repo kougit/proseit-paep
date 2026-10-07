@@ -42,7 +42,7 @@ import {
   trapProblems,
 } from './shell-qa.mjs';
 
-const EXPECTED_NEGATIVES = 41;
+const EXPECTED_NEGATIVES = 44;
 const EXPECTED_CONTROLS = 7;
 const css = (rule) => async (page) => page.addStyleTag({ content: rule });
 const js = (fn) => async (page) => page.evaluate(fn);
@@ -138,6 +138,9 @@ const CASES = [
   ['S44', 'C1 Trusted Types not required (the HTML sink probe then runs)', null, null, strict({ policy: (d) => { const { ['require-trusted-types-for']: _, ...rest } = d; return rest; } }), null, /C1 probe: an HTML string sink is allowed/],
   ['S45', 'C1 a wildcard script origin', null, null, strict({ policy: addPolicy('script-src', '*') }), null, /C1 script-src allows \*/],
   ['S46', 'H5 a style element inserted without the nonce is reported as a violation', [1440, 900], '/workspace', strict({}, null, js(() => { const e = document.createElement('style'); e.textContent = '.x{}'; document.head.append(e); })), null, /H5 CSP violation: style-src-elem/],
+  ['S48', 'C1 a wildcard in the script-src-elem override', null, null, strict({ policy: (d) => ({ ...d, 'script-src-elem': ['*'] }) }), null, /C1 script-src-elem allows \*/],
+  ['S49', 'C1 a repeated directive in other capitals placed first (browsers enforce the first copy)', null, null, strict({ policy: (d) => ({ 'Script-Src': ['*'], ...d }) }), null, /C1 directive script-src is repeated/],
+  ['S50', 'C1 frame-ancestors dropped', null, null, strict({ policy: (d) => { const { ['frame-ancestors']: _, ...rest } = d; return rest; } }), null, /C1 frame-ancestors is not 'self' or 'none'/],
   ['S47', 'positive control: the strict server as it is', null, null, strict(), null, null],
   ['S30', 'positive control: raw initial bundle exactly at the hard maximum', null, null, build(padRawTo(BUDGET.rawMax)), null, null],
   ['S31', 'positive control: the build as it is', null, null, build(() => {}), null, null],

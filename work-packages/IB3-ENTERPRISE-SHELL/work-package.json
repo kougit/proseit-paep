@@ -40,21 +40,18 @@
     "he": "PENDING - REQUIRED BEFORE IB3 ACCEPTANCE"
   },
   "findings_open": {
-    "high": 1,
-    "medium": 5,
-    "as_of": "2026-10-07: independent QA (High 1 / Medium 4) and RR6 (Medium 2) on head 574f028; QA M-03 and RR6 M-02 are the same finding. Counts stay open until a re-review on the final head closes them.",
+    "high": 0,
+    "medium": 2,
+    "as_of": "2026-10-07: round 2 on 28c3552, independent QA (High 0 / Medium 1) and RR6 (High 0 / Medium 1). Round-1 findings are closed. Counts stay open until a re-review on the final head closes them.",
     "items": [
-      "H-01 strict CSP (AC-IB3-12): PO/SA approved strict nonce-based CSP 2026-10-07; implemented (WORK_PACKAGE §8a), awaiting re-review",
-      "QA M-01 budget gate without preload hints",
-      "QA M-02 language control label in name",
-      "QA M-03 / RR6 M-02 work-package.json state",
-      "QA M-04 per-part test counts",
-      "RR6 M-01 CI-governance negative count not pinned"
+      "QA M-05 strict-CSP gate could pass a weakened policy: fixed on the next head, awaiting re-review",
+      "RR6 M-03 CI headroom: PAEP / negative-ci-b exceeds its 20-minute limit; STOP for PO/SA (WORK_PACKAGE §9)"
     ]
   },
   "ddrIb3": {
     "DDR-IB3-07": "ACCEPTED 2026-10-07 (PO/SA): 500 kB raw target; hard maximums 525 kB raw / 150 kB transfer, fail-closed (qa:shell B1; evidence/IB3-ENTERPRISE-SHELL/gates/bundle-composition.json)",
-    "DDR-IB3-01..06": "CANDIDATES awaiting PO/SA disposition (evidence/design-handoff/HOF-IB3-001/conformance-report.md)"
+    "DDR-IB3-01..06": "CANDIDATES awaiting PO/SA disposition (evidence/design-handoff/HOF-IB3-001/conformance-report.md)",
+    "DDR-IB3-08": "CANDIDATE awaiting PO/SA and accessibility disposition: language button named by its visible code plus the approved key (\"EN, Language: English\"; WCAG 2.5.3)"
   },
   "strict_csp": "PO/SA decision 2026-10-07: strict nonce-based CSP approved (WORK_PACKAGE §8a); profile apps/reference-app/deployment/csp-strict.json"
 }

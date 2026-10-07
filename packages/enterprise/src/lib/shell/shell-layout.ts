@@ -34,4 +34,8 @@ export class PaepShellLayout {
   readonly paletteOpen = signal(false);
   /** Content density; the chrome stays comfortable. */
   readonly density = signal<PaepShellDensity>('comfortable');
+  /** The display preferences dialog is open (opened from the account menu). */
+  readonly preferencesOpen = signal(false);
+  /** Incremented to ask the topbar to open its language menu ("Change language" in the account menu, ≥ 600 px). */
+  readonly languageMenuRequest = signal(0);
 }

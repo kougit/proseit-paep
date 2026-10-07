@@ -7,8 +7,11 @@ import type {
   PaepShellCommandResult,
   PaepShellContext,
   PaepShellContextProvider,
+  PaepShellHostHooks,
   PaepShellNavCounts,
   PaepShellNavManifest,
+  PaepShellNotification,
+  PaepShellNotificationProvider,
   PaepShellOptions,
   PaepShellSession,
 } from '@proseit/paep-enterprise';
@@ -123,6 +126,35 @@ function sampleSession(): PaepShellSession {
   };
 }
 
+/** Sample notifications: three unread items and one from another site; "Mark all as read" clears the unread state. */
+function sampleNotifications(): PaepShellNotificationProvider {
+  const items = signal<readonly PaepShellNotification[]>([
+    { id: 'n1', text: '3 records need your review', time: '5 min ago', unread: true, route: '/workspace' },
+    { id: 'n2', text: 'Document DOC-2291 is ready', time: '1 h ago', unread: true },
+    { id: 'n3', text: 'Schedule “Weekly checks” was updated', time: 'yesterday', unread: true },
+    { id: 'n4', text: 'Access review assigned to you', time: 'yesterday', unread: false, otherTenant: 'Site 07' },
+  ]);
+  const unread = signal(3);
+  return {
+    state: signal('ready'),
+    unread,
+    items,
+    markAllRead: () => {
+      items.update((list) => list.map((i) => ({ ...i, unread: false })));
+      unread.set(0);
+    },
+  };
+}
+
+/** Sample help menu: requests the app would handle and one link; this sample opens nothing. */
+const hooks: PaepShellHostHooks = {
+  helpLinks: [
+    { label: 'Help for this page', run: () => undefined },
+    { label: 'Keyboard shortcuts', run: () => undefined },
+    { label: 'Support site', href: '/workspace' },
+  ],
+};
+
 /** Shell options of the reference application. */
 export function referenceShellOptions(store: RuntimeConfigStore): PaepShellOptions {
   return {
@@ -133,5 +165,7 @@ export function referenceShellOptions(store: RuntimeConfigStore): PaepShellOptio
     commands,
     context: sampleContext(),
     session: sampleSession(),
+    notifications: sampleNotifications(),
+    hooks,
   };
 }

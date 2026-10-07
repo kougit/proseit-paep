@@ -123,15 +123,19 @@ export interface PaepShellNotification {
   readonly otherTenant?: string;
 }
 
-export type PaepShellNotificationState = 'loading' | 'ready' | 'error' | 'stale';
+/** List state; `unavailable`: the deployment has notifications switched off (the bell stays, without a count). */
+export type PaepShellNotificationState = 'loading' | 'ready' | 'error' | 'stale' | 'unavailable';
 
 export interface PaepShellNotificationProvider {
   readonly state: Signal<PaepShellNotificationState>;
-  readonly unread: Signal<number>;
+  /** Unread count for the bell: a number (0 shows none, above 99 "99+"), `loading` or `unknown` (count error). */
+  readonly unread: Signal<PaepShellCount>;
   readonly items: Signal<readonly PaepShellNotification[]>;
   /** Formatted time of the last successful load, for the stale state. */
   readonly staleSince?: Signal<string | null>;
   markAllRead?(): void;
+  /** Request to load again after an error ("Try again"); without it no retry is offered. */
+  reload?(): void;
 }
 
 /** Session state given by the host. */
@@ -147,10 +151,19 @@ export interface PaepShellSession {
   endImpersonation?(): void;
 }
 
+/** One entry of the help menu: host text (plain), with a destination link or a request the app handles. */
+export interface PaepShellHelpLink {
+  readonly label: string;
+  readonly href?: string;
+  run?(): void;
+}
+
 /** App hooks the shell calls. Every hook is a request; the app decides what happens. */
 export interface PaepShellHostHooks {
-  /** Help entry; without it no help control is shown. */
+  /** Help entry; without it (and without `helpLinks`) no help control is shown. */
   openHelp?(): void;
+  /** Help menu entries (for example "Help for this page", "Keyboard shortcuts", "Support site"); they take precedence over `openHelp` in the help menu. */
+  readonly helpLinks?: readonly PaepShellHelpLink[];
   /** Explanation action of a locked page; without it the default action is not shown. */
   explainLock?(reason: PaepShellLockReason): void;
 }

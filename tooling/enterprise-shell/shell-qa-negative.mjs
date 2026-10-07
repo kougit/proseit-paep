@@ -11,20 +11,23 @@ import {
   auditState,
   focusVisibleProblems,
   largeTextProblems,
+  menuKeyboardProblems,
   neverHiddenProblems,
+  notificationPanelProblems,
   openApp,
   paletteKeyboardProblems,
   reducedMotionProblems,
   routeFocusProblems,
   rtlProblems,
   sheetKeyboardProblems,
+  signOutReachableProblems,
   skipLinkProblems,
   targetSizeProblems,
   trapProblems,
 } from './shell-qa.mjs';
 
-const EXPECTED_NEGATIVES = 18;
-const EXPECTED_CONTROLS = 3;
+const EXPECTED_NEGATIVES = 24;
+const EXPECTED_CONTROLS = 4;
 const css = (rule) => async (page) => page.addStyleTag({ content: rule });
 const js = (fn) => async (page) => page.evaluate(fn);
 const blurOnClose = () => document.addEventListener('close', () => setTimeout(() => document.activeElement?.blur?.(), 0), true);
@@ -52,6 +55,13 @@ const CASES = [
   ['S18', 'L1 fixed-width content at 200 % text', [1440, 900], '/workspace', js(() => document.querySelector('main').insertAdjacentHTML('beforeend', '<div style="inline-size: 60rem">Fixed</div>')), (p) => largeTextProblems(p), /L1 horizontal scroll at 200 % text/],
   ['S19', 'positive control: the navigation sheet keyboard path passes unmutated at 834', [834, 1112], '/workspace', null, (p) => sheetKeyboardProblems(p), null],
   ['S20', 'positive control: RTL mirroring passes unmutated', [1440, 900], '/workspace', 'rtl-ok', null, null],
+  ['S21', 'N1 notification count dropped from the bell name at 320', [320, 256], '/workspace', js(() => document.querySelector('.paep-notification-panel__bell').setAttribute('aria-label', 'Notifications')), (p) => neverHiddenProblems(p), /N1 notifications without its count/],
+  ['S22', 'N1 account hidden at 320', [320, 720], '/workspace', css('.paep-account-menu__button { display: none !important; }'), (p) => neverHiddenProblems(p), /N1 account not rendered/],
+  ['S23', 'N1 Sign out removed from the account menu at 320', [320, 256], '/workspace', css('paep-account-menu [role="menu"] > button:last-child { display: none !important; }'), (p) => signOutReachableProblems(p), /N1 End in the account menu does not reach Sign out/],
+  ['S24', 'K6 focus lost after Escape closes the account menu', [1440, 900], '/workspace', js(() => document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setTimeout(() => document.activeElement?.blur?.(), 50); }, true)), (p) => menuKeyboardProblems(p), /K6 focus did not return to the account button/],
+  ['S25', 'K7 notification panel wider than 24 rem', [1440, 900], '/workspace', css('.paep-notification-panel__popover { inline-size: 40rem !important; max-inline-size: none !important; }'), (p) => notificationPanelProblems(p), /K7 panel wider than 24 rem/],
+  ['S26', 'K7 focus not on the panel heading when it opens', [320, 720], '/workspace', js(() => document.addEventListener('focusin', (e) => { if (e.target.matches?.('.paep-notification-panel__title')) e.target.blur(); })), (p) => notificationPanelProblems(p), /K7 focus is not on the panel heading/],
+  ['S27', 'positive control: the account menu and notification panel keyboard paths pass unmutated at 320', [320, 720], '/workspace', null, async (p) => [...(await menuKeyboardProblems(p)), ...(await notificationPanelProblems(p))], null],
 ];
 
 const server = await serve(DIST);

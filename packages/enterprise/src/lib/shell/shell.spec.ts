@@ -6,7 +6,7 @@ import { PaepErrorBoundary } from '../error/error-boundary';
 import type { PaepShellContext } from '../ports/ports';
 import { PaepShellLayout } from './shell-layout';
 import { PaepShell } from './shell';
-import { provideTestShell, settle, testRuntimeConfig, text } from '../testing/shell-testing';
+import { provideTestShell, settle, testNotifications, testRuntimeConfig, testSession, text } from '../testing/shell-testing';
 
 @Component({ template: '<h1>Home page</h1><p>Home body</p>' })
 class HomePage {}
@@ -161,6 +161,8 @@ describe('PaepShellTopbar', () => {
   it('keeps doubled-length text inside the viewport: the product name truncates, labels and context wrap or truncate', async () => {
     const twice = (s: string) => `${s} ${s}`;
     const product = twice('Regional Operations Management Platform');
+    const session = testSession();
+    session.identity.set({ principalId: 'u-1', displayName: twice('Alexandra Montgomery-Whitfield'), tenant: LONG_CONTEXT.tenant });
     // The layout follows the test runner's viewport width.
     fixture = await create({
       wide: window.innerWidth >= 1024,
@@ -168,7 +170,10 @@ describe('PaepShellTopbar', () => {
       runtimeConfig: testRuntimeConfig({ productName: product }),
       navigation: { home: '/home', groups: [{ id: 'g', label: twice('Operations and compliance'), icon: 'tasks', items: [{ id: 'home', label: twice('Supplier qualification requests'), route: '/home' }] }] },
       context: { current: signal(LONG_CONTEXT), available: signal([LONG_CONTEXT, LONG_CONTEXT_B]), requestSwitch: async () => ({ status: 'accepted' }) },
+      session,
+      notifications: testNotifications({ unread: 120 }),
     });
+    expect(bar().querySelector('.paep-account-menu__button')?.getAttribute('aria-label')).toBe(`Account: ${twice('Alexandra Montgomery-Whitfield')}`);
     const name = bar().querySelector('.paep-shell-topbar__product') as HTMLAnchorElement;
     expect(name.getAttribute('aria-label')).toBe(`${product} home`);
     const visible = Array.from(name.querySelectorAll<HTMLElement>('*')).find((e) => getComputedStyle(e).textOverflow === 'ellipsis');
@@ -211,5 +216,86 @@ describe('PaepShellTopbar', () => {
     expect(bar().querySelector('.paep-shell-topbar__online')?.getAttribute('aria-label')).toBe('Online');
     (bar().querySelector('[aria-label="Help"]') as HTMLButtonElement).click();
     expect(helped).toBe(1);
+  });
+
+  it('keeps notifications with their count and the account with sign-out at 320 px; help and language move into the account menu', async () => {
+    fixture = await create({
+      wide: false,
+      medium: false,
+      session: testSession(),
+      notifications: testNotifications({ unread: 3 }),
+      hooks: { helpLinks: [{ label: 'Support site', href: '/support' }] },
+      runtimeConfig: testRuntimeConfig({ locales: ['en', 'fr'] }),
+    });
+    expect(bar().querySelector('.paep-notification-panel__bell')?.getAttribute('aria-label')).toBe('Notifications, 3 unread');
+    expect(bar().querySelector('.paep-account-menu__button')?.getAttribute('aria-label')).toBe('Account: Alex Morgan');
+    expect(bar().querySelector('.paep-shell-topbar__language')).toBeNull();
+    expect(bar().querySelector('[aria-label="Help"]')).toBeNull();
+    const account = bar().querySelector<HTMLButtonElement>('.paep-account-menu__button')!;
+    account.click();
+    await settle(fixture);
+    const menu = document.getElementById(account.getAttribute('aria-controls')!)!;
+    expect(Array.from(menu.querySelectorAll('[role="menuitemradio"]')).length).toBe(2);
+    expect(text(menu)).toContain('Support site');
+    expect(text(menu)).toContain('Sign out');
+  });
+
+  it('offers the language menu at 600 px and wider with more than one locale; a choice is applied by the app and announced', async () => {
+    const root = document.documentElement;
+    fixture = await create({ runtimeConfig: testRuntimeConfig({ locales: ['en', 'fr', 'ar'] }) });
+    const button = bar().querySelector<HTMLButtonElement>('.paep-shell-topbar__language')!;
+    expect(button.getAttribute('aria-label')).toBe('Language: English');
+    expect(text(button)).toBe('EN');
+    expect(button.getAttribute('aria-haspopup')).toBe('menu');
+    button.focus();
+    await userEvent.keyboard('{Enter}');
+    await settle(fixture);
+    const menu = document.getElementById(button.getAttribute('aria-controls')!)!;
+    expect(menu.getAttribute('aria-label')).toBe('Language');
+    const radios = Array.from(menu.querySelectorAll<HTMLElement>('[role="menuitemradio"]'));
+    expect(radios.map((r) => r.getAttribute('aria-checked'))).toEqual(['true', 'false', 'false']);
+    expect(document.activeElement).toBe(radios[0]);
+    await userEvent.keyboard('{ArrowDown}{Enter}');
+    await settle(fixture, 120);
+    expect(root.getAttribute('lang')).toBe('fr');
+    expect(document.activeElement).toBe(button);
+    expect(text(button)).toBe('FR');
+    expect(button.getAttribute('aria-label')).toBe('Language: Français');
+    await expect.poll(() => document.querySelector('[data-paep-announcer="polite"]')?.textContent).toBe('Language changed to Français');
+    fixture.destroy();
+    root.setAttribute('lang', 'en');
+    TestBed.resetTestingModule();
+    fixture = await create({ runtimeConfig: testRuntimeConfig({ locales: ['en'] }) });
+    expect(bar().querySelector('.paep-shell-topbar__language')).toBeNull();
+  });
+
+  it('opens a help menu of the host\'s help links at 600 px and wider, aligned to the button\'s inline-end edge', async () => {
+    const opened: string[] = [];
+    fixture = await create({ hooks: { helpLinks: [{ label: 'Help for this page', run: () => opened.push('page') }, { label: 'Keyboard shortcuts', run: () => opened.push('keys') }, { label: 'Support site', href: '/support' }] } });
+    const help = bar().querySelector<HTMLButtonElement>('[aria-label="Help"]')!;
+    expect(help.getAttribute('aria-haspopup')).toBe('menu');
+    help.focus();
+    await userEvent.keyboard('{ArrowUp}');
+    await settle(fixture);
+    const menu = document.getElementById(help.getAttribute('aria-controls')!)!;
+    expect(menu.getAttribute('data-align')).toBe('end');
+    expect(text(document.activeElement)).toBe('Support site');
+    await userEvent.keyboard('k');
+    expect(text(document.activeElement)).toBe('Keyboard shortcuts');
+    await userEvent.keyboard('{Enter}');
+    await settle(fixture, 40);
+    expect(opened).toEqual(['keys']);
+    expect(menu.matches(':popover-open')).toBe(false);
+  });
+
+  it('opens the display preferences dialog from the account menu', async () => {
+    fixture = await create({ session: testSession() });
+    const account = bar().querySelector<HTMLButtonElement>('.paep-account-menu__button')!;
+    account.click();
+    await settle(fixture);
+    const menu = document.getElementById(account.getAttribute('aria-controls')!)!;
+    Array.from(menu.querySelectorAll<HTMLElement>('[role="menuitem"]')).find((i) => text(i) === 'Display preferences')!.click();
+    await settle(fixture, 100);
+    await expect.poll(() => fixture.nativeElement.querySelector('paep-shell-preferences dialog')?.open).toBe(true);
   });
 });

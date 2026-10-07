@@ -7,6 +7,9 @@ import type {
   PaepShellContext,
   PaepShellContextProvider,
   PaepShellNavManifest,
+  PaepShellNotification,
+  PaepShellNotificationProvider,
+  PaepShellNotificationState,
   PaepShellOptions,
 } from '@proseit/paep-enterprise';
 import { validateRuntimeConfigBytes, type ConnectivitySource } from '@proseit/paep-platform';
@@ -119,12 +122,40 @@ const commands: PaepShellCommandProvider = {
     }),
 };
 
+/**
+ * Sample notifications. `state` selects the panel state (loading, error, stale, empty, unavailable); the default is
+ * three unread items and one from another site. "Mark all as read" clears the unread state.
+ */
+function sampleNotifications(state: string | null): PaepShellNotificationProvider {
+  const list: readonly PaepShellNotification[] = [
+    { id: 'n1', text: '3 records need your review', time: '5 min ago', unread: true, route: at('workspace') },
+    { id: 'n2', text: 'Document DOC-2291 is ready', time: '1 h ago', unread: true },
+    { id: 'n3', text: 'Schedule “Weekly checks” was updated', time: 'yesterday', unread: true },
+    { id: 'n4', text: 'Access review assigned to you', time: 'yesterday', unread: false, otherTenant: 'Site 07' },
+  ];
+  const known: readonly PaepShellNotificationState[] = ['loading', 'error', 'stale', 'unavailable'];
+  const listState = signal<PaepShellNotificationState>(known.find((k) => k === state) ?? 'ready');
+  const items = signal<readonly PaepShellNotification[]>(state === 'empty' ? [] : state === 'stale' ? list.slice(0, 2) : list);
+  const unread = signal(state === 'empty' ? 0 : state === 'stale' ? 2 : 3);
+  return {
+    state: listState,
+    unread,
+    items,
+    staleSince: signal('09:40'),
+    markAllRead: () => {
+      items.update((all) => all.map((i) => ({ ...i, unread: false })));
+      unread.set(0);
+    },
+    reload: () => listState.set('loading'),
+  };
+}
+
 /** A fixed connectivity state, so the status strip can be shown offline without touching the network. */
 const fixedConnectivity = (state: 'offline'): ConnectivitySource => ({ current: () => state, subscribe: () => () => undefined });
 
 /**
- * Shell options of the preview. The query string selects the variant: `dir=rtl` starts in Arabic (right to left)
- * and `connectivity=offline` shows the offline status. Error reports are kept in memory only, so the lab console
+ * Shell options of the preview. The query string selects the variant: `dir=rtl` starts in Arabic (right to left),
+ * `connectivity=offline` shows the offline status and `notifications=<state>` a notification panel state. Error reports are kept in memory only, so the lab console
  * stays clean; products route them through the observability seam.
  */
 export function showcaseShellOptions(search: string): PaepShellOptions {
@@ -139,6 +170,8 @@ export function showcaseShellOptions(search: string): PaepShellOptions {
     commands,
     context: sampleContext(),
     session: { identity, signingOut, signOut: () => signingOut.set(true) },
+    notifications: sampleNotifications(q.get('notifications')),
+    hooks: { helpLinks: [{ label: 'Help for this page', run: () => undefined }, { label: 'Keyboard shortcuts', run: () => undefined }, { label: 'Support site', href: at('workspace') }] },
     errorReporter: { report: () => undefined },
     ...(q.get('connectivity') === 'offline' ? { connectivity: fixedConnectivity('offline') } : {}),
   };

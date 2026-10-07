@@ -22,7 +22,7 @@ let nextNavId = 0;
  * Component messages inside the navigation: the count badge's loading and unknown text come from the shell keys
  * (`paep.shell.nav.count.loading`, `paep.shell.nav.count.unknown`) and follow the active shell locale.
  */
-function navMessages(): PaepMessages {
+export function navMessages(): PaepMessages {
   const parent = inject(PAEP_MESSAGES, { skipSelf: true });
   const text = inject(PaepShellText);
   return Object.create(parent, {

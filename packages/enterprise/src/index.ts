@@ -30,6 +30,7 @@ export type {
   PaepShellContext,
   PaepShellContextProvider,
   PaepShellCount,
+  PaepShellHelpLink,
   PaepShellHostHooks,
   PaepShellLocaleControl,
   PaepShellLockReason,
@@ -55,6 +56,8 @@ export { PaepShellTopbar } from './lib/topbar/topbar';
 export { PaepShellNav } from './lib/nav/nav';
 export { PaepShellNavSheet } from './lib/nav/nav-sheet';
 export { PaepCommandPalette } from './lib/palette/command-palette';
+export { PaepNotificationPanel } from './lib/notifications/notification-panel';
+export { PaepAccountMenu } from './lib/account/account-menu';
 export { PaepPageFrame } from './lib/page-frame/page-frame';
 export type { PaepPageState } from './lib/page-frame/page-frame';
 export { PaepStatusStrip } from './lib/status/status-strip';

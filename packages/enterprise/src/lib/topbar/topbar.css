@@ -45,8 +45,10 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+/* At large text sizes the badge may wrap rather than push the global actions out of the viewport (WCAG 1.4.4). */
 .paep-shell-topbar__env {
-  flex: none;
+  flex: 0 1 auto;
+  min-inline-size: 0;
 }
 .paep-shell-topbar__search {
   display: flex;
@@ -75,6 +77,11 @@
   color: var(--paep-color-status-success-fg);
   font-size: var(--paep-font-size-body-sm);
   font-weight: var(--paep-font-weight-label);
+}
+.paep-shell-topbar__hint {
+  margin-inline-start: var(--paep-space-2);
+  color: var(--paep-color-text-secondary);
+  font-size: var(--paep-font-size-body-sm);
 }
 .paep-shell-topbar__online svg {
   --paep-icon-size: var(--paep-size-icon-sm);

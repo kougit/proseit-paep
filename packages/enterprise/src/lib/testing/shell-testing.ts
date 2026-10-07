@@ -7,7 +7,15 @@ import { ComponentFixture } from '@angular/core/testing';
 import type { IdentityContext, RuntimeConfig, RuntimeConfigStore } from '@proseit/paep-contracts';
 import type { PaepErrorReport } from '@proseit/paep-observability';
 import type { ConnectivitySource, ConnectivityState } from '@proseit/paep-platform';
-import type { PaepShellContext, PaepShellNavManifest, PaepShellSession } from '../ports/ports';
+import type {
+  PaepShellContext,
+  PaepShellCount,
+  PaepShellNavManifest,
+  PaepShellNotification,
+  PaepShellNotificationProvider,
+  PaepShellNotificationState,
+  PaepShellSession,
+} from '../ports/ports';
 import { providePaepShell, type PaepShellOptions } from '../providers/provide-shell';
 import { PaepShellLayout } from '../shell/shell-layout';
 
@@ -78,21 +86,45 @@ export function testSession(overrides: Partial<{ agent: string | null; minutes: 
   readonly calls: string[];
   readonly agent: ReturnType<typeof signal<string | null>>;
   readonly minutes: ReturnType<typeof signal<number | null>>;
+  readonly signingOut: ReturnType<typeof signal<boolean>>;
+  readonly identity: ReturnType<typeof signal<IdentityContext | null>>;
 } {
   const calls: string[] = [];
   const agent = signal<string | null>(overrides.agent ?? null);
   const minutes = signal<number | null>(overrides.minutes ?? null);
   const identity = signal<IdentityContext | null>({ principalId: 'u-1', displayName: 'Alex Morgan', tenant: TEST_CONTEXTS[0].tenant });
+  const signingOut = signal(false);
   return {
     calls,
     agent,
     minutes,
     identity,
+    signingOut,
     impersonatorName: agent,
     expiringInMinutes: minutes,
-    signOut: () => calls.push('signOut'),
+    signOut: () => (calls.push('signOut'), signingOut.set(true)),
     continueSession: () => calls.push('continue'),
     endImpersonation: () => calls.push('endImpersonation'),
+  };
+}
+
+/** A controllable notification provider; `calls` records markAllRead and reload requests. */
+export function testNotifications(initial: { state?: PaepShellNotificationState; unread?: PaepShellCount; items?: readonly PaepShellNotification[] } = {}): PaepShellNotificationProvider & {
+  readonly calls: string[];
+  readonly state: ReturnType<typeof signal<PaepShellNotificationState>>;
+  readonly unread: ReturnType<typeof signal<PaepShellCount>>;
+  readonly items: ReturnType<typeof signal<readonly PaepShellNotification[]>>;
+  readonly staleSince: ReturnType<typeof signal<string | null>>;
+} {
+  const calls: string[] = [];
+  return {
+    calls,
+    state: signal<PaepShellNotificationState>(initial.state ?? 'ready'),
+    unread: signal<PaepShellCount>(initial.unread ?? 0),
+    items: signal<readonly PaepShellNotification[]>(initial.items ?? []),
+    staleSince: signal<string | null>(null),
+    markAllRead: () => calls.push('markAllRead'),
+    reload: () => calls.push('reload'),
   };
 }
 
@@ -105,6 +137,8 @@ export function testLayout(wide: boolean, medium = true): PaepShellLayout {
     sheetOpen: signal(false),
     paletteOpen: signal(false),
     density: signal('comfortable'),
+    preferencesOpen: signal(false),
+    languageMenuRequest: signal(0),
   } as unknown as PaepShellLayout;
 }
 

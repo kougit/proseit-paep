@@ -1,11 +1,23 @@
-import { ChangeDetectionStrategy, Component, ElementRef, computed, inject, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, computed, effect, inject, untracked, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { PaepButton, PaepIconButton, PaepStatusBadge } from '@proseit/paep-components';
-import { PaepIcon } from '@proseit/paep-foundation';
+import {
+  PaepButton,
+  PaepIconButton,
+  PaepMenu,
+  PaepMenuGroup,
+  PaepMenuItem,
+  PaepMenuItemRadio,
+  PaepMenuTrigger,
+  PaepStatusBadge,
+} from '@proseit/paep-components';
+import { PaepAnnouncer, PaepIcon } from '@proseit/paep-foundation';
+import { PaepAccountMenu } from '../account/account-menu';
 import { PaepContextSwitcher } from '../context/context-switcher';
-import { PAEP_SHELL_HOOKS, PAEP_SHELL_NAVIGATION, PAEP_SHELL_RUNTIME_CONFIG } from '../ports/ports';
+import { PaepNotificationPanel } from '../notifications/notification-panel';
+import { PAEP_SHELL_HOOKS, PAEP_SHELL_LOCALE, PAEP_SHELL_NAVIGATION, PAEP_SHELL_RUNTIME_CONFIG } from '../ports/ports';
 import { connectivitySignal, environmentLabel } from '../status/status-strip';
 import { PaepShellLayout } from '../shell/shell-layout';
+import { closeOnNavigation, directionLabel, languageCode, languageName } from '../shell/shell-locale';
 import { PaepShellText } from '../shell/shell-text';
 
 /** Visible shortcut hint and aria-keyshortcuts of the palette (Q-12). */
@@ -17,16 +29,34 @@ function shortcutHint(nav: Navigator | undefined, text: PaepShellText): string {
 /**
  * Topbar (banner) of the shell (HOF-IB3-001 E-02, SCR-SHELL-001/-005): navigation toggle (below 1024 px), product
  * link with the app's mark and name, environment badge (non-production), context, the search trigger (field-style
- * at ≥ 1024 px, an icon button below), the online indicator, help and the global actions the shell projects
- * (language, notifications, account). Overflow follows interaction-notes §7; the never-hidden set stays visible at
- * 320 px. There is no `role="toolbar"`: each control is a Tab stop.
+ * at ≥ 1024 px, an icon button below), the online indicator, the language menu (X-05 B: at 600 px and wider, with
+ * more than one locale), help (a menu of the host's help links, or the host's help request), any global actions the
+ * app projects, notifications (E-07) and the account menu (E-09). Below 600 px language and help move into the account
+ * menu. Overflow follows interaction-notes §7; the never-hidden set (navigation toggle, search, notifications with
+ * count, account with sign-out) stays visible at 320 px. There is no `role="toolbar"`: each control is a Tab stop.
+ * After the app applies a language the shell announces "Language changed to {language}" in that language.
  *
- * Slots: `[paepShellMark]` (the product's approved mark), `[paepShellActions]` (global actions at the inline end).
+ * Slots: `[paepShellMark]` (the product's approved mark), `[paepShellLanguage]` and `[paepShellActions]` (app
+ * controls before notifications).
  */
 @Component({
   selector: 'paep-shell-topbar',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, PaepButton, PaepIcon, PaepIconButton, PaepStatusBadge, PaepContextSwitcher],
+  imports: [
+    RouterLink,
+    PaepButton,
+    PaepIcon,
+    PaepIconButton,
+    PaepMenu,
+    PaepMenuGroup,
+    PaepMenuItem,
+    PaepMenuItemRadio,
+    PaepMenuTrigger,
+    PaepStatusBadge,
+    PaepAccountMenu,
+    PaepContextSwitcher,
+    PaepNotificationPanel,
+  ],
   host: { class: 'paep-shell-topbar' },
   template: `
     <header class="paep-shell-topbar__bar">
@@ -88,11 +118,46 @@ function shortcutHint(nav: Navigator | undefined, text: PaepShellText): string {
             }
           </span>
         }
+        @if (layout.medium() && locales().length > 1) {
+          <button
+            #languageButton
+            paepButton
+            variant="tertiary"
+            icon="globe"
+            class="paep-shell-topbar__language"
+            [paepMenuTrigger]="languageMenu"
+            [attr.aria-label]="text.t('paep.shell.locale.button', { language: activeName() })"
+          >{{ activeCode() }}</button>
+          <paep-menu #languageMenu [label]="text.t('paep.shell.locale.label')" align="end">
+            <paep-menu-group [label]="text.t('paep.shell.locale.label')">
+              @for (l of locales(); track l.tag) {
+                <button paepMenuItemRadio [checked]="l.tag === locale.active()" [attr.lang]="l.tag" (select)="locale.request(l.tag)">
+                  {{ l.name }} <span class="paep-shell-topbar__hint" lang="en">{{ l.direction }}</span>
+                </button>
+              }
+            </paep-menu-group>
+          </paep-menu>
+        }
         <ng-content select="[paepShellLanguage]" />
-        @if (layout.medium() && hooks?.openHelp) {
-          <button paepIconButton icon="help" [label]="text.t('paep.shell.help.button')" (click)="help()"></button>
+        @if (layout.medium()) {
+          @if (helpLinks.length) {
+            <button paepIconButton icon="help" [label]="text.t('paep.shell.help.button')" [paepMenuTrigger]="helpMenu"></button>
+            <paep-menu #helpMenu [label]="text.t('paep.shell.help.button')" align="end">
+              @for (link of helpLinks; track $index) {
+                @if (link.href) {
+                  <a paepMenuItem [attr.href]="link.href">{{ link.label }}</a>
+                } @else {
+                  <button paepMenuItem (click)="link.run?.()">{{ link.label }}</button>
+                }
+              }
+            </paep-menu>
+          } @else if (hooks?.openHelp) {
+            <button paepIconButton icon="help" [label]="text.t('paep.shell.help.button')" (click)="help()"></button>
+          }
         }
         <ng-content select="[paepShellActions]" />
+        <paep-notification-panel />
+        <paep-account-menu />
       </div>
     </header>
   `,
@@ -102,9 +167,20 @@ export class PaepShellTopbar {
   protected readonly text = inject(PaepShellText);
   protected readonly layout = inject(PaepShellLayout);
   protected readonly hooks = inject(PAEP_SHELL_HOOKS, { optional: true });
+  protected readonly helpLinks = this.hooks?.helpLinks ?? [];
   protected readonly home = inject(PAEP_SHELL_NAVIGATION).home;
   private readonly config = inject(PAEP_SHELL_RUNTIME_CONFIG).config;
   private readonly navToggle = viewChild<ElementRef<HTMLElement>>('navToggle');
+  protected readonly locale = inject(PAEP_SHELL_LOCALE);
+  private readonly rtl = this.config.localisation.rtlLocales ?? [];
+  private readonly languageButton = viewChild('languageButton', { read: ElementRef<HTMLElement> });
+  private readonly languageMenu = viewChild<PaepMenu>('languageMenu');
+  private readonly helpMenu = viewChild<PaepMenu>('helpMenu');
+  protected readonly locales = computed(() =>
+    this.locale.supported().map((tag) => ({ tag, name: languageName(tag), direction: directionLabel(tag, this.rtl) })),
+  );
+  protected readonly activeName = computed(() => languageName(this.locale.active()));
+  protected readonly activeCode = computed(() => languageCode(this.locale.active()));
   protected readonly product = this.config.product.name;
   protected readonly connectivity = connectivitySignal();
   protected readonly shortcut = shortcutHint(inject(ElementRef).nativeElement.ownerDocument.defaultView?.navigator, this.text);
@@ -112,6 +188,32 @@ export class PaepShellTopbar {
     const env = this.config.deployment.environment;
     return env === 'production' ? null : this.text.t('paep.shell.env.badge', { environment: environmentLabel(env) });
   });
+
+  constructor() {
+    closeOnNavigation(() => {
+      this.languageMenu()?.hide();
+      this.helpMenu()?.hide();
+    });
+    // "Change language" in the account menu opens the topbar language menu.
+    effect(() => {
+      if (!this.layout.languageMenuRequest()) return;
+      untracked(() => {
+        const button = this.languageButton()?.nativeElement;
+        if (button) setTimeout(() => this.languageMenu()?.show(button, 'first'));
+      });
+    });
+    // Once the app has applied another language: announce it politely, in the new language.
+    const announcer = inject(PaepAnnouncer);
+    let previous = this.locale.active();
+    effect(() => {
+      const active = this.locale.active();
+      untracked(() => {
+        if (active === previous) return;
+        previous = active;
+        announcer.announce(this.text.t('paep.shell.locale.changed', { language: languageName(active) }));
+      });
+    });
+  }
 
   /** Focuses the Open navigation button (focus return after the sheet closes). */
   focusNavToggle(): void {

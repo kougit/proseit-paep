@@ -104,12 +104,16 @@ export class PaepPopover {
   protected readonly placement = signal<'below' | 'above'>('below');
   protected readonly supported = typeof HTMLElement !== 'undefined' && 'popover' in HTMLElement.prototype;
   private trigger: HTMLElement | null = null;
+  private destroyed = false;
   private typed = '';
   private typedAt = 0;
   private readonly reposition = () => this.position();
 
   constructor() {
-    inject(DestroyRef).onDestroy(() => this.stopTracking());
+    inject(DestroyRef).onDestroy(() => {
+      this.destroyed = true;
+      this.stopTracking();
+    });
   }
 
   /** Opens the panel anchored to the trigger. Menus focus their first (or last) item. */
@@ -228,7 +232,8 @@ export class PaepPopover {
     this.describesTrigger.set(false);
     this.scrollable.set(false);
     this.stopTracking();
-    this.openChange.emit(false);
+    // Removing an open panel from the DOM fires a late toggle event; a destroyed popover emits nothing.
+    if (!this.destroyed) this.openChange.emit(false);
     const refocus = focus === 'return' || (focus === 'auto' && focusWasInside);
     if (refocus && this.trigger?.isConnected) {
       this.trigger.focus();
@@ -274,10 +279,18 @@ export class PaepPopover {
       this.close('keep');
       return;
     }
+    // The panel never runs past the viewport edge on its side: it scrolls inside the room it has (16 px margin);
+    // informational panels are also capped at 60 % of the viewport, menus are not.
+    const below = Math.max(0, Math.floor(vh - t.bottom - GAP - EDGE));
+    const above = Math.max(0, Math.floor(t.top - GAP - EDGE));
+    const limit = (room: number) => (this.variant() === 'menu' ? `${room}px` : `min(60%, ${room}px)`);
+    this.host.style.maxBlockSize = limit(Math.max(below, above));
     const p = this.host.getBoundingClientRect();
-    const spaceBelow = vh - t.bottom - GAP;
-    const flip = p.height > spaceBelow && t.top - GAP > spaceBelow;
-    const top = flip ? Math.max(EDGE, t.top - GAP - p.height) : t.bottom + GAP;
+    const flip = p.height > below && above > below;
+    const room = flip ? above : below;
+    this.host.style.maxBlockSize = limit(room);
+    const height = Math.min(p.height, room);
+    const top = flip ? Math.max(EDGE, t.top - GAP - height) : t.bottom + GAP;
     const rtl = getComputedStyle(this.host).direction === 'rtl';
     // Inline-start offset from the viewport's inline-start edge (the right edge in RTL).
     const anchorStart = this.align() === 'end' ? (rtl ? vw - t.left : t.right) - p.width : rtl ? vw - t.right : t.left;

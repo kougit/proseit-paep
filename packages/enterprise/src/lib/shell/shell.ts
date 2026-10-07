@@ -19,6 +19,7 @@ import { PaepContextSwitcher } from '../context/context-switcher';
 import { PaepCommandPalette } from '../palette/command-palette';
 import { PaepShellNav } from '../nav/nav';
 import { PaepShellNavSheet } from '../nav/nav-sheet';
+import { PaepShellPreferences } from '../preferences/preferences';
 import { PAEP_SHELL_RUNTIME_CONFIG } from '../ports/ports';
 import { PaepRouteFocus } from '../route-focus/route-focus';
 import { PaepStatusStrip, environmentLabel } from '../status/status-strip';
@@ -38,7 +39,7 @@ import { PaepShellText } from './shell-text';
 @Component({
   selector: 'paep-shell',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [PaepCommandPalette, PaepContextSwitcher, PaepShellNav, PaepShellNavSheet, PaepStatusStrip, PaepShellTopbar, PaepStatusBadge],
+  imports: [PaepCommandPalette, PaepContextSwitcher, PaepShellNav, PaepShellNavSheet, PaepShellPreferences, PaepStatusStrip, PaepShellTopbar, PaepStatusBadge],
   host: { class: 'paep-shell', '(document:keydown)': 'onKeydown($event)' },
   template: `
     <a class="paep-skip-link" [attr.href]="'#' + skipTarget()" (click)="skipToMain($event)">{{ text.t('paep.shell.skipLink.main') }}</a>
@@ -72,6 +73,9 @@ import { PaepShellText } from './shell-text';
     @defer (when layout.paletteOpen()) {
       <paep-command-palette [(open)]="paletteOpen" [heading]="text.t('paep.shell.search.dialog')" />
     }
+    @defer (when layout.preferencesOpen()) {
+      <paep-shell-preferences [(open)]="preferencesOpen" />
+    }
     <ng-content select="[paepShellOverlay]" />
   `,
   styleUrl: './shell.css',
@@ -91,6 +95,7 @@ export class PaepShell {
   private readonly topbar = viewChild.required(PaepShellTopbar);
   protected readonly sheetOpen = this.layout.sheetOpen;
   protected readonly paletteOpen = this.layout.paletteOpen;
+  protected readonly preferencesOpen = this.layout.preferencesOpen;
   protected readonly environment = () => (this.env === 'production' ? null : this.text.t('paep.shell.env.badge', { environment: environmentLabel(this.env) }));
 
   constructor() {

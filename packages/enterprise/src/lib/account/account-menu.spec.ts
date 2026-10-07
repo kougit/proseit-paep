@@ -144,12 +144,27 @@ describe('PaepAccountMenu', () => {
     expect(opened).toEqual(['page']);
   });
 
-  it('neutralises a script URL in a host help link (Angular URL sanitisation): it never runs', async () => {
-    await create({ session: testSession(), medium: false, hooks: { helpLinks: [{ label: 'Bad link', href: 'javascript:alert(1)' }] } });
+  it('renders help links only under the link policy: internal routes and https:; other schemes and addresses are dropped', async () => {
+    const bad = ['javascript:alert(1)', 'http://help.example/', 'data:text/html,x', '//help.example/', 'help', 'https://user:pw@help.example/', 'https://help.example/a b', 'vbscript:x'];
+    await create({
+      session: testSession(),
+      medium: false,
+      hooks: { helpLinks: [{ label: 'Support site', href: '/support' }, { label: 'Product docs', href: 'https://help.example/docs' }, ...bad.map((href, i) => ({ label: `Bad ${i}`, href }))] },
+    });
     await open();
-    const link = items().find((i) => text(i) === 'Bad link') as HTMLAnchorElement;
-    expect(link.tagName).toBe('A');
-    expect(link.getAttribute('href')).toMatch(/^unsafe:javascript:/);
+    expect(items().map((i) => text(i))).toEqual(['Display preferences', 'Support site', 'Product docs', 'Sign out']);
+    const internal = item('Support site') as HTMLAnchorElement;
+    const external = item('Product docs') as HTMLAnchorElement;
+    expect(internal.getAttribute('href')).toBe('/support');
+    expect(internal.getAttribute('rel')).toBeNull();
+    expect(external.getAttribute('href')).toBe('https://help.example/docs');
+    expect(external.getAttribute('rel')).toBe('noopener noreferrer');
+    for (const a of [internal, external]) expect(a.getAttribute('target')).toBeNull();
+  });
+
+  it('names the button through the catalogued key, which a host can override (DDR-IB3-06)', async () => {
+    await create({ session: testSession(), messages: { en: { 'paep.shell.account.button.named': 'Signed in as {name}' } } });
+    expect(button().getAttribute('aria-label')).toBe('Signed in as Alex Morgan');
   });
 
   it('shows the display name at 1280 px and wider only; the name never widens the button past its limit', async () => {

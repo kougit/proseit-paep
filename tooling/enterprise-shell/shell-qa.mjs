@@ -11,7 +11,9 @@
  *   H5 no CSP or Trusted Types violation under the strict policy (C1)
  * and once per run:
  *   N1 the never-hidden set (navigation, product, search, notifications with count, account, page h1) is present and
- *      inside the viewport at 320 and 320×256, and the account menu reaches Sign out there
+ *      inside the viewport at 320 and 320×256, and the account menu reaches Sign out there; the current tenant
+ *      context shows whole in the page-header context line and in the sheet header; the offline and unknown
+ *      connectivity rows show first in the status strip (degraded is host-reported and has no reference-app source)
  *   T1 shell targets are at least 24 × 24 CSS px (WCAG 2.5.8) at 1440 and 320
  *   A1 label in name (WCAG 2.5.3): a control named by aria-label has a name containing its visible text
  *   K1 the skip link is the first Tab stop, is visible when focused, and moves focus to main
@@ -393,6 +395,81 @@ export async function signOutReachableProblems(page) {
   });
 }
 
+/** English default text of a shell message key, read from the catalogue (no copy of the wording here). */
+function shellMessage(key) {
+  const src = fs.readFileSync('packages/enterprise/src/lib/messages/shell-messages.ts', 'utf8');
+  const m = new RegExp(`'${key.replace(/\./g, '\\.')}':\\s*'([^']*)'`).exec(src);
+  if (!m) throw new Error(`no shell message ${key}`);
+  return m[1];
+}
+
+/** The reference app's current context (sample: the first context), as the page-header context line shows it. */
+export const NARROW_CONTEXT = 'Sample Organisation A · Site 01';
+
+/**
+ * N1 (context, HOF responsive-rules: never hidden at 320): the current tenant context is shown in the page-header
+ * context line, whole (it wraps, never truncates) and inside the viewport, and the navigation sheet header names it.
+ */
+export async function narrowContextProblems(page) {
+  const p = await page.evaluate((want) => {
+    const out = [];
+    const line = document.querySelector('.paep-page-frame__tenant');
+    if (!line) return ['N1 context line missing (.paep-page-frame__tenant)'];
+    const r = line.getBoundingClientRect();
+    const s = getComputedStyle(line);
+    if (r.width < 1 || r.height < 1 || s.visibility === 'hidden' || s.display === 'none') return ['N1 context line not rendered'];
+    if (!(line.textContent ?? '').replace(/\s+/g, ' ').includes(want)) out.push(`N1 context line does not show "${want}" ("${(line.textContent ?? '').trim().slice(0, 60)}")`);
+    if (r.left < -0.5 || r.right > innerWidth + 0.5) out.push('N1 context line outside the viewport horizontally');
+    for (const e of [line, ...line.querySelectorAll('*')]) {
+      if (e.closest('.paep-visually-hidden') || e.closest('svg')) continue;
+      const c = getComputedStyle(e);
+      if (e.scrollWidth > e.clientWidth + 1 && (c.overflowX !== 'visible' || c.textOverflow === 'ellipsis')) { out.push('N1 context line truncated'); break; }
+    }
+    return out;
+  }, NARROW_CONTEXT);
+  const toggle = page.locator('.paep-shell-topbar__nav-toggle');
+  if (!(await toggle.count())) return [...p, 'N1 navigation toggle missing (sheet context not checked)'];
+  await toggle.click();
+  await settle(page, 300);
+  const sheet = await page.evaluate((want) => {
+    const c = document.querySelector('.paep-shell__sheet-context');
+    if (!c || !c.getClientRects().length) return ['N1 navigation sheet has no context header'];
+    return (c.textContent ?? '').replace(/\s+/g, ' ').includes(want.split(' · ')[0]) ? [] : [`N1 navigation sheet context does not name "${want.split(' · ')[0]}"`];
+  }, NARROW_CONTEXT);
+  await page.keyboard.press('Escape');
+  await settle(page, 200);
+  return [...p, ...sheet];
+}
+
+/**
+ * N1 (connectivity, HOF responsive-rules: never hidden at 320): a non-online state shows its status row, with its
+ * catalogued title, first in the status strip and inside the viewport. `offline` is driven here (the browser goes
+ * offline); `unknown` needs the page opened with `navigator.onLine` unavailable (see `UNKNOWN_CONNECTIVITY`).
+ */
+export async function narrowConnectivityProblems(page, state) {
+  if (state === 'offline') {
+    await page.context().setOffline(true);
+    await settle(page, 300);
+  }
+  const want = shellMessage(`paep.shell.connectivity.${state}`);
+  const p = await page.evaluate((title) => {
+    const row = document.querySelector('.paep-shell-status__row[data-status="connectivity"]');
+    if (!row) return ['row missing'];
+    const r = row.getBoundingClientRect();
+    const s = getComputedStyle(row);
+    if (r.width < 1 || r.height < 1 || s.visibility === 'hidden' || s.display === 'none') return ['row not rendered'];
+    const out = [];
+    if (!(row.textContent ?? '').includes(title)) out.push(`row does not say "${title}"`);
+    if (r.left < -0.5 || r.right > innerWidth + 0.5 || r.top < -0.5 || r.bottom > innerHeight + 0.5) out.push('row outside the viewport');
+    return out;
+  }, want);
+  if (state === 'offline') await page.context().setOffline(false);
+  return p.map((x) => `N1 ${state} connectivity ${x}`);
+}
+
+/** Init script: `navigator.onLine` unavailable, so the browser connectivity source starts as `unknown`. */
+export const UNKNOWN_CONNECTIVITY = () => Object.defineProperty(Navigator.prototype, 'onLine', { get: () => undefined, configurable: true });
+
 /** K6: the account menu follows the menu key map and stays 16 px inside the viewport. */
 export async function menuKeyboardProblems(page) {
   const p = [];
@@ -758,10 +835,19 @@ async function main() {
         const { page } = await openApp(ctx, `${server.url}/workspace`, dir);
         n1.push(...(await neverHiddenProblems(page)).map((x) => `${vp.join('×')}/${dir}: ${x}`));
         n1.push(...(await signOutReachableProblems(page)).map((x) => `${vp.join('×')}/${dir}: ${x}`));
+        await page.keyboard.press('Escape');
+        await settle(page, 200);
+        n1.push(...(await narrowContextProblems(page)).map((x) => `${vp.join('×')}/${dir}: ${x}`));
+        n1.push(...(await narrowConnectivityProblems(page, 'offline')).map((x) => `${vp.join('×')}/${dir}: ${x}`));
         await ctx.close();
+        const unknownCtx = await browser.newContext({ viewport: { width: vp[0], height: vp[1] } });
+        await unknownCtx.addInitScript(UNKNOWN_CONNECTIVITY);
+        const unknown = await openApp(unknownCtx, `${server.url}/workspace`, dir);
+        n1.push(...(await narrowConnectivityProblems(unknown.page, 'unknown')).map((x) => `${vp.join('×')}/${dir}: ${x}`));
+        await unknownCtx.close();
       }
     }
-    results.push({ id: 'N1', name: 'Never-hidden set (incl. notifications with count and account with sign-out) present and inside the viewport at 320 and 320×256 (LTR and RTL)', problems: n1 });
+    results.push({ id: 'N1', name: 'Never-hidden set (incl. notifications with count, account with sign-out, the current tenant context and the offline and unknown connectivity rows) present and inside the viewport at 320 and 320×256 (LTR and RTL)', problems: n1 });
     const t1 = [];
     for (const vp of [[1440, 900], [320, 720]]) {
       for (const act of [null, openSheet, openPalette, openNotifications, openAccount]) {

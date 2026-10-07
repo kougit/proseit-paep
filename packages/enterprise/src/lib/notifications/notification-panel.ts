@@ -6,6 +6,7 @@ import { navMessages } from '../nav/nav';
 import { PAEP_SHELL_NOTIFICATIONS, type PaepShellNotification } from '../ports/ports';
 import { closeOnNavigation } from '../shell/shell-locale';
 import { PaepShellText } from '../shell/shell-text';
+import { isInternalRoute } from '../shell/safe-links';
 
 let nextPanelId = 0;
 /** Count increases within this interval are announced once (interaction-notes §5: batched). */
@@ -81,7 +82,7 @@ const ANNOUNCE_BATCH_MS = 1000;
                           @if (item.unread) {
                             <span class="paep-visually-hidden">{{ unreadMarker() }}</span>
                           }
-                          @if (item.route) {
+                          @if (internal(item.route)) {
                             <a class="paep-notification-panel__text" [routerLink]="item.route">{{ itemText(item) }}</a>
                           } @else {
                             <span class="paep-notification-panel__text">{{ itemText(item) }}</span>
@@ -126,11 +127,10 @@ export class PaepNotificationPanel {
     const p = this.provider;
     return !!p?.markAllRead && (p.state() === 'ready' || p.state() === 'stale') && p.items().some((i) => i.unread);
   });
-  /**
-   * Hidden marker before an unread item. HOF-IB3-001 content-keys has no per-item key, so the approved unread key is
-   * used with a count of 1 ("1 unread"); see conformance report DDR-IB3-06.
-   */
-  protected readonly unreadMarker = computed(() => this.text.t('paep.shell.notifications.unread', { count: 1 }));
+  /** Hidden marker before an unread item (`paep.shell.notifications.item.unread`, DDR-IB3-06). */
+  protected readonly unreadMarker = computed(() => this.text.t('paep.shell.notifications.item.unread'));
+  /** A provider route is a link only when it is an internal route; otherwise the item is plain text. */
+  protected readonly internal = isInternalRoute;
 
   constructor() {
     closeOnNavigation(() => this.panel()?.hide());

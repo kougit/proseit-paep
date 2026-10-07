@@ -5,6 +5,7 @@ import { PAEP_SHELL_HOOKS, PAEP_SHELL_LOCALE, PAEP_SHELL_RUNTIME_CONFIG, PAEP_SH
 import { PaepShellLayout } from '../shell/shell-layout';
 import { closeOnNavigation, directionLabel, languageName } from '../shell/shell-locale';
 import { PaepShellText } from '../shell/shell-text';
+import { isExternalHelpHref, safeHelpLinks } from '../shell/safe-links';
 
 /**
  * Account menu (HOF-IB3-001 E-09, SCR-SHELL-010), composed on `PaepMenu` (P-02, `align="end"`): the identity header,
@@ -57,7 +58,7 @@ import { PaepShellText } from '../shell/shell-text';
           <paep-menu-group [label]="text.t('paep.shell.account.help')">
             @for (link of helpLinks; track $index) {
               @if (link.href) {
-                <a paepMenuItem [attr.href]="link.href">{{ link.label }}</a>
+                <a paepMenuItem [attr.href]="link.href" [attr.rel]="external(link.href) ? 'noopener noreferrer' : null">{{ link.label }}</a>
               } @else {
                 <button paepMenuItem (click)="link.run?.()">{{ link.label }}</button>
               }
@@ -83,15 +84,16 @@ export class PaepAccountMenu {
   protected readonly locale = inject(PAEP_SHELL_LOCALE);
   private readonly rtl = inject(PAEP_SHELL_RUNTIME_CONFIG).config.localisation.rtlLocales ?? [];
   private readonly menu = viewChild(PaepMenu);
-  protected readonly helpLinks = this.hooks?.helpLinks ?? [];
+  /** Host help links under the shell link policy (internal routes and https: only). */
+  protected readonly helpLinks = safeHelpLinks(this.hooks?.helpLinks);
+  protected readonly external = isExternalHelpHref;
 
   protected readonly displayName = computed(() => this.session?.identity()?.displayName ?? '');
   protected readonly signingOut = computed(() => this.session?.signingOut?.() ?? false);
-  /** "Account: {name}" (accessibility-intent §3); "Account" before the identity is known. */
+  /** "Account: {name}" (accessibility-intent §3, `paep.shell.account.button.named`, DDR-IB3-06); "Account" before the identity is known. */
   protected readonly buttonName = computed(() => {
     const name = this.displayName();
-    const account = this.text.t('paep.shell.account.button');
-    return name ? `${account}: ${name}` : account;
+    return name ? this.text.t('paep.shell.account.button.named', { name }) : this.text.t('paep.shell.account.button');
   });
   protected readonly locales = computed(() =>
     this.locale.supported().map((tag) => ({ tag, name: languageName(tag), direction: directionLabel(tag, this.rtl) })),

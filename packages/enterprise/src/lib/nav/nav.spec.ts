@@ -135,13 +135,51 @@ describe('PaepShellNav', () => {
     await settle(fixture);
     expect(ops.getAttribute('aria-expanded')).toBe('true');
     const flyout = el().querySelector(`#${ops.getAttribute('aria-controls')}`) as HTMLElement;
+    expect(flyout.tagName).toBe('PAEP-POPOVER');
+    expect(flyout.matches(':popover-open')).toBe(true);
     expect(text(flyout.querySelector('h2'))).toBe('Operations');
     (flyout.querySelector('a') as HTMLElement).focus();
     await userEvent.keyboard('{Escape}');
     await settle(fixture);
-    expect(el().querySelector('.paep-shell-nav__flyout')).toBeNull();
+    expect(flyout.matches(':popover-open')).toBe(false);
     expect(document.activeElement).toBe(ops);
     expect(ops.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('closes the rail flyout when one of its links is chosen', async () => {
+    fixture = await create();
+    TestBed.inject(PaepShellLayout).navCollapsed.set(true);
+    await settle(fixture);
+    const ops = el().querySelectorAll<HTMLButtonElement>('.paep-shell-nav__rail-btn')[1];
+    ops.click();
+    await settle(fixture);
+    const flyout = el().querySelector<HTMLElement>(`#${ops.getAttribute('aria-controls')}`)!;
+    expect(flyout.matches(':popover-open')).toBe(true);
+    flyout.querySelector<HTMLElement>('a')!.click();
+    await settle(fixture);
+    expect(flyout.matches(':popover-open')).toBe(false);
+  });
+
+  it('places the rail flyout with the governed popover: below its button, inside the 16 px viewport margin, in LTR and RTL (DDR-IB3-02)', async () => {
+    for (const dir of ['ltr', 'rtl']) {
+      document.documentElement.setAttribute('dir', dir);
+      fixture = await create();
+      TestBed.inject(PaepShellLayout).navCollapsed.set(true);
+      await settle(fixture);
+      const ops = el().querySelectorAll<HTMLButtonElement>('.paep-shell-nav__rail-btn')[1];
+      ops.click();
+      await settle(fixture);
+      const flyout = el().querySelector<HTMLElement>(`#${ops.getAttribute('aria-controls')}`)!;
+      const b = ops.getBoundingClientRect();
+      const f = flyout.getBoundingClientRect();
+      expect(flyout.getAttribute('data-placement')).toBe('below');
+      expect(f.top).toBeGreaterThanOrEqual(b.bottom);
+      expect(f.left).toBeGreaterThanOrEqual(16 - 0.5);
+      expect(f.right).toBeLessThanOrEqual(innerWidth - 16 + 0.5);
+      fixture.destroy();
+      TestBed.resetTestingModule();
+    }
+    document.documentElement.removeAttribute('dir');
   });
 
   it('has no collapse toggle inside the sheet', async () => {

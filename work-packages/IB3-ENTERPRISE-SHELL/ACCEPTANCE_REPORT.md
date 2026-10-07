@@ -6,7 +6,7 @@
 | --- | --- |
 | Generation 5 | CANDIDATE (not accepted, not promoted) |
 | Design handoff | HOF-IB3-001 v1.0, APPROVED_FOR_IMPLEMENTATION; retained and verified (`qa:enterprise` E12, 577/577 files) |
-| Conformance | `evidence/design-handoff/HOF-IB3-001/conformance-report.md`: 24/24 component-map rows and 111/114 states implemented and tested; 1 partial (020 focus-order: no check compares the full Tab order with the design map) and 2 divergent states (DDR-IB3-01, -02 candidates) |
+| Conformance | `evidence/design-handoff/HOF-IB3-001/conformance-report.md`: 24/24 component-map rows and 111/114 states implemented and tested; 1 state conforms by approved DDR-IB3-02 (002 rail flyout on the governed popover); 1 partial (020 focus-order: no check compares the full Tab order with the design map) and 1 divergent state (DDR-IB3-01 candidate) |
 | DDR-IB3 candidates | DDR-IB3-07 ACCEPTED (2026-10-07); DDR-IB3-01..06 and DDR-IB3-08 (language button name) awaiting PO/SA disposition |
 | Native-copy review (ar, he) | NOT STARTED (human); never claimed |
 | CI headroom | Resolved by the PO/SA three-way split (2026-10-07): on f23006d the three CI-control jobs took 11 m 40 s (a), 12 m 48 s (b) and 11 m 39 s (c) as whole-job durations (setup included; job a also runs `qa:baseline:negative`), each under its unchanged 20-minute limit (AC-IB3-21) |
@@ -25,7 +25,7 @@
 | AC-IB3-07 | IN PROGRESS | `qa:shell` axe over 124 state × viewport × direction combinations, 0 violations; `qa:shell` A1 label in name (WCAG 2.5.3) for every named control at 1440, 834 and 320 px with each menu open (negative S34; language button now named "EN, Language: English", DDR-IB3-08 candidate); manual NVDA, keyboard-only review and usability evaluation NOT RUN (human) |
 | AC-IB3-08 | PASS for mechanics | `qa:shell` R1, L1; long-text tests in `test:enterprise`; captures in `evidence/IB3-ENTERPRISE-SHELL/visual/`; wording not validated |
 | AC-IB3-09 | PASS (local) | `qa:shell` M1; negatives S15, S16 |
-| AC-IB3-10 | PASS (local) | Conformance report Table B is the state coverage table with test ids: 111/114 tested, 1 partial, 2 divergent (DDR candidates) |
+| AC-IB3-10 | PASS (local) | Conformance report Table B is the state coverage table with test ids: 111/114 tested, 1 conforms by approved DDR-IB3-02, 1 partial, 1 divergent (DDR-IB3-01 candidate) |
 | AC-IB3-11 | PASS (local) | `qa:enterprise` E07; palette, nav, context and locked tests against doubles; impersonation row test |
 | AC-IB3-12 | PASS (local) | `qa:enterprise` E05, E06; `qa:ib0-wp05` W08 secret scan; Angular URL sanitisation of host help links (account-menu.spec). Strict CSP per the PO/SA decision of 2026-10-07 (WORK_PACKAGE §8a; independent QA H-01): `index.html` carries the `ngCspNonce` placeholder, the deployment profile `apps/reference-app/deployment/csp-strict.json` defines the per-response nonce and the policy (no `'unsafe-inline'`, no `'unsafe-eval'`, Trusted Types `angular` only), and `qa:shell` serves every page under it: C1 (header is the profile with a fresh 16-byte nonce matching the page; policy rules over every script- and style-deciding directive incl. the -elem and -attr overrides, case-insensitive with no repeated directive, and closed object-src, base-uri, form-action and frame-ancestors; inventory of `index.html`; every Angular style element nonced, also after navigating to a lazily loaded route; blocked probes for an inline script without or with a wrong nonce, an inline style without a nonce, eval and an HTML sink) and H5 (no violation in 124 state combinations); negatives S35-S50 (unsafe-inline, unsafe-eval, static, missing, unsubstituted and wrong nonce, no placeholder, inline handler, unsafe-bypass, Trusted Types off, wildcard, an un-nonced style, a wildcard in script-src-elem, a repeated directive in other capitals, frame-ancestors dropped; control). The policy each real deployment emits is that deployment's evidence |
 | AC-IB3-13 | PASS (local) | error-boundary, lazy-load, version, not-retryable and not-found tests; `qa:shell` S03 negative (raw detail in the report line) |
@@ -50,13 +50,13 @@
 | --- | --- | --- |
 | `PaepShell` | shell.spec | 7 |
 | `PaepShellTopbar` | shell.spec | 9 |
-| `PaepShellNav` | nav.spec | 12 |
+| `PaepShellNav` | nav.spec | 14 |
 | `PaepShellNavSheet` | nav.spec | 4 |
 | `PaepStatusStrip` | status-strip.spec | 5 |
 | `PaepContextSwitcher` | context-switcher.spec | 7 |
 | `PaepCommandPalette` | command-palette.spec | 11 |
-| `PaepNotificationPanel` | notification-panel.spec | 10 |
-| `PaepAccountMenu` | account-menu.spec | 10 |
+| `PaepNotificationPanel` | notification-panel.spec | 12 |
+| `PaepAccountMenu` | account-menu.spec | 11 |
 | `PaepPageFrame` | page-frame.spec | 8 |
 | `PaepErrorBoundary` | error-boundary.spec | 6 |
 | `PaepNotFound` | error-boundary.spec | 3 |
@@ -64,4 +64,4 @@
 | `PaepRouteFocus` | provide-shell.spec | 3 (plus shell integration tests) |
 | `PaepShellPreferences` | provide-shell.spec | 3 (plus shell integration tests) |
 
-The remaining `test:enterprise` tests cover `providePaepShell`, the shell messages and the connectivity source. Browser checks in `qa:shell` add keyboard, layout, axe and label-in-name coverage for each part.
+The remaining `test:enterprise` tests cover `providePaepShell`, the shell messages, the connectivity source and the shell link policy (safe-links.spec). Browser checks in `qa:shell` add keyboard, layout, axe and label-in-name coverage for each part.

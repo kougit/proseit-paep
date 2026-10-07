@@ -12,9 +12,11 @@ import { TEST_NAVIGATION, provideTestShell, settle, testRuntimeConfig, text } fr
 import { providePaepShell } from './provide-shell';
 
 describe('shell messages', () => {
-  it('carries exactly the 121 approved paep.shell.* keys, each with an English default', () => {
+  it('carries exactly the 121 HOF keys and the 2 PO/SA-approved DDR-IB3-06 keys (paep.shell.*), each with an English default', () => {
     const keys = Object.keys(PAEP_SHELL_DEFAULT_MESSAGES);
-    expect(keys.length).toBe(121);
+    expect(keys.length).toBe(123);
+    expect(PAEP_SHELL_DEFAULT_MESSAGES['paep.shell.notifications.item.unread']).toBe('Unread');
+    expect(PAEP_SHELL_DEFAULT_MESSAGES['paep.shell.account.button.named']).toBe('Account: {name}');
     expect(keys.every((k) => k.startsWith('paep.shell.'))).toBe(true);
     expect(Object.values(PAEP_SHELL_DEFAULT_MESSAGES).every((v) => typeof v === 'string' && v.length > 0)).toBe(true);
   });

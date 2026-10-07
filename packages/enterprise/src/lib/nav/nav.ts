@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, DOCUMENT, DestroyRef, ElementRef, computed, inject, input, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, computed, inject, input, signal, viewChild, viewChildren } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { PAEP_MESSAGES, PaepCountBadge, PaepIconButton, PaepSkeleton, type PaepMessages } from '@proseit/paep-components';
+import { PAEP_MESSAGES, PaepCountBadge, PaepIconButton, PaepPopover, PaepPopoverTrigger, PaepSkeleton, type PaepMessages } from '@proseit/paep-components';
 import { PaepIcon, type PaepIconName } from '@proseit/paep-foundation';
 import type { PaepShellLockReason } from '../ports/ports';
 import { PaepShellLayout } from '../shell/shell-layout';
+import { closeOnNavigation } from '../shell/shell-locale';
 import { PaepShellText } from '../shell/shell-text';
 import { PaepShellNavModel, type PaepShellNavEntry, type PaepShellNavSection } from './nav-model';
 
@@ -34,21 +35,20 @@ export function navMessages(): PaepMessages {
 /**
  * Primary navigation (HOF-IB3-001 E-03, SCR-SHELL-002/-006): groups as disclosures, links with `aria-current="page"`,
  * counts and locked items, in manifest order. `mode="persistent"` (≥ 1024 px) can be collapsed by the user to the
- * rail, whose group buttons open a flyout of links; `mode="sheet"` is the same list inside the navigation sheet.
+ * rail, whose group buttons open a flyout of links on the governed popover (DDR-IB3-02: below the button, flipping
+ * above and shifting to stay 16 px inside the viewport; Escape returns focus to the button); `mode="sheet"` is the same list inside the navigation sheet.
  * Items are links, so there is no arrow-key roving. Locked items stay links to the explanation page; not-permitted
  * items are not shown (Q-10 A). Presentation only: the router and the server decide.
  */
 @Component({
   selector: 'paep-shell-nav',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgTemplateOutlet, RouterLink, PaepIcon, PaepIconButton, PaepCountBadge, PaepSkeleton],
+  imports: [NgTemplateOutlet, RouterLink, PaepIcon, PaepIconButton, PaepCountBadge, PaepSkeleton, PaepPopover, PaepPopoverTrigger],
   providers: [{ provide: PAEP_MESSAGES, useFactory: navMessages }],
   host: {
     class: 'paep-shell-nav',
     '[class.paep-shell-nav--rail]': 'rail()',
     '[attr.data-mode]': 'mode()',
-    '(keydown.escape)': 'closeFlyout(true)',
-    '(focusout)': 'onFocusOut($event)',
   },
   template: `
     <nav [attr.aria-label]="text.t('paep.shell.nav.label')" [attr.id]="mode() === 'persistent' ? 'paep-shell-nav' : null">
@@ -78,22 +78,18 @@ export function navMessages(): PaepMessages {
               <button
                 type="button"
                 class="paep-shell-nav__rail-btn"
-                [attr.aria-expanded]="flyout() === section.id"
-                [attr.aria-controls]="flyout() === section.id ? flyoutId(section) : null"
+                [paepPopoverTrigger]="flyoutPanel"
                 [attr.aria-current]="section.current ? 'true' : null"
-                (click)="toggleFlyout(section.id)"
               >
                 @if (section.icon) {
                   <svg [paepIcon]="section.icon"></svg>
                 }
                 <span class="paep-shell-nav__rail-label">{{ section.shortLabel }}</span>
               </button>
-              @if (flyout() === section.id) {
-                <div class="paep-shell-nav__flyout" [id]="flyoutId(section)">
-                  <h2 class="paep-shell-nav__flyout-title">{{ section.label }}</h2>
-                  <ng-container [ngTemplateOutlet]="items" [ngTemplateOutletContext]="{ $implicit: section.items }" />
-                </div>
-              }
+              <paep-popover #flyoutPanel class="paep-shell-nav__flyout">
+                <h2 class="paep-shell-nav__flyout-title">{{ section.label }}</h2>
+                <ng-container [ngTemplateOutlet]="items" [ngTemplateOutletContext]="{ $implicit: section.items }" />
+              </paep-popover>
             </li>
           }
         </ul>
@@ -133,7 +129,7 @@ export function navMessages(): PaepMessages {
               [routerLink]="item.route"
               [attr.aria-current]="item.current ? 'page' : null"
               [attr.aria-label]="item.locked ? text.t('paep.shell.nav.locked', { label: item.label, reason: reasonText(item.locked) }) : null"
-              (click)="closeFlyout(false)"
+              (click)="closeFlyouts()"
             >
               <span class="paep-shell-nav__label">{{ item.label }}</span>
               @if (item.locked; as reason) {
@@ -158,8 +154,6 @@ export class PaepShellNav {
   protected readonly text = inject(PaepShellText);
   protected readonly model = inject(PaepShellNavModel);
   private readonly layout = inject(PaepShellLayout);
-  private readonly host: HTMLElement = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
-  private readonly document = inject(DOCUMENT);
   private readonly id = `paep-shell-nav-${nextNavId++}`;
   private readonly toggleRef = viewChild<ElementRef<HTMLElement>>('toggle');
 
@@ -167,16 +161,19 @@ export class PaepShellNav {
   readonly mode = input<'persistent' | 'sheet'>('persistent');
 
   protected readonly rail = computed(() => this.mode() === 'persistent' && this.layout.navCollapsed());
-  protected readonly flyout = signal<string | null>(null);
   private readonly closedGroups = signal<ReadonlySet<string>>(new Set());
   protected readonly skeletonRows = [0, 1, 2, 3, 4, 5];
 
+  /** Rail flyouts (DDR-IB3-02): governed popovers, closed when a route change starts. */
+  private readonly flyouts = viewChildren(PaepPopover);
+
   constructor() {
-    const onPointer = (e: PointerEvent) => {
-      if (this.flyout() && e.target instanceof Node && !this.host.contains(e.target)) this.flyout.set(null);
-    };
-    this.document.addEventListener('pointerdown', onPointer, true);
-    inject(DestroyRef).onDestroy(() => this.document.removeEventListener('pointerdown', onPointer, true));
+    closeOnNavigation(() => this.closeFlyouts());
+  }
+
+  /** Closes any open rail flyout (a link was chosen or a route change started). */
+  protected closeFlyouts(): void {
+    for (const f of this.flyouts()) if (f.isOpen()) f.hide();
   }
 
   /** Focuses the collapse toggle (used when the sheet closes at ≥ 1024 px). */
@@ -185,7 +182,6 @@ export class PaepShellNav {
   }
 
   protected toggleRail(): void {
-    this.flyout.set(null);
     this.layout.navCollapsed.update((v) => !v);
   }
 
@@ -201,30 +197,8 @@ export class PaepShellNav {
     });
   }
 
-  protected toggleFlyout(id: string): void {
-    this.flyout.update((v) => (v === id ? null : id));
-  }
-
-  /** Closes the rail flyout; with `restore`, focus returns to its group button (Escape). */
-  closeFlyout(restore: boolean): void {
-    const open = this.flyout();
-    if (!open) return;
-    const button = this.host.querySelector<HTMLElement>(`[aria-controls="${this.id}-flyout-${open}"]`);
-    this.flyout.set(null);
-    if (restore) button?.focus();
-  }
-
-  protected onFocusOut(event: FocusEvent): void {
-    const next = event.relatedTarget;
-    if (this.flyout() && next instanceof Node && !this.host.contains(next)) this.flyout.set(null);
-  }
-
   protected groupId(section: PaepShellNavSection): string {
     return `${this.id}-group-${section.id}`;
-  }
-
-  protected flyoutId(section: PaepShellNavSection): string {
-    return `${this.id}-flyout-${section.id}`;
   }
 
   protected reasonText(reason: PaepShellLockReason): string {

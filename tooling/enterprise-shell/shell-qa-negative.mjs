@@ -27,6 +27,8 @@ import {
   labelInNameProblems,
   largeTextProblems,
   menuKeyboardProblems,
+  narrowConnectivityProblems,
+  narrowContextProblems,
   neverHiddenProblems,
   notificationPanelProblems,
   openApp,
@@ -42,7 +44,7 @@ import {
   trapProblems,
 } from './shell-qa.mjs';
 
-const EXPECTED_NEGATIVES = 44;
+const EXPECTED_NEGATIVES = 49;
 const EXPECTED_CONTROLS = 7;
 const css = (rule) => async (page) => page.addStyleTag({ content: rule });
 const js = (fn) => async (page) => page.evaluate(fn);
@@ -141,6 +143,11 @@ const CASES = [
   ['S48', 'C1 a wildcard in the script-src-elem override', null, null, strict({ policy: (d) => ({ ...d, 'script-src-elem': ['*'] }) }), null, /C1 script-src-elem allows \*/],
   ['S49', 'C1 a repeated directive in other capitals placed first (browsers enforce the first copy)', null, null, strict({ policy: (d) => ({ 'Script-Src': ['*'], ...d }) }), null, /C1 directive script-src is repeated/],
   ['S50', 'C1 frame-ancestors dropped', null, null, strict({ policy: (d) => { const { ['frame-ancestors']: _, ...rest } = d; return rest; } }), null, /C1 frame-ancestors is not 'self' or 'none'/],
+  ['S51', 'N1 current tenant context line hidden at 320', [320, 720], '/workspace', css('.paep-page-frame__tenant { display: none !important; }'), (p) => narrowContextProblems(p), /N1 context line not rendered/],
+  ['S52', 'N1 current tenant context line truncated with an ellipsis at 320', [320, 256], '/workspace', css('.paep-page-frame__tenant > span:last-child { display: inline-block; max-width: 60px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }'), (p) => narrowContextProblems(p), /N1 context line truncated/],
+  ['S53', 'N1 context line names another tenant at 320', [320, 720], '/workspace', js(() => { const s = document.querySelector('.paep-page-frame__tenant > span:last-child'); s.lastChild.textContent = 'Other Organisation'; }), (p) => narrowContextProblems(p), /N1 context line does not show "Sample Organisation A · Site 01"/],
+  ['S54', 'N1 navigation sheet context header hidden at 320', [320, 720], '/workspace', css('.paep-shell__sheet-context { display: none !important; }'), (p) => narrowContextProblems(p), /N1 navigation sheet has no context header/],
+  ['S55', 'N1 offline connectivity row hidden at 320', [320, 256], '/workspace', css('.paep-shell-status__row[data-status="connectivity"] { display: none !important; }'), (p) => narrowConnectivityProblems(p, 'offline'), /N1 offline connectivity row not rendered/],
   ['S47', 'positive control: the strict server as it is', null, null, strict(), null, null],
   ['S30', 'positive control: raw initial bundle exactly at the hard maximum', null, null, build(padRawTo(BUDGET.rawMax)), null, null],
   ['S31', 'positive control: the build as it is', null, null, build(() => {}), null, null],

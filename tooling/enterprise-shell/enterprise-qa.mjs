@@ -42,7 +42,9 @@ const APP_ROUTES = ['', 'workspace', 'locked/:reason', 'error-demo', 'diagnostic
 const FROZEN = [/^packages\/(analytics|offline|frappe-sdk|contracts|domain-[^/]+)\//, /^config\/runtime-config\.schema\.json$/, /^package-lock\.json$/];
 const CLAUDE_OLD = '- Do not implement analytics/reporting UI, offline queues, the enterprise shell, or domain kits.';
 const CLAUDE_NEW = '- Do not implement analytics/reporting UI, offline queues, or domain kits. Do not implement the enterprise shell, except under the PO/SA-authorised work package `IB3-ENTERPRISE-SHELL` (PO/SA authorisation 2026-10-06), within its `WORK_PACKAGE.md`, `ACCEPTANCE.md` and the Generation 5 `authorisedScope`; this exception grants no permission for any later milestone, for self-acceptance, or for baseline promotion.';
-const MESSAGE_COUNT = 121;
+/** 121 HOF-IB3-001 content keys plus the 2 the PO/SA added on 2026-10-07 (DDR-IB3-06, remediated to conformance). */
+const MESSAGE_COUNT = 123;
+const DDR06_KEYS = ['paep.shell.notifications.item.unread', 'paep.shell.account.button.named'];
 /** The approved HOF-IB3-001 v1.0 handoff, retained verbatim (PO/SA approval 2026-10-06). */
 const HOF_ROOT = 'evidence/design-handoff/HOF-IB3-001/handoff';
 const HOF_MANIFEST_SHA256 = '645dd2e9bb4274c9b787bbbcc52cf53eb4f08dc21d733b5985aa3ab572f4fce5';
@@ -145,7 +147,7 @@ const appFiles = walk(APP).filter((f) => /\.(ts|html)$/.test(f));
   check('E03', 'No generic primitive reimplemented in enterprise: shell selectors only, native dialogs only on PaepModalBase, no popover="manual" or private positioning', f);
 }
 
-// E04 shell message catalogue (content-keys.md, 121 keys).
+// E04 shell message catalogue (content-keys.md, 121 keys, plus the 2 DDR-IB3-06 keys).
 {
   const f = [];
   const file = `${ENT}/lib/messages/shell-messages.ts`;
@@ -154,11 +156,12 @@ const appFiles = walk(APP).filter((f) => /\.(ts|html)$/.test(f));
   if (keys.length !== MESSAGE_COUNT) f.push(`${keys.length} keys (expected ${MESSAGE_COUNT})`);
   if (keys.some((k) => !/^paep\.shell\.[a-z0-9.]+$/i.test(k))) f.push('a key outside paep.shell.*');
   if (new Set(keys).size !== keys.length) f.push('duplicate key');
+  for (const k of DDR06_KEYS) if (!keys.includes(k)) f.push(`DDR-IB3-06 key ${k} missing`);
   const known = new Set(keys);
   for (const src of entTemplates.filter((x) => x.endsWith('.ts') && x !== file)) {
     for (const m of stripComments(read(src)).matchAll(/'(paep\.shell\.[a-z0-9.]+)'/gi)) if (!known.has(m[1]) && !m[1].endsWith('.')) f.push(`${src}: unknown key ${m[1]}`);
   }
-  check('E04', `Shell messages: exactly ${MESSAGE_COUNT} approved paep.shell.* keys with English defaults; every key the shell names exists`, f, `${keys.length} keys`);
+  check('E04', `Shell messages: exactly ${MESSAGE_COUNT} approved paep.shell.* keys (121 HOF + 2 DDR-IB3-06) with English defaults; every key the shell names exists`, f, `${keys.length} keys`);
 }
 
 // E05 security rules (AC-IB3-12): no unsafe HTML, script evaluation or open redirect primitives.

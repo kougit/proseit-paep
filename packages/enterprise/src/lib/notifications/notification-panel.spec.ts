@@ -31,9 +31,9 @@ describe('PaepNotificationPanel', () => {
   const popover = () => el.querySelector<HTMLElement>('paep-popover')!;
   const isOpen = () => popover().matches(':popover-open');
 
-  async function create(provider: ReturnType<typeof testNotifications> | null): Promise<void> {
+  async function create(provider: ReturnType<typeof testNotifications> | null, options: Parameters<typeof provideTestShell>[0] = {}): Promise<void> {
     TestBed.configureTestingModule({
-      providers: [provideRouter([{ path: 'records', component: RecordsPage }]), ...provideTestShell(provider ? { notifications: provider } : {})],
+      providers: [provideRouter([{ path: 'records', component: RecordsPage }]), ...provideTestShell(provider ? { ...options, notifications: provider } : options)],
     });
     fixture = TestBed.createComponent(PanelHost);
     el = fixture.nativeElement;
@@ -132,7 +132,7 @@ describe('PaepNotificationPanel', () => {
     expect(text(items[2])).toContain('Notifications');
     const link = items[0].querySelector('a')!;
     expect(link.getAttribute('href')).toBe('/records');
-    expect(text(items[0].querySelector('.paep-visually-hidden'))).toBe('1 unread');
+    expect(text(items[0].querySelector('.paep-visually-hidden'))).toBe('Unread');
     expect(items[2].querySelector('.paep-visually-hidden')).toBeNull();
     expect(items[0].querySelector('.paep-notification-panel__dot')?.getAttribute('aria-hidden')).toBe('true');
     expect(text(items[3].querySelector('paep-status-badge'))).toBe('In Site 07');
@@ -227,5 +227,27 @@ describe('PaepNotificationPanel', () => {
     await TestBed.inject(Router).navigateByUrl('/records');
     await settle(fixture);
     expect(isOpen()).toBe(false);
+  });
+  it('names unread items with the catalogued key, which a host can override per locale (DDR-IB3-06)', async () => {
+    await create(testNotifications({ unread: 1, items: [ITEMS[0]] }), { messages: { en: { 'paep.shell.notifications.item.unread': 'New' } } });
+    await openPanel();
+    expect(text(dialog().querySelector('li .paep-visually-hidden'))).toBe('New');
+  });
+
+  it('links an item only to an internal route; any other provider route leaves the item as plain text', async () => {
+    const routes = ['https://evil.example/x', '//evil.example/x', 'javascript:alert(1)', 'records', '/\\evil.example', '/records\nnext', ' /records'];
+    const items: PaepShellNotification[] = [
+      { id: 'ok', text: 'Internal', time: 'now', unread: false, route: '/records/42' },
+      ...routes.map((route, i) => ({ id: `bad${i}`, text: `Item ${i}`, time: 'now', unread: false, route })),
+    ];
+    await create(testNotifications({ items }));
+    await openPanel();
+    const li = Array.from(dialog().querySelectorAll('li'));
+    expect(li.length).toBe(1 + routes.length);
+    expect(li[0].querySelector('a')?.getAttribute('href')).toBe('/records/42');
+    for (const row of li.slice(1)) {
+      expect(row.querySelector('a')).toBeNull();
+      expect(row.querySelector('.paep-notification-panel__text')?.tagName).toBe('SPAN');
+    }
   });
 });

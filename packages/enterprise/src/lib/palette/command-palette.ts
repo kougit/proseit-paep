@@ -14,6 +14,7 @@ import {
   type PaepShellLockReason,
 } from '../ports/ports';
 import { PaepShellText } from '../shell/shell-text';
+import { isInternalRoute } from '../shell/safe-links';
 
 /** Typing pause before record search runs and before the result count is announced. */
 const DEBOUNCE_MS = 250;
@@ -22,11 +23,6 @@ const GOTO_LIMIT = 8;
 const GROUP_ICONS: Readonly<Record<PaepShellCommandGroup, PaepIconName>> = { goto: 'list', actions: 'tasks', records: 'document' };
 
 type SearchState = { readonly status: 'idle' } | { readonly status: 'loading' } | { readonly status: 'ready'; readonly partial: boolean } | { readonly status: 'error'; readonly reference: string };
-
-/** An internal route: one leading slash, no scheme or protocol-relative address. */
-function isInternalRoute(route: string | undefined): route is string {
-  return typeof route === 'string' && route.startsWith('/') && !route.startsWith('//') && !route.includes('\\');
-}
 
 /**
  * The command palette (HOF-IB3-001 E-06, Q-05, Q-12; SCR-SHELL-008, -021): a modal dialog on `PaepModalBase` that

@@ -19,6 +19,7 @@ import { connectivitySignal, environmentLabel } from '../status/status-strip';
 import { PaepShellLayout } from '../shell/shell-layout';
 import { closeOnNavigation, directionLabel, languageCode, languageName } from '../shell/shell-locale';
 import { PaepShellText } from '../shell/shell-text';
+import { isExternalHelpHref, safeHelpLinks } from '../shell/safe-links';
 
 /** Visible shortcut hint and aria-keyshortcuts of the palette (Q-12). */
 function shortcutHint(nav: Navigator | undefined, text: PaepShellText): string {
@@ -147,7 +148,7 @@ function shortcutHint(nav: Navigator | undefined, text: PaepShellText): string {
             <paep-menu #helpMenu [label]="text.t('paep.shell.help.button')" align="end">
               @for (link of helpLinks; track $index) {
                 @if (link.href) {
-                  <a paepMenuItem [attr.href]="link.href">{{ link.label }}</a>
+                  <a paepMenuItem [attr.href]="link.href" [attr.rel]="external(link.href) ? 'noopener noreferrer' : null">{{ link.label }}</a>
                 } @else {
                   <button paepMenuItem (click)="link.run?.()">{{ link.label }}</button>
                 }
@@ -169,7 +170,9 @@ export class PaepShellTopbar {
   protected readonly text = inject(PaepShellText);
   protected readonly layout = inject(PaepShellLayout);
   protected readonly hooks = inject(PAEP_SHELL_HOOKS, { optional: true });
-  protected readonly helpLinks = this.hooks?.helpLinks ?? [];
+  /** Host help links under the shell link policy (internal routes and https: only). */
+  protected readonly helpLinks = safeHelpLinks(this.hooks?.helpLinks);
+  protected readonly external = isExternalHelpHref;
   protected readonly home = inject(PAEP_SHELL_NAVIGATION).home;
   private readonly config = inject(PAEP_SHELL_RUNTIME_CONFIG).config;
   private readonly navToggle = viewChild<ElementRef<HTMLElement>>('navToggle');

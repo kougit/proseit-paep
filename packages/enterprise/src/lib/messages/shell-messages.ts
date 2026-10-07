@@ -1,5 +1,6 @@
 /**
- * The 121 `paep.shell.*` content keys of HOF-IB3-001 v1.0 (content-keys.md) with their typed English defaults.
+ * The 121 `paep.shell.*` content keys of HOF-IB3-001 v1.0 (content-keys.md) and the two keys the PO/SA added on
+ * 2026-10-07 (DDR-IB3-06: the per-item unread marker and the named account button), with their typed English defaults.
  * Every shell string resolves through the i18n message seam; a host overrides keys per locale with
  * providePaepShell({ messages }). Provider text (notifications, results, context names) is never a key and is always
  * rendered as plain text.
@@ -44,7 +45,9 @@ export const PAEP_SHELL_DEFAULT_MESSAGES = {
   'paep.shell.notifications.stale': 'Showing notifications from {time}. They may be out of date.',
   'paep.shell.notifications.markAll': 'Mark all as read',
   'paep.shell.notifications.otherContext': 'In {tenant}',
+  'paep.shell.notifications.item.unread': 'Unread',
   'paep.shell.account.button': 'Account',
+  'paep.shell.account.button.named': 'Account: {name}',
   'paep.shell.account.signOut': 'Sign out',
   'paep.shell.account.signingOut': 'Signing out…',
   'paep.shell.account.preferences': 'Display preferences',

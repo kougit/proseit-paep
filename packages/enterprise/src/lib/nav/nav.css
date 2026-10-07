@@ -110,9 +110,6 @@ svg {
   flex-direction: column;
   gap: var(--paep-space-1);
 }
-.paep-shell-nav__rail-group {
-  position: relative;
-}
 .paep-shell-nav__rail-btn {
   flex-direction: column;
   justify-content: center;
@@ -135,18 +132,9 @@ svg {
   hyphens: manual;
 }
 .paep-shell-nav__flyout {
-  position: absolute;
-  inset-block-start: 0;
-  inset-inline-start: calc(100% + var(--paep-space-2));
-  z-index: var(--paep-layer-flyout);
+  /* Placement, layering and the 16 px viewport margin come from the governed popover (DDR-IB3-02). */
   min-inline-size: 14rem;
-  max-inline-size: min(20rem, calc(100vw - var(--paep-shell-rail-inline-size) - 2 * var(--paep-space-4)));
   padding: var(--paep-space-2);
-  box-sizing: border-box;
-  border: 1px solid var(--paep-color-border-subtle);
-  border-radius: var(--paep-radius-md);
-  background: var(--paep-color-surface-overlay);
-  box-shadow: var(--paep-elevation-3);
 }
 .paep-shell-nav__flyout-title {
   margin: 0 var(--paep-space-2) var(--paep-space-1);

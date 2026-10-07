@@ -4,6 +4,8 @@ Captures of the production reference-app build taken by `node tooling/enterprise
 
 After 4b64059 the application changed in two ways that do not alter what is drawn: the language button's name moved from `aria-label` to visually hidden text after the visible code (label in name), and `index.html` gained the strict-CSP nonce placeholder (`ngCspNonce`, filled per response by the serving layer). These captures were therefore not retaken; every state still passes the H1-H5 audit under the enforced policy.
 
+On 45069ff (PO/SA pre-acceptance disposition, 2026-10-07) three more changes were made, none of them in a retained capture: the per-item unread marker and the account button name now come from catalogued keys (DDR-IB3-06; both are non-visual: visually hidden text and an accessible name), and the collapsed-rail flyout now opens on the governed `PaepPopover` (DDR-IB3-02 ACCEPTED). No capture shows an open rail flyout, so these captures were not retaken.
+
 RTL is set with `dir="rtl"` and `lang="ar"` on the document; the text stays English. Arabic and Hebrew wording has not had native-speaker review.
 
 Each capture is compared with the HOF-IB3-001 render named below (`evidence/design-handoff/HOF-IB3-001/handoff/screens/`). The reference app shows neutral sample data, so names and content differ from the renders by design; the comparison is of layout, components, order and states. The topbar language, help, notifications and account controls (HOF-IB2-001 v1.2, approved 2026-10-07) are in every capture. The disposition of each baseline is a PO/SA decision (AC-IB3-16).

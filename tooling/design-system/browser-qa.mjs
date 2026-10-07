@@ -58,15 +58,32 @@ export async function launch() {
   return chromium.launch({ executablePath: findChrome(), headless: true, args: ['--no-sandbox'] });
 }
 
-/** Opens a page, collecting console errors and page errors; waits for Angular to render the h1. */
-export async function open(context, url) {
+/**
+ * Opens a page, collecting console errors and page errors; waits for Angular to render the h1. `trace`, when given,
+ * is called with the phase name as each phase begins (diagnostics only; it does not change any wait or timeout).
+ */
+export async function open(context, url, trace = null) {
   const page = await context.newPage();
   const errors = [];
   page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
   page.on('pageerror', (e) => errors.push(String(e)));
+  trace?.('navigation-start');
   await page.goto(url, { waitUntil: 'networkidle' });
+  trace?.('navigation-end; waiting for main h1');
   await page.waitForSelector('main h1', { timeout: 15000 });
+  trace?.('h1-rendered');
   return { page, errors };
+}
+
+/**
+ * Per-audit diagnostics on stderr (PO/SA pre-acceptance disposition 2026-10-07, section 8): one line per phase with
+ * the audit number, route, viewport and direction, so a stalled or failed CI run shows where it stopped.
+ */
+function tracer(n, total, pth, vp, dir) {
+  const t0 = Date.now();
+  let phase = 'queued';
+  const log = (next) => { phase = next; process.stderr.write(`[a11y-trace] audit ${n}/${total} ${pth} ${vp} ${dir} +${Date.now() - t0}ms ${next}\n`); };
+  return { log, phase: () => phase };
 }
 
 /**
@@ -367,15 +384,21 @@ async function main() {
     if (only) paths = paths.filter((x) => only.test(x));
     const jobs = paths.flatMap((pth) => VIEWPORTS.flatMap((vp) => ['ltr', 'rtl'].map((dir) => ({ pth, vp, dir }))));
     if (capture) fs.mkdirSync(capture, { recursive: true });
-    const res = await pool(jobs, 4, async ({ pth, vp, dir }) => {
+    const res = await pool(jobs.map((j, k) => ({ ...j, n: k + 1 })), 4, async ({ pth, vp, dir, n }) => {
+      const tr = tracer(n, jobs.length, pth, vp.name, dir);
+      tr.log('start');
       const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height } });
       try {
-        const { page, errors } = await open(ctx, `${server.url}${pth}${dir === 'rtl' ? '?dir=rtl' : ''}`);
+        const { page, errors } = await open(ctx, `${server.url}${pth}${dir === 'rtl' ? '?dir=rtl' : ''}`, tr.log);
+        tr.log('audit-start');
         const problems = await auditPage(page, errors);
         if (capture && dir === 'ltr') await page.screenshot({ path: path.join(capture, `${(pth.replace(/^\/|\/$/g, '') || 'home').replace(/\//g, '--')}--${vp.name}.png`), fullPage: true });
+        tr.log(`end (${problems.length} problems)`);
         return { page: pth, viewport: vp.name, dir, problems };
       } catch (e) {
-        return { page: pth, viewport: vp.name, dir, problems: [`error: ${e.message}`] };
+        const at = tr.phase();
+        tr.log(`failed during ${at}: ${e.message.split('\n')[0]}`);
+        return { page: pth, viewport: vp.name, dir, problems: [`error during ${at}: ${e.message}`] };
       } finally { await ctx.close(); }
     });
     report.pages = res;
@@ -399,7 +422,9 @@ async function main() {
     }
     console.log(`\npages: ${paths.length}; page audits: ${res.length}; failed: ${failed}`);
     if (!only) {
+      process.stderr.write('[a11y-trace] global checks start\n');
       report.checks = await globalChecks(browser, server.url, tokens, paths);
+      process.stderr.write('[a11y-trace] global checks end\n');
       for (const c of report.checks) {
         console.log(`${c.problems.length ? 'FAIL' : 'PASS'} ${c.id} ${c.name}${c.problems.length ? ` — ${c.problems.join('; ')}` : ''}`);
         if (c.problems.length) failed++;

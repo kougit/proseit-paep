@@ -137,7 +137,7 @@ describe('PaepPopover', () => {
     expect(Math.round(panel('#links-trigger').getBoundingClientRect().right)).toBe(Math.round(t.right));
   });
 
-  it('align="end" aligns the panel to the trigger\'s inline-end edge in LTR and to its left edge in RTL', async () => {
+  it('align="end" aligns the panel to the trigger\'s inline-end edge in LTR and to its left edge in RTL; its text stays start-aligned', async () => {
     host.placeStyle.set('padding: 40px 400px');
     await settle(fixture);
     const trigger = q('#end-trigger');
@@ -146,6 +146,8 @@ describe('PaepPopover', () => {
     await userEvent.click(trigger);
     await settle(fixture);
     expect(Math.round(p.getBoundingClientRect().right)).toBe(Math.round(trigger.getBoundingClientRect().right));
+    // The align="end" attribute is also a legacy HTML presentational hint (text-align); it must not align the text.
+    expect(['start', 'left']).toContain(getComputedStyle(p).textAlign);
     await userEvent.keyboard('{Escape}');
     host.dir.set('rtl');
     await settle(fixture);

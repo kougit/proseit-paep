@@ -5,6 +5,7 @@
   z-index: var(--paep-layer-sticky);
 }
 .paep-shell-topbar__bar {
+  container-type: inline-size;
   display: flex;
   align-items: center;
   gap: var(--paep-space-2);
@@ -45,16 +46,30 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-/* At large text sizes the badge may wrap rather than push the global actions out of the viewport (WCAG 1.4.4). */
 .paep-shell-topbar__env {
-  flex: 0 1 auto;
-  min-inline-size: 0;
+  flex: none;
+}
+/*
+ * Enlarged text (WCAG 1.4.4): container query lengths follow the bar's font size, so this matches only when the bar
+ * is narrower than the narrow breakpoint in text units (for example 640 px at 200 % text), never at normal text from
+ * 600 px. The badge may then wrap rather than push the global actions out of the viewport.
+ */
+@container (max-width: 37.4375em) {
+  .paep-shell-topbar__env {
+    flex: 0 1 auto;
+    min-inline-size: 0;
+  }
 }
 .paep-shell-topbar__search {
   display: flex;
   flex: 1 1 16rem;
   min-inline-size: 10rem;
   max-inline-size: 32rem;
+}
+/* Below 1024 px search is an icon button and takes only its own size. */
+.paep-shell-topbar__search--icon {
+  flex: none;
+  min-inline-size: 0;
 }
 .paep-shell-topbar__search-field {
   inline-size: 100%;

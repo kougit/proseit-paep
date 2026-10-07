@@ -1,13 +1,18 @@
 # IB3-ENTERPRISE-SHELL visual captures
 
-Captures of the production reference-app build taken by `node tooling/enterprise-shell/shell-qa.mjs --capture <dir>` on the head named in `ACCEPTANCE_REPORT.md`, after each state passed the H1-H4 audit (no page scroll, no console error, one h1 and one main, axe). The run captures 88 state × viewport × direction combinations; this folder retains 1440, 834 and 320 in LTR and 1440 and 320 in RTL. The sheet and context states have no capture at a width where the control is not shown (the sheet is below 1024 px; the context button is removed below 600 px, Q-07).
+Captures of the production reference-app build taken by `node tooling/enterprise-shell/shell-qa.mjs --capture <dir>` on the head named in `ACCEPTANCE_REPORT.md`, after each state passed the H1-H4 audit (no page scroll, no console error, one h1 and one main, axe). The run captures 124 state × viewport × direction combinations; this folder retains 1440, 834 and 320 in LTR and 1440 and 320 in RTL. The sheet, context and language states have no capture at a width where the control is not shown (the sheet is below 1024 px; the context button and the topbar language menu are removed below 600 px, Q-07 and X-05 B, where the language group is in the account menu).
 
 RTL is set with `dir="rtl"` and `lang="ar"` on the document; the text stays English. Arabic and Hebrew wording has not had native-speaker review.
 
-Each capture is compared with the HOF-IB3-001 render named below (`evidence/design-handoff/HOF-IB3-001/handoff/screens/`). The reference app shows neutral sample data, so names and content differ from the renders by design; the comparison is of layout, components, order and states. Parts blocked on HOF-IB2-001 v1.2 (language, notifications, account, help menu) are absent from every capture. The disposition of each baseline is a PO/SA decision (AC-IB3-16).
+Each capture is compared with the HOF-IB3-001 render named below (`evidence/design-handoff/HOF-IB3-001/handoff/screens/`). The reference app shows neutral sample data, so names and content differ from the renders by design; the comparison is of layout, components, order and states. The topbar language, help, notifications and account controls (HOF-IB2-001 v1.2, approved 2026-10-07) are in every capture. The disposition of each baseline is a PO/SA decision (AC-IB3-16).
 
 | Capture | State | Viewport | Direction | HOF-IB3-001 render | PO/SA disposition |
 | --- | --- | --- | --- | --- | --- |
+| `account--1440--ltr.png` | account | 1440 | LTR | SCR-SHELL-010 account-menu | PENDING |
+| `account--1440--rtl.png` | account | 1440 | RTL | SCR-SHELL-010 account-menu; SCR-SHELL-017 (RTL) | PENDING |
+| `account--320--ltr.png` | account | 320 | LTR | SCR-SHELL-010 account-menu | PENDING |
+| `account--320--rtl.png` | account | 320 | RTL | SCR-SHELL-010 account-menu; SCR-SHELL-017 (RTL) | PENDING |
+| `account--834--ltr.png` | account | 834 | LTR | SCR-SHELL-010 account-menu | PENDING |
 | `context--1440--ltr.png` | context | 1440 | LTR | SCR-SHELL-007 switch-dialog | PENDING |
 | `context--1440--rtl.png` | context | 1440 | RTL | SCR-SHELL-007 switch-dialog; SCR-SHELL-017 (RTL) | PENDING |
 | `context--834--ltr.png` | context | 834 | LTR | SCR-SHELL-007 switch-dialog | PENDING |
@@ -16,6 +21,9 @@ Each capture is compared with the HOF-IB3-001 render named below (`evidence/desi
 | `error--320--ltr.png` | error | 320 | LTR | SCR-SHELL-013 recoverable | PENDING |
 | `error--320--rtl.png` | error | 320 | RTL | SCR-SHELL-013 recoverable; SCR-SHELL-017 (RTL) | PENDING |
 | `error--834--ltr.png` | error | 834 | LTR | SCR-SHELL-013 recoverable | PENDING |
+| `language--1440--ltr.png` | language | 1440 | LTR | SCR-SHELL-010 locale-selector | PENDING |
+| `language--1440--rtl.png` | language | 1440 | RTL | SCR-SHELL-010 locale-selector; SCR-SHELL-017 (RTL) | PENDING |
+| `language--834--ltr.png` | language | 834 | LTR | SCR-SHELL-010 locale-selector | PENDING |
 | `locked--1440--ltr.png` | locked | 1440 | LTR | SCR-SHELL-012 page-edition | PENDING |
 | `locked--1440--rtl.png` | locked | 1440 | RTL | SCR-SHELL-012 page-edition; SCR-SHELL-017 (RTL) | PENDING |
 | `locked--320--ltr.png` | locked | 320 | LTR | SCR-SHELL-012 page-edition | PENDING |
@@ -26,6 +34,11 @@ Each capture is compared with the HOF-IB3-001 render named below (`evidence/desi
 | `not-found--320--ltr.png` | not-found | 320 | LTR | SCR-SHELL-013 not-found | PENDING |
 | `not-found--320--rtl.png` | not-found | 320 | RTL | SCR-SHELL-013 not-found; SCR-SHELL-017 (RTL) | PENDING |
 | `not-found--834--ltr.png` | not-found | 834 | LTR | SCR-SHELL-013 not-found | PENDING |
+| `notifications--1440--ltr.png` | notifications | 1440 | LTR | SCR-SHELL-009 panel-populated | PENDING |
+| `notifications--1440--rtl.png` | notifications | 1440 | RTL | SCR-SHELL-009 panel-populated; SCR-SHELL-017 (RTL) | PENDING |
+| `notifications--320--ltr.png` | notifications | 320 | LTR | SCR-SHELL-009 panel-populated | PENDING |
+| `notifications--320--rtl.png` | notifications | 320 | RTL | SCR-SHELL-009 panel-populated; SCR-SHELL-017 (RTL) | PENDING |
+| `notifications--834--ltr.png` | notifications | 834 | LTR | SCR-SHELL-009 panel-populated | PENDING |
 | `palette--1440--ltr.png` | palette | 1440 | LTR | SCR-SHELL-008 results | PENDING |
 | `palette--1440--rtl.png` | palette | 1440 | RTL | SCR-SHELL-008 results; SCR-SHELL-017 (RTL) | PENDING |
 | `palette--320--ltr.png` | palette | 320 | LTR | SCR-SHELL-008 results | PENDING |

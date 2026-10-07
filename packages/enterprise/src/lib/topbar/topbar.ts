@@ -84,7 +84,7 @@ function shortcutHint(nav: Navigator | undefined, text: PaepShellText): string {
       @if (layout.medium()) {
         <paep-context-switcher class="paep-shell-topbar__context" />
       }
-      <search class="paep-shell-topbar__search">
+      <search class="paep-shell-topbar__search" [class.paep-shell-topbar__search--icon]="!layout.wide()">
         @if (layout.wide()) {
           <button
             paepButton

@@ -55,6 +55,7 @@ export type PaepPopoverAlign = 'start' | 'end';
       padding: var(--paep-space-3) var(--paep-space-4);
       overflow: auto;
       color: var(--paep-color-text-primary);
+      text-align: start;
       background: var(--paep-color-surface-overlay);
       border: 1px solid var(--paep-color-border-subtle);
       border-radius: var(--paep-radius-md);

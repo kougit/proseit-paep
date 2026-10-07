@@ -1,11 +1,11 @@
 {
   "ok": true,
-  "raw": 516746,
-  "transfer": 121444,
+  "raw": 516799,
+  "transfer": 121528,
   "files": [
     "styles-J65SLB5I.css",
     "chunk-W9DnW3rH.js",
-    "main-JB5MXGDC.js"
+    "main-EAHLLU33.js"
   ],
   "results": [
     {
@@ -45,7 +45,7 @@
       "id": "C7",
       "name": "This build has the production initial files and a raw total within 1 % of it",
       "problems": [],
-      "detail": "production 516746 bytes, source-mapped 519090 bytes"
+      "detail": "production 516799 bytes, source-mapped 519143 bytes"
     }
   ],
   "composition": [

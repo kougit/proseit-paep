@@ -144,6 +144,14 @@ describe('PaepAccountMenu', () => {
     expect(opened).toEqual(['page']);
   });
 
+  it('neutralises a script URL in a host help link (Angular URL sanitisation): it never runs', async () => {
+    await create({ session: testSession(), medium: false, hooks: { helpLinks: [{ label: 'Bad link', href: 'javascript:alert(1)' }] } });
+    await open();
+    const link = items().find((i) => text(i) === 'Bad link') as HTMLAnchorElement;
+    expect(link.tagName).toBe('A');
+    expect(link.getAttribute('href')).toMatch(/^unsafe:javascript:/);
+  });
+
   it('shows the display name at 1280 px and wider only; the name never widens the button past its limit', async () => {
     await create({ session: testSession() });
     const name = () => el.querySelector<HTMLElement>('.paep-account-menu__name')!;

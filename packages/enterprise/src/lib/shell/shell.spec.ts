@@ -241,11 +241,19 @@ describe('PaepShellTopbar', () => {
   });
 
   it('offers the language menu at 600 px and wider with more than one locale; a choice is applied by the app and announced', async () => {
+    // The accessible name comes from the content and starts with the visible code (WCAG 2.5.3 label in name).
+    const visible = (b: HTMLElement) => {
+      const label = b.querySelector('.paep-button__label')!.cloneNode(true) as HTMLElement;
+      label.querySelectorAll('.paep-visually-hidden').forEach((x) => x.remove());
+      return text(label);
+    };
     const root = document.documentElement;
     fixture = await create({ runtimeConfig: testRuntimeConfig({ locales: ['en', 'fr', 'ar'] }) });
     const button = bar().querySelector<HTMLButtonElement>('.paep-shell-topbar__language')!;
-    expect(button.getAttribute('aria-label')).toBe('Language: English');
-    expect(text(button)).toBe('EN');
+    expect(button.hasAttribute('aria-label')).toBe(false);
+    expect(text(button)).toBe('EN, Language: English');
+    expect(text(button).startsWith(visible(button))).toBe(true);
+    expect(visible(button)).toBe('EN');
     expect(button.getAttribute('aria-haspopup')).toBe('menu');
     button.focus();
     await userEvent.keyboard('{Enter}');
@@ -259,8 +267,8 @@ describe('PaepShellTopbar', () => {
     await settle(fixture, 120);
     expect(root.getAttribute('lang')).toBe('fr');
     expect(document.activeElement).toBe(button);
-    expect(text(button)).toBe('FR');
-    expect(button.getAttribute('aria-label')).toBe('Language: Français');
+    expect(text(button)).toBe('FR, Language: Français');
+    expect(visible(button)).toBe('FR');
     await expect.poll(() => document.querySelector('[data-paep-announcer="polite"]')?.textContent).toBe('Language changed to Français');
     fixture.destroy();
     root.setAttribute('lang', 'en');

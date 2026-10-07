@@ -33,14 +33,27 @@
   "nx_disposition": "NOT REQUIRED",
   "ib2DdrFollowUps": {
     "DDR-IB2-07": "CLOSED 2026-10-06 (stage S1a; evidence/IB3-ENTERPRISE-SHELL/ddr-ib2-07/CLOSURE.md)",
-    "HOF-IB2-001 v1.2": "NOT STARTED: required before the Q-02 component code lands and before IB3 acceptance (DDR-IB2-01, -02, -04, -05, -08 and the Q-02 change)"
+    "HOF-IB2-001 v1.2": "APPROVED_FOR_IMPLEMENTATION 2026-10-07 (PO/SA); built and tested (AC-IB3-25 PASS; evidence/design-handoff/HOF-IB2-001/v1.2/)"
   },
   "native_copy_review": {
     "ar": "PENDING - REQUIRED BEFORE IB3 ACCEPTANCE",
     "he": "PENDING - REQUIRED BEFORE IB3 ACCEPTANCE"
   },
   "findings_open": {
-    "high": 0,
-    "medium": 0
+    "high": 1,
+    "medium": 5,
+    "as_of": "2026-10-07: independent QA (High 1 / Medium 4) and RR6 (Medium 2) on head 574f028; QA M-03 and RR6 M-02 are the same finding. Counts stay open until a re-review on the final head closes them.",
+    "items": [
+      "H-01 strict CSP (AC-IB3-12): awaiting PO/SA decision on the reference-app build change",
+      "QA M-01 budget gate without preload hints",
+      "QA M-02 language control label in name",
+      "QA M-03 / RR6 M-02 work-package.json state",
+      "QA M-04 per-part test counts",
+      "RR6 M-01 CI-governance negative count not pinned"
+    ]
+  },
+  "ddrIb3": {
+    "DDR-IB3-07": "ACCEPTED 2026-10-07 (PO/SA): 500 kB raw target; hard maximums 525 kB raw / 150 kB transfer, fail-closed (qa:shell B1; evidence/IB3-ENTERPRISE-SHELL/gates/bundle-composition.json)",
+    "DDR-IB3-01..06": "CANDIDATES awaiting PO/SA disposition (evidence/design-handoff/HOF-IB3-001/conformance-report.md)"
   }
 }

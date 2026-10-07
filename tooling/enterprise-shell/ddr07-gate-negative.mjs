@@ -100,6 +100,7 @@ const CASES = [
   ['N13', 'components committed together with the closure', (f) => { touchComponents(f); closeIt(f); f.commit('closure and components together'); }, 1, [/FAIL G2/, /before the DDR-IB2-07 closure/]],
   ['N14', 'components changed while the closure is uncommitted', (f) => { closeIt(f); touchComponents(f); }, 1, [/FAIL G2/, /closure record is not committed/]],
   ['N15', 'an unknown DDR-IB2-07 status', (f) => { const wp = JSON.parse(f.read(WP_JSON)); wp.ib2DdrFollowUps['DDR-IB2-07'] = 'DONE'; f.write(WP_JSON, JSON.stringify(wp, null, 2) + '\n'); }, 1, [/FAIL G4/, /neither OPEN nor CLOSED/]],
+  ['N16', 'closure committed, later deleted in a commit, then a components commit (HEAD must hold the record)', (f) => { closeIt(f); f.commit('closure'); f.remove(CLOSURE); f.commit('drop closure'); touchComponents(f); f.commit('components after the record was dropped'); }, 1, [/FAIL G2/, /closure record is not committed/]],
   ['P10', 'positive control: closure committed first, then a components commit', (f) => { closeIt(f); f.commit('closure'); touchComponents(f); f.commit('components after closure'); }, 0, [/PASS \(4\/4\)/, /CLOSED at/]],
 ];
 
@@ -128,4 +129,4 @@ for (const [id, name, mutate, exit, patterns] of CASES) {
 fs.rmSync(scratch, { recursive: true, force: true });
 const failed = results.filter((r) => !r.pass).length;
 console.log(`\nPAEP DDR-IB2-07 gate negatives: ${failed ? 'FAIL' : 'PASS'} (${results.length - failed}/${results.length}; expected ${CASES.length})`);
-process.exit(failed || results.length !== 18 ? 1 : 0);
+process.exit(failed || results.length !== 19 ? 1 : 0);

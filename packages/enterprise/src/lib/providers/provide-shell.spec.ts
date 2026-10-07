@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, RouterOutlet, provideRouter } from '@angular/router';
+import { userEvent } from 'vitest/browser';
 import { PAEP_SHELL_DEFAULT_MESSAGES } from '../messages/shell-messages';
 import { PAEP_SHELL_CONNECTIVITY, PAEP_SHELL_ERROR_REPORTER, PAEP_SHELL_LOCALE } from '../ports/ports';
 import { PaepShellPreferences } from '../preferences/preferences';
@@ -90,7 +91,7 @@ class FirstPage {}
 
 @Component({
   imports: [PaepShellPreferences],
-  template: '<main><h1>Page</h1></main><paep-shell-preferences [(open)]="open" />',
+  template: '<main><h1>Page</h1><button id="open-prefs" (click)="open = true">Preferences</button></main><paep-shell-preferences [(open)]="open" />',
 })
 class PrefsHost {
   open = false;
@@ -98,6 +99,9 @@ class PrefsHost {
 
 @Component({ imports: [RouterOutlet], template: '<main><router-outlet /></main>' })
 class OutletHost {}
+
+@Component({ template: '<p>No heading here</p>' })
+class HeadinglessPage {}
 
 describe('PaepRouteFocus', () => {
   let fixture: ComponentFixture<unknown>;
@@ -127,6 +131,41 @@ describe('PaepRouteFocus', () => {
     expect(h1.getAttribute('tabindex')).toBe('-1');
     expect(text(document.querySelector('[data-paep-announcer="polite"]'))).toBe('Second page');
   });
+
+  it('focuses the main region (tabindex -1) and announces nothing when the new page has no h1', async () => {
+    TestBed.configureTestingModule({
+      providers: [provideRouter([{ path: 'first', component: FirstPage }, { path: 'bare', component: HeadinglessPage }]), ...provideTestShell()],
+    });
+    fixture = TestBed.createComponent(OutletHost);
+    const main = (fixture.nativeElement as HTMLElement).querySelector('main') as HTMLElement;
+    TestBed.inject(PaepRouteFocus).attach(main);
+    await TestBed.inject(Router).navigateByUrl('/first');
+    await settle(fixture, 60);
+    const live = document.querySelector('[data-paep-announcer="polite"]');
+    if (live) live.textContent = '';
+    await TestBed.inject(Router).navigateByUrl('/bare');
+    await settle(fixture, 120);
+    expect(document.activeElement).toBe(main);
+    expect(main.getAttribute('tabindex')).toBe('-1');
+    expect(text(document.querySelector('[data-paep-announcer="polite"]'))).toBe('');
+  });
+
+  it('focusPage() after a retry or context switch focuses the current h1 and announces it again', async () => {
+    TestBed.configureTestingModule({ providers: [provideRouter([{ path: 'second', component: TitledPage }]), ...provideTestShell()] });
+    fixture = TestBed.createComponent(OutletHost);
+    const focus = TestBed.inject(PaepRouteFocus);
+    focus.attach((fixture.nativeElement as HTMLElement).querySelector('main'));
+    await TestBed.inject(Router).navigateByUrl('/second');
+    await settle(fixture, 60);
+    const h1 = (fixture.nativeElement as HTMLElement).querySelector('h1') as HTMLElement;
+    expect(document.activeElement).not.toBe(h1);
+    const live = document.querySelector('[data-paep-announcer="polite"]');
+    if (live) live.textContent = '';
+    focus.focusPage();
+    await settle(fixture, 120);
+    expect(document.activeElement).toBe(h1);
+    await expect.poll(() => text(document.querySelector('[data-paep-announcer="polite"]'))).toBe('Second page');
+  });
 });
 
 describe('PaepShellPreferences', () => {
@@ -145,6 +184,44 @@ describe('PaepShellPreferences', () => {
     (dialog.querySelector('input[type="checkbox"]') as HTMLInputElement).click();
     expect(layout.navCollapsed()).toBe(true);
     expect(text(dialog)).not.toMatch(/saved/i);
+    fixture.destroy();
+  });
+
+  it('closes with Escape and with Close, updating the two-way open binding each time', async () => {
+    TestBed.configureTestingModule({ providers: [provideRouter([]), ...provideTestShell()] });
+    const fixture = TestBed.createComponent(PrefsHost);
+    const dialog = () => (fixture.nativeElement as HTMLElement).querySelector('dialog') as HTMLDialogElement;
+    const invoker = (fixture.nativeElement as HTMLElement).querySelector('#open-prefs') as HTMLElement;
+    await settle(fixture);
+    await userEvent.click(invoker);
+    await settle(fixture);
+    expect(dialog().open).toBe(true);
+    await userEvent.keyboard('{Escape}');
+    await settle(fixture);
+    expect(dialog().open).toBe(false);
+    expect(fixture.componentInstance.open).toBe(false);
+    expect(document.activeElement).toBe(invoker);
+    await userEvent.click(invoker);
+    await settle(fixture);
+    const close = Array.from(dialog().querySelectorAll('paep-dialog-footer button')).find((b) => text(b) === 'Close') as HTMLButtonElement;
+    close.click();
+    await settle(fixture);
+    expect(dialog().open).toBe(false);
+    expect(fixture.componentInstance.open).toBe(false);
+    fixture.destroy();
+  });
+
+  it('below 1024 px offers the content density only, with the radios in a group named "Content density"', async () => {
+    TestBed.configureTestingModule({ providers: [provideRouter([]), ...provideTestShell({ wide: false })] });
+    const fixture = TestBed.createComponent(PrefsHost);
+    fixture.componentInstance.open = true;
+    await settle(fixture);
+    const dialog = (fixture.nativeElement as HTMLElement).querySelector('dialog') as HTMLDialogElement;
+    expect(dialog.querySelector('input[type="checkbox"]')).toBeNull();
+    const radios = Array.from(dialog.querySelectorAll<HTMLInputElement>('input[type="radio"]'));
+    expect(radios.map((r) => r.value)).toEqual(['comfortable', 'compact']);
+    expect(radios[0].checked).toBe(true);
+    expect(text(dialog.querySelector('legend'))).toBe('Content density');
     fixture.destroy();
   });
 });

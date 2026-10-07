@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
 import { page, userEvent } from 'vitest/browser';
+import { PaepAnnouncer } from '@proseit/paep-foundation';
 import type { PaepShellNotification } from '../ports/ports';
 import { provideTestShell, settle, testNotifications, text } from '../testing/shell-testing';
 import { PaepNotificationPanel } from './notification-panel';
@@ -195,6 +196,13 @@ describe('PaepNotificationPanel', () => {
   it('announces an increase of the unread count once (batched), and never a decrease', async () => {
     const provider = testNotifications({ unread: 3 });
     await create(provider);
+    const announcer = TestBed.inject(PaepAnnouncer);
+    const calls: string[] = [];
+    const original = announcer.announce.bind(announcer);
+    announcer.announce = ((message: string, ...rest: unknown[]) => {
+      calls.push(message);
+      return (original as (...a: unknown[]) => unknown)(message, ...rest);
+    }) as typeof announcer.announce;
     const region = () => document.querySelector('[data-paep-announcer="polite"]')?.textContent ?? '';
     const live = document.querySelector('[data-paep-announcer="polite"]');
     if (live) live.textContent = '';
@@ -203,10 +211,13 @@ describe('PaepNotificationPanel', () => {
     provider.unread.set(5);
     await settle(fixture);
     await expect.poll(region, { timeout: 3000 }).toBe('Notifications, 5 unread');
+    await settle(fixture, 1300);
+    expect(calls).toEqual(['Notifications, 5 unread']);
     document.querySelector('[data-paep-announcer="polite"]')!.textContent = '';
     provider.unread.set(1);
     await settle(fixture, 1300);
     expect(region()).toBe('');
+    expect(calls).toEqual(['Notifications, 5 unread']);
   });
 
   it('closes on a route change', async () => {

@@ -1,10 +1,10 @@
 {
   "ok": true,
-  "seconds": 113,
+  "seconds": 145,
   "results": [
     {
       "id": "B1",
-      "name": "Initial bundle budget: raw 516746 bytes (516.75 kB; target 500.00 kB exceeded, hard maximum 525.00 kB), transfer 121444 bytes (121.44 kB; hard maximum 150.00 kB) — styles-J65SLB5I.css, chunk-W9DnW3rH.js, main-JB5MXGDC.js",
+      "name": "Initial bundle budget: raw 516799 bytes (516.80 kB; target 500.00 kB exceeded, hard maximum 525.00 kB), transfer 121528 bytes (121.53 kB; hard maximum 150.00 kB) — styles-J65SLB5I.css, chunk-W9DnW3rH.js, main-EAHLLU33.js",
       "problems": []
     },
     {
@@ -20,6 +20,11 @@
     {
       "id": "T1",
       "name": "Shell targets at least 24 × 24 CSS px at 1440 and 320 (chrome, sheet, palette, notification panel, account menu)",
+      "problems": []
+    },
+    {
+      "id": "A1",
+      "name": "Label in name (WCAG 2.5.3): controls named by aria-label include their visible text (1440, 834, 320; chrome, sheet, notifications, account and language menus)",
       "problems": []
     },
     {

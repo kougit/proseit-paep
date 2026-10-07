@@ -147,4 +147,34 @@ describe('PaepNotFound', () => {
     expect(TestBed.inject(PaepShellLayout).paletteOpen()).toBe(true);
     fixture.destroy();
   });
+
+  it('is a region named by its h1; the icon is decorative and the actions are a link and a button in that order', async () => {
+    TestBed.configureTestingModule({ providers: [provideRouter([{ path: '**', component: PaepNotFound }]), ...provideTestShell()] });
+    const fixture = TestBed.createComponent(BoundaryHost);
+    await TestBed.inject(Router).navigateByUrl('/missing');
+    await settleFixture(fixture);
+    const el = fixture.nativeElement as HTMLElement;
+    const section = el.querySelector('section') as HTMLElement;
+    expect(document.getElementById(section.getAttribute('aria-labelledby')!)).toBe(el.querySelector('h1'));
+    expect(el.querySelector('section > svg')?.getAttribute('aria-hidden')).toBe('true');
+    const actions = Array.from(el.querySelectorAll<HTMLElement>('.paep-error-page__actions > *'));
+    expect(actions.map((a) => `${a.tagName} ${text(a)}`)).toEqual(['A Go to Home', 'BUTTON Search or go to…']);
+    fixture.destroy();
+  });
+
+  it('"Go to Home" navigates to the host home route', async () => {
+    TestBed.configureTestingModule({
+      providers: [provideRouter([{ path: 'home', component: HomePage }, { path: '**', component: PaepNotFound }]), ...provideTestShell()],
+    });
+    const fixture = TestBed.createComponent(BoundaryHost);
+    const router = TestBed.inject(Router);
+    await router.navigateByUrl('/nowhere');
+    await settleFixture(fixture);
+    const el = fixture.nativeElement as HTMLElement;
+    (el.querySelector('a') as HTMLAnchorElement).click();
+    await settleFixture(fixture, 60);
+    expect(router.url).toBe('/home');
+    expect(text(el.querySelector('h1'))).toBe('Home page');
+    fixture.destroy();
+  });
 });

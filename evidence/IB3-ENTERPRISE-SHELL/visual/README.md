@@ -1,6 +1,8 @@
 # IB3-ENTERPRISE-SHELL visual captures
 
-Captures of the production reference-app build taken by `node tooling/enterprise-shell/shell-qa.mjs --capture <dir>` on the head named in `ACCEPTANCE_REPORT.md`, after each state passed the H1-H4 audit (no page scroll, no console error, one h1 and one main, axe). The run captures 124 state × viewport × direction combinations; this folder retains 1440, 834 and 320 in LTR and 1440 and 320 in RTL. The sheet, context and language states have no capture at a width where the control is not shown (the sheet is below 1024 px; the context button and the topbar language menu are removed below 600 px, Q-07 and X-05 B, where the language group is in the account menu).
+Captures of the production reference-app build taken by `node tooling/enterprise-shell/shell-qa.mjs --capture <dir>` on head 4b64059, after each state passed the H1-H4 audit (no page scroll, no console error, one h1 and one main, axe). The run captures 124 state × viewport × direction combinations; this folder retains 1440, 834 and 320 in LTR and 1440 and 320 in RTL. The sheet, context and language states have no capture at a width where the control is not shown (the sheet is below 1024 px; the context button and the topbar language menu are removed below 600 px, Q-07 and X-05 B, where the language group is in the account menu).
+
+After 4b64059 the only shell source change is the language button's name, which moved from `aria-label` to visually hidden text after the visible code (label in name); the visible button is unchanged, so these captures were not retaken.
 
 RTL is set with `dir="rtl"` and `lang="ar"` on the document; the text stays English. Arabic and Hebrew wording has not had native-speaker review.
 

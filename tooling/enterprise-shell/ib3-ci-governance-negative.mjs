@@ -93,6 +93,10 @@ const cases = [
   ['J11', 'a WP04 edge-count control that names an edge it does not inject fails the negative-architecture gate', [['tooling/verification/negative-ib0-wp04.mjs', replace("  [entry('frappe-sdk'), append(\"import '@proseit/paep-offline';\")],\n", '')]], 'negative-architecture', [/FAIL W17/, /FAIL W18/, /C1 failed: allowed-edge control/], { commit: false }],
 ];
 
+/** Pinned case count (AC-IB3-17): 11 seeded negatives (J01-J11) and 1 positive control (P00). */
+const EXPECTED_NEGATIVES = 11;
+const EXPECTED_CONTROLS = 1;
+
 const results = [];
 for (const [id, name, edits, g, expect, { commit = true } = {}] of cases) {
   const saved = new Map();
@@ -126,6 +130,11 @@ for (const [id, name, edits, g, expect, { commit = true } = {}] of cases) {
   console.log(`${pass ? 'PASS' : 'FAIL'} ${id} ${name} (gate ${g}, exit ${r.status})${fails.length ? `\n    ${fails.join('\n    ')}` : ''}`);
 }
 fs.rmSync(scratch, { recursive: true, force: true });
-const failed = results.filter((x) => !x.pass).length;
-console.log(`\nPAEP IB3 CI-governance negative suite: ${failed ? 'FAIL' : 'PASS'} (${results.length - failed}/${results.length})`);
+const negatives = cases.filter((c) => c[4]).length;
+const coverage = negatives === EXPECTED_NEGATIVES && cases.length - negatives === EXPECTED_CONTROLS && new Set(cases.map((c) => c[0])).size === cases.length
+  ? []
+  : [`${negatives} negatives and ${cases.length - negatives} controls (unique ids: ${new Set(cases.map((c) => c[0])).size}); expected ${EXPECTED_NEGATIVES} and ${EXPECTED_CONTROLS}`];
+for (const c of coverage) console.log(`FAIL ${c}`);
+const failed = results.filter((x) => !x.pass).length + coverage.length;
+console.log(`\nPAEP IB3 CI-governance negative suite: ${failed ? 'FAIL' : 'PASS'} (${results.filter((x) => x.pass).length}/${results.length}; ${negatives} seeded negatives + ${results.length - negatives} control)`);
 process.exit(failed ? 1 : 0);

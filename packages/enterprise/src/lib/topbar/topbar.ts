@@ -126,8 +126,10 @@ function shortcutHint(nav: Navigator | undefined, text: PaepShellText): string {
             icon="globe"
             class="paep-shell-topbar__language"
             [paepMenuTrigger]="languageMenu"
-            [attr.aria-label]="text.t('paep.shell.locale.button', { language: activeName() })"
-          >{{ activeCode() }}</button>
+          >
+            <!-- The name starts with the visible code (WCAG 2.5.3 label in name): "EN, Language: English". -->
+            {{ activeCode() }}<span class="paep-visually-hidden">, {{ text.t('paep.shell.locale.button', { language: activeName() }) }}</span>
+          </button>
           <paep-menu #languageMenu [label]="text.t('paep.shell.locale.label')" align="end">
             <paep-menu-group [label]="text.t('paep.shell.locale.label')">
               @for (l of locales(); track l.tag) {

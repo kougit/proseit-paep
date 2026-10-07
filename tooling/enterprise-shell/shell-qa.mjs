@@ -12,6 +12,7 @@
  *   N1 the never-hidden set (navigation, product, search, notifications with count, account, page h1) is present and
  *      inside the viewport at 320 and 320×256, and the account menu reaches Sign out there
  *   T1 shell targets are at least 24 × 24 CSS px (WCAG 2.5.8) at 1440 and 320
+ *   A1 label in name (WCAG 2.5.3): a control named by aria-label has a name containing its visible text
  *   K1 the skip link is the first Tab stop, is visible when focused, and moves focus to main
  *   K2 Ctrl+K opens the palette with focus in the combobox; Escape closes it and focus returns to its opener
  *   K3 the navigation sheet takes focus when opened and returns it to Open navigation on Escape (834)
@@ -27,7 +28,8 @@
  *   K7 the notification panel: Enter on the bell opens it with focus on its heading; it is at most 24 rem wide and
  *      16 px inside the viewport; Escape closes it and focus returns to the bell (1440, 320)
  * and first, on the build itself:
- *   B1 initial bundle budget (AC-IB3-15, DDR-IB3-07 ACCEPTED 2026-10-07): the initial files named by index.html, raw
+ *   B1 initial bundle budget (AC-IB3-15, DDR-IB3-07 ACCEPTED 2026-10-07): the initial files (named by index.html
+ *      and every script they import statically, followed recursively), raw
  *      bytes at most 525 000 and Brotli bytes (the CLI's estimated transfer size) at most 150 000, fail-closed on the
  *      exact byte counts, never rounded. 500 kB raw stays the engineering target and is reported, not enforced here
  *      (the Angular budget warns above it).
@@ -255,6 +257,37 @@ export async function targetSizeProblems(page) {
   });
 }
 
+/**
+ * A1 (WCAG 2.5.3 label in name): a shell control named by aria-label has a name that contains its visible text
+ * (text nodes that render, outside visually hidden text), compared case-insensitively with punctuation ignored (the
+ * visible words must appear whole and in order; WCAG 2.5.3 Understanding: punctuation and symbols in a label are not spoken).
+ */
+export async function labelInNameProblems(page) {
+  return page.evaluate(() => {
+    const p = [];
+    const norm = (t) => t.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+    const scope = 'paep-shell-topbar, paep-shell-nav, paep-shell-status-strip, dialog[open], :popover-open';
+    for (const host of document.querySelectorAll(scope)) {
+      for (const el of host.querySelectorAll('a[href][aria-label], button[aria-label], [role^="menuitem"][aria-label]')) {
+        const r = el.getBoundingClientRect();
+        if (r.width === 0 && r.height === 0) continue;
+        const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+        let visible = '';
+        for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+          const parent = n.parentElement;
+          if (!parent || parent.closest('.paep-visually-hidden')) continue;
+          const pr = parent.getBoundingClientRect();
+          if (pr.width < 2 || pr.height < 2 || getComputedStyle(parent).visibility === 'hidden') continue;
+          visible += ` ${n.textContent}`;
+        }
+        const v = norm(visible);
+        if (v && !` ${norm(el.getAttribute('aria-label'))} `.includes(` ${v} `)) p.push(`A1 ${el.tagName.toLowerCase()} shows "${v}" but is named "${el.getAttribute('aria-label')}"`);
+      }
+    }
+    return p;
+  });
+}
+
 const active = (page) => page.evaluate(() => {
   const e = document.activeElement;
   return e ? { tag: e.tagName.toLowerCase(), cls: e.className?.baseVal ?? e.className ?? '', label: e.getAttribute('aria-label') || '', text: (e.textContent || '').trim().slice(0, 40), role: e.getAttribute('role') || '' } : null;
@@ -423,10 +456,24 @@ async function pool(items, n, fn) {
 /** DDR-IB3-07 (PO/SA, 2026-10-07): hard limits in bytes (1 kB = 1000 bytes, as the Angular CLI reports). */
 export const BUDGET = { rawTarget: 500_000, rawMax: 525_000, transferMax: 150_000 };
 
-/** Exact sizes of the initial files that index.html loads: raw bytes and Brotli bytes (the CLI's transfer estimate). */
+/**
+ * Exact sizes of the initial files: the scripts, stylesheets and module preloads index.html names, plus every
+ * script they import statically, followed recursively (a preload hint can be missing, so it is never relied on).
+ * Dynamic import() targets are lazy and not counted. Raw bytes and Brotli bytes (the CLI's transfer estimate).
+ */
 export function measureInitial(dir) {
   const html = fs.readFileSync(path.join(dir, 'index.html'), 'utf8');
-  const files = [...new Set([...html.matchAll(/(?:src|href)="([^"?#]+\.(?:js|css))"/g)].map((m) => m[1]))];
+  const named = [...html.matchAll(/(?:src|href)="([^"?#]+\.(?:js|css))"/g)].map((m) => m[1]);
+  const files = [];
+  const queue = [...new Set(named)];
+  while (queue.length) {
+    const f = queue.shift();
+    if (files.includes(f)) continue;
+    files.push(f);
+    if (!f.endsWith('.js')) continue;
+    const code = fs.readFileSync(path.join(dir, f), 'utf8');
+    for (const m of code.matchAll(/\b(?:import|export)\s*(?:[^"'();]*?\bfrom\s*)?["']\.\/([^"']+\.js)["']/g)) if (!files.includes(m[1])) queue.push(m[1]);
+  }
   let raw = 0;
   let transfer = 0;
   for (const f of files) {
@@ -519,6 +566,20 @@ async function main() {
       }
     }
     results.push({ id: 'T1', name: 'Shell targets at least 24 × 24 CSS px at 1440 and 320 (chrome, sheet, palette, notification panel, account menu)', problems: [...new Set(t1)] });
+    const a1 = [];
+    for (const vp of [[1440, 900], [834, 1112], [320, 720]]) {
+      for (const act of [null, openSheet, openNotifications, openAccount, openLanguage]) {
+        const ctx = await browser.newContext({ viewport: { width: vp[0], height: vp[1] } });
+        try {
+          const { page } = await openApp(ctx, `${server.url}/workspace`);
+          if (act && !(await act(page))) continue;
+          a1.push(...(await labelInNameProblems(page)).map((x) => `${vp[0]}${act ? `/${act.name}` : ''}: ${x}`));
+        } finally {
+          await ctx.close();
+        }
+      }
+    }
+    results.push({ id: 'A1', name: 'Label in name (WCAG 2.5.3): controls named by aria-label include their visible text (1440, 834, 320; chrome, sheet, notifications, account and language menus)', problems: [...new Set(a1)] });
     await single('K1', 'Skip link is the first Tab stop, visible when focused, and moves focus to main (1440, 320)', [1440, 900], '/workspace', skipLinkProblems);
     await single('K1b', 'Skip link at 320', [320, 720], '/workspace', skipLinkProblems);
     await single('K2', 'Ctrl+K opens the palette with focus in the combobox; Escape returns focus to the trigger', [1440, 900], '/workspace', paletteKeyboardProblems);

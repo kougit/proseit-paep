@@ -19,6 +19,7 @@ import {
   budgetProblems,
   measureInitial,
   focusVisibleProblems,
+  labelInNameProblems,
   largeTextProblems,
   menuKeyboardProblems,
   neverHiddenProblems,
@@ -35,7 +36,7 @@ import {
   trapProblems,
 } from './shell-qa.mjs';
 
-const EXPECTED_NEGATIVES = 26;
+const EXPECTED_NEGATIVES = 29;
 const EXPECTED_CONTROLS = 6;
 const css = (rule) => async (page) => page.addStyleTag({ content: rule });
 const js = (fn) => async (page) => page.evaluate(fn);
@@ -53,6 +54,30 @@ const incompressible = (dir) => {
   const f = largestInitial(dir);
   const size = fs.statSync(f).size;
   fs.writeFileSync(f, crypto.randomBytes(size).toString('base64').slice(0, size));
+};
+/** Removes every modulepreload hint from index.html (the CLI emits at most 10, and none without preloadInitial). */
+const dropPreloads = (dir) => {
+  const f = path.join(dir, 'index.html');
+  const html = fs.readFileSync(f, 'utf8');
+  if (!/rel="modulepreload"/.test(html)) throw new Error('no modulepreload hint to drop');
+  fs.writeFileSync(f, html.replace(/<link rel="modulepreload"[^>]*>/g, ''));
+};
+/** Grows a statically imported, unhinted chunk until the raw total is one byte over the hard maximum. */
+const growImported = (dir) => {
+  const shared = measureInitial(dir).files.find((x) => x.startsWith('chunk-'));
+  if (!shared) throw new Error('no statically imported chunk');
+  dropPreloads(dir);
+  const n = BUDGET.rawMax + 1 - measureInitial(dir).raw - 4;
+  fs.appendFileSync(path.join(dir, shared), `/*${'a'.repeat(n)}*/`);
+};
+/** Adds a second-level chunk, imported only by another chunk and never hinted, that takes the raw total over. */
+const nestedChunk = (dir) => {
+  const shared = measureInitial(dir).files.find((x) => x.startsWith('chunk-'));
+  dropPreloads(dir);
+  const extra = 'chunk-PAEPNEG1.js';
+  fs.writeFileSync(path.join(dir, extra), '');
+  fs.appendFileSync(path.join(dir, shared), `\nimport"./${extra}";`);
+  fs.writeFileSync(path.join(dir, extra), `/*${'a'.repeat(BUDGET.rawMax + 1 - measureInitial(dir).raw - 4)}*/`);
 };
 const blurOnClose = () => document.addEventListener('close', () => setTimeout(() => document.activeElement?.blur?.(), 0), true);
 
@@ -88,6 +113,9 @@ const CASES = [
   ['S27', 'positive control: the account menu and notification panel keyboard paths pass unmutated at 320', [320, 720], '/workspace', null, async (p) => [...(await menuKeyboardProblems(p)), ...(await notificationPanelProblems(p))], null],
   ['S28', 'B1 raw initial bundle one byte over the hard maximum (shown as 525.00 kB; never rounded)', null, null, build(padRawTo(BUDGET.rawMax + 1)), null, new RegExp(`raw ${BUDGET.rawMax + 1} bytes > hard maximum ${BUDGET.rawMax}`)],
   ['S29', 'B1 transfer over the hard maximum at unchanged raw size', null, null, build(incompressible), null, new RegExp(`transfer \\d+ bytes > hard maximum ${BUDGET.transferMax}`)],
+  ['S32', 'B1 a statically imported chunk without its preload hint grows over the hard maximum (hints are never relied on)', null, null, build(growImported), null, new RegExp(`raw ${BUDGET.rawMax + 1} bytes > hard maximum ${BUDGET.rawMax}`)],
+  ['S33', 'B1 a second-level chunk imported only by another chunk takes the raw total over the hard maximum', null, null, build(nestedChunk), null, new RegExp(`raw ${BUDGET.rawMax + 1} bytes > hard maximum ${BUDGET.rawMax}`)],
+  ['S34', 'A1 the language button named "Language: English" while it shows "EN" (label not in name)', [1440, 900], '/workspace', js(() => document.querySelector('.paep-shell-topbar__language').setAttribute('aria-label', 'Language: English')), (p) => labelInNameProblems(p), /A1 button shows "en" but is named "Language: English"/],
   ['S30', 'positive control: raw initial bundle exactly at the hard maximum', null, null, build(padRawTo(BUDGET.rawMax)), null, null],
   ['S31', 'positive control: the build as it is', null, null, build(() => {}), null, null],
 ];

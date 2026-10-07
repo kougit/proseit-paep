@@ -1,20 +1,25 @@
 {
   "ok": true,
-  "seconds": 74,
+  "seconds": 113,
   "results": [
     {
+      "id": "B1",
+      "name": "Initial bundle budget: raw 516746 bytes (516.75 kB; target 500.00 kB exceeded, hard maximum 525.00 kB), transfer 121444 bytes (121.44 kB; hard maximum 150.00 kB) — styles-J65SLB5I.css, chunk-W9DnW3rH.js, main-JB5MXGDC.js",
+      "problems": []
+    },
+    {
       "id": "H",
-      "name": "H1-H4 shell states: 88 state × viewport × direction combinations (axe at 1440, 834, 640 and 320)",
+      "name": "H1-H4 shell states: 124 state × viewport × direction combinations (axe at 1440, 834, 640 and 320)",
       "problems": []
     },
     {
       "id": "N1",
-      "name": "Never-hidden set present and inside the viewport at 320 and 320×256 (LTR and RTL)",
+      "name": "Never-hidden set (incl. notifications with count and account with sign-out) present and inside the viewport at 320 and 320×256 (LTR and RTL)",
       "problems": []
     },
     {
       "id": "T1",
-      "name": "Shell targets at least 24 × 24 CSS px at 1440 and 320 (chrome, sheet, palette)",
+      "name": "Shell targets at least 24 × 24 CSS px at 1440 and 320 (chrome, sheet, palette, notification panel, account menu)",
       "problems": []
     },
     {
@@ -65,6 +70,26 @@
     {
       "id": "R1",
       "name": "RTL mirroring: navigation at the inline start, sheet on the right edge, directional icon mirrored",
+      "problems": []
+    },
+    {
+      "id": "K6",
+      "name": "Account menu: Enter opens on the first item, End reaches Sign out, Escape returns to the button; 16 px inside the viewport (1440)",
+      "problems": []
+    },
+    {
+      "id": "K6b",
+      "name": "Account menu at 320",
+      "problems": []
+    },
+    {
+      "id": "K7",
+      "name": "Notification panel: opens on its heading, at most 24 rem and 16 px inside the viewport, Escape returns to the bell (1440)",
+      "problems": []
+    },
+    {
+      "id": "K7b",
+      "name": "Notification panel at 320",
       "problems": []
     },
     {

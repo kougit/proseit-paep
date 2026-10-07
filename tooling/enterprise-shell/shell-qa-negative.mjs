@@ -2,13 +2,22 @@
 /**
  * Seeded negatives for the IB3 enterprise-shell browser gate (npm run qa:shell:negative), against the production
  * reference-app build. Each case injects one defect into a served page and requires the matching shell-qa check to
- * report it; the positive controls require the unmutated pages to pass. The case count is pinned.
+ * report it; the positive controls require the unmutated pages to pass. The B1 budget cases mutate a copy of the build
+ * instead (raw one byte over the hard maximum, transfer over its maximum at unchanged raw size; controls at exactly the
+ * raw maximum and on the build as it is). The case count is pinned.
  *   node tooling/enterprise-shell/shell-qa-negative.mjs
  */
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import { launch, serve } from '../design-system/browser-qa.mjs';
 import {
+  BUDGET,
   DIST,
   auditState,
+  budgetProblems,
+  measureInitial,
   focusVisibleProblems,
   largeTextProblems,
   menuKeyboardProblems,
@@ -26,10 +35,25 @@ import {
   trapProblems,
 } from './shell-qa.mjs';
 
-const EXPECTED_NEGATIVES = 24;
-const EXPECTED_CONTROLS = 4;
+const EXPECTED_NEGATIVES = 26;
+const EXPECTED_CONTROLS = 6;
 const css = (rule) => async (page) => page.addStyleTag({ content: rule });
 const js = (fn) => async (page) => page.evaluate(fn);
+/** A budget case: mutate(dir) edits a copy of the build; the check is B1 on that copy. */
+const build = (mutate) => ({ build: mutate });
+const largestInitial = (dir) => measureInitial(dir).files.filter((f) => f.endsWith('.js')).map((f) => path.join(dir, f)).sort((a, b) => fs.statSync(b).size - fs.statSync(a).size)[0];
+/** Pads the largest initial script with a compressible comment until the raw total is exactly `target` bytes. */
+const padRawTo = (target) => (dir) => {
+  const n = target - measureInitial(dir).raw - 4;
+  if (n < 0) throw new Error(`build already over ${target} bytes`);
+  fs.appendFileSync(largestInitial(dir), `/*${'a'.repeat(n)}*/`);
+};
+/** Replaces the largest initial script with incompressible text of the same byte length (raw total unchanged). */
+const incompressible = (dir) => {
+  const f = largestInitial(dir);
+  const size = fs.statSync(f).size;
+  fs.writeFileSync(f, crypto.randomBytes(size).toString('base64').slice(0, size));
+};
 const blurOnClose = () => document.addEventListener('close', () => setTimeout(() => document.activeElement?.blur?.(), 0), true);
 
 /** [id, name, viewport, url, mutation, check, expected] — a null mutation is a positive control. */
@@ -62,6 +86,10 @@ const CASES = [
   ['S25', 'K7 notification panel wider than 24 rem', [1440, 900], '/workspace', css('.paep-notification-panel__popover { inline-size: 40rem !important; max-inline-size: none !important; }'), (p) => notificationPanelProblems(p), /K7 panel wider than 24 rem/],
   ['S26', 'K7 focus not on the panel heading when it opens', [320, 720], '/workspace', js(() => document.addEventListener('focusin', (e) => { if (e.target.matches?.('.paep-notification-panel__title')) e.target.blur(); })), (p) => notificationPanelProblems(p), /K7 focus is not on the panel heading/],
   ['S27', 'positive control: the account menu and notification panel keyboard paths pass unmutated at 320', [320, 720], '/workspace', null, async (p) => [...(await menuKeyboardProblems(p)), ...(await notificationPanelProblems(p))], null],
+  ['S28', 'B1 raw initial bundle one byte over the hard maximum (shown as 525.00 kB; never rounded)', null, null, build(padRawTo(BUDGET.rawMax + 1)), null, new RegExp(`raw ${BUDGET.rawMax + 1} bytes > hard maximum ${BUDGET.rawMax}`)],
+  ['S29', 'B1 transfer over the hard maximum at unchanged raw size', null, null, build(incompressible), null, new RegExp(`transfer \\d+ bytes > hard maximum ${BUDGET.transferMax}`)],
+  ['S30', 'positive control: raw initial bundle exactly at the hard maximum', null, null, build(padRawTo(BUDGET.rawMax)), null, null],
+  ['S31', 'positive control: the build as it is', null, null, build(() => {}), null, null],
 ];
 
 const server = await serve(DIST);
@@ -72,7 +100,16 @@ try {
     let problems = [];
     const ctxs = [];
     try {
-      if (mutate === 'rtl-nav' || mutate === 'rtl-ok') {
+      if (mutate?.build) {
+        const copy = fs.mkdtempSync(path.join(os.tmpdir(), 'paep-shell-budget-'));
+        try {
+          fs.cpSync(DIST, copy, { recursive: true });
+          mutate.build(copy);
+          problems = budgetProblems(copy).problems;
+        } finally {
+          fs.rmSync(copy, { recursive: true, force: true });
+        }
+      } else if (mutate === 'rtl-nav' || mutate === 'rtl-ok') {
         const a = await browser.newContext({ viewport: { width: 1440, height: 900 } });
         const b = await browser.newContext({ viewport: { width: 834, height: 1112 } });
         ctxs.push(a, b);

@@ -81,6 +81,8 @@ Analytics / reporting engine, saved views and reporting gateways; offline queue,
 
 Reference-app production build, initial chunks: at most **500 kB raw** and **150 kB estimated transfer** with the shell composed (pre-IB3 baseline 221.65 kB raw / 59.44 kB transfer, 2026-10-06). The existing Angular budgets (initial warning 500 kB, error 1 MB; any component style warning 4 kB, error 8 kB) stay unchanged.
 
+**PO/SA decision 2026-10-07 (DDR-IB3-07, ACCEPTED with controlled budget adjustment).** 500 kB raw is retained as the engineering target. The IB3 hard limits are **525 kB raw** and **150 kB estimated transfer** (unchanged); IB3 fails if either is exceeded, measured in exact bytes from the production build and never rounded (`qa:shell` B1, with negatives). The size reference is 516.75 kB raw / 121.44 kB transfer; a later material increase before IB3 acceptance must be investigated, and a result approaching or exceeding 525 kB needs optimisation or separate PO/SA authorisation. This decision authorises no further increase.
+
 ## 9. CI
 
 Two new mandatory jobs feed `PAEP / gate`: `PAEP / enterprise-shell` (`test:enterprise`, `qa:enterprise`, `qa:enterprise:negative`, `qa:ib3:ci-negative`) and `PAEP / shell-browser` (`build:reference-app`, `qa:shell`, `qa:shell:negative`). No IB3 case goes into `negative-ci` or `negative-ci-b`; both keep `timeout-minutes: 20`. Actual timings are recorded. Insufficient headroom is a STOP for PO/SA authorisation.

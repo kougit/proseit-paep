@@ -26,11 +26,17 @@
  *      Escape closes and returns focus to the button; the menu is inside the viewport with a 16 px margin (1440, 320)
  *   K7 the notification panel: Enter on the bell opens it with focus on its heading; it is at most 24 rem wide and
  *      16 px inside the viewport; Escape closes it and focus returns to the bell (1440, 320)
+ * and first, on the build itself:
+ *   B1 initial bundle budget (AC-IB3-15, DDR-IB3-07 ACCEPTED 2026-10-07): the initial files named by index.html, raw
+ *      bytes at most 525 000 and Brotli bytes (the CLI's estimated transfer size) at most 150 000, fail-closed on the
+ *      exact byte counts, never rounded. 500 kB raw stays the engineering target and is reported, not enforced here
+ *      (the Angular budget warns above it).
  *   node tooling/enterprise-shell/shell-qa.mjs [--capture <dir>] [--json <file>]
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import zlib from 'node:zlib';
 import { axeViolations, launch, serve } from '../design-system/browser-qa.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -414,15 +420,50 @@ async function pool(items, n, fn) {
   return out;
 }
 
+/** DDR-IB3-07 (PO/SA, 2026-10-07): hard limits in bytes (1 kB = 1000 bytes, as the Angular CLI reports). */
+export const BUDGET = { rawTarget: 500_000, rawMax: 525_000, transferMax: 150_000 };
+
+/** Exact sizes of the initial files that index.html loads: raw bytes and Brotli bytes (the CLI's transfer estimate). */
+export function measureInitial(dir) {
+  const html = fs.readFileSync(path.join(dir, 'index.html'), 'utf8');
+  const files = [...new Set([...html.matchAll(/(?:src|href)="([^"?#]+\.(?:js|css))"/g)].map((m) => m[1]))];
+  let raw = 0;
+  let transfer = 0;
+  for (const f of files) {
+    const bytes = fs.readFileSync(path.join(dir, f));
+    raw += bytes.length;
+    transfer += zlib.brotliCompressSync(bytes).length;
+  }
+  return { files, raw, transfer };
+}
+
+export function budgetProblems(dir) {
+  const m = measureInitial(dir);
+  const p = [];
+  if (!m.files.length) p.push('no initial files found in index.html');
+  if (m.raw > BUDGET.rawMax) p.push(`raw ${m.raw} bytes > hard maximum ${BUDGET.rawMax}`);
+  if (m.transfer > BUDGET.transferMax) p.push(`transfer ${m.transfer} bytes > hard maximum ${BUDGET.transferMax}`);
+  return { m, problems: p };
+}
+
 async function main() {
   const args = process.argv.slice(2);
   const capture = args.includes('--capture') ? path.resolve(args[args.indexOf('--capture') + 1]) : null;
   const jsonOut = args.includes('--json') ? path.resolve(args[args.indexOf('--json') + 1]) : null;
   if (capture) fs.mkdirSync(capture, { recursive: true });
   const started = Date.now();
+  const results = [];
+  {
+    const { m, problems } = budgetProblems(DIST);
+    const kb = (n) => `${(n / 1000).toFixed(2)} kB`;
+    results.push({
+      id: 'B1',
+      name: `Initial bundle budget: raw ${m.raw} bytes (${kb(m.raw)}; target ${kb(BUDGET.rawTarget)} ${m.raw > BUDGET.rawTarget ? 'exceeded' : 'met'}, hard maximum ${kb(BUDGET.rawMax)}), transfer ${m.transfer} bytes (${kb(m.transfer)}; hard maximum ${kb(BUDGET.transferMax)}) — ${m.files.join(', ')}`,
+      problems,
+    });
+  }
   const server = await serve(DIST);
   const browser = await launch();
-  const results = [];
   try {
     const combos = [];
     for (const vp of VIEWPORTS) for (const dir of ['ltr', 'rtl']) for (const st of STATES) combos.push({ vp, dir, st });

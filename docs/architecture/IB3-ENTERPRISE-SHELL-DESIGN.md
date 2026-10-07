@@ -42,7 +42,7 @@ One entry point, `packages/enterprise/src/index.ts`: `providePaepShell(options)`
 | `PaepShellPreferences` (E-13) | `PaepDialog` | Session only, nothing stored (E06) |
 | `PaepRouteFocus` (E-14) | `PaepAnnouncer` | Focuses the new `h1`, announces the title |
 
-The palette is declared in the shell template with `@defer (when layout.paletteOpen())`. Because the entry point also exports `PaepCommandPalette`, the bundler keeps it in the main chunk (about 11 kB); the reference-app initial bundle is 477.73 kB raw / 111.13 kB transfer, inside the WORK_PACKAGE §8 budget (500 kB / 150 kB).
+The palette is declared in the shell template with `@defer (when layout.paletteOpen())`. Because the entry point also exports `PaepCommandPalette`, the bundler keeps it in the main chunk (about 11 kB). The same holds for the notification panel and the account menu. The reference-app initial bundle is 516 746 bytes raw / 121 444 bytes transfer (516.75 / 121.44 kB): above the 500 kB raw engineering target and inside the hard limits of 525 kB raw / 150 kB transfer that the PO/SA set on 2026-10-07 (DDR-IB3-07, WORK_PACKAGE §8). `qa:shell` B1 enforces the hard limits on exact bytes; `tooling/enterprise-shell/bundle-composition.mjs` attributes the bundle to its sources and checks it for avoidable duplication.
 
 Render failures reach the root `ErrorHandler`, which `providePaepShell` replaces with the shell handler: the failure becomes an allowlisted report (`PAEP error <kind> (ERR-…)`) and the boundary shows fixed text. Raw messages reach the console only in development builds.
 

@@ -102,7 +102,10 @@ function composition(src, where) {
   } else {
     const dirty = [...lines(git('diff', '--name-only', 'HEAD', '--', ...PACKAGES).stdout), ...lines(git('ls-files', '--others', '--exclude-standard', '--', ...PACKAGES).stdout)];
     // The newest commit that adds the record: a record removed and added again counts from its re-addition.
-    const closureCommit = lines(git('log', '--diff-filter=A', '--format=%H', `${g4.acceptedCommit}..HEAD`, '--', CLOSURE).stdout).at(0);
+    // A record deleted later and not committed again is not committed: HEAD must hold it.
+    const closureCommit = git('cat-file', '-e', `HEAD:${CLOSURE}`).status === 0
+      ? lines(git('log', '--diff-filter=A', '--format=%H', `${g4.acceptedCommit}..HEAD`, '--', CLOSURE).stdout).at(0)
+      : undefined;
     const touching = lines(git('log', '--format=%H', `${g4.acceptedCommit}..HEAD`, '--', ...PACKAGES).stdout);
     if (!closureCommit) {
       if (touching.length || dirty.length) p.push('foundation or components changed but the DDR-IB2-07 closure record is not committed');

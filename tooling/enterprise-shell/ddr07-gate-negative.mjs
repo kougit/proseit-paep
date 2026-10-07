@@ -4,8 +4,9 @@
  *
  * Each case mutates a disposable copy of the repository (with .git, without node_modules), runs
  * ddr07-gate.mjs --root <copy> and expects the stated result. P00 runs the repository as it is; every other case
- * starts from a committed copy in which DDR-IB2-07 is reopened (status OPEN, closure record and section removed), so
- * the cases hold whichever state the repository is in. P00, P01 and P10 are positive controls.
+ * starts from a committed copy in which DDR-IB2-07 is reopened (status OPEN, closure record and section removed,
+ * foundation and components restored to generation 4, history squashed onto generation 4), so the cases hold whichever
+ * state the repository is in. P00, P01 and P10 are positive controls.
  *   node tooling/enterprise-shell/ddr07-gate-negative.mjs
  */
 import { spawnSync } from 'node:child_process';
@@ -17,6 +18,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const WP_JSON = 'work-packages/IB3-ENTERPRISE-SHELL/work-package.json';
 const CLOSURE = 'evidence/IB3-ENTERPRISE-SHELL/ddr-ib2-07/CLOSURE.md';
+const PACKAGES = ['packages/foundation/', 'packages/components/'];
 const DDR = 'evidence/design-handoff/HOF-IB2-001/deviations/DDR-IB2-07.md';
 const F07_FILE = 'apps/ui-lab/src/app/pages/foundation.html';
 const R03_FILE = 'apps/ui-lab/src/app/pages/proofs.ts';
@@ -39,6 +41,11 @@ const io = (copy) => ({
     if (!s.includes(a)) throw new Error(`seed text not found in ${f}: ${a}`);
     this.write(f, s.replace(a, b));
   },
+  git(...a) {
+    const r = spawnSync('git', a, { cwd: copy, encoding: 'utf8' });
+    if (r.status !== 0) throw new Error(`git ${a.join(' ')} failed: ${r.stderr}`);
+    return r.stdout;
+  },
   commit(msg) {
     const g = (...a) => spawnSync('git', a, { cwd: copy, encoding: 'utf8' });
     g('add', '-A');
@@ -54,6 +61,13 @@ const closeIt = (f) => {
   f.write(DDR, `${f.read(DDR)}\n## Closure\n\n2026-10-06: CLOSED.\n`);
 };
 const reopen = (f) => {
+  // An open DDR-IB2-07 means foundation and components equal generation 4: restore them, and rebuild the history as
+  // one commit on top of generation 4, so the later package commits of the real history do not precede the closures
+  // the cases commit.
+  const g4 = JSON.parse(f.read('tooling/governance/baseline-registry.json')).generations.find((g) => g.generation === 4).acceptedCommit;
+  for (const added of f.git('diff', '--name-only', '--diff-filter=A', g4, 'HEAD', '--', ...PACKAGES).split('\n').filter(Boolean)) f.remove(added);
+  f.git('checkout', g4, '--', ...PACKAGES);
+  f.git('reset', '-q', '--soft', g4);
   const wp = JSON.parse(f.read(WP_JSON));
   wp.ib2DdrFollowUps['DDR-IB2-07'] = 'OPEN (reopened by the negative harness)';
   f.write(WP_JSON, JSON.stringify(wp, null, 2) + '\n');

@@ -398,6 +398,8 @@ const IB3_REQUIRED_JOBS = {
 };
 /** The CI-control jobs that each run one part of the WP05 negative suite; each keeps the 20-minute timeout (RR14). */
 const CI_CONTROL_PARTS = { 'negative-ci': 'a', 'negative-ci-b': 'b', 'negative-ci-c': 'c' };
+/** WP05 negative-suite case count pinned here as well as in the harness, so lowering both the harness pin and its case list fails W11. */
+const WP05_NEGATIVE_CASES = 104;
 const IB3_NEGATIVES = ['npm run qa:enterprise:negative', 'npm run qa:shell:negative', 'npm run qa:ib3:ci-negative'];
 // IB2 CI-performance split (PO/SA, 2026-09-28; RR14): the accepted negative-ci command `npm run qa:ib0-wp05:negative`
 // may be replaced only by exactly its two halves, part a in negative-ci (keeping every other accepted command in order)
@@ -482,6 +484,8 @@ if (want('W11') && wf) {
   }
   const partition = run(process.execPath, ['tooling/verification/negative-ib0-wp05.mjs', '--check-partition']);
   if (partition.status !== 0) p.push(`WP05 negative-suite partition: ${(partition.stdout || '').split('\n').filter((l) => l.startsWith('FAIL')).join('; ') || `exit ${partition.status}`}`);
+  const total = /; (\d+) cases\)$/m.exec(partition.stdout || '');
+  if (!total || Number(total[1]) !== WP05_NEGATIVE_CASES) p.push(`WP05 negative-suite partition covers ${total ? total[1] : 'an unreported number of'} cases; W11 pins ${WP05_NEGATIVE_CASES}`);
   add('W11', 'Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention; the three CI-control jobs (PAEP / negative-ci, negative-ci-b, negative-ci-c) each run exactly their part of the WP05 negative suite, whose partition covers every pinned case once, and keep the 20-minute timeout (RR14)',
     p.length === 0, p.length ? p.join('; ') : `${mandatoryIds.length} parallel jobs: ${mandatoryIds.join(', ')}`);
 }

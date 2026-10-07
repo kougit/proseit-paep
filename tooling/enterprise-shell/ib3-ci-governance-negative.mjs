@@ -5,8 +5,8 @@
  *
  * Proves that the two IB3 jobs are mandatory, keep their commands and feed PAEP / gate, and that the IB3 negative
  * suites cannot move into other jobs, and that the IB3 W18 edge bound still rejects a WP04 control that no longer
- * injects the edge it names (J11). J12-J17 cover the three-way CI-control split (PO/SA 2026-10-07): part c dropped,
- * left out of the gate or given a longer timeout, and a WP05 negative case unassigned, dropped or in two parts. Same harness as the IB2 suite (tooling/design-system/ci-governance-negative.mjs):
+ * injects the edge it names (J11). J12-J19 cover the three-way CI-control split (PO/SA 2026-10-07): part c dropped,
+ * left out of the gate or given a longer timeout, part a left out of the gate, and a WP05 negative case unassigned, dropped (also with the harness pin lowered) or in two parts. Same harness as the IB2 suite (tooling/design-system/ci-governance-negative.mjs):
  * each case mutates a disposable scratch copy of the repository (with .git; node_modules hard-linked read-only),
  * commits the mutation in the copy only (J11 leaves it uncommitted), and runs the provenance gate, expecting exactly the stated W checks to
  * fail. P00 is the positive control on the unmutated copy.
@@ -101,10 +101,12 @@ const cases = [
   ['J15', 'a WP05 negative case left unassigned in the partition', [[WP05_HARNESS, replace("'P15', 'P23', 'P24'", "'P15', 'P24'")]], 'provenance', [/FAIL W11/, /partition: unassigned cases P23/]],
   ['J16', 'a WP05 negative case dropped from the pinned list and the partition together', [[WP05_HARNESS, (t) => replace("'P15', 'P23', 'P24'", "'P15', 'P24'")(replace("'P22', 'P23', 'P24', 'P20'", "'P22', 'P24', 'P20'")(t))]], 'provenance', [/FAIL W11/, /partition: 103 declared and 103 assigned cases; expected 104/]],
   ['J17', 'a WP05 negative case placed in two parts', [[WP05_HARNESS, replace("    'L00', 'T02',", "    'L00', 'P23', 'T02',")]], 'provenance', [/FAIL W11/, /partition: cases in more than one part P23/]],
+  ['J18', 'negative-ci (part a) dropped from the gate needs and MANDATORY_JOBS', [[WORKFLOW, dropNeed('negative-ci')]], 'provenance', [/FAIL W12/]],
+  ['J19', 'a WP05 negative case dropped with the harness pin lowered to match', [[WP05_HARNESS, (t) => replace('const EXPECTED_CASES = 104;', 'const EXPECTED_CASES = 103;')(replace("'P15', 'P23', 'P24'", "'P15', 'P24'")(replace("'P22', 'P23', 'P24', 'P20'", "'P22', 'P24', 'P20'")(t)))]], 'provenance', [/FAIL W11/, /partition covers 103 cases; W11 pins 104/]],
 ];
 
-/** Pinned case count (AC-IB3-17): 17 seeded negatives (J01-J17) and 1 positive control (P00). */
-const EXPECTED_NEGATIVES = 17;
+/** Pinned case count (AC-IB3-17): 19 seeded negatives (J01-J19) and 1 positive control (P00). */
+const EXPECTED_NEGATIVES = 19;
 const EXPECTED_CONTROLS = 1;
 
 const results = [];

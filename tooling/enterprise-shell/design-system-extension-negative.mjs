@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Seeded negatives for the IB3 extension of the design-system static gate (tooling/design-system/design-system-qa.mjs):
- * the component census and public API (S03), the UI-lab coverage of the approved HOF-IB3-001 primitives and variants
+ * the pinned HOF-IB2-001 v1.2 revision (S01), the component census and public API (S03), the UI-lab coverage of the approved HOF-IB3-001 primitives and variants
  * (S07), the message catalogue (S08), the icon set (S11), the shell tokens (S12) and the bounded UI-lab shell-showcase
  * import exception (S05).
  *
@@ -19,7 +19,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-const EXPECTED_CASES = 27;
+const EXPECTED_CASES = 29;
 const SKIP = new Set(['node_modules', 'dist', '.angular', 'tmp', '.vitest-attachments', '.git']);
 const GATE = 'tooling/design-system/design-system-qa.mjs';
 const GENERATOR = 'tooling/design-system/generate-tokens.mjs';
@@ -27,6 +27,7 @@ const TOKEN_OUT = ['packages/foundation/src/styles/paep-tokens.css', 'packages/f
 const INDEX = 'packages/components/src/index.ts';
 const MESSAGES = 'packages/components/src/lib/messages/messages.ts';
 const ICONS = 'packages/foundation/src/lib/icons/icons.ts';
+const V12 = 'evidence/design-handoff/HOF-IB2-001/v1.2/HOF-IB2-001-v1.2.md';
 const SPECIMENS = 'apps/ui-lab/src/app/specimens';
 
 const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'paep-ds-extension-negative-'));
@@ -50,8 +51,11 @@ const run = (file) => {
 // [id, label, edits [[file, fn | string | null]], regenerate tokens?, expected failing checks, expected findings]
 const cases = [
   ['P00', 'positive control: unmutated copy passes every check', [], false, [], []],
+  // S01: the approved HOF-IB2-001 v1.2 revision is pinned.
+  ['E28', 'approved v1.2 revision text edited', [[V12, replace('| shift | along the inline axis to keep the accepted **16 px viewport edge margin**', '| shift | along the inline axis to keep an **8 px viewport edge margin**')]], false, ['S01'], [/v1\.2 revision sha256 [0-9a-f]{64} != approved/]],
+  ['E29', 'v1.2 approval status reverted', [[V12, replace('**Status:** APPROVED_FOR_IMPLEMENTATION by the PO/SA', '**Status:** READY_FOR_PO_SA_REVIEW; prepared for the PO/SA')]], false, ['S01'], [/v1\.2 revision status is not APPROVED_FOR_IMPLEMENTATION/, /v1\.2 revision sha256/]],
   // S03: census and public API.
-  ['E01', 'extra unapproved component folder (a menu outside the approved list)', [['packages/components/src/lib/menu/menu.ts', 'export class PaepMenu {}\n'], ['packages/components/src/lib/menu/menu.spec.ts', "it('a', () => {});\nit('b', () => {});\nit('c', () => {});\n"]], false, ['S03'], [/unexpected component folder menu/]],
+  ['E01', 'extra unapproved component folder (a tooltip outside the approved list)', [['packages/components/src/lib/tooltip/tooltip.ts', 'export class PaepTooltip {}\n'], ['packages/components/src/lib/tooltip/tooltip.spec.ts', "it('a', () => {});\nit('b', () => {});\nit('c', () => {});\n"]], false, ['S03'], [/unexpected component folder tooltip/]],
   ['E02', 'unapproved public export added to the entry point', [[INDEX, replace("export { PaepCountBadge } from './lib/count-badge/count-badge';", "export { PaepCountBadge, paepCountText } from './lib/count-badge/count-badge';")]], false, ['S03'], [/unapproved public export paepCountText/]],
   ['E03', 'approved combobox type export removed', [[INDEX, replace('export type { PaepComboboxGroup, PaepComboboxOption }', 'export type { PaepComboboxGroup }')]], false, ['S03'], [/approved public export PaepComboboxOption missing/]],
   ['E04', 'approved primitive without its behaviour tests', [['packages/components/src/lib/combobox/combobox.spec.ts', null]], false, ['S03'], [/combobox: combobox\.spec\.ts missing/]],

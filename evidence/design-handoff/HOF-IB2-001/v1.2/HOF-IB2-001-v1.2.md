@@ -1,6 +1,6 @@
 # HOF-IB2-001 v1.2: controlled documentation revision
 
-**Status:** READY_FOR_PO_SA_APPROVAL (bounded documentation-revision review). It is not approved, and Claude does not approve it.
+**Status:** APPROVED_FOR_IMPLEMENTATION by the PO/SA (Kouga) on 2026-10-07 ("version v1.2 is approved", project thread message of 2026-10-07T02:39:03Z). Claude prepared this revision and recorded the approval; it did not approve it.
 **Revision of:** HOF-IB2-001 v1.1, APPROVED_FOR_IMPLEMENTATION 2026-09-27, manifest SHA-256 `24e7049dd675e2025ae75c099637fd3f0a9eb9f24ff2958d1ce88607d040ac53`. v1.1 is retained unchanged under `../design-export/` and stays the accepted IB2 record; this revision only adds.
 **Prepared:** 2026-10-06 by Claude Code under IB3-ENTERPRISE-SHELL (`work-packages/IB3-ENTERPRISE-SHELL/WORK_PACKAGE.md` §3 stage S1b; PO/SA authorisation §10).
 **Inputs:** the six accepted DDR records in `../deviations/` (PO/SA, 2026-09-29) and the PO/SA decisions Q-02 and RD-01 recorded in HOF-IB3-001 v1.0 (`decision-record.md`, `component-map.md` §2 P-01..P-06 and §2a, board SCR-SHELL-023), approved for implementation on 2026-10-05 (manifest `645dd2e9…fce5`).
@@ -111,5 +111,5 @@ Scope note (closure report C2): the F04, F05, F06 and F08 lab omissions were acc
 | --- | --- |
 | Review | bounded documentation-revision review (pre-flight `08` OD-8): incorporation of approved intent only |
 | New material decisions | none identified by the preparer |
-| Approval | **PENDING PO/SA** |
+| Approval | **APPROVED_FOR_IMPLEMENTATION**, PO/SA (Kouga), 2026-10-07T02:39:03Z: "version v1.2 is approved" |
 | Effect of approval | v1.2 becomes the design-system handoff for the Q-02 component code (`PaepPopover` alignment, `PaepMenu`, action-group overflow); v1.1 stays the accepted IB2 record |

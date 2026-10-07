@@ -138,6 +138,10 @@ export const HANDOFF = {
   fileHashes: 'evidence/design-handoff/HOF-IB2-001/HANDOFF-FILES.sha256',
   fileHashesSha256: '0e340d5af4f77ac167d3626bf422249c13951bcf83b9bf91c5f384fbb00e7a38',
   hashedDirs: ['design-export', 'requirements'],
+  // HOF-IB2-001 v1.2 (Q-02 popover alignment, PaepMenu, action-group overflow), APPROVED_FOR_IMPLEMENTATION by the
+  // PO/SA on 2026-10-07; pinned so the approved text cannot change without failing S01.
+  v12: 'evidence/design-handoff/HOF-IB2-001/v1.2/HOF-IB2-001-v1.2.md',
+  v12Sha256: '8c030f1228f35d8b8f08e38e744d5dc1b16d521df26723079e31200f974f6b32',
 };
 
 /**
@@ -301,7 +305,14 @@ export function runChecks(fsx) {
       }
       for (const f of listed.keys()) if (!present.includes(f)) p.push(`pinned handoff file ${f} missing`);
     }
-    add('S01', 'HOF-IB2-001 v1.1 APPROVED_FOR_IMPLEMENTATION is retained with the approved manifest hash, and every retained handoff file matches its pinned sha256', p, `manifest sha256 ${HANDOFF.manifestSha256.slice(0, 12)}…, APPROVED_FOR_IMPLEMENTATION; ${pinned} handoff files pinned`);
+    if (!fsx.exists(HANDOFF.v12)) p.push(`${HANDOFF.v12} missing`);
+    else {
+      const t = fsx.read(HANDOFF.v12);
+      const sha = crypto.createHash('sha256').update(fsx.readBytes(HANDOFF.v12)).digest('hex');
+      if (sha !== HANDOFF.v12Sha256) p.push(`v1.2 revision sha256 ${sha} != approved ${HANDOFF.v12Sha256}`);
+      if (!/^\*\*Status:\*\* APPROVED_FOR_IMPLEMENTATION by the PO\/SA/m.test(t)) p.push('v1.2 revision status is not APPROVED_FOR_IMPLEMENTATION by the PO/SA');
+    }
+    add('S01', 'HOF-IB2-001 v1.1 APPROVED_FOR_IMPLEMENTATION is retained with the approved manifest hash, every retained handoff file matches its pinned sha256, and the approved v1.2 revision matches its pinned sha256', p, `manifest sha256 ${HANDOFF.manifestSha256.slice(0, 12)}…, APPROVED_FOR_IMPLEMENTATION; ${pinned} handoff files pinned; v1.2 ${HANDOFF.v12Sha256.slice(0, 12)}… APPROVED_FOR_IMPLEMENTATION`);
   }
 
   // S02: generated token files match the approved values (no drift, no hand edits).

@@ -42,7 +42,7 @@
   "findings_open": {
     "high": 0,
     "medium": 0,
-    "as_of": "2026-10-07: round 3 on a403020, independent QA (High 0 / Medium 0 / Low 6) and RR6 (PASS, High 0 / Medium 0 / Low 4). QA M-05 (strict-CSP gate) and RR6 M-03 (CI headroom, resolved by the PO/SA three-way split) are closed. QA L-11 and L-16 were fixed on 50e7171; the record lows were fixed on the next head.",
+    "as_of": "2026-10-07: round 4 delta reviews on 5edbf5f (after the PO/SA pre-acceptance disposition): independent QA High 0 / Medium 0 / Low 1 (traceability bundle figure, fixed on the next head); RR6 PASS High 0 / Medium 0 / Low 3 (L-16 final-head evidence cited in the readiness block; L-03 and L-04 allowed by PO/SA). Earlier: round 3 on a403020, independent QA (High 0 / Medium 0 / Low 6) and RR6 (PASS, High 0 / Medium 0 / Low 4). QA M-05 (strict-CSP gate) and RR6 M-03 (CI headroom, resolved by the PO/SA three-way split) are closed. QA L-11 and L-16 were fixed on 50e7171; the record lows were fixed on the next head.",
     "items": [
       "Low, allowed to remain by PO/SA 2026-10-07 (no dependency or lockfile change): IB3 package.json script bodies not content-pinned while the generation is CANDIDATE; bundle-composition loads the hoisted source-map-js. The notification-route, help-link and N1 tenant/connectivity Lows were fixed on 45069ff (mandatory Low fixes A-C)"
     ]

@@ -41,7 +41,7 @@
 | AC-IB3-23 | PASS (local) | `qa:enterprise` E06, E08, E09 |
 | AC-IB3-24 | PASS | `evidence/IB3-ENTERPRISE-SHELL/ddr-ib2-07/CLOSURE.md` |
 | AC-IB3-25 | PASS | HOF-IB2-001 v1.2 APPROVED_FOR_IMPLEMENTATION by the PO/SA (2026-10-07), retained under `evidence/design-handoff/HOF-IB2-001/v1.2/`; S01 pins its sha256 and status line; negatives E28, E29; v1.1 retained |
-| AC-IB3-26 | IN PROGRESS | Round 3 on a403020: independent QA High 0 / Medium 0 / Low 6; RR6 PASS High 0 / Medium 0 / Low 4 (rounds 1 and 2 in the header). The PO/SA disposition changes (45069ff onward) need round-4 delta reviews on the final head with High 0 / Medium 0: RR6 round 4 on a7efb58 reported Medium 2 (record wording; fixed on the next head) and is re-run on the final head, cited in the readiness block |
+| AC-IB3-26 | IN PROGRESS | Round 3 on a403020: independent QA High 0 / Medium 0 / Low 6; RR6 PASS High 0 / Medium 0 / Low 4 (rounds 1 and 2 in the header). The PO/SA disposition changes (45069ff onward) need round-4 delta reviews on the final head with High 0 / Medium 0: RR6 round 4 on a7efb58 reported Medium 2 (record wording), fixed on 5edbf5f; on 5edbf5f independent QA High 0 / Medium 0 / Low 1 and RR6 PASS High 0 / Medium 0 / Low 3 (`/mnt/project-files/ib3/readiness/IB3-INDEPENDENT-QA-R4-DELTA.md`, `IB3-RR6-GOVERNANCE-R4-DELTA.md`). The next head fixes that Low (records only) and is re-checked; the result is cited in the readiness block |
 | AC-IB3-27 | n/a | PO/SA decision |
 
 ## 2. Direct tests per shell part (AC-IB3-18)

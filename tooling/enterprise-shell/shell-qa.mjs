@@ -8,6 +8,7 @@
  * 1440, 1024, 834, 640, 375, 320 and 320×256 CSS px, in LTR and RTL:
  *   H1 no page-wide horizontal scroll        H2 no console error (only the allowlisted one-line error report)
  *   H3 one h1 and one main landmark          H4 axe-core: zero WCAG 2.x A/AA violations (at 1440, 834, 640, 320)
+ *   H5 no CSP or Trusted Types violation under the strict policy (C1)
  * and once per run:
  *   N1 the never-hidden set (navigation, product, search, notifications with count, account, page h1) is present and
  *      inside the viewport at 320 and 320×256, and the account menu reaches Sign out there
@@ -27,6 +28,17 @@
  *      Escape closes and returns focus to the button; the menu is inside the viewport with a 16 px margin (1440, 320)
  *   K7 the notification panel: Enter on the bell opens it with focus on its heading; it is at most 24 rem wide and
  *      16 px inside the viewport; Escape closes it and focus returns to the bell (1440, 320)
+ *   C1 strict CSP (AC-IB3-12; PO/SA decision 2026-10-07): every page in this gate is served the way the deployment
+ *      profile `apps/reference-app/deployment/csp-strict.json` requires (a fresh nonce per HTML response, put into the
+ *      policy header and the page's ngCspNonce placeholders), so every state above runs under the enforced policy, and
+ *      H5 reports any CSP or Trusted Types violation. C1 also checks: the built index.html has no inline handler, style
+ *      attribute or javascript: URL, and every inline script and style carries the placeholder; the emitted header is
+ *      the profile with a nonce of at least 16 random bytes that differs per response and matches the page; the policy
+ *      has no 'unsafe-inline', 'unsafe-eval', wildcard, data: or scheme source for scripts or styles, requires Trusted
+ *      Types and allows only the `angular` policies (never angular#unsafe-bypass or angular#unsafe-jit); every Angular
+ *      style element carries the response nonce and the component styles apply; and on a probe page an inline script
+ *      without a nonce or with a wrong nonce, an inline style without a nonce, eval and an HTML string sink are blocked
+ *      while a nonced script and style run.
  * and first, on the build itself:
  *   B1 initial bundle budget (AC-IB3-15, DDR-IB3-07 ACCEPTED 2026-10-07): the initial files (named by index.html
  *      and every script they import statically, followed recursively), raw
@@ -35,11 +47,13 @@
  *      (the Angular budget warns above it).
  *   node tooling/enterprise-shell/shell-qa.mjs [--capture <dir>] [--json <file>]
  */
+import crypto from 'node:crypto';
 import fs from 'node:fs';
+import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import zlib from 'node:zlib';
-import { axeViolations, launch, serve } from '../design-system/browser-qa.mjs';
+import { AXE, axeViolations, launch } from '../design-system/browser-qa.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 export const DIST = path.join(ROOT, 'dist/reference-app/browser');
@@ -55,6 +69,48 @@ export const VIEWPORTS = [
 const AXE_AT = new Set(['1440', '834', '640', '320']);
 /** The one console line the default reporter writes (kind and reference only). */
 const REPORT_LINE = /^PAEP error (render|route-load|version|unknown) \(ERR-[A-Z0-9]{12}\)$/;
+
+/** The strict CSP deployment profile: the policy with `{nonce}` standing for the per-response nonce. */
+export const CSP_PROFILE_FILE = path.join(ROOT, 'apps/reference-app/deployment/csp-strict.json');
+export const cspProfile = () => JSON.parse(fs.readFileSync(CSP_PROFILE_FILE, 'utf8'));
+export const cspHeader = (directives, nonce) => Object.entries(directives).map(([k, v]) => [k, ...v].join(' ').replaceAll('{nonce}', nonce)).join('; ');
+const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.json': 'application/json', '.ico': 'image/x-icon', '.txt': 'text/plain' };
+/** Inline probes added to the page for `?paep-csp-probe` (this harness only). The placeholder gets the response nonce. */
+const PROBES = (ph) => `<script nonce="${ph}">window.__paepProbe={ok:true};try{eval('1');window.__paepProbe.eval='allowed'}catch(e){window.__paepProbe.eval=e.name}try{document.createElement('div').innerHTML='<b></b>';window.__paepProbe.html='allowed'}catch(e){window.__paepProbe.html=e.name}</script>`
+  + `<script>window.__paepProbe.noNonce=true</script><script nonce="AAAAAAAAAAAAAAAAAAAAAA==">window.__paepProbe.wrongNonce=true</script>`
+  + `<style>.paep-csp-probe-bare{inline-size:123px}</style><style nonce="${ph}">.paep-csp-probe-nonced{inline-size:77px}</style>`;
+const freshNonce = () => crypto.randomBytes(16).toString('base64');
+
+/**
+ * Static server for the built app with SPA fallback, serving HTML the way the strict CSP profile requires: a fresh
+ * nonce per HTML response in the policy header and in place of every placeholder. Resolves to { url, dir, close }.
+ * The options seed the C1 negatives: `nonce` 'static' (one nonce for every response), 'mismatch' (the page gets a
+ * different nonce than the header), 'unsubstituted' (placeholders left in the page); `policy(directives)` and
+ * `html(text)` edit the served policy and page.
+ */
+export function serveStrict(dir = DIST, { nonce = 'fresh', policy = (d) => d, html = (t) => t } = {}) {
+  if (!fs.existsSync(path.join(dir, 'index.html'))) throw new Error(`${dir}/index.html missing: run npm run build:reference-app first`);
+  const profile = cspProfile();
+  const fixed = freshNonce();
+  const server = http.createServer((req, res) => {
+    const url = new URL(req.url, 'http://x');
+    let f = path.normalize(path.join(dir, decodeURIComponent(url.pathname)));
+    if (!f.startsWith(dir) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) f = path.join(dir, 'index.html');
+    const headers = { 'content-type': TYPES[path.extname(f)] || 'application/octet-stream', 'cache-control': 'no-store' };
+    let body = fs.readFileSync(f);
+    if (f === path.join(dir, 'index.html')) {
+      const n = nonce === 'static' ? fixed : freshNonce();
+      headers['content-security-policy'] = cspHeader(policy(structuredClone(profile.directives)), n);
+      let text = html(body.toString('utf8'));
+      if (url.searchParams.has('paep-csp-probe')) text = text.replace('</head>', `${PROBES(profile.noncePlaceholder)}</head>`);
+      if (nonce !== 'unsubstituted') text = text.replaceAll(profile.noncePlaceholder, nonce === 'mismatch' ? freshNonce() : n);
+      body = text;
+    }
+    res.writeHead(200, headers);
+    res.end(body);
+  });
+  return new Promise((resolve) => server.listen(0, '127.0.0.1', () => resolve({ url: `http://127.0.0.1:${server.address().port}`, dir, close: () => new Promise((r) => server.close(r)) })));
+}
 
 const settle = (page, ms = 250) => page.waitForTimeout(ms);
 const openPalette = async (page) => {
@@ -118,6 +174,10 @@ export async function openApp(context, url, dir = 'ltr') {
   const errors = [];
   page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
   page.on('pageerror', (e) => errors.push(String(e)));
+  await page.addInitScript(() => {
+    window.__paepCspViolations = [];
+    document.addEventListener('securitypolicyviolation', (e) => window.__paepCspViolations.push(`${e.effectiveDirective} blocked ${e.blockedURI || 'inline'}${e.sample ? ` (${e.sample.slice(0, 40)})` : ''}`));
+  });
   await page.goto(url, { waitUntil: 'networkidle' });
   await page.waitForSelector('main h1', { timeout: 15000 });
   if (dir === 'rtl') await page.evaluate(() => { document.documentElement.setAttribute('dir', 'rtl'); document.documentElement.setAttribute('lang', 'ar'); });
@@ -125,7 +185,7 @@ export async function openApp(context, url, dir = 'ltr') {
   return { page, errors };
 }
 
-/** H1-H4 on an open page. `report` allows the default reporter's one console line. */
+/** H1-H5 on an open page. `report` allows the default reporter's one console line. */
 export async function auditState(page, errors, { axe = true, report = false } = {}) {
   const p = [];
   const layout = await page.evaluate(() => ({
@@ -138,8 +198,128 @@ export async function auditState(page, errors, { axe = true, report = false } = 
   for (const e of errors) if (!(report && REPORT_LINE.test(e))) p.push(`H2 console: ${e.slice(0, 200)}`);
   if (layout.h1 !== 1) p.push(`H3 ${layout.h1} h1 elements`);
   if (layout.main !== 1) p.push(`H3 ${layout.main} main landmarks`);
-  if (axe) for (const v of await axeViolations(page)) p.push(`H4 axe ${v}`);
+  for (const v of await page.evaluate(() => window.__paepCspViolations ?? [])) p.push(`H5 CSP violation: ${v}`);
+  if (axe) {
+    // Loaded through the DevTools protocol: a script tag would be (correctly) blocked by the strict policy.
+    if (!(await page.evaluate(() => 'axe' in window))) await page.evaluate(fs.readFileSync(AXE, 'utf8'));
+    for (const v of await axeViolations(page)) p.push(`H4 axe ${v}`);
+  }
   return p;
+}
+
+const has = (tokens, re) => tokens.some((t) => re.test(t));
+/** C1 policy rules on one emitted header; returns { problems, nonce }. */
+export function cspPolicyProblems(header) {
+  const p = [];
+  const d = new Map(header.split(';').map((x) => x.trim().split(/\s+/)).filter((x) => x[0]).map(([k, ...v]) => [k.toLowerCase(), v]));
+  const nonces = [];
+  for (const k of ['default-src', 'script-src', 'style-src']) {
+    const v = d.get(k);
+    if (!v) { p.push(`C1 policy has no ${k}`); continue; }
+    for (const t of v) {
+      const m = /^'nonce-([^']*)'$/.exec(t);
+      if (m) { if (k === 'default-src') p.push(`C1 ${k} carries a nonce`); else nonces.push(m[1]); continue; }
+      if (!["'self'", "'none'"].includes(t)) p.push(`C1 ${k} allows ${t}`);
+    }
+  }
+  if (d.get('default-src')?.join(' ') !== "'self'" && d.get('default-src')?.join(' ') !== "'none'") p.push(`C1 default-src is ${d.get('default-src')?.join(' ')}`);
+  if (d.get('object-src')?.join(' ') !== "'none'") p.push('C1 object-src is not \'none\'');
+  if (!["'self'", "'none'"].includes(d.get('base-uri')?.join(' '))) p.push('C1 base-uri is not \'self\' or \'none\'');
+  if (d.get('require-trusted-types-for')?.join(' ') !== "'script'") p.push('C1 Trusted Types are not required for scripts');
+  const tt = d.get('trusted-types') ?? [];
+  if (!tt.length) p.push('C1 no trusted-types allowlist');
+  for (const t of tt) if (!['angular', 'angular#bundler'].includes(t)) p.push(`C1 trusted-types allows ${t}`);
+  for (const k of d.keys()) if (has(d.get(k), /unsafe-(inline|eval|hashes)|wasm-unsafe-eval/)) p.push(`C1 ${k} allows ${d.get(k).find((t) => /unsafe/.test(t))}`);
+  if (has(d.get('script-src') ?? [], /^'strict-dynamic'$/)) p.push('C1 script-src allows \'strict-dynamic\'');
+  const nonce = nonces[0];
+  if (nonces.length !== 2 || nonces[1] !== nonce) p.push(`C1 script-src and style-src do not carry one nonce (${nonces.length} found)`);
+  else if (!/^[A-Za-z0-9+/_-]+={0,2}$/.test(nonce) || Buffer.from(nonce, 'base64').length < 16) p.push(`C1 nonce "${nonce}" is not base64 of at least 16 bytes`);
+  return { problems: [...new Set(p)], nonce };
+}
+
+/** C1 inventory of a built index.html: no inline handler, style attribute or javascript: URL; inline scripts and styles carry the placeholder. */
+export function cspInventoryProblems(html, placeholder) {
+  const p = [];
+  for (const m of html.matchAll(/<([a-zA-Z][^\s>/]*)([^>]*)>/g)) {
+    const [, tag, attrs] = m;
+    const on = /\s(on[a-z]+)\s*=/i.exec(attrs);
+    if (on) p.push(`C1 index.html <${tag}> has an inline ${on[1]} handler`);
+    if (/\sstyle\s*=/i.test(attrs)) p.push(`C1 index.html <${tag}> has a style attribute`);
+    if (/^(script|style)$/i.test(tag) && !attrs.includes(`nonce="${placeholder}"`)) p.push(`C1 index.html <${tag}> without the nonce placeholder`);
+    const n = /\snonce\s*=\s*"([^"]*)"/i.exec(attrs);
+    if (n && n[1] !== placeholder) p.push(`C1 index.html has a fixed nonce "${n[1]}"`);
+  }
+  if (/javascript:/i.test(html)) p.push('C1 index.html has a javascript: URL');
+  if (/<app-root[^>]*\sngcspnonce="([^"]*)"/i.exec(html)?.[1] !== placeholder) p.push('C1 index.html root element has no ngCspNonce placeholder');
+  return p;
+}
+
+/** C1: the strict CSP as served and as enforced (see the header). `server` is a serveStrict server. */
+export async function cspProblems(context, server) {
+  const profile = cspProfile();
+  const p = cspInventoryProblems(fs.readFileSync(path.join(server.dir, 'index.html'), 'utf8'), profile.noncePlaceholder);
+  const seen = [];
+  for (let i = 0; i < 2; i++) {
+    const r = await fetch(`${server.url}/workspace`);
+    const header = r.headers.get('content-security-policy');
+    const body = await r.text();
+    if (!header) { p.push('C1 no Content-Security-Policy header on the HTML response'); continue; }
+    const { problems, nonce } = cspPolicyProblems(header);
+    p.push(...problems);
+    if (header !== cspHeader(profile.directives, nonce)) p.push('C1 the emitted policy is not the deployment profile');
+    if (!/no-store/.test(r.headers.get('cache-control') ?? '')) p.push('C1 index.html is cacheable');
+    if (body.includes(profile.noncePlaceholder)) p.push('C1 the page still holds the nonce placeholder');
+    const inPage = [...body.matchAll(/\s(?:nonce|ngcspnonce)="([^"]*)"/gi)].map((m) => m[1]);
+    if (!inPage.length || inPage.some((x) => x !== nonce)) p.push('C1 the page nonce does not match the header nonce');
+    seen.push(nonce);
+  }
+  if (seen.length === 2 && seen[0] === seen[1]) p.push('C1 the nonce is repeated across responses');
+
+  const page = await context.newPage();
+  try {
+    await page.addInitScript(() => {
+      window.__paepCspViolations = [];
+      document.addEventListener('securitypolicyviolation', (e) => window.__paepCspViolations.push(`${e.effectiveDirective} blocked ${e.blockedURI || 'inline'}`));
+    });
+    await page.goto(`${server.url}/workspace`, { waitUntil: 'networkidle' });
+    await page.waitForSelector('main h1', { timeout: 15000 }).catch(() => p.push('C1 the shell did not render under the policy'));
+    await page.locator('paep-shell-nav a[href]').filter({ hasNotText: /workspace/i }).first().click().catch(() => {});
+    await settle(page, 600);
+    const r = await page.evaluate(() => {
+      const nonce = document.querySelector('[ngcspnonce]')?.getAttribute('ngcspnonce') ?? '';
+      const styles = [...document.querySelectorAll('style')];
+      return {
+        violations: window.__paepCspViolations,
+        styles: styles.length,
+        bare: styles.filter((s) => !nonce || s.nonce !== nonce).length,
+        media: [...document.querySelectorAll('link[rel="stylesheet"]')].map((l) => l.media),
+        componentCss: getComputedStyle(document.querySelector('.paep-shell-topbar__bar') ?? document.body).containerType,
+        h1: document.querySelectorAll('main h1').length,
+      };
+    });
+    for (const v of r.violations) p.push(`C1 violation during normal operation: ${v}`);
+    if (r.styles < 2) p.push(`C1 only ${r.styles} style element(s): component styles were not inserted`);
+    if (r.bare) p.push(`C1 ${r.bare} style element(s) without the response nonce`);
+    if (!r.media.length || r.media.some((m) => m && m !== 'all')) p.push(`C1 global stylesheet not applied (media ${r.media.join(', ') || 'none'})`);
+    if (r.componentCss !== 'inline-size') p.push('C1 component styles do not apply (topbar container type)');
+    if (r.h1 !== 1) p.push('C1 navigation to another route did not render its page');
+
+    await page.goto(`${server.url}/workspace?paep-csp-probe=1`, { waitUntil: 'networkidle' });
+    const probe = await page.evaluate(() => {
+      const size = (c) => { const e = document.createElement('div'); e.className = c; document.body.append(e); const w = e.getBoundingClientRect().width; e.remove(); return Math.round(w); };
+      return { ...(window.__paepProbe ?? {}), bare: size('paep-csp-probe-bare'), nonced: size('paep-csp-probe-nonced') };
+    });
+    if (!probe.ok) p.push('C1 probe: a script with the response nonce did not run');
+    if (probe.noNonce) p.push('C1 probe: an inline script without a nonce ran');
+    if (probe.wrongNonce) p.push('C1 probe: an inline script with a wrong nonce ran');
+    if (probe.eval !== 'EvalError') p.push(`C1 probe: eval is ${probe.eval ?? 'not tested'}`);
+    if (probe.html !== 'TypeError') p.push(`C1 probe: an HTML string sink is ${probe.html ?? 'not tested'} (Trusted Types not enforced)`);
+    if (probe.bare === 123) p.push('C1 probe: an inline style without a nonce applied');
+    if (probe.nonced !== 77) p.push('C1 probe: a style with the response nonce did not apply');
+  } finally {
+    await page.close();
+  }
+  return [...new Set(p)];
 }
 
 /** N1: the never-hidden set is present, rendered and inside the viewport. */
@@ -509,7 +689,7 @@ async function main() {
       problems,
     });
   }
-  const server = await serve(DIST);
+  const server = await serveStrict(DIST);
   const browser = await launch();
   try {
     const combos = [];
@@ -531,7 +711,7 @@ async function main() {
       }
     });
     const ran = states.filter(Boolean);
-    results.push({ id: 'H', name: `H1-H4 shell states: ${ran.length} state × viewport × direction combinations (axe at 1440, 834, 640 and 320)`, problems: ran.flatMap((s) => s.problems.map((x) => `${s.id}: ${x}`)) });
+    results.push({ id: 'H', name: `H1-H5 shell states: ${ran.length} state × viewport × direction combinations (axe at 1440, 834, 640 and 320)`, problems: ran.flatMap((s) => s.problems.map((x) => `${s.id}: ${x}`)) });
 
     const single = async (id, name, vp, url, fn, { dir = 'ltr', reduce = false } = {}) => {
       const ctx = await browser.newContext({ viewport: { width: vp[0], height: vp[1] }, reducedMotion: reduce ? 'reduce' : 'no-preference' });
@@ -580,6 +760,14 @@ async function main() {
       }
     }
     results.push({ id: 'A1', name: 'Label in name (WCAG 2.5.3): controls named by aria-label include their visible text (1440, 834, 320; chrome, sheet, notifications, account and language menus)', problems: [...new Set(a1)] });
+    {
+      const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+      try {
+        results.push({ id: 'C1', name: 'Strict CSP: per-response nonce in header and page, profile policy, no inline content without the nonce, Angular styles nonced, blocked probes (inline script, wrong nonce, inline style, eval, HTML sink)', problems: await cspProblems(ctx, server) });
+      } finally {
+        await ctx.close();
+      }
+    }
     await single('K1', 'Skip link is the first Tab stop, visible when focused, and moves focus to main (1440, 320)', [1440, 900], '/workspace', skipLinkProblems);
     await single('K1b', 'Skip link at 320', [320, 720], '/workspace', skipLinkProblems);
     await single('K2', 'Ctrl+K opens the palette with focus in the combobox; Escape returns focus to the trigger', [1440, 900], '/workspace', paletteKeyboardProblems);

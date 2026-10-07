@@ -4,7 +4,11 @@
  * reference-app build. Each case injects one defect into a served page and requires the matching shell-qa check to
  * report it; the positive controls require the unmutated pages to pass. The B1 budget cases mutate a copy of the build
  * instead (raw one byte over the hard maximum, transfer over its maximum at unchanged raw size; controls at exactly the
- * raw maximum and on the build as it is). The case count is pinned.
+ * raw maximum and on the build as it is). The C1 strict-CSP cases serve the build (or an edited copy) through the
+ * gate's strict server with one seeded weakness each: a weakened policy, a static, missing, unsubstituted or wrong
+ * nonce, inline content in index.html, or a violation on a page (H5); the control is the strict server as it is.
+ * The other cases inject defects with inline styles and scripts, so they use a server without a policy. The case
+ * count is pinned.
  *   node tooling/enterprise-shell/shell-qa-negative.mjs
  */
 import crypto from 'node:crypto';
@@ -17,6 +21,7 @@ import {
   DIST,
   auditState,
   budgetProblems,
+  cspProblems,
   measureInitial,
   focusVisibleProblems,
   labelInNameProblems,
@@ -29,6 +34,7 @@ import {
   reducedMotionProblems,
   routeFocusProblems,
   rtlProblems,
+  serveStrict,
   sheetKeyboardProblems,
   signOutReachableProblems,
   skipLinkProblems,
@@ -36,8 +42,8 @@ import {
   trapProblems,
 } from './shell-qa.mjs';
 
-const EXPECTED_NEGATIVES = 29;
-const EXPECTED_CONTROLS = 6;
+const EXPECTED_NEGATIVES = 41;
+const EXPECTED_CONTROLS = 7;
 const css = (rule) => async (page) => page.addStyleTag({ content: rule });
 const js = (fn) => async (page) => page.evaluate(fn);
 /** A budget case: mutate(dir) edits a copy of the build; the check is B1 on that copy. */
@@ -79,6 +85,10 @@ const nestedChunk = (dir) => {
   fs.appendFileSync(path.join(dir, shared), `\nimport"./${extra}";`);
   fs.writeFileSync(path.join(dir, extra), `/*${'a'.repeat(BUDGET.rawMax + 1 - measureInitial(dir).raw - 4)}*/`);
 };
+/** A strict-CSP case: `opts` for serveStrict, `edit(dir)` on a copy of the build; the check is C1 (or `page` on a served page). */
+const strict = (opts = {}, edit = null, page = null) => ({ strict: { opts, edit, page } });
+const addPolicy = (k, t) => (d) => ({ ...d, [k]: [...d[k], t] });
+const editIndex = (fn) => (dir) => { const f = path.join(dir, 'index.html'); fs.writeFileSync(f, fn(fs.readFileSync(f, 'utf8'))); };
 const blurOnClose = () => document.addEventListener('close', () => setTimeout(() => document.activeElement?.blur?.(), 0), true);
 
 /** [id, name, viewport, url, mutation, check, expected] — a null mutation is a positive control. */
@@ -116,6 +126,19 @@ const CASES = [
   ['S32', 'B1 a statically imported chunk without its preload hint grows over the hard maximum (hints are never relied on)', null, null, build(growImported), null, new RegExp(`raw ${BUDGET.rawMax + 1} bytes > hard maximum ${BUDGET.rawMax}`)],
   ['S33', 'B1 a second-level chunk imported only by another chunk takes the raw total over the hard maximum', null, null, build(nestedChunk), null, new RegExp(`raw ${BUDGET.rawMax + 1} bytes > hard maximum ${BUDGET.rawMax}`)],
   ['S34', 'A1 the language button named "Language: English" while it shows "EN" (label not in name)', [1440, 900], '/workspace', js(() => document.querySelector('.paep-shell-topbar__language').setAttribute('aria-label', 'Language: English')), (p) => labelInNameProblems(p), /A1 button shows "en" but is named "Language: English"/],
+  ['S35', "C1 'unsafe-inline' added to style-src", null, null, strict({ policy: addPolicy('style-src', "'unsafe-inline'") }), null, /C1 style-src allows 'unsafe-inline'/],
+  ['S36', "C1 'unsafe-eval' added to script-src", null, null, strict({ policy: addPolicy('script-src', "'unsafe-eval'") }), null, /C1 script-src allows 'unsafe-eval'/],
+  ['S37', 'C1 one static nonce for every response', null, null, strict({ nonce: 'static' }), null, /C1 the nonce is repeated across responses/],
+  ['S38', 'C1 placeholders left unsubstituted (the page has no nonce)', null, null, strict({ nonce: 'unsubstituted' }), null, /C1 violation during normal operation/],
+  ['S39', 'C1 a policy without the nonce', null, null, strict({ policy: (d) => ({ ...d, 'script-src': ["'self'"], 'style-src': ["'self'"] }) }), null, /C1 script-src and style-src do not carry one nonce/],
+  ['S40', 'C1 the page gets a different nonce than the header (wrong nonce)', null, null, strict({ nonce: 'mismatch' }), null, /C1 the page nonce does not match the header nonce/],
+  ['S41', 'C1 a build without the ngCspNonce placeholder', null, null, strict({}, editIndex((h) => h.replace(/\sngcspnonce="[^"]*"/gi, '').replace(/\snonce="[^"]*"/g, ''))), null, /C1 index.html root element has no ngCspNonce placeholder/],
+  ['S42', 'C1 an inline onclick handler in index.html', null, null, strict({}, editIndex((h) => h.replace('<body>', '<body onclick="void 0">'))), null, /C1 index.html <body> has an inline onclick handler/],
+  ['S43', 'C1 angular#unsafe-bypass added to trusted-types', null, null, strict({ policy: addPolicy('trusted-types', 'angular#unsafe-bypass') }), null, /C1 trusted-types allows angular#unsafe-bypass/],
+  ['S44', 'C1 Trusted Types not required (the HTML sink probe then runs)', null, null, strict({ policy: (d) => { const { ['require-trusted-types-for']: _, ...rest } = d; return rest; } }), null, /C1 probe: an HTML string sink is allowed/],
+  ['S45', 'C1 a wildcard script origin', null, null, strict({ policy: addPolicy('script-src', '*') }), null, /C1 script-src allows \*/],
+  ['S46', 'H5 a style element inserted without the nonce is reported as a violation', [1440, 900], '/workspace', strict({}, null, js(() => { const e = document.createElement('style'); e.textContent = '.x{}'; document.head.append(e); })), null, /H5 CSP violation: style-src-elem/],
+  ['S47', 'positive control: the strict server as it is', null, null, strict(), null, null],
   ['S30', 'positive control: raw initial bundle exactly at the hard maximum', null, null, build(padRawTo(BUDGET.rawMax)), null, null],
   ['S31', 'positive control: the build as it is', null, null, build(() => {}), null, null],
 ];
@@ -136,6 +159,26 @@ try {
           problems = budgetProblems(copy).problems;
         } finally {
           fs.rmSync(copy, { recursive: true, force: true });
+        }
+      } else if (mutate?.strict) {
+        const { opts, edit, page: act } = mutate.strict;
+        const copy = edit ? fs.mkdtempSync(path.join(os.tmpdir(), 'paep-shell-csp-')) : null;
+        if (copy) { fs.cpSync(DIST, copy, { recursive: true }); edit(copy); }
+        const strictServer = await serveStrict(copy ?? DIST, opts);
+        try {
+          const ctx = await browser.newContext({ viewport: { width: vp?.[0] ?? 1440, height: vp?.[1] ?? 900 } });
+          ctxs.push(ctx);
+          if (act) {
+            const { page, errors } = await openApp(ctx, `${strictServer.url}${url}`);
+            await act(page);
+            await page.waitForTimeout(150);
+            problems = await auditState(page, errors, { axe: false });
+          } else {
+            problems = await cspProblems(ctx, strictServer);
+          }
+        } finally {
+          await strictServer.close();
+          if (copy) fs.rmSync(copy, { recursive: true, force: true });
         }
       } else if (mutate === 'rtl-nav' || mutate === 'rtl-ok') {
         const a = await browser.newContext({ viewport: { width: 1440, height: 900 } });

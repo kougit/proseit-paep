@@ -9,7 +9,7 @@
     },
     {
       "id": "H",
-      "name": "H1-H4 shell states: 124 state × viewport × direction combinations (axe at 1440, 834, 640 and 320)",
+      "name": "H1-H5 shell states: 124 state × viewport × direction combinations (axe at 1440, 834, 640 and 320)",
       "problems": []
     },
     {
@@ -25,6 +25,11 @@
     {
       "id": "A1",
       "name": "Label in name (WCAG 2.5.3): controls named by aria-label include their visible text (1440, 834, 320; chrome, sheet, notifications, account and language menus)",
+      "problems": []
+    },
+    {
+      "id": "C1",
+      "name": "Strict CSP: per-response nonce in header and page, profile policy, no inline content without the nonce, Angular styles nonced, blocked probes (inline script, wrong nonce, inline style, eval, HTML sink)",
       "problems": []
     },
     {

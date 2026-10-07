@@ -13,7 +13,7 @@
  *   N1 the never-hidden set (navigation, product, search, notifications with count, account, page h1) is present and
  *      inside the viewport at 320 and 320×256, and the account menu reaches Sign out there; the current tenant
  *      context shows whole in the page-header context line and in the sheet header; the offline and unknown
- *      connectivity rows show first in the status strip (degraded is host-reported and has no reference-app source)
+ *      connectivity rows show in the status strip with their catalogued title (degraded is host-reported and has no reference-app source)
  *   T1 shell targets are at least 24 × 24 CSS px (WCAG 2.5.8) at 1440 and 320
  *   A1 label in name (WCAG 2.5.3): a control named by aria-label has a name containing its visible text
  *   K1 the skip link is the first Tab stop, is visible when focused, and moves focus to main
@@ -443,7 +443,7 @@ export async function narrowContextProblems(page) {
 
 /**
  * N1 (connectivity, HOF responsive-rules: never hidden at 320): a non-online state shows its status row, with its
- * catalogued title, first in the status strip and inside the viewport. `offline` is driven here (the browser goes
+ * catalogued title, in the status strip and inside the viewport (the strip order itself is not asserted). `offline` is driven here (the browser goes
  * offline); `unknown` needs the page opened with `navigator.onLine` unavailable (see `UNKNOWN_CONNECTIVITY`).
  */
 export async function narrowConnectivityProblems(page, state) {

@@ -42,9 +42,10 @@ import {
   skipLinkProblems,
   targetSizeProblems,
   trapProblems,
+  UNKNOWN_CONNECTIVITY,
 } from './shell-qa.mjs';
 
-const EXPECTED_NEGATIVES = 49;
+const EXPECTED_NEGATIVES = 50;
 const EXPECTED_CONTROLS = 7;
 const css = (rule) => async (page) => page.addStyleTag({ content: rule });
 const js = (fn) => async (page) => page.evaluate(fn);
@@ -148,6 +149,7 @@ const CASES = [
   ['S53', 'N1 context line names another tenant at 320', [320, 720], '/workspace', js(() => { const s = document.querySelector('.paep-page-frame__tenant > span:last-child'); s.lastChild.textContent = 'Other Organisation'; }), (p) => narrowContextProblems(p), /N1 context line does not show "Sample Organisation A · Site 01"/],
   ['S54', 'N1 navigation sheet context header hidden at 320', [320, 720], '/workspace', css('.paep-shell__sheet-context { display: none !important; }'), (p) => narrowContextProblems(p), /N1 navigation sheet has no context header/],
   ['S55', 'N1 offline connectivity row hidden at 320', [320, 256], '/workspace', css('.paep-shell-status__row[data-status="connectivity"] { display: none !important; }'), (p) => narrowConnectivityProblems(p, 'offline'), /N1 offline connectivity row not rendered/],
+  ['S56', 'N1 unknown connectivity row hidden at 320', [320, 256], '/workspace', { init: UNKNOWN_CONNECTIVITY, page: css('.paep-shell-status__row[data-status="connectivity"] { display: none !important; }') }, (p) => narrowConnectivityProblems(p, 'unknown'), /N1 unknown connectivity row not rendered/],
   ['S47', 'positive control: the strict server as it is', null, null, strict(), null, null],
   ['S30', 'positive control: raw initial bundle exactly at the hard maximum', null, null, build(padRawTo(BUDGET.rawMax)), null, null],
   ['S31', 'positive control: the build as it is', null, null, build(() => {}), null, null],
@@ -202,9 +204,12 @@ try {
         const reduce = /^M1/.test(name);
         const ctx = await browser.newContext({ viewport: { width: vp[0], height: vp[1] }, reducedMotion: reduce ? 'reduce' : 'no-preference' });
         ctxs.push(ctx);
+        // A case may set an init script (for example `navigator.onLine` unavailable) before the page loads.
+        const act = mutate?.init ? mutate.page : mutate;
+        if (mutate?.init) await ctx.addInitScript(mutate.init);
         const { page, errors } = await openApp(ctx, `${server.url}${url}`);
-        if (mutate) {
-          await mutate(page);
+        if (act) {
+          await act(page);
           await page.waitForTimeout(150);
         }
         problems = await check(page, errors);

@@ -4,7 +4,7 @@ IB3 cannot be ACCEPTED until every gate below is recorded as passed by a named h
 
 Candidate: the exact head named in the final human-gate readiness block. Serve the production reference app (`npm run build:reference-app`, then serve `dist/reference-app/browser`) and use its sample shell at `/workspace`.
 
-For each gate record: reviewer, date, environment, PASS / FAIL and any findings.
+For each gate record: reviewer, date, environment, the result (PASS or FAILED) and any findings. Every gate is NOT STARTED until a reviewer records it.
 
 ## 1. Keyboard-only walkthrough (AC-IB3-06)
 
@@ -36,7 +36,7 @@ Across all items, verify:
 
 | Reviewer | Date | Browser / OS | Result | Findings |
 | --- | --- | --- | --- | --- |
-| | | | PENDING | |
+| | | | NOT STARTED | |
 
 ## 2. NVDA with current Chromium on Windows (AC-IB3-07)
 
@@ -62,16 +62,16 @@ DDR-IB3-08 (design approved, manual verification pending):
 
 | Reviewer | Date | Windows | NVDA | Browser | Result | Findings |
 | --- | --- | --- | --- | --- | --- | --- |
-| | | | | | PENDING | |
+| | | | | | NOT STARTED | |
 
 ## 3. Native-copy review (wording only; RTL mechanics are qualified separately)
 
-Review every `paep.shell.*` string (123 keys, `packages/enterprise/src/lib/messages/shell-messages.ts`) as the host would localise it, together with the Arabic and Hebrew HOF renders (`SCR-SHELL-017--ar-*`, `--he-*`). Return any material layout or interaction defect for implementation correction.
+Review every `paep.shell.*` string (123 keys, `packages/enterprise/src/lib/messages/shell-messages.ts`) as the host would localise it, together with the Arabic and Hebrew HOF renders (`SCR-SHELL-017--ar-*`, `--he-*`). Return any material layout or interaction defect for implementation correction. Also review two composed accessible names whose separators are fixed in code (independent QA L-21, not changed by the disposition; a PO/SA follow-up if the wording does not work): the context button "{label}: {context}. {switch}" (`context/context-switcher.ts`) and the unread announcement "{button}, {n unread}" (`notifications/notification-panel.ts`).
 
 | Language | Reviewer | Date | Result | Findings |
 | --- | --- | --- | --- | --- |
-| Arabic | | | PENDING | |
-| Hebrew | | | PENDING | |
+| Arabic | | | NOT STARTED | |
+| Hebrew | | | NOT STARTED | |
 
 ## 4. Visual captures (AC-IB3-16)
 
@@ -79,7 +79,7 @@ Dispose of each baseline in `evidence/IB3-ENTERPRISE-SHELL/visual/README.md`, on
 
 | Reviewer (PO/SA or designate) | Date | Captures disposed | Result | Findings |
 | --- | --- | --- | --- | --- |
-| | | 0 of 44 | PENDING | |
+| | | 0 of 44 | NOT STARTED | |
 
 ## 5. Provenance attestation (AC-IB3-19)
 
@@ -92,4 +92,4 @@ Review and attest:
 
 | Reviewer | Date | Result | Findings |
 | --- | --- | --- | --- |
-| | | PENDING | |
+| | | NOT STARTED | |

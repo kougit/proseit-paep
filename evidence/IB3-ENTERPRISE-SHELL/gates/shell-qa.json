@@ -1,10 +1,10 @@
 {
   "ok": true,
-  "seconds": 142,
+  "seconds": 144,
   "results": [
     {
       "id": "B1",
-      "name": "Initial bundle budget: raw 516799 bytes (516.80 kB; target 500.00 kB exceeded, hard maximum 525.00 kB), transfer 121528 bytes (121.53 kB; hard maximum 150.00 kB) — styles-J65SLB5I.css, chunk-W9DnW3rH.js, main-EAHLLU33.js",
+      "name": "Initial bundle budget: raw 517564 bytes (517.56 kB; target 500.00 kB exceeded, hard maximum 525.00 kB), transfer 121463 bytes (121.46 kB; hard maximum 150.00 kB) — styles-J65SLB5I.css, chunk-DOVfOEvS.js, main-N6FUZ54O.js",
       "problems": []
     },
     {
@@ -14,7 +14,7 @@
     },
     {
       "id": "N1",
-      "name": "Never-hidden set (incl. notifications with count and account with sign-out) present and inside the viewport at 320 and 320×256 (LTR and RTL)",
+      "name": "Never-hidden set (incl. notifications with count, account with sign-out, the current tenant context and the offline and unknown connectivity rows) present and inside the viewport at 320 and 320×256 (LTR and RTL)",
       "problems": []
     },
     {

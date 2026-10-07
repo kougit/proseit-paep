@@ -1,11 +1,11 @@
 {
   "ok": true,
-  "raw": 516799,
-  "transfer": 121528,
+  "raw": 517564,
+  "transfer": 121463,
   "files": [
     "styles-J65SLB5I.css",
-    "chunk-W9DnW3rH.js",
-    "main-EAHLLU33.js"
+    "chunk-DOVfOEvS.js",
+    "main-N6FUZ54O.js"
   ],
   "results": [
     {
@@ -33,7 +33,7 @@
       "id": "C5",
       "name": "No component selector defined twice; one popover positioning implementation",
       "problems": [],
-      "detail": "47 component definitions; positioning in packages/components/src/lib/popover/popover.ts"
+      "detail": "48 component definitions; positioning in packages/components/src/lib/popover/popover.ts"
     },
     {
       "id": "C6",
@@ -45,21 +45,21 @@
       "id": "C7",
       "name": "This build has the production initial files and a raw total within 1 % of it",
       "problems": [],
-      "detail": "production 516799 bytes, source-mapped 519143 bytes"
+      "detail": "production 517564 bytes, source-mapped 519742 bytes"
     }
   ],
   "composition": [
     {
       "source": "@angular/core",
-      "kB": 137.8
+      "kB": 137.9
     },
     {
       "source": "packages/enterprise",
-      "kB": 110.4
+      "kB": 109.8
     },
     {
       "source": "packages/components",
-      "kB": 94.9
+      "kB": 96
     },
     {
       "source": "@angular/router",

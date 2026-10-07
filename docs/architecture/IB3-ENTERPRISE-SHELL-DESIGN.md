@@ -21,7 +21,7 @@ Every package is imported through its single public entry point; there is no sec
 
 ## 2. Enterprise public API
 
-One entry point, `packages/enterprise/src/index.ts`: `providePaepShell(options)`, thirteen port tokens, `PAEP_SHELL_DEFAULT_MESSAGES` (123: 121 HOF + 2 DDR-IB3-06 `paep.shell.*` keys) and the shell parts. `qa:enterprise` E02 pins the census to the 15 approved shell symbols of authorisation §12. Two of them are not built yet: `PaepNotificationPanel` (E-07) and `PaepAccountMenu` (E-09) need `PaepMenu` and the `PaepPopover` alignment of HOF-IB2-001 v1.2, which is awaiting PO/SA approval. E02 therefore fails until they exist; it is not relaxed.
+One entry point, `packages/enterprise/src/index.ts`: `providePaepShell(options)`, thirteen port tokens, `PAEP_SHELL_DEFAULT_MESSAGES` (123: 121 HOF + 2 DDR-IB3-06 `paep.shell.*` keys) and the shell parts. `qa:enterprise` E02 pins the census to the 15 approved shell symbols of authorisation §12. All 15 are built; `PaepNotificationPanel` (E-07) and `PaepAccountMenu` (E-09) use `PaepMenu` and the `PaepPopover` alignment of HOF-IB2-001 v1.2 (approved 2026-10-07).
 
 `providePaepShell` takes the validated `RuntimeConfigStore` and the navigation manifest (required) and optional ports: access, counts, context, commands, notifications, session, host hooks, connectivity, error reporter, locale control and message overrides. Every port is presentation input; `requestSwitch` receives the chosen context and the server decides. Nothing in the shell grants authority: the server decides access, context and session, no route guard is exported (E07), and locked pages and items only explain.
 
@@ -58,9 +58,9 @@ The UI lab keeps its own chrome. Under "Enterprise shell" it has one page per bu
 
 | Gate | What it proves | Negatives |
 | --- | --- | --- |
-| `test:enterprise` | 122 behaviour tests in 14 files (enterprise and the three seams), real Chromium | — |
-| `qa:enterprise` E01-E12 | Imports, API census, no duplicated primitive, 123 keys (121 HOF + 2 DDR-IB3-06), no unsafe HTML, no storage, no guard, bounded routes, milestone scope, the one CLAUDE.md line, clean-room scan, retained HOF | `qa:enterprise:negative` (33 + control) |
-| `qa:shell` | 22 checks on the production reference app, every page served under the strict CSP: B1 budget, C1 strict CSP, H1-H5 over 124 state × viewport × direction combinations (7 viewports, LTR/RTL, axe, CSP violations), never-hidden set, targets, label in name, keyboard, focus, reduced motion, RTL mirroring, 200 % / 400 % zoom | `qa:shell:negative` (44 + 7 controls) |
+| `test:enterprise` | 131 behaviour tests in 15 files (enterprise and the three seams), real Chromium | — |
+| `qa:enterprise` E01-E12 | Imports, API census, no duplicated primitive, 123 keys (121 HOF + 2 DDR-IB3-06), no unsafe HTML, no storage, no guard, bounded routes, milestone scope, the one CLAUDE.md line, clean-room scan, retained HOF | `qa:enterprise:negative` (34 + control) |
+| `qa:shell` | 22 checks on the production reference app, every page served under the strict CSP: B1 budget, C1 strict CSP, H1-H5 over 124 state × viewport × direction combinations (7 viewports, LTR/RTL, axe, CSP violations), never-hidden set, targets, label in name, keyboard, focus, reduced motion, RTL mirroring, 200 % / 400 % zoom | `qa:shell:negative` (50 + 7 controls) |
 | `bundle-composition.mjs` | What the initial bundle holds (DDR-IB3-07 §5): no UI-lab, test, analytics, offline, Frappe or domain code; no duplicate source, selector or positioning; Angular, rxjs and tslib only; optimisation and AOT on | — (one-off evidence) |
 | `qa:design-system` S03, S05, S07, S08, S11, S12 | Approved component, icon, token and key extensions; S05 admits the enterprise entry point only in the lab showcase | `design-system-extension-negative.mjs` (34) |
 | `qa:accessibility` A1 | axe also runs inside the framed showcase previews | B16, B17 |
@@ -71,6 +71,6 @@ The UI lab keeps its own chrome. Under "Enterprise shell" it has one page per bu
 ## 6. Known limits
 
 - Shell test doubles live in `packages/enterprise/src/lib/testing/` (not exported), because package code may not import `tooling/` (`qa:contracts` S10). WORK_PACKAGE §5 names `tooling/test-utils`; recorded as a DDR-IB3 candidate.
-- DDR-IB3-07 is ACCEPTED; DDR-IB3-01..06 and -08 are candidates in the conformance report (section D); none is self-approved.
+- PO/SA pre-acceptance disposition 2026-10-07: DDR-IB3-02 ACCEPTED (ACCEPTED IMPLEMENTATION DIVERGENCE); DDR-IB3-06: CLOSED — REMEDIATED TO CONFORMANCE; DDR-IB3-07 ACCEPTED; DDR-IB3-08: PO/SA DESIGN DISPOSITION APPROVED / MANUAL ACCESSIBILITY VERIFICATION PENDING. DDR-IB3-01, -03, -04 and -05 are candidates for PO/SA decision (`work-packages/IB3-ENTERPRISE-SHELL/DDR-DECISION-TABLE.md`); none is self-approved.
 - The strict CSP is verified with the gate's own server, which behaves as the deployment profile requires; each real deployment must show its emitted header and nonce handling in its own deployment evidence.
 - Arabic and Hebrew shell copy has not had native-speaker review; RTL mechanics are tested, the wording is not validated.

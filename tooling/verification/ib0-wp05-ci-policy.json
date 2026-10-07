@@ -123,6 +123,10 @@
     {
       "id": "shell-browser",
       "name": "PAEP / shell-browser"
+    },
+    {
+      "id": "negative-ci-c",
+      "name": "PAEP / negative-ci-c"
     }
   ],
   "requiredCommands": {
@@ -192,6 +196,9 @@
       "npm run build:reference-app",
       "npm run qa:shell",
       "npm run qa:shell:negative"
+    ],
+    "negative-ci-c": [
+      "npm run qa:ib0-wp05:negative -- --part c"
     ]
   },
   "approvedActions": [

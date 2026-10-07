@@ -5,7 +5,8 @@
  *
  * Proves that the two IB3 jobs are mandatory, keep their commands and feed PAEP / gate, and that the IB3 negative
  * suites cannot move into other jobs, and that the IB3 W18 edge bound still rejects a WP04 control that no longer
- * injects the edge it names (J11). Same harness as the IB2 suite (tooling/design-system/ci-governance-negative.mjs):
+ * injects the edge it names (J11). J12-J17 cover the three-way CI-control split (PO/SA 2026-10-07): part c dropped,
+ * left out of the gate or given a longer timeout, and a WP05 negative case unassigned, dropped or in two parts. Same harness as the IB2 suite (tooling/design-system/ci-governance-negative.mjs):
  * each case mutates a disposable scratch copy of the repository (with .git; node_modules hard-linked read-only),
  * commits the mutation in the copy only (J11 leaves it uncommitted), and runs the provenance gate, expecting exactly the stated W checks to
  * fail. P00 is the positive control on the unmutated copy.
@@ -20,6 +21,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const WORKFLOW = '.github/workflows/paep-ci.yml';
 const POLICY = 'tooling/verification/ib0-wp05-ci-policy.json';
+const WP05_HARNESS = 'tooling/verification/negative-ib0-wp05.mjs';
 const env = { ...process.env, NO_COLOR: '1', FORCE_COLOR: '0', NG_CLI_ANALYTICS: 'false' };
 delete env.PAEP_EVIDENCE_DIR;
 delete env.GITHUB_STEP_SUMMARY;
@@ -91,10 +93,18 @@ const cases = [
   // suite also fails its static integrity check (W17), so W17 is expected with W18. The case runs here, not in the WP05 suite, because one
   // more WP04 negative run does not fit the 20-minute PAEP / negative-ci budget (RR14, AC-IB3-21).
   ['J11', 'a WP04 edge-count control that names an edge it does not inject fails the negative-architecture gate', [['tooling/verification/negative-ib0-wp04.mjs', replace("  [entry('frappe-sdk'), append(\"import '@proseit/paep-offline';\")],\n", '')]], 'negative-architecture', [/FAIL W17/, /FAIL W18/, /C1 failed: allowed-edge control/], { commit: false }],
+  // Three-way CI-control split (PO/SA 2026-10-07): part c is a mandatory job feeding the gate with the 20-minute timeout,
+  // and the WP05 negative suite's explicit PARTITION assigns every pinned case to exactly one part (W11).
+  ['J12', 'negative-ci-c removed from the policy, the workflow and the gate together', [[POLICY, jsonEdit((o) => { o.mandatoryJobs = o.mandatoryJobs.filter((j) => j.id !== 'negative-ci-c'); delete o.requiredCommands['negative-ci-c']; })], [WORKFLOW, (t) => dropNeed('negative-ci-c')(dropJob('negative-ci-c')(t))]], 'provenance', [/FAIL W11/, /IB3 mandatory job negative-ci-c removed or renamed/, /part c of the WP05 negative suite runs in \[\], expected \[negative-ci-c\]/]],
+  ['J13', 'negative-ci-c dropped from the gate needs and MANDATORY_JOBS', [[WORKFLOW, dropNeed('negative-ci-c')]], 'provenance', [/FAIL W12/]],
+  ['J14', 'negative-ci-c timeout raised from 20 to 25 minutes', [[WORKFLOW, timeoutOf('negative-ci-c', 25)]], 'provenance', [/FAIL W11/, /negative-ci-c timeout-minutes 25 \(RR14 fixes it at 20\)/]],
+  ['J15', 'a WP05 negative case left unassigned in the partition', [[WP05_HARNESS, replace("'P15', 'P23', 'P24'", "'P15', 'P24'")]], 'provenance', [/FAIL W11/, /partition: unassigned cases P23/]],
+  ['J16', 'a WP05 negative case dropped from the pinned list and the partition together', [[WP05_HARNESS, (t) => replace("'P15', 'P23', 'P24'", "'P15', 'P24'")(replace("'P22', 'P23', 'P24', 'P20'", "'P22', 'P24', 'P20'")(t))]], 'provenance', [/FAIL W11/, /partition: 103 declared and 103 assigned cases; expected 104/]],
+  ['J17', 'a WP05 negative case placed in two parts', [[WP05_HARNESS, replace("    'L00', 'T02',", "    'L00', 'P23', 'T02',")]], 'provenance', [/FAIL W11/, /partition: cases in more than one part P23/]],
 ];
 
-/** Pinned case count (AC-IB3-17): 11 seeded negatives (J01-J11) and 1 positive control (P00). */
-const EXPECTED_NEGATIVES = 11;
+/** Pinned case count (AC-IB3-17): 17 seeded negatives (J01-J17) and 1 positive control (P00). */
+const EXPECTED_NEGATIVES = 17;
 const EXPECTED_CONTROLS = 1;
 
 const results = [];

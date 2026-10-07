@@ -393,7 +393,11 @@ const IB2_REQUIRED_JOBS = {
 const IB3_REQUIRED_JOBS = {
   'enterprise-shell': { name: 'PAEP / enterprise-shell', commands: ['npm run test:enterprise', 'npm run qa:enterprise', 'npm run qa:enterprise:negative', 'npm run qa:ib3:ci-negative'] },
   'shell-browser': { name: 'PAEP / shell-browser', commands: ['npm run build:reference-app', 'npm run qa:shell', 'npm run qa:shell:negative'] },
+  // Three-way split (PO/SA, 2026-10-07): part c of the WP05 negative suite, beside part a (negative-ci) and part b.
+  'negative-ci-c': { name: 'PAEP / negative-ci-c', commands: ['npm run qa:ib0-wp05:negative -- --part c'] },
 };
+/** The CI-control jobs that each run one part of the WP05 negative suite; each keeps the 20-minute timeout (RR14). */
+const CI_CONTROL_PARTS = { 'negative-ci': 'a', 'negative-ci-b': 'b', 'negative-ci-c': 'c' };
 const IB3_NEGATIVES = ['npm run qa:enterprise:negative', 'npm run qa:shell:negative', 'npm run qa:ib3:ci-negative'];
 // IB2 CI-performance split (PO/SA, 2026-09-28; RR14): the accepted negative-ci command `npm run qa:ib0-wp05:negative`
 // may be replaced only by exactly its two halves, part a in negative-ci (keeping every other accepted command in order)
@@ -453,8 +457,8 @@ if (want('W11') && wf) {
     if (j.name !== mj.name) p.push(`${mj.id} name "${j.name}" != "${mj.name}"`);
     if (j['runs-on'] !== policy.workflow.runner) p.push(`${mj.id} runs-on ${j['runs-on']}`);
     if (!Number.isInteger(j['timeout-minutes']) || j['timeout-minutes'] < 1 || j['timeout-minutes'] > 30) p.push(`${mj.id} timeout-minutes ${j['timeout-minutes']}`);
-    // RR14 (accepted LOW): PAEP / negative-ci keeps its 20-minute timeout until the PO/SA authorises a change.
-    if ((mj.id === 'negative-ci' || mj.id === 'negative-ci-b') && j['timeout-minutes'] !== 20) p.push(`${mj.id} timeout-minutes ${j['timeout-minutes']} (RR14 fixes it at 20)`);
+    // RR14 (accepted LOW): the CI-control jobs keep their 20-minute timeout (PO/SA 2026-10-07: three parts, no increase).
+    if (CI_CONTROL_PARTS[mj.id] && j['timeout-minutes'] !== 20) p.push(`${mj.id} timeout-minutes ${j['timeout-minutes']} (RR14 fixes it at 20)`);
     const steps = Array.isArray(j.steps) ? j.steps : [];
     const [co, su, ...rest] = steps;
     const up = rest.pop();
@@ -470,7 +474,15 @@ if (want('W11') && wf) {
     if (JSON.stringify(cmds) !== JSON.stringify(policy.requiredCommands[mj.id])) p.push(`${mj.id}: commands ${JSON.stringify(cmds)} != ${JSON.stringify(policy.requiredCommands[mj.id])}`);
     for (const r of runs) if (r.split('\n').filter(Boolean).length !== 2) p.push(`${mj.id}: run step has extra lines`);
   }
-  add('W11', 'Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention; PAEP / negative-ci and PAEP / negative-ci-b (its split half) keep the 20-minute timeout (RR14)',
+  // Every part of the WP05 negative suite runs in exactly its own CI-control job, and the suite's explicit PARTITION
+  // assigns every pinned case to exactly one part (PO/SA 2026-10-07), so a split can neither drop nor duplicate a case.
+  for (const [id, part] of Object.entries(CI_CONTROL_PARTS)) {
+    const owners = Object.entries(policy.requiredCommands || {}).filter(([, cmds]) => cmds.includes(`${WP05_NEGATIVE} -- --part ${part}`)).map(([k]) => k);
+    if (JSON.stringify(owners) !== JSON.stringify([id])) p.push(`part ${part} of the WP05 negative suite runs in [${owners.join(', ')}], expected [${id}]`);
+  }
+  const partition = run(process.execPath, ['tooling/verification/negative-ib0-wp05.mjs', '--check-partition']);
+  if (partition.status !== 0) p.push(`WP05 negative-suite partition: ${(partition.stdout || '').split('\n').filter((l) => l.startsWith('FAIL')).join('; ') || `exit ${partition.status}`}`);
+  add('W11', 'Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention; the three CI-control jobs (PAEP / negative-ci, negative-ci-b, negative-ci-c) each run exactly their part of the WP05 negative suite, whose partition covers every pinned case once, and keep the 20-minute timeout (RR14)',
     p.length === 0, p.length ? p.join('; ') : `${mandatoryIds.length} parallel jobs: ${mandatoryIds.join(', ')}`);
 }
 

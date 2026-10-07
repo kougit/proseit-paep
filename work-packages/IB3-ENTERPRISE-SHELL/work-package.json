@@ -41,11 +41,10 @@
   },
   "findings_open": {
     "high": 0,
-    "medium": 2,
-    "as_of": "2026-10-07: round 2 on 28c3552, independent QA (High 0 / Medium 1) and RR6 (High 0 / Medium 1). Round-1 findings are closed. Counts stay open until a re-review on the final head closes them.",
+    "medium": 0,
+    "as_of": "2026-10-07: round 3 on a403020, independent QA (High 0 / Medium 0 / Low 6) and RR6 (PASS, High 0 / Medium 0 / Low 4). QA M-05 (strict-CSP gate) and RR6 M-03 (CI headroom, resolved by the PO/SA three-way split) are closed. QA L-11 and L-16 were fixed on 50e7171; the record lows were fixed on the next head.",
     "items": [
-      "QA M-05 strict-CSP gate could pass a weakened policy: fixed on the next head, awaiting re-review",
-      "RR6 M-03 CI headroom: PAEP / negative-ci-b exceeds its 20-minute limit; STOP for PO/SA (WORK_PACKAGE §9)"
+      "Low only (not blocking): IB3 package.json script bodies not content-pinned while the generation is CANDIDATE; bundle-composition loads the hoisted source-map-js; notification route/key trust, help-link href allowlist/rel and the N1 tenant/offline row (hardening)"
     ]
   },
   "ddrIb3": {

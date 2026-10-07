@@ -66,7 +66,7 @@ The UI lab keeps its own chrome. Under "Enterprise shell" it has one page per bu
 | `qa:accessibility` A1 | axe also runs inside the framed showcase previews | B16, B17 |
 | `qa:ddr07` | DDR-IB2-07 sequence, content and release guard | `qa:ddr07:negative` (19) |
 | `qa:ib0-wp05` W02 | An in-scope CLAUDE.md change must be exactly the approved amendment | F02 |
-| `qa:ib0-wp05` floor, W18 | The two IB3 jobs and their negatives cannot be dropped or moved; the W18 edge bound uses the base graph | `qa:ib3:ci-negative` (17 + control, pinned; J11 is the W18 edge-bound negative, kept out of the CI-control parts for their 20-minute budget; J12-J17 prove the three-part CI-control split cannot lose a part, a gate link, its 20-minute limit or a case) |
+| `qa:ib0-wp05` floor, W18 | The two IB3 jobs and their negatives cannot be dropped or moved; the W18 edge bound uses the base graph | `qa:ib3:ci-negative` (19 + control, pinned; J11 is the W18 edge-bound negative, kept out of the CI-control parts for their 20-minute budget; J12-J19 prove the three-part CI-control split cannot lose a part, a gate link, its 20-minute limit or a case) |
 
 ## 6. Known limits
 

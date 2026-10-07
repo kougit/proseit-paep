@@ -10,7 +10,7 @@
 | DDR-IB3 candidates | DDR-IB3-07 ACCEPTED (2026-10-07); DDR-IB3-01..06 and DDR-IB3-08 (language button name) awaiting PO/SA disposition |
 | Native-copy review (ar, he) | NOT STARTED (human); never claimed |
 | CI headroom | Resolved by the PO/SA three-way split (2026-10-07): on f23006d the three CI-control jobs took 11 m 40 s (a), 12 m 48 s (b) and 11 m 39 s (c) as whole-job durations (setup included; job a also runs `qa:baseline:negative`), each under its unchanged 20-minute limit (AC-IB3-21) |
-| Independent QA / RR6 | Round 1 on 574f028: independent QA High 1 / Medium 4 / Low 7; RR6 FAIL (High 0 / Medium 2 / Low 5); all fixed. Round 2 on 28c3552: independent QA High 0 / Medium 1 (C1 could pass a weakened policy; fixed on the next head); RR6 FAIL High 0 / Medium 1 (the CI headroom STOP, recorded here).. Round 3 on a403020: independent QA High 0 / Medium 0 / Low 6 (L-11 and L-16 fixed on 50e7171, record lows L-12 to L-15 fixed on the next head); RR6 PASS High 0 / Medium 0 / Low 4 |
+| Independent QA / RR6 | Round 1 on 574f028: independent QA High 1 / Medium 4 / Low 7; RR6 FAIL (High 0 / Medium 2 / Low 5); all fixed. Round 2 on 28c3552: independent QA High 0 / Medium 1 (C1 could pass a weakened policy; fixed on the next head); RR6 FAIL High 0 / Medium 1 (the CI headroom STOP, recorded here). Round 3 on a403020: independent QA High 0 / Medium 0 / Low 6 (L-11 and L-16 fixed on 50e7171, record lows L-12 to L-15 fixed on the next head); RR6 PASS High 0 / Medium 0 / Low 4 |
 
 ## 1. Criteria
 

@@ -1,95 +1,183 @@
-# IB3-ENTERPRISE-SHELL: human gate checklist
+# IB3-ENTERPRISE-SHELL: human gates H1 to H6
 
-IB3 cannot be ACCEPTED until every gate below is recorded as passed by a named human reviewer (PO/SA pre-acceptance disposition, 2026-10-07, sections 9 to 11). Automated evidence (axe, `qa:shell`, screenshots) never counts as a pass here.
+These are the evidence forms for the human gates in the PO/SA instruction of 2026-10-08 (sections 5 to 13). IB3 cannot be ACCEPTED until each gate has a human result on record. Claude prepared these forms. Claude does not perform, infer or fabricate any judgment in them. Automated evidence (axe, `qa:shell`, `qa:accessibility`, screenshots) is never a human result.
 
-Candidate: the exact head named in the final human-gate readiness block. Serve the production reference app (`npm run build:reference-app`, then serve `dist/reference-app/browser`) and use its sample shell at `/workspace`.
+## Candidate and freeze
 
-For each gate record: reviewer, date, environment, the result (PASS or FAILED) and any findings. Every gate is NOT STARTED until a reviewer records it.
+- **Candidate:** the frozen human-gate head. That is the commit that records the 2026-10-08 DDR dispositions and has green exact-head CI. Its full SHA is in the PR #12 readiness reply and in `/mnt/project-files/ib3/human-gates/README.md`.
+- **Freeze:** while review is in progress, no code or controlled record changes, except to record human evidence a reviewer has submitted.
+- **SHA check:** each reviewer writes down the SHA they reviewed. A result for any other SHA does not count.
+- **Serving:** run `npm run build:reference-app`, then serve `dist/reference-app/browser`. The sample shell is at `/workspace`. RTL is `?dir=rtl`.
 
-## 1. Keyboard-only walkthrough (AC-IB3-06)
+Every record identifies:
+- the exact candidate SHA;
+- the reviewer and their role;
+- the date;
+- the environment, where relevant;
+- the result, PASS or FAILED (H5 uses PASS or CONCERN per capture);
+- the findings;
+- the corrective action required, if FAILED.
 
-Use no mouse. Check every item at 1440 px and at 320 px, in LTR and RTL.
+**If a gate fails** (section 13):
+1. Record the finding and classify it.
+2. Make only an authorised correction.
+3. Re-run the affected automated gates and exact-head CI.
+4. Re-run the affected human gate.
+5. Refresh provenance to the new SHA.
+6. Assess, for each earlier human result, whether it is still valid on the new head.
 
-| # | Area | Checks |
-| --- | --- | --- |
-| 1 | Skip link | It is the first Tab stop, is visible when focused, and moves focus to main. |
-| 2 | Navigation expanded / collapsed | Logical order; the current page is identifiable. |
-| 3 | Rail flyout | Opens from its group button; Escape closes it and returns focus to the button. |
-| 4 | Mobile navigation sheet | Takes focus when opened; Escape returns focus to "Open navigation". |
-| 5 | Command palette | Ctrl/Cmd+K opens it; arrow keys and Enter work; Escape returns focus to the opener. |
-| 6 | Notification panel | Opens on Enter with focus on its heading; Escape closes it and focus returns to the bell. |
-| 7 | Account menu | Arrow keys, Home and End work; Sign out is reachable; Escape restores focus. |
-| 8 | Language menu | Opens, a choice changes the language, and Escape restores focus. |
-| 9 | Help menu | Every entry can be reached and opened. |
-| 10 | Locked / unavailable | The reason is reachable; the explanation action works. |
-| 11 | Error / not-found recovery | "Try again", "Go to Home" and "Search or go to…" can be reached and work. |
-| 12 | Status expansion | The "n more status messages" disclosure opens and closes. |
-| 13 | Route-change focus | After each navigation, focus is on the new page h1. |
-| 14 | Focus restoration | Focus returns to the opener after every overlay closes. |
+## H1. Keyboard-only walkthrough (AC-IB3-06)
 
-Across all items, verify:
-- the order is logical;
+- **Reviewer:** a human accessibility reviewer: the PO/SA or a delegate, never Claude or automation.
+- **Browser:** a supported Chromium-family browser. No pointing device.
+
+Areas to walk through:
+- Skip link.
+- Expanded navigation.
+- Collapsed rail.
+- Rail flyout.
+- Mobile navigation sheet.
+- Command palette.
+- Locked palette result.
+- Notification panel.
+- Account menu.
+- Language menu.
+- Help menu.
+- Context switch dialog.
+- Status expansion.
+- Locked / unavailable page.
+- Error / not-found recovery.
+- Route-change focus.
+
+Verify in each area:
+- every operation is reachable by keyboard;
+- the focus order is logical;
+- focus is visible and not obscured;
+- focus enters dialogs and sheets correctly;
 - there is no keyboard trap;
 - Escape dismisses;
-- focus is always visible and never hidden behind sticky chrome;
-- focus is restored on close.
+- focus is restored on close;
+- route changes move focus;
+- the current or checked state is perceivable;
+- interaction still works at 320 px where applicable.
 
-| Reviewer | Date | Browser / OS | Result | Findings |
-| --- | --- | --- | --- | --- |
-| | | | NOT STARTED | |
+| Candidate SHA | Reviewer | Role | Date | Browser + version | Result | Findings | Corrective action if FAILED |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| | | | | | NOT STARTED | | |
 
-## 2. NVDA with current Chromium on Windows (AC-IB3-07)
+AC-IB3-06 stays IN PROGRESS until this row records PASS.
 
-Record the exact Windows version, NVDA version, and browser and version.
+## H2. NVDA with Chromium on Windows (AC-IB3-07, DDR-IB3-08)
 
-Checks:
-- Shell landmarks: banner, navigation, main and the status region.
-- Navigation and its current state.
+- **Reviewer:** a human assistive-technology reviewer. One qualified person may do both H1 and H2.
+- **Versions:** record the exact Windows, NVDA and browser versions.
+
+Check:
+- Shell landmarks.
+- Navigation names and current state.
 - Collapsed-rail labels.
-- The command palette combobox and listbox (name, expanded, active option).
-- The notification bell's unread state ("Notifications, n unread") and each item's "Unread" marker.
-- The account button ("Account: {name}").
-- The language button.
-- Status announcements, including a connectivity change, announced once.
-- Locked reasons.
-- The error message with its correlation reference.
-- Route-change announcements and focus.
+- Menu names, roles and states.
+- The command palette combobox and listbox.
+- The locked-result reason.
+- The notification unread state ("Notifications, n unread"; per item "Unread").
+- The notification panel.
+- The account trigger ("Account: {name}").
+- The context radio group and its current (checked) state.
+- The language control.
+- Status announcements.
+- The locked / unavailable explanation.
+- The error with its correlation reference.
+- Route-change focus and announcement.
 
-DDR-IB3-08 (design approved, manual verification pending):
-- The visible label is "EN" and the accessible name is "EN, Language: English".
-- Confirm that the button can be activated by its visible token, for example a speech command "click EN".
-- Confirm the same rule for every other locale offered.
+**DDR-IB3-08:**
+- The visible control is "EN" and its accessible name is "EN, Language: English".
+- Confirm that the visible token occurs in the name and that the control is understandable and operable.
+- The same rule applies to every other locale token offered.
 
-| Reviewer | Date | Windows | NVDA | Browser | Result | Findings |
+| Candidate SHA | Reviewer | Role | Date | Windows | NVDA | Browser | Result | DDR-IB3-08 | Findings | Corrective action if FAILED |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| | | | | | | | NOT STARTED | NOT STARTED | | |
+
+If PASS, DDR-IB3-08 may be recorded as CLOSED — MANUAL ACCESSIBILITY VERIFIED. If FAILED, DDR-IB3-08 stays OPEN with the exact defect recorded.
+
+## H3 and H4. Arabic and Hebrew native-copy review
+
+- **Reviewer:** a fluent or native reviewer, competent to judge UI wording in that language.
+- **Scope:**
+  - the shell copy in the controlled `paep.shell.*` catalogue (123 keys, `packages/enterprise/src/lib/messages/shell-messages.ts`), as the host would localise it;
+  - the IB3 screens and the HOF RTL renders (`SCR-SHELL-017--ar-*`, `--he-*`);
+  - two composed accessible names with fixed separators: the context button "{label}: {context}. {switch}" and the unread announcement "{button}, {n unread}" (independent QA L-21).
+
+Judge the wording for:
+- naturalness;
+- clarity;
+- fit for an enterprise UI;
+- consistent terminology;
+- grammar;
+- ambiguity;
+- misleading literal translation.
+
+This is copy validation. RTL mechanics already passed and are not reopened unless the wording exposes a real layout or interaction issue.
+
+| Gate | Language | Candidate SHA | Reviewer | Role / language competence | Date | Result | Findings | Corrective action if FAILED |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| H3 | Arabic | | | | | NOT STARTED | | |
+| H4 | Hebrew | | | | | NOT STARTED | | |
+
+## H5. PO/SA visual acceptance (AC-IB3-16)
+
+- **Reviewer:** Dr Kamulegeya Grace B (PhD), Product Owner / Solutions Architect.
+- **Captures:** the 44 captures, listed with their HOF renders in `evidence/IB3-ENTERPRISE-SHELL/visual/README.md`.
+- **Mark:** each capture PASS or CONCERN.
+
+Review against the approved HOF:
+- shell hierarchy;
+- topbar;
+- navigation;
+- page / workspace frame;
+- menus;
+- command palette;
+- notifications;
+- context / account;
+- locked / error states;
+- responsive adaptation and 320 px;
+- RTL;
+- focus presentation;
+- long content;
+- reduced motion, where visible.
+
+Automated screenshot generation is not this review. Use the per-capture form in `/mnt/project-files/ib3/human-gates/H5-visual-captures.md`.
+
+| Candidate SHA | Reviewer | Date | PASS | CONCERN | Overall | Material concerns (capture, screen, correction) |
 | --- | --- | --- | --- | --- | --- | --- |
-| | | | | | NOT STARTED | |
+| | | | 0 | 0 | NOT STARTED | |
 
-## 3. Native-copy review (wording only; RTL mechanics are qualified separately)
+The overall result is BLOCKED if there is any material CONCERN. AC-IB3-16 is PASS only when all 44 pass.
 
-Review every `paep.shell.*` string (123 keys, `packages/enterprise/src/lib/messages/shell-messages.ts`) as the host would localise it, together with the Arabic and Hebrew HOF renders (`SCR-SHELL-017--ar-*`, `--he-*`). Return any material layout or interaction defect for implementation correction. Also review two composed accessible names whose separators are fixed in code (independent QA L-21, not changed by the disposition; a PO/SA follow-up if the wording does not work): the context button "{label}: {context}. {switch}" (`context/context-switcher.ts`) and the unread announcement "{button}, {n unread}" (`notifications/notification-panel.ts`).
+## H6. Provenance review (AC-IB3-19)
 
-| Language | Reviewer | Date | Result | Findings |
-| --- | --- | --- | --- | --- |
-| Arabic | | | NOT STARTED | |
-| Hebrew | | | NOT STARTED | |
+- **Reviewer:** the PO/SA, or a delegated governance / provenance reviewer.
 
-## 4. Visual captures (AC-IB3-16)
+Verify that the candidate retains each of these (the per-item form is in `/mnt/project-files/ib3/human-gates/H6-provenance.md`):
+- [ ] Approved HOF-IB3-001 (manifest `645dd2e9…fce5`).
+- [ ] Approved HOF-IB2-001 v1.2.
+- [ ] The DWP / work-package linkage.
+- [ ] The human similarity PASS.
+- [ ] Source / input hashes.
+- [ ] The asset register.
+- [ ] Shell icon provenance.
+- [ ] The C2PA explanation.
+- [ ] Implementation provenance.
+- [ ] Dependency / SBOM evidence.
+- [ ] DDR records and dispositions.
+- [ ] The design conformance mapping.
+- [ ] The exact candidate SHA.
+- [ ] No prohibited third-party template source or assets.
+- [ ] Dependency and package-lock status.
+- [ ] Reviewer / approval history.
 
-Dispose of each baseline in `evidence/IB3-ENTERPRISE-SHELL/visual/README.md`, one row per capture, against the HOF-IB3-001 render named in that row. Check layout, components, order and state; sample content differs by design. Automated screenshot generation is not approval.
+| Candidate SHA | Reviewer | Role | Date | Result | Findings | Corrective action if FAILED |
+| --- | --- | --- | --- | --- | --- | --- |
+| | | | | NOT STARTED | | |
 
-| Reviewer (PO/SA or designate) | Date | Captures disposed | Result | Findings |
-| --- | --- | --- | --- | --- |
-| | | 0 of 44 | NOT STARTED | |
-
-## 5. Provenance attestation (AC-IB3-19)
-
-Review and attest:
-- [ ] HOF-IB3-001 provenance is complete (`evidence/design-handoff/HOF-IB3-001/handoff/provenance.md` and `provenance/`), and its human similarity review PASS is on record.
-- [ ] `docs/provenance/PROVENANCE-REGISTER.md` row "PAEP enterprise shell (IB3)" is correct.
-- [ ] `docs/provenance/PROVENANCE-REGISTER.md` row "Reference application favicon and product mark (IB3)" is correct.
-- [ ] The clean-room scan (`qa:enterprise` E11) covers enterprise and the reference app, and has its negatives.
-- [ ] The favicon and product mark are the approved placeholder mark (P-09).
-
-| Reviewer | Date | Result | Findings |
-| --- | --- | --- | --- |
-| | | NOT STARTED | |
+AC-IB3-19 stays IN PROGRESS until this row records PASS.

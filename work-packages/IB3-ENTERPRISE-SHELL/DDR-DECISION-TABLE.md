@@ -5,7 +5,7 @@ This table was prepared for the PO/SA under the pre-acceptance disposition of 20
 - the retained HOF-IB3-001 handoff;
 - the code at the candidate head.
 
-None of these four records is disposed of here. No implementation change is made for them until the PO/SA returns a disposition.
+None of these four records was disposed of by Claude. **PO/SA disposition 2026-10-08:** DDR-IB3-01 ACCEPTED AS IMPLEMENTED (CONFORMS BY APPROVED DDR-IB3-01); DDR-IB3-03 ACCEPTED AS IMPLEMENTED (CONFORMS BY APPROVED DDR-IB3-03); DDR-IB3-04 ACCEPTED, TEST-ONLY LOCATION EXCEPTION (APPROVED WORK-PACKAGE IMPLEMENTATION EXCEPTION); DDR-IB3-05 ACCEPTED AS IMPLEMENTED (CONFORMS BY APPROVED DDR-IB3-05). No code was changed for them. The cards below are kept as prepared for the decision.
 
 ## Summary
 

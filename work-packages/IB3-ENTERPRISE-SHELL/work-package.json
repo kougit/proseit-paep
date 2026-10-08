@@ -52,7 +52,12 @@
     "DDR-IB3-02": "ACCEPTED 2026-10-07 (PO/SA): ACCEPTED IMPLEMENTATION DIVERGENCE; the rail flyout uses the governed PaepPopover positioning (keyboard, focus restoration, dismissal, LTR/RTL, viewport collision/shift, 16 px edge margin); state 002 CONFORMS BY APPROVED DDR-IB3-02",
     "DDR-IB3-06": "CLOSED - REMEDIATED TO CONFORMANCE 2026-10-07: per-item unread marker and \"Account: {name}\" are catalogued keys paep.shell.notifications.item.unread and paep.shell.account.button.named (123 keys; qa:enterprise E04; negative N34)",
     "DDR-IB3-08": "PO/SA DESIGN DISPOSITION APPROVED 2026-10-07 / MANUAL ACCESSIBILITY VERIFICATION PENDING: the exact visible locale token occurs in the accessible name for every locale (\"EN, Language: English\"); not closed",
-    "DDR-IB3-01, -03, -04, -05": "CANDIDATES - PO/SA DECISION REQUIRED (work-packages/IB3-ENTERPRISE-SHELL/DDR-DECISION-TABLE.md); no implementation change until disposition"
+    "DDR-IB3-01": "ACCEPTED AS IMPLEMENTED 2026-10-08 (PO/SA): catalogued description plus lock reason; no trailingMarker field, no sub-line key; state 008 locked CONFORMS BY APPROVED DDR-IB3-01",
+    "DDR-IB3-03": "ACCEPTED AS IMPLEMENTED 2026-10-08 (PO/SA): the checked radio identifies the current context; no paep.shell.context.current key; state 007 switch-dialog CONFORMS BY APPROVED DDR-IB3-03",
+    "DDR-IB3-04": "ACCEPTED - TEST-ONLY LOCATION EXCEPTION 2026-10-08 (PO/SA): APPROVED WORK-PACKAGE IMPLEMENTATION EXCEPTION; doubles stay in packages/enterprise/src/lib/testing/ (not exported, spec-only, not bundled); qa:contracts S10 unchanged",
+    "DDR-IB3-05": "ACCEPTED AS IMPLEMENTED 2026-10-08 (PO/SA): palette, notification panel and account menu stay in the initial chunk; no secondary entry point; DDR-IB3-07 controls retained; CONFORMS BY APPROVED DDR-IB3-05"
   },
+  "help_link_trust": "PO/SA decision 2026-10-08: no host allowlist for IB3; external help links https: only; javascript:, data:, file: and other schemes rejected; Angular sanitisation and rel=noopener noreferrer retained; the host help-link configuration is a trusted configuration boundary",
+  "ci_timing_observation": "2026-10-08 PO/SA: PAEP / enterprise-shell 17 m 27 s of 20 m on 118752a (run 37672551779); no change, timeout stays 20 minutes",
   "strict_csp": "PO/SA decision 2026-10-07: strict nonce-based CSP approved (WORK_PACKAGE §8a); profile apps/reference-app/deployment/csp-strict.json"
 }

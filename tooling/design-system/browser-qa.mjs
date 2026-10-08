@@ -67,8 +67,27 @@ export async function open(context, url, trace = null) {
   const errors = [];
   page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
   page.on('pageerror', (e) => errors.push(String(e)));
+  // Diagnostics only (PO/SA 2026-10-07 section 8): what the page was waiting on if navigation does not settle.
+  const t0 = Date.now();
+  const inflight = new Map();
+  const events = [];
+  page.on('request', (r) => inflight.set(r, Date.now() - t0));
+  page.on('requestfinished', (r) => inflight.delete(r));
+  page.on('requestfailed', (r) => { events.push(`request failed +${Date.now() - t0}ms ${r.url()} (${r.failure()?.errorText})`); inflight.delete(r); });
+  page.on('domcontentloaded', () => events.push(`domcontentloaded +${Date.now() - t0}ms`));
+  page.on('load', () => events.push(`load +${Date.now() - t0}ms`));
+  page.on('frameattached', () => events.push(`frame attached +${Date.now() - t0}ms`));
+  page.on('framenavigated', (f) => { if (f !== page.mainFrame()) events.push(`frame navigated +${Date.now() - t0}ms ${f.url()}`); });
   trace?.('navigation-start');
-  await page.goto(url, { waitUntil: 'networkidle' });
+  try {
+    await page.goto(url, { waitUntil: 'networkidle' });
+  } catch (e) {
+    const pending = [...inflight].map(([r, at]) => `pending since +${at}ms ${r.method()} ${r.url()}`);
+    const frames = page.frames().map((f) => f.url() || '(blank)');
+    const h1 = await page.locator('main h1').count().catch(() => 'unknown');
+    e.message += `\n  diagnostics: ${pending.length} request(s) in flight; main h1 count ${h1}; frames: ${frames.join(' | ')}\n  ${[...pending, ...events.slice(-20)].join('\n  ')}`;
+    throw e;
+  }
   trace?.('navigation-end; waiting for main h1');
   await page.waitForSelector('main h1', { timeout: 15000 });
   trace?.('h1-rendered');
@@ -398,6 +417,8 @@ async function main() {
       } catch (e) {
         const at = tr.phase();
         tr.log(`failed during ${at}: ${e.message.split('\n')[0]}`);
+        const diag = e.message.split('\n').filter((x) => x.startsWith('  diagnostics') || x.startsWith('  pending') || /^  (load|domcontentloaded|frame|request failed)/.test(x));
+        for (const x of diag) process.stderr.write(`[a11y-trace] audit ${n}/${jobs.length} ${pth} ${vp.name} ${dir} ${x.trim()}\n`);
         return { page: pth, viewport: vp.name, dir, problems: [`error during ${at}: ${e.message}`] };
       } finally { await ctx.close(); }
     });

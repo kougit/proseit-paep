@@ -51,7 +51,7 @@
     "DDR-IB3-07": "ACCEPTED 2026-10-07 (PO/SA): 500 kB raw target; hard maximums 525 kB raw / 150 kB transfer, fail-closed (qa:shell B1; evidence/IB3-ENTERPRISE-SHELL/gates/bundle-composition.json)",
     "DDR-IB3-02": "ACCEPTED 2026-10-07 (PO/SA): ACCEPTED IMPLEMENTATION DIVERGENCE; the rail flyout uses the governed PaepPopover positioning (keyboard, focus restoration, dismissal, LTR/RTL, viewport collision/shift, 16 px edge margin); state 002 CONFORMS BY APPROVED DDR-IB3-02",
     "DDR-IB3-06": "CLOSED - REMEDIATED TO CONFORMANCE 2026-10-07: per-item unread marker and \"Account: {name}\" are catalogued keys paep.shell.notifications.item.unread and paep.shell.account.button.named (123 keys; qa:enterprise E04; negative N34)",
-    "DDR-IB3-08": "CLOSED - PO/SA HUMAN ACCESSIBILITY ACCEPTANCE 2026-10-14 (human gate H2 APPROVED BY PO/SA; design disposition approved 2026-10-07: the exact visible locale token occurs in the accessible name for every locale, \"EN, Language: English\"). Not a record of independent NVDA verification; specialist assistive-technology validation may be extended during product pilot/UAT",
+    "DDR-IB3-08": "CLOSED - PO/SA HUMAN ACCESSIBILITY ACCEPTANCE 2026-10-14 (human gate H2 APPROVED BY PO/SA; design disposition approved 2026-10-07: the exact visible locale token occurs in the accessible name for every locale, \"EN, Language: English\"). Not a record of independent NVDA verification; deeper assistive-technology qualification may continue during product pilots/UAT (PAEP-A11Y-AT-PILOT)",
     "DDR-IB3-01": "ACCEPTED AS IMPLEMENTED 2026-10-08 (PO/SA): catalogued description plus lock reason; no trailingMarker field, no sub-line key; state 008 locked CONFORMS BY APPROVED DDR-IB3-01",
     "DDR-IB3-03": "ACCEPTED AS IMPLEMENTED 2026-10-08 (PO/SA): the checked radio identifies the current context; no paep.shell.context.current key; state 007 switch-dialog CONFORMS BY APPROVED DDR-IB3-03",
     "DDR-IB3-04": "ACCEPTED - TEST-ONLY LOCATION EXCEPTION 2026-10-08 (PO/SA): APPROVED WORK-PACKAGE IMPLEMENTATION EXCEPTION; doubles stay in packages/enterprise/src/lib/testing/ (not exported, spec-only, not bundled); qa:contracts S10 unchanged",
@@ -62,12 +62,13 @@
   "strict_csp": "PO/SA decision 2026-10-07: strict nonce-based CSP approved (WORK_PACKAGE §8a); profile apps/reference-app/deployment/csp-strict.json",
   "human_gates": {
     "disposition": "PO/SA 2026-10-14, Dr Kamulegeya Grace B (PhD), Product Owner / Solutions Architect; human review boundary H1-H6 approved for IB3 against the frozen candidate 9b03d484df19e1002c2e48091f837fc1d24d8b57 (run 37733276322); record work-packages/IB3-ENTERPRISE-SHELL/HUMAN_GATES.md",
-    "H1": "APPROVED BY PO/SA",
-    "H2": "APPROVED BY PO/SA (specialist AT validation may continue in pilot/UAT)",
+    "H1": "APPROVED BY PO/SA; for AC-IB3-07: PO/SA HUMAN ACCESSIBILITY ACCEPTANCE - APPROVED",
+    "H2": "APPROVED BY PO/SA; for AC-IB3-07: PO/SA HUMAN ACCESSIBILITY ACCEPTANCE - APPROVED; specialist assistive-technology validation deferred to product pilot/UAT (PAEP-A11Y-AT-PILOT)",
     "H3": "APPROVED FOR IB3 - PILOT VALIDATION OBLIGATION PAEP-LOC-AR-PILOT",
     "H4": "APPROVED FOR IB3 - PILOT VALIDATION OBLIGATION PAEP-LOC-HE-PILOT",
     "H5": "PASS - PO/SA APPROVED (44/44 ACCEPTED BY PO/SA)",
-    "H6": "PASS - PO/SA APPROVED (incl. repository visibility review)"
+    "H6": "PASS - PO/SA APPROVED (incl. repository visibility review)",
+    "AC-IB3-07": "PASS - PO/SA AUTHORIZED HUMAN-REVIEW DISPOSITION (PO/SA 2026-10-14: the H1 and H2 approvals cover the manual NVDA record and the structured usability evaluation for IB3; no specialist execution, versions, transcripts or observations recorded or claimed; implementation candidate 9b03d484df19e1002c2e48091f837fc1d24d8b57; human-gate record a45105f81a6ff7244cecedb8fcedaa8f24abfb3d)"
   },
   "carried_obligations": [
     {
@@ -101,6 +102,19 @@
       ],
       "blocks_ib3": false,
       "record": "work-packages/IB3-ENTERPRISE-SHELL/HUMAN_GATES.md (H3 and H4)"
+    },
+    {
+      "id": "PAEP-A11Y-AT-PILOT",
+      "status": "OPEN",
+      "raised": "2026-10-14 (PO/SA decision on AC-IB3-07)",
+      "required_before": "product pilot / UAT accessibility qualification",
+      "required": [
+        "specialist assistive-technology validation: NVDA with Chromium on Windows, exact versions recorded",
+        "specialist keyboard validation",
+        "any material PAEP platform accessibility defect found raised against the PAEP backlog"
+      ],
+      "blocks_ib3": false,
+      "record": "work-packages/IB3-ENTERPRISE-SHELL/HUMAN_GATES.md (AC-IB3-07 disposition)"
     }
   ]
 }

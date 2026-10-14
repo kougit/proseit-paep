@@ -8,8 +8,8 @@ The human review boundary H1 to H6 was approved for IB3 by Dr Kamulegeya Grace B
 
 | Gate | Disposition |
 | --- | --- |
-| H1 keyboard | APPROVED BY PO/SA |
-| H2 NVDA / assistive technology | APPROVED BY PO/SA (specialist AT validation may continue in pilot/UAT) |
+| H1 keyboard | APPROVED BY PO/SA (for AC-IB3-07: PO/SA HUMAN ACCESSIBILITY ACCEPTANCE — APPROVED) |
+| H2 NVDA / assistive technology | APPROVED BY PO/SA (for AC-IB3-07: PO/SA HUMAN ACCESSIBILITY ACCEPTANCE — APPROVED; specialist assistive-technology validation deferred to product pilot/UAT, obligation PAEP-A11Y-AT-PILOT) |
 | H3 Arabic | APPROVED FOR IB3, WITH CONTROLLED DEFERRAL; carried obligation PAEP-LOC-AR-PILOT (OPEN) |
 | H4 Hebrew | APPROVED FOR IB3, WITH CONTROLLED DEFERRAL; carried obligation PAEP-LOC-HE-PILOT (OPEN) |
 | H5 visuals | PASS — PO/SA APPROVED (44/44 ACCEPTED BY PO/SA) |
@@ -113,7 +113,16 @@ Check:
 
 Disposition (PO/SA 2026-10-14), recorded verbatim: "IB3 human accessibility acceptance approved by the PO/SA. Specialist assistive-technology validation may be extended during product pilot/UAT. Any material PAEP platform accessibility defect discovered there shall be raised against the PAEP backlog."
 
-DDR-IB3-08: CLOSED — PO/SA HUMAN ACCESSIBILITY ACCEPTANCE. This is not a record that NVDA was independently verified; the Windows, NVDA and browser versions were not recorded.
+DDR-IB3-08: CLOSED — PO/SA HUMAN ACCESSIBILITY ACCEPTANCE. Deeper assistive-technology qualification may continue during product pilots/UAT. This is not a record that NVDA was independently verified; the Windows, NVDA and browser versions were not recorded.
+
+### AC-IB3-07 disposition (PO/SA 2026-10-14)
+
+PO/SA decision on AC-IB3-07 (Dr Kamulegeya Grace B (PhD), Product Owner / Solutions Architect, 2026-10-14): YES. The H1 and H2 PO/SA human-review approvals cover the two outstanding human-evidence records of AC-IB3-07 for IB3 (the manual NVDA record and the structured independent usability evaluation). They are recorded as: H1 PO/SA HUMAN ACCESSIBILITY ACCEPTANCE — APPROVED; H2 PO/SA HUMAN ACCESSIBILITY ACCEPTANCE — APPROVED, specialist assistive-technology validation deferred to product pilot/UAT. The deferral is authorised by the PO/SA and is not an IB3 blocker; it is carried as obligation PAEP-A11Y-AT-PILOT (OPEN). No specialist keyboard or NVDA execution, Windows, NVDA or Chromium version, transcript or test observation is recorded or claimed, and no usability-evaluation session is claimed. ACCEPTANCE.md is unchanged.
+
+- AC-IB3-07: PASS — PO/SA AUTHORIZED HUMAN-REVIEW DISPOSITION.
+- Implementation candidate: `9b03d484df19e1002c2e48091f837fc1d24d8b57`.
+- Human-gate record: `a45105f81a6ff7244cecedb8fcedaa8f24abfb3d`; this disposition is recorded in the records commit that follows it.
+- Carried obligation PAEP-A11Y-AT-PILOT (OPEN): specialist assistive-technology validation (NVDA with Chromium on Windows, exact versions recorded) and specialist keyboard validation in product pilot/UAT; any material PAEP platform accessibility defect found is raised against the PAEP backlog. Not an IB3 blocker.
 
 ## H3 and H4. Arabic and Hebrew native-copy review
 

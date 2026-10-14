@@ -11,8 +11,21 @@
     "date": "2026-10-05",
     "manifest_sha256": "645dd2e9bb4274c9b787bbbcc52cf53eb4f08dc21d733b5985aa3ab572f4fce5"
   },
-  "status": "IN PROGRESS",
-  "acceptance": null,
+  "status": "ACCEPTED",
+  "acceptance": {
+    "status": "ACCEPTED",
+    "authority": "Product Owner / Solutions Architect",
+    "date": "2026-10-14",
+    "approver": "Dr Kamulegeya Grace B (PhD)",
+    "accepted_implementation": "9b03d484df19e1002c2e48091f837fc1d24d8b57",
+    "acceptance_record": "6a5ad84284919c14697c2d31d0915431795f22e1",
+    "evidence": "implementation CI 37733276322 (19/19, PAEP / gate PASS); acceptance-record CI 38540629500 (19/19, PAEP / gate PASS); independent QA High 0 / Medium 0; RR6 PASS; H1-H6 PO/SA dispositions; AC-IB3-07 PASS - PO/SA AUTHORIZED HUMAN-REVIEW DISPOSITION; all DDR-IB3 dispositions recorded",
+    "carried_obligations_open": [
+      "PAEP-LOC-AR-PILOT",
+      "PAEP-LOC-HE-PILOT",
+      "PAEP-A11Y-AT-PILOT"
+    ]
+  },
   "predecessor": {
     "id": "IB2-FOUNDATION-COMPONENTS",
     "status": "ACCEPTED",
@@ -29,7 +42,7 @@
   "evidence_path": "evidence/IB3-ENTERPRISE-SHELL/",
   "human_acceptance_required": true,
   "claude_md_disposition": "PROTECTED GOVERNED ARTIFACT: narrow amendment permitting IB3-ENTERPRISE-SHELL only (policyChange)",
-  "enterprise_shell": "IN PROGRESS",
+  "enterprise_shell": "ACCEPTED",
   "nx_disposition": "NOT REQUIRED",
   "ib2DdrFollowUps": {
     "DDR-IB2-07": "CLOSED 2026-10-06 (stage S1a; evidence/IB3-ENTERPRISE-SHELL/ddr-ib2-07/CLOSURE.md)",

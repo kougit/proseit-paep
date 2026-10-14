@@ -36,8 +36,8 @@
     "HOF-IB2-001 v1.2": "APPROVED_FOR_IMPLEMENTATION 2026-10-07 (PO/SA); built and tested (AC-IB3-25 PASS; evidence/design-handoff/HOF-IB2-001/v1.2/)"
   },
   "native_copy_review": {
-    "ar": "PENDING - REQUIRED BEFORE IB3 ACCEPTANCE",
-    "he": "PENDING - REQUIRED BEFORE IB3 ACCEPTANCE"
+    "ar": "APPROVED FOR IB3, WITH CONTROLLED DEFERRAL (PO/SA 2026-10-14; native review NOT PERFORMED): Arabic platform/RTL mechanics are accepted for IB3 on the available engineering and PO/SA evidence. Advanced native Arabic terminology and copy validation is deferred to product pilots / product-specific localisation qualification. Carried obligation PAEP-LOC-AR-PILOT",
+    "he": "APPROVED FOR IB3, WITH CONTROLLED DEFERRAL (PO/SA 2026-10-14; native review NOT PERFORMED): Hebrew platform/RTL mechanics are accepted for IB3 on the available engineering and PO/SA evidence. Advanced native Hebrew terminology and copy validation is deferred to product pilots / product-specific localisation qualification. Carried obligation PAEP-LOC-HE-PILOT"
   },
   "findings_open": {
     "high": 0,
@@ -51,7 +51,7 @@
     "DDR-IB3-07": "ACCEPTED 2026-10-07 (PO/SA): 500 kB raw target; hard maximums 525 kB raw / 150 kB transfer, fail-closed (qa:shell B1; evidence/IB3-ENTERPRISE-SHELL/gates/bundle-composition.json)",
     "DDR-IB3-02": "ACCEPTED 2026-10-07 (PO/SA): ACCEPTED IMPLEMENTATION DIVERGENCE; the rail flyout uses the governed PaepPopover positioning (keyboard, focus restoration, dismissal, LTR/RTL, viewport collision/shift, 16 px edge margin); state 002 CONFORMS BY APPROVED DDR-IB3-02",
     "DDR-IB3-06": "CLOSED - REMEDIATED TO CONFORMANCE 2026-10-07: per-item unread marker and \"Account: {name}\" are catalogued keys paep.shell.notifications.item.unread and paep.shell.account.button.named (123 keys; qa:enterprise E04; negative N34)",
-    "DDR-IB3-08": "PO/SA DESIGN DISPOSITION APPROVED 2026-10-07 / MANUAL ACCESSIBILITY VERIFICATION PENDING: the exact visible locale token occurs in the accessible name for every locale (\"EN, Language: English\"); not closed",
+    "DDR-IB3-08": "CLOSED - PO/SA HUMAN ACCESSIBILITY ACCEPTANCE 2026-10-14 (human gate H2 APPROVED BY PO/SA; design disposition approved 2026-10-07: the exact visible locale token occurs in the accessible name for every locale, \"EN, Language: English\"). Not a record of independent NVDA verification; specialist assistive-technology validation may be extended during product pilot/UAT",
     "DDR-IB3-01": "ACCEPTED AS IMPLEMENTED 2026-10-08 (PO/SA): catalogued description plus lock reason; no trailingMarker field, no sub-line key; state 008 locked CONFORMS BY APPROVED DDR-IB3-01",
     "DDR-IB3-03": "ACCEPTED AS IMPLEMENTED 2026-10-08 (PO/SA): the checked radio identifies the current context; no paep.shell.context.current key; state 007 switch-dialog CONFORMS BY APPROVED DDR-IB3-03",
     "DDR-IB3-04": "ACCEPTED - TEST-ONLY LOCATION EXCEPTION 2026-10-08 (PO/SA): APPROVED WORK-PACKAGE IMPLEMENTATION EXCEPTION; doubles stay in packages/enterprise/src/lib/testing/ (not exported, spec-only, not bundled); qa:contracts S10 unchanged",
@@ -59,5 +59,48 @@
   },
   "help_link_trust": "PO/SA decision 2026-10-08: no host allowlist for IB3; external help links https: only; javascript:, data:, file: and other schemes rejected; Angular sanitisation and rel=noopener noreferrer retained; the host help-link configuration is a trusted configuration boundary",
   "ci_timing_observation": "2026-10-08 PO/SA: PAEP / enterprise-shell 17 m 27 s of 20 m on 118752a (run 37672551779); no change, timeout stays 20 minutes",
-  "strict_csp": "PO/SA decision 2026-10-07: strict nonce-based CSP approved (WORK_PACKAGE §8a); profile apps/reference-app/deployment/csp-strict.json"
+  "strict_csp": "PO/SA decision 2026-10-07: strict nonce-based CSP approved (WORK_PACKAGE §8a); profile apps/reference-app/deployment/csp-strict.json",
+  "human_gates": {
+    "disposition": "PO/SA 2026-10-14, Dr Kamulegeya Grace B (PhD), Product Owner / Solutions Architect; human review boundary H1-H6 approved for IB3 against the frozen candidate 9b03d484df19e1002c2e48091f837fc1d24d8b57 (run 37733276322); record work-packages/IB3-ENTERPRISE-SHELL/HUMAN_GATES.md",
+    "H1": "APPROVED BY PO/SA",
+    "H2": "APPROVED BY PO/SA (specialist AT validation may continue in pilot/UAT)",
+    "H3": "APPROVED FOR IB3 - PILOT VALIDATION OBLIGATION PAEP-LOC-AR-PILOT",
+    "H4": "APPROVED FOR IB3 - PILOT VALIDATION OBLIGATION PAEP-LOC-HE-PILOT",
+    "H5": "PASS - PO/SA APPROVED (44/44 ACCEPTED BY PO/SA)",
+    "H6": "PASS - PO/SA APPROVED (incl. repository visibility review)"
+  },
+  "carried_obligations": [
+    {
+      "id": "PAEP-LOC-AR-PILOT",
+      "status": "OPEN",
+      "language": "Arabic",
+      "raised": "2026-10-14 (PO/SA, human gates H3/H4)",
+      "required_before": "a product claims production-qualified Arabic",
+      "required": [
+        "native or fluent copy review",
+        "product-domain terminology review",
+        "long-content review",
+        "RTL product workflow validation",
+        "corrections fed back to the shared PAEP catalogue where platform-generic"
+      ],
+      "blocks_ib3": false,
+      "record": "work-packages/IB3-ENTERPRISE-SHELL/HUMAN_GATES.md (H3 and H4)"
+    },
+    {
+      "id": "PAEP-LOC-HE-PILOT",
+      "status": "OPEN",
+      "language": "Hebrew",
+      "raised": "2026-10-14 (PO/SA, human gates H3/H4)",
+      "required_before": "a product claims production-qualified Hebrew",
+      "required": [
+        "native or fluent copy review",
+        "product-domain terminology review",
+        "long-content review",
+        "RTL product workflow validation",
+        "corrections fed back to the shared PAEP catalogue where platform-generic"
+      ],
+      "blocks_ib3": false,
+      "record": "work-packages/IB3-ENTERPRISE-SHELL/HUMAN_GATES.md (H3 and H4)"
+    }
+  ]
 }

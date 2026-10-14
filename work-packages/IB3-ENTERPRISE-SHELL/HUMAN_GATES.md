@@ -2,9 +2,22 @@
 
 These are the evidence forms for the human gates in the PO/SA instruction of 2026-10-08 (sections 5 to 13). IB3 cannot be ACCEPTED until each gate has a human result on record. Claude prepared these forms. Claude does not perform, infer or fabricate any judgment in them. Automated evidence (axe, `qa:shell`, `qa:accessibility`, screenshots) is never a human result.
 
+## PO/SA human-gate disposition 2026-10-14
+
+The human review boundary H1 to H6 was approved for IB3 by Dr Kamulegeya Grace B (PhD), Product Owner / Solutions Architect, on 2026-10-14, against the frozen candidate `9b03d484df19e1002c2e48091f837fc1d24d8b57` (exact-head CI run 37733276322, 19 of 19 jobs green, `PAEP / gate` PASS). Claude recorded the disposition below. Claude performed no review and recorded no result the PO/SA did not give. Where specialist validation was deferred, the deferral is recorded as such; a deferred review is not described as performed.
+
+| Gate | Disposition |
+| --- | --- |
+| H1 keyboard | APPROVED BY PO/SA |
+| H2 NVDA / assistive technology | APPROVED BY PO/SA (specialist AT validation may continue in pilot/UAT) |
+| H3 Arabic | APPROVED FOR IB3, WITH CONTROLLED DEFERRAL; carried obligation PAEP-LOC-AR-PILOT (OPEN) |
+| H4 Hebrew | APPROVED FOR IB3, WITH CONTROLLED DEFERRAL; carried obligation PAEP-LOC-HE-PILOT (OPEN) |
+| H5 visuals | PASS — PO/SA APPROVED (44/44 ACCEPTED BY PO/SA) |
+| H6 provenance | PASS — PO/SA APPROVED |
+
 ## Candidate and freeze
 
-- **Candidate:** the frozen human-gate head. That is the commit that records the 2026-10-08 DDR dispositions and has green exact-head CI. Its full SHA is in the PR #12 readiness reply and in `/mnt/project-files/ib3/human-gates/README.md`.
+- **Candidate:** the frozen human-gate head `9b03d484df19e1002c2e48091f837fc1d24d8b57`, frozen on 2026-10-08 at 16:17 UTC. It follows the records commit for the 2026-10-08 DDR dispositions (3befb2e) and has green exact-head CI (run 37733276322). The same SHA is in the project's shared review folder (`/mnt/project-files/ib3/human-gates/README.md`, outside the repository).
 - **Freeze:** while review is in progress, no code or controlled record changes, except to record human evidence a reviewer has submitted.
 - **SHA check:** each reviewer writes down the SHA they reviewed. A result for any other SHA does not count.
 - **Serving:** run `npm run build:reference-app`, then serve `dist/reference-app/browser`. The sample shell is at `/workspace`. RTL is `?dir=rtl`.
@@ -63,9 +76,9 @@ Verify in each area:
 
 | Candidate SHA | Reviewer | Role | Date | Browser + version | Result | Findings | Corrective action if FAILED |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| | | | | | NOT STARTED | | |
+| `9b03d484df19e1002c2e48091f837fc1d24d8b57` | Dr Kamulegeya Grace B (PhD) | Product Owner / Solutions Architect | 2026-10-14 | Not recorded | APPROVED BY PO/SA | The PO/SA accepted the keyboard / focus interaction evidence. No item-by-item walkthrough result was recorded, and none is claimed here | n/a |
 
-AC-IB3-06 stays IN PROGRESS until this row records PASS.
+Disposition (PO/SA 2026-10-14): H1 APPROVED BY PO/SA. Deeper keyboard validation may continue in product pilots / UAT without reopening IB3, unless a material platform defect is found.
 
 ## H2. NVDA with Chromium on Windows (AC-IB3-07, DDR-IB3-08)
 
@@ -96,9 +109,11 @@ Check:
 
 | Candidate SHA | Reviewer | Role | Date | Windows | NVDA | Browser | Result | DDR-IB3-08 | Findings | Corrective action if FAILED |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| | | | | | | | NOT STARTED | NOT STARTED | | |
+| `9b03d484df19e1002c2e48091f837fc1d24d8b57` | Dr Kamulegeya Grace B (PhD) | Product Owner / Solutions Architect | 2026-10-14 | Not recorded | Not recorded | Not recorded | APPROVED BY PO/SA | CLOSED — PO/SA HUMAN ACCESSIBILITY ACCEPTANCE | No transcript or per-item result was recorded, and none is claimed here | n/a |
 
-If PASS, DDR-IB3-08 may be recorded as CLOSED — MANUAL ACCESSIBILITY VERIFIED. If FAILED, DDR-IB3-08 stays OPEN with the exact defect recorded.
+Disposition (PO/SA 2026-10-14), recorded verbatim: "IB3 human accessibility acceptance approved by the PO/SA. Specialist assistive-technology validation may be extended during product pilot/UAT. Any material PAEP platform accessibility defect discovered there shall be raised against the PAEP backlog."
+
+DDR-IB3-08: CLOSED — PO/SA HUMAN ACCESSIBILITY ACCEPTANCE. This is not a record that NVDA was independently verified; the Windows, NVDA and browser versions were not recorded.
 
 ## H3 and H4. Arabic and Hebrew native-copy review
 
@@ -121,8 +136,21 @@ This is copy validation. RTL mechanics already passed and are not reopened unles
 
 | Gate | Language | Candidate SHA | Reviewer | Role / language competence | Date | Result | Findings | Corrective action if FAILED |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| H3 | Arabic | | | | | NOT STARTED | | |
-| H4 | Hebrew | | | | | NOT STARTED | | |
+| H3 | Arabic | `9b03d484df19e1002c2e48091f837fc1d24d8b57` | Dr Kamulegeya Grace B (PhD) | Product Owner / Solutions Architect (native review not performed) | 2026-10-14 | APPROVED FOR IB3, WITH CONTROLLED DEFERRAL | Native Arabic copy review was not performed | Carried obligation PAEP-LOC-AR-PILOT |
+| H4 | Hebrew | `9b03d484df19e1002c2e48091f837fc1d24d8b57` | Dr Kamulegeya Grace B (PhD) | Product Owner / Solutions Architect (native review not performed) | 2026-10-14 | APPROVED FOR IB3, WITH CONTROLLED DEFERRAL | Native Hebrew copy review was not performed | Carried obligation PAEP-LOC-HE-PILOT |
+
+Dispositions (PO/SA 2026-10-14). The Arabic text is the PO/SA's verbatim; the PO/SA directed the same text with Hebrew wording for H4:
+- H3: "Arabic platform/RTL mechanics are accepted for IB3 on the available engineering and PO/SA evidence. Advanced native Arabic terminology and copy validation is deferred to product pilots / product-specific localisation qualification."
+- H4: "Hebrew platform/RTL mechanics are accepted for IB3 on the available engineering and PO/SA evidence. Advanced native Hebrew terminology and copy validation is deferred to product pilots / product-specific localisation qualification."
+
+**Carried obligations PAEP-LOC-AR-PILOT and PAEP-LOC-HE-PILOT (OPEN).** Each is required before a product claims production-qualified Arabic (respectively Hebrew):
+1. native or fluent copy review;
+2. product-domain terminology review;
+3. long-content review;
+4. RTL product workflow validation;
+5. corrections fed back to the shared PAEP catalogue where they are platform-generic.
+
+Neither obligation blocks IB3. Both are also recorded in `work-package.json` (`carried_obligations`) and in `ACCEPTANCE_REPORT.md`.
 
 ## H5. PO/SA visual acceptance (AC-IB3-16)
 
@@ -150,34 +178,55 @@ Automated screenshot generation is not this review. Use the per-capture form in 
 
 | Candidate SHA | Reviewer | Date | PASS | CONCERN | Overall | Material concerns (capture, screen, correction) |
 | --- | --- | --- | --- | --- | --- | --- |
-| | | | 0 | 0 | NOT STARTED | |
+| `9b03d484df19e1002c2e48091f837fc1d24d8b57` | Dr Kamulegeya Grace B (PhD) | 2026-10-14 | 44 | 0 | PASS — PO/SA APPROVED | None |
 
 The overall result is BLOCKED if there is any material CONCERN. AC-IB3-16 is PASS only when all 44 pass.
+
+Disposition (PO/SA 2026-10-14): 44/44 ACCEPTED BY PO/SA. The set is exactly the 44 retained captures (44 PNG files in `evidence/IB3-ENTERPRISE-SHELL/visual/`, 44 rows in its README), unchanged since the candidate; no capture was regenerated. AC-IB3-16: PASS — PO/SA VISUAL ACCEPTANCE.
 
 ## H6. Provenance review (AC-IB3-19)
 
 - **Reviewer:** the PO/SA, or a delegated governance / provenance reviewer.
 
 Verify that the candidate retains each of these (the per-item form is in `/mnt/project-files/ib3/human-gates/H6-provenance.md`):
-- [ ] Approved HOF-IB3-001 (manifest `645dd2e9…fce5`).
-- [ ] Approved HOF-IB2-001 v1.2.
-- [ ] The DWP / work-package linkage.
-- [ ] The human similarity PASS.
-- [ ] Source / input hashes.
-- [ ] The asset register.
-- [ ] Shell icon provenance.
-- [ ] The C2PA explanation.
-- [ ] Implementation provenance.
-- [ ] Dependency / SBOM evidence.
-- [ ] DDR records and dispositions.
-- [ ] The design conformance mapping.
-- [ ] The exact candidate SHA.
-- [ ] No prohibited third-party template source or assets.
-- [ ] Dependency and package-lock status.
-- [ ] Reviewer / approval history.
+- [x] Approved HOF-IB3-001 (manifest `645dd2e9…fce5`).
+- [x] Approved HOF-IB2-001 v1.2.
+- [x] The DWP / work-package linkage.
+- [x] The human similarity PASS.
+- [x] Source / input hashes.
+- [x] The asset register.
+- [x] Shell icon provenance.
+- [x] The C2PA explanation.
+- [x] Implementation provenance.
+- [x] Dependency / SBOM evidence.
+- [x] DDR records and dispositions.
+- [x] The design conformance mapping.
+- [x] The exact candidate SHA.
+- [x] No prohibited third-party template source or assets.
+- [x] Dependency and package-lock status.
+- [x] Reviewer / approval history.
 
 | Candidate SHA | Reviewer | Role | Date | Result | Findings | Corrective action if FAILED |
 | --- | --- | --- | --- | --- | --- | --- |
-| | | | | NOT STARTED | | |
+| `9b03d484df19e1002c2e48091f837fc1d24d8b57` | Dr Kamulegeya Grace B (PhD) | Product Owner / Solutions Architect | 2026-10-14 | PASS — PO/SA APPROVED | None | n/a |
 
-AC-IB3-19 stays IN PROGRESS until this row records PASS.
+Disposition (PO/SA 2026-10-14): AC-IB3-19 PASS — PO/SA PROVENANCE ACCEPTANCE, against the frozen candidate. The PO/SA confirmation covers:
+- the clean-room records;
+- the design prompts and source records, retained;
+- the approved dependencies and licences;
+- the controlled package-lock and dependency state;
+- no proprietary template source or assets;
+- the human similarity review, retained;
+- the DDRs, traceable;
+- HOF / DWP / work-package traceability.
+
+**Repository visibility review.** The PO/SA instruction of 2026-10-14 states that the repository was made public, and the PO/SA confirmed each check below. The pointers name the existing evidence:
+
+| PO/SA-confirmed check | Existing evidence on the frozen candidate (run 37733276322, attempt 7, all jobs green) |
+| --- | --- |
+| No credentials or secrets | `PAEP / governance` runs `qa:ib0-wp05` W08 (no credential or secret signatures in files added or modified since the accepted baseline); `PAEP / security-provenance` (workflow security, action pinning, install-script and lockfile provenance; registry signatures); `qa:enterprise` E05 |
+| No private tenant or customer data | The reference app uses neutral sample data only (`apps/reference-app/src/app/shell-sample.ts`: `sample-tenant-a`, `sample-tenant-b`) |
+| No confidential commercial material | `qa:enterprise` E11 clean-room scan with negatives N28 to N30; the provenance register and the HOF similarity review |
+| No restricted evidence | `evidence/` holds gate output, captures of the sample app and the retained design-handoff records; W08 covers every evidence file added or modified since the accepted baseline |
+
+No repository content changed between the candidate and the visibility change: the branch head stayed `9b03d484df19e1002c2e48091f837fc1d24d8b57` until this records-only commit. So the existing evidence above is referenced, and no new scan was run. At the time of recording, the GitHub API reported the repository as private again; this does not change the review.

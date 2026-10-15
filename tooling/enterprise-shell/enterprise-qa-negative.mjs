@@ -5,7 +5,7 @@
  * One disposable copy of the repository (with .git, without node_modules) is made. P00 runs the gate on it unchanged
  * and must reproduce the gate's result on the repository exactly. Every other case applies one mutation, runs
  * enterprise-qa.mjs --root <copy> --json, restores the copy, and passes only when its target check FAILS with the
- * expected finding. The case count is pinned.
+ * expected finding. P01 and P02 are E10 positives against synthetic baselines (see below). The case count is pinned.
  *   node tooling/enterprise-shell/enterprise-qa-negative.mjs
  */
 import { spawnSync } from 'node:child_process';
@@ -17,7 +17,9 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const GATE = path.join(root, 'tooling/enterprise-shell/enterprise-qa.mjs');
 const SKIP = new Set(['node_modules', 'dist', '.angular', 'tmp', '.vitest-attachments']);
-const EXPECTED_CASES = 34;
+const EXPECTED_CASES = 39;
+/** P00 plus the two E10 baseline-aware positives P01 and P02. */
+const CONTROLS = 3;
 const ENT = 'packages/enterprise/src';
 const NAV = `${ENT}/lib/nav/nav.ts`;
 const SHELL = `${ENT}/lib/shell/shell.ts`;
@@ -55,7 +57,7 @@ const summary = (report) => (report?.checks || []).map((c) => `${c.id}:${c.pass 
   results.push({ id: 'P00', name: 'control: the unmutated copy reproduces the gate result on the repository', pass, detail: `${summary(there.report)} (exit ${there.status})` });
 }
 
-function negative(id, name, edits, target, finding) {
+function negative(id, name, edits, target, finding, expectPass = false) {
   const saved = new Map();
   let r;
   try {
@@ -77,7 +79,7 @@ function negative(id, name, edits, target, finding) {
     }
   }
   const c = r.report?.checks.find((x) => x.id === target);
-  const pass = r.status === 1 && Boolean(c) && !c.pass && finding.test(c.detail);
+  const pass = expectPass ? Boolean(c) && c.pass : r.status === 1 && Boolean(c) && !c.pass && finding.test(c.detail);
   results.push({ id, name, pass, detail: c ? `${target} ${c.pass ? 'PASS' : 'FAIL'}: ${c.detail}` : r.out || 'no report' });
 }
 
@@ -118,11 +120,52 @@ negative('N31', 'retained HOF manifest edited', [[`${HOF}/handoff.manifest.yaml`
 negative('N32', 'retained handoff file altered', [[`${HOF}/component-map.md`, append('| E-15 | an unapproved part |')]], 'E12', /handoff file component-map\.md sha256/);
 negative('N33', 'unlisted file in the retained handoff', [[`${HOF}/screens/SCR-SHELL-099--extra.html`, () => '<p>extra</p>']], 'E12', /unlisted file .*SCR-SHELL-099--extra\.html/);
 
+// E10 is baseline-aware (PO/SA authorisation 2026-10-15). Each case points the registry's active ACCEPTED generation at a
+// synthetic baseline: a commit object equal to the copy's HEAD with CLAUDE.md replaced, made with a private index so
+// neither HEAD nor the working tree moves. A baseline without the approved amendment (before promotion) and one that
+// already carries it (after promotion) are both exercised, whatever the repository's own active baseline is.
+const CLAUDE_OLD = '- Do not implement analytics/reporting UI, offline queues, the enterprise shell, or domain kits.';
+const CLAUDE_NEW_PREFIX = '- Do not implement analytics/reporting UI, offline queues, or domain kits. Do not implement the enterprise shell, except under';
+const REGISTRY = 'tooling/governance/baseline-registry.json';
+const claudeNow = fs.readFileSync(path.join(copy, 'CLAUDE.md'), 'utf8');
+const approvedLine = claudeNow.split('\n').find((l) => l.startsWith(CLAUDE_NEW_PREFIX));
+if (!approvedLine) throw new Error('CLAUDE.md carries no approved IB3 amendment line');
+const withoutAmendment = claudeNow.replace(approvedLine, CLAUDE_OLD);
+const withNeither = claudeNow.replace(`${approvedLine}\n`, '');
+const gitIn = (args, opts = {}) => spawnSync('git', ['-C', copy, ...args], { encoding: 'utf8', ...opts });
+function baselineCommit(claudeText) {
+  const env = { ...process.env, GIT_INDEX_FILE: path.join(scratch, 'baseline.index') };
+  gitIn(['read-tree', 'HEAD'], { env });
+  const blob = gitIn(['hash-object', '-w', '--stdin'], { input: claudeText }).stdout.trim();
+  gitIn(['update-index', '--cacheinfo', `100644,${blob},CLAUDE.md`], { env });
+  const tree = gitIn(['write-tree'], { env }).stdout.trim();
+  const commit = gitIn(['-c', 'user.name=paep-negative', '-c', 'user.email=paep-negative@invalid', 'commit-tree', tree, '-p', 'HEAD', '-m', 'synthetic E10 baseline']).stdout.trim();
+  fs.rmSync(env.GIT_INDEX_FILE, { force: true });
+  if (!/^[0-9a-f]{40}$/.test(commit)) throw new Error('synthetic E10 baseline commit not created');
+  return commit;
+}
+const atBaseline = (commit) => [REGISTRY, (t) => {
+  const reg = JSON.parse(t);
+  const active = [...reg.generations].reverse().find((g) => g.status === 'ACCEPTED');
+  active.acceptedCommit = commit;
+  return `${JSON.stringify(reg, null, 2)}\n`;
+}];
+const preBase = baselineCommit(withoutAmendment);
+const postBase = baselineCommit(claudeNow);
+const drift = append('- Claude may accept its own work packages.');
+negative('P01', 'control: E10 passes when the baseline lacks the amendment and CLAUDE.md adds exactly the approved line', [atBaseline(preBase)], 'E10', null, true);
+negative('N35', 'E10 baseline without the amendment: CLAUDE.md lacks the approved line', [atBaseline(preBase), ['CLAUDE.md', () => withoutAmendment]], 'E10', /differs from the baseline plus the one approved amendment/);
+negative('N36', 'E10 baseline without the amendment: approved line plus unrelated drift', [atBaseline(preBase), ['CLAUDE.md', drift]], 'E10', /differs from the baseline plus the one approved amendment/);
+negative('P02', 'control: E10 passes when the baseline already carries the amendment and CLAUDE.md equals it', [atBaseline(postBase)], 'E10', null, true);
+negative('N37', 'E10 baseline with the amendment: CLAUDE.md differs from it', [atBaseline(postBase), ['CLAUDE.md', drift]], 'E10', /differs from the baseline plus the one approved amendment/);
+negative('N38', 'E10 baseline with the amendment: CLAUDE.md reverts to the pre-amendment line', [atBaseline(postBase), ['CLAUDE.md', () => withoutAmendment]], 'E10', /differs from the baseline plus the one approved amendment/);
+negative('N39', 'E10 fails closed when the baseline has neither the original nor the approved line', [atBaseline(baselineCommit(withNeither))], 'E10', /baseline CLAUDE\.md lacks the amended line/);
+
 fs.rmSync(scratch, { recursive: true, force: true });
 const coverage = [];
-if (results.length !== EXPECTED_CASES + 1) coverage.push(`${results.length - 1} negative cases (expected ${EXPECTED_CASES})`);
+if (results.length !== EXPECTED_CASES + CONTROLS) coverage.push(`${results.length - CONTROLS} negative cases (expected ${EXPECTED_CASES})`);
 for (const r of results) console.log(`${r.pass ? 'PASS' : 'FAIL'} ${r.id} ${r.name} — ${r.detail}`);
 for (const c of coverage) console.log(`FAIL ${c}`);
 const failed = results.filter((r) => !r.pass).length + coverage.length;
-console.log(`\nPAEP enterprise-shell QA negatives: ${failed ? 'FAIL' : 'PASS'} (${results.filter((r) => r.pass).length}/${results.length}; ${EXPECTED_CASES} seeded negatives + control)`);
+console.log(`\nPAEP enterprise-shell QA negatives: ${failed ? 'FAIL' : 'PASS'} (${results.filter((r) => r.pass).length}/${results.length}; ${EXPECTED_CASES} seeded negatives + ${CONTROLS} controls)`);
 process.exit(failed ? 1 : 0);

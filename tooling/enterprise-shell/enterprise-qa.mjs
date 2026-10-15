@@ -238,9 +238,11 @@ let base = null;
     const was = git('show', `${base}:CLAUDE.md`).stdout.split('\n');
     const now = exists('CLAUDE.md') ? read('CLAUDE.md').split('\n') : [];
     const i = was.indexOf(CLAUDE_OLD);
-    if (i < 0) f.push('baseline CLAUDE.md lacks the amended line');
+    // Once Generation 5 is promoted, the accepted baseline already carries the amendment: CLAUDE.md must then equal it.
+    const promoted = i < 0 && was.includes(CLAUDE_NEW);
+    if (i < 0 && !promoted) f.push('baseline CLAUDE.md lacks the amended line');
     else {
-      const expected = [...was.slice(0, i), CLAUDE_NEW, ...was.slice(i + 1)];
+      const expected = promoted ? was : [...was.slice(0, i), CLAUDE_NEW, ...was.slice(i + 1)];
       if (JSON.stringify(now) !== JSON.stringify(expected)) {
         const diff = now.findIndex((l, k) => l !== expected[k]);
         f.push(`CLAUDE.md differs from the baseline plus the one approved amendment (first difference at line ${diff < 0 ? Math.min(now.length, expected.length) + 1 : diff + 1})`);

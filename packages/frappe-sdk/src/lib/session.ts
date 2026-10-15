@@ -7,7 +7,7 @@ import type { IdentityContext, SessionGateway, SessionOutcome, SignInRequest, Si
 import { adapterError, isPaepError } from './errors.js';
 import { safeReturnPath, serverLoginUrl, type Navigate } from './login-redirect.js';
 import { METHOD, methodMessage } from './methods.js';
-import type { CsrfHeaderSource, Transport } from './transport.js';
+import type { CsrfHeaderSource, Transport, WireResponse } from './transport.js';
 
 const CSRF_HEADER = 'X-Frappe-CSRF-Token';
 const TOKEN = /^[A-Za-z0-9]{8,256}$/;
@@ -67,7 +67,15 @@ export function createSessionGateway(transport: Transport, csrf: CsrfStore, navi
         if (who === 'Guest') { csrf.clear(); return { status: 'unauthenticated' }; }
         if (typeof who !== 'string' || !PRINCIPAL.test(who)) { csrf.clear(); return { status: 'invalid', error: adapterError('MALFORMED_RESPONSE') }; }
         user = who;
-        const response = await transport.send({ method: 'GET', path: METHOD.session });
+        let response: WireResponse;
+        try {
+          response = await transport.send({ method: 'GET', path: METHOD.session });
+        } catch (e) {
+          // The user is signed in (the step above returned them): a denial here is a backend permission problem, not a
+          // missing session, so it is reported as invalid instead of sending the user to a login that returns at once.
+          if (isPaepError(e) && e.code === 'PERMISSION_DENIED') { csrf.clear(); return { status: 'invalid', error: e }; }
+          throw e;
+        }
         const payload = sessionPayload(methodMessage(response.body), user);
         if (!payload) { csrf.clear(); return { status: 'invalid', error: adapterError('MALFORMED_RESPONSE', response.correlationId) }; }
         csrf.set(payload.token);
@@ -79,12 +87,16 @@ export function createSessionGateway(transport: Transport, csrf: CsrfStore, navi
     },
 
     async signOut(): Promise<SignOutResult> {
-      // Server-authoritative: local state is cleared whatever happens; success is reported only on a server success.
+      // Server-authoritative: success is reported only on a server success. The token is cleared once the session is
+      // gone (success, or the server says it is no longer authenticated); after any other failure it is kept, so the
+      // retryable error can actually be retried.
       try {
         const response = await transport.send({ method: 'POST', path: METHOD.logout });
-        return { outcome: { status: 'unauthenticated' }, correlationId: response.correlationId };
-      } finally {
         csrf.clear();
+        return { outcome: { status: 'unauthenticated' }, correlationId: response.correlationId };
+      } catch (e) {
+        if (!isPaepError(e) || e.category === 'authentication') csrf.clear();
+        throw e;
       }
     },
 

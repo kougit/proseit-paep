@@ -66,6 +66,8 @@ export interface TransportOptions {
 }
 
 const STATE_CHANGING = new Set<HttpMethod>(['POST', 'PUT', 'PATCH', 'DELETE']);
+/** A header-safe idempotency key: 1-128 letters, digits and "_ . : -". */
+const IDEMPOTENCY_KEY = /^[A-Za-z0-9_.:-]{1,128}$/;
 /** Upper bounds the configuration cannot exceed. */
 export const MAX_ATTEMPTS_LIMIT = 5;
 export const TIMEOUT_LIMIT_MS = 60_000;
@@ -124,20 +126,26 @@ export function createTransport(o: TransportOptions): Transport {
         if (!csrf) throw adapterError('CSRF_TOKEN_MISSING', requestId);
         Object.assign(headers, csrf);
       }
-      if (request.idempotencyKey !== undefined) headers['X-Idempotency-Key'] = request.idempotencyKey;
+      if (request.idempotencyKey !== undefined) {
+        if (!IDEMPOTENCY_KEY.test(request.idempotencyKey)) throw adapterError('INVALID_REFERENCE', requestId);
+        headers['X-Idempotency-Key'] = request.idempotencyKey;
+      }
       if (request.body !== undefined) headers['Content-Type'] = 'application/json';
       const init = {
         method: request.method, headers, credentials: 'include', redirect: 'error', cache: 'no-store',
         ...(request.body !== undefined ? { body: JSON.stringify(request.body) } : {}),
       } as const;
-      // A state-changing request is retried only when it carries an idempotency key, which every retry keeps.
+      // A state-changing request is retried only when it carries an idempotency key, which every retry keeps, and only
+      // after a rate-limit refusal (the server did not process it). A timeout, network failure or 5xx after a write may
+      // follow a committed change, and stock Frappe does not de-duplicate by key, so it is returned to the caller.
       const attempts = stateChanging && request.idempotencyKey === undefined ? 1 : o.maxAttempts;
+      const mayRetry = (error: PaepError): boolean => error.retryable && (!stateChanging || error.code === 'RATE_LIMITED');
       for (let n = 1; ; n += 1) {
         try {
           return await attempt(url, init, requestId);
         } catch (e) {
           const error: PaepError = isPaepError(e) ? e : adapterError('SERVICE_FAILURE', requestId);
-          if (!error.retryable || n >= attempts) throw error;
+          if (!mayRetry(error) || n >= attempts) throw error;
           await o.sleep(o.baseDelayMs * 2 ** (n - 1));
         }
       }

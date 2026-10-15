@@ -47,6 +47,8 @@ export interface CompiledResourceMap {
 
 const OPERATORS: readonly FilterOperator[] = ['eq', 'neq', 'in', 'notIn', 'gt', 'gte', 'lt', 'lte', 'between', 'contains', 'startsWith', 'isNull', 'isNotNull'];
 const RECORD_TYPE = /^[a-z][a-z0-9.-]{0,63}$/;
+/** A semantic record-type key as the resource map accepts it. */
+export const validRecordTypeKey = (key: unknown): boolean => typeof key === 'string' && RECORD_TYPE.test(key);
 const DOCTYPE = /^[A-Z][A-Za-z0-9 _-]{0,139}$/;
 const SEMANTIC = /^[A-Za-z][A-Za-z0-9_]{0,63}$/;
 const SERVER_FIELD = /^[a-z][a-z0-9_]{0,63}$/;
@@ -55,7 +57,9 @@ const MESSAGE_KEY = /^[a-z][A-Za-z0-9]*(\.[A-Za-z0-9]+){1,7}$/;
 const SERVER_NAME = /^[^\u0000-\u001f\u007f]{1,140}$/;
 /** Server fields the adapter reads itself; they are never mapped as record fields. */
 const RESERVED = new Set(['name', 'modified', 'creation', 'owner', 'modified_by', 'docstatus', 'idx', 'doctype']);
-const ENTITY_ID = /^[^\u0000-\u001f\u007f/\\]{1,140}$/;
+const ENTITY_ID = /^[^\u0000-\u001f\u007f\\]{1,140}$/;
+/** A "/" is allowed (Frappe naming series such as INV/24-25/0001); empty, "." and ".." segments are not. */
+const entitySegmentsSafe = (id: string): boolean => id.split('/').every((s) => s.length > 0 && s !== '.' && s !== '..');
 
 const compiled = new WeakMap<CompiledResourceMap, ReadonlyMap<RecordTypeKey, CompiledResource>>();
 
@@ -118,7 +122,7 @@ export function resourcesOf(map: CompiledResourceMap): ReadonlyMap<RecordTypeKey
 }
 
 /** A record identifier that can be placed in a path segment. */
-export const validEntityId = (id: unknown): id is EntityId => typeof id === 'string' && ENTITY_ID.test(id);
+export const validEntityId = (id: unknown): id is EntityId => typeof id === 'string' && ENTITY_ID.test(id) && entitySegmentsSafe(id);
 
 const RESOURCE = '/api/resource/';
 

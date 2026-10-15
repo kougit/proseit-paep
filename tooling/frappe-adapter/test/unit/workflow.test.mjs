@@ -18,7 +18,9 @@ test('the state and allowed actions come from the server, filtered to the approv
     allowedActions: [{ id: 'approve', labelKey: 'inspection.action.approve' }, { id: 'reject', labelKey: 'inspection.action.reject' }],
     concurrency: { serverVersion: DOC.modified },
   });
-  assert.deepEqual(JSON.parse(backend.calls[2].query.doc), DOC);
+  // Only the record reference reaches the transitions URL: no field value, whatever the record holds.
+  assert.deepEqual(JSON.parse(backend.calls[2].query.doc), { doctype: 'PMRA Inspection', name: 'INS-0001' });
+  assert.ok(!backend.calls[2].url.includes('Site%20A') && !backend.calls[2].url.includes('Open'));
 });
 
 test('an unknown server workflow state is a malformed response, never a guess', async () => {
@@ -42,7 +44,7 @@ test('an accepted transition is applied with the CSRF header, the caller token a
   const post = backend.calls.at(-1);
   assert.equal(post.headers['X-Frappe-CSRF-Token'] !== undefined, true);
   assert.equal(post.headers['X-Idempotency-Key'], 'op-0001');
-  assert.deepEqual(post.body, { doc: { ...DOC, modified: TOKEN.serverVersion }, action: 'Approve' });
+  assert.deepEqual(post.body, { doc: { doctype: 'PMRA Inspection', name: 'INS-0001', modified: TOKEN.serverVersion }, action: 'Approve' });
 });
 
 test('an action outside the latest server set is refused before any write', async () => {
@@ -72,7 +74,8 @@ test('a server denial maps to an authorization error', async () => {
 });
 
 test('a retried write keeps its idempotency key; only retryable failures are retried, a bounded number of times', async () => {
-  const { adapter, backend, sleeps } = makeAdapter([...signedIn, X.compatible, READ(), TRANSITIONS(), APPLY(503, {}), APPLY(503, {}), APPLY()]);
+  // A write is retried only after a rate-limit refusal (the server did not process it), keeping its key.
+  const { adapter, backend, sleeps } = makeAdapter([...signedIn, X.compatible, READ(), TRANSITIONS(), APPLY(429, {}), APPLY(429, {}), APPLY()]);
   await adapter.session.check();
   const result = await adapter.workflow.transition('inspection', { recordId: 'INS-0001', actionId: 'approve', concurrency: TOKEN });
   assert.equal(result.state.stateKey, 'approved');
@@ -81,10 +84,23 @@ test('a retried write keeps its idempotency key; only retryable failures are ret
   assert.match(posts[0].headers['X-Idempotency-Key'], /^[A-Za-z0-9_-]{8,64}$/, 'a key is generated when the caller gives none');
   assert.ok(posts.every((p) => p.headers['X-Idempotency-Key'] === posts[0].headers['X-Idempotency-Key']));
   assert.deepEqual(sleeps, [250, 500]);
-  const exhausted = makeAdapter([...signedIn, X.compatible, READ(), TRANSITIONS(), APPLY(503, {}), APPLY(503, {}), APPLY(503, {})]);
+  const exhausted = makeAdapter([...signedIn, X.compatible, READ(), TRANSITIONS(), APPLY(429, {}), APPLY(429, {}), APPLY(429, {})]);
   await exhausted.adapter.session.check();
   await assert.rejects(exhausted.adapter.workflow.transition('inspection', { recordId: 'INS-0001', actionId: 'approve', concurrency: TOKEN, idempotencyKey: 'op-0009' }), (e) => e.retryable);
   assert.equal(exhausted.backend.calls.filter((c) => c.method === 'POST').length, 3);
+  // A 5xx, timeout or network failure after a write may follow a committed change: it is returned (retryable, so the
+  // caller may retry with the same key after re-reading), never re-sent by the adapter.
+  for (const failure of [APPLY(503, {}), APPLY(500, {}), { request: APPLY().request, network: true }]) {
+    const once = makeAdapter([...signedIn, X.compatible, READ(), TRANSITIONS(), failure]);
+    await once.adapter.session.check();
+    await assert.rejects(once.adapter.workflow.transition('inspection', { recordId: 'INS-0001', actionId: 'approve', concurrency: TOKEN, idempotencyKey: 'op-0010' }), (e) => typeof e.code === 'string');
+    assert.equal(once.backend.calls.filter((c) => c.method === 'POST').length, 1);
+    assert.deepEqual(once.sleeps, []);
+  }
+  const badKey = makeAdapter([...signedIn, X.compatible, READ(), TRANSITIONS()]);
+  await badKey.adapter.session.check();
+  await assert.rejects(badKey.adapter.workflow.transition('inspection', { recordId: 'INS-0001', actionId: 'approve', concurrency: TOKEN, idempotencyKey: 'op 1\r\nX-Injected: 1' }), (e) => e.code === 'INVALID_REFERENCE' && !e.retryable);
+  assert.equal(badKey.backend.calls.filter((c) => c.method === 'POST').length, 0);
 });
 
 test('reason, evidence and a missing token are refused rather than dropped', async () => {

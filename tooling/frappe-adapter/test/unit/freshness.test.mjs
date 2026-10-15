@@ -110,8 +110,11 @@ test('reconnection after offline triggers an immediate resync; listener failures
   assert.equal(timers.pending.length, 1);
 });
 
-test('at most twenty distinct scopes can be subscribed', () => {
+test('at most twenty distinct scopes can be subscribed; a malformed scope is refused at subscription', () => {
   const poller = sdk.createFreshnessPoller({ gateway: scriptedGateway([]), timers: fakeTimers() });
+  for (const bad of [{ kind: 'record', recordType: 'inspection' }, { kind: 'record', recordType: 'inspection', id: '../x' }, { kind: 'record-type', recordType: 'inspection', id: 'x' }, { kind: 'doctype', recordType: 'inspection' }, { kind: 'record-type', recordType: 'PMRA Inspection' }]) {
+    assert.throws(() => poller.subscribe(bad, () => {}), (e) => e.code === 'INVALID_REFERENCE', JSON.stringify(bad));
+  }
   for (let i = 0; i < 20; i += 1) poller.subscribe({ kind: 'record', recordType: 'inspection', id: `I-${i}` }, () => {});
   assert.throws(() => poller.subscribe({ kind: 'record', recordType: 'inspection', id: 'I-20' }, () => {}), (e) => e.code === 'INVALID_QUERY');
 });

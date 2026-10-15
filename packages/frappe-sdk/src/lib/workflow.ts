@@ -35,7 +35,8 @@ export function createWorkflowGateway(transport: Transport, lookup: ResourceLook
     const { doc, id: name, version } = identityOf(resourceData(read.body), read.correlationId);
     if (name !== id) throw adapterError('MALFORMED_RESPONSE', read.correlationId);
     const state = stateOf(w, doc, read.correlationId);
-    const t = await transport.send({ method: 'GET', path: METHOD.workflowTransitions, query: { doc: JSON.stringify(doc) } });
+    // Only the record reference is sent: the server loads the document itself, so no field value enters the URL.
+    const t = await transport.send({ method: 'GET', path: METHOD.workflowTransitions, query: { doc: JSON.stringify({ doctype: r.doctype, name: id }) } });
     const list = methodMessage(t.body);
     if (!Array.isArray(list)) throw adapterError('MALFORMED_RESPONSE', t.correlationId);
     const allowed: WorkflowAction[] = [];
@@ -76,8 +77,9 @@ export function createWorkflowGateway(transport: Transport, lookup: ResourceLook
       if (serverAction === undefined) throw adapterError('WORKFLOW_ACTION_NOT_ALLOWED');
       const response = await transport.send({
         method: 'POST', path: METHOD.applyWorkflow,
-        // The caller's token is sent as the document version, so the server rejects a write against a newer record.
-        body: { doc: { ...current.doc, modified: token }, action: serverAction },
+        // The record reference and the caller's version only; no other field value is sent. The version check above is
+        // the adapter's; whether the server re-checks it atomically depends on the backend method (see the design §6).
+        body: { doc: { doctype: r.doctype, name: request.recordId, modified: token }, action: serverAction },
         idempotencyKey: request.idempotencyKey ?? newKey(),
       });
       const { doc, version } = identityOf(methodMessage(response.body), response.correlationId);

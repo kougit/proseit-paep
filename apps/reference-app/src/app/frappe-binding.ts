@@ -71,7 +71,12 @@ export function createFrappeShellBinding(
         signingOut.set(true);
         gateway.signOut().then(
           async () => { identity.set(null); await toLogin(gateway, '/'); },
-          (e: unknown) => { signingOut.set(false); host?.report({ kind: 'unknown', correlationId: reference(e), retryable: true }); },
+          async (e: unknown) => {
+            // The server says the session is already gone: the user is signed out, so the login follows.
+            if (e && typeof e === 'object' && (e as Partial<PaepError>).category === 'authentication') { identity.set(null); await toLogin(gateway, '/'); return; }
+            signingOut.set(false);
+            host?.report({ kind: 'unknown', correlationId: reference(e), retryable: true });
+          },
         );
       },
     },

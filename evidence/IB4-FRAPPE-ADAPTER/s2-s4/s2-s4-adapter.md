@@ -1,6 +1,7 @@
 # IB4-FRAPPE-ADAPTER — S2–S4 adapter, fixtures and tests
 
-**Status:** PASS (local; CI on commit 84d9529). Technical PASS is not PO/SA ACCEPTED.
+**Status:** PASS (local; CI 20/20 with PAEP / gate on commit 84d9529, the S2–S4 head; the exact candidate head is
+recorded in the acceptance report). Technical PASS is not PO/SA ACCEPTED.
 
 ## What was built
 
@@ -8,7 +9,7 @@
 | --- | --- |
 | S2 | `packages/frappe-sdk/src/` — one transport (HTTPS origin only, `credentials: 'include'`, `redirect: 'error'`, `cache: 'no-store'`, correlation id, bounded retry, timeout), in-memory CSRF store, session, records, workflow, files, capabilities, compatibility and freshness gateways, compiled resource map, approved login redirect. Public entry point: 4 values (`createFrappeAdapter`, `compileResourceMap`, `createFreshnessPoller`, `isPaepError`) plus types. |
 | S3 | `tooling/frappe-adapter/fixtures/` — 36 synthetic fixtures (conformance 14, error 12, malformed 3, security 9 across compatibility, session, records, workflow, files, capabilities, freshness), versioned manifest 1.0.0 with 4 compatibility profiles and a sha256 per file. No captured data, cookie value, CSRF token or credential. |
-| S4 | `tooling/frappe-adapter/test/` — 7 unit files (57 tests) and the conformance suite (37 tests: manifest plus one per fixture). `frappe-qa.mjs` F01–F09, `frappe-qa-negative.mjs` 35 seeded negatives plus a control (N34/N35 added: markup in a template literal, `insertAdjacentHTML`). |
+| S4 | `tooling/frappe-adapter/test/` — 7 unit files (57 tests at S4; S5 adds the binding file, 8 files and 64 tests in the logs here) and the conformance suite (37 tests: manifest plus one per fixture). `frappe-qa.mjs` F01–F09, `frappe-qa-negative.mjs` 35 seeded negatives plus a control (N34/N35 added: markup in a template literal, `insertAdjacentHTML`). |
 
 ## Results (logs in `logs/`)
 

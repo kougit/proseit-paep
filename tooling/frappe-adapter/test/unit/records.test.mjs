@@ -79,7 +79,8 @@ test('unknown resources, fields, operators, malformed values and cursors are ref
     await assert.rejects(adapter.records.list(request), (e) => e.category === 'validation', JSON.stringify(request));
     assert.equal(backend.calls.length, 0, JSON.stringify(request));
   }
-  for (const ref of [{ recordType: 'nope', id: 'x' }, { recordType: 'inspection', id: '' }, { recordType: 'inspection', id: '../File/x' }, { recordType: 'inspection', id: 'a\\b' }]) {
+  for (const ref of [{ recordType: 'nope', id: 'x' }, { recordType: 'inspection', id: '' }, { recordType: 'inspection', id: '../File/x' }, { recordType: 'inspection', id: 'a\\b' },
+    { recordType: 'inspection', id: 'INV//1' }, { recordType: 'inspection', id: './x' }, { recordType: 'inspection', id: 'INV/..' }, { recordType: 'inspection', id: '/INV' }, { recordType: 'inspection', id: 'INV/' }]) {
     const { adapter, backend } = makeAdapter([]);
     await assert.rejects(adapter.records.get(ref), (e) => e.category === 'validation');
     assert.equal(backend.calls.length, 0);
@@ -93,6 +94,11 @@ test('detail returns the mapped fields and the server modified value as concurre
   assert.deepEqual(detail.fields, { title: 'Site 1', status: 'Open', score: 1, site: null });
   assert.deepEqual(detail.concurrency, { serverVersion: '2026-10-15 09:00:01.000000' });
   assert.ok(Object.isFrozen(detail) && Object.isFrozen(detail.fields));
+  // Frappe naming series may contain "/": such an id is one encoded path segment.
+  const series = makeAdapter([X.compatible, { request: { method: 'GET', path: '/api/resource/PMRA%20Inspection/INV%2F24-25%2F0001' }, response: json(200, { data: row(2, { name: 'INV/24-25/0001' }) }) }]);
+  const named = await series.adapter.records.get({ recordType: 'inspection', id: 'INV/24-25/0001' });
+  assert.equal(named.id, 'INV/24-25/0001');
+  assert.equal(series.backend.calls[1].path, '/api/resource/PMRA%20Inspection/INV%2F24-25%2F0001');
 });
 
 test('malformed list and detail responses are rejected, not partially mapped', async () => {

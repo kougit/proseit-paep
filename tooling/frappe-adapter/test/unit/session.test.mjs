@@ -14,7 +14,7 @@ test('an authenticated session maps to an authenticated SessionOutcome with iden
   });
 });
 
-test('Guest, 401 and 403 map to unauthenticated; SessionExpired maps to expired', async () => {
+test('Guest, 401 and 403 from the user check map to unauthenticated; SessionExpired to expired; 403 on the session method to invalid', async () => {
   assert.deepEqual(await makeAdapter([X.loggedUser('Guest')]).adapter.session.check(), { status: 'unauthenticated' });
   for (const [status, body] of [[401, {}], [403, { exc_type: 'PermissionError' }], [401, { exc_type: 'AuthenticationError' }]]) {
     const { adapter } = makeAdapter([{ request: X.loggedUser().request, response: json(status, body) }]);
@@ -22,6 +22,11 @@ test('Guest, 401 and 403 map to unauthenticated; SessionExpired maps to expired'
   }
   const { adapter } = makeAdapter([{ request: X.loggedUser().request, response: json(401, { exc_type: 'SessionExpired' }) }]);
   assert.deepEqual(await adapter.session.check(), { status: 'expired' });
+  // A signed-in user denied the session method is a backend permission problem: invalid (reported), never a login loop.
+  const denied = makeAdapter([X.loggedUser(), { request: X.session().request, response: json(403, { exc_type: 'PermissionError' }) }]);
+  const outcome = await denied.adapter.session.check();
+  assert.deepEqual([outcome.status, outcome.error?.code], ['invalid', 'PERMISSION_DENIED']);
+  await assert.rejects(denied.adapter.session.signOut(), (e) => e.code === 'CSRF_TOKEN_MISSING');
 });
 
 test('malformed or inconsistent session payloads map to invalid and keep no token', async () => {
@@ -60,11 +65,19 @@ test('sign-out is server-authoritative: success only on a server success, local 
   assert.match(result.correlationId, /^[A-Za-z0-9_-]{8,64}$/);
   await assert.rejects(ok.adapter.session.signOut(), (e) => e.code === 'CSRF_TOKEN_MISSING');
 
-  const failed = makeAdapter([X.loggedUser(), X.session(), LOGOUT(417)]);
+  // A failed sign-out is not retried by the adapter and keeps the token, so the user can actually retry it.
+  const failed = makeAdapter([X.loggedUser(), X.session(), LOGOUT(417), LOGOUT(200)]);
   await failed.adapter.session.check();
   await assert.rejects(failed.adapter.session.signOut(), (e) => e.category === 'validation');
-  await assert.rejects(failed.adapter.session.signOut(), (e) => e.code === 'CSRF_TOKEN_MISSING');
   assert.equal(failed.backend.calls.filter((c) => c.method === 'POST').length, 1, 'a failed sign-out is not retried without an idempotency key');
+  assert.deepEqual((await failed.adapter.session.signOut()).outcome, { status: 'unauthenticated' });
+  assert.equal(failed.backend.calls.at(-1).headers['X-Frappe-CSRF-Token'], SYNTHETIC_CSRF);
+  await assert.rejects(failed.adapter.session.signOut(), (e) => e.code === 'CSRF_TOKEN_MISSING');
+  // When the server says the session is already gone, the token is cleared.
+  const gone = makeAdapter([X.loggedUser(), X.session(), { request: LOGOUT().request, response: json(401, { exc_type: 'SessionExpired' }) }]);
+  await gone.adapter.session.check();
+  await assert.rejects(gone.adapter.session.signOut(), (e) => e.code === 'SESSION_EXPIRED');
+  await assert.rejects(gone.adapter.session.signOut(), (e) => e.code === 'CSRF_TOKEN_MISSING');
 });
 
 test('the CSRF token is held in memory only: no browser store, cookie, URL or global is written', async () => {

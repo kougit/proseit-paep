@@ -90,7 +90,7 @@ test('sign-out is server-authoritative: on success the identity clears and the l
   assert.equal(backend.calls.at(-1).headers['X-Frappe-CSRF-Token'], X.session().response.body.message.csrf_token);
 });
 
-test('a failed sign-out keeps the identity, ends the pending state and reports "unknown"; an invalid session reports too', async () => {
+test('a failed sign-out keeps the identity, ends the pending state and reports "unknown"; a gone session signs out; an invalid session reports', async () => {
   const { binding, navigations, reports, started } = bind([X.compatible, X.loggedUser(), X.session(), LOGOUT(417)]);
   await started;
   binding.session.signOut();
@@ -98,6 +98,12 @@ test('a failed sign-out keeps the identity, ends the pending state and reports "
   assert.equal(binding.session.signingOut(), false);
   assert.equal(binding.session.identity()?.principalId, 'inspector@example.test');
   assert.deepEqual([navigations, reports.map((r) => [r.kind, r.retryable])], [[], [['unknown', true]]]);
+  // The server says the session is already gone: the user is treated as signed out and goes to the login.
+  const gone = bind([X.compatible, X.loggedUser(), X.session(), { request: LOGOUT(200).request, response: json(401, { exc_type: 'SessionExpired' }) }]);
+  await gone.started;
+  gone.binding.session.signOut();
+  await new Promise((r) => setTimeout(r, 0));
+  assert.deepEqual([gone.binding.session.identity(), gone.navigations, gone.reports], [null, [`${ORIGIN}/login?redirect-to=%2F`], []]);
   const invalid = bind([X.compatible, X.loggedUser(), X.session({ tenant: null })]);
   await invalid.started;
   assert.deepEqual([invalid.binding.session.identity(), invalid.navigations, invalid.reports.map((r) => r.kind)], [null, [], ['unknown']]);

@@ -12,7 +12,7 @@ import type {
 } from '@proseit/paep-contracts';
 import { adapterError } from './errors.js';
 import { identityOf, resourceData, type ResourceLookup } from './records.js';
-import { collectionPath, validEntityId } from './resources.js';
+import { collectionPath, validEntityId, validRecordTypeKey } from './resources.js';
 import type { Transport } from './transport.js';
 
 export const MAX_SCOPES = 20;
@@ -160,6 +160,10 @@ export function createFreshnessPoller(options: FreshnessPollerOptions): Freshnes
 
   return Object.freeze({
     subscribe(scope: FreshnessScope, listener: InvalidationListener): () => void {
+      // A malformed scope is refused here, so it cannot make every later poll fail for the other subscribers.
+      const shapeOk = validRecordTypeKey(scope.recordType)
+        && (scope.kind === 'record' ? validEntityId(scope.id) : scope.kind === 'record-type' && scope.id === undefined);
+      if (!shapeOk) throw adapterError('INVALID_REFERENCE');
       const key = scopeKey(scope);
       if (!subs.has(key) && subs.size >= MAX_SCOPES) throw adapterError('INVALID_QUERY');
       const first = subs.size === 0;

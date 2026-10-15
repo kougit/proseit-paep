@@ -13,7 +13,7 @@ import fs from 'node:fs';
 import { createRequire } from 'node:module';
 import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const require = createRequire(import.meta.url);
@@ -24,7 +24,7 @@ const SUITE = suiteArg < 0 ? null : process.argv[suiteArg + 1];
 const EXPECTED_TESTS = {
   unit: {
     'compatibility.test.mjs': 5, 'files.test.mjs': 7, 'freshness.test.mjs': 7, 'records.test.mjs': 6, 'session.test.mjs': 8,
-    'transport.test.mjs': 15, 'workflow.test.mjs': 9,
+    'reference-binding.test.mjs': 7, 'transport.test.mjs': 15, 'workflow.test.mjs': 9,
   },
   // One manifest test plus one test per fixture case (tooling/frappe-adapter/fixtures/manifest.json, 36 cases).
   integration: { 'conformance.test.mjs': 37 },
@@ -35,7 +35,7 @@ if (!EXPECTED_TESTS[SUITE]) {
 }
 
 const R = (p) => path.join(root, p);
-const ALIASES = { '@proseit/paep-contracts': 'packages/contracts/src/index.ts', '@proseit/paep-observability': 'packages/observability/src/index.ts', '@proseit/paep-platform': 'packages/platform/src/index.ts' };
+const ALIASES = { '@proseit/paep-contracts': 'packages/contracts/src/index.ts', '@proseit/frappe-sdk': 'packages/frappe-sdk/src/index.ts', '@proseit/paep-observability': 'packages/observability/src/index.ts', '@proseit/paep-platform': 'packages/platform/src/index.ts' };
 const work = fs.mkdtempSync(path.join(os.tmpdir(), 'paep-frappe-tests-'));
 const dist = path.join(work, 'dist');
 const failures = [];
@@ -51,7 +51,11 @@ const options = {
   lib: ['lib.es2022.d.ts', 'lib.dom.d.ts'], types: [], outDir: dist, rootDir: root, declaration: false, sourceMap: false, noEmitOnError: true,
   paths: Object.fromEntries(Object.entries(ALIASES).map(([k, v]) => [k, [R(v)]])),
 };
-const program = ts.createProgram({ rootNames: [R('packages/frappe-sdk/src/index.ts')], options });
+// The reference application's Frappe binding (IB4 S5) compiles with the adapter; its only runtime import outside the
+// workspace is Angular's signal primitive, mapped to the installed @angular/core ESM entry.
+const BINDING = 'apps/reference-app/src/app/frappe-binding.ts';
+const ANGULAR_CORE = pathToFileURL(R('node_modules/@angular/core/fesm2022/core.mjs')).href;
+const program = ts.createProgram({ rootNames: [R('packages/frappe-sdk/src/index.ts'), R(BINDING)], options });
 const diagnostics = ts.getPreEmitDiagnostics(program);
 if (diagnostics.length) fail(`adapter compile: ${diagnostics.slice(0, 8).map((d) => `${d.file ? `${path.relative(root, d.file.fileName)}:${d.file.getLineAndCharacterOfPosition(d.start ?? 0).line + 1} ` : ''}TS${d.code} ${ts.flattenDiagnosticMessageText(d.messageText, ' ')}`).join('; ')}`);
 const emitted = program.emit();
@@ -70,6 +74,7 @@ const walk = (dir, out = []) => {
 };
 for (const file of walk(dist).filter((f) => f.endsWith('.js'))) {
   let s = fs.readFileSync(file, 'utf8');
+  s = s.replace(/(from\s*)(['"])@angular\/core\2/g, (m, lead, q) => `${lead}${q}${ANGULAR_CORE}${q}`);
   s = s.replace(/(from\s*|import\s*\(\s*|import\s+)(['"])(@proseit\/[a-z0-9-]+)\2/g, (m, lead, q, spec) => {
     if (spec === '@proseit/paep-contracts') { fail(`${path.relative(dist, file)}: runtime reference to @proseit/paep-contracts`); return m; }
     if (!ALIASES[spec]) { fail(`${path.relative(dist, file)}: unknown workspace alias ${spec}`); return m; }
@@ -81,6 +86,8 @@ for (const file of walk(dist).filter((f) => f.endsWith('.js'))) {
 }
 const sdkEntry = path.join(dist, 'packages/frappe-sdk/src/index.js');
 if (!fs.existsSync(sdkEntry)) fail('compiled adapter entry point missing');
+const bindingEntry = path.join(dist, BINDING.replace(/\.ts$/, '.js'));
+if (!fs.existsSync(bindingEntry)) fail('compiled reference binding missing');
 
 // Run the suite.
 const dir = R(`tooling/frappe-adapter/test/${SUITE}`);
@@ -92,7 +99,7 @@ const evidence = [];
 for (const f of files) {
   if (failures.length && failures.some((m) => m.startsWith('adapter'))) break;
   const r = spawnSync(process.execPath, ['--test', '--test-reporter=tap', path.join(dir, f)], {
-    cwd: work, encoding: 'utf8', env: { ...process.env, PAEP_FRAPPE_SDK_DIST: sdkEntry, PAEP_FRAPPE_FIXTURES: R('tooling/frappe-adapter/fixtures') }, maxBuffer: 64 * 1024 * 1024,
+    cwd: work, encoding: 'utf8', env: { ...process.env, PAEP_FRAPPE_SDK_DIST: sdkEntry, PAEP_FRAPPE_BINDING_DIST: bindingEntry, PAEP_FRAPPE_FIXTURES: R('tooling/frappe-adapter/fixtures') }, maxBuffer: 64 * 1024 * 1024,
   });
   const n = (k) => Number((r.stdout.match(new RegExp(`^# ${k} (\\d+)$`, 'm')) || [])[1] ?? NaN);
   const c = { tests: n('tests'), pass: n('pass'), fail: n('fail'), skipped: n('skipped'), todo: n('todo'), cancelled: n('cancelled') };

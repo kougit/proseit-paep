@@ -36,11 +36,13 @@ export function createCompatibilityGateway(transport: Transport, configuredContr
       const m = message && typeof message === 'object' ? (message as Record<string, unknown>) : undefined;
       const contract = m?.['api_contract'];
       const min = m?.['minimum_paep'];
-      const max = m?.['maximum_paep'];
+      const rawMax = m?.['maximum_paep'];
       const cid = correlationId ? { correlationId } : {};
-      if (typeof contract !== 'string' || typeof min !== 'string' || !VERSION.test(min) || !(max === null || (typeof max === 'string' && VERSION.test(max)))) {
+      if (typeof contract !== 'string' || typeof min !== 'string' || !VERSION.test(min) || !(rawMax === null || (typeof rawMax === 'string' && VERSION.test(rawMax)))) {
         return Object.freeze({ status: 'unknown', apiContract: configuredContract, code: adapterError('BACKEND_COMPATIBILITY_UNKNOWN').code, ...cid });
       }
+      // Explicitly typed so the narrowing holds in every compiler configuration that builds the application.
+      const max: string | null = typeof rawMax === 'string' ? rawMax : null;
       const inRange = compare(min, ADAPTER_PAEP_VERSION) <= 0 && (max === null || compare(ADAPTER_PAEP_VERSION, max) <= 0);
       if (contract !== configuredContract || !inRange) {
         return Object.freeze({ status: 'incompatible', apiContract: configuredContract, code: adapterError('BACKEND_INCOMPATIBLE').code, ...cid });

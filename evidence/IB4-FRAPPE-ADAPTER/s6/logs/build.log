@@ -1,0 +1,29 @@
+
+> @proseit/paep-workspace@0.0.0 build:reference-app
+> ng build reference-app --configuration production
+
+❯ Building...
+✔ Building...
+Initial chunk files | Names           |  Raw size | Estimated transfer size
+chunk-DbwHdBEg.js   | -               | 367.31 kB |                89.59 kB
+main-ZWZJO7B5.js    | main            | 141.59 kB |                30.27 kB
+styles-J65SLB5I.css | styles          |  10.80 kB |                 2.25 kB
+chunk-DJVAsKa_.js   | -               | 464 bytes |               464 bytes
+
+                    | Initial total   | 520.16 kB |               122.57 kB
+
+Lazy chunk files    | Names           |  Raw size | Estimated transfer size
+chunk-RJqwwp2L.js   | index           |  25.15 kB |                 7.88 kB
+chunk-DafyKQfw.js   | workspace       |   1.69 kB |               783 bytes
+chunk-COUrx1hu.js   | locked-example  | 908 bytes |               908 bytes
+chunk-CW2Tu1kn.js   | error-example   | 855 bytes |               855 bytes
+chunk-CGt_u5RV.js   | preferences     | 101 bytes |               101 bytes
+chunk-DSThwCfH.js   | command-palette | 101 bytes |               101 bytes
+
+Application bundle generation complete. [5.160 seconds] - 2026-10-15T21:46:32.286Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mbundle initial exceeded maximum budget. Budget 500.00 kB was not met by 20.16 kB with a total of 520.16 kB.[0m
+
+
+Output location: /home/claude/proseit-paep/dist/reference-app
+

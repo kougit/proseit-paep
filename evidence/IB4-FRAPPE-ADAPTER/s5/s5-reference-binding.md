@@ -45,3 +45,8 @@
   architecture PASS, enterprise negatives 63/63, design-system extension negatives 34/34, shell browser QA 22/22,
   shell browser negatives 57/57, IB2 CI negatives 27/27, IB3 CI negatives 20/20, IB4 CI negatives 9/9, WP05 part a
   26/26, part c 47/47.
+
+## Later heads
+
+The figures above are from the S5 head. The final figures on 97bb548 (after the independent-QA fixes) are in
+`../s6/logs/` and the acceptance report: B1 520,359 bytes raw and 122,308 bytes transfer, bundle composition 7/7.

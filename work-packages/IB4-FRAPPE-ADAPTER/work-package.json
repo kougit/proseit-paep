@@ -36,6 +36,7 @@
   ],
   "findings_open": {
     "high": 0,
-    "medium": 0
+    "medium": 1,
+    "note": "M1: workflow transition race with stock apply_workflow; PO/SA decision pending (evidence/IB4-FRAPPE-ADAPTER/s6/qa/findings-disposition.md)"
   }
 }

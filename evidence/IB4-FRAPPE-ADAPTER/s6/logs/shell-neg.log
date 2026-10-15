@@ -1,0 +1,59 @@
+PASS S00 positive control: workspace state at 320
+PASS S01 H1 element forcing horizontal scroll
+PASS S02 H2 console error
+PASS S03 H2 an error line carrying raw detail is not the allowlisted report
+PASS S04 H3 second h1
+PASS S05 H4 unnamed button in the topbar
+PASS S06 N1 search hidden at 320
+PASS S07 N1 product link pushed outside the viewport
+PASS S08 T1 navigation toggle below 24 px
+PASS S09 K1 skip link removed
+PASS S10 K2 focus lost after the palette closes
+PASS S11 K3 focus lost after the sheet closes
+PASS S12 K4 focus not moved to the new h1 on a route change
+PASS S13 K5 keyboard trap in the topbar
+PASS S14 F1 focus indicator removed from the chrome
+PASS S15 M1 sheet transition left running under reduced motion
+PASS S16 M1 motion token left at 150 ms under reduced motion
+PASS S17 R1 navigation not mirrored in RTL
+PASS S18 L1 fixed-width content at 200 % text
+PASS S19 positive control: the navigation sheet keyboard path passes unmutated at 834
+PASS S20 positive control: RTL mirroring passes unmutated
+PASS S21 N1 notification count dropped from the bell name at 320
+PASS S22 N1 account hidden at 320
+PASS S23 N1 Sign out removed from the account menu at 320
+PASS S24 K6 focus lost after Escape closes the account menu
+PASS S25 K7 notification panel wider than 24 rem
+PASS S26 K7 focus not on the panel heading when it opens
+PASS S27 positive control: the account menu and notification panel keyboard paths pass unmutated at 320
+PASS S28 B1 raw initial bundle one byte over the hard maximum (shown as 525.00 kB; never rounded)
+PASS S29 B1 transfer over the hard maximum at unchanged raw size
+PASS S32 B1 a statically imported chunk without its preload hint grows over the hard maximum (hints are never relied on)
+PASS S33 B1 a second-level chunk imported only by another chunk takes the raw total over the hard maximum
+PASS S34 A1 the language button named "Language: English" while it shows "EN" (label not in name)
+PASS S35 C1 'unsafe-inline' added to style-src
+PASS S36 C1 'unsafe-eval' added to script-src
+PASS S37 C1 one static nonce for every response
+PASS S38 C1 placeholders left unsubstituted (the page has no nonce)
+PASS S39 C1 a policy without the nonce
+PASS S40 C1 the page gets a different nonce than the header (wrong nonce)
+PASS S41 C1 a build without the ngCspNonce placeholder
+PASS S42 C1 an inline onclick handler in index.html
+PASS S43 C1 angular#unsafe-bypass added to trusted-types
+PASS S44 C1 Trusted Types not required (the HTML sink probe then runs)
+PASS S45 C1 a wildcard script origin
+PASS S46 H5 a style element inserted without the nonce is reported as a violation
+PASS S48 C1 a wildcard in the script-src-elem override
+PASS S49 C1 a repeated directive in other capitals placed first (browsers enforce the first copy)
+PASS S50 C1 frame-ancestors dropped
+PASS S51 N1 current tenant context line hidden at 320
+PASS S52 N1 current tenant context line truncated with an ellipsis at 320
+PASS S53 N1 context line names another tenant at 320
+PASS S54 N1 navigation sheet context header hidden at 320
+PASS S55 N1 offline connectivity row hidden at 320
+PASS S56 N1 unknown connectivity row hidden at 320
+PASS S47 positive control: the strict server as it is
+PASS S30 positive control: raw initial bundle exactly at the hard maximum
+PASS S31 positive control: the build as it is
+
+PAEP enterprise-shell browser QA negatives: PASS (57/57; 50 seeded negatives + 7 controls)

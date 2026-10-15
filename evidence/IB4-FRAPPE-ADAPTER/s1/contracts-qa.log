@@ -1,0 +1,37 @@
+
+== S1 independent compile
+
+== S2 public API report
+
+== S3 type-only surface
+
+== S4 neutrality
+  25 files, 260 property signatures, 8 record-map sites, vocabulary exceptions: IdentityMode="frappe-session"
+
+== S5 DOM/vendor negatives and architecture check
+  note: injected @angular/core import under types [] -> 83 compile diagnostic(s); caught by S4 regardless
+
+== S6 positive type fixtures
+  25 fixture values (capabilitySet, compatibilityBlockedUnknown, compatibilityCompatible, compatibilityIncompatible, datasetDescriptor, exportJob, failedExportJob, fileAccessRequest, freshnessBatch, freshnessPollRequest, ib01RuntimeConfigExample, moneyValue, offlineCommand, paepError, recordDetail, recordListRequest, recordListResult, reportQuery, reportResult, sessionAuthenticated, sessionInvalid, signInRequest, signOutResult, workflowTransition, workflowTransitionResult)
+
+== S7 negative type fixtures
+
+== S8 JSON round trip
+
+== S9 test doubles (node:test)
+  21 node:test tests passed
+
+== S10 packages/ and apps/ never import tooling/
+
+PAEP contracts QA summary
+  PASS S1  independent compile: 7/7
+  PASS S2  public API report: 5/5
+  PASS S3  type-only surface: 51/51
+  PASS S4  neutrality: 28/28
+  PASS S5  DOM/vendor negatives and architecture check: 41/41
+  PASS S6  positive type fixtures: 6/6
+  PASS S7  negative type fixtures: 28/28
+  PASS S8  JSON round trip: 25/25
+  PASS S9  test doubles (node:test): 8/8
+  PASS S10 packages/ and apps/ never import tooling/: 1/1
+PAEP contracts QA: PASS - 200/200 checks, 10 sections, 21 node:test tests, 129 public exports

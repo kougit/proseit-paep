@@ -351,7 +351,7 @@
       "workPackages": [
         "IB3-ENTERPRISE-SHELL"
       ],
-      "status": "CANDIDATE",
+      "status": "ACCEPTED",
       "predecessorGeneration": 4,
       "authorisation": {
         "authority": "Product Owner / Solutions Architect",
@@ -392,10 +392,41 @@
         "evidence/IB3-ENTERPRISE-SHELL/",
         "work-packages/IB3-ENTERPRISE-SHELL/"
       ],
-      "acceptedCommit": null,
-      "acceptedTree": null,
-      "acceptance": null,
-      "fingerprints": null,
+      "acceptedCommit": "10462434ebb9d9dc1dfe0a3e89fb4f754b4b4473",
+      "acceptedTree": "540c73cf46c7db3a0d76fca54987df347e6e8389",
+      "acceptance": {
+        "authority": "Product Owner / Solutions Architect",
+        "date": "2026-10-14",
+        "evidence": [
+          {
+            "path": "work-packages/IB3-ENTERPRISE-SHELL/work-package.json",
+            "blob": "d3b119e2127ddf0f9ca8fa080412143a2a03586f"
+          }
+        ]
+      },
+      "fingerprints": {
+        ".github/": "02b1036a4e8e344efc22d100a48052c39dad8a95",
+        ".gitignore": "14dd79e40e46517f3ab496db8bfb33e0686650eb",
+        ".npmrc": "3cefa3035c08b733cde4e55a5115bd76afdbd23b",
+        ".nvmrc": "df6ae3370f9f89272d88629c442cf554d6c1f9fb",
+        ".paep-control/": "6ccb81c274dfef6140f8e2bc5e6fb2567a2c1527",
+        "CLAUDE.md": "feaa69cf6f846d988de2e7b22daebb65f1acb6cf",
+        "PACK_MANIFEST.json": "65d82fb7f4545d3966c6893c782053662fbee77f",
+        "angular.json": "7b604078d70e195bfd5a941e215c1c07f63d2b62",
+        "docs/adr/": "27fb8368e3c92da3bd6c3602affe478d58ccb50b",
+        "docs/architecture/toolchain-version-manifest.json": "cfa9389db7a841639245abbfce4121e965b60b7f",
+        "docs/licences/": "9bf91adeeeea016fc4c5e4863cc8b4a6166bd6c9",
+        "docs/provenance/": "8f6a16d69ff8451548fd93c86ece22c3bc0a2239",
+        "evidence/IB3-ENTERPRISE-SHELL/": "38a89b3ba5863aa6d0246f2b286937f695491c2c",
+        "package-lock.json": "2c4202ff347ec8c006dc0b1820c3679e172b6b34",
+        "package.json": "382fa1c4d4f3dc2fcad92f212e6f0a28204f9ac0",
+        "tooling/architecture-boundaries/": "5d7d3191a9be8ae5c2ff7d11505a286b322c3b21",
+        "tooling/governance/": "8884298257957b35dd648d1fe04e72e8a18139e6",
+        "tooling/verification/": "130628ed599170868116d6ca3c43f5543b8de27c",
+        "tsconfig.base.json": "994bb1f7acef2319532afe8bb25aa7d3b970c774",
+        "tsconfig.json": "4d88b1ae7992a7335ed3156f2f870f6d2de6d43a",
+        "work-packages/IB3-ENTERPRISE-SHELL/": "f298591760f78676299968fcdc2791a1bf82f77b"
+      },
       "notes": "CANDIDATE only. Prepared by Claude Code under the PO/SA instruction \"PAEP IB3 - FINAL DESIGN APPROVAL + GENERATION 5 IMPLEMENTATION AUTHORIZATION\" (project thread, 2026-10-06T09:48Z), which approved HOF-IB3-001 v1.0 for implementation (manifest 645dd2e9bb4274c9b787bbbcc52cf53eb4f08dc21d733b5985aa3ab572f4fce5) and authorised IB3-ENTERPRISE-SHELL. policyChange is true because IB3 narrowly amends CLAUDE.md for this work package only, adds two mandatory CI jobs and bounds the IB0-WP05 regression for the IB3 entry points (.github/, CLAUDE.md and tooling/verification/). No package-lock.json change and no new dependency is authorised. It becomes ACCEPTED only through the promote command after PO/SA acceptance and merge."
     }
   ]

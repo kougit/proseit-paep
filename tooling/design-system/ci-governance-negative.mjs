@@ -83,7 +83,7 @@ const cases = [
   ['I23', 'the WP05 negative harness run with an unknown part (fails closed before any case)', [], 'part-x', [/FAIL --part must be a, b or c/]],
   // The harness itself weakened: part b silently delegating its own cases (I24), or a declaration dropped or renamed
   // (I25), fails the pinned-coverage check. Both mutations keep part b to one cheap case so the case stays fast.
-  ['I24', 'WP05 harness part b delegates its own cases (runs only G01)', [[WP05_HARNESS, ONLY_G01_IN_B]], 'wp05-part-b', [/FAIL part b ran 1 of 104 declared cases; expected exactly its 32/]],
+  ['I24', 'WP05 harness part b delegates its own cases (runs only G01)', [[WP05_HARNESS, ONLY_G01_IN_B]], 'wp05-part-b', [/FAIL part b ran 1 of 105 declared cases; expected exactly its 32/]],
   ['I25', 'WP05 harness case K07 renamed (declared list differs from the pinned list)', [[WP05_HARNESS, (t) => replace("caseRun('K07',", "caseRun('K07x',")(ONLY_G01_IN_B(t))]], 'wp05-part-b', [/FAIL declared case list differs from the pinned list: missing K07; extra K07x/]],
   ['I26', 'the WP05 negative harness run with --part given twice (fails closed before any case)', [], 'part-twice', [/FAIL --part given more than once/]],
   ['I15', 'candidate scope bypass: a governed file outside the generation 4 scope changed', [['tooling/architecture-boundaries/check-boundaries.mjs', (t) => `${t}// drift\n`]], 'governance', [/FAIL W07/, /FAIL W26/, /unauthorised change: tooling\/architecture-boundaries/]],

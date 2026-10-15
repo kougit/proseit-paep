@@ -1,0 +1,19 @@
+{
+  "fixtureSetVersion": "0.1.0",
+  "compatibilityContract": "pmra-api-v1",
+  "provenance": {
+    "source": "synthetic",
+    "authoredBy": "Claude Code for ProSEIT (IB4-FRAPPE-ADAPTER)",
+    "basis": "Hand-authored from the public Frappe REST, session and CSRF documentation and the pmra-api-v1 definition in ADR-011. No captured production data, cookie value, CSRF token or credential; identities are generated placeholders."
+  },
+  "profiles": [
+    {
+      "id": "pmra-api-v1/frappe-15",
+      "apiContract": "pmra-api-v1",
+      "frappe": "15.x",
+      "paepRange": { "minimum": "1.1", "maximum": null },
+      "expect": "compatible"
+    }
+  ],
+  "files": []
+}

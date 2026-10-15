@@ -55,7 +55,10 @@
     "qa:enterprise:negative": "node tooling/enterprise-shell/enterprise-qa-negative.mjs && node tooling/enterprise-shell/design-system-extension-negative.mjs",
     "qa:shell": "node tooling/enterprise-shell/shell-qa.mjs",
     "qa:shell:negative": "node tooling/enterprise-shell/shell-qa-negative.mjs",
-    "qa:ib3:ci-negative": "node tooling/enterprise-shell/ib3-ci-governance-negative.mjs"
+    "qa:ib3:ci-negative": "node tooling/enterprise-shell/ib3-ci-governance-negative.mjs",
+    "qa:frappe": "node tooling/frappe-adapter/run-frappe-tests.mjs --suite unit && node tooling/frappe-adapter/frappe-qa.mjs && node tooling/frappe-adapter/frappe-qa-negative.mjs",
+    "qa:integration": "node tooling/frappe-adapter/run-frappe-tests.mjs --suite integration",
+    "qa:ib4:ci-negative": "node tooling/frappe-adapter/ib4-ci-governance-negative.mjs"
   },
   "dependencies": {
     "@angular/common": "22.1.8",

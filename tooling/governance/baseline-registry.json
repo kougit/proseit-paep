@@ -428,6 +428,54 @@
         "work-packages/IB3-ENTERPRISE-SHELL/": "f298591760f78676299968fcdc2791a1bf82f77b"
       },
       "notes": "CANDIDATE only. Prepared by Claude Code under the PO/SA instruction \"PAEP IB3 - FINAL DESIGN APPROVAL + GENERATION 5 IMPLEMENTATION AUTHORIZATION\" (project thread, 2026-10-06T09:48Z), which approved HOF-IB3-001 v1.0 for implementation (manifest 645dd2e9bb4274c9b787bbbcc52cf53eb4f08dc21d733b5985aa3ab572f4fce5) and authorised IB3-ENTERPRISE-SHELL. policyChange is true because IB3 narrowly amends CLAUDE.md for this work package only, adds two mandatory CI jobs and bounds the IB0-WP05 regression for the IB3 entry points (.github/, CLAUDE.md and tooling/verification/). No package-lock.json change and no new dependency is authorised. It becomes ACCEPTED only through the promote command after PO/SA acceptance and merge."
+    },
+    {
+      "generation": 6,
+      "name": "IB4 Frappe adapter",
+      "milestone": "IB4",
+      "workPackages": [
+        "IB4-FRAPPE-ADAPTER"
+      ],
+      "status": "CANDIDATE",
+      "predecessorGeneration": 5,
+      "authorisation": {
+        "authority": "Product Owner / Solutions Architect",
+        "date": "2026-10-15",
+        "reference": "work-packages/IB4-FRAPPE-ADAPTER/WORK_PACKAGE.md"
+      },
+      "policyChange": true,
+      "authorisedScope": [
+        ".github/workflows/paep-ci.yml",
+        "CLAUDE.md",
+        "apps/reference-app/",
+        "docs/adr/ADR-011-FRAPPE-ADAPTER-BOUNDARY.md",
+        "docs/adr/ADR-REGISTER.md",
+        "docs/architecture/IB4-FRAPPE-ADAPTER-DESIGN.md",
+        "docs/provenance/PROVENANCE-REGISTER.md",
+        "evidence/IB4-FRAPPE-ADAPTER/",
+        "package.json",
+        "packages/contracts/src/",
+        "packages/frappe-sdk/README.md",
+        "packages/frappe-sdk/src/",
+        "tooling/design-system/ci-governance-negative.mjs",
+        "tooling/enterprise-shell/",
+        "tooling/frappe-adapter/",
+        "tooling/governance/baseline-registry.json",
+        "tooling/test-utils/",
+        "tooling/verification/ib0-wp05-ci-policy.json",
+        "tooling/verification/negative-ib0-wp05.mjs",
+        "tooling/verification/verify-ib0-wp05.mjs",
+        "work-packages/IB4-FRAPPE-ADAPTER/"
+      ],
+      "protectedRecords": [
+        "evidence/IB4-FRAPPE-ADAPTER/",
+        "work-packages/IB4-FRAPPE-ADAPTER/"
+      ],
+      "acceptedCommit": null,
+      "acceptedTree": null,
+      "acceptance": null,
+      "fingerprints": null,
+      "notes": "CANDIDATE only. Prepared by Claude Code under the PO/SA instruction \"PAEP IB4 - IMPLEMENTATION AUTHORISATION, IB4-FRAPPE-ADAPTER / GENERATION 6\" (project timeline, 2026-10-15T09:59Z), which approved pre-flight decisions D1-D10 and authorised IB4-FRAPPE-ADAPTER (EQP W5) on the Generation 5 baseline a50120017fc84f869043be0c2837286a6f598ef3. policyChange is true because IB4 narrowly amends CLAUDE.md for this work package only, adds the mandatory PAEP / frappe-adapter CI job and rescopes the IB3 gates E01, E09 and E10 and the IB0-WP05 filled-entry controls (.github/, CLAUDE.md and tooling/verification/). tooling/design-system/ci-governance-negative.mjs is listed only for the WP05 case-count update the new mandatory job forces. No package-lock.json change, no new dependency, no engine change and no runtime-config schema change is authorised. It becomes ACCEPTED only through the promote command after PO/SA acceptance and merge."
     }
   ]
 }

@@ -127,6 +127,10 @@
     {
       "id": "negative-ci-c",
       "name": "PAEP / negative-ci-c"
+    },
+    {
+      "id": "frappe-adapter",
+      "name": "PAEP / frappe-adapter"
     }
   ],
   "requiredCommands": {
@@ -199,6 +203,11 @@
     ],
     "negative-ci-c": [
       "npm run qa:ib0-wp05:negative -- --part c"
+    ],
+    "frappe-adapter": [
+      "npm run qa:frappe",
+      "npm run qa:integration",
+      "npm run qa:ib4:ci-negative"
     ]
   },
   "approvedActions": [

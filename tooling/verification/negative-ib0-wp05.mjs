@@ -58,20 +58,20 @@ if (process.argv.slice(2).some((a, i, all) => a !== '--part' && all[i - 1] !== '
 // the PARTITION and EXPECTED_CASES.
 const DECLARED_CASE_IDS = [
   'C06', 'G00', 'G01', 'G02', 'G03', 'G04', 'G05', 'G06', 'G07', 'G08', 'G09', 'GJ10', 'GJ11', 'GJ12', 'GJ13',
-  'GJ14', 'GJ15', 'GJ16', 'GJ17', 'GJ18', 'G10', 'G11', 'G12', 'G13', 'G14', 'G15', 'G16', 'G17', 'G18', 'C01', 'C02', 'C03', 'C04', 'C05',
+  'GJ14', 'GJ15', 'GJ16', 'GJ17', 'GJ18', 'GJ19', 'G10', 'G11', 'G12', 'G13', 'G14', 'G15', 'G16', 'G17', 'G18', 'C01', 'C02', 'C03', 'C04', 'C05',
   'C07', 'C08', 'A01', 'A02', 'A03', 'A04', 'S01', 'S02', 'S03', 'S04', 'B01', 'H01', 'H02', 'L00', 'L01', 'L02',
   'L03', 'T01', 'T02', 'T03', 'T04', 'T05', 'T06', 'I01', 'I02', 'I03', 'I04', 'F01', 'F02', 'F03', 'F04', 'X01',
   'X02', 'X03', 'X04', 'P01', 'P02', 'P03', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P13',
   'P14', 'P15', 'P16', 'P17', 'P18', 'P19', 'P21', 'P22', 'P23', 'P24', 'P20', 'N01', 'N02', 'N03', 'K01', 'K02',
   'K03', 'K08', 'K04', 'K05', 'K06', 'K07'
 ];
-const EXPECTED_CASES = 104;
+const EXPECTED_CASES = 105;
 // Explicit, deterministic case-to-part mapping (PO/SA 2026-10-07), balanced on measured case times so each part
 // keeps headroom under the 20-minute job timeout. Part a also carries qa:baseline:negative in PAEP / negative-ci.
 const PARTITION = {
   a: [
     'G00', 'G02', 'G05', 'G07', 'GJ10', 'GJ14', 'GJ17', 'G11', 'G14', 'G18', 'A02', 'A04', 'S01', 'S03', 'H02',
-    'L00', 'T02', 'I02', 'I04', 'F01', 'F02', 'F04', 'P17', 'P22', 'K05'
+    'L00', 'T02', 'I02', 'I04', 'F01', 'F02', 'F04', 'P17', 'P22', 'K05', 'GJ19'
   ],
   b: [
     'C06', 'G01', 'G03', 'G06', 'G09', 'GJ12', 'GJ15', 'G10', 'G13', 'G16', 'G17', 'C03', 'C07', 'C08', 'A01',
@@ -382,8 +382,9 @@ try {
 
   // ---- scope: Nx and IB1 --------------------------------------------------------------------------------
   caseRun('N01', 'Nx introduced (nx.json) fails the governance gate', [['nx.json', () => '{}\n']], () => verifyGate('governance'), [/FAIL W04/]);
-  // IB1-CONTRACTS-CONFIG: config/ is now CANDIDATE scope, so N02 uses a successor package outside that scope (frappe-sdk is IB4).
-  caseRun('N02', 'successor artefact outside the CANDIDATE scope (packages/frappe-sdk source) fails the governance gate', [['packages/frappe-sdk/src/lib/client.ts', () => 'export const client = 1;\n']], () => verifyGate('governance'), [/FAIL W05/]);
+  // IB1-CONTRACTS-CONFIG: config/ is now CANDIDATE scope, so N02 uses a successor package outside that scope. IB4 brings
+  // packages/frappe-sdk/src/ into the Generation 6 scope, so the case now uses the offline package (a later milestone).
+  caseRun('N02', 'successor artefact outside the CANDIDATE scope (packages/offline source) fails the governance gate', [['packages/offline/src/lib/client.ts', () => 'export const client = 1;\n']], () => verifyGate('governance'), [/FAIL W05/]);
   caseRun('N03', 'lint configuration introduced fails the governance gate', [['eslint.config.mjs', () => 'export default [];\n']], () => verifyGate('governance'), [/FAIL W07/]);
 
   // ---- IB1-CONTRACTS-CONFIG jobs are mandatory like the IB0 jobs ---------------------------------------

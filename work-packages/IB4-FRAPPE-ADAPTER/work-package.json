@@ -1,0 +1,41 @@
+{
+  "id": "IB4-FRAPPE-ADAPTER",
+  "title": "IB4: Frappe adapter",
+  "milestone": "IB4",
+  "eqp_wave": "W5",
+  "design_classification": "No new user-visible screen, dialog, component or copy (D6); no HOF-IB4 handoff required",
+  "status": "IN PROGRESS",
+  "acceptance": null,
+  "predecessor": {
+    "id": "IB3-ENTERPRISE-SHELL",
+    "status": "ACCEPTED",
+    "baseline_commit": "1046243",
+    "promotion_merge": "a501200"
+  },
+  "baseline_registry": "tooling/governance/baseline-registry.json",
+  "baseline_generation": {
+    "active_accepted": 5,
+    "candidate": 6,
+    "candidate_status": "CANDIDATE"
+  },
+  "new_dependencies": [],
+  "evidence_path": "evidence/IB4-FRAPPE-ADAPTER/",
+  "human_acceptance_required": true,
+  "claude_md_disposition": "PROTECTED GOVERNED ARTIFACT: narrow amendment permitting IB4-FRAPPE-ADAPTER only (policyChange)",
+  "adr": "ADR-011",
+  "compatibility_contract": "pmra-api-v1",
+  "frappe_adapter": "IN PROGRESS",
+  "po_sa_decisions": {
+    "D1": "APPROVED", "D2": "APPROVED", "D3": "APPROVED", "D4": "APPROVED", "D5": "APPROVED",
+    "D6": "APPROVED", "D7": "APPROVED", "D8": "APPROVED", "D9": "APPROVED", "D10": "APPROVED"
+  },
+  "carried_obligations_open": [
+    "PAEP-LOC-AR-PILOT",
+    "PAEP-LOC-HE-PILOT",
+    "PAEP-A11Y-AT-PILOT"
+  ],
+  "findings_open": {
+    "high": 0,
+    "medium": 0
+  }
+}

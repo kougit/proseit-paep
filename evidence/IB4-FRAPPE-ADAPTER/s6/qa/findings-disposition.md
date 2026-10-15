@@ -30,3 +30,12 @@ record), L5 (deployment serves files as attachments with `nosniff`), L6/F13 (a r
 next session check), L8 (transition result carries no allowed actions; `getState` gives the next set), F7 (an unmapped
 but well-formed scope still fails polls), F9 (session expiry between the two startup calls reports instead of
 redirecting), INFO items. None of these is HIGH or MEDIUM.
+
+## CI hang in `PAEP / shell-browser` (heads d2f8bdd and fa0887a)
+
+The browser-QA negative suite hung inside a strict-CSP case until the job was cancelled (after S46 on d2f8bdd, after
+S41 on fa0887a). Reproduced locally with a stress loop of the strict-CSP case on two cores: `serveStrict().close()`
+waited up to 66 s for keep-alive connections that the still-open browser context held (`server.close()` waits for
+every open connection). Fix (`tooling/enterprise-shell/shell-qa.mjs`): `close()` also calls
+`server.closeAllConnections()` after the page work is done. Same stress loop after the fix: 60/60 iterations, longest
+close 17 ms. No check, case or expectation changed.

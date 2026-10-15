@@ -53,6 +53,12 @@ test('the next page uses the cursor; the last page has no cursor', async () => {
   assert.equal(backend.calls[1].query.limit_start, '2');
   assert.equal(result.nextCursor, undefined);
   assert.equal(result.items.length, 1);
+  // One unusual server name does not fail the page; a request about it is still refused before any request.
+  const odd = makeAdapter([X.compatible, listX([row(1), row(2, { name: 'A//B' })])]);
+  const page = await odd.adapter.records.list({ recordType: 'inspection' });
+  assert.deepEqual(page.items.map((i) => i.id), ['INS-0001', 'A//B']);
+  await assert.rejects(odd.adapter.records.get({ recordType: 'inspection', id: 'A//B' }), (e) => e.code === 'INVALID_REFERENCE');
+  assert.equal(odd.backend.calls.length, 2);
 });
 
 test('unknown resources, fields, operators, malformed values and cursors are refused before any request', async () => {

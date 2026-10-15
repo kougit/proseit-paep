@@ -123,6 +123,11 @@ export function resourcesOf(map: CompiledResourceMap): ReadonlyMap<RecordTypeKey
 
 /** A record identifier that can be placed in a path segment. */
 export const validEntityId = (id: unknown): id is EntityId => typeof id === 'string' && ENTITY_ID.test(id) && entitySegmentsSafe(id);
+/**
+ * A name as the server may return it (bounded, no control character or backslash). Accepted in results so one unusual
+ * name cannot fail a whole page; any request about it still needs validEntityId.
+ */
+export const validServerName = (id: unknown): id is EntityId => typeof id === 'string' && ENTITY_ID.test(id);
 
 const RESOURCE = '/api/resource/';
 

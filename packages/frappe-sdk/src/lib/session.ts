@@ -87,16 +87,13 @@ export function createSessionGateway(transport: Transport, csrf: CsrfStore, navi
     },
 
     async signOut(): Promise<SignOutResult> {
-      // Server-authoritative: success is reported only on a server success. The token is cleared once the session is
-      // gone (success, or the server says it is no longer authenticated); after any other failure it is kept, so the
-      // retryable error can actually be retried.
+      // Server-authoritative (ADR-011 §5): local state is cleared whatever happens; success is reported only on a
+      // server success. A caller that keeps the user signed in after a failure runs check() again for a fresh token.
       try {
         const response = await transport.send({ method: 'POST', path: METHOD.logout });
-        csrf.clear();
         return { outcome: { status: 'unauthenticated' }, correlationId: response.correlationId };
-      } catch (e) {
-        if (!isPaepError(e) || e.category === 'authentication') csrf.clear();
-        throw e;
+      } finally {
+        csrf.clear();
       }
     },
 

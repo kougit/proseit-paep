@@ -7,7 +7,7 @@ import type {
   RecordSummary, RecordTypeKey, RecordsGateway, ScalarValue,
 } from '@proseit/paep-contracts';
 import { adapterError } from './errors.js';
-import { collectionPath, documentPath, validEntityId, type CompiledResource } from './resources.js';
+import { collectionPath, documentPath, validEntityId, validServerName, type CompiledResource } from './resources.js';
 import type { Transport } from './transport.js';
 
 export const DEFAULT_PAGE_SIZE = 20;
@@ -40,7 +40,7 @@ export function identityOf(doc: unknown, correlationId: string): { doc: ServerDo
   const d = doc as ServerDocument;
   const id = d['name'];
   const version = d['modified'];
-  if (!validEntityId(id) || typeof version !== 'string' || !version.length || version.length > 64) throw adapterError('MALFORMED_RESPONSE', correlationId);
+  if (!validServerName(id) || typeof version !== 'string' || !version.length || version.length > 64) throw adapterError('MALFORMED_RESPONSE', correlationId);
   return { doc: d, id, version };
 }
 

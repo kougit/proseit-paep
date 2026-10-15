@@ -38,8 +38,8 @@ apps/reference-app ──(one dynamic import)──▶ @proseit/frappe-sdk ─�
 * No `Authorization` header, no bearer token, no cookie access, no browser storage, no console output (frappe-qa F04).
 * Every POST, PUT, PATCH and DELETE carries `X-Frappe-CSRF-Token`; without a held token it fails with
   `CSRF_TOKEN_MISSING` before any request. The token is held in a closure, never in storage, the DOM or a URL, and is
-  dropped after a successful sign-out (or one the server answers as no longer authenticated), on the login redirect
-  and on any failed session check. A sign-out that fails for any other reason keeps it, so the retry can run.
+  dropped on every sign-out whatever its result (ADR-011 §5), on the login redirect and on any failed session check.
+  A caller that keeps the user signed in after a failed sign-out runs the session check again for a fresh token.
 * Each request carries `X-Correlation-Id` (`REQ-` + 16 base-32 characters); a well-formed server `X-Correlation-Id`
   (8-64 of `[A-Za-z0-9_-]`) replaces it in results and errors.
 * Retries: only retryable failures (429, 502, 503, 504, network failure, timeout), at most `retry.maxAttempts`
@@ -119,7 +119,8 @@ the adapter. Lists are cursor-paged (`o:<offset>`, page size 1-100, default 20, 
 ordered by the requested allowlisted keys, then `modified desc, name asc`. `contains` and `startsWith` escape `%`, `_`
 and `\`. Field values are JSON scalars or bounded lists of scalars; any other shape is a malformed response. A record
 id is 1-140 characters with no control character or backslash; it may contain `/` (Frappe naming series such as
-`INV/24-25/0001`), sent as one encoded path segment, but no empty, `.` or `..` segment.
+`INV/24-25/0001`), sent as one encoded path segment, but no empty, `.` or `..` segment. A server name outside that rule
+is still accepted in a result (one unusual name never fails a page), but any request about it is refused.
 
 ## 6. Workflow, concurrency and idempotency (AC-IB4-04, -07)
 
@@ -173,8 +174,9 @@ compatibility first: a blocked backend locks the navigation with the existing `e
 the shell identity; unauthenticated or expired goes to the server-hosted login with the browser's same-origin path
 and query (including the base path) as return path, or `/` when that path is not safe; invalid (including a signed-in
 user denied the session method, which would otherwise loop through the login) reports an `unknown` error. Sign-out is
-the server call, then the server login; a sign-out the server answers as no longer authenticated also goes to the
-login; any other failure keeps the user signed in and reports a retryable error. The compatibility method must be
+the server call, then the server login; a sign-out the server answers with an expired or missing session also goes
+to the login; any other failure (including a rejected CSRF token) keeps the user signed in, reports a retryable error
+and checks the session again for a fresh token, so a retry can work. The compatibility method must be
 callable by a signed-out user (it runs before the session check), and a blocked startup is retried by reloading the
 application. No route, screen, dialog,
 component or copy is added.

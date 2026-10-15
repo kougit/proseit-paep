@@ -91,13 +91,26 @@ test('sign-out is server-authoritative: on success the identity clears and the l
 });
 
 test('a failed sign-out keeps the identity, ends the pending state and reports "unknown"; a gone session signs out; an invalid session reports', async () => {
-  const { binding, navigations, reports, started } = bind([X.compatible, X.loggedUser(), X.session(), LOGOUT(417)]);
+  // The failure is reported, the user stays signed in, and the session is checked again for a fresh token, so the
+  // retried sign-out reaches the server with it.
+  const { binding, backend, navigations, reports, started } = bind([X.compatible, X.loggedUser(), X.session(), LOGOUT(417), X.loggedUser(), X.session(), LOGOUT(200)]);
   await started;
   binding.session.signOut();
   await new Promise((r) => setTimeout(r, 0));
   assert.equal(binding.session.signingOut(), false);
   assert.equal(binding.session.identity()?.principalId, 'inspector@example.test');
   assert.deepEqual([navigations, reports.map((r) => [r.kind, r.retryable])], [[], [['unknown', true]]]);
+  binding.session.signOut();
+  await new Promise((r) => setTimeout(r, 0));
+  assert.equal(backend.calls.at(-1).headers['X-Frappe-CSRF-Token'], X.session().response.body.message.csrf_token);
+  assert.deepEqual([binding.session.identity(), navigations], [null, [`${ORIGIN}/login?redirect-to=%2F`]]);
+  // A rejected CSRF token is not "already signed out": the user stays signed in and the failure is reported.
+  const rejected = bind([X.compatible, X.loggedUser(), X.session(), { request: LOGOUT(200).request, response: json(400, { exc_type: 'CSRFTokenError' }) }, X.loggedUser(), X.session()]);
+  await rejected.started;
+  rejected.binding.session.signOut();
+  await new Promise((r) => setTimeout(r, 0));
+  assert.equal(rejected.binding.session.identity()?.principalId, 'inspector@example.test');
+  assert.deepEqual([rejected.navigations, rejected.reports.map((r) => r.kind), rejected.backend.remaining()], [[], ['unknown'], 0]);
   // The server says the session is already gone: the user is treated as signed out and goes to the login.
   const gone = bind([X.compatible, X.loggedUser(), X.session(), { request: LOGOUT(200).request, response: json(401, { exc_type: 'SessionExpired' }) }]);
   await gone.started;

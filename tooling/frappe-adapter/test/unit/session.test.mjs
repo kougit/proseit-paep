@@ -65,15 +65,17 @@ test('sign-out is server-authoritative: success only on a server success, local 
   assert.match(result.correlationId, /^[A-Za-z0-9_-]{8,64}$/);
   await assert.rejects(ok.adapter.session.signOut(), (e) => e.code === 'CSRF_TOKEN_MISSING');
 
-  // A failed sign-out is not retried by the adapter and keeps the token, so the user can actually retry it.
-  const failed = makeAdapter([X.loggedUser(), X.session(), LOGOUT(417), LOGOUT(200)]);
+  // A failed sign-out is not retried by the adapter and the token is cleared all the same (ADR-011 §5); a new session
+  // check gives a fresh token, and the retried sign-out then succeeds.
+  const failed = makeAdapter([X.loggedUser(), X.session(), LOGOUT(417), X.loggedUser(), X.session(), LOGOUT(200)]);
   await failed.adapter.session.check();
   await assert.rejects(failed.adapter.session.signOut(), (e) => e.category === 'validation');
   assert.equal(failed.backend.calls.filter((c) => c.method === 'POST').length, 1, 'a failed sign-out is not retried without an idempotency key');
+  await assert.rejects(failed.adapter.session.signOut(), (e) => e.code === 'CSRF_TOKEN_MISSING');
+  assert.equal((await failed.adapter.session.check()).status, 'authenticated');
   assert.deepEqual((await failed.adapter.session.signOut()).outcome, { status: 'unauthenticated' });
   assert.equal(failed.backend.calls.at(-1).headers['X-Frappe-CSRF-Token'], SYNTHETIC_CSRF);
-  await assert.rejects(failed.adapter.session.signOut(), (e) => e.code === 'CSRF_TOKEN_MISSING');
-  // When the server says the session is already gone, the token is cleared.
+  // When the server says the session is already gone, the token is cleared too.
   const gone = makeAdapter([X.loggedUser(), X.session(), { request: LOGOUT().request, response: json(401, { exc_type: 'SessionExpired' }) }]);
   await gone.adapter.session.check();
   await assert.rejects(gone.adapter.session.signOut(), (e) => e.code === 'SESSION_EXPIRED');

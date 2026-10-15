@@ -36,7 +36,7 @@ export const ACTION_GROUP_META: LabSpecimenMeta = {
   accessibility: [
     'role="group" named by the label input.',
     'More is a <button aria-haspopup="menu" aria-expanded aria-controls> named "More actions" (visible text "More").',
-    'The menu is role="menu" with native buttons as role="menuitem", in the same order, destructive last after a divider.',
+    'The menu is the Menu component (role="menu", aligned to More\'s inline-end edge, platform light dismiss; HOF-IB2-001 v1.2 §2.3) with native buttons as role="menuitem", in the same order, destructive last after a divider.',
     'After an item runs, focus returns to More (or to the overlay the item opened). Visual order equals DOM order.',
     'Nothing depends on hover. Hiding an action is never the authorisation control.',
   ],

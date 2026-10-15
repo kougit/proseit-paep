@@ -1,0 +1,26 @@
+{
+  "profile": "strict",
+  "decision": "PO/SA strict nonce-based CSP, 2026-10-07 (AC-IB3-12)",
+  "noncePlaceholder": "%PAEP_CSP_NONCE%",
+  "nonceMinBytes": 16,
+  "deployment": [
+    "The serving or edge layer generates a fresh nonce for every HTML response from a cryptographically strong source (at least nonceMinBytes random bytes, base64), never reused and never stored in source or the build.",
+    "It replaces every noncePlaceholder in index.html (the ngCspNonce attribute on the root element and the nonce attributes the build copies from it) with that nonce, and sends the policy below with {nonce} replaced by the same value.",
+    "index.html is served with Cache-Control: no-store; the hashed scripts and styles may be cached.",
+    "A deployment adds its own origins (for example the runtime-config backend origins in connect-src) without widening script-src or style-src. A profile that cannot provide a per-response nonce is a security exception that needs PO/SA disposition."
+  ],
+  "directives": {
+    "default-src": ["'self'"],
+    "script-src": ["'self'", "'nonce-{nonce}'"],
+    "style-src": ["'self'", "'nonce-{nonce}'"],
+    "img-src": ["'self'"],
+    "font-src": ["'self'"],
+    "connect-src": ["'self'"],
+    "object-src": ["'none'"],
+    "base-uri": ["'self'"],
+    "form-action": ["'self'"],
+    "frame-ancestors": ["'none'"],
+    "require-trusted-types-for": ["'script'"],
+    "trusted-types": ["angular"]
+  }
+}

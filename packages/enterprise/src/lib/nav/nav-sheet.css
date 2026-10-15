@@ -1,0 +1,93 @@
+.paep-shell-sheet {
+  position: fixed;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+  margin: 0;
+  inline-size: min(var(--paep-shell-sheet-inline-size), 100vw);
+  max-inline-size: 100vw;
+  block-size: 100dvh;
+  max-block-size: 100dvh;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+  flex-direction: column;
+  background: var(--paep-color-surface);
+  color: var(--paep-color-text-primary);
+  box-shadow: var(--paep-elevation-5);
+}
+.paep-shell-sheet[open] {
+  display: flex;
+}
+.paep-shell-sheet::backdrop {
+  background: var(--paep-color-scrim);
+}
+.paep-shell-sheet__head {
+  display: flex;
+  align-items: center;
+  gap: var(--paep-space-2);
+  min-block-size: var(--paep-shell-topbar-block-size);
+  padding: var(--paep-space-2) var(--paep-space-3);
+  box-sizing: border-box;
+  border-block-end: 1px solid var(--paep-color-border-subtle);
+}
+.paep-shell-sheet__title {
+  flex: 1;
+  margin: 0;
+  font-size: var(--paep-font-size-title-sm);
+  font-weight: var(--paep-font-weight-title-sm);
+  line-height: var(--paep-line-height-title-sm);
+}
+.paep-shell-sheet__title:focus {
+  outline: none;
+}
+.paep-shell-sheet__title:focus-visible {
+  outline: var(--paep-focus-ring-width) solid var(--paep-color-focus-ring);
+  outline-offset: var(--paep-focus-ring-offset);
+}
+.paep-shell-sheet__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--paep-size-target-touch);
+  min-block-size: var(--paep-size-target-touch);
+  border: 1px solid transparent;
+  border-radius: var(--paep-radius-sm);
+  background: transparent;
+  color: var(--paep-color-text-primary);
+  cursor: pointer;
+}
+.paep-shell-sheet__close:hover {
+  background: var(--paep-color-hover-neutral);
+}
+.paep-shell-sheet__close svg {
+  --paep-icon-size: var(--paep-size-icon-md);
+}
+.paep-shell-sheet__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--paep-space-2);
+}
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-paep-motion='reduce']) .paep-shell-sheet[open] {
+    animation: paep-shell-sheet-in var(--paep-motion-duration-moderate) var(--paep-motion-easing-enter);
+  }
+}
+@keyframes paep-shell-sheet-in {
+  from {
+    transform: translateX(-100%);
+  }
+}
+:host-context([dir='rtl']) .paep-shell-sheet[open] {
+  animation-name: paep-shell-sheet-in-rtl;
+}
+@keyframes paep-shell-sheet-in-rtl {
+  from {
+    transform: translateX(100%);
+  }
+}
+@media (max-width: 37.4375em) {
+  .paep-shell-sheet {
+    inline-size: 100vw;
+  }
+}

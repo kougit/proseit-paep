@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, Component, DOCUMENT, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
+import { SHOWCASE_PREVIEW_DOCUMENT } from './app.config';
 import { LAB_NAV } from './app.routes';
 import { LabBrand, LabDensity, LabDirection, LabSettings } from './lab/lab-settings';
 
 /**
  * PAEP UI laboratory frame (HOF-IB2-001 SCR-IB2-L01): a header with specimen settings, a contents list at the
  * inline start from 64em (a disclosure above the page below that) and the page. Deliberately not an
- * application shell: the enterprise shell is IB3.
+ * application shell. A showcase preview document (IB3) renders only its routed enterprise shell.
  */
 @Component({
   selector: 'app-root',
@@ -22,9 +23,12 @@ export class App {
   protected readonly settings = inject(LabSettings);
   protected readonly nav = LAB_NAV;
   protected readonly contentsOpen = signal(false);
+  protected readonly preview = SHOWCASE_PREVIEW_DOCUMENT;
 
   constructor() {
     this.settings.readFromQuery(this.document.location.search);
+    // In a preview the shell owns route focus and announcements.
+    if (this.preview) return;
     this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe((e) => {
       this.settings.readFromQuery(e.urlAfterRedirects.includes('?') ? e.urlAfterRedirects.slice(e.urlAfterRedirects.indexOf('?')) : '');
       this.contentsOpen.set(false);

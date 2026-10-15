@@ -1,12 +1,14 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
+import { PaepErrorBoundary, PaepShell } from '@proseit/paep-enterprise';
 
+/** Reference application root: the enterprise shell around the routed pages (IB3). */
 @Component({
-  imports: [RouterOutlet],
+  imports: [PaepShell, PaepErrorBoundary],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
 export class App {
-  protected readonly title = signal('PAEP Reference Application');
+  /** Document title of the application (the product name comes from runtime configuration). */
+  protected readonly title = 'PAEP Reference Application';
 }

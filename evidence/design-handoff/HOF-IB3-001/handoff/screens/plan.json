@@ -1,0 +1,1544 @@
+[
+ {
+  "sid": "SCR-SHELL-001",
+  "state": "populated",
+  "file": "SCR-SHELL-001--populated.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Desktop expanded shell, populated"
+ },
+ {
+  "sid": "SCR-SHELL-001",
+  "state": "loading",
+  "file": "SCR-SHELL-001--loading.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Desktop expanded shell, loading after config"
+ },
+ {
+  "sid": "SCR-SHELL-001",
+  "state": "default",
+  "file": "SCR-SHELL-001--default.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Desktop expanded shell, default (Home)"
+ },
+ {
+  "sid": "SCR-SHELL-002",
+  "state": "collapsed",
+  "file": "SCR-SHELL-002--collapsed.html",
+  "viewports": [
+   "desktop",
+   "tablet"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Desktop collapsed navigation (rail with visible short labels, Q-03)"
+ },
+ {
+  "sid": "SCR-SHELL-002",
+  "state": "group-flyout",
+  "file": "SCR-SHELL-002--group-flyout.html",
+  "viewports": [
+   "desktop"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Collapsed rail: group flyout on the governed menu base"
+ },
+ {
+  "sid": "SCR-SHELL-002",
+  "state": "re-expanded",
+  "file": "SCR-SHELL-002--re-expanded.html",
+  "viewports": [
+   "desktop"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Re-expanded: focus returns to the collapse toggle"
+ },
+ {
+  "sid": "SCR-SHELL-003",
+  "state": "nav-closed",
+  "file": "SCR-SHELL-003--nav-closed.html",
+  "viewports": [
+   "tablet",
+   "zoom200"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Tablet and 640 px shell, navigation closed"
+ },
+ {
+  "sid": "SCR-SHELL-003",
+  "state": "nav-open",
+  "file": "SCR-SHELL-003--nav-open.html",
+  "viewports": [
+   "tablet",
+   "zoom200"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Tablet and 640 px shell, modal navigation open (Q-09)"
+ },
+ {
+  "sid": "SCR-SHELL-004",
+  "state": "nav-closed",
+  "file": "SCR-SHELL-004--nav-closed.html",
+  "viewports": [
+   "narrow375",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Narrow shell, navigation closed"
+ },
+ {
+  "sid": "SCR-SHELL-004",
+  "state": "nav-open",
+  "file": "SCR-SHELL-004--nav-open.html",
+  "viewports": [
+   "narrow375",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Narrow shell, navigation open (full width)"
+ },
+ {
+  "sid": "SCR-SHELL-004",
+  "state": "long-labels",
+  "file": "SCR-SHELL-004--long-labels.html",
+  "viewports": [
+   "narrow375",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Narrow shell, navigation open with long names and labels"
+ },
+ {
+  "sid": "SCR-SHELL-005",
+  "state": "overflow-sequence",
+  "file": "SCR-SHELL-005--overflow-sequence.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320",
+   "desktop1024",
+   "narrow375"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Topbar overflow sequence 1440 \u2192 320 (never-hidden set)"
+ },
+ {
+  "sid": "SCR-SHELL-005",
+  "state": "long-names",
+  "file": "SCR-SHELL-005--long-names.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320",
+   "desktop1024"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Topbar with long product, tenant and user names"
+ },
+ {
+  "sid": "SCR-SHELL-006",
+  "state": "current-nested",
+  "file": "SCR-SHELL-006--current-nested.html",
+  "viewports": [
+   "desktop",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Navigation: current item, nested child, counts"
+ },
+ {
+  "sid": "SCR-SHELL-006",
+  "state": "count-loading-unknown",
+  "file": "SCR-SHELL-006--count-loading-unknown.html",
+  "viewports": [
+   "desktop"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Navigation: count badge loading and unknown"
+ },
+ {
+  "sid": "SCR-SHELL-006",
+  "state": "locked-hidden",
+  "file": "SCR-SHELL-006--locked-hidden.html",
+  "viewports": [
+   "desktop",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Navigation: locked \u00d7 3 reasons shown; permission-denied hidden (Q-10 recommended)"
+ },
+ {
+  "sid": "SCR-SHELL-006",
+  "state": "locked-shown-alt",
+  "file": "SCR-SHELL-006--locked-shown-alt.html",
+  "viewports": [
+   "desktop"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Navigation: Q-10 alternative, permission-denied shown locked"
+ },
+ {
+  "sid": "SCR-SHELL-006",
+  "state": "long-labels",
+  "file": "SCR-SHELL-006--long-labels.html",
+  "viewports": [
+   "desktop",
+   "tablet"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Navigation: long labels wrap (never truncate)"
+ },
+ {
+  "sid": "SCR-SHELL-006",
+  "state": "current-nested-sheet",
+  "file": "SCR-SHELL-006--current-nested-sheet.html",
+  "viewports": [
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Navigation current-nested inside the mobile navigation container (below 1024 px)"
+ },
+ {
+  "sid": "SCR-SHELL-006",
+  "state": "count-loading-unknown-sheet",
+  "file": "SCR-SHELL-006--count-loading-unknown-sheet.html",
+  "viewports": [
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Navigation count-loading-unknown inside the mobile navigation container (below 1024 px)"
+ },
+ {
+  "sid": "SCR-SHELL-006",
+  "state": "locked-hidden-sheet",
+  "file": "SCR-SHELL-006--locked-hidden-sheet.html",
+  "viewports": [
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Navigation locked-hidden inside the mobile navigation container (below 1024 px)"
+ },
+ {
+  "sid": "SCR-SHELL-006",
+  "state": "locked-shown-alt-sheet",
+  "file": "SCR-SHELL-006--locked-shown-alt-sheet.html",
+  "viewports": [
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Navigation locked-shown-alt inside the mobile navigation container (below 1024 px)"
+ },
+ {
+  "sid": "SCR-SHELL-006",
+  "state": "long-labels-sheet",
+  "file": "SCR-SHELL-006--long-labels-sheet.html",
+  "viewports": [
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Navigation long-labels inside the mobile navigation container (below 1024 px)"
+ },
+ {
+  "sid": "SCR-SHELL-007",
+  "state": "long-names",
+  "file": "SCR-SHELL-007--long-names.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Context: long tenant and site names"
+ },
+ {
+  "sid": "SCR-SHELL-007",
+  "state": "single-context",
+  "file": "SCR-SHELL-007--single-context.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Context: one context only, no switcher (Q-11)"
+ },
+ {
+  "sid": "SCR-SHELL-007",
+  "state": "switch-dialog",
+  "file": "SCR-SHELL-007--switch-dialog.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Context switch request dialog (Q-11)"
+ },
+ {
+  "sid": "SCR-SHELL-007",
+  "state": "switch-pending",
+  "file": "SCR-SHELL-007--switch-pending.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Context switch request pending"
+ },
+ {
+  "sid": "SCR-SHELL-007",
+  "state": "switch-rejected",
+  "file": "SCR-SHELL-007--switch-rejected.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Context switch request rejected"
+ },
+ {
+  "sid": "SCR-SHELL-007",
+  "state": "deep-link-mismatch",
+  "file": "SCR-SHELL-007--deep-link-mismatch.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Deep link to another tenant: never switches silently"
+ },
+ {
+  "sid": "SCR-SHELL-007",
+  "state": "impersonation",
+  "file": "SCR-SHELL-007--impersonation.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Support impersonation always visible"
+ },
+ {
+  "sid": "SCR-SHELL-008",
+  "state": "idle",
+  "file": "SCR-SHELL-008--idle.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Command palette: idle"
+ },
+ {
+  "sid": "SCR-SHELL-008",
+  "state": "typing",
+  "file": "SCR-SHELL-008--typing.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Command palette: typing"
+ },
+ {
+  "sid": "SCR-SHELL-008",
+  "state": "loading",
+  "file": "SCR-SHELL-008--loading.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Command palette: loading"
+ },
+ {
+  "sid": "SCR-SHELL-008",
+  "state": "results",
+  "file": "SCR-SHELL-008--results.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Command palette: results"
+ },
+ {
+  "sid": "SCR-SHELL-008",
+  "state": "none",
+  "file": "SCR-SHELL-008--none.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Command palette: none"
+ },
+ {
+  "sid": "SCR-SHELL-008",
+  "state": "error",
+  "file": "SCR-SHELL-008--error.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Command palette: error"
+ },
+ {
+  "sid": "SCR-SHELL-008",
+  "state": "partial",
+  "file": "SCR-SHELL-008--partial.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Command palette: partial"
+ },
+ {
+  "sid": "SCR-SHELL-008",
+  "state": "locked",
+  "file": "SCR-SHELL-008--locked.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Command palette: locked"
+ },
+ {
+  "sid": "SCR-SHELL-008",
+  "state": "full-screen-narrow",
+  "file": "SCR-SHELL-008--full-screen-narrow.html",
+  "viewports": [
+   "narrow320",
+   "narrow375"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Command palette: narrow"
+ },
+ {
+  "sid": "SCR-SHELL-009",
+  "state": "access-none",
+  "file": "SCR-SHELL-009--access-none.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Notification access: none"
+ },
+ {
+  "sid": "SCR-SHELL-009",
+  "state": "access-unread",
+  "file": "SCR-SHELL-009--access-unread.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Notification access: unread"
+ },
+ {
+  "sid": "SCR-SHELL-009",
+  "state": "access-99plus",
+  "file": "SCR-SHELL-009--access-99plus.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Notification access: 99plus"
+ },
+ {
+  "sid": "SCR-SHELL-009",
+  "state": "access-count-loading",
+  "file": "SCR-SHELL-009--access-count-loading.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Notification access: count-loading"
+ },
+ {
+  "sid": "SCR-SHELL-009",
+  "state": "access-count-error",
+  "file": "SCR-SHELL-009--access-count-error.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Notification access: count-error"
+ },
+ {
+  "sid": "SCR-SHELL-009",
+  "state": "access-provider-unavailable",
+  "file": "SCR-SHELL-009--access-provider-unavailable.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Notification access: provider-unavailable"
+ },
+ {
+  "sid": "SCR-SHELL-009",
+  "state": "panel-populated",
+  "file": "SCR-SHELL-009--panel-populated.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Notification panel: populated"
+ },
+ {
+  "sid": "SCR-SHELL-009",
+  "state": "panel-empty",
+  "file": "SCR-SHELL-009--panel-empty.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Notification panel: empty"
+ },
+ {
+  "sid": "SCR-SHELL-009",
+  "state": "panel-loading",
+  "file": "SCR-SHELL-009--panel-loading.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Notification panel: loading"
+ },
+ {
+  "sid": "SCR-SHELL-009",
+  "state": "panel-error",
+  "file": "SCR-SHELL-009--panel-error.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Notification panel: error"
+ },
+ {
+  "sid": "SCR-SHELL-009",
+  "state": "panel-stale",
+  "file": "SCR-SHELL-009--panel-stale.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Notification panel: stale"
+ },
+ {
+  "sid": "SCR-SHELL-009",
+  "state": "panel-unavailable",
+  "file": "SCR-SHELL-009--panel-unavailable.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Notification panel: unavailable"
+ },
+ {
+  "sid": "SCR-SHELL-009",
+  "state": "transient-vs-persistent",
+  "file": "SCR-SHELL-009--transient-vs-persistent.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Transient announcement vs persistent notification"
+ },
+ {
+  "sid": "SCR-SHELL-010",
+  "state": "account-menu",
+  "file": "SCR-SHELL-010--account-menu.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Account menu with sign-out and language request"
+ },
+ {
+  "sid": "SCR-SHELL-010",
+  "state": "single-locale",
+  "file": "SCR-SHELL-010--single-locale.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Account menu, one locale: language shown, no language control in the topbar"
+ },
+ {
+  "sid": "SCR-SHELL-010",
+  "state": "locale-selector",
+  "file": "SCR-SHELL-010--locale-selector.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Language selector (host supplies more than one locale, X-05 B): topbar language control opens a menuitemradio group on the governed menu at >= 600 px; below 600 px the group is in the account menu; choosing sends a request to the app"
+ },
+ {
+  "sid": "SCR-SHELL-010",
+  "state": "signing-out",
+  "file": "SCR-SHELL-010--signing-out.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Sign-out in progress (state given by host)"
+ },
+ {
+  "sid": "SCR-SHELL-010",
+  "state": "help",
+  "file": "SCR-SHELL-010--help.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Help surface (app-configured hook)"
+ },
+ {
+  "sid": "SCR-SHELL-011",
+  "state": "title-only",
+  "file": "SCR-SHELL-011--title-only.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Page frame: title only"
+ },
+ {
+  "sid": "SCR-SHELL-011",
+  "state": "title-context-status",
+  "file": "SCR-SHELL-011--title-context-status.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Page frame: title + context + status"
+ },
+ {
+  "sid": "SCR-SHELL-011",
+  "state": "actions-overflow",
+  "file": "SCR-SHELL-011--actions-overflow.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Page frame: primary + secondary actions + overflow"
+ },
+ {
+  "sid": "SCR-SHELL-011",
+  "state": "breadcrumbs",
+  "file": "SCR-SHELL-011--breadcrumbs.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Page frame: breadcrumbs (when justified)"
+ },
+ {
+  "sid": "SCR-SHELL-011",
+  "state": "filter-region",
+  "file": "SCR-SHELL-011--filter-region.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Page frame: filter region"
+ },
+ {
+  "sid": "SCR-SHELL-011",
+  "state": "extension-regions",
+  "file": "SCR-SHELL-011--extension-regions.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Page frame: generic extension and action regions"
+ },
+ {
+  "sid": "SCR-SHELL-011",
+  "state": "aside",
+  "file": "SCR-SHELL-011--aside.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320",
+   "desktop1024"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Page frame: aside (beside at \u2265 1440, below otherwise)"
+ },
+ {
+  "sid": "SCR-SHELL-011",
+  "state": "long-content",
+  "file": "SCR-SHELL-011--long-content.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Page frame: long title and content"
+ },
+ {
+  "sid": "SCR-SHELL-011",
+  "state": "content-loading",
+  "file": "SCR-SHELL-011--content-loading.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Page frame: content loading"
+ },
+ {
+  "sid": "SCR-SHELL-011",
+  "state": "content-empty",
+  "file": "SCR-SHELL-011--content-empty.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Page frame: content empty"
+ },
+ {
+  "sid": "SCR-SHELL-011",
+  "state": "content-error",
+  "file": "SCR-SHELL-011--content-error.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Page frame: content error"
+ },
+ {
+  "sid": "SCR-SHELL-012",
+  "state": "page-permission",
+  "file": "SCR-SHELL-012--page-permission.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Locked page: permission"
+ },
+ {
+  "sid": "SCR-SHELL-012",
+  "state": "page-edition",
+  "file": "SCR-SHELL-012--page-edition.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Locked page: edition"
+ },
+ {
+  "sid": "SCR-SHELL-012",
+  "state": "page-configuration",
+  "file": "SCR-SHELL-012--page-configuration.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Locked page: configuration"
+ },
+ {
+  "sid": "SCR-SHELL-012",
+  "state": "page-environment",
+  "file": "SCR-SHELL-012--page-environment.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Locked page: environment"
+ },
+ {
+  "sid": "SCR-SHELL-012",
+  "state": "three-levels",
+  "file": "SCR-SHELL-012--three-levels.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Locked \u00d7 4 reasons at page, navigation-item and action level"
+ },
+ {
+  "sid": "SCR-SHELL-013",
+  "state": "recoverable",
+  "file": "SCR-SHELL-013--recoverable.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Error boundary: recoverable with correlation reference"
+ },
+ {
+  "sid": "SCR-SHELL-013",
+  "state": "not-retryable",
+  "file": "SCR-SHELL-013--not-retryable.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Error boundary: not retryable (safe navigation only)"
+ },
+ {
+  "sid": "SCR-SHELL-013",
+  "state": "lazy-load-failure",
+  "file": "SCR-SHELL-013--lazy-load-failure.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Route / lazy-load failure"
+ },
+ {
+  "sid": "SCR-SHELL-013",
+  "state": "incompatible-version",
+  "file": "SCR-SHELL-013--incompatible-version.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Incompatible version"
+ },
+ {
+  "sid": "SCR-SHELL-013",
+  "state": "not-found",
+  "file": "SCR-SHELL-013--not-found.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Not found"
+ },
+ {
+  "sid": "SCR-SHELL-014",
+  "state": "online",
+  "file": "SCR-SHELL-014--online.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Connectivity: online"
+ },
+ {
+  "sid": "SCR-SHELL-014",
+  "state": "offline",
+  "file": "SCR-SHELL-014--offline.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Connectivity: offline"
+ },
+ {
+  "sid": "SCR-SHELL-014",
+  "state": "degraded",
+  "file": "SCR-SHELL-014--degraded.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Connectivity: degraded"
+ },
+ {
+  "sid": "SCR-SHELL-014",
+  "state": "unknown",
+  "file": "SCR-SHELL-014--unknown.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Connectivity: unknown"
+ },
+ {
+  "sid": "SCR-SHELL-014",
+  "state": "non-production",
+  "file": "SCR-SHELL-014--non-production.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Non-production environment notice"
+ },
+ {
+  "sid": "SCR-SHELL-014",
+  "state": "stacked",
+  "file": "SCR-SHELL-014--stacked.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Stacked status: impersonation + degraded + session expiring + environment"
+ },
+ {
+  "sid": "SCR-SHELL-014",
+  "state": "stacked-narrow-collapsed",
+  "file": "SCR-SHELL-014--stacked-narrow-collapsed.html",
+  "viewports": [
+   "narrow320",
+   "short320x256"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Stacked status below 600 px (recommended): highest-priority message plus a disclosure for the rest"
+ },
+ {
+  "sid": "SCR-SHELL-015",
+  "state": "default",
+  "file": "SCR-SHELL-015--default.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Generic hosting example: default"
+ },
+ {
+  "sid": "SCR-SHELL-015",
+  "state": "loading",
+  "file": "SCR-SHELL-015--loading.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Generic hosting example: loading"
+ },
+ {
+  "sid": "SCR-SHELL-015",
+  "state": "empty",
+  "file": "SCR-SHELL-015--empty.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Generic hosting example: empty"
+ },
+ {
+  "sid": "SCR-SHELL-015",
+  "state": "error",
+  "file": "SCR-SHELL-015--error.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Generic hosting example: error"
+ },
+ {
+  "sid": "SCR-SHELL-016",
+  "state": "preferences",
+  "file": "SCR-SHELL-016--preferences.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Shell-local preferences (session only)"
+ },
+ {
+  "sid": "SCR-SHELL-016",
+  "state": "applied-compact-collapsed",
+  "file": "SCR-SHELL-016--applied-compact-collapsed.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Preferences applied: collapsed navigation + compact content"
+ },
+ {
+  "sid": "SCR-SHELL-017",
+  "state": "ar-001-shell",
+  "file": "SCR-SHELL-017--ar-001-shell.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "RTL (ar): expanded shell"
+ },
+ {
+  "sid": "SCR-SHELL-017",
+  "state": "ar-004-nav-open",
+  "file": "SCR-SHELL-017--ar-004-nav-open.html",
+  "viewports": [
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "RTL (ar): mobile navigation open"
+ },
+ {
+  "sid": "SCR-SHELL-017",
+  "state": "ar-008-palette",
+  "file": "SCR-SHELL-017--ar-008-palette.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "RTL (ar): command palette"
+ },
+ {
+  "sid": "SCR-SHELL-017",
+  "state": "he-001-shell",
+  "file": "SCR-SHELL-017--he-001-shell.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "RTL (he): expanded shell"
+ },
+ {
+  "sid": "SCR-SHELL-017",
+  "state": "he-004-nav-open",
+  "file": "SCR-SHELL-017--he-004-nav-open.html",
+  "viewports": [
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "RTL (he): mobile navigation open"
+ },
+ {
+  "sid": "SCR-SHELL-017",
+  "state": "he-008-palette",
+  "file": "SCR-SHELL-017--he-008-palette.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "RTL (he): command palette"
+ },
+ {
+  "sid": "SCR-SHELL-017",
+  "state": "ar-006-nav-locked",
+  "file": "SCR-SHELL-017--ar-006-nav-locked.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "RTL (ar): navigation states and locked items"
+ },
+ {
+  "sid": "SCR-SHELL-017",
+  "state": "ar-011-frame",
+  "file": "SCR-SHELL-017--ar-011-frame.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "RTL (ar): page frame with aside and mixed-direction identifiers"
+ },
+ {
+  "sid": "SCR-SHELL-017",
+  "state": "ar-012-locked",
+  "file": "SCR-SHELL-017--ar-012-locked.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "RTL (ar): locked page"
+ },
+ {
+  "sid": "SCR-SHELL-017",
+  "state": "he-006-nav-locked",
+  "file": "SCR-SHELL-017--he-006-nav-locked.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "RTL (he): navigation states and locked items"
+ },
+ {
+  "sid": "SCR-SHELL-017",
+  "state": "he-011-frame",
+  "file": "SCR-SHELL-017--he-011-frame.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "RTL (he): page frame with aside and mixed-direction identifiers"
+ },
+ {
+  "sid": "SCR-SHELL-017",
+  "state": "he-012-locked",
+  "file": "SCR-SHELL-017--he-012-locked.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "RTL (he): locked page"
+ },
+ {
+  "sid": "SCR-SHELL-018",
+  "state": "long-text-2x",
+  "file": "SCR-SHELL-018--long-text-2x.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Long-text (2\u00d7) board: truncation vs wrap"
+ },
+ {
+  "sid": "SCR-SHELL-018",
+  "state": "zoom-400",
+  "file": "SCR-SHELL-018--zoom-400.html",
+  "viewports": [
+   "narrow320",
+   "short320x256"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "400 % zoom equivalent (1280 px at 400 % = 320 CSS px)"
+ },
+ {
+  "sid": "SCR-SHELL-020",
+  "state": "focus-order",
+  "file": "SCR-SHELL-020--focus-order.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": false,
+  "title": "Focus order (numbered; stop 1 is the skip link, visible on focus as in SCR-SHELL-020 maps)"
+ },
+ {
+  "sid": "SCR-SHELL-022",
+  "state": "comfortable",
+  "file": "SCR-SHELL-022--comfortable.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Density: comfortable content in shell chrome"
+ },
+ {
+  "sid": "SCR-SHELL-022",
+  "state": "compact",
+  "file": "SCR-SHELL-022--compact.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Density: compact content, chrome unchanged (Q-14)"
+ },
+ {
+  "sid": "SCR-SHELL-021",
+  "state": "nav-open-reduced",
+  "file": "SCR-SHELL-021--nav-open-reduced.html",
+  "viewports": [
+   "tablet",
+   "narrow320"
+  ],
+  "full": false,
+  "reduced": true,
+  "title": "Reduced motion: navigation open without slide"
+ },
+ {
+  "sid": "SCR-SHELL-021",
+  "state": "palette-reduced",
+  "file": "SCR-SHELL-021--palette-reduced.html",
+  "viewports": [
+   "desktop"
+  ],
+  "full": false,
+  "reduced": true,
+  "title": "Reduced motion: palette without animation; spinner static"
+ },
+ {
+  "sid": "SCR-SHELL-020",
+  "state": "maps",
+  "file": "SCR-SHELL-020--maps.html",
+  "viewports": [
+   "desktop",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Keyboard / focus maps and focus visibility"
+ },
+ {
+  "sid": "SCR-SHELL-021",
+  "state": "board",
+  "file": "SCR-SHELL-021--board.html",
+  "viewports": [
+   "desktop",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Reduced-motion board"
+ },
+ {
+  "sid": "SCR-SHELL-023",
+  "state": "board",
+  "file": "SCR-SHELL-023--board.html",
+  "viewports": [
+   "desktop",
+   "tablet",
+   "zoom200",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "Governed menu/positioning base"
+ },
+ {
+  "sid": "SCR-SHELL-019",
+  "state": "board",
+  "file": "SCR-SHELL-019--board.html",
+  "viewports": [
+   "desktop",
+   "narrow320"
+  ],
+  "full": true,
+  "reduced": false,
+  "title": "320 px board"
+ }
+]

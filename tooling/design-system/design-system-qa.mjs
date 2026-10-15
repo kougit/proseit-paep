@@ -2,8 +2,9 @@
 /**
  * PAEP IB2 design-system static quality gate (npm run qa:design-system).
  *
- * Checks the approved handoff evidence, token drift, the 25-component census and public API, token-only and
- * logical-property styling, import boundaries, clean-room terms, UI-lab coverage, content keys and test hygiene.
+ * Checks the approved handoff evidence, token drift, the component census (the 25 IB2 components plus the approved
+ * HOF-IB3-001 primitives) and public API, token-only and logical-property styling, import boundaries, clean-room
+ * terms, UI-lab coverage, content keys, test hygiene, and (IB3, by extension) the icon set and the shell tokens.
  * Every check reads files through `fsx`, so the negative suite can run the same checks over a mutated overlay.
  *
  *   node tooling/design-system/design-system-qa.mjs [--json <file>]
@@ -45,6 +46,96 @@ export const COMPONENTS = [
   ['divider', 'Structure', ['PaepDivider']],
 ];
 
+/**
+ * IB3-ENTERPRISE-SHELL extension (HOF-IB3-001 v1.0 component-map §2, PO/SA 2026-10-05; HOF-IB2-001 v1.2 §2.2, PO/SA
+ * 2026-10-07). New generic primitives: id, family, exported classes, and the states their specimen must document
+ * (P-03 combobox, P-04 count badge, P-02 menu).
+ */
+export const IB3_COMPONENTS = [
+  ['combobox', 'Forms', ['PaepCombobox'], ['default', 'typing', 'active option', 'no options']],
+  ['count-badge', 'Feedback', ['PaepCountBadge'], ['count', 'capped', 'loading', 'unknown']],
+  ['menu', 'Overlay', ['PaepMenu', 'PaepMenuTrigger', 'PaepMenuItem', 'PaepMenuItemRadio', 'PaepMenuGroup', 'PaepMenuSeparator'], ['closed', 'open', 'link item', 'radio group', 'disabled item', 'align end']],
+];
+
+/**
+ * Approved variants of accepted components (HOF-IB3-001 P-04, P-05, P-06; HOF-IB2-001 v1.2 §2.1 P-01 popover
+ * alignment): component id and the state its specimen documents.
+ */
+export const IB3_EXTENDED = [
+  ['icon-button', ['count', 'count capped', 'count loading', 'count unknown']],
+  ['button', ['field']],
+  ['empty-state', ['unavailable']],
+  ['popover', ['align end']],
+];
+
+/**
+ * The exact public API of @proseit/paep-components (values and types): the accepted IB2 exports plus the approved
+ * HOF-IB3-001 combobox and count-badge symbols and the HOF-IB2-001 v1.2 popover alignment and menu symbols. Any other
+ * export fails S03.
+ */
+export const PUBLIC_EXPORTS = [
+  'PAEP_DEFAULT_MESSAGES', 'PAEP_MESSAGES', 'paepFormat', 'providePaepMessages', 'PaepMessageKey', 'PaepMessages',
+  'PaepButton', 'PaepButtonVariant', 'PaepButtonType', 'PaepIconButton', 'PaepIconButtonVariant', 'PaepActionGroup',
+  'PaepActionGroupVariant', 'PaepActionPriority', 'PaepField', 'PAEP_FIELD_CONTROL', 'PaepFieldControl', 'PaepInput',
+  'PaepSelect', 'PaepCheckbox', 'PaepRadioGroup', 'PaepRadio', 'PaepTable', 'PaepTableCell', 'PaepTableCellContext',
+  'PaepTableColumn', 'PaepTableRow', 'PaepTableVariant', 'PaepList', 'PaepCollectionState', 'PaepListItem',
+  'PaepPagination', 'PaepEmptyState', 'PaepEmptyStateKind', 'PaepHeadingLevel', 'PaepAlert', 'PaepAlertStatus',
+  'PaepStatusBadge', 'PAEP_STATUS_ICONS', 'PaepStatusTone', 'PaepProgress', 'PaepSkeleton', 'PaepSkeletonShape',
+  'PaepDialog', 'PaepDialogClose', 'PaepDialogFooter', 'PaepModalBase', 'PaepDialogSize', 'PaepDrawer', 'PaepDrawerSide',
+  'PaepDrawerSize', 'PaepPopover', 'PaepPopoverTrigger', 'PaepPopoverFocus', 'PaepPopoverVariant', 'PaepTab', 'PaepTabs',
+  'PaepTabsActivation', 'PaepBreadcrumb', 'PaepBreadcrumbItem', 'PaepCard', 'PaepCardHeadingLevel', 'PaepPanel',
+  'PaepDivider', 'PaepVerticalDivider',
+  // HOF-IB3-001 P-03 / P-04.
+  'PaepCombobox', 'PaepComboboxGroup', 'PaepComboboxOption', 'PaepCountBadge', 'PaepCount', 'PaepCountBadgeVariant',
+  // HOF-IB2-001 v1.2 P-01 / P-02.
+  'PaepPopoverAlign', 'PaepMenu', 'PaepMenuTrigger', 'PaepMenuItem', 'PaepMenuItemRadio', 'PaepMenuGroup', 'PaepMenuSeparator',
+];
+
+/**
+ * Generic component message keys added with the P-04 count badge (English defaults from HOF-IB3-001 content-keys
+ * paep.shell.nav.count.*, which name the same texts for the shell). The catalogue is the handoff keys plus these.
+ */
+export const IB3_CONTENT_KEYS = ['paep.count.items', 'paep.count.loading', 'paep.count.unknown', 'paep.count.inName'];
+
+/**
+ * Icon set (HOF-IB2-001 assets/icons + HOF-IB3-001 P-08): the 25 accepted icons, pinned by the sha256 of their
+ * drawing data so they stay unchanged, and the 24 approved shell icons in asset-register order, pinned likewise.
+ */
+export const ICONS = {
+  file: 'packages/foundation/src/lib/icons/icons.ts',
+  accepted: ['check', 'chevron-down', 'chevron-end', 'chevron-start', 'chevron-up', 'close', 'contents', 'delete', 'empty', 'error', 'external', 'info', 'minus', 'more', 'neutral', 'no-results', 'page-first', 'page-last', 'pending', 'plus', 'retry', 'search', 'spinner', 'success', 'warning'],
+  acceptedSha256: '4f452b4254cbf79809950722dc93ec16ca5372a60047041f433f213064faa45a',
+  shell: ['menu', 'panel-start', 'bell', 'user', 'help', 'globe', 'building', 'lock', 'edition', 'sliders', 'device', 'signal', 'signal-low', 'cloud-off', 'unknown', 'impersonate', 'environment', 'home', 'list', 'tasks', 'document', 'shield', 'sign-out', 'keyboard'],
+  shellSha256: 'b1de4631ed78b263fb8cec86f695f97b7615ae32e622f30d404ff318dfdec758',
+  // Mirrored in RTL: the accepted directional icons plus panel-start and sign-out (HOF-IB3-001 accessibility-intent §6).
+  directional: ['chevron-start', 'chevron-end', 'page-first', 'page-last', 'external', 'panel-start', 'sign-out'],
+};
+
+/**
+ * Shell tokens (HOF-IB3-001 token-use-map.md §3, PO/SA 2026-10-05): exactly these 12 --paep-shell-* / --paep-layer-*
+ * tokens with these values; the rejected content-max alias nowhere. Every other token equals the accepted IB2
+ * catalogue (184 tokens, pinned by the sha256 of its name=value lines), so no colour, tone or other token is added.
+ */
+export const SHELL_TOKENS = {
+  approved: {
+    '--paep-shell-topbar-block-size': '3.5rem',
+    '--paep-shell-sidebar-inline-size': '16rem',
+    '--paep-shell-rail-inline-size': '5.5rem',
+    '--paep-shell-sheet-inline-size': '20rem',
+    '--paep-shell-status-block-size': '2.5rem',
+    '--paep-shell-sticky-offset': 'calc(var(--paep-shell-topbar-block-size) + var(--paep-space-2))',
+    '--paep-layer-sticky': '30',
+    '--paep-layer-flyout': '40',
+    '--paep-layer-popup': '45',
+    '--paep-layer-overlay-scrim': '60',
+    '--paep-layer-overlay': '61',
+    '--paep-layer-skip-link': '80',
+  },
+  rejected: ['--paep-shell-content-max-inline-size'],
+  ib2Count: 184,
+  ib2Sha256: 'ab692ca4b74276453626bb1f6d286873bf342a4f177edaefd84589e53f507442',
+};
+
 export const HANDOFF = {
   manifest: 'evidence/design-handoff/HOF-IB2-001/handoff.manifest.yaml',
   manifestSha256: '24e7049dd675e2025ae75c099637fd3f0a9eb9f24ff2958d1ce88607d040ac53',
@@ -56,6 +147,10 @@ export const HANDOFF = {
   fileHashes: 'evidence/design-handoff/HOF-IB2-001/HANDOFF-FILES.sha256',
   fileHashesSha256: '0e340d5af4f77ac167d3626bf422249c13951bcf83b9bf91c5f384fbb00e7a38',
   hashedDirs: ['design-export', 'requirements'],
+  // HOF-IB2-001 v1.2 (Q-02 popover alignment, PaepMenu, action-group overflow), APPROVED_FOR_IMPLEMENTATION by the
+  // PO/SA on 2026-10-07; pinned so the approved text cannot change without failing S01.
+  v12: 'evidence/design-handoff/HOF-IB2-001/v1.2/HOF-IB2-001-v1.2.md',
+  v12Sha256: '8c030f1228f35d8b8f08e38e744d5dc1b16d521df26723079e31200f974f6b32',
 };
 
 /**
@@ -75,6 +170,7 @@ export const FORBIDDEN_TERMS = [/\bultima\b/i, /primeng/i, /primeicons/i, /prime
 
 const COMPONENTS_DIR = 'packages/components/src/lib';
 const FOUNDATION_DIR = 'packages/foundation/src';
+const SHOWCASE_DIR = 'apps/ui-lab/src/app/showcase/';
 
 /** Real file system rooted at the repository; `overlay` maps path -> content (null = deleted). */
 export function makeFs(root = ROOT, overlay = new Map()) {
@@ -218,7 +314,14 @@ export function runChecks(fsx) {
       }
       for (const f of listed.keys()) if (!present.includes(f)) p.push(`pinned handoff file ${f} missing`);
     }
-    add('S01', 'HOF-IB2-001 v1.1 APPROVED_FOR_IMPLEMENTATION is retained with the approved manifest hash, and every retained handoff file matches its pinned sha256', p, `manifest sha256 ${HANDOFF.manifestSha256.slice(0, 12)}…, APPROVED_FOR_IMPLEMENTATION; ${pinned} handoff files pinned`);
+    if (!fsx.exists(HANDOFF.v12)) p.push(`${HANDOFF.v12} missing`);
+    else {
+      const t = fsx.read(HANDOFF.v12);
+      const sha = crypto.createHash('sha256').update(fsx.readBytes(HANDOFF.v12)).digest('hex');
+      if (sha !== HANDOFF.v12Sha256) p.push(`v1.2 revision sha256 ${sha} != approved ${HANDOFF.v12Sha256}`);
+      if (!/^\*\*Status:\*\* APPROVED_FOR_IMPLEMENTATION by the PO\/SA/m.test(t)) p.push('v1.2 revision status is not APPROVED_FOR_IMPLEMENTATION by the PO/SA');
+    }
+    add('S01', 'HOF-IB2-001 v1.1 APPROVED_FOR_IMPLEMENTATION is retained with the approved manifest hash, every retained handoff file matches its pinned sha256, and the approved v1.2 revision matches its pinned sha256', p, `manifest sha256 ${HANDOFF.manifestSha256.slice(0, 12)}…, APPROVED_FOR_IMPLEMENTATION; ${pinned} handoff files pinned; v1.2 ${HANDOFF.v12Sha256.slice(0, 12)}… APPROVED_FOR_IMPLEMENTATION`);
   }
 
   // S02: generated token files match the approved values (no drift, no hand edits).
@@ -262,16 +365,22 @@ export function runChecks(fsx) {
   {
     const p = [];
     const dirs = [...new Set(fsx.list(COMPONENTS_DIR).map((f) => f.slice(COMPONENTS_DIR.length + 1).split('/')[0]))].filter((d) => d !== 'messages');
-    const expected = COMPONENTS.map(([id]) => id);
+    const expected = [...COMPONENTS, ...IB3_COMPONENTS].map(([id]) => id);
     for (const id of expected) {
       if (!dirs.includes(id)) { p.push(`${id}: folder missing`); continue; }
       if (!fsx.exists(`${COMPONENTS_DIR}/${id}/${id}.spec.ts`)) p.push(`${id}: ${id}.spec.ts missing`);
     }
-    for (const d of dirs) if (!expected.includes(d)) p.push(`unexpected component folder ${d} (outside the 25-component tranche)`);
+    for (const d of dirs) if (!expected.includes(d)) p.push(`unexpected component folder ${d} (outside the 25-component tranche and the approved HOF-IB3-001 primitives)`);
     const exported = [...index.matchAll(/export\s*\{([^}]*)\}\s*from\s*'([^']+)'/g)].flatMap((m) => m[1].split(',').map((s) => s.trim()).filter(Boolean).map((n) => ({ n: n.replace(/^type\s+/, ''), from: m[2] })));
-    for (const [id, , classes] of COMPONENTS) for (const c of classes) if (!exported.some((e) => e.n === c)) p.push(`${c} (${id}) not exported from packages/components/src/index.ts`);
+    for (const [id, , classes] of [...COMPONENTS, ...IB3_COMPONENTS]) for (const c of classes) if (!exported.some((e) => e.n === c)) p.push(`${c} (${id}) not exported from packages/components/src/index.ts`);
     for (const e of exported) if (!e.from.startsWith('./lib/')) p.push(`index re-exports from ${e.from}`);
-    add('S03', 'Exactly the 25 IR-01 §6.4 components, each with behaviour tests, exported through the public entry point only', p, `${expected.length} components; ${exported.length} public exports`);
+    // The whole public API, values and types (export { … } and export type { … }), equals the approved list.
+    const api = [...index.matchAll(/export\s+(?:type\s+)?\{([^}]*)\}\s*from\s*'[^']+'/g)].flatMap((m) => m[1].split(',').map((s) => s.trim().replace(/^type\s+/, '').split(/\s+as\s+/).pop()).filter(Boolean));
+    if (/export\s*\*|export\s+(?:const|let|var|function|class|interface|type\s+\w+\s*=|enum|default)\b/.test(stripComments(index))) p.push('index.ts declares or star-exports symbols directly (re-export named symbols only)');
+    for (const n of api) if (!PUBLIC_EXPORTS.includes(n)) p.push(`unapproved public export ${n}`);
+    for (const n of PUBLIC_EXPORTS) if (!api.includes(n)) p.push(`approved public export ${n} missing`);
+    if (new Set(api).size !== api.length) p.push('a public symbol is exported twice');
+    add('S03', 'Exactly the 25 IR-01 §6.4 components plus the approved IB3 primitives (combobox, count badge, menu), each with behaviour tests, exported through the public entry point only; the public API equals the approved export list', p, `${expected.length} components; ${api.length} public exports (approved list)`);
   }
 
   // S04: token-only, logical-property styling in components (and the foundation base stylesheet).
@@ -325,14 +434,16 @@ export function runChecks(fsx) {
         if (/^@proseit\/[^/]+\/./.test(spec_)) p.push(`${f}: deep import ${spec_}`);
         if (/^(axe-core|playwright|@vitest\/browser-playwright)$/.test(spec_)) p.push(`${f}: imports test tooling ${spec_}`);
         if (/^vitest/.test(spec_) && !spec) p.push(`${f}: imports ${spec_} outside a spec`);
-        if (/frappe|erpnext/i.test(spec_) || /^@proseit\/(paep-domain-|frappe-sdk|paep-enterprise|paep-analytics|paep-offline)/.test(spec_)) p.push(`${f}: imports ${spec_} (later milestone)`);
+        // IB3 (AC-IB3-14): only the bounded UI-lab enterprise-shell showcase may import the enterprise entry point.
+        const showcase = f.startsWith(SHOWCASE_DIR) && spec_ === '@proseit/paep-enterprise';
+        if (!showcase && (/frappe|erpnext/i.test(spec_) || /^@proseit\/(paep-domain-|frappe-sdk|paep-enterprise|paep-analytics|paep-offline)/.test(spec_))) p.push(`${f}: imports ${spec_} (later milestone${spec_.startsWith('@proseit/paep-enterprise') ? `; only ${SHOWCASE_DIR} may import the enterprise entry point` : ''})`);
         if (inFoundation && !(spec_.startsWith('.') || spec_ === '@angular/core' || spec_ === '@angular/core/testing' || spec_ === '@proseit/paep-foundation' || (spec && /^vitest/.test(spec_)))) p.push(`${f}: foundation may import only @angular/core and itself, not ${spec_}`);
         if (inComponents && !(spec_.startsWith('.') || /^@angular\/(core|common|forms|router|platform-browser)(\/testing)?$/.test(spec_) || spec_ === '@proseit/paep-foundation' || (spec && /^vitest/.test(spec_)))) p.push(`${f}: components may import only Angular and @proseit/paep-foundation, not ${spec_}`);
         if (inComponents && spec_.startsWith('.') && path.posix.normalize(path.posix.join(path.posix.dirname(f), spec_)).split('/').slice(0, 2).join('/') !== 'packages/components') p.push(`${f}: relative import leaves the package (${spec_})`);
         if (f.startsWith('apps/') && spec_.startsWith('.') && path.posix.normalize(path.posix.join(path.posix.dirname(f), spec_)).startsWith('packages/')) p.push(`${f}: relative import into packages (${spec_})`);
       }
     }
-    add('S05', 'Import boundaries: foundation imports only @angular/core; components only Angular and the foundation entry point; no deep, Frappe, domain or later-milestone imports; test tooling only in specs; CSS @import of a package only for the foundation stylesheet in apps', p, `${tsFiles.length} TypeScript files`);
+    add('S05', 'Import boundaries: foundation imports only @angular/core; components only Angular and the foundation entry point; no deep, Frappe, domain or later-milestone imports (the enterprise entry point only in the bounded UI-lab shell showcase); test tooling only in specs; CSS @import of a package only for the foundation stylesheet in apps', p, `${tsFiles.length} TypeScript files`);
   }
 
   // S06: clean-room terms in UI source.
@@ -375,7 +486,34 @@ export function runChecks(fsx) {
       for (const s of required) if (!entries.some((e) => e.startsWith(s))) p.push(`${id}: required state "${s}" not documented in the specimen`);
       requiredStates += required.length;
     }
-    add('S07', 'UI laboratory: every one of the 25 components has a registered specimen page with purpose, variants, states, keyboard, accessibility, responsive, RTL, content keys and its unit-test reference; every applicable handoff state documented', p, `${COMPONENTS.length} specimens registered; ${requiredStates} required states documented`);
+    // IB3 extension: the approved primitives document the HOF-IB3-001 states, and the extended components their new variant.
+    const documented = (t, s) => {
+      const open = t.search(/\bstates:\s*\[/);
+      const entries = [];
+      if (open >= 0) for (const m of t.slice(open).matchAll(/'((?:[^'\\]|\\.)*)'|\]/g)) { if (m[0] === ']') break; entries.push(m[1].toLowerCase()); }
+      // The state name, alone or followed by its parenthesised description ("count" is not satisfied by "count capped").
+      return entries.some((e) => e === s || e.startsWith(`${s} (`));
+    };
+    for (const [id, family, , states] of IB3_COMPONENTS) {
+      const f = `apps/ui-lab/src/app/specimens/${id}.specimen.ts`;
+      if (!fsx.exists(f)) { p.push(`${id}: specimen file missing`); continue; }
+      const t = fsx.read(f);
+      if (!new RegExp(`from '\\./${id}\\.specimen'`).test(reg)) p.push(`${id}: not registered in specimens/registry.ts`);
+      if (!new RegExp(`id:\\s*'${id}'`).test(t)) p.push(`${id}: meta id missing`);
+      if (!new RegExp(`family:\\s*'${family}'`).test(t)) p.push(`${id}: family is not ${family}`);
+      for (const field of ['purpose', 'variants', 'states', 'keyboard', 'accessibility', 'responsive', 'rtl', 'contentKeys', 'unitTests']) if (!new RegExp(`\\b${field}:`).test(t)) p.push(`${id}: meta.${field} missing`);
+      if (!/<lab-specimen-page\b/.test(t) || !/<lab-example\b/.test(t)) p.push(`${id}: no specimen page or live example`);
+      if (!/from '@proseit\/paep-components'/.test(t)) p.push(`${id}: specimen does not use the public entry point`);
+      for (const s of states) if (!documented(t, s)) p.push(`${id}: required state "${s}" not documented in the specimen`);
+      requiredStates += states.length;
+    }
+    for (const [id, states] of IB3_EXTENDED) {
+      const f = `apps/ui-lab/src/app/specimens/${id}.specimen.ts`;
+      const t = fsx.exists(f) ? fsx.read(f) : '';
+      for (const s of states) if (!documented(t, s)) p.push(`${id}: required HOF-IB3-001 state "${s}" not documented in the specimen`);
+      requiredStates += states.length;
+    }
+    add('S07', 'UI laboratory: every one of the 25 components and the approved HOF-IB3-001 primitives has a registered specimen page with purpose, variants, states, keyboard, accessibility, responsive, RTL, content keys and its unit-test reference; every applicable handoff state documented, including the HOF-IB3-001 variants', p, `${COMPONENTS.length + IB3_COMPONENTS.length} specimens registered; ${requiredStates} required states documented`);
   }
 
   // S08: content keys: the message catalogue is exactly the handoff's key list.
@@ -385,10 +523,10 @@ export function runChecks(fsx) {
     const keys = [...md.matchAll(/^\| (paep\.[\w.]+) \|/gm)].map((m) => m[1]);
     const msg = fsx.exists(`${COMPONENTS_DIR}/messages/messages.ts`) ? fsx.read(`${COMPONENTS_DIR}/messages/messages.ts`) : '';
     const impl = [...msg.matchAll(/^\s+'(paep\.[\w.]+)':/gm)].map((m) => m[1]);
-    for (const k of keys) if (!impl.includes(k)) p.push(`${k} missing from messages.ts`);
-    for (const k of impl) if (!keys.includes(k)) p.push(`${k} not in content-keys.md`);
+    for (const k of [...keys, ...IB3_CONTENT_KEYS]) if (!impl.includes(k)) p.push(`${k} missing from messages.ts`);
+    for (const k of impl) if (!keys.includes(k) && !IB3_CONTENT_KEYS.includes(k)) p.push(`${k} not in content-keys.md or the approved IB3 component keys`);
     if (!keys.length) p.push('no content keys found in the handoff');
-    add('S08', 'Message catalogue holds exactly the approved content keys', p, `${keys.length} keys`);
+    add('S08', 'Message catalogue holds exactly the approved content keys (HOF-IB2-001 plus the IB3 count-badge keys)', p, `${keys.length} + ${IB3_CONTENT_KEYS.length} keys`);
   }
 
   // S09: test hygiene: no focused or skipped tests; every component spec has at least three tests.
@@ -425,6 +563,54 @@ export function runChecks(fsx) {
       }
     }
     add('S10', 'Interactive semantics: every (click) handler in a component template is on a native interactive element or one with an interactive role', p, `${handlers} click handlers, all on interactive elements`);
+  }
+
+  // S11: icon set (IB3 extension): exactly the 25 accepted and the 24 approved shell icons, drawing data pinned, on the
+  // 24 px grid, the approved RTL-mirrored set, no metadata.
+  {
+    const p = [];
+    const sha = (s) => crypto.createHash('sha256').update(s).digest('hex');
+    const src = fsx.exists(ICONS.file) ? fsx.read(ICONS.file) : '';
+    const block = src.slice(src.indexOf('export const PAEP_ICONS = {'), src.indexOf('} as const satisfies'));
+    const entries = [...stripComments(block).matchAll(/^ {2}'?([\w-]+)'?: (\[.*\]),\s*$/gm)].map((m) => [m[1], m[2]]);
+    const names = entries.map(([n]) => n);
+    const want = [...ICONS.accepted, ...ICONS.shell];
+    for (const n of want) if (!names.includes(n)) p.push(`approved icon ${n} missing`);
+    for (const n of names) if (!want.includes(n)) p.push(`unapproved icon ${n}`);
+    if (names.length !== want.length) p.push(`${names.length} icons, expected ${want.length}`);
+    const pinned = (list) => sha(list.map((n) => `${n}=${entries.find(([e]) => e === n)?.[1] ?? ''}`).join('\n'));
+    if (pinned(ICONS.accepted) !== ICONS.acceptedSha256) p.push('accepted IB2 icon drawing data changed');
+    if (pinned(ICONS.shell) !== ICONS.shellSha256) p.push('shell icon drawing data differs from the approved HOF-IB3-001 geometry');
+    for (const [n, d] of entries) {
+      if (!/^\[\{ type: '(path|circle)'/.test(d) || /type: '(?!path'|circle')/.test(d)) p.push(`${n}: shape other than path or circle`);
+      for (const v of d.match(/-?\d*\.?\d+/g) ?? []) if (Math.abs(Number(v)) > 24) p.push(`${n}: coordinate ${v} outside the 24 px grid`);
+    }
+    if (/c2pa|<metadata|<title|xmlns/i.test(src)) p.push('icon source carries metadata, titles or namespaces');
+    const dir = /PAEP_DIRECTIONAL_ICONS[^=]*=\s*\[([^\]]*)\]/.exec(src)?.[1] ?? '';
+    const mirrored = [...dir.matchAll(/'([\w-]+)'/g)].map((m) => m[1]);
+    if (JSON.stringify(mirrored) !== JSON.stringify(ICONS.directional)) p.push(`PAEP_DIRECTIONAL_ICONS ${mirrored.join(', ')} != approved ${ICONS.directional.join(', ')}`);
+    add('S11', 'Icon set: exactly the 25 accepted icons (unchanged) and the 24 approved HOF-IB3-001 shell icons (approved geometry), path/circle only on the 24 px grid, no metadata; RTL mirroring for exactly the approved directional icons', p, `${names.length} icons (${ICONS.accepted.length} accepted + ${ICONS.shell.length} shell); ${mirrored.length} mirrored`);
+  }
+
+  // S12: shell tokens (IB3 extension): exactly the 12 approved tokens and values, the rejected alias nowhere, and every
+  // other token unchanged from the accepted IB2 catalogue (no new colour or tone).
+  {
+    const p = [];
+    const rows = fsx.exists(TS_OUT) ? [...fsx.read(TS_OUT).matchAll(/^ {2}(\{.*\})/gm)].map((m) => JSON.parse(m[1])) : [];
+    const shell = rows.filter((x) => /^--paep-(shell|layer)-/.test(x.name));
+    for (const [n, v] of Object.entries(SHELL_TOKENS.approved)) {
+      const r = shell.find((x) => x.name === n);
+      if (!r) p.push(`approved token ${n} missing`);
+      else if (r.value !== v) p.push(`${n} = ${r.value}, approved ${v}`);
+      else if (r.layer === 'brand' || r.overridable) p.push(`${n} is overridable`);
+    }
+    for (const r of shell) if (!(r.name in SHELL_TOKENS.approved)) p.push(`unapproved token ${r.name}`);
+    const rest = rows.filter((x) => !/^--paep-(shell|layer)-/.test(x.name));
+    const restSha = crypto.createHash('sha256').update(rest.map((x) => `${x.name}=${x.value}`).join('\n')).digest('hex');
+    if (rest.length !== SHELL_TOKENS.ib2Count || restSha !== SHELL_TOKENS.ib2Sha256) p.push(`the ${rest.length} non-shell tokens differ from the accepted IB2 catalogue (${SHELL_TOKENS.ib2Count} tokens): no other token, colour or tone may be added or changed`);
+    const scanned = [...fsx.list('packages'), ...fsx.list('apps'), 'tooling/design-system/generate-tokens.mjs'].filter((f) => /\.(ts|css|html|mjs|json|scss)$/.test(f) && !f.endsWith('.spec.ts') && !f.includes('/node_modules/'));
+    for (const f of scanned) for (const a of SHELL_TOKENS.rejected) if (fsx.exists(f) && fsx.read(f).includes(a)) p.push(`${f}: rejected token ${a}`);
+    add('S12', 'Shell tokens: exactly the 12 approved HOF-IB3-001 --paep-shell-* / --paep-layer-* tokens with their approved values; the rejected content-max alias nowhere; every other token unchanged from the accepted IB2 catalogue (no new colour or tone)', p, `${shell.length} shell tokens; ${rest.length} accepted tokens unchanged; ${scanned.length} files free of the rejected alias`);
   }
 
   return results;

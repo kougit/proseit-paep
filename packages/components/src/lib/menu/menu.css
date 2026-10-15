@@ -1,0 +1,80 @@
+/* Menu (HOF-IB2-001 v1.2 §2.2, board SCR-SHELL-023). Unencapsulated so the projected items take these styles; every
+ * selector is scoped under .paep-menu. The panel is the PaepPopover menu variant (elevation-3, radius-md). */
+.paep-menu {
+  display: contents;
+}
+
+.paep-menu .paep-menu__panel {
+  min-inline-size: calc(var(--paep-space-10) * 3);
+}
+
+.paep-menu .paep-menu__item {
+  display: flex;
+  align-items: center;
+  gap: var(--paep-space-2);
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-block-size: var(--paep-density-control-height);
+  padding-block: var(--paep-space-1);
+  padding-inline: var(--paep-space-3);
+  border: 0;
+  border-radius: var(--paep-radius-sm);
+  background: transparent;
+  color: var(--paep-color-text-primary);
+  font: inherit;
+  text-align: start;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.paep-menu .paep-menu__item:hover,
+.paep-menu .paep-menu__item:focus-visible {
+  background: var(--paep-color-hover-neutral);
+}
+/* Focus ring inset, so it stays visible where the menu scrolls. */
+.paep-menu .paep-menu__item:focus-visible {
+  outline-offset: calc(var(--paep-focus-ring-width) * -1);
+}
+.paep-menu .paep-menu__item--destructive {
+  color: var(--paep-color-status-error-fg);
+  font-weight: var(--paep-font-weight-label);
+}
+.paep-menu .paep-menu__item[aria-disabled='true'] {
+  color: var(--paep-color-disabled-fg);
+  cursor: not-allowed;
+}
+
+.paep-menu .paep-menu__icon,
+.paep-menu .paep-menu__check {
+  flex: none;
+  inline-size: var(--paep-size-icon-md);
+  block-size: var(--paep-size-icon-md);
+}
+.paep-menu .paep-menu__item--radio[aria-checked='false'] .paep-menu__check {
+  visibility: hidden;
+}
+.paep-menu .paep-menu__label {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.paep-menu .paep-menu__group-label {
+  padding-block: var(--paep-space-1);
+  padding-inline: var(--paep-space-3);
+  color: var(--paep-color-text-secondary);
+  font-size: var(--paep-font-size-label);
+  font-weight: var(--paep-font-weight-label);
+}
+
+.paep-menu .paep-menu__separator {
+  margin: var(--paep-space-1) 0;
+  border: 0;
+  border-block-start: 1px solid var(--paep-color-border-subtle);
+}
+
+/* Below 600 px: targets at least 40 px tall (HOF-IB2-001 v1.2 §2.1 Mobile). */
+@media (max-width: 37.4375em) {
+  .paep-menu .paep-menu__item {
+    min-block-size: var(--paep-size-target-touch);
+  }
+}

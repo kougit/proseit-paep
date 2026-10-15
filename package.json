@@ -47,7 +47,15 @@
     "qa:design-system:negative": "node tooling/design-system/design-system-negative.mjs",
     "qa:accessibility": "node tooling/design-system/browser-qa.mjs",
     "qa:accessibility:negative": "node tooling/design-system/browser-qa-negative.mjs",
-    "qa:ib2:ci-negative": "node tooling/design-system/ci-governance-negative.mjs"
+    "qa:ib2:ci-negative": "node tooling/design-system/ci-governance-negative.mjs",
+    "test:enterprise": "node tooling/enterprise-shell/run-enterprise-tests.mjs",
+    "qa:ddr07": "node tooling/enterprise-shell/ddr07-gate.mjs",
+    "qa:ddr07:negative": "node tooling/enterprise-shell/ddr07-gate-negative.mjs",
+    "qa:enterprise": "node tooling/enterprise-shell/enterprise-qa.mjs",
+    "qa:enterprise:negative": "node tooling/enterprise-shell/enterprise-qa-negative.mjs && node tooling/enterprise-shell/design-system-extension-negative.mjs",
+    "qa:shell": "node tooling/enterprise-shell/shell-qa.mjs",
+    "qa:shell:negative": "node tooling/enterprise-shell/shell-qa-negative.mjs",
+    "qa:ib3:ci-negative": "node tooling/enterprise-shell/ib3-ci-governance-negative.mjs"
   },
   "dependencies": {
     "@angular/common": "22.1.8",

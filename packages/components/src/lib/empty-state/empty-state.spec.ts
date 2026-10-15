@@ -27,6 +27,27 @@ class Host {
   actions = 0;
 }
 
+@Component({
+  imports: [PaepEmptyState],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <paep-empty-state
+      kind="unavailable"
+      icon="edition"
+      [headingLevel]="2"
+      heading="Archive"
+      reason="Not included in your edition"
+      description="This capability is part of a different edition."
+      [actionLabel]="action()"
+      (action)="actions = actions + 1"
+    />
+  `,
+})
+class UnavailableHost {
+  readonly action = signal<string | undefined>(undefined);
+  actions = 0;
+}
+
 async function setup(init?: (h: Host) => void) {
   const fixture = TestBed.createComponent(Host);
   init?.(fixture.componentInstance);
@@ -105,5 +126,51 @@ describe('PaepEmptyState', () => {
     fixture.detectChanges();
     await fixture.whenStable();
     expect(el.scrollWidth).toBeLessThanOrEqual(el.clientWidth + 1);
+  });
+
+  it('unavailable: host-supplied icon, heading and reason line, with no default description or action', async () => {
+    const { el } = await setup((h) => {
+      h.kind.set('unavailable');
+      h.heading.set('Archive');
+    });
+    expect(el.querySelector('svg')).toBeNull();
+    expect(el.querySelector('h3')?.textContent?.trim()).toBe('Archive');
+    expect(el.querySelector('p')).toBeNull();
+    expect(el.querySelector('button')).toBeNull();
+    const reasoned = TestBed.createComponent(UnavailableHost);
+    reasoned.detectChanges();
+    await reasoned.whenStable();
+    const u = reasoned.nativeElement.querySelector('paep-empty-state') as HTMLElement;
+    expect(u.getAttribute('data-kind')).toBe('unavailable');
+    expect(u.querySelector('svg')?.getAttribute('aria-hidden')).toBe('true');
+    expect(u.querySelector('svg path')).not.toBeNull();
+    expect(u.querySelector('h2')?.textContent?.trim()).toBe('Archive');
+    expect(u.querySelector('.paep-empty-state__unavailable-reason')?.textContent?.trim()).toBe('Not included in your edition');
+    expect(u.querySelector('.paep-empty-state__description')?.textContent?.trim()).toBe('This capability is part of a different edition.');
+  });
+
+  it('unavailable: the reason line precedes the description and keeps full text contrast', async () => {
+    const f = TestBed.createComponent(UnavailableHost);
+    f.detectChanges();
+    await f.whenStable();
+    const u = f.nativeElement.querySelector('paep-empty-state') as HTMLElement;
+    const [reason, body] = [...u.querySelectorAll('p')];
+    expect(reason.classList).toContain('paep-empty-state__unavailable-reason');
+    expect(body.classList).toContain('paep-empty-state__description');
+    expect(getComputedStyle(reason).color).toBe('rgb(26, 31, 38)');
+    expect(getComputedStyle(reason).fontWeight).toBe('600');
+  });
+
+  it('unavailable: never takes focus and offers only a host-supplied action', async () => {
+    const before = document.activeElement;
+    const f = TestBed.createComponent(UnavailableHost);
+    f.componentInstance.action.set('Learn about editions');
+    f.detectChanges();
+    await f.whenStable();
+    expect(document.activeElement).toBe(before);
+    const button = (f.nativeElement as HTMLElement).querySelector('button') as HTMLButtonElement;
+    expect(button.textContent?.trim()).toBe('Learn about editions');
+    button.click();
+    expect(f.componentInstance.actions).toBe(1);
   });
 });

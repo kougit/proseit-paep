@@ -18,6 +18,7 @@ export const BUTTON_META: LabSpecimenMeta = {
     'destructive (error-strong fill; label names the outcome)',
     'leading icon / trailing icon',
     'block (full width, a layout option at narrow widths)',
+    'field (HOF-IB3-001 P-05: a button presented like a field, leading search icon, one-line label, optional keyboard hint)',
     'link-styled button (a[paepButton])',
     'size comes from density (40px comfortable / 32px compact), not from a size variant',
   ],
@@ -30,6 +31,7 @@ export const BUTTON_META: LabSpecimenMeta = {
     'loading (spinner replaces the leading icon, aria-busy + aria-disabled, focusable, activation suppressed, width locked)',
     'long-label (wraps, never truncated)',
     'narrow-width (primary stretches inside an action group)',
+    'field (surface fill, default border, secondary text; the label truncates on one line and the name keeps it in full)',
   ],
   keyboard: ['Enter / Space: activate a <button>.', 'Enter: follow an a[paepButton] link (links navigate; they never run in-page actions).'],
   accessibility: [
@@ -38,6 +40,7 @@ export const BUTTON_META: LabSpecimenMeta = {
     'Loading: aria-busy="true" + aria-disabled="true"; focus stays on the busy button; clicks, Enter and Space do nothing.',
     'Disabled: native disabled plus a dashed border (non-colour cue); give an adjacent reason when the cause is not obvious.',
     'Hiding or disabling a button is never the authorisation control.',
+    'Field variant: still a native button named by its label ("Search or go to…"); the keyboard hint is aria-hidden and the host states the shortcut with aria-keyshortcuts and what it opens with aria-haspopup.',
   ],
   responsive: 'Intrinsic width at wide sizes; full width (block) as the primary action of a narrow action group or dialog footer.',
   rtl: 'The leading icon moves to the inline-start (right); directional icons mirror.',
@@ -90,6 +93,22 @@ export const BUTTON_META: LabSpecimenMeta = {
       <lab-example heading="Block (full width)">
         <button paepButton variant="primary" block>Continue</button>
       </lab-example>
+      <lab-example heading="Field (search trigger)">
+        <div class="field-row">
+          <button paepButton variant="field" keyHint="Ctrl K" aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" (click)="opened.set(opened() + 1)">
+            Search or go to…
+          </button>
+        </div>
+        <div class="field-row field-row--narrow">
+          <button paepButton variant="field" keyHint="Ctrl K" aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K">
+            Search records, pages, commands and recently viewed destinations
+          </button>
+        </div>
+        <div class="field-row" dir="rtl">
+          <button paepButton variant="field" keyHint="Ctrl K" aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K">Search or go to…</button>
+        </div>
+        <p class="note">Opened {{ opened() }} time(s). The trigger opens a command surface; it is not a text input.</p>
+      </lab-example>
       <lab-example heading="Compact density">
         <div class="row" data-paep-density="compact">
           <button paepButton variant="primary">Save changes</button>
@@ -110,6 +129,16 @@ export const BUTTON_META: LabSpecimenMeta = {
       flex-wrap: wrap;
       gap: var(--paep-space-2);
     }
+    .field-row {
+      max-inline-size: calc(var(--paep-space-10) * 6);
+      margin-block-end: var(--paep-space-2);
+    }
+    .field-row button {
+      inline-size: 100%;
+    }
+    .field-row--narrow {
+      max-inline-size: calc(var(--paep-space-10) * 3);
+    }
     .narrow {
       max-inline-size: calc(var(--paep-space-10) * 4);
     }
@@ -123,6 +152,7 @@ export class ButtonSpecimen {
   protected readonly meta = BUTTON_META;
   protected readonly saving = signal(false);
   protected readonly saves = signal(0);
+  protected readonly opened = signal(0);
 
   protected save(): void {
     this.saving.set(true);

@@ -1,0 +1,116 @@
+{
+  "ok": true,
+  "seconds": 144,
+  "results": [
+    {
+      "id": "B1",
+      "name": "Initial bundle budget: raw 517564 bytes (517.56 kB; target 500.00 kB exceeded, hard maximum 525.00 kB), transfer 121463 bytes (121.46 kB; hard maximum 150.00 kB) — styles-J65SLB5I.css, chunk-DOVfOEvS.js, main-N6FUZ54O.js",
+      "problems": []
+    },
+    {
+      "id": "H",
+      "name": "H1-H5 shell states: 124 state × viewport × direction combinations (axe at 1440, 834, 640 and 320)",
+      "problems": []
+    },
+    {
+      "id": "N1",
+      "name": "Never-hidden set (incl. notifications with count, account with sign-out, the current tenant context and the offline and unknown connectivity rows) present and inside the viewport at 320 and 320×256 (LTR and RTL)",
+      "problems": []
+    },
+    {
+      "id": "T1",
+      "name": "Shell targets at least 24 × 24 CSS px at 1440 and 320 (chrome, sheet, palette, notification panel, account menu)",
+      "problems": []
+    },
+    {
+      "id": "A1",
+      "name": "Label in name (WCAG 2.5.3): controls named by aria-label include their visible text (1440, 834, 320; chrome, sheet, notifications, account and language menus)",
+      "problems": []
+    },
+    {
+      "id": "C1",
+      "name": "Strict CSP: per-response nonce in header and page, profile policy, no inline content without the nonce, Angular styles nonced, blocked probes (inline script, wrong nonce, inline style, eval, HTML sink)",
+      "problems": []
+    },
+    {
+      "id": "K1",
+      "name": "Skip link is the first Tab stop, visible when focused, and moves focus to main (1440, 320)",
+      "problems": []
+    },
+    {
+      "id": "K1b",
+      "name": "Skip link at 320",
+      "problems": []
+    },
+    {
+      "id": "K2",
+      "name": "Ctrl+K opens the palette with focus in the combobox; Escape returns focus to the trigger",
+      "problems": []
+    },
+    {
+      "id": "K3",
+      "name": "Navigation sheet takes focus and returns it to Open navigation on Escape (834)",
+      "problems": []
+    },
+    {
+      "id": "K4",
+      "name": "A route change focuses the new page h1",
+      "problems": []
+    },
+    {
+      "id": "K5",
+      "name": "No keyboard trap over the chrome and page (1440)",
+      "problems": []
+    },
+    {
+      "id": "F1",
+      "name": "Focused chrome controls show a focus indicator of at least 2 px (1440, 834)",
+      "problems": []
+    },
+    {
+      "id": "F1b",
+      "name": "Focus indicator at 834",
+      "problems": []
+    },
+    {
+      "id": "M1",
+      "name": "Reduced motion: motion tokens 0 ms; the sheet and the palette open without animation (834)",
+      "problems": []
+    },
+    {
+      "id": "R1",
+      "name": "RTL mirroring: navigation at the inline start, sheet on the right edge, directional icon mirrored",
+      "problems": []
+    },
+    {
+      "id": "K6",
+      "name": "Account menu: Enter opens on the first item, End reaches Sign out, Escape returns to the button; 16 px inside the viewport (1440)",
+      "problems": []
+    },
+    {
+      "id": "K6b",
+      "name": "Account menu at 320",
+      "problems": []
+    },
+    {
+      "id": "K7",
+      "name": "Notification panel: opens on its heading, at most 24 rem and 16 px inside the viewport, Escape returns to the bell (1440)",
+      "problems": []
+    },
+    {
+      "id": "K7b",
+      "name": "Notification panel at 320",
+      "problems": []
+    },
+    {
+      "id": "L1",
+      "name": "200 % text keeps the workspace free of horizontal scroll (1440)",
+      "problems": []
+    },
+    {
+      "id": "L1b",
+      "name": "200 % text at 640 (400 % zoom is covered by the 320 px states)",
+      "problems": []
+    }
+  ]
+}

@@ -32,6 +32,7 @@
  */
 
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import process from 'node:process';
 import crypto from 'node:crypto';
@@ -174,6 +175,17 @@ if (want('W26')) {
 }
 const allFiles = ['W03', 'W04'].some(want) ? walk('.') : [];
 
+/**
+ * The one approved CLAUDE.md amendment per authorised work package: [baseline line, amended line]. An in-scope
+ * CLAUDE.md change must be exactly this replacement (IB3 authorisation §7).
+ */
+const APPROVED_CLAUDE_AMENDMENTS = {
+  'IB3-ENTERPRISE-SHELL': [
+    '- Do not implement analytics/reporting UI, offline queues, the enterprise shell, or domain kits.',
+    '- Do not implement analytics/reporting UI, offline queues, or domain kits. Do not implement the enterprise shell, except under the PO/SA-authorised work package `IB3-ENTERPRISE-SHELL` (PO/SA authorisation 2026-10-06), within its `WORK_PACKAGE.md`, `ACCEPTANCE.md` and the Generation 5 `authorisedScope`; this exception grants no permission for any later milestone, for self-acceptance, or for baseline promotion.',
+  ],
+};
+
 // W02: controlled sources (PACK_MANIFEST fingerprints) and CLAUDE.md unchanged.
 if (want('W02')) {
   const p = [];
@@ -191,10 +203,21 @@ if (want('W02')) {
     if (!BASE) p.push(noBase);
     else {
       if (git('diff', '--quiet', BASE, '--', '.paep-control', '.gitignore', 'PACK_MANIFEST.json').status !== 0) p.push(`controlled files differ from the accepted baseline ${BASE.slice(0, 7)}`);
-      if (git('diff', '--quiet', BASE, '--', 'CLAUDE.md').status !== 0 && !inScope('CLAUDE.md')) p.push(`CLAUDE.md differs from the accepted baseline ${BASE.slice(0, 7)} without authorisation in the CANDIDATE scope`);
+      if (git('diff', '--quiet', BASE, '--', 'CLAUDE.md').status !== 0) {
+        if (!inScope('CLAUDE.md')) p.push(`CLAUDE.md differs from the accepted baseline ${BASE.slice(0, 7)} without authorisation in the CANDIDATE scope`);
+        else {
+          // An in-scope change is exactly the approved amendment of the candidate's work package, nothing more.
+          const amendment = (gov?.candidate?.workPackages ?? []).map((w) => APPROVED_CLAUDE_AMENDMENTS[w]).find(Boolean);
+          const was = git('show', `${BASE}:CLAUDE.md`).stdout.split('\n');
+          const now = exists('CLAUDE.md') ? read('CLAUDE.md').split('\n') : [];
+          const i = amendment ? was.indexOf(amendment[0]) : -1;
+          const expected = i < 0 ? null : [...was.slice(0, i), amendment[1], ...was.slice(i + 1)];
+          if (!expected || JSON.stringify(now) !== JSON.stringify(expected)) p.push(`CLAUDE.md differs from the accepted baseline ${BASE.slice(0, 7)} by more than the approved amendment of the CANDIDATE work package`);
+        }
+      }
     }
   } catch (e) { p.push(String(e)); }
-  add('W02', 'Controlled sources match PACK_MANIFEST.json sha256 and size; .paep-control, .gitignore and PACK_MANIFEST.json unchanged since the accepted baseline; CLAUDE.md unchanged unless the CANDIDATE scope authorises it',
+  add('W02', 'Controlled sources match PACK_MANIFEST.json sha256 and size; .paep-control, .gitignore and PACK_MANIFEST.json unchanged since the accepted baseline; CLAUDE.md unchanged unless the CANDIDATE scope authorises it, and then only by the approved amendment of its work package',
     n > 0 && p.length === 0, p.length ? p.join('; ') : `${n}/${n} controlled files match`);
 }
 
@@ -364,6 +387,20 @@ const IB2_REQUIRED_JOBS = {
   accessibility: { name: 'PAEP / accessibility', commands: ['npm run build:ui-lab', 'npm run qa:accessibility', 'npm run qa:accessibility:negative'] },
   'negative-ci-b': { name: 'PAEP / negative-ci-b', commands: ['npm run qa:ib0-wp05:negative -- --part b'] },
 };
+// IB3-ENTERPRISE-SHELL (authorising instruction §17, ACCEPTANCE AC-IB3-21): the two IB3 jobs are mandatory and keep these
+// commands, and the IB3 negative suites run only in them, so PAEP / negative-ci and negative-ci-b keep their accepted
+// workload and 20-minute timeout.
+const IB3_REQUIRED_JOBS = {
+  'enterprise-shell': { name: 'PAEP / enterprise-shell', commands: ['npm run test:enterprise', 'npm run qa:enterprise', 'npm run qa:enterprise:negative', 'npm run qa:ib3:ci-negative'] },
+  'shell-browser': { name: 'PAEP / shell-browser', commands: ['npm run build:reference-app', 'npm run qa:shell', 'npm run qa:shell:negative'] },
+  // Three-way split (PO/SA, 2026-10-07): part c of the WP05 negative suite, beside part a (negative-ci) and part b.
+  'negative-ci-c': { name: 'PAEP / negative-ci-c', commands: ['npm run qa:ib0-wp05:negative -- --part c'] },
+};
+/** The CI-control jobs that each run one part of the WP05 negative suite; each keeps the 20-minute timeout (RR14). */
+const CI_CONTROL_PARTS = { 'negative-ci': 'a', 'negative-ci-b': 'b', 'negative-ci-c': 'c' };
+/** WP05 negative-suite case count pinned here as well as in the harness, so lowering both the harness pin and its case list fails W11. */
+const WP05_NEGATIVE_CASES = 104;
+const IB3_NEGATIVES = ['npm run qa:enterprise:negative', 'npm run qa:shell:negative', 'npm run qa:ib3:ci-negative'];
 // IB2 CI-performance split (PO/SA, 2026-09-28; RR14): the accepted negative-ci command `npm run qa:ib0-wp05:negative`
 // may be replaced only by exactly its two halves, part a in negative-ci (keeping every other accepted command in order)
 // and part b in the mandatory negative-ci-b job, so the two parallel jobs run exactly the accepted suite.
@@ -382,6 +419,15 @@ function acceptedPolicyFloor() {
     const c = policy.mandatoryJobs?.find((x) => x.id === id);
     if (!c || c.name !== r.name) jobs.push(`IB2 mandatory job ${id} removed or renamed`);
     for (const cmd of r.commands) if (!(policy.requiredCommands?.[id] || []).includes(cmd)) jobs.push(`IB2 command "${cmd}" dropped from ${id}`);
+  }
+  for (const [id, r] of Object.entries(IB3_REQUIRED_JOBS)) {
+    const c = policy.mandatoryJobs?.find((x) => x.id === id);
+    if (!c || c.name !== r.name) jobs.push(`IB3 mandatory job ${id} removed or renamed`);
+    for (const cmd of r.commands) if (!(policy.requiredCommands?.[id] || []).includes(cmd)) jobs.push(`IB3 command "${cmd}" dropped from ${id}`);
+  }
+  for (const [id, cmds] of Object.entries(policy.requiredCommands || {})) {
+    if (IB3_REQUIRED_JOBS[id]) continue;
+    for (const cmd of cmds) if (IB3_NEGATIVES.some((n) => cmd.startsWith(n))) jobs.push(`IB3 negative "${cmd}" outside the IB3 jobs (${id})`);
   }
   if (!BASE) return { jobs: [...jobs, noBase], other: [noBase] };
   let a = null;
@@ -413,8 +459,8 @@ if (want('W11') && wf) {
     if (j.name !== mj.name) p.push(`${mj.id} name "${j.name}" != "${mj.name}"`);
     if (j['runs-on'] !== policy.workflow.runner) p.push(`${mj.id} runs-on ${j['runs-on']}`);
     if (!Number.isInteger(j['timeout-minutes']) || j['timeout-minutes'] < 1 || j['timeout-minutes'] > 30) p.push(`${mj.id} timeout-minutes ${j['timeout-minutes']}`);
-    // RR14 (accepted LOW): PAEP / negative-ci keeps its 20-minute timeout until the PO/SA authorises a change.
-    if ((mj.id === 'negative-ci' || mj.id === 'negative-ci-b') && j['timeout-minutes'] !== 20) p.push(`${mj.id} timeout-minutes ${j['timeout-minutes']} (RR14 fixes it at 20)`);
+    // RR14 (accepted LOW): the CI-control jobs keep their 20-minute timeout (PO/SA 2026-10-07: three parts, no increase).
+    if (CI_CONTROL_PARTS[mj.id] && j['timeout-minutes'] !== 20) p.push(`${mj.id} timeout-minutes ${j['timeout-minutes']} (RR14 fixes it at 20)`);
     const steps = Array.isArray(j.steps) ? j.steps : [];
     const [co, su, ...rest] = steps;
     const up = rest.pop();
@@ -430,7 +476,17 @@ if (want('W11') && wf) {
     if (JSON.stringify(cmds) !== JSON.stringify(policy.requiredCommands[mj.id])) p.push(`${mj.id}: commands ${JSON.stringify(cmds)} != ${JSON.stringify(policy.requiredCommands[mj.id])}`);
     for (const r of runs) if (r.split('\n').filter(Boolean).length !== 2) p.push(`${mj.id}: run step has extra lines`);
   }
-  add('W11', 'Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention; PAEP / negative-ci and PAEP / negative-ci-b (its split half) keep the 20-minute timeout (RR14)',
+  // Every part of the WP05 negative suite runs in exactly its own CI-control job, and the suite's explicit PARTITION
+  // assigns every pinned case to exactly one part (PO/SA 2026-10-07), so a split can neither drop nor duplicate a case.
+  for (const [id, part] of Object.entries(CI_CONTROL_PARTS)) {
+    const owners = Object.entries(policy.requiredCommands || {}).filter(([, cmds]) => cmds.includes(`${WP05_NEGATIVE} -- --part ${part}`)).map(([k]) => k);
+    if (JSON.stringify(owners) !== JSON.stringify([id])) p.push(`part ${part} of the WP05 negative suite runs in [${owners.join(', ')}], expected [${id}]`);
+  }
+  const partition = run(process.execPath, ['tooling/verification/negative-ib0-wp05.mjs', '--check-partition']);
+  if (partition.status !== 0) p.push(`WP05 negative-suite partition: ${(partition.stdout || '').split('\n').filter((l) => l.startsWith('FAIL')).join('; ') || `exit ${partition.status}`}`);
+  const total = /; (\d+) cases\)$/m.exec(partition.stdout || '');
+  if (!total || Number(total[1]) !== WP05_NEGATIVE_CASES) p.push(`WP05 negative-suite partition covers ${total ? total[1] : 'an unreported number of'} cases; W11 pins ${WP05_NEGATIVE_CASES}`);
+  add('W11', 'Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout with the PAEP setup, its required commands under set -euo pipefail, a timeout and an always-uploaded evidence artifact with bounded retention; the three CI-control jobs (PAEP / negative-ci, negative-ci-b, negative-ci-c) each run exactly their part of the WP05 negative suite, whose partition covers every pinned case once, and keep the 20-minute timeout (RR14)',
     p.length === 0, p.length ? p.join('; ') : `${mandatoryIds.length} parallel jobs: ${mandatoryIds.join(', ')}`);
 }
 
@@ -588,12 +644,25 @@ const pkgFinding = (key) => [/^(package\.json scripts differ from baseline \+ th
 // IB1-CONTRACTS-CONFIG: the WP03/WP04 verifiers require the IB0 placeholder entry points. A package entry point that is
 // no longer a placeholder is accepted only when it changed inside the CANDIDATE scope (B11 passing) or, once promoted, in
 // accepted history after that verifier's baseline (the same bound as every other historical finding).
-// IB2-FOUNDATION-COMPONENTS adds the foundation and components entry points under the same bound.
-const IB1_FILLED_ENTRIES = ['packages/contracts/src/index.ts', 'packages/platform/src/index.ts', 'packages/foundation/src/index.ts', 'packages/components/src/index.ts'];
+// IB2-FOUNDATION-COMPONENTS adds the foundation and components entry points under the same bound, and
+// IB3-ENTERPRISE-SHELL the i18n, observability and enterprise entry points.
+const IB1_FILLED_ENTRIES = ['packages/contracts/src/index.ts', 'packages/platform/src/index.ts', 'packages/foundation/src/index.ts', 'packages/components/src/index.ts',
+  'packages/i18n/src/index.ts', 'packages/observability/src/index.ts', 'packages/enterprise/src/index.ts'];
 const filledEntry = (key) => (f) => IB1_FILLED_ENTRIES.includes(f) && since(key)(f);
 
-// Bounded WP04 V07 (filled entry points) and V16/V17 (static checks).
+// IB3-ENTERPRISE-SHELL: the WP03 V13 / WP04 V18 integrity finding is accepted only when CLAUDE.md is the one controlled
+// path that differs from that verifier's baseline and it changed inside the CANDIDATE scope (or, once promoted, in
+// accepted history). .paep-control, .gitignore and PACK_MANIFEST.json stay exact (W02 also checks them).
+const CONTROLLED_FINDING = 'controlled files or CLAUDE.md differ from the baseline';
+function claudeMdBounded(key, d) {
+  if (d !== CONTROLLED_FINDING || !BASE) return false;
+  const changed = lines(git('diff', '--name-only', HISTORICAL_VERIFIER_BASELINE[key], '--', '.paep-control', '.gitignore', 'PACK_MANIFEST.json', 'CLAUDE.md').out);
+  return changed.length === 1 && changed[0] === 'CLAUDE.md' && since(key)('CLAUDE.md');
+}
+
+// Bounded WP04 V07 (filled entry points), V16/V17 (static checks) and V18 (CLAUDE.md only, IB3).
 function wp04StaticBounded(check) {
+  if (check.id === 'V18') return claudeMdBounded('wp04', check.details);
   if (check.id === 'V07') return segmentsOk(check.details, [[/^(.+) is not a placeholder$/, (m) => filledEntry('wp04')(m[1])]]);
   if (check.id === 'V16') return segmentsOk(check.details, [pkgFinding('wp04')]);
   if (check.id === 'V17') {
@@ -675,7 +744,7 @@ if (want('W17')) {
     }
   }
   const fails = wp04Static ? wp04Static.checks.filter((c) => !c.pass).map((c) => c.id) : [];
-  add('W17', 'Strict configuration: WP04 static verifier passes V04-V07 (strict, noImplicitAny, strictTemplates, noCheck and suppression protection, aliases, entry points) and every other static check; V07 reports only entry points filled inside the CANDIDATE scope; V16/V17 report only accepted-history or in-scope change',
+  add('W17', 'Strict configuration: WP04 static verifier passes V04-V07 (strict, noImplicitAny, strictTemplates, noCheck and suppression protection, aliases, entry points) and every other static check; V07 reports only entry points filled inside the CANDIDATE scope; V16/V17 report only accepted-history or in-scope change; V18 reports only an in-scope CLAUDE.md change',
     p.length === 0, p.length ? p.join('; ') : `WP04 static ${19 - fails.length}/19 pass; bounded: ${fails.join(', ') || 'none'}`);
 }
 
@@ -702,20 +771,35 @@ if (want('W18')) {
       // E0 edges (measured here, and it must equal what C0 reports); a control is accepted only if it still exits 0 with no
       // violation or cycle and reports exactly its own edges plus E0 (optional edges likewise). E0 > 0 requires an entry point
       // filled inside the CANDIDATE scope.
-      const live = run(process.execPath, ['tooling/architecture-boundaries/check-boundaries.mjs', '--json']);
+      // IB3-ENTERPRISE-SHELL: the unmutated graph can already hold an edge a control injects (enterprise -> components,
+      // reference-app -> enterprise), and an existing edge is not counted twice. The base edge set is therefore read
+      // too, and a control that names its edges ("a -> b", exactly as many as it expects) adds only the named edges
+      // the base graph lacks (optional edges likewise).
+      const graphFile = path.join(os.tmpdir(), `paep-wp05-base-graph-${process.pid}.json`);
+      const live = run(process.execPath, ['tooling/architecture-boundaries/check-boundaries.mjs', '--json', '--graph', graphFile]);
       let base0 = null;
       try { const j = JSON.parse(live.stdout); if (live.status === 0 && j.ok === true) base0 = { edges: j.summary.edges, optional: j.summary.optionalEdges }; } catch { /* fails below */ }
+      let baseGraph = null;
+      try { baseGraph = JSON.parse(fs.readFileSync(graphFile, 'utf8')); } catch { /* fails below */ } finally { fs.rmSync(graphFile, { force: true }); }
+      const baseEdges = new Map((baseGraph?.edges || []).map((e) => [`${e.source} -> ${e.target}`, e.matrix]));
+      const nodeOf = (short) => [short, `@proseit/paep-${short}`, `@proseit/${short}`].find((n) => Object.hasOwn(baseGraph?.nodes || {}, n)) ?? null;
+      const namedEdges = (name) => [...name.matchAll(/([a-z][a-z0-9-]*) -> ([a-z][a-z0-9-]*)/g)].map((m) => [nodeOf(m[1]), nodeOf(m[2])]);
       const summaryOf = (id) => { const m = new RegExp(`^## ${id} [^\\n]*\\nexpected: [^\\n]*\\nsummary: (\\{[^\\n]*\\})$`, 'm').exec(negLog); try { return m ? JSON.parse(m[1]) : null; } catch { return null; } };
       const graphGrew = Boolean(base0) && (base0.edges === 0 || IB1_FILLED_ENTRIES.some(filledEntry('wp04'))) && summaryOf('C0')?.edges === base0.edges;
       const edgeBounded = (c) => {
         const want = /^exit 0, no violations, (\d+) edges \((\d+) optional\)$/.exec(c.expected || '');
         const got = summaryOf(c.id);
-        return graphGrew && base0.edges > 0 && c.tool === 'arch:check' && Boolean(want) && c.exit === 0 && (c.rules || []).length === 0 && Boolean(got)
-          && got.violations === 0 && got.cycles === 0 && got.edges === Number(want[1]) + base0.edges && got.optionalEdges === Number(want[2]) + base0.optional;
+        if (!(graphGrew && base0.edges > 0 && baseGraph && c.tool === 'arch:check' && Boolean(want) && c.exit === 0 && (c.rules || []).length === 0 && Boolean(got))) return false;
+        const named = namedEdges(c.name || '');
+        if (named.length !== Number(want[1]) || named.some(([a, b]) => !a || !b)) return false;
+        const present = named.filter(([a, b]) => baseEdges.has(`${a} -> ${b}`));
+        const presentOptional = present.filter(([a, b]) => baseEdges.get(`${a} -> ${b}`) === 'Optional').length;
+        return got.violations === 0 && got.cycles === 0 && got.edges === base0.edges + named.length - present.length
+          && got.optionalEdges === base0.optional + Number(want[2]) - presentOptional;
       };
       for (const c of neg.cases) {
         if (c.pass) continue;
-        if (c.id === 'C3' && c.exit === 1 && (sameSet(c.failedChecks || [], ['V16', 'V17']) || sameSet(c.failedChecks || [], ['V07', 'V16', 'V17']))) continue;
+        if (c.id === 'C3' && c.exit === 1 && [['V16', 'V17'], ['V07', 'V16', 'V17'], ['V16', 'V17', 'V18'], ['V07', 'V16', 'V17', 'V18']].some((set) => sameSet(c.failedChecks || [], set))) continue;
         if (edgeBounded(c)) continue;
         p.push(`${c.id} failed: ${c.name} (exit ${c.exit}; ${JSON.stringify(c.failedChecks || c.rules || c.codesFound)})`);
       }
@@ -723,12 +807,12 @@ if (want('W18')) {
       const c3 = neg.cases.find((c) => c.id === 'C3');
       if (c3 && !c3.pass) {
         const st = wp04Static?.checks || [];
-        if (!['V07', 'V16', 'V17'].every((id) => { const c = st.find((x) => x.id === id); return c && (c.pass || wp04StaticBounded(c)); })) p.push('C3 V07/V16/V17 findings are not the bounded ones (see W17)');
+        if (!['V07', 'V16', 'V17', 'V18'].every((id) => { const c = st.find((x) => x.id === id); return c && (c.pass || wp04StaticBounded(c)); })) p.push('C3 V07/V16/V17/V18 findings are not the bounded ones (see W17)');
       }
     }
   }
   const failed = neg ? neg.cases.filter((c) => !c.pass).map((c) => c.id) : [];
-  add('W18', 'WP04 negative architecture/strictness suite: every case passes except positive control C3, which fails only V16/V17 (and V07 for entry points filled in scope) with accepted-history or in-scope findings, and edge-count controls that differ only by the edges of the unmutated graph',
+  add('W18', 'WP04 negative architecture/strictness suite: every case passes except positive control C3, which fails only V16/V17 (and V07 for entry points filled in scope, V18 for an in-scope CLAUDE.md change) with accepted-history or in-scope findings, and edge-count controls that differ only by the edges of the unmutated graph',
     p.length === 0, p.length ? p.join('; ') : `${neg.cases.length - failed.length}/${neg.cases.length} pass; bounded: ${failed.join(', ') || 'none'}`);
 }
 
@@ -789,6 +873,7 @@ if (['W20', 'W21', 'W22', 'W23'].some(want)) {
         [/^(changed outside WORK_PACKAGE §4|apps changed): (.+)$/, (m) => fileList(m).every((f) => since('wp03')(f))]
       ]),
       V06: wp03V06Bounded,
+      V13: (d) => claudeMdBounded('wp03', d),
       // WP03 V17 relays every failing WP02 check; each must be one W22 bounds (V13/V15 as "failed", V17 as outside).
       V17: (d) => {
         const failing = (wp02?.checks || []).filter((c) => !c.pass);
@@ -811,15 +896,15 @@ if (['W20', 'W21', 'W22', 'W23'].some(want)) {
     if (wp04.mode !== 'full' || wp04.checks.length !== 24) p20.push(`WP04 mode ${wp04.mode}, ${wp04.checks.length} checks`);
     for (const c of wp04.checks) {
       if (c.pass) continue;
-      if (c.id === 'V07' || c.id === 'V16' || c.id === 'V17') { if (!wp04StaticBounded(c)) p20.push(`${c.id} outside the accepted-history/CANDIDATE bound: ${c.details.slice(0, 300)}`); continue; }
+      if (c.id === 'V07' || c.id === 'V16' || c.id === 'V17' || c.id === 'V18') { if (!wp04StaticBounded(c)) p20.push(`${c.id} outside the accepted-history/CANDIDATE bound: ${c.details.slice(0, 300)}`); continue; }
       if (c.id === 'V22') { if (p21.length) p20.push('V22 not explained by the bound (see W21)'); continue; }
       if (c.id === 'V23') { if (p22.length) p20.push('V23 not explained by the bound (see W22)'); continue; }
       p20.push(`${c.id} failed: ${c.details.split('\n')[0]}`);
     }
   } else if (!dirty) p20.push('no WP04 report');
   const summary = (j) => (j ? `${j.checks.filter((c) => c.pass).length}/${j.checks.length} pass; bounded: ${j.checks.filter((c) => !c.pass).map((c) => c.id).join(', ') || 'none'}` : '');
-  add('W20', 'IB0-WP04 regression (full, with both builds): every check passes except V07 (only entry points filled inside the CANDIDATE scope), V16/V17 (only accepted-history or in-scope package/path changes) and V22/V23 (re-evaluated in W21/W22)', p20.length === 0, p20.length ? p20.join('; ') : `WP04 ${summary(wp04)}`);
-  add('W21', 'IB0-WP03 regression: every check passes except the accepted V05/V08 (WP04 tsconfig change, exact), V09 (only entry points filled inside the CANDIDATE scope), V06 (only the ui-lab test target in angular.json) and V10/V12/V17, whose findings are only accepted-history or in-scope change; accepted records unchanged', p21.length === 0, p21.length ? p21.join('; ') : `WP03 ${summary(wp03)}`);
+  add('W20', 'IB0-WP04 regression (full, with both builds): every check passes except V07 (only entry points filled inside the CANDIDATE scope), V16/V17 (only accepted-history or in-scope package/path changes), V18 (only an in-scope CLAUDE.md change) and V22/V23 (re-evaluated in W21/W22)', p20.length === 0, p20.length ? p20.join('; ') : `WP04 ${summary(wp04)}`);
+  add('W21', 'IB0-WP03 regression: every check passes except the accepted V05/V08 (WP04 tsconfig change, exact), V09 (only entry points filled inside the CANDIDATE scope), V06 (only the ui-lab test target in angular.json), V13 (only an in-scope CLAUDE.md change) and V10/V12/V17, whose findings are only accepted-history or in-scope change; accepted records unchanged', p21.length === 0, p21.length ? p21.join('; ') : `WP03 ${summary(wp03)}`);
   add('W22', 'IB0-WP02 regression: every check (toolchain, pins, lockfile provenance, install scripts, licences, controlled sources, secrets) passes except V13 (lockfile change limited to the PO/SA-approved IB2 dev dependencies at their pins, no runtime dependency change, new lockfile entries dev-only), V15 (axe-core under review L5 only) and V17, whose findings are only accepted-history or in-scope change', p22.length === 0, p22.length ? p22.join('; ') : `WP02 ${summary(wp02)}`);
   add('W23', 'IB0-WP01 regression passes', p23.length === 0, p23.length ? p23.join('; ') : `WP01 ${summary(wp01)}`);
 }

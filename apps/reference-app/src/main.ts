@@ -3,7 +3,7 @@ import type { RuntimeConfigFailure } from '@proseit/paep-contracts';
 import { describeRuntimeConfigFailure, loadRuntimeConfig, RUNTIME_CONFIG_PATH, startWithRuntimeConfig } from '@proseit/paep-platform';
 import { appConfig } from './app/app.config';
 import { App } from './app/app';
-import { REFERENCE_APP_RUNTIME_CONTEXT, RUNTIME_CONFIG_STORE } from './app/runtime-config';
+import { REFERENCE_APP_RUNTIME_CONTEXT } from './app/runtime-config';
 
 // IB1 fail-safe startup: the runtime configuration is loaded and validated before Angular starts. An invalid, incomplete or
 // incompatible configuration never starts the application; a bounded, non-sensitive message is shown instead.
@@ -31,7 +31,7 @@ void startWithRuntimeConfig({
   }),
   onReady: async (store) => {
     document.documentElement.dataset['paepProfile'] = store.config.deployment.profile;
-    await bootstrapApplication(App, { providers: [...appConfig.providers, { provide: RUNTIME_CONFIG_STORE, useValue: store }] });
+    await bootstrapApplication(App, appConfig(store));
     document.documentElement.dataset['paepConfig'] = 'ready';
   },
   onFailure: showConfigurationFailure

@@ -63,7 +63,7 @@ const cases = [
   ['N45', 'S05', 'template-literal dynamic import of a later-milestone package', [['packages/components/src/lib/card/card.ts', (t) => `${t}\nexport const lazy = () => import(\`@proseit/frappe-sdk\`);\n`]], /imports @proseit\/frappe-sdk \(later milestone\)/],
   ['N46', 'S05', 'dynamic import with a computed specifier', [['packages/components/src/lib/card/card.ts', (t) => `${t}\nconst pkg = 'x';\nexport const lazy = () => import(pkg);\n`]], /dynamic import with a computed specifier/],
   ['N47', 'S05', 'component imports a domain kit package', [['packages/components/src/lib/card/card.ts', (t) => `import '@proseit/paep-domain-sales';\n${t}`]], /imports @proseit\/paep-domain-sales \(later milestone\)/],
-  ['N48', 'S02', 'approved status colour lightened in the token catalogue (contrast pair no longer backed by a token)', [['packages/foundation/src/lib/tokens/token-catalogue.generated.ts', (t) => t.replaceAll('"#16693A"', '"#7FBF95"')]], /contrast pair "status-success-fg \/ status-success-bg": #16693A is not a token value/],
+  ['N48', 'S02', 'approved status colour lightened in the token catalogue (contrast pair no longer backed by a token)', [['packages/foundation/src/lib/tokens/token-catalogue.generated.ts', (t) => t.replaceAll('"#16693A"', '"#7FBF95"')]], /contrast pair "status-success-fg \/ status-success-bg": #16693A is not a token value/, ['S12']],
   ['N34', 'S01', 'handoff file and its pin line edited together', [['evidence/design-handoff/HOF-IB2-001/design-export/decision-record.md', (t) => `${t}\nextra\n`], ['evidence/design-handoff/HOF-IB2-001/HANDOFF-FILES.sha256', (t) => t.replace(/^[0-9a-f]{64}(  design-export\/decision-record\.md)$/m, `${'0'.repeat(64)}$1`)]], /HANDOFF-FILES\.sha256 sha256 .* != pinned/],
   ['N35', 'S10', 'clickable non-interactive element in a component template', [['packages/components/src/lib/card/card.ts', (t) => t.replace(/template: `/, 'template: `<div class="x" (click)="noop()">Open</div>')]], /\(click\) on <div> without native interactive semantics/],
   ['N30', 'S04', 'component reads a foundation-internal reference token', [['packages/components/src/lib/pagination/pagination.css', (t) => `${t}\n:host { background: var(--paep-ref-color-neutral-100); }\n`]], /foundation-internal reference token --paep-ref-color-neutral-100/],
@@ -77,7 +77,8 @@ if (!base.every((r) => r.pass)) {
   console.log(`FAIL C00 positive control: unmutated repository fails ${base.filter((r) => !r.pass).map((r) => r.id).join(', ')}`);
   failures++;
 } else console.log('PASS C00 positive control: unmutated repository passes every check');
-// A case may name other checks that must fail with it (N03: an edited token source is both unpinned and undeployed).
+// A case may name other checks that must fail with it (N03: an edited token source is both unpinned and undeployed;
+// N48: a changed accepted colour also breaks the IB3 S12 pin of the accepted token catalogue).
 for (const [id, check, label, edits, expect, alsoFail = []] of cases) {
   const overlay = new Map();
   for (const [f, e] of edits) overlay.set(f, e === null ? null : typeof e === 'string' ? e : e(real.exists(f) ? real.read(f) : ''));

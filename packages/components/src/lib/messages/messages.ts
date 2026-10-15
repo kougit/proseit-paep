@@ -1,9 +1,10 @@
 import { InjectionToken, Provider } from '@angular/core';
 
 /**
- * Reusable platform strings (HOF-IB2-001 content-keys.md). Components never hard-code user-facing text:
- * they read these English defaults, which an application replaces with providePaepMessages() once its
- * locale layer exists. Product nouns are parameters, never built into sentences.
+ * Reusable platform strings (HOF-IB2-001 content-keys.md, plus the paep.count.* keys of the HOF-IB3-001 count
+ * badge). Components never hard-code user-facing text: they read these English defaults, which an application
+ * replaces with providePaepMessages() once its locale layer exists. Product nouns are parameters, never built into
+ * sentences.
  */
 export const PAEP_DEFAULT_MESSAGES = {
   'paep.common.close': 'Close',
@@ -54,6 +55,11 @@ export const PAEP_DEFAULT_MESSAGES = {
   'paep.progress.step': 'Step {step} of {total}',
   'paep.button.busy': '{label}…',
   'paep.announce.saved': 'Saved',
+  // HOF-IB3-001 P-04 count badge: hidden text appended to the owning control's name; "{count}" is the shown value.
+  'paep.count.items': '{count} items',
+  'paep.count.loading': 'Loading count',
+  'paep.count.unknown': 'Count not available',
+  'paep.count.inName': '{name}, {count}',
 } as const;
 
 export type PaepMessageKey = keyof typeof PAEP_DEFAULT_MESSAGES;

@@ -1,0 +1,79 @@
+:host(.paep-locked) {
+  display: block;
+}
+:host([data-level='action']) {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--paep-space-3);
+}
+.paep-locked__page {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--paep-space-3);
+  max-inline-size: var(--paep-layout-form-max);
+  padding: var(--paep-space-6);
+  box-sizing: border-box;
+  border: 1px solid var(--paep-color-border-subtle);
+  border-inline-start: var(--paep-space-1) solid var(--paep-color-status-neutral-border);
+  border-radius: var(--paep-radius-md);
+  background: var(--paep-color-surface);
+}
+:host([data-reason='edition']) .paep-locked__page {
+  border-inline-start-color: var(--paep-color-status-info-border);
+}
+.paep-locked__heading {
+  margin: 0;
+  font-size: var(--paep-font-size-heading-3);
+  font-weight: var(--paep-font-weight-heading-3);
+  line-height: var(--paep-line-height-heading-3);
+  overflow-wrap: anywhere;
+}
+.paep-locked__heading:focus {
+  outline: none;
+}
+.paep-locked__heading:focus-visible {
+  outline: var(--paep-focus-ring-width) solid var(--paep-color-focus-ring);
+  outline-offset: var(--paep-focus-ring-offset);
+}
+.paep-locked__page p {
+  margin: 0;
+  max-inline-size: var(--paep-layout-reading-max);
+}
+.paep-locked__reason {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--paep-space-1);
+  padding: var(--paep-space-0-5) var(--paep-space-2);
+  border: 1px solid var(--paep-color-status-neutral-border);
+  border-radius: var(--paep-radius-sm);
+  background: var(--paep-color-status-neutral-bg);
+  color: var(--paep-color-status-neutral-fg);
+  font-size: var(--paep-font-size-body-sm);
+  font-weight: var(--paep-font-weight-label);
+  line-height: var(--paep-line-height-body-sm);
+}
+:host([data-reason='edition']) .paep-locked__reason {
+  border-color: var(--paep-color-status-info-border);
+  background: var(--paep-color-status-info-bg);
+  color: var(--paep-color-status-info-fg);
+}
+.paep-locked__reason svg {
+  --paep-icon-size: var(--paep-size-icon-sm);
+  flex: none;
+}
+.paep-locked__server {
+  color: var(--paep-color-text-secondary);
+  font-size: var(--paep-font-size-body-sm);
+  line-height: var(--paep-line-height-body-sm);
+}
+.paep-locked__server--section {
+  margin: 0;
+  text-align: center;
+}
+.paep-locked__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--paep-space-2);
+}

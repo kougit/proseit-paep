@@ -259,7 +259,8 @@ describe('PaepDialog', () => {
     body.focus();
     await userEvent.keyboard('{PageDown}');
     await settle(fixture);
-    expect(body.scrollTop).toBeGreaterThan(0);
+    // Chrome animates keyboard scrolling, so the body may still be moving when the frame settles.
+    await expect.poll(() => body.scrollTop, { timeout: 2000 }).toBeGreaterThan(0);
     await userEvent.keyboard('{Escape}');
     await settle(fixture);
     expect(document.activeElement).toBe(q('#invoker'));

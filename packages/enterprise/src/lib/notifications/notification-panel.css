@@ -1,0 +1,85 @@
+:host {
+  display: contents;
+}
+/* Inset panel: at most 24 rem, 16 px from the viewport edge, never full screen (RD-02). */
+.paep-notification-panel__popover {
+  inline-size: 24rem;
+  max-inline-size: min(24rem, calc(100% - 2 * var(--paep-space-4)));
+  padding: 0;
+}
+.paep-notification-panel__head {
+  display: flex;
+  align-items: center;
+  gap: var(--paep-space-2);
+  padding-block: var(--paep-space-2);
+  padding-inline: var(--paep-space-4) var(--paep-space-2);
+  border-block-end: 1px solid var(--paep-color-border-subtle);
+}
+.paep-notification-panel__title {
+  flex: 1 1 auto;
+  margin: 0;
+  font-size: var(--paep-font-size-title-sm);
+  font-weight: var(--paep-font-weight-title-sm);
+  line-height: var(--paep-line-height-title-sm);
+}
+.paep-notification-panel__body {
+  padding-block: var(--paep-space-2);
+}
+.paep-notification-panel__message,
+.paep-notification-panel__stale {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--paep-space-2);
+  margin: 0;
+  padding: var(--paep-space-3) var(--paep-space-4);
+  color: var(--paep-color-text-secondary);
+}
+.paep-notification-panel__message p {
+  margin: 0;
+}
+.paep-notification-panel__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.paep-notification-panel__item {
+  display: flex;
+  gap: var(--paep-space-2);
+  padding: var(--paep-space-2) var(--paep-space-4);
+}
+.paep-notification-panel__dot {
+  flex: none;
+  inline-size: var(--paep-space-2);
+  block-size: var(--paep-space-2);
+  margin-block-start: var(--paep-space-2);
+  border-radius: var(--paep-radius-full);
+}
+.paep-notification-panel__item--unread .paep-notification-panel__dot {
+  background: var(--paep-brand-primary);
+}
+.paep-notification-panel__item--unread .paep-notification-panel__text {
+  font-weight: var(--paep-font-weight-label);
+}
+.paep-notification-panel__main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--paep-space-1) var(--paep-space-2);
+  min-inline-size: 0;
+}
+.paep-notification-panel__text {
+  display: block;
+  flex: 1 1 100%;
+  overflow-wrap: anywhere;
+  color: var(--paep-color-text-primary);
+}
+a.paep-notification-panel__text {
+  min-block-size: var(--paep-size-target-min);
+  color: var(--paep-color-link);
+}
+.paep-notification-panel__meta {
+  flex: 1 1 100%;
+  color: var(--paep-color-text-secondary);
+  font-size: var(--paep-font-size-body-sm);
+}

@@ -15,11 +15,14 @@
  * - npm cases run `npm ci --dry-run` in a separate scratch folder that holds
  *   only the manifests, so no install can reach the linked node_modules.
  *
- * --part a | --part b (IB2 CI-performance split, PO/SA 2026-09-28): runs every second case, in declaration order,
- * so PAEP / negative-ci (part a) and PAEP / negative-ci-b (part b) together run exactly the full suite in
- * parallel. Without --part every case runs. Any other --part value, or --part given twice, fails. Every run
- * must declare exactly the pinned DECLARED_CASE_IDS and run exactly its half of them; each part lists the ids
- * it left to the other part.
+ * --part a | b | c (IB2 CI-performance split, PO/SA 2026-09-28; three-way split, PO/SA 2026-10-07): runs only
+ * the cases the explicit PARTITION assigns to that part, so PAEP / negative-ci (part a), PAEP / negative-ci-b
+ * (part b) and PAEP / negative-ci-c (part c) together run exactly the full suite in parallel. Without --part every
+ * case runs. Any other --part value, or --part given twice, fails. Every run must declare exactly the pinned
+ * DECLARED_CASE_IDS and run exactly its part of them; each part lists the ids it left to the other parts.
+ * The PARTITION is checked before anything runs: every declared case in exactly one part, no unknown or repeated
+ * id, no empty part, EXPECTED_CASES cases in all (a failure exits 1). --check-partition runs only that check
+ * (used by the provenance gate, W11).
  *
  * PAEP_EVIDENCE_DIR is removed from the environment of every scratch run.
  * Writes negative-ci-tests.log and negative-ci-tests.json to PAEP_EVIDENCE_DIR
@@ -40,35 +43,79 @@ if (process.argv.filter((a) => a === '--part').length > 1) {
   console.log(`FAIL --part given more than once: ${process.argv.slice(2).join(' ')}`);
   process.exit(1);
 }
-if (partArg >= 0 && !['a', 'b'].includes(PART)) {
-  console.log(`FAIL --part must be a or b, got ${PART === undefined ? 'nothing' : JSON.stringify(PART)}`);
+if (partArg >= 0 && !['a', 'b', 'c'].includes(PART)) {
+  console.log(`FAIL --part must be a, b or c, got ${PART === undefined ? 'nothing' : JSON.stringify(PART)}`);
   process.exit(1);
 }
-if (process.argv.slice(2).some((a, i, all) => a !== '--part' && all[i - 1] !== '--part')) {
+const CHECK_PARTITION = process.argv.includes('--check-partition');
+if (process.argv.slice(2).some((a, i, all) => a !== '--part' && all[i - 1] !== '--part' && a !== '--check-partition')) {
   console.log(`FAIL unknown arguments: ${process.argv.slice(2).join(' ')}`);
   process.exit(1);
 }
-// Case k (0-based, in declaration order) belongs to part a when k is odd and to part b when k is even (part a
-// shares PAEP / negative-ci with qa:baseline:negative, so it takes the half without the first case).
-// Every run, full or split, must declare exactly DECLARED_CASE_IDS in this order, and a part must run exactly its
-// half of it (checked at the end, independently of mine()), so neither part can drop, add or reorder a case
-// without a reviewable edit to this list. A new case, or a new mandatory job (one more GJ case), updates the list.
+// Every run, full or split, must declare exactly DECLARED_CASE_IDS in this order, and a part must run exactly the
+// cases PARTITION gives it (checked at the end, independently of mine()), so no part can drop, add or reorder a case
+// without a reviewable edit to these lists. A new case, or a new mandatory job (one more GJ case), updates the list,
+// the PARTITION and EXPECTED_CASES.
 const DECLARED_CASE_IDS = [
   'C06', 'G00', 'G01', 'G02', 'G03', 'G04', 'G05', 'G06', 'G07', 'G08', 'G09', 'GJ10', 'GJ11', 'GJ12', 'GJ13',
-  'GJ14', 'GJ15', 'G10', 'G11', 'G12', 'G13', 'G14', 'G15', 'G16', 'G17', 'G18', 'C01', 'C02', 'C03', 'C04', 'C05',
+  'GJ14', 'GJ15', 'GJ16', 'GJ17', 'GJ18', 'G10', 'G11', 'G12', 'G13', 'G14', 'G15', 'G16', 'G17', 'G18', 'C01', 'C02', 'C03', 'C04', 'C05',
   'C07', 'C08', 'A01', 'A02', 'A03', 'A04', 'S01', 'S02', 'S03', 'S04', 'B01', 'H01', 'H02', 'L00', 'L01', 'L02',
   'L03', 'T01', 'T02', 'T03', 'T04', 'T05', 'T06', 'I01', 'I02', 'I03', 'I04', 'F01', 'F02', 'F03', 'F04', 'X01',
   'X02', 'X03', 'X04', 'P01', 'P02', 'P03', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P13',
   'P14', 'P15', 'P16', 'P17', 'P18', 'P19', 'P21', 'P22', 'P23', 'P24', 'P20', 'N01', 'N02', 'N03', 'K01', 'K02',
   'K03', 'K08', 'K04', 'K05', 'K06', 'K07'
 ];
+const EXPECTED_CASES = 104;
+// Explicit, deterministic case-to-part mapping (PO/SA 2026-10-07), balanced on measured case times so each part
+// keeps headroom under the 20-minute job timeout. Part a also carries qa:baseline:negative in PAEP / negative-ci.
+const PARTITION = {
+  a: [
+    'G00', 'G02', 'G05', 'G07', 'GJ10', 'GJ14', 'GJ17', 'G11', 'G14', 'G18', 'A02', 'A04', 'S01', 'S03', 'H02',
+    'L00', 'T02', 'I02', 'I04', 'F01', 'F02', 'F04', 'P17', 'P22', 'K05'
+  ],
+  b: [
+    'C06', 'G01', 'G03', 'G06', 'G09', 'GJ12', 'GJ15', 'G10', 'G13', 'G16', 'G17', 'C03', 'C07', 'C08', 'A01',
+    'S02', 'S04', 'L01', 'L02', 'L03', 'T01', 'I03', 'X01', 'X04', 'P16', 'P18', 'P19', 'P21', 'P20', 'N02',
+    'N03', 'K07'
+  ],
+  c: [
+    'G04', 'G08', 'GJ11', 'GJ13', 'GJ16', 'GJ18', 'G12', 'G15', 'C01', 'C02', 'C04', 'C05', 'A03', 'B01', 'H01',
+    'T03', 'T04', 'T05', 'T06', 'I01', 'F03', 'X02', 'X03', 'P01', 'P02', 'P03', 'P04', 'P05', 'P06', 'P07',
+    'P08', 'P09', 'P10', 'P11', 'P12', 'P13', 'P14', 'P15', 'P23', 'P24', 'N01', 'K01', 'K02', 'K03', 'K08',
+    'K04', 'K06'
+  ],
+};
+/** Partition problems: unassigned, unknown or repeated ids, empty parts, or a case count other than EXPECTED_CASES. */
+function partitionProblems() {
+  const p = [];
+  const assigned = Object.values(PARTITION).flat();
+  const unassigned = DECLARED_CASE_IDS.filter((id) => !assigned.includes(id));
+  const unknown = assigned.filter((id) => !DECLARED_CASE_IDS.includes(id));
+  const repeated = [...new Set(assigned.filter((id, i) => assigned.indexOf(id) !== i))];
+  const repeatedDeclared = [...new Set(DECLARED_CASE_IDS.filter((id, i) => DECLARED_CASE_IDS.indexOf(id) !== i))];
+  if (JSON.stringify(Object.keys(PARTITION)) !== JSON.stringify(['a', 'b', 'c'])) p.push(`partition parts are ${Object.keys(PARTITION).join(', ')}; expected a, b, c`);
+  if (unassigned.length) p.push(`partition: unassigned cases ${unassigned.join(' ')}`);
+  if (unknown.length) p.push(`partition: unknown cases ${unknown.join(' ')}`);
+  if (repeated.length) p.push(`partition: cases in more than one part ${repeated.join(' ')}`);
+  if (repeatedDeclared.length) p.push(`declared case list repeats ${repeatedDeclared.join(' ')}`);
+  for (const [k, ids] of Object.entries(PARTITION)) if (!ids.length) p.push(`partition: part ${k} is empty`);
+  if (DECLARED_CASE_IDS.length !== EXPECTED_CASES || new Set(assigned).size !== EXPECTED_CASES) p.push(`partition: ${DECLARED_CASE_IDS.length} declared and ${new Set(assigned).size} assigned cases; expected ${EXPECTED_CASES}`);
+  return p;
+}
+{
+  const p = partitionProblems();
+  for (const x of p) console.log(`FAIL ${x}`);
+  if (CHECK_PARTITION) console.log(`IB0-WP05 negative-suite partition: ${p.length ? 'FAIL' : 'PASS'} (${Object.entries(PARTITION).map(([k, v]) => `part ${k} ${v.length}`).join(', ')}; ${EXPECTED_CASES} cases)`);
+  if (p.length || CHECK_PARTITION) process.exit(p.length ? 1 : 0);
+}
+const partOf = (id) => Object.keys(PARTITION).find((k) => PARTITION[k].includes(id));
 let caseIndex = 0;
 const declared = [];
 const delegated = [];
 const mine = (id) => {
-  const k = caseIndex++;
+  caseIndex++;
   declared.push(id);
-  if (PART === null || (k % 2 === 1) === (PART === 'a')) return true;
+  if (PART === null || partOf(id) === PART) return true;
   delegated.push(id);
   return false;
 };
@@ -300,7 +347,7 @@ try {
 
   // ---- (x) skipped/cancelled: see G10-G18; plus the gate must keep always() and full needs ------------
   caseRun('X01', '(x) gate condition changed from always() to success() fails the provenance gate', [[WORKFLOW, replace("  gate:\n    name: PAEP / gate\n    if: ${{ always() }}", "  gate:\n    name: PAEP / gate\n    if: ${{ success() }}")]], () => verifyGate('provenance'), [/FAIL W12/]);
-  caseRun('X02', '(x) mandatory job dropped from gate needs fails the provenance gate', [[WORKFLOW, replace('      - build-ui-lab\n    runs-on', '    runs-on')]], () => verifyGate('provenance'), [/FAIL W12/]);
+  caseRun('X02', '(x) mandatory job dropped from gate needs fails the provenance gate', [[WORKFLOW, replace('      - build-ui-lab\n      - enterprise-shell\n', '      - enterprise-shell\n')]], () => verifyGate('provenance'), [/FAIL W12/]);
   caseRun('X03', '(x) continue-on-error on a mandatory job fails the provenance gate', [[WORKFLOW, replace('    name: PAEP / architecture\n', '    name: PAEP / architecture\n    continue-on-error: true\n')]], () => verifyGate('provenance'), [/FAIL W11/]);
   caseRun('X04', '(x) mandatory job made conditional (if) fails the provenance gate', [[WORKFLOW, replace('    name: PAEP / regression\n', "    name: PAEP / regression\n    if: ${{ github.event_name == 'push' }}\n")]], () => verifyGate('provenance'), [/FAIL W11/]);
 
@@ -362,7 +409,7 @@ if (total !== caseIndex) coverage.push(`case accounting: ${results.length} run +
 if (JSON.stringify(declared) !== JSON.stringify(DECLARED_CASE_IDS)) {
   coverage.push(`declared case list differs from the pinned list: missing ${DECLARED_CASE_IDS.filter((id) => !declared.includes(id)).join(' ') || 'none'}; extra ${declared.filter((id) => !DECLARED_CASE_IDS.includes(id)).join(' ') || 'none'}; ${declared.length} declared, ${DECLARED_CASE_IDS.length} pinned`);
 }
-const expectedRun = DECLARED_CASE_IDS.filter((id, k) => PART === null || (PART === 'a' ? k % 2 === 1 : k % 2 === 0));
+const expectedRun = DECLARED_CASE_IDS.filter((id) => PART === null || partOf(id) === PART);
 if (JSON.stringify(results.map((r) => r.id)) !== JSON.stringify(expectedRun)) {
   coverage.push(`part ${PART || 'full'} ran ${results.length} of ${DECLARED_CASE_IDS.length} declared cases; expected exactly its ${expectedRun.length}`);
 }
@@ -391,6 +438,6 @@ if (evidenceOut) {
 }
 
 for (const r of results) console.log(`${r.pass ? 'PASS' : 'FAIL'} ${r.id} ${r.name} — exit ${r.exit}`);
-if (PART) console.log(`\npart ${PART}: ran ${results.length} of ${caseIndex} declared cases; the other ${delegated.length} run in part ${PART === 'a' ? 'b' : 'a'}: ${delegated.join(' ')}`);
+if (PART) console.log(`\npart ${PART}: ran ${results.length} of ${caseIndex} declared cases; the other ${delegated.length} run in ${Object.keys(PARTITION).filter((k) => k !== PART).map((k) => `part ${k}: ${delegated.filter((id) => partOf(id) === k).join(' ')}`).join('; ')}`);
 console.log(`\nIB0-WP05 negative CI-control tests${PART ? ` (part ${PART})` : ''}: ${passed ? 'PASS' : 'FAIL'} (${results.filter((r) => r.pass).length}/${results.length}; ${report.controls} controls, ${report.negatives} negatives)`);
 process.exit(passed ? 0 : 1);

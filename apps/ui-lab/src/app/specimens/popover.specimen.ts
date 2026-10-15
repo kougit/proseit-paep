@@ -9,13 +9,14 @@ export const POPOVER_META: LabSpecimenMeta = {
   name: 'Popover',
   family: 'Overlay',
   selector: 'paep-popover, [paepPopoverTrigger]',
-  exports: ['PaepPopover', 'PaepPopoverTrigger', 'PaepPopoverVariant', 'PaepPopoverFocus'],
+  exports: ['PaepPopover', 'PaepPopoverTrigger', 'PaepPopoverVariant', 'PaepPopoverFocus', 'PaepPopoverAlign'],
   purpose: 'Show short, non-essential supplementary content or a small set of options anchored to a trigger.',
-  variants: ['informational (text)', 'informational with links', 'menu (role="menu")'],
+  variants: ['informational (text)', 'informational with links', 'menu (role="menu"; full menus use the Menu component)', 'align="start" (default) or align="end" (HOF-IB2-001 v1.2 §2.1)'],
   states: [
     'open (anchored below the trigger at its inline-start edge)',
+    'align end (anchored at the trigger\'s inline-end edge; kept when it flips; shifted to stay 16 px inside the viewport)',
     'flipped (opens above when there is not enough space below; shifts to stay 16 px inside the viewport)',
-    'narrow-width (width min(20 rem, 100vw - 32 px); still anchored)',
+    'narrow-width (width min(20 rem, 100vw - 32 px); below 600 px up to 100vw - 32 px; still anchored)',
     'long-label (content wraps; max-height 60% of the viewport, then inner scroll)',
     'focus-visible (trigger and content controls)',
     'disabled (trigger disabled)',
@@ -29,12 +30,12 @@ export const POPOVER_META: LabSpecimenMeta = {
   ],
   accessibility: [
     'Trigger exposes aria-expanded and aria-controls (aria-haspopup="menu" for menus).',
-    'Uses the HTML popover attribute (light dismiss "auto") with a script that anchors, flips and shifts the panel.',
+    'Uses the HTML popover attribute (light dismiss "auto") with a script that anchors, flips and shifts the panel; scroll and resize reposition it, and it closes once its trigger leaves the viewport.',
     'Informational text: focus stays on the trigger and the panel describes it (aria-describedby) while open. Interactive content: focus moves to the first control.',
     'Hover never opens a popover (WCAG 1.4.13 not triggered).',
   ],
-  responsive: 'Max 20 rem wide; below that min(20 rem, 100vw - 32 px); flips block-side and shifts inline to stay inside the viewport.',
-  rtl: 'Aligns to the trigger’s right edge (inline-start) in RTL.',
+  responsive: 'Max 20 rem wide; min(20 rem, 100vw - 32 px), and below 600 px up to 100vw - 32 px; flips block-side and shifts inline to stay inside the viewport.',
+  rtl: 'Alignment is logical: start is the trigger’s right edge and end its left edge in RTL.',
   contentKeys: [],
   unitTests: 'packages/components/src/lib/popover/popover.spec.ts',
 };
@@ -83,6 +84,13 @@ export const POPOVER_META: LabSpecimenMeta = {
             <p class="p">Rule {{ n }}. Records are kept for the configured period and then archived; archived records stay searchable.</p>
           }
         </paep-popover>
+      </lab-example>
+
+      <lab-example heading="Inline-end alignment (align=&quot;end&quot;)">
+        <div class="end">
+          <button paepButton [paepPopoverTrigger]="endInfo">Sync details</button>
+        </div>
+        <paep-popover #endInfo align="end"><p class="p">The panel's inline-end edge lines up with the trigger's, so it stays inside the viewport at the end of a bar.</p></paep-popover>
       </lab-example>
 
       <lab-example heading="Disabled trigger">

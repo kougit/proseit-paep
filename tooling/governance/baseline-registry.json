@@ -343,6 +343,60 @@
         "work-packages/IB2-FOUNDATION-COMPONENTS/": "973e6b8fb57785c530ce10d6079a1d24fcbac17f"
       },
       "notes": "CANDIDATE only. Prepared by Claude Code under the PO/SA instruction authorising IB2 (project thread, 2026-09-26T20:30Z), the PO/SA CI-performance remediation authorising the negative-ci split (2026-09-28T05:02Z), the PO/SA design approval of HOF-IB2-001 v1.1 (2026-09-27) and the PO/SA dependency approval of vitest, @vitest/browser-playwright, playwright and axe-core (2026-09-27). policyChange is true because IB2 adds mandatory CI jobs and bounds the IB0-WP05 regression for IB2 entry points, the approved dependency change and the ui-lab test target (.github/ and tooling/verification/). It becomes ACCEPTED only through the promote command after PO/SA acceptance and merge."
+    },
+    {
+      "generation": 5,
+      "name": "IB3 enterprise application shell",
+      "milestone": "IB3",
+      "workPackages": [
+        "IB3-ENTERPRISE-SHELL"
+      ],
+      "status": "CANDIDATE",
+      "predecessorGeneration": 4,
+      "authorisation": {
+        "authority": "Product Owner / Solutions Architect",
+        "date": "2026-10-06",
+        "reference": "work-packages/IB3-ENTERPRISE-SHELL/WORK_PACKAGE.md"
+      },
+      "policyChange": true,
+      "authorisedScope": [
+        ".github/workflows/paep-ci.yml",
+        "CLAUDE.md",
+        "angular.json",
+        "apps/reference-app/",
+        "apps/ui-lab/src/app/",
+        "apps/ui-lab/tsconfig.spec.json",
+        "docs/architecture/IB3-ENTERPRISE-SHELL-DESIGN.md",
+        "docs/provenance/PROVENANCE-REGISTER.md",
+        "evidence/IB3-ENTERPRISE-SHELL/",
+        "evidence/design-handoff/HOF-IB2-001/",
+        "evidence/design-handoff/HOF-IB3-001/",
+        "package.json",
+        "packages/components/src/",
+        "packages/enterprise/README.md",
+        "packages/enterprise/src/",
+        "packages/foundation/src/",
+        "packages/i18n/src/",
+        "packages/observability/src/",
+        "packages/platform/src/",
+        "tooling/design-system/",
+        "tooling/enterprise-shell/",
+        "tooling/governance/baseline-registry.json",
+        "tooling/test-utils/",
+        "tooling/verification/ib0-wp05-ci-policy.json",
+        "tooling/verification/negative-ib0-wp05.mjs",
+        "tooling/verification/verify-ib0-wp05.mjs",
+        "work-packages/IB3-ENTERPRISE-SHELL/"
+      ],
+      "protectedRecords": [
+        "evidence/IB3-ENTERPRISE-SHELL/",
+        "work-packages/IB3-ENTERPRISE-SHELL/"
+      ],
+      "acceptedCommit": null,
+      "acceptedTree": null,
+      "acceptance": null,
+      "fingerprints": null,
+      "notes": "CANDIDATE only. Prepared by Claude Code under the PO/SA instruction \"PAEP IB3 - FINAL DESIGN APPROVAL + GENERATION 5 IMPLEMENTATION AUTHORIZATION\" (project thread, 2026-10-06T09:48Z), which approved HOF-IB3-001 v1.0 for implementation (manifest 645dd2e9bb4274c9b787bbbcc52cf53eb4f08dc21d733b5985aa3ab572f4fce5) and authorised IB3-ENTERPRISE-SHELL. policyChange is true because IB3 narrowly amends CLAUDE.md for this work package only, adds two mandatory CI jobs and bounds the IB0-WP05 regression for the IB3 entry points (.github/, CLAUDE.md and tooling/verification/). No package-lock.json change and no new dependency is authorised. It becomes ACCEPTED only through the promote command after PO/SA acceptance and merge."
     }
   ]
 }

@@ -1,5 +1,11 @@
-<main>
-  <h1>{{ title() }}</h1>
-  <p>Workspace bootstrap placeholder (IB0-WP01). No product, shell or design-system features are implemented.</p>
-</main>
-<router-outlet />
+<paep-shell>
+  <!-- Neutral placeholder product mark (HOF-IB3-001 P-09): test content only, not a brand asset. -->
+  <svg paepShellMark viewBox="0 0 32 32" width="32" height="32" focusable="false">
+    <rect width="32" height="32" rx="6" fill="#24364B" />
+    <path d="M9 22L16 9l7 13" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M12 18h8" stroke="#D4A62A" stroke-width="2.5" stroke-linecap="round" />
+  </svg>
+  <main>
+    <paep-error-boundary />
+  </main>
+</paep-shell>

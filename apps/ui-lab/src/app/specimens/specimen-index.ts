@@ -1,7 +1,7 @@
 import { LabFamily } from '../lab/specimen-meta';
 
 /**
- * Light contents entries for the 25 specimens, so the lab frame can list them without loading the specimen
+ * Light contents entries for the 28 specimens, so the lab frame can list them without loading the specimen
  * pages: those load on demand from registry.ts (LAB_SPECIMEN_ROUTES). The registry reports any drift between
  * this list and the specimen metadata as a console error, which the browser gate (A3) fails on.
  */
@@ -15,17 +15,20 @@ export const LAB_SPECIMEN_INDEX: readonly { readonly id: string; readonly name: 
   { id: 'textarea', name: 'Textarea', family: 'Forms' },
   { id: 'checkbox', name: 'Checkbox', family: 'Forms' },
   { id: 'radio', name: 'Radio group', family: 'Forms' },
+  { id: 'combobox', name: 'Combobox', family: 'Forms' },
   { id: 'table', name: 'Table shell', family: 'Data' },
   { id: 'list', name: 'List', family: 'Data' },
   { id: 'pagination', name: 'Pagination', family: 'Data' },
   { id: 'empty-state', name: 'Empty state', family: 'Data' },
   { id: 'alert', name: 'Alert', family: 'Feedback' },
   { id: 'status-badge', name: 'Status badge', family: 'Feedback' },
+  { id: 'count-badge', name: 'Count badge', family: 'Feedback' },
   { id: 'progress', name: 'Progress', family: 'Feedback' },
   { id: 'skeleton', name: 'Skeleton', family: 'Feedback' },
   { id: 'dialog', name: 'Dialog', family: 'Overlay' },
   { id: 'drawer', name: 'Drawer', family: 'Overlay' },
   { id: 'popover', name: 'Popover', family: 'Overlay' },
+  { id: 'menu', name: 'Menu', family: 'Overlay' },
   { id: 'tabs', name: 'Tabs', family: 'Navigation' },
   { id: 'breadcrumb', name: 'Breadcrumb', family: 'Navigation' },
   { id: 'card', name: 'Card', family: 'Structure' },

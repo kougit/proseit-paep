@@ -5,7 +5,8 @@
  * Serves dist/ui-lab/browser locally, discovers every laboratory page from its contents list, and in an
  * installed Chrome/Chromium (browser.mjs; nothing is downloaded) checks at 1440, 834 and 320 CSS px, in LTR
  * and RTL:
- *   A1 axe-core: zero WCAG 2.0/2.1/2.2 A and AA violations        A2 no page-level horizontal overflow
+ *   A1 axe-core: zero WCAG 2.0/2.1/2.2 A and AA violations, framed  A2 no page-level horizontal overflow
+ *      shell-showcase previews included
  *   A3 no console error or page error                              A4 one h1 and one main landmark
  * and, once per run:
  *   M1 reduced motion (media emulation and the lab simulation) zeroes motion tokens and stops loops
@@ -57,19 +58,65 @@ export async function launch() {
   return chromium.launch({ executablePath: findChrome(), headless: true, args: ['--no-sandbox'] });
 }
 
-/** Opens a page, collecting console errors and page errors; waits for Angular to render the h1. */
-export async function open(context, url) {
+/**
+ * Opens a page, collecting console errors and page errors; waits for Angular to render the h1. `trace`, when given,
+ * is called with the phase name as each phase begins (diagnostics only; it does not change any wait or timeout).
+ */
+export async function open(context, url, trace = null) {
   const page = await context.newPage();
   const errors = [];
   page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
   page.on('pageerror', (e) => errors.push(String(e)));
-  await page.goto(url, { waitUntil: 'networkidle' });
+  // Diagnostics only (PO/SA 2026-10-07 section 8): what the page was waiting on if navigation does not settle.
+  const t0 = Date.now();
+  const inflight = new Map();
+  const events = [];
+  page.on('request', (r) => inflight.set(r, Date.now() - t0));
+  page.on('requestfinished', (r) => inflight.delete(r));
+  page.on('requestfailed', (r) => { events.push(`request failed +${Date.now() - t0}ms ${r.url()} (${r.failure()?.errorText})`); inflight.delete(r); });
+  page.on('domcontentloaded', () => events.push(`domcontentloaded +${Date.now() - t0}ms`));
+  page.on('load', () => events.push(`load +${Date.now() - t0}ms`));
+  page.on('frameattached', () => events.push(`frame attached +${Date.now() - t0}ms`));
+  page.on('framenavigated', (f) => { if (f !== page.mainFrame()) events.push(`frame navigated +${Date.now() - t0}ms ${f.url()}`); });
+  trace?.('navigation-start');
+  try {
+    await page.goto(url, { waitUntil: 'networkidle' });
+  } catch (e) {
+    const pending = [...inflight].map(([r, at]) => `pending since +${at}ms ${r.method()} ${r.url()}`);
+    const frames = page.frames().map((f) => f.url() || '(blank)');
+    const h1 = await page.locator('main h1').count().catch(() => 'unknown');
+    e.message += `\n  diagnostics: ${pending.length} request(s) in flight; main h1 count ${h1}; frames: ${frames.join(' | ')}\n  ${[...pending, ...events.slice(-20)].join('\n  ')}`;
+    throw e;
+  }
+  trace?.('navigation-end; waiting for main h1');
   await page.waitForSelector('main h1', { timeout: 15000 });
+  trace?.('h1-rendered');
   return { page, errors };
 }
 
-/** Runs axe-core on the document, or on the first element matching `selector`. Returns violation strings. */
+/**
+ * Per-audit diagnostics on stderr (PO/SA pre-acceptance disposition 2026-10-07, section 8): one line per phase with
+ * the audit number, route, viewport and direction, so a stalled or failed CI run shows where it stopped.
+ */
+function tracer(n, total, pth, vp, dir) {
+  const t0 = Date.now();
+  let phase = 'queued';
+  const log = (next) => { phase = next; process.stderr.write(`[a11y-trace] audit ${n}/${total} ${pth} ${vp} ${dir} +${Date.now() - t0}ms ${next}\n`); };
+  return { log, phase: () => phase };
+}
+
+/**
+ * Runs axe-core on the document, or on the first element matching `selector`. Returns violation strings. On the
+ * whole document, axe-core is also loaded into every child frame (the IB3 shell-showcase previews) once its h1 has
+ * rendered, so the audit covers the framed documents too.
+ */
 export async function axeViolations(page, selector = null) {
+  if (!selector) {
+    for (const frame of page.frames().filter((f) => f !== page.mainFrame())) {
+      await frame.waitForSelector('main h1', { timeout: 15000 });
+      if (!(await frame.evaluate(() => 'axe' in window))) await frame.addScriptTag({ path: AXE });
+    }
+  }
   if (!(await page.evaluate(() => 'axe' in window))) await page.addScriptTag({ path: AXE });
   return page.evaluate(async ([tags, sel]) => {
     const target = sel ? document.querySelector(sel) : document;
@@ -356,15 +403,23 @@ async function main() {
     if (only) paths = paths.filter((x) => only.test(x));
     const jobs = paths.flatMap((pth) => VIEWPORTS.flatMap((vp) => ['ltr', 'rtl'].map((dir) => ({ pth, vp, dir }))));
     if (capture) fs.mkdirSync(capture, { recursive: true });
-    const res = await pool(jobs, 4, async ({ pth, vp, dir }) => {
+    const res = await pool(jobs.map((j, k) => ({ ...j, n: k + 1 })), 4, async ({ pth, vp, dir, n }) => {
+      const tr = tracer(n, jobs.length, pth, vp.name, dir);
+      tr.log('start');
       const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height } });
       try {
-        const { page, errors } = await open(ctx, `${server.url}${pth}${dir === 'rtl' ? '?dir=rtl' : ''}`);
+        const { page, errors } = await open(ctx, `${server.url}${pth}${dir === 'rtl' ? '?dir=rtl' : ''}`, tr.log);
+        tr.log('audit-start');
         const problems = await auditPage(page, errors);
         if (capture && dir === 'ltr') await page.screenshot({ path: path.join(capture, `${(pth.replace(/^\/|\/$/g, '') || 'home').replace(/\//g, '--')}--${vp.name}.png`), fullPage: true });
+        tr.log(`end (${problems.length} problems)`);
         return { page: pth, viewport: vp.name, dir, problems };
       } catch (e) {
-        return { page: pth, viewport: vp.name, dir, problems: [`error: ${e.message}`] };
+        const at = tr.phase();
+        tr.log(`failed during ${at}: ${e.message.split('\n')[0]}`);
+        const diag = e.message.split('\n').filter((x) => x.startsWith('  diagnostics') || x.startsWith('  pending') || /^  (load|domcontentloaded|frame|request failed)/.test(x));
+        for (const x of diag) process.stderr.write(`[a11y-trace] audit ${n}/${jobs.length} ${pth} ${vp.name} ${dir} ${x.trim()}\n`);
+        return { page: pth, viewport: vp.name, dir, problems: [`error during ${at}: ${e.message}`] };
       } finally { await ctx.close(); }
     });
     report.pages = res;
@@ -388,7 +443,9 @@ async function main() {
     }
     console.log(`\npages: ${paths.length}; page audits: ${res.length}; failed: ${failed}`);
     if (!only) {
+      process.stderr.write('[a11y-trace] global checks start\n');
       report.checks = await globalChecks(browser, server.url, tokens, paths);
+      process.stderr.write('[a11y-trace] global checks end\n');
       for (const c of report.checks) {
         console.log(`${c.problems.length ? 'FAIL' : 'PASS'} ${c.id} ${c.name}${c.problems.length ? ` — ${c.problems.join('; ')}` : ''}`);
         if (c.problems.length) failed++;

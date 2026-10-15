@@ -11,6 +11,7 @@ import {
   PaepField,
   PaepInput,
   PaepPagination,
+  PaepPanel,
   PaepProgress,
   PaepRadio,
   PaepRadioGroup,
@@ -71,7 +72,8 @@ const PROOF_STYLES = `
 @Component({
   selector: 'lab-proof-reflow',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [PaepActionGroup, PaepAlert, PaepBreadcrumb, PaepButton, PaepField, PaepInput, PaepPagination, PaepStatusBadge, PaepTab, PaepTable, PaepTableCell, PaepTabs],
+  imports: [PaepActionGroup, PaepAlert, PaepBreadcrumb, PaepButton, PaepCard, PaepField, PaepInput, PaepPagination, PaepPanel, PaepStatusBadge, PaepTab, PaepTable, PaepTableCell, PaepTabs, RouterLink],
+  styles: PROOF_STYLES,
   template: `
     <div class="lab-page">
       <header>
@@ -114,14 +116,45 @@ const PROOF_STYLES = `
         <h2 id="rf-bc">Breadcrumb</h2>
         <paep-breadcrumb [items]="trail" />
       </section>
-      <section class="lab-panel" aria-labelledby="rf-table">
-        <h2 id="rf-table">Table shell with pagination</h2>
+      <section class="lab-panel" aria-labelledby="rf-table" data-r03-section="table-action">
+        <h2 id="rf-table">Table shell with header action and pagination</h2>
         <paep-table #records caption="Records" [columns]="columns" [rows]="rows" [total]="184" [headingLevel]="3">
+          <button paepButton paepTableActions variant="primary" icon="plus">Create record</button>
           <ng-template paepTableCell="status" let-row>
             <paep-status-badge [tone]="tone(row)">{{ row['status'] }}</paep-status-badge>
           </ng-template>
           <paep-pagination paepTableFooter [(page)]="page" [pageCount]="20" [focusTarget]="records.captionElement()" />
         </paep-table>
+      </section>
+      <section class="lab-panel" aria-labelledby="rf-pagination" data-r03-section="pagination">
+        <h2 id="rf-pagination">Pagination</h2>
+        <paep-pagination [(page)]="standalonePage" [pageCount]="20" />
+      </section>
+      <section class="lab-panel" aria-labelledby="rf-card" data-r03-section="card-panel">
+        <h2 id="rf-card">Card and panel</h2>
+        <div class="stack">
+          <paep-card heading="Stock position for the current reporting period across all sites" description="A two-line title wraps; actions wrap below it under 30 rem.">
+            <paep-action-group paepCardActions label="Card actions">
+              <button paepButton>Export</button>
+              <button paepButton variant="primary">Refresh</button>
+            </paep-action-group>
+            <p>Body content grows with its content. Cards are not click targets.</p>
+            <button paepButton paepCardFooter variant="tertiary">View details</button>
+          </paep-card>
+          <paep-panel heading="Delivery details">
+            <button paepButton paepPanelActions>Edit</button>
+            <p>Static panel with a header action.</p>
+          </paep-panel>
+        </div>
+      </section>
+      <section class="lab-panel" aria-labelledby="rf-overlays" data-r03-section="overlays">
+        <h2 id="rf-overlays">Overlays at 320</h2>
+        <ul class="lab-list">
+          <li><a routerLink="/components/dialog">Dialog (inset 16 px, stacked actions)</a></li>
+          <li><a routerLink="/components/dialog">Large dialog (full screen below 600 px)</a></li>
+          <li><a routerLink="/components/drawer">Drawer (full width)</a></li>
+          <li><a routerLink="/components/popover">Popover (viewport-bounded)</a></li>
+        </ul>
       </section>
     </div>
   `,
@@ -131,6 +164,7 @@ export class LabProofReflow {
   protected readonly rows = ROWS;
   protected readonly trail = TRAIL;
   protected readonly page = signal(8);
+  protected readonly standalonePage = signal(8);
   protected readonly tone = tone;
 }
 

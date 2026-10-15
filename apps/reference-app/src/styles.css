@@ -1,1 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+/* PAEP reference application global styles: the foundation stylesheet only (tokens, focus, skip link). */
+@import '@proseit/paep-foundation/src/styles/paep-foundation.css';
+
+body {
+  margin: 0;
+  font-family: var(--paep-font-family-sans);
+  font-size: var(--paep-font-size-body);
+  line-height: var(--paep-line-height-body);
+}

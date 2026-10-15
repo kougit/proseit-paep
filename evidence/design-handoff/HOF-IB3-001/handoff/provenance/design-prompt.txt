@@ -1,0 +1,425 @@
+PAEP IB3 — CLAUDE DESIGN EXECUTION
+DWP-IB3-001 v1.0 → HOF-IB3-001 v1.0 REVIEW CANDIDATE
+PAEP ENTERPRISE APPLICATION SHELL
+
+You are working on the ProSEIT Angular Experience Platform (PAEP).
+
+This is a CONTROLLED DESIGN STAGE (PAEP-DCH-01 class D1 — Design
+Significant).
+
+You are NOT implementing Angular production code.
+You are NOT approving your own design.
+You are producing HOF-IB3-001 v1.0 as a REVIEW CANDIDATE for the Product
+Owner / Solutions Architect (PO/SA). Only a PO/SA-approved handoff may be
+given to Claude Code, and only after that approval may Generation 5 or any
+repository change begin.
+
+==================================================
+0. PRECONDITION
+==================================================
+
+Confirm that the attached DWP-IB3-001 v1.0 is marked APPROVED FOR DESIGN
+by the PO/SA.
+
+If it is not:
+
+STOP.
+
+Report:
+
+IB3 DESIGN STATUS: BLOCKED — DWP NOT APPROVED
+
+==================================================
+1. GOVERNING CONTEXT
+==================================================
+
+Controlling inputs, in the priority order of
+.paep-control/SOURCE_OF_TRUTH.md:
+
+1. ProSEIT Angular Experience Platform Specification, PAEP v1.1
+   (§6, §7, §8, §11-§19);
+2. PAEP Implementation Architecture & Repository Baseline, PAEP-IB-01 v1.0;
+3. PAEP Implementation Roadmap IB0-IB2, PAEP-IR-01 v1.0;
+4. PAEP Claude Engineering Execution & QA Protocol, PAEP-EQP-01 v1.1;
+5. PAEP Design-to-Code Handoff Standard, PAEP-DCH-01 v1.0 (governs this
+   design stage);
+then, below the controlled sources:
+6. the approved DWP-IB3-001 v1.0 (primary brief);
+7. the ACCEPTED PAEP design-system baseline:
+   - Generation 4: ACCEPTED; accepted implementation: commit 81c223c;
+   - HOF-IB2-001 v1.1: APPROVED_FOR_IMPLEMENTATION;
+   - plus six binding approved amendments: DDR-IB2-01, -02, -04, -05, -07,
+     -08 (attached verbatim with the binding-amendments digest). Wherever
+     an approved DDR disposition modifies or qualifies HOF-IB2-001 v1.1,
+     the DDR disposition prevails;
+   - DDR-IB2-03 and DDR-IB2-06 are CLOSED.
+   This baseline is accepted, not provisional. HOF-IB2-001 v1.2 is not
+   an input to this stage.
+
+Do not substitute remembered product conventions for controlled sources.
+
+If a controlled source conflicts materially with the DWP:
+
+STOP.
+
+Report:
+
+IB3 DESIGN STATUS: CONTROLLED-SOURCE CONFLICT
+
+and identify the exact conflict.
+
+==================================================
+2. OBJECTIVE
+==================================================
+
+Design the shared, product-neutral PAEP enterprise application shell that
+every ProSEIT product will compose in its own thin app:
+
+- topbar (product identity, tenant/site context, search/command entry,
+  notifications, help, locale, account);
+- sidebar navigation (driven by an app-supplied typed build-time
+  manifest; groups, current state, collapsed mode, narrow/mobile
+  navigation, long labels, RTL, locked explanations);
+- workspace / page frame (title, context, status, primary/secondary
+  actions, breadcrumbs when justified, filter region, generic extension
+  and action regions, density, long content);
+- search / command palette (bounded commands, grouped results, all states);
+- notification access and panel (transient vs persistent);
+- error boundary and not-found (correlation reference, retry, safe
+  navigation);
+- locked / unavailable presentation (permission, edition, configuration,
+  environment/capability — each distinct);
+- connectivity indicator (online, offline, degraded, unknown);
+- a GENERIC workspace/page-frame hosting example that shows future
+  experiences can be hosted through the generic regions;
+- shell-local preference surfaces for the session only (navigation
+  collapsed, density);
+- one governed reusable positioning/menu base for shell menus (DDR-02).
+
+The shell must use the accepted PAEP design system. Reuse existing PAEP
+components and tokens wherever they exist. Do not restyle, duplicate or
+privately substitute an existing primitive.
+
+Package placement:
+- reusable generic primitives (for example generic Menu/Popover
+  behaviour)            → @proseit/paep-components
+- generic design assets and icons → @proseit/paep-foundation
+- shell compositions (topbar, navigation rail/sidebar, workspace/page
+  frame, command-palette composition consuming approved generic
+  primitives)           → @proseit/paep-enterprise
+
+Generic primitives must NOT be designed as private substitutes inside
+@proseit/paep-enterprise.
+
+Where the shell needs something the design system does not have (for
+example: inline-end alignment for PaepPopover, a general menu, a
+combobox/listbox, a count badge, a search-field variant, an
+"unavailable" empty-state kind, a skip link, shell icons, sidebar and
+topbar layout tokens), mark it
+
+PROPOSED NEW PATTERN
+
+with the target package, the DCH class (D1/D2), the rationale, and why an
+existing component cannot be used. None of these is authorised until the
+PO/SA design review approves it.
+
+==================================================
+3. MANDATORY CONSTRAINTS
+==================================================
+
+3.1 Product neutrality and synthetic content
+- Use only the synthetic content in DWP-IB3-001 §12 ("Acme Platform",
+  "Northwind Holdings — Site 04", "Alex Morgan", navigation groups
+  Overview / Records / Operations / Reports / Administration, and their
+  long, Arabic and Hebrew variants). "Reports" is a neutral label only.
+- No manufacturing, agriculture, construction, fiscal, AI, IoT or other
+  domain menu, vocabulary or workflow.
+- No customer data and no real tenant or user data.
+
+3.2 Backend authority (the shell presents; the server decides)
+- Navigation visibility, disabled actions, edition presentation, command
+  results, tenant context, preferences and deep links NEVER grant
+  authority. Show them as provider-supplied state.
+- Do not design or imply backend search, notification, identity,
+  session, permission or entitlement contracts or services. Record the
+  data you need as read-only data assumptions only.
+- Locked-state and error copy must explain without implying that the
+  browser enforces anything.
+- Error UI shows fixed text and a correlation reference only — never
+  stack traces, payloads, tokens or internal URLs.
+- A tenant switch is a request; a deep link to another tenant never
+  switches silently. Impersonation is always visible.
+- Applications own their Routes. The enterprise shell may offer
+  route-targetable shell, error, locked and not-found components, but it
+  is never the route authority and has no permission-granting guards.
+- Keep any prototype logic non-authoritative (PAEP-DCH-01 §7(vi)).
+
+3.3 Scope
+- No login page, reauthentication or real session/authentication flow.
+  The account surface shows sign-out and the session state it is given.
+- No offline queue, replay, service worker, conflict engine or sync
+  authority, and no state or copy implying they exist.
+- No analytics or reporting behaviour: no datasets, reporting gateways,
+  metrics, drill-down, saved report definitions, saved views, report
+  persistence or analytics navigation. The hosting example is generic.
+- No preference persistence; shell preferences hold for the session only.
+- No runtime-configuration schema change; navigation content comes from
+  an app-supplied typed build-time manifest.
+- i18n boundary: active locale, direction, lang/dir, message keys with
+  English defaults. No dictionary loading, no complete locale-switching
+  subsystem, no date/number/currency formatting subsystem. A locale
+  selector appears only when the host supplies more than one locale, and
+  it only raises a request to the app.
+- Observability boundary: error reporting with a correlation reference
+  only; no telemetry transport or metrics.
+- No new dependencies.
+- Do not create or propose Generation 5, baseline-registry entries or
+  work-package records; that happens only after HOF approval.
+
+3.4 Accepted DDR constraints (see the attached records)
+- DDR-01: the table narrow rule depends on the content CONTAINER width
+  (< 40 rem), so a sidebar can trigger it at desktop widths.
+- DDR-02: today PaepPopover opens from the trigger's inline-start edge;
+  there is no inline-end option and no general menu. Design all shell
+  menus on ONE governed reusable positioning/menu base. The preferred
+  direction is a PROPOSED extension of PaepPopover with inline-end
+  alignment, also used — where technically and behaviourally
+  appropriate — to rebuild the Action-group overflow. In SCR-SHELL-023
+  show: inline-start; inline-end; collision flip/shift; LTR; RTL;
+  keyboard/focus; dismissal; mobile behaviour. Do NOT design a third
+  ad-hoc popover="manual" implementation in the enterprise package.
+- DDR-04: an overflowing dialog/drawer body becomes a focusable region;
+  page scroll is locked while a modal is open; use document scrolling.
+- DDR-05: long non-interactive popover content takes focus; keep help
+  popovers short.
+- DDR-07: the F07 and R03 boards in HOF-IB2-001 v1.1 are the approved
+  focus-state and 320 px references. Their UI-lab completion is later
+  implementation work, not part of this design.
+- DDR-08: modal footers use the dialog-footer pattern. Do not add
+  role="group" automatically; propose it only for a concrete IB3 need,
+  classified and justified.
+- The checkbox error API (DDR-06 residual) is not to be introduced
+  unless a concrete IB3 need is proposed, classified and justified.
+- `paep-drawer` is not to be used as application navigation.
+
+3.5 Public API form
+- Every componentMap target uses a single public entry point per
+  package, for example:
+    @proseit/paep-enterprise#PaepShell
+    @proseit/paep-components#PaepPopover
+- Do NOT use @proseit/paep-enterprise/navigation or any other secondary
+  or deep entry point.
+
+3.6 Content keys
+- All shell copy uses the controlled paep.shell.* message namespace, with
+  typed English defaults and provider override, following the pattern
+  the PAEP components already use.
+
+==================================================
+4. REQUIRED SCREENS, VIEWPORTS AND STATES
+==================================================
+
+Produce every screen SCR-SHELL-001 to SCR-SHELL-023 listed in
+DWP-IB3-001 §5.2, with every state listed there and every state marked
+REQUIRED in the attached state matrix.
+
+Viewports: 1440 desktop, 834 tablet, 640 (200 % zoom), 320 CSS px for
+every screen whose layout changes; 375 where the narrow layout differs.
+
+The catalogue must include:
+- desktop expanded shell and desktop collapsed navigation;
+- tablet shell, 640 px shell and 320 px shell;
+- mobile navigation open and closed;
+- the topbar overflow sequence from 1440 to 320, and the never-hidden
+  set (navigation toggle, search/command, notifications with count,
+  account with sign-out, degraded connectivity, current tenant context,
+  skip link);
+- long product and tenant names, and long navigation labels (truncation
+  only where the full value is also available and in the accessible
+  name; navigation labels wrap);
+- command palette, with search loading, results, empty and error;
+- notification access states;
+- page-frame variants;
+- the four locked/unavailable reasons at page, navigation-item and
+  action level;
+- error boundary and not-found;
+- connectivity indicator;
+- RTL (Arabic, Hebrew) boards with mirrored navigation and LTR
+  identifiers;
+- reduced motion;
+- keyboard/focus maps;
+- density compatibility;
+- account, locale and help surfaces;
+- context presentation (tenant/site, impersonation, non-production
+  environment);
+- the generic workspace/page-frame hosting example (no analytics
+  behaviour);
+- the governed menu/positioning base (SCR-SHELL-023);
+- a long-text (2×) and 200 % / 400 % zoom board;
+- a full 320 px board with no page-wide horizontal scrolling.
+
+States owned by later milestones may be drawn only where needed to prove
+the shell can represent them, labelled "future state — not implemented
+in IB3". This never applies to offline queue/sync/conflict states or to
+analytics/reporting states: do not draw those.
+
+Do not omit a state silently. If a state cannot be designed, list it as
+an open question with the reason.
+
+==================================================
+5. OPEN DESIGN QUESTIONS
+==================================================
+
+For each of DWP-IB3-001 §18 Q-01 to Q-14: explore the options, recommend
+one, and record in decision-record.md its rationale, the alternatives
+considered, and why each rejected alternative was rejected. Keep every
+Q-01..Q-14 item OPEN in the review candidate and list each as an open
+decision in the manifest. You must NOT decide these questions on behalf
+of the PO/SA; the PO/SA resolves them at the HOF-IB3-001 design review
+before the handoff can become APPROVED_FOR_IMPLEMENTATION.
+
+==================================================
+6. ACCESSIBILITY INTENT (WCAG 2.2 AA)
+==================================================
+
+Deliver:
+- a landmark map (one banner, labelled navigation, one main, search;
+  one skip link first in focus order);
+- a keyboard map for every interactive shell area (navigation as
+  Tab-navigable links with disclosure groups; menus with the menu-button
+  key map; the palette as combobox + listbox with a visible trigger and
+  no single-character shortcuts; the shortcut itself is Q-12);
+- focus order and a focus-restoration table (palette, menus, panels,
+  mobile navigation, route change to the page heading, error boundary);
+- focus visibility on every chrome surface, including any dark or brand
+  surface, with contrast evidence (the IB2 ring is 2 px with a white
+  halo);
+- focus not obscured by sticky chrome, including at 320 × 256;
+- a live-region plan (polite: route change, counts, results,
+  connectivity; assertive: blocking errors only; no repeated
+  announcements);
+- accessible names, states and non-colour cues for the current item,
+  locked reasons, connectivity and unread counts;
+- reduced-motion intent; 24 px minimum and 40 px touch targets;
+- long translated content and RTL behaviour.
+
+==================================================
+7. CLEAN-ROOM PROVENANCE
+==================================================
+
+Prohibited design inputs:
+- proprietary commercial template screenshots;
+- Ultima source or assets;
+- PrimeNG, PrimeFlex, PrimeIcons and PrimeNG commercial-template layouts;
+- SAP Fiori / UI5 copying;
+- Angular Material themes and icons;
+- copied third-party theme files;
+- any commercial or proprietary admin template or UI kit;
+- screenshots or recollections of any vendor or competitor enterprise
+  shell, including Frappe Desk / ERPNext / frappe-ui visual design;
+- customer data; real tenant or user data.
+
+Do not copy, reproduce, imitate or reconstruct any distinctive template
+implementation, theme file, asset, layout signature or icon.
+
+Permitted references: the attached PAEP sources; WCAG 2.2 and the
+WAI-ARIA Authoring Practices as behaviour specifications only; generic,
+non-distinctive conventions described in words.
+
+Do not use web search, external fonts, external icons or CDN assets. If
+you open any external URL, log it in provenance.md.
+
+The handoff must retain:
+- the prompt of record, verbatim (provenance/design-prompt.txt);
+- input/source hashes (SHA-256 of every source file read);
+- asset provenance (asset-register.md: new icons drawn on the PAEP 24 px
+  grid with provenance "authored-in-HOF-IB3-001"; a neutral placeholder
+  product mark only; no third-party assets);
+- an independent-composition statement per shell region (requirement →
+  design decision);
+- alternatives considered and rejected;
+- a similarity-review record template for the PO/SA's human review.
+
+==================================================
+8. REQUIRED OUTPUT — HOF-IB3-001 v1.0 REVIEW CANDIDATE
+==================================================
+
+Create the bundle exactly as defined in the attached
+E11-hof-required-contents.md (extract of 11-HOF-IB3-001-REQUIRED-CONTENTS.md):
+
+handoff/HOF-IB3-001/
+  handoff.manifest.yaml
+  design-brief.md
+  shell-information-architecture.md
+  token-use-map.md
+  component-map.md
+  screens/ (HTML + PNG per screen × viewport × state, render-check.json)
+  interaction-notes.md
+  responsive-rules.md
+  accessibility-intent.md
+  content-keys.md (paep.shell.* with English defaults)
+  assets/ (+ asset-register.md)
+  provenance.md
+  provenance/ (design-prompt.txt, generator/, similarity-review.md)
+  decision-record.md (decisions, alternatives, open questions)
+  approvals.md
+  deviations/ (README only)
+
+Manifest rules:
+- handoffId: HOF-IB3-001
+- version: 1.0
+- status: READY_FOR_PO_SA_REVIEW
+- designApproval.approvedBy: null
+- designApproval.approvedDate: null
+- designSystemBaseline: HOF-IB2-001 v1.1 + DDR-IB2-01/02/04/05/07/08
+  @ Generation 4, 81c223c
+- componentMap targets use single-entry-point symbols only
+- list every PROPOSED NEW PATTERN (target package, D1/D2) and every
+  PROPOSED token
+- list every open design question and open decision; do not resolve
+  PO/SA decisions yourself
+
+approvals.md: every gate PENDING. Do not mark anything approved,
+accepted, passed or ready for implementation.
+
+==================================================
+9. PROHIBITIONS
+==================================================
+
+- No Angular production code, no TypeScript services, no package or
+  repository changes.
+- Never set status APPROVED_FOR_IMPLEMENTATION; never fill
+  designApproval; no self-approval.
+- No proprietary or commercial template reference (section 7).
+- No product-specific or domain-specific content.
+- No invented backend, identity, permission, entitlement, search or
+  notification contracts or services.
+- No analytics/reporting behaviour, saved views or persistence.
+- No offline queue/sync/conflict design.
+- No secondary package entry points.
+- No new dependencies.
+
+==================================================
+10. FINAL REPORT
+==================================================
+
+Return exactly one of:
+
+IB3 DESIGN STATUS: REVIEW CANDIDATE READY
+IB3 DESIGN STATUS: BLOCKED — <reason>
+IB3 DESIGN STATUS: CONTROLLED-SOURCE CONFLICT — <conflict>
+
+Then list:
+- handoff: HOF-IB3-001 v1.0, status READY_FOR_PO_SA_REVIEW;
+- screens produced (id × viewport × state count) and any gaps;
+- PROPOSED NEW PATTERNS (target package, D1/D2) and PROPOSED tokens;
+- how each accepted DDR constraint was respected, including every
+  DDR-02 behaviour in SCR-SHELL-023;
+- recommendations for Q-01 to Q-14, with rationale and rejected
+  alternatives; every one still OPEN;
+- open decisions for the PO/SA;
+- provenance summary (sources hashed, assets, external references: none
+  or listed);
+- designApproval: EMPTY.
+
+STOP.

@@ -115,6 +115,18 @@
     {
       "id": "build-ui-lab",
       "name": "PAEP / build-ui-lab"
+    },
+    {
+      "id": "enterprise-shell",
+      "name": "PAEP / enterprise-shell"
+    },
+    {
+      "id": "shell-browser",
+      "name": "PAEP / shell-browser"
+    },
+    {
+      "id": "negative-ci-c",
+      "name": "PAEP / negative-ci-c"
     }
   ],
   "requiredCommands": {
@@ -173,6 +185,20 @@
     "build-ui-lab": [
       "npm run build:ui-lab",
       "node tooling/verification/verify-ib0-wp05.mjs --gate build-metadata --app ui-lab"
+    ],
+    "enterprise-shell": [
+      "npm run test:enterprise",
+      "npm run qa:enterprise",
+      "npm run qa:enterprise:negative",
+      "npm run qa:ib3:ci-negative"
+    ],
+    "shell-browser": [
+      "npm run build:reference-app",
+      "npm run qa:shell",
+      "npm run qa:shell:negative"
+    ],
+    "negative-ci-c": [
+      "npm run qa:ib0-wp05:negative -- --part c"
     ]
   },
   "approvedActions": [

@@ -1,0 +1,50 @@
+:host {
+  display: contents;
+}
+.paep-account-menu__button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--paep-space-2);
+  min-inline-size: var(--paep-size-target-touch);
+  min-block-size: var(--paep-size-target-touch);
+  max-inline-size: 14rem;
+  padding-inline: var(--paep-space-2);
+  border: 0;
+  border-radius: var(--paep-radius-sm);
+  background: transparent;
+  color: var(--paep-color-text-primary);
+  font: inherit;
+  cursor: pointer;
+}
+.paep-account-menu__button:hover {
+  background: var(--paep-color-hover-neutral);
+}
+.paep-account-menu__button svg {
+  flex: none;
+}
+.paep-account-menu__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Overflow sequence step 2 (interaction-notes §7): below 1280 px the display name hides; the icon remains. */
+@media (max-width: 79.9375em) {
+  .paep-account-menu__name {
+    display: none;
+  }
+}
+.paep-account-menu__identity {
+  padding-block: var(--paep-space-2);
+  padding-inline: var(--paep-space-3);
+  overflow-wrap: anywhere;
+  font-weight: var(--paep-font-weight-label);
+}
+.paep-account-menu__identity--language {
+  color: var(--paep-color-text-secondary);
+  font-weight: var(--paep-font-weight-body);
+}
+.paep-account-menu__hint {
+  margin-inline-start: var(--paep-space-2);
+  color: var(--paep-color-text-secondary);
+  font-size: var(--paep-font-size-body-sm);
+}

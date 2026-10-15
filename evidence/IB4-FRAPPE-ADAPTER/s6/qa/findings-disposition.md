@@ -1,12 +1,12 @@
 # IB4-FRAPPE-ADAPTER — independent QA findings and dispositions
 
-Two independent, read-only QA passes were run by a separate reviewer on exact heads (reports in this folder). A third
-pass runs on the final candidate head and is recorded in the acceptance report.
+Independent, read-only QA passes were run by a separate reviewer on exact heads (reports in this folder).
 
 | Pass | Head | HIGH | MEDIUM | LOW | INFO |
 | --- | --- | --- | --- | --- | --- |
 | 1 | d2f8bdd | 0 | 6 | 10 | 8 |
 | 2 | fa0887a | 0 | 3 | 10 | 4 |
+| 3 | 53a59b5 | 0 | 1 (M1) | 9 | 9 |
 
 ## MEDIUM findings
 
@@ -19,6 +19,7 @@ pass runs on the final candidate head and is recorded in the acceptance report.
 | M5 | A 403 on the session method for a signed-in user was treated as unauthenticated (login loop). | Fixed in fa0887a: `invalid` with `PERMISSION_DENIED`; confirmed by pass 2. |
 | M6 | Record ids containing `/` refused. | Fixed in fa0887a: `/` allowed as one encoded segment, empty/`.`/`..` segments refused; no path escape found by pass 2. F8 side effect fixed: an unusual server name no longer fails a page. |
 | F2 | M4 fix contradicted ADR-011 §5. | Fixed: see M4. |
+| F21 (pass 3, LOW) | The pending sign-out state ended before the session re-check settled, so a repeat click could race it. | Fixed after pass 3: the pending state lasts until the re-check settles; the promise chain has a catch (F25); a gated test proves a click during the re-check is ignored (it fails on the previous binding). |
 | F3 | Every authentication-category sign-out error (including `CSRF_REJECTED`) treated as "already signed out". | Fixed: only `SESSION_EXPIRED` and `AUTHENTICATION_REQUIRED` sign the user out; any other failure keeps the user signed in, is reported, and refreshes the token. |
 
 ## LOW and INFO findings

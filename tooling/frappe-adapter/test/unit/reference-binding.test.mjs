@@ -96,14 +96,42 @@ test('a failed sign-out keeps the identity, ends the pending state and reports "
   const { binding, backend, navigations, reports, started } = bind([X.compatible, X.loggedUser(), X.session(), LOGOUT(417), X.loggedUser(), X.session(), LOGOUT(200)]);
   await started;
   binding.session.signOut();
+  binding.session.signOut();
   await new Promise((r) => setTimeout(r, 0));
   assert.equal(binding.session.signingOut(), false);
   assert.equal(binding.session.identity()?.principalId, 'inspector@example.test');
+  // A repeat click while the failure and the re-check are pending is ignored: one report, one logout request.
   assert.deepEqual([navigations, reports.map((r) => [r.kind, r.retryable])], [[], [['unknown', true]]]);
+  assert.equal(backend.calls.filter((c) => c.method === 'POST').length, 1);
   binding.session.signOut();
   await new Promise((r) => setTimeout(r, 0));
   assert.equal(backend.calls.at(-1).headers['X-Frappe-CSRF-Token'], X.session().response.body.message.csrf_token);
   assert.deepEqual([binding.session.identity(), navigations], [null, [`${ORIGIN}/login?redirect-to=%2F`]]);
+  // A click while the re-check after a failed sign-out is still pending is ignored (no second report or request).
+  let release;
+  const gate = new Promise((r) => { release = r; });
+  const held = scriptedFetch([X.compatible, X.loggedUser(), X.session(), LOGOUT(417), X.loggedUser(), X.session()]);
+  const heldReports = [];
+  let checks = 0;
+  const slow = createFrappeShellBinding(STORE, {
+    fallbackAvailability: SAMPLE,
+    load: async () => ({
+      ...sdk,
+      createFrappeAdapter: (o) => {
+        const a = sdk.createFrappeAdapter({ ...o, fetch: held.fetch, navigate: () => {}, newId: sequentialIds(), sleep: async () => {} });
+        return { ...a, session: { ...a.session, check: async () => { checks += 1; if (checks === 2) await gate; return a.session.check(); } } };
+      },
+    }),
+  });
+  await slow.start({ currentPath: () => '/workspace', report: (r) => heldReports.push(r) });
+  slow.session.signOut();
+  while (checks < 2) await new Promise((r) => setTimeout(r, 0));
+  assert.equal(slow.session.signingOut(), true);
+  slow.session.signOut();
+  release();
+  await new Promise((r) => setTimeout(r, 0));
+  assert.equal(slow.session.signingOut(), false);
+  assert.deepEqual([heldReports.length, held.calls.filter((c) => c.method === 'POST').length, held.remaining()], [1, 1, 0]);
   // A rejected CSRF token is not "already signed out": the user stays signed in and the failure is reported.
   const rejected = bind([X.compatible, X.loggedUser(), X.session(), { request: LOGOUT(200).request, response: json(400, { exc_type: 'CSRFTokenError' }) }, X.loggedUser(), X.session()]);
   await rejected.started;

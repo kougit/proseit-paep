@@ -77,13 +77,17 @@ export function createFrappeShellBinding(
             if (code === 'SESSION_EXPIRED' || code === 'AUTHENTICATION_REQUIRED') { identity.set(null); await toLogin(gateway, '/'); return; }
             // Any other failure (including a rejected CSRF token) keeps the user signed in and is reported. The adapter
             // cleared its token, so the session is checked again for a fresh one and a retry can work.
-            signingOut.set(false);
+            // The pending state lasts until the re-check settles, so a repeat click cannot race it.
             host?.report({ kind: 'unknown', correlationId: reference(e), retryable: true });
-            const outcome = await gateway.check();
-            if (outcome.status === 'authenticated') identity.set(outcome.identity);
-            else if (outcome.status !== 'invalid') { identity.set(null); await toLogin(gateway, '/'); }
+            try {
+              const outcome = await gateway.check();
+              if (outcome.status === 'authenticated') identity.set(outcome.identity);
+              else if (outcome.status !== 'invalid') { identity.set(null); await toLogin(gateway, '/'); }
+            } finally {
+              signingOut.set(false);
+            }
           },
-        );
+        ).catch((e: unknown) => { signingOut.set(false); host?.report({ kind: 'unknown', correlationId: reference(e), retryable: true }); });
       },
     },
     access: {

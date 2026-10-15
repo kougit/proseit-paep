@@ -44,7 +44,7 @@ Exact, path-bounded entries, frozen at the end of S0:
 * `apps/reference-app/` (lazy adapter binding; no new route or screen)
 * `tooling/frappe-adapter/` (new), `tooling/test-utils/`, `tooling/enterprise-shell/` (gate rescoping only)
 * `tooling/verification/ib0-wp05-ci-policy.json`, `tooling/verification/verify-ib0-wp05.mjs`, `tooling/verification/negative-ib0-wp05.mjs`
-* `tooling/design-system/ci-governance-negative.mjs` (only the WP05 case-count update that the new mandatory job forces; raised to the PO/SA as a scope decision on 2026-10-15)
+* `tooling/design-system/ci-governance-negative.mjs` (case I24 only: the WP05 declared-case total 104 → 105 that the new mandatory job forces; PO/SA S0 scope decision "APPROVED WITH BOUNDARY", 2026-10-15T13:06Z, no other change in the file authorised; the S0 authorisedScope is frozen after this addition)
 * `tooling/governance/baseline-registry.json`
 * `docs/architecture/IB4-FRAPPE-ADAPTER-DESIGN.md`, `docs/adr/ADR-REGISTER.md`, `docs/adr/ADR-011-FRAPPE-ADAPTER-BOUNDARY.md`, `docs/provenance/PROVENANCE-REGISTER.md`
 * `evidence/IB4-FRAPPE-ADAPTER/`, `work-packages/IB4-FRAPPE-ADAPTER/`

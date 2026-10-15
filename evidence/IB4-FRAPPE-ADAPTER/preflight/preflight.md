@@ -21,4 +21,4 @@ Eight read-only analysis threads ran concurrently with no shared-file writes: A 
 * contract ports must be Promise-based `*Gateway` interfaces (contracts-qa S4), so freshness is a pull-based port;
 * the next available ADR identifier is ADR-011 (ADR-001..010 are reserved in PAEP-IB-01 App. F);
 * the adapter stays out of the initial bundle through one dynamic `import()` (bundle-composition C1 unchanged);
-* one path outside the authorised areas is needed: `tooling/design-system/ci-governance-negative.mjs` case I24 pins the WP05 case count (104), which the new mandatory job raises to 105. It was raised to the PO/SA as a scope decision before the scope was frozen.
+* one path outside the authorised areas is needed: `tooling/design-system/ci-governance-negative.mjs` case I24 pins the WP05 case count (104), which the new mandatory job raises to 105. The PO/SA approved it with a boundary (S0 scope decision, 2026-10-15T13:06Z: case I24 only, 104 → 105, no other change in the file); the S0 authorisedScope is frozen after this addition.

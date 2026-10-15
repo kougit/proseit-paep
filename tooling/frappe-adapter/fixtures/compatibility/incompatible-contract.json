@@ -1,0 +1,76 @@
+{
+  "id": "compatibility.incompatible-contract",
+  "profile": "pmra-api-v2/frappe-15",
+  "kind": "error",
+  "description": "Backend publishes a different contract: blocked, and no data request follows.",
+  "steps": [
+    {
+      "call": {
+        "port": "compatibility",
+        "method": "check",
+        "args": []
+      },
+      "expect": {
+        "resolves": {
+          "status": "incompatible",
+          "apiContract": "pmra-api-v1",
+          "code": "BACKEND_INCOMPATIBLE",
+          "correlationId": "$correlation"
+        }
+      }
+    },
+    {
+      "call": {
+        "port": "records",
+        "method": "list",
+        "args": [
+          {
+            "recordType": "inspection"
+          }
+        ]
+      },
+      "expect": {
+        "rejects": {
+          "code": "BACKEND_INCOMPATIBLE",
+          "category": "service-failure",
+          "retryable": false,
+          "correlationId": "$correlation"
+        }
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/pmra.api.v1.get_compatibility"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": {
+            "api_contract": "pmra-api-v2",
+            "minimum_paep": "1.0",
+            "maximum_paep": null
+          }
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/pmra.api.v1.get_compatibility"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": {
+            "api_contract": "pmra-api-v2",
+            "minimum_paep": "1.0",
+            "maximum_paep": null
+          }
+        }
+      }
+    }
+  ]
+}

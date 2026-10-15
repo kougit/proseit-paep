@@ -1,0 +1,119 @@
+{
+  "id": "session.sign-out",
+  "profile": "pmra-api-v1/frappe-15",
+  "kind": "conformance",
+  "description": "Server-authoritative sign-out with the CSRF header; the token is gone afterwards.",
+  "steps": [
+    {
+      "call": {
+        "port": "session",
+        "method": "check",
+        "args": []
+      },
+      "expect": {
+        "resolves": {
+          "status": "authenticated",
+          "identity": {
+            "principalId": "inspector@example.test",
+            "displayName": "Example Inspector",
+            "tenant": {
+              "tenantId": "tenant-01",
+              "displayName": "Example Tenant"
+            }
+          }
+        }
+      }
+    },
+    {
+      "call": {
+        "port": "session",
+        "method": "signOut",
+        "args": []
+      },
+      "expect": {
+        "resolves": {
+          "outcome": {
+            "status": "unauthenticated"
+          },
+          "correlationId": "$correlation"
+        }
+      }
+    },
+    {
+      "call": {
+        "port": "session",
+        "method": "signOut",
+        "args": []
+      },
+      "expect": {
+        "rejects": {
+          "code": "CSRF_TOKEN_MISSING",
+          "category": "authentication",
+          "retryable": false,
+          "correlationId": "$correlation"
+        }
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/frappe.auth.get_logged_user"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": "inspector@example.test"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/pmra.api.v1.get_session"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": {
+            "user": "inspector@example.test",
+            "full_name": "Example Inspector",
+            "tenant": {
+              "id": "tenant-01",
+              "name": "Example Tenant"
+            },
+            "csrf_token": "synthetic0csrf0token0value0001",
+            "capabilities": [
+              {
+                "id": "inspection.create",
+                "enabled": true
+              },
+              {
+                "id": "inspection.approve",
+                "enabled": false
+              },
+              {
+                "id": "site.read",
+                "enabled": true
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "path": "/api/method/logout",
+        "csrf": true
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": null
+        }
+      }
+    }
+  ]
+}

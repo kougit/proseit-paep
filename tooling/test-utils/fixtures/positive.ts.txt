@@ -166,7 +166,7 @@ export const workflowTransitionResult = {
   correlationId: 'corr-0104'
 } satisfies WorkflowTransitionResult;
 
-export const fileAccessRequest = { owner: { recordType: 'inspection', id: 'rec-0001' }, fileId: 'file-0001', disposition: 'attachment' } satisfies FileAccessRequest;
+export const fileAccessRequest = { owner: { recordType: 'inspection', id: 'rec-0001' }, fileId: 'file-0001' } satisfies FileAccessRequest;
 
 export const capabilitySet = {
   capabilities: [{ id: 'inspection.create', enabled: true }, { id: 'inspection.delete', enabled: false, reasonKey: 'capabilities.locked' }],

@@ -1,0 +1,37 @@
+{
+  "id": "session.expired",
+  "profile": "pmra-api-v1/frappe-15",
+  "kind": "error",
+  "description": "Expired session: expired outcome.",
+  "steps": [
+    {
+      "call": {
+        "port": "session",
+        "method": "check",
+        "args": []
+      },
+      "expect": {
+        "resolves": {
+          "status": "expired"
+        }
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/frappe.auth.get_logged_user"
+      },
+      "response": {
+        "status": 401,
+        "body": {
+          "exc_type": "SessionExpired",
+          "exception": "frappe.exceptions.SessionExpired: synthetic internal detail",
+          "exc": "[\"Traceback (most recent call last): synthetic\"]",
+          "_server_messages": "[\"{\\\"message\\\": \\\"synthetic server prose\\\"}\"]"
+        }
+      }
+    }
+  ]
+}

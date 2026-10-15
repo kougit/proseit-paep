@@ -1,0 +1,127 @@
+{
+  "id": "records.list-page",
+  "profile": "pmra-api-v1/frappe-15",
+  "kind": "conformance",
+  "description": "First page of a two-item page size with a next cursor.",
+  "steps": [
+    {
+      "call": {
+        "port": "records",
+        "method": "list",
+        "args": [
+          {
+            "recordType": "inspection",
+            "query": {
+              "page": {
+                "limit": 2
+              },
+              "filters": [
+                {
+                  "field": "status",
+                  "operator": "eq",
+                  "value": "Open"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "expect": {
+        "resolves": {
+          "items": [
+            {
+              "recordType": "inspection",
+              "id": "INS-0001",
+              "fields": {
+                "title": "Site 1",
+                "status": "Open",
+                "score": 1,
+                "site": null
+              },
+              "concurrency": {
+                "serverVersion": "2026-10-15 09:00:01.000000"
+              }
+            },
+            {
+              "recordType": "inspection",
+              "id": "INS-0002",
+              "fields": {
+                "title": "Site 2",
+                "status": "Open",
+                "score": 2,
+                "site": null
+              },
+              "concurrency": {
+                "serverVersion": "2026-10-15 09:00:02.000000"
+              }
+            }
+          ],
+          "nextCursor": "o:2",
+          "correlationId": "$correlation"
+        }
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/pmra.api.v1.get_compatibility"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": {
+            "api_contract": "pmra-api-v1",
+            "minimum_paep": "1.0",
+            "maximum_paep": null
+          }
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/resource/PMRA%20Inspection",
+        "query": {
+          "fields": "[\"name\",\"modified\",\"title\",\"status\",\"score\",\"site_code\"]",
+          "filters": "[[\"status\",\"=\",\"Open\"]]",
+          "order_by": "modified desc, name asc",
+          "limit_start": "0",
+          "limit_page_length": "3"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "data": [
+            {
+              "name": "INS-0001",
+              "modified": "2026-10-15 09:00:01.000000",
+              "title": "Site 1",
+              "status": "Open",
+              "score": 1,
+              "site_code": null
+            },
+            {
+              "name": "INS-0002",
+              "modified": "2026-10-15 09:00:02.000000",
+              "title": "Site 2",
+              "status": "Open",
+              "score": 2,
+              "site_code": null
+            },
+            {
+              "name": "INS-0003",
+              "modified": "2026-10-15 09:00:03.000000",
+              "title": "Site 3",
+              "status": "Open",
+              "score": 3,
+              "site_code": null
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

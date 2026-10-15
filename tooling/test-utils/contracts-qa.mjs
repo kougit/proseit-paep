@@ -387,7 +387,7 @@ const NEGATIVE = [
   ['RecordDetail without a concurrency token', 'RecordDetail', `const d: RecordDetail = { recordType: 'a', id: '1', fields: {} };`, [2741]],
   ['write through RecordDetail.fields', 'RecordDetail', `declare const d: RecordDetail;\nd.fields['a'] = 1;`, [2542]],
   ['RecordSummary field as an arbitrary object', 'RecordSummary', `const r: RecordSummary = { recordType: 'a', id: '1', fields: { a: { nested: 1 } } };`, [2322, 2353]],
-  ["FileDisposition 'download-path'", 'FileDisposition', `const f: FileDisposition = 'download-path';`, [2322]],
+  ['FileAccessRequest with a client-built path', 'FileAccessRequest', `const f: FileAccessRequest = { owner: { recordType: 'a', id: '1' }, fileId: 'f', path: '/private/files/x' };`, [2353]],
   ['SignOutResult without an outcome', 'SignOutResult', `const r: SignOutResult = {};`, [2741]]
 ];
 const NEG = R('tooling/test-utils/fixtures/__negative__.ts'); // virtual only

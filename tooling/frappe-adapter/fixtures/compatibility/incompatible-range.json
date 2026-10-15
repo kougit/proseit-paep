@@ -1,0 +1,41 @@
+{
+  "id": "compatibility.incompatible-range",
+  "profile": "pmra-api-v1/paep-2-only",
+  "kind": "error",
+  "description": "Backend supports PAEP 2.0 and later only: blocked.",
+  "steps": [
+    {
+      "call": {
+        "port": "compatibility",
+        "method": "check",
+        "args": []
+      },
+      "expect": {
+        "resolves": {
+          "status": "incompatible",
+          "apiContract": "pmra-api-v1",
+          "code": "BACKEND_INCOMPATIBLE",
+          "correlationId": "$correlation"
+        }
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/pmra.api.v1.get_compatibility"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": {
+            "api_contract": "pmra-api-v1",
+            "minimum_paep": "2.0",
+            "maximum_paep": null
+          }
+        }
+      }
+    }
+  ]
+}

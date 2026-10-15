@@ -17,7 +17,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const GATE = path.join(root, 'tooling/frappe-adapter/frappe-qa.mjs');
 const SKIP = new Set(['node_modules', 'dist', '.angular', 'tmp', '.vitest-attachments', '.git']);
-const EXPECTED_CASES = 33;
+const EXPECTED_CASES = 35;
 const CONTROLS = 1;
 const SDK = 'packages/frappe-sdk/src';
 const INDEX = `${SDK}/index.ts`;
@@ -116,6 +116,8 @@ negative('N31', 'insecure non-loopback HTTP backend in the runtime-config exampl
 negative('N32', 'a secret added to the runtime-config example', [['apps/reference-app/public/config/runtime-config.json', json((c) => { c.identity.csrfToken = 'synthetic'; })]], 'F08', /secret-named key identity\.csrfToken/);
 // No new UI (D6).
 negative('N33', 'DOM markup created in the adapter', [[PROBE, put("export const el = () => document.createElement('dialog');\n")]], 'F09', /probe\.ts: DOM or markup in the adapter/);
+negative('N34', 'markup in an adapter template literal', [[PROBE, put('export const html = (n: number) => `<div class="x">${n}</div>`;\n')]], 'F09', /probe\.ts: DOM or markup in the adapter/);
+negative('N35', 'markup string assigned through insertAdjacentHTML', [[PROBE, put("export const add = (e: { insertAdjacentHTML(p: string, h: string): void }) => e.insertAdjacentHTML('beforeend', 'x');\n")]], 'F09', /probe\.ts: DOM or markup in the adapter/);
 
 fs.rmSync(scratch, { recursive: true, force: true });
 const coverage = [];

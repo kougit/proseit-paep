@@ -1,0 +1,40 @@
+{
+  "id": "compatibility.unknown-missing-method",
+  "profile": "unknown",
+  "kind": "error",
+  "description": "Backend without the pmra-api-v1 compatibility method (404): unknown, blocked.",
+  "steps": [
+    {
+      "call": {
+        "port": "compatibility",
+        "method": "check",
+        "args": []
+      },
+      "expect": {
+        "resolves": {
+          "status": "unknown",
+          "apiContract": "pmra-api-v1",
+          "code": "BACKEND_COMPATIBILITY_UNKNOWN",
+          "correlationId": "$correlation"
+        }
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/pmra.api.v1.get_compatibility"
+      },
+      "response": {
+        "status": 404,
+        "body": {
+          "exc_type": "DoesNotExistError",
+          "exception": "frappe.exceptions.DoesNotExistError: synthetic internal detail",
+          "exc": "[\"Traceback (most recent call last): synthetic\"]",
+          "_server_messages": "[\"{\\\"message\\\": \\\"synthetic server prose\\\"}\"]"
+        }
+      }
+    }
+  ]
+}

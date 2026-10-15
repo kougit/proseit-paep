@@ -1,0 +1,34 @@
+{
+  "id": "session.guest",
+  "profile": "pmra-api-v1/frappe-15",
+  "kind": "conformance",
+  "description": "Guest session: unauthenticated.",
+  "steps": [
+    {
+      "call": {
+        "port": "session",
+        "method": "check",
+        "args": []
+      },
+      "expect": {
+        "resolves": {
+          "status": "unauthenticated"
+        }
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/frappe.auth.get_logged_user"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": "Guest"
+        }
+      }
+    }
+  ]
+}

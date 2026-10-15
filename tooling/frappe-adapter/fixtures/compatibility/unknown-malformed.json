@@ -1,0 +1,35 @@
+{
+  "id": "compatibility.unknown-malformed",
+  "profile": "unknown",
+  "kind": "malformed",
+  "description": "Compatibility method answers HTML: unknown, blocked and surfaced.",
+  "steps": [
+    {
+      "call": {
+        "port": "compatibility",
+        "method": "check",
+        "args": []
+      },
+      "expect": {
+        "resolves": {
+          "status": "unknown",
+          "apiContract": "pmra-api-v1",
+          "code": "BACKEND_COMPATIBILITY_UNKNOWN",
+          "correlationId": "$correlation"
+        }
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/pmra.api.v1.get_compatibility"
+      },
+      "response": {
+        "status": 200,
+        "raw": "<html><body>maintenance</body></html>"
+      }
+    }
+  ]
+}

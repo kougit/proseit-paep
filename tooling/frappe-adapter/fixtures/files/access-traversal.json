@@ -1,0 +1,68 @@
+{
+  "id": "files.access-traversal",
+  "profile": "pmra-api-v1/frappe-15",
+  "kind": "security",
+  "description": "Server file URL rejected (traversal).",
+  "steps": [
+    {
+      "call": {
+        "port": "files",
+        "method": "requestAccess",
+        "args": [
+          {
+            "owner": {
+              "recordType": "inspection",
+              "id": "INS-0001"
+            },
+            "fileId": "f-0001"
+          }
+        ]
+      },
+      "expect": {
+        "rejects": {
+          "code": "FILE_URL_REJECTED",
+          "category": "validation",
+          "retryable": false,
+          "correlationId": "$correlation"
+        }
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/pmra.api.v1.get_compatibility"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": {
+            "api_contract": "pmra-api-v1",
+            "minimum_paep": "1.0",
+            "maximum_paep": null
+          }
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/resource/File/f-0001"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "data": {
+            "name": "f-0001",
+            "file_name": "report.pdf",
+            "file_url": "/private/files/..%2F..%2Fsite_config.json",
+            "attached_to_doctype": "PMRA Inspection",
+            "attached_to_name": "INS-0001",
+            "is_private": 1
+          }
+        }
+      }
+    }
+  ]
+}

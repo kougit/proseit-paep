@@ -6,7 +6,7 @@
 == S3 type-only surface
 
 == S4 neutrality
-  25 files, 260 property signatures, 8 record-map sites, vocabulary exceptions: IdentityMode="frappe-session"
+  25 files, 259 property signatures, 8 record-map sites, vocabulary exceptions: IdentityMode="frappe-session"
 
 == S5 DOM/vendor negatives and architecture check
   note: injected @angular/core import under types [] -> 83 compile diagnostic(s); caught by S4 regardless
@@ -34,4 +34,4 @@ PAEP contracts QA summary
   PASS S8  JSON round trip: 25/25
   PASS S9  test doubles (node:test): 8/8
   PASS S10 packages/ and apps/ never import tooling/: 1/1
-PAEP contracts QA: PASS - 200/200 checks, 10 sections, 21 node:test tests, 129 public exports
+PAEP contracts QA: PASS - 200/200 checks, 10 sections, 21 node:test tests, 128 public exports

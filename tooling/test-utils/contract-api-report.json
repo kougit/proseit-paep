@@ -205,17 +205,12 @@
     {
       "name": "FileAccessRequest",
       "kind": "InterfaceDeclaration",
-      "declaration": "export interface FileAccessRequest{readonly owner:RecordRef;readonly fileId:EntityId;readonly disposition?:FileDisposition;}"
+      "declaration": "export interface FileAccessRequest{readonly owner:RecordRef;readonly fileId:EntityId;}"
     },
     {
       "name": "FileChecksum",
       "kind": "InterfaceDeclaration",
       "declaration": "export interface FileChecksum{readonly algorithm:string;readonly value:string;}"
-    },
-    {
-      "name": "FileDisposition",
-      "kind": "TypeAliasDeclaration",
-      "declaration": "export type FileDisposition='inline'|'attachment';"
     },
     {
       "name": "FileMetadata",

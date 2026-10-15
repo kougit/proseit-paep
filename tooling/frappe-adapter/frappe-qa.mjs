@@ -20,8 +20,8 @@ const FIXTURES = `${QA}/fixtures`;
 
 /** Packages the adapter may import (architecture matrix row frappe-sdk: contracts and observability Yes, platform Optional). */
 const SDK_IMPORTS = ['@proseit/paep-contracts', '@proseit/paep-observability', '@proseit/paep-platform'];
-/** The adapter's approved public value exports (§12 of ADR-011: the factory and its error/config helpers only). */
-export const SDK_VALUES = [];
+/** The adapter's approved public value exports (ADR-011 §2.2: the factory, the resource-map compiler, the freshness poller and the error guard). */
+export const SDK_VALUES = ['createFrappeAdapter', 'compileResourceMap', 'createFreshnessPoller', 'isPaepError'];
 /** Wire details that may appear in exactly one adapter file each (single point of control). */
 const ONE_PLACE = [
   [/\/api\/resource\//, 'lib/resources.ts'],
@@ -217,7 +217,9 @@ let fixtureFiles = [];
   const f = [];
   for (const file of sdkTs) {
     const s = stripComments(read(file));
-    if (/\bdocument\.|\bcreateElement\b|\binnerHTML\b|\btextContent\b|`[^`]*<[a-z][a-z0-9-]*[\s>/]/.test(s)) f.push(`${file}: DOM or markup in the adapter`);
+    // Markup is looked for inside each template literal (a type argument such as Map<string, …> between two literals is not markup).
+    const templates = [...s.matchAll(/`(?:\\[\s\S]|[^`\\])*`/g)].map((m) => m[0]);
+    if (/\bdocument\.|\bcreateElement\b|\binnerHTML\b|\btextContent\b|\binsertAdjacentHTML\b/.test(s) || templates.some((t) => /<\/?[a-z][a-z0-9-]*[\s>/]/i.test(t))) f.push(`${file}: DOM or markup in the adapter`);
     if (/'paep\.shell\./.test(s)) f.push(`${file}: shell message key in the adapter`);
     if (/@angular\//.test(s)) f.push(`${file}: Angular in the adapter`);
   }

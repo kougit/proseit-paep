@@ -1,0 +1,27 @@
+{
+  "id": "records.unknown-resource",
+  "profile": "pmra-api-v1/frappe-15",
+  "kind": "security",
+  "description": "A record type outside the compiled map is refused before any request.",
+  "steps": [
+    {
+      "call": {
+        "port": "records",
+        "method": "list",
+        "args": [
+          {
+            "recordType": "user"
+          }
+        ]
+      },
+      "expect": {
+        "rejects": {
+          "code": "UNKNOWN_RESOURCE",
+          "category": "validation",
+          "retryable": false
+        }
+      }
+    }
+  ],
+  "exchanges": []
+}

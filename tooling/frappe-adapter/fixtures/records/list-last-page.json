@@ -1,0 +1,88 @@
+{
+  "id": "records.list-last-page",
+  "profile": "pmra-api-v1/frappe-15",
+  "kind": "conformance",
+  "description": "Second page from the cursor; no further cursor.",
+  "steps": [
+    {
+      "call": {
+        "port": "records",
+        "method": "list",
+        "args": [
+          {
+            "recordType": "inspection",
+            "query": {
+              "page": {
+                "limit": 2,
+                "cursor": "o:2"
+              }
+            }
+          }
+        ]
+      },
+      "expect": {
+        "resolves": {
+          "items": [
+            {
+              "recordType": "inspection",
+              "id": "INS-0003",
+              "fields": {
+                "title": "Site 3",
+                "status": "Open",
+                "score": 3,
+                "site": null
+              },
+              "concurrency": {
+                "serverVersion": "2026-10-15 09:00:03.000000"
+              }
+            }
+          ],
+          "correlationId": "$correlation"
+        }
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/pmra.api.v1.get_compatibility"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": {
+            "api_contract": "pmra-api-v1",
+            "minimum_paep": "1.0",
+            "maximum_paep": null
+          }
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/resource/PMRA%20Inspection",
+        "query": {
+          "limit_start": "2",
+          "limit_page_length": "3"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "data": [
+            {
+              "name": "INS-0003",
+              "modified": "2026-10-15 09:00:03.000000",
+              "title": "Site 3",
+              "status": "Open",
+              "score": 3,
+              "site_code": null
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

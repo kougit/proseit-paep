@@ -1,0 +1,11 @@
+PASS F01 The adapter imports only @proseit/paep-contracts, @proseit/paep-observability and @proseit/paep-platform through their entry points (no UI package, no framework, no third-party client); no test file in its source — 1 adapter files
+PASS F02 Public-API census: the adapter entry point exports exactly the 0 approved values — 0 value exports
+PASS F03 Only applications compose @proseit/frappe-sdk: no PAEP package and not the UI laboratory imports it — 202 files scanned
+PASS F04 No browser storage, cookie, cache-storage or service-worker API, no Authorization / bearer header, no console output, no window.open or script evaluation in the adapter
+PASS F05 Each Frappe wire detail lives in one adapter file: resource paths (resources.ts), server error fields (errors.ts), the CSRF header (session.ts), the login redirect (login-redirect.ts)
+PASS F06 Fixture set: versioned manifest with synthetic provenance, the pmra-api-v1 compatibility profile, every fixture listed with its sha256, no unlisted file — 0 fixtures
+PASS F07 Secret scan: no private key, cloud or registry token, JWT, bearer value, session cookie value, CSRF token, API key pair or password in the adapter, its fixtures or its tests — 4 files scanned
+PASS F08 Deployment profile: CSP connect-src has no wildcard, scheme-only or insecure source; the runtime-config example uses HTTPS (loopback HTTP only), frappe-session identity, pmra-api-v1, and no secret-named key
+PASS F09 No user-visible surface in the adapter: no DOM access or markup, no styling, no shell message key, no Angular
+
+PAEP Frappe adapter static QA: PASS (9/9)

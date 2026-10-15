@@ -1,0 +1,51 @@
+PASS G04 mandatory job strictness failed — exit 1
+PASS G08 mandatory job contracts failed — exit 1
+PASS GJ11 mandatory job components failed — exit 1
+PASS GJ13 mandatory job negative-ci-b failed — exit 1
+PASS GJ16 mandatory job enterprise-shell failed — exit 1
+PASS GJ18 mandatory job negative-ci-c failed — exit 1
+PASS G12 mandatory job timed out (regression; GitHub reports timeouts as failure) — exit 1
+PASS G15 every mandatory job skipped — exit 1
+PASS C01 control: governance gate passes unmutated — exit 0
+PASS C02 control: provenance gate passes unmutated — exit 0
+PASS C04 control: qa:architecture passes unmutated — exit 0
+PASS C05 control: toolchain gate passes unmutated — exit 0
+PASS A03 (xii) prohibited change: deep import into another package fails qa:architecture — exit 1
+PASS B01 (iii) type error fails the reference-app production build — exit 1
+PASS H01 (iv) crashed WP04 negative harness fails the negative-architecture gate — exit 1
+PASS T03 (vii) running npm differs from the pin fails the toolchain gate — exit 1
+PASS T04 (vii) packageManager pin drift fails the toolchain gate — exit 1
+PASS T05 (vi) devEngines Node pin not met fails npm ci (EBADDEVENGINES) — exit 1
+PASS T06 (vii) devEngines npm pin not met fails npm ci (EBADDEVENGINES) — exit 1
+PASS I01 (viii) new lockfile package with an unreviewed install script fails the provenance gate — exit 1
+PASS F03 (ix) unlisted file under .paep-control fails the governance gate — exit 1
+PASS X02 (x) mandatory job dropped from gate needs fails the provenance gate — exit 1
+PASS X03 (x) continue-on-error on a mandatory job fails the provenance gate — exit 1
+PASS P01 (xi) unapproved third-party action fails the provenance gate — exit 1
+PASS P02 (xi) action referenced by a floating tag fails the provenance gate — exit 1
+PASS P03 (xi) approved action at a different SHA fails the provenance gate — exit 1
+PASS P04 (xi) contents: write fails the provenance gate — exit 1
+PASS P05 (xi) job-level permission escalation fails the provenance gate — exit 1
+PASS P06 (xi) pull_request_target trigger fails the provenance gate — exit 1
+PASS P07 (xi) untrusted PR title interpolated into a run script fails the provenance gate — exit 1
+PASS P08 (xi) secrets reference fails the provenance gate — exit 1
+PASS P09 (xi) checkout persisting credentials fails the provenance gate — exit 1
+PASS P10 (xi) node_modules cached with actions/cache fails the provenance gate — exit 1
+PASS P11 (xi) new unapproved dependency fails the governance gate — exit 1
+PASS P12 (xi) floating Node version in setup-node fails the provenance gate — exit 1
+PASS P13 (xi) second, unreviewed workflow file fails the provenance gate — exit 1
+PASS P14 (xi) invalid workflow YAML (unquoted ": " in a step name, which GitHub rejects) fails the provenance gate — exit 1
+PASS P15 (x) early "exit 0" in the gate script fails the provenance gate — exit 1
+PASS P23 (xi) top-level defaults hidden behind U+0085 (NEL) in a comment fails the provenance gate — exit 1
+PASS P24 (xi) gate job moved to another runner fails the provenance gate — exit 1
+PASS N01 Nx introduced (nx.json) fails the governance gate — exit 1
+PASS K01 IB1 contracts job dropped from gate needs fails the provenance gate — exit 1
+PASS K02 IB1 runtime-config job command replaced fails the provenance gate — exit 1
+PASS K03 IB1 portability proof removed from the runtime-config-negative job fails the provenance gate — exit 1
+PASS K08 empty workflow file (parses to null) fails the provenance gate instead of skipping its checks — exit 1
+PASS K04 accepted job build-ui-lab dropped from the CI policy fails the provenance gate — exit 1
+PASS K06 gate script made to pass (exit 0) in the policy and the workflow together fails the provenance gate — exit 1
+
+part c: ran 47 of 105 declared cases; the other 58 run in part a: G00 G02 G05 G07 GJ10 GJ14 GJ17 GJ19 G11 G14 G18 A02 A04 S01 S03 H02 L00 T02 I02 I04 F01 F02 F04 P17 P22 K05; part b: C06 G01 G03 G06 G09 GJ12 GJ15 G10 G13 G16 G17 C03 C07 C08 A01 S02 S04 L01 L02 L03 T01 I03 X01 X04 P16 P18 P19 P21 P20 N02 N03 K07
+
+IB0-WP05 negative CI-control tests (part c): PASS (47/47; 4 controls, 43 negatives)

@@ -125,7 +125,8 @@ call) and otherwise reject with `BACKEND_INCOMPATIBLE` or the retryable `BACKEND
    as it was, with nothing applied; the same user and key with a different command is refused (`ValidationError`). A
    key is kept at least 24 hours after its first use. (user, key) is unique in the key store (a unique index), so the
    same key sent for two different records, which hold different row locks, cannot both be applied: the second insert
-   fails, its transaction rolls back and it is refused;
+   fails, its transaction rolls back and it is refused with `ValidationError` (a raw database error must not reach the
+   client);
 6. compare the record's current `modified` with `expected_version`; if they differ, apply nothing and raise
    `TimestampMismatchError` with HTTP status 409 (the adapter classifies by `exc_type`, so Frappe's default 417 for that
    class is also read as a conflict);

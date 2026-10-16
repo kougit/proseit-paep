@@ -1,0 +1,65 @@
+PASS P00 control: the unmutated copy reproduces the gate result on the repository — E01:PASS E02:PASS E03:PASS E04:PASS E05:PASS E06:PASS E07:PASS E08:PASS E09:PASS E10:PASS E11:PASS E12:PASS (exit 0)
+PASS N01 enterprise -> frappe-sdk import — E01 FAIL: packages/enterprise/src/lib/nav/nav.ts: @proseit/frappe-sdk
+PASS N02 enterprise -> analytics import — E01 FAIL: packages/enterprise/src/lib/nav/nav.ts: @proseit/paep-analytics
+PASS N03 enterprise -> domain package import — E01 FAIL: packages/enterprise/src/lib/nav/nav.ts: @proseit/paep-domain-quality
+PASS N04 enterprise -> offline import — E01 FAIL: packages/enterprise/src/lib/nav/nav.ts: @proseit/paep-offline
+PASS N05 reference app -> frappe-sdk import — E01 FAIL: apps/reference-app/src/app/app.ts: @proseit/frappe-sdk must be imported lazily (dynamic import() or import type only)
+PASS N06 deep import into the components package — E01 FAIL: packages/enterprise/src/lib/nav/nav.ts: @proseit/paep-components/src/lib/button/button
+PASS N07 store framework in enterprise — E01 FAIL: packages/enterprise/src/lib/nav/nav.ts: @ngrx/store
+PASS N08 relative import that leaves the enterprise package — E01 FAIL: packages/enterprise/src/lib/nav/nav.ts: relative import leaves the package (../../../../components/src/index)
+PASS N09 unapproved public export — E02 FAIL: unapproved export PaepShellNavModel
+PASS N10 approved shell symbol removed from the entry point — E02 FAIL: missing PaepShell
+PASS N11 export * in the entry point — E02 FAIL: export * in the entry point
+PASS N12 generic primitive selector reimplemented in enterprise — E03 FAIL: packages/enterprise/src/lib/extra/button.ts: selector paep-button
+PASS N13 popover="manual" in an enterprise template — E03 FAIL: packages/enterprise/src/lib/shell/shell.ts: popover used directly (menus use the governed component base)
+PASS N14 own <dialog> outside PaepModalBase — E03 FAIL: packages/enterprise/src/lib/extra/panel.ts: own <dialog> outside PaepModalBase
+PASS N15 private anchor positioning in enterprise CSS — E03 FAIL: packages/enterprise/src/lib/shell/shell.css: private anchor positioning
+PASS N16 a shell message key removed — E04 FAIL: 122 keys (expected 123); packages/enterprise/src/lib/palette/command-palette.ts: unknown key paep.shell.search.count
+PASS N17 an unknown shell key referenced — E04 FAIL: packages/enterprise/src/lib/nav/nav.ts: unknown key paep.shell.not.approved
+PASS N34 a DDR-IB3-06 key renamed in the catalogue (count unchanged) — E04 FAIL: DDR-IB3-06 key paep.shell.account.button.named missing; packages/enterprise/src/lib/account/account-menu.ts: unknown key paep.shell.account.button.named
+PASS N18 [innerHTML] in an enterprise template — E05 FAIL: packages/enterprise/src/lib/shell/shell.ts: \[innerHTML\]
+PASS N19 window.open in the reference app — E05 FAIL: apps/reference-app/src/app/app.ts: window\.open\s*\(
+PASS N20 localStorage in enterprise — E06 FAIL: packages/enterprise/src/lib/nav/nav.ts: \blocalStorage\b
+PASS N21 route guard in the reference app — E07 FAIL: apps/reference-app/src/app/app.routes.ts: route guard
+PASS N22 permission guard exported by enterprise — E07 FAIL: packages/enterprise/src/lib/nav/nav.ts: route guard
+PASS N23 /login route in the reference app — E08 FAIL: unapproved route "login"; missing route "workspace"; apps/reference-app/src/app/app.routes.ts: excluded route named
+PASS N24 package-lock.json changed — E09 FAIL: changed: package-lock.json
+PASS N25 new devDependency — E09 FAIL: package.json devDependencies changed
+PASS N26 paep-contracts manifest changed — E09 FAIL: changed: packages/contracts/package.json
+PASS N27 CLAUDE.md widened beyond the one approved line — E10 FAIL: CLAUDE.md differs from the baseline plus the one approved amendment (first difference at line 56)
+PASS N28 commercial-template term in an enterprise stylesheet — E11 FAIL: packages/enterprise/src/lib/shell/shell.css: forbidden term /primeng/i
+PASS N29 Angular favicon.ico back in the reference app — E11 FAIL: apps/reference-app/public/favicon.ico (Angular logo) still present
+PASS N30 reference-app favicon is not the approved placeholder mark — E11 FAIL: favicon.svg is not the approved placeholder mark
+PASS N31 retained HOF manifest edited — E12 FAIL: manifest sha256 6f95f65f4ea2958b140e412207f6e9673d8892afd3d917030b04b7675a5e83c2 != approved 645dd2e9bb4274c9b787bbbcc52cf53eb4f08dc21d733b5985aa3ab572f4fce5; manifest status is not APPROVED_FOR_IMPLEMENTATION
+PASS N32 retained handoff file altered — E12 FAIL: handoff file component-map.md sha256 cbef249d0850… != manifest 9165e40bc7b8…
+PASS N33 unlisted file in the retained handoff — E12 FAIL: unlisted file evidence/design-handoff/HOF-IB3-001/handoff/screens/SCR-SHELL-099--extra.html
+PASS P01 control: E10 passes when the baseline lacks the amendment and CLAUDE.md adds exactly the approved line — E10 PASS: 
+PASS N35 E10 baseline without the amendment: CLAUDE.md lacks the approved line — E10 FAIL: CLAUDE.md differs from the baseline plus the one approved amendment (first difference at line 30)
+PASS N36 E10 baseline without the amendment: approved line plus unrelated drift — E10 FAIL: CLAUDE.md differs from the baseline plus the one approved amendment (first difference at line 56)
+PASS P02 control: E10 passes when the baseline already carries the amendment and CLAUDE.md equals it — E10 PASS: 
+PASS N37 E10 baseline with the amendment: CLAUDE.md differs from it — E10 FAIL: CLAUDE.md differs from the baseline plus the one approved amendment (first difference at line 56)
+PASS N38 E10 baseline with the amendment: CLAUDE.md reverts to the pre-amendment line — E10 FAIL: CLAUDE.md differs from the baseline plus the one approved amendment (first difference at line 30)
+PASS N39 E10 fails closed when the baseline has neither the original nor the approved line — E10 FAIL: baseline CLAUDE.md lacks the amended line
+PASS P03 control: E10 passes when the baseline lacks the IB4 amendment and CLAUDE.md adds exactly the approved IB4 line — E10 PASS: 
+PASS N40 E10 before G6 promotion: CLAUDE.md lacks the approved IB4 line — E10 FAIL: CLAUDE.md differs from the baseline plus the one approved amendment (first difference at line 29)
+PASS N41 E10 before G6 promotion: the IB4 line is broadened — E10 FAIL: CLAUDE.md differs from the baseline plus the one approved amendment (first difference at line 29)
+PASS N42 E10 before G6 promotion: the IB4 line is removed — E10 FAIL: CLAUDE.md differs from the baseline plus the one approved amendment (first difference at line 29)
+PASS P04 control: E10 passes after G6 promotion when CLAUDE.md equals the promoted baseline — E10 PASS: 
+PASS N43 E10 after G6 promotion: CLAUDE.md reverts to the pre-IB4 line — E10 FAIL: CLAUDE.md differs from the baseline plus the one approved amendment (first difference at line 29)
+PASS N44 E10 after G6 promotion: the IB4 line is broadened — E10 FAIL: CLAUDE.md differs from the baseline plus the one approved amendment (first difference at line 29)
+PASS N45 E10 fails closed when two amendments are pending at once — E10 FAIL: baseline CLAUDE.md has 2 pending amendments (at most one may be pending)
+PASS N46 E10 fails closed when the baseline has neither the original nor the approved IB4 line — E10 FAIL: baseline CLAUDE.md lacks the amended line
+PASS N47 E09: frappe-sdk manifest changed (outside the admitted sources) — E09 FAIL: changed: packages/frappe-sdk/package.json
+PASS N48 E09: candidate scope widened to analytics, analytics source changed — E09 FAIL: changed: packages/analytics/src/index.ts
+PASS N49 E09: contracts source changed with no candidate in the registry — E09 FAIL: changed: packages/contracts/src/index.ts; changed: packages/contracts/src/lib/config/compatibility-gateway.ts; changed: packages/contracts/src/lib/core/capabilities-gateway.ts; changed: packages/contracts/src/lib/core/freshness.ts; changed: packages/contracts/src/lib/domain/files-gateway.ts; changed: packages/contracts/src/lib/domain/records.ts; changed: packages/contracts/src/lib/domain/workflow-gateway.ts; changed: packages/contracts/src/lib/identity/session.ts; changed: packages/frappe-sdk/README.md; changed: packages/frappe-sdk/src/index.ts; changed: packages/frappe-sdk/src/lib/adapter.ts; changed: packages/frappe-sdk/src/lib/capabilities.ts; … 12 more
+PASS N50 E09: frappe-sdk source changed while the candidate scope omits it — E09 FAIL: changed: packages/frappe-sdk/src/index.ts; changed: packages/frappe-sdk/src/lib/adapter.ts; changed: packages/frappe-sdk/src/lib/capabilities.ts; changed: packages/frappe-sdk/src/lib/compatibility.ts; changed: packages/frappe-sdk/src/lib/correlation.ts; changed: packages/frappe-sdk/src/lib/errors.ts; changed: packages/frappe-sdk/src/lib/files.ts; changed: packages/frappe-sdk/src/lib/freshness.ts; changed: packages/frappe-sdk/src/lib/login-redirect.ts; changed: packages/frappe-sdk/src/lib/methods.ts; changed: packages/frappe-sdk/src/lib/records.ts; changed: packages/frappe-sdk/src/lib/resources.ts; … 3 more
+PASS N51 E09: a frozen file moved into the admitted adapter source (rename detection off) — E09 FAIL: changed: packages/offline/src/index.ts
+PASS P05 control: E09 admits an in-scope frappe-sdk source change while the G6 candidate is open — E09 PASS: baseline 10462434ebb9; candidate scope admits frappe-sdk/contracts source in scope
+PASS P06 control: E09 passes after G6 promotion when nothing changed since the promoted baseline — E09 PASS: baseline efadc2d0b7a4; no candidate scope
+PASS N52 E09 after G6 promotion: a frappe-sdk source change is frozen again (no candidate) — E09 FAIL: changed: packages/frappe-sdk/src/index.ts
+PASS N53 E01: reference app value-imports frappe-sdk statically (eager) — E01 FAIL: apps/reference-app/src/app/app.ts: @proseit/frappe-sdk must be imported lazily (dynamic import() or import type only)
+PASS N54 E01: reference app dynamic import with a non-literal specifier — E01 FAIL: apps/reference-app/src/app/app.ts: dynamic import() with a non-literal specifier
+PASS N56 E01: reference app deep-imports frappe-sdk lazily — E01 FAIL: apps/reference-app/src/app/app.ts: @proseit/frappe-sdk/src/lib/transport
+PASS P07 control: E01 passes when the reference app imports frappe-sdk only lazily and type-only — E01 PASS: 40 enterprise and 12 app files
+
+PAEP enterprise-shell QA negatives: PASS (63/63; 55 seeded negatives + 8 controls)

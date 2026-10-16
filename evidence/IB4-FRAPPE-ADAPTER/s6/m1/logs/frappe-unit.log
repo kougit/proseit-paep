@@ -1,0 +1,10 @@
+PASS unit/compatibility.test.mjs: 5/5 passed, 0 failed/skipped/todo
+PASS unit/files.test.mjs: 7/7 passed, 0 failed/skipped/todo
+PASS unit/freshness.test.mjs: 7/7 passed, 0 failed/skipped/todo
+PASS unit/records.test.mjs: 6/6 passed, 0 failed/skipped/todo
+PASS unit/reference-binding.test.mjs: 7/7 passed, 0 failed/skipped/todo
+PASS unit/session.test.mjs: 8/8 passed, 0 failed/skipped/todo
+PASS unit/transport.test.mjs: 15/15 passed, 0 failed/skipped/todo
+PASS unit/workflow.test.mjs: 16/16 passed, 0 failed/skipped/todo
+
+PAEP Frappe adapter unit tests: PASS (71/71 node:test tests in 8 files; adapter compiled strictly with 0 diagnostics)

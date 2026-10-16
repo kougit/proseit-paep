@@ -2,7 +2,7 @@
   "id": "workflow.transition-denied",
   "profile": "pmra-api-v1/frappe-15",
   "kind": "error",
-  "description": "Server denies the transition: authorization error.",
+  "description": "The action is no longer allowed when the server revalidates it: authorization error, no transition.",
   "steps": [
     {
       "call": {
@@ -165,7 +165,7 @@
     {
       "request": {
         "method": "POST",
-        "path": "/api/method/frappe.model.workflow.apply_workflow",
+        "path": "/api/method/pmra.api.v1.apply_transition",
         "csrf": true
       },
       "response": {

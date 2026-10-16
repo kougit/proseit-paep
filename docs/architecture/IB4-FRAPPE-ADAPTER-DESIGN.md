@@ -90,14 +90,16 @@ Frappe/ERPNext interface the adapter calls:
 | detail | `GET /api/resource/<DocType>/<name>` → `{ data: {...} }` |
 | attachments | `GET /api/resource/File` filtered by `attached_to_doctype` and `attached_to_name`; `GET /api/resource/File/<name>` |
 | workflow actions | `GET /api/method/frappe.model.workflow.get_transitions?doc={"doctype","name"}` (the server loads the document) → `{ message: [{ action, ... }] }` |
-| workflow transition | `POST /api/method/frappe.model.workflow.apply_workflow` `{ doc: { doctype, name, modified }, action }` (CSRF, idempotency key) → `{ message: <document> }` |
 
-The two ProSEIT backend methods:
+Stock `frappe.model.workflow.apply_workflow` is not used: it does not check the caller's version (ADR-011 §2.8, M1).
+
+The three ProSEIT backend methods:
 
 | Method | Response `message` |
 | --- | --- |
 | `GET /api/method/pmra.api.v1.get_compatibility` | `{ api_contract: "pmra-api-v1", minimum_paep: "<major.minor>", maximum_paep: "<major.minor>" \| null }` |
 | `GET /api/method/pmra.api.v1.get_session` | `{ user, full_name, tenant: { id, name }, csrf_token, expires_at?, capabilities: [{ id, enabled }] }` |
+| `POST /api/method/pmra.api.v1.apply_transition` `{ doctype, name, action, expected_version }` (CSRF, `X-Idempotency-Key`) | `{ record: <document with name, modified and the workflow state field> }` |
 
 `csrf_token` is `[A-Za-z0-9]{8,256}`; `expires_at` is ISO 8601 with an offset; a capability id is a lower-case dotted
 key whose first segment is a record-type key (or an application-wide key). `user` must equal the logged-in user.
@@ -107,6 +109,41 @@ must report the same contract, and the adapter's PAEP line (1.1) must lie within
 `incompatible`; an error, a missing method or a malformed answer is `unknown`. Records, workflow, files, capabilities
 and freshness wait for a verified compatible result (cached once compatible; `unknown` is checked again on the next
 call) and otherwise reject with `BACKEND_INCOMPATIBLE` or the retryable `BACKEND_COMPATIBILITY_UNKNOWN`.
+
+### 4.1 The atomic transition method (ADR-011 §2.8, PO/SA M1 decision 2026-10-16)
+
+`pmra.api.v1.apply_transition` performs, as one backend operation inside one database transaction, with the record row
+locked (`SELECT ... FOR UPDATE`, for example `frappe.get_doc(doctype, name, for_update=True)`) from the version read to
+the commit:
+
+1. authenticate the session and check the CSRF token (Frappe's request handling);
+2. accept only a DocType the ProSEIT backend exposes to PAEP (no arbitrary DocType), and resolve the record;
+3. check the actor's permission on the record;
+4. if the idempotency key was already used by the same user for the same command, return the stored result without
+   applying anything; the same key with a different command is refused (`ValidationError`);
+5. compare the record's current `modified` with `expected_version`; if they differ, apply nothing;
+6. revalidate the action against the transitions allowed now for this user and state;
+7. apply the transition (standard Frappe workflow semantics may be invoked here, on the locked document), store the
+   idempotency result with the key, and return the new record.
+
+| Outcome | HTTP status, `exc_type` | Adapter `PaepError` |
+| --- | --- | --- |
+| applied, or a replayed command | 200, `{ message: { record } }` | (result: new state and version) |
+| stale version | 409, `TimestampMismatchError` | `RECORD_CONFLICT` (conflict) |
+| action not allowed now | 403 or 417, `WorkflowTransitionError` / `WorkflowPermissionError` | `WORKFLOW_ACTION_NOT_ALLOWED` (authorization) |
+| permission denied | 403, `PermissionError` | `PERMISSION_DENIED` (authorization) |
+| record or DocType not available | 404, `DoesNotExistError` | `NOT_FOUND` |
+| key reused for another command, invalid input | 417, `ValidationError` | `VALIDATION_FAILED` |
+| method absent (stock Frappe: unknown command) | 417 `ValidationError`, or 404 | `VALIDATION_FAILED` / `NOT_FOUND`: the transition fails, nothing else is sent |
+
+Error responses never reach callers as text (§3). The method name and these wire shapes stay in
+`@proseit/frappe-sdk`; `@proseit/paep-contracts` is unchanged.
+
+**Backend-adoption obligation (PAEP-IB4-BACKEND-ATOMIC-TRANSITION, OPEN).** The production ProSEIT backend lives
+outside this repository and is not changed by Generation 6. Workflow writes must not be enabled in a product pilot or
+in production until the target backend implements this method and validates it against this definition (the six cases
+of §6 at least). Until then a transition fails safe: it is reported as failed and never falls back to stock
+`apply_workflow`.
 
 ## 5. Resource map (AC-IB4-03)
 
@@ -127,17 +164,35 @@ is still accepted in a result (one unusual name never fails a page), but any req
 The concurrency token is the server's `modified` value (`ConcurrencyMetadata.serverVersion`). `getState` reads the
 document and the server's transition list, offering only actions in the approved vocabulary. `transition` re-reads
 both, refuses a stale token (`RECORD_CONFLICT`) or an action outside the latest server set
-(`WORKFLOW_ACTION_NOT_ALLOWED`) before any write, then applies the action, sending only the record reference and the
-caller's version. Neither request carries another field value. A transition reason or evidence list is refused
+(`WORKFLOW_ACTION_NOT_ALLOWED`) before any write, then sends the action to the atomic transition method (§4.1) with
+only the record reference, the action and the caller's version. Neither request carries another field value. The
+re-read is advisory: the server's own check, under its lock, decides, so a change after the re-read is still a
+conflict and nothing is applied. A transition reason or evidence list is refused
 (`WORKFLOW_UNSUPPORTED_INPUT`) because pmra-api-v1 carries neither. Every write carries an idempotency key (the
 caller's, or a generated one) kept on every retry, and is retried only after a 429 (§2).
 
-**Open limitation (independent QA M1, PO/SA decision pending).** Stock `apply_workflow` reloads the document on the
-server and does not compare the caller's version, and it does not de-duplicate by idempotency key. The adapter's
-version check therefore leaves a window between its re-read and the server's apply in which a concurrent change is not
-detected. Closing it needs a server-side atomic check, which is a change to the `pmra-api-v1` definition in ADR-011
-and is put to the PO/SA. The result of a transition carries no allowed actions; callers read `getState` for the next
-set.
+**M1 (independent QA, closed by the PO/SA decision of 2026-10-16).** The earlier design applied the action with stock
+`apply_workflow`, which does not compare the caller's version, so a change between the adapter's re-read and the apply
+went undetected. The write now goes only to the atomic method. A success result must carry the same record; anything
+else (a bare document, another record, a proxy page) is `MALFORMED_RESPONSE`. A failed transition is never retried
+through another endpoint. After a conflict the caller reconciles with `getState` before another attempt. A retried
+command keeps its idempotency key: a double submission reaches the server twice and has one effect; a later retry
+finds the record moved on and is refused before any write. frappe-qa F05 keeps `apply_workflow` out of the adapter.
+
+Proofs against the contract double (`tooling/frappe-adapter/test/support/backend.mjs`, `transitionBackend`;
+`workflow.test.mjs` M1-A to M1-F and the fail-safe case) and fixtures (`fixtures/workflow/`):
+
+| Case | Result |
+| --- | --- |
+| A. matching version | applied once; new state and version returned |
+| B. stale version | conflict; nothing applied (refused by the adapter's re-read, or by the server if it reaches it) |
+| C. record changed after the re-read, before the mutation | the server detects it: conflict, nothing applied; reconcile, then succeed |
+| D. action no longer allowed | the server rejects it: authorization error, no transition |
+| E. same idempotent command retried | one business effect; the replay returns the first result |
+| F. permission denied | authorization error, no transition |
+| method absent | the transition fails with a controlled error; no other request |
+
+The result of a transition carries no allowed actions; callers read `getState` for the next set.
 
 ## 7. Files (AC-IB4-05)
 
@@ -188,8 +243,9 @@ component or copy is added.
 * Add the backend origin (`backend.apiBaseUrl`) to the CSP `connect-src` of the strict profile
   (`apps/reference-app/deployment/csp-strict.json`, "A deployment adds its own origins"); no wildcard, scheme-only or
   plain-HTTP source (frappe-qa F08).
-* The backend publishes `pmra.api.v1.get_compatibility` (callable without a session) and `pmra.api.v1.get_session`
-  as defined in §4.
+* The backend publishes `pmra.api.v1.get_compatibility` (callable without a session), `pmra.api.v1.get_session` and
+  `pmra.api.v1.apply_transition` as defined in §4. Workflow writes stay disabled in a pilot or production until the
+  target backend's atomic method is implemented and validated (§4.1, backend-adoption obligation).
 * Serve `/files/` and `/private/files/` with `Content-Disposition: attachment` and `X-Content-Type-Options: nosniff`,
   so an uploaded HTML or SVG file never runs on the application origin (§7).
 * No runtime-configuration schema change: the adapter reads `backend.apiBaseUrl`, `backend.compatibility.apiContract`

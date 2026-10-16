@@ -2,7 +2,7 @@
   "id": "workflow.transition-approve",
   "profile": "pmra-api-v1/frappe-15",
   "kind": "conformance",
-  "description": "Approve with CSRF, the caller token and the idempotency key.",
+  "description": "Approve through the atomic pmra-api-v1 transition method with CSRF, the caller version and the idempotency key; the server returns the new state and version.",
   "steps": [
     {
       "call": {
@@ -173,21 +173,23 @@
     {
       "request": {
         "method": "POST",
-        "path": "/api/method/frappe.model.workflow.apply_workflow",
+        "path": "/api/method/pmra.api.v1.apply_transition",
         "csrf": true
       },
       "response": {
         "status": 200,
         "body": {
           "message": {
-            "name": "INS-0001",
-            "modified": "2026-10-15 09:05:00.000001",
-            "title": "Site A",
-            "status": "Open",
-            "score": 7,
-            "site_code": "S-01",
-            "workflow_state": "Approved",
-            "docstatus": 0
+            "record": {
+              "name": "INS-0001",
+              "modified": "2026-10-15 09:05:00.000001",
+              "title": "Site A",
+              "status": "Open",
+              "score": 7,
+              "site_code": "S-01",
+              "workflow_state": "Approved",
+              "docstatus": 0
+            }
           }
         }
       }

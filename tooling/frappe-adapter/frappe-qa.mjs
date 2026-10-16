@@ -28,7 +28,10 @@ const ONE_PLACE = [
   [/_server_messages|\bexc_type\b|['"]exception['"]|['"]exc['"]/, 'lib/errors.ts'],
   [/X-Frappe-CSRF-Token/, 'lib/session.ts'],
   [/\blocation\b/, 'lib/login-redirect.ts'],
+  [/pmra\.api\.v1\.apply_transition/, 'lib/methods.ts'],
 ];
+/** Wire details the adapter may never use: stock apply_workflow does not check the caller's version (ADR-011 §8, M1). */
+const NOWHERE = [/apply_workflow/];
 /** Fixture-set policy (D2). */
 const FIXTURE_SET_VERSION = /^\d+\.\d+\.\d+$/;
 
@@ -125,7 +128,8 @@ const sdkTs = sdkFiles.filter((f) => f.endsWith('.ts'));
       if (re.test(stripComments(read(file)))) f.push(`${file}: ${re.source} outside ${home}`);
     }
   }
-  check('F05', 'Each Frappe wire detail lives in one adapter file: resource paths (resources.ts), server error fields (errors.ts), the CSRF header (session.ts), the login redirect (login-redirect.ts)', f);
+  for (const re of NOWHERE) for (const file of sdkTs) if (re.test(read(file))) f.push(`${file}: ${re.source} is not permitted in the adapter (no unchecked workflow write, no fallback)`);
+  check('F05', 'Each Frappe wire detail lives in one adapter file: resource paths (resources.ts), server error fields (errors.ts), the CSRF header (session.ts), the login redirect (login-redirect.ts), the atomic transition method (methods.ts); stock apply_workflow nowhere', f);
 }
 
 // F06 versioned, credential-free fixture set (D2, AC-IB4-01, -18).

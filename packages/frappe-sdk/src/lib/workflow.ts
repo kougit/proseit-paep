@@ -1,7 +1,10 @@
 /**
- * Workflow (AC-IB4-04). Allowed actions are the server's latest transition set, filtered to the approved vocabulary of
- * the resource map. A transition outside that set, or against a stale concurrency token, is refused before any write;
- * the server still decides, and a server denial maps to an authorization error.
+ * Workflow (AC-IB4-04, AC-IB4-07). Allowed actions are the server's latest transition set, filtered to the approved
+ * vocabulary of the resource map. A transition is written only through the bounded pmra-api-v1 transition method
+ * (ADR-011 §8, §12), which checks the caller's version, revalidates the action and applies it in one backend operation.
+ * The adapter's own re-read is advisory: it refuses an action that is plainly stale or not offered before any write,
+ * but the server's answer is the authority. There is no other write path and no fallback: when the method is absent or
+ * fails, the transition is reported as failed and nothing else is sent.
  */
 import type {
   RecordRef, RecordTypeKey, WorkflowAction, WorkflowGateway, WorkflowState, WorkflowTransitionRequest, WorkflowTransitionResult,
@@ -76,13 +79,17 @@ export function createWorkflowGateway(transport: Transport, lookup: ResourceLook
       const serverAction = current.serverActions.get(request.actionId);
       if (serverAction === undefined) throw adapterError('WORKFLOW_ACTION_NOT_ALLOWED');
       const response = await transport.send({
-        method: 'POST', path: METHOD.applyWorkflow,
-        // The record reference and the caller's version only; no other field value is sent. The version check above is
-        // the adapter's; whether the server re-checks it atomically depends on the backend method (see the design §6).
-        body: { doc: { doctype: r.doctype, name: request.recordId, modified: token }, action: serverAction },
+        method: 'POST', path: METHOD.applyTransition,
+        // The record reference, the action and the caller's version only; no other field value is sent. The server
+        // compares the version under its own lock and applies the action in the same operation (a stale version is a
+        // conflict and nothing is applied); the idempotency key lets it return the first result for a repeated command.
+        body: { doctype: r.doctype, name: request.recordId, action: serverAction, expected_version: token },
         idempotencyKey: request.idempotencyKey ?? newKey(),
       });
-      const { doc, version } = identityOf(methodMessage(response.body), response.correlationId);
+      const result = methodMessage(response.body);
+      const record = result && typeof result === 'object' && !Array.isArray(result) ? (result as { record?: unknown }).record : undefined;
+      const { doc, id, version } = identityOf(record, response.correlationId);
+      if (id !== request.recordId) throw adapterError('MALFORMED_RESPONSE', response.correlationId);
       const state = stateOf(w, doc, response.correlationId);
       return Object.freeze({
         state: Object.freeze({ stateKey: state.key, labelKey: state.labelKey, allowedActions: Object.freeze([]), concurrency: Object.freeze({ serverVersion: version }) }),

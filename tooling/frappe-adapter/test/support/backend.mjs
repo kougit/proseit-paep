@@ -79,3 +79,60 @@ export function fixtureCases() {
   const manifest = JSON.parse(fs.readFileSync(path.join(FIXTURES, 'manifest.json'), 'utf8'));
   return { manifest, cases: manifest.files.map((f) => ({ ...f, data: JSON.parse(fs.readFileSync(path.join(FIXTURES, f.path), 'utf8')) })) };
 }
+
+/**
+ * Contract double of the pmra-api-v1 atomic transition method (ADR-011 §8, §12): a synthetic, in-memory backend with one
+ * workflow record. `pmra.api.v1.apply_transition` does, as one step with no gap for another request: authenticate and
+ * check CSRF, resolve the approved DocType and record, check permission, return the stored result for a replayed
+ * idempotency key, compare the expected version with the current one, revalidate the action against the current state,
+ * then apply it and store the result. `effects` lists every business effect applied. The hooks change the record or
+ * the rules between the adapter's advisory re-read and the mutation, as a concurrent user would. Stock
+ * `frappe.model.workflow.apply_workflow` is deliberately not served, so any request for it fails the test.
+ */
+export function transitionBackend({ actions = { 'Pending Review': { Approve: 'Approved', Reject: 'Draft' } }, writable = true, method = true, beforeMutation } = {}) {
+  const record = { name: 'INS-0001', modified: '2026-10-15 09:00:00.000001', title: 'Site A', status: 'Open', workflow_state: 'Pending Review', docstatus: 0 };
+  const rules = { actions, writable };
+  const effects = [];
+  const replies = new Map();
+  const calls = [];
+  let clock = 0;
+  const reply = (status, body) => ({ ok: status >= 200 && status < 300, status, headers: { get: () => null }, text: async () => JSON.stringify(body) });
+  const fail = (status, exc_type) => reply(status, { exc_type, exception: `frappe.exceptions.${exc_type}: synthetic internal detail`, exc: '["Traceback (most recent call last): synthetic"]' });
+  const exchanges = { compatible: X.compatible, loggedUser: X.loggedUser(), session: X.session() };
+  const fetch = async (url, init) => {
+    const u = new URL(url);
+    const body = init.body === undefined ? undefined : JSON.parse(init.body);
+    calls.push({ method: init.method, path: u.pathname, query: Object.fromEntries(u.searchParams), headers: { ...init.headers }, body });
+    const canned = Object.values(exchanges).find((x) => x.request.method === init.method && x.request.path === u.pathname);
+    if (canned) return reply(canned.response.status, canned.response.body);
+    if (init.method === 'GET' && u.pathname === '/api/resource/PMRA%20Inspection/INS-0001') return reply(200, { data: { ...record } });
+    if (init.method === 'GET' && u.pathname === '/api/method/frappe.model.workflow.get_transitions') {
+      return reply(200, { message: Object.entries(rules.actions[record.workflow_state] ?? {}).map(([action, next_state]) => ({ action, next_state, allowed: 'Reviewer' })) });
+    }
+    // A backend without the method answers as stock Frappe does for an unknown command.
+    if (init.method === 'POST' && u.pathname === '/api/method/pmra.api.v1.apply_transition' && !method) return fail(417, 'ValidationError');
+    if (init.method === 'POST' && u.pathname === '/api/method/pmra.api.v1.apply_transition') {
+      if (init.headers['X-Frappe-CSRF-Token'] !== SYNTHETIC_CSRF) return fail(400, 'CSRFTokenError');
+      await beforeMutation?.({ record, rules });
+      // From here to the reply is one synchronous step: nothing else can run in between (the double's "transaction").
+      if (body.doctype !== 'PMRA Inspection' || body.name !== record.name) return fail(404, 'DoesNotExistError');
+      if (!rules.writable) return fail(403, 'PermissionError');
+      const key = init.headers['X-Idempotency-Key'];
+      if (typeof key !== 'string' || !key.length) return fail(417, 'ValidationError');
+      const command = JSON.stringify([body.doctype, body.name, body.action, body.expected_version]);
+      const seen = replies.get(key);
+      if (seen) return seen.command === command ? reply(200, seen.body) : fail(417, 'ValidationError');
+      if (body.expected_version !== record.modified) return fail(409, 'TimestampMismatchError');
+      const next = rules.actions[record.workflow_state]?.[body.action];
+      if (next === undefined) return fail(403, 'WorkflowTransitionError');
+      record.workflow_state = next;
+      record.modified = `2026-10-15 09:${String(10 + ++clock).padStart(2, '0')}:00.000001`;
+      effects.push({ key, action: body.action, state: next });
+      const result = { message: { record: { ...record } } };
+      replies.set(key, { command, body: result });
+      return reply(200, result);
+    }
+    throw new Error(`the contract double does not serve ${init.method} ${u.pathname}`);
+  };
+  return { fetch, calls, record, rules, effects };
+}

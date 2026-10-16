@@ -17,7 +17,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const GATE = path.join(root, 'tooling/frappe-adapter/frappe-qa.mjs');
 const SKIP = new Set(['node_modules', 'dist', '.angular', 'tmp', '.vitest-attachments', '.git']);
-const EXPECTED_CASES = 35;
+const EXPECTED_CASES = 37;
 const CONTROLS = 1;
 const SDK = 'packages/frappe-sdk/src';
 const INDEX = `${SDK}/index.ts`;
@@ -104,6 +104,8 @@ negative('N21', 'a resource path built outside the approved resource map (arbitr
 negative('N22', 'raw server messages read outside the error normaliser', [[PROBE, put('export const text = (b: { _server_messages?: string }) => b._server_messages;\n')]], 'F05', /outside lib\/errors\.ts/);
 negative('N23', 'the CSRF header set outside the session module', [[PROBE, put("export const h = { 'X-Frappe-CSRF-Token': 'x' };\n")]], 'F05', /outside lib\/session\.ts/);
 negative('N24', 'a location redirect outside the approved login redirect', [[PROBE, put("export const go = () => globalThis.location.assign('/x');\n")]], 'F05', /outside lib\/login-redirect\.ts/);
+negative('N36', 'the workflow write falls back to stock apply_workflow (no server version check)', [[`${SDK}/lib/workflow.ts`, (t) => t.replace('METHOD.applyTransition', "'/api/method/frappe.model.workflow.apply_workflow'")]], 'F05', /workflow\.ts: apply_workflow is not permitted/);
+negative('N37', 'the atomic transition method named outside the method table', [[PROBE, put("export const m = '/api/method/pmra.api.v1.apply_transition';\n")]], 'F05', /probe\.ts: .*apply_transition outside lib\/methods\.ts/);
 // Fixtures, provenance and secrets.
 negative('N25', 'an unlisted fixture', [['tooling/frappe-adapter/fixtures/session/extra.json', put('{}\n')]], 'F06', /unlisted fixture tooling\/frappe-adapter\/fixtures\/session\/extra\.json/);
 negative('N26', 'fixture provenance claims captured data', [[MANIFEST, json((m) => { m.provenance.source = 'captured'; })]], 'F06', /provenance\.source is not "synthetic"/);

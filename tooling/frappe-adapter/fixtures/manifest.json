@@ -1,5 +1,5 @@
 {
-  "fixtureSetVersion": "1.0.0",
+  "fixtureSetVersion": "1.1.0",
   "compatibilityContract": "pmra-api-v1",
   "provenance": {
     "source": "synthetic",
@@ -275,21 +275,35 @@
       "id": "workflow.transition-approve",
       "profile": "pmra-api-v1/frappe-15",
       "kind": "conformance",
-      "sha256": "16fd7fe802c685e891002e534a9d78d70e9fb44e5a52a86a19d57e67707ed763"
+      "sha256": "d476b5a037eca3e46cdea427921dd6a84bdb2b04b083fbad9bccc7202e508550"
     },
     {
       "path": "workflow/transition-denied.json",
       "id": "workflow.transition-denied",
       "profile": "pmra-api-v1/frappe-15",
       "kind": "error",
-      "sha256": "3f379791f97483ebaf122825505be0e62f93e03c33389d103269d0f2fb2d5b02"
+      "sha256": "19cdb432ed64934365c82f796bbfb49233230ca9001ecf812f30a46329ef6663"
+    },
+    {
+      "path": "workflow/transition-method-absent.json",
+      "id": "workflow.transition-method-absent",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "error",
+      "sha256": "1afde00f8692e1cef9cf219596802eac2bc7e41db4750e05ca6f431af6d51d07"
+    },
+    {
+      "path": "workflow/transition-permission-denied.json",
+      "id": "workflow.transition-permission-denied",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "error",
+      "sha256": "d0ce7897d165e121539f711a6a6d0152f29c2dd5033617ce6efa64750a1a4b4c"
     },
     {
       "path": "workflow/transition-server-conflict.json",
       "id": "workflow.transition-server-conflict",
       "profile": "pmra-api-v1/frappe-15",
       "kind": "error",
-      "sha256": "c11a4dc0d4bed1290dbb022fa0459b68b2ed36b9447fd4e836267f4fc6f7b7f5"
+      "sha256": "56c766372837fb80dfc5c2b18ab2df7508fca79b80884b4d82ccc90c7ba52079"
     },
     {
       "path": "workflow/transition-stale.json",

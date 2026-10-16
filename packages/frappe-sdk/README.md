@@ -22,7 +22,8 @@ product packages; applications load it lazily with one dynamic `import()`.
 
 - Cookie session with `credentials: 'include'`, `redirect: 'error'` and `cache: 'no-store'`; the backend origin must be HTTPS and origin-only.
 - The CSRF token is held in memory only and sent as `X-Frappe-CSRF-Token` on state-changing requests; it is never stored, logged or returned.
-- Bounded retry of retryable failures only; a state-changing request is retried only with an idempotency key.
+- Bounded retry of retryable failures only; a state-changing request is retried only with an idempotency key, and only after a rate-limit refusal.
+- A workflow transition is written only through the backend's atomic `pmra.api.v1.apply_transition` method, which checks the caller's version and applies the action in one operation (ADR-011 §2.8); a stale version is a conflict, and there is no fallback to stock `apply_workflow`. Workflow writes need a backend that implements that method (design §4.1).
 - Server error text, tracebacks and `_server_messages` never leave the adapter; callers get a category, code and reference.
 - Login goes to the server-hosted Frappe login with an application-relative return path; PAEP has no login screen.
 

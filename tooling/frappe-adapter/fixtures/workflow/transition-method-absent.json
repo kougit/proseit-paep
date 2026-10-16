@@ -1,0 +1,182 @@
+{
+  "id": "workflow.transition-method-absent",
+  "profile": "pmra-api-v1/frappe-15",
+  "kind": "error",
+  "description": "A backend without the atomic transition method: the transition fails safe, with no fallback request.",
+  "steps": [
+    {
+      "call": {
+        "port": "session",
+        "method": "check",
+        "args": []
+      },
+      "expect": {
+        "resolves": {
+          "status": "authenticated",
+          "identity": {
+            "principalId": "inspector@example.test",
+            "displayName": "Example Inspector",
+            "tenant": {
+              "tenantId": "tenant-01",
+              "displayName": "Example Tenant"
+            }
+          }
+        }
+      }
+    },
+    {
+      "call": {
+        "port": "workflow",
+        "method": "transition",
+        "args": [
+          "inspection",
+          {
+            "recordId": "INS-0001",
+            "actionId": "approve",
+            "concurrency": {
+              "serverVersion": "2026-10-15 09:00:00.000001"
+            },
+            "idempotencyKey": "op-fixture-0001"
+          }
+        ]
+      },
+      "expect": {
+        "rejects": {
+          "code": "VALIDATION_FAILED",
+          "category": "validation",
+          "retryable": false,
+          "correlationId": "$correlation"
+        }
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/frappe.auth.get_logged_user"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": "inspector@example.test"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/pmra.api.v1.get_session"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": {
+            "user": "inspector@example.test",
+            "full_name": "Example Inspector",
+            "tenant": {
+              "id": "tenant-01",
+              "name": "Example Tenant"
+            },
+            "csrf_token": "synthetic0csrf0token0value0001",
+            "capabilities": [
+              {
+                "id": "inspection.create",
+                "enabled": true
+              },
+              {
+                "id": "inspection.approve",
+                "enabled": false
+              },
+              {
+                "id": "site.read",
+                "enabled": true
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/pmra.api.v1.get_compatibility"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": {
+            "api_contract": "pmra-api-v1",
+            "minimum_paep": "1.0",
+            "maximum_paep": null
+          }
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/resource/PMRA%20Inspection/INS-0001"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "data": {
+            "name": "INS-0001",
+            "modified": "2026-10-15 09:00:00.000001",
+            "title": "Site A",
+            "status": "Open",
+            "score": 7,
+            "site_code": "S-01",
+            "workflow_state": "Pending Review",
+            "docstatus": 0
+          }
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/frappe.model.workflow.get_transitions"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": [
+            {
+              "action": "Approve",
+              "next_state": "Approved",
+              "allowed": "Reviewer"
+            },
+            {
+              "action": "Reject",
+              "next_state": "Draft",
+              "allowed": "Reviewer"
+            },
+            {
+              "action": "Escalate To Admin",
+              "next_state": "Admin",
+              "allowed": "All"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "path": "/api/method/pmra.api.v1.apply_transition",
+        "csrf": true
+      },
+      "response": {
+        "status": 417,
+        "body": {
+          "exc_type": "ValidationError",
+          "exception": "frappe.exceptions.ValidationError: synthetic internal detail",
+          "exc": "[\"Traceback (most recent call last): synthetic\"]",
+          "_server_messages": "[\"{\\\"message\\\": \\\"synthetic server prose\\\"}\"]"
+        }
+      }
+    }
+  ]
+}

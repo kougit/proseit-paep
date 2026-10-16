@@ -5,7 +5,7 @@ ADR-001..ADR-010 are reserved, PROPOSED register entries in PAEP-IB-01 Appendix 
 | ADR ID | Title | Status | Decision date | Supersedes | Notes |
 | --- | --- | --- | --- | --- | --- |
 | — | — | — | — | — | Create an ADR only if IB0-WP01 exposes a material decision not already controlled by PAEP v1.1 or PAEP-IB-01. |
-| ADR-011 | Frappe adapter boundary, cookie session + CSRF, polling freshness and the `pmra-api-v1` compatibility contract | ACCEPTED — PO/SA | 2026-10-15 | — | `docs/adr/ADR-011-FRAPPE-ADAPTER-BOUNDARY.md`. Records PO/SA decisions D1-D10 of the IB4 implementation authorisation. Related to (does not change) ADR-003 and ADR-008, which stay PROPOSED. |
+| ADR-011 | Frappe adapter boundary, cookie session + CSRF, polling freshness and the `pmra-api-v1` compatibility contract | ACCEPTED — PO/SA | 2026-10-15 | — | `docs/adr/ADR-011-FRAPPE-ADAPTER-BOUNDARY.md`. Records PO/SA decisions D1-D10 of the IB4 implementation authorisation. Amended 2026-10-16 (§2.8, §2.12, §4 only) by the PO/SA M1 decision: workflow writes use the atomic `pmra-api-v1` transition method; status unchanged. Related to (does not change) ADR-003 and ADR-008, which stay PROPOSED. |
 
 ## Work-package notes
 

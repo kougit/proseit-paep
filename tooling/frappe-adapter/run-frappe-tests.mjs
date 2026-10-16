@@ -24,10 +24,10 @@ const SUITE = suiteArg < 0 ? null : process.argv[suiteArg + 1];
 const EXPECTED_TESTS = {
   unit: {
     'compatibility.test.mjs': 5, 'files.test.mjs': 7, 'freshness.test.mjs': 7, 'records.test.mjs': 6, 'session.test.mjs': 8,
-    'reference-binding.test.mjs': 7, 'transport.test.mjs': 15, 'workflow.test.mjs': 9,
+    'reference-binding.test.mjs': 7, 'transport.test.mjs': 15, 'workflow.test.mjs': 16,
   },
-  // One manifest test plus one test per fixture case (tooling/frappe-adapter/fixtures/manifest.json, 36 cases).
-  integration: { 'conformance.test.mjs': 37 },
+  // One manifest test plus one test per fixture case (tooling/frappe-adapter/fixtures/manifest.json, 38 cases).
+  integration: { 'conformance.test.mjs': 39 },
 };
 if (!EXPECTED_TESTS[SUITE]) {
   console.log(`FAIL --suite must be ${Object.keys(EXPECTED_TESTS).join(' or ')}`);

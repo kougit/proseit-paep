@@ -2,7 +2,7 @@
   "id": "workflow.transition-server-conflict",
   "profile": "pmra-api-v1/frappe-15",
   "kind": "error",
-  "description": "Server timestamp mismatch on apply: conflict.",
+  "description": "The record changed after the advisory re-read: the atomic method detects the stale version and applies nothing (conflict).",
   "steps": [
     {
       "call": {
@@ -165,11 +165,11 @@
     {
       "request": {
         "method": "POST",
-        "path": "/api/method/frappe.model.workflow.apply_workflow",
+        "path": "/api/method/pmra.api.v1.apply_transition",
         "csrf": true
       },
       "response": {
-        "status": 417,
+        "status": 409,
         "body": {
           "exc_type": "TimestampMismatchError",
           "exception": "frappe.exceptions.TimestampMismatchError: synthetic internal detail",

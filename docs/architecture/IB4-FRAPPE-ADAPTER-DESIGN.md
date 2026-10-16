@@ -123,7 +123,9 @@ call) and otherwise reject with `BACKEND_INCOMPATIBLE` or the retryable `BACKEND
 5. look up the idempotency key. The key is scoped to the authenticated user; the command it identifies is
    (DocType, record name, action, `expected_version`). A stored result for the same user, key and command is returned
    as it was, with nothing applied; the same user and key with a different command is refused (`ValidationError`). A
-   key is kept at least 24 hours after its first use;
+   key is kept at least 24 hours after its first use. (user, key) is unique in the key store (a unique index), so the
+   same key sent for two different records, which hold different row locks, cannot both be applied: the second insert
+   fails, its transaction rolls back and it is refused;
 6. compare the record's current `modified` with `expected_version`; if they differ, apply nothing and raise
    `TimestampMismatchError` with HTTP status 409 (the adapter classifies by `exc_type`, so Frappe's default 417 for that
    class is also read as a conflict);

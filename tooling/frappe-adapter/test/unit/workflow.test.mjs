@@ -202,8 +202,11 @@ test('M1 fail-safe: a backend without the atomic method fails the transition and
   await assert.rejects(absent.approve(), (e) => typeof e.code === 'string' && !e.retryable && Boolean(e.correlationId));
   assert.deepEqual([absent.writes().length, absent.double.effects, absent.double.record.workflow_state], [1, [], 'Pending Review']);
   noStockApply(absent.double);
-  // Whatever an absent or misrouted method answers (not found, a proxy page, a bare document), nothing else is sent.
-  for (const reply of [json(404, { exc_type: 'DoesNotExistError' }), { status: 404, raw: '<html>not found</html>' }, json(200, { message: { ...DOC, workflow_state: 'Approved' } }), json(200, { message: { record: { ...DOC, name: 'INS-0002', workflow_state: 'Approved' } } }), json(200, { message: { record: { ...DOC, workflow_state: 'Approved' } } })]) {
+  // Whatever an absent or misrouted method answers (not found, a proxy page, a bare saved document as stock
+  // apply_workflow returns, another record, a success with the caller's version unchanged), nothing else is sent. The
+  // misrouted successes carry a newer version so that each is refused by its own check.
+  const saved = { ...DOC, workflow_state: 'Approved', modified: '2026-10-15 09:05:00.000001' };
+  for (const reply of [json(404, { exc_type: 'DoesNotExistError' }), { status: 404, raw: '<html>not found</html>' }, json(200, { message: saved }), json(200, { message: { record: { ...saved, name: 'INS-0002' } } }), json(200, { message: { record: { ...saved, modified: DOC.modified } } })]) {
     const { adapter, backend } = makeAdapter([...signedIn, X.compatible, READ(), TRANSITIONS(), { request: APPLY().request, response: reply }]);
     await adapter.session.check();
     await assert.rejects(adapter.workflow.transition('inspection', { recordId: 'INS-0001', actionId: 'approve', concurrency: TOKEN, idempotencyKey: 'op-m1-0003' }), (e) => typeof e.code === 'string' && !e.retryable);

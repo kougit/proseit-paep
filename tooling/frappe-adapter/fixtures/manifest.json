@@ -261,7 +261,7 @@
       "id": "workflow.action-not-offered",
       "profile": "pmra-api-v1/frappe-15",
       "kind": "security",
-      "sha256": "6c4dbbcb14ce6ef6dd3d160022c03887ec530bc9c03b850f62aeedc269fb67d5"
+      "sha256": "3b33765334640dc4619692796eb5e6e046ba5dd3cd6d03cab44812db852f374f"
     },
     {
       "path": "workflow/state.json",
@@ -310,7 +310,7 @@
       "id": "workflow.transition-stale",
       "profile": "pmra-api-v1/frappe-15",
       "kind": "error",
-      "sha256": "f10a3b23e086c550b9c60bc988c1fbab645fba7a9167ab13f207b5973475d073"
+      "sha256": "1c429459922f8564b527ca1d66ed7a74f24da17188f567157bad5f588f4000e1"
     }
   ],
   "kinds": [

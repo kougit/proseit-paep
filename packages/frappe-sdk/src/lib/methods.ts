@@ -12,7 +12,7 @@ export const METHOD = Object.freeze({
   session: method('pmra.api.v1.get_session'),
   /** ProSEIT backend: the contract identifier and the supported PAEP range. */
   compatibility: method('pmra.api.v1.get_compatibility'),
-  /** ProSEIT backend: checks the caller's version and applies a workflow action in one operation (ADR-011 §8). */
+  /** ProSEIT backend: checks the caller's version and applies a workflow action in one operation (ADR-011 §2.8). */
   applyTransition: method('pmra.api.v1.apply_transition'),
 });
 

@@ -81,7 +81,7 @@ export function fixtureCases() {
 }
 
 /**
- * Contract double of the pmra-api-v1 atomic transition method (ADR-011 §8, §12): a synthetic, in-memory backend with one
+ * Contract double of the pmra-api-v1 atomic transition method (ADR-011 §2.8, §2.12): a synthetic, in-memory backend with one
  * workflow record. `pmra.api.v1.apply_transition` does, as one step with no gap for another request: authenticate and
  * check CSRF, resolve the approved DocType and record, check permission, return the stored result for a replayed
  * idempotency key, compare the expected version with the current one, revalidate the action against the current state,

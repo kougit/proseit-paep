@@ -30,7 +30,7 @@ const ONE_PLACE = [
   [/\blocation\b/, 'lib/login-redirect.ts'],
   [/pmra\.api\.v1\.apply_transition/, 'lib/methods.ts'],
 ];
-/** Wire details the adapter may never use: stock apply_workflow does not check the caller's version (ADR-011 §8, M1). */
+/** Wire details the adapter may never use: stock apply_workflow does not check the caller's version (ADR-011 §2.8, M1). */
 const NOWHERE = [/apply_workflow/];
 /** Fixture-set policy (D2). */
 const FIXTURE_SET_VERSION = /^\d+\.\d+\.\d+$/;

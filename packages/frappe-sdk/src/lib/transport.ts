@@ -137,7 +137,8 @@ export function createTransport(o: TransportOptions): Transport {
       } as const;
       // A state-changing request is retried only when it carries an idempotency key, which every retry keeps, and only
       // after a rate-limit refusal (the server did not process it). A timeout, network failure or 5xx after a write may
-      // follow a committed change, and stock Frappe does not de-duplicate by key, so it is returned to the caller.
+      // follow a committed change, and plain Frappe writes do not de-duplicate by key, so it is returned to the caller
+      // (the atomic transition method does, ADR-011 §2.8, but the adapter does not rely on that to re-send).
       const attempts = stateChanging && request.idempotencyKey === undefined ? 1 : o.maxAttempts;
       const mayRetry = (error: PaepError): boolean => error.retryable && (!stateChanging || error.code === 'RATE_LIMITED');
       for (let n = 1; ; n += 1) {

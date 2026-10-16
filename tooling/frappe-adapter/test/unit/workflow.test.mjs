@@ -1,5 +1,5 @@
 // IB4 workflow (AC-IB4-04) and write concurrency / idempotency (AC-IB4-07), including the atomic transition method of
-// ADR-011 §8 (PO/SA M1 decision 2026-10-16): proofs A-F against the contract double, and the fail-safe without it.
+// ADR-011 §2.8 (PO/SA M1 decision 2026-10-16): proofs A-F against the contract double, and the fail-safe without it.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { json, makeAdapter, transitionBackend, X } from '../support/backend.mjs';
@@ -112,7 +112,7 @@ test('reason, evidence and a missing token are refused rather than dropped', asy
   assert.equal(backend.calls.length, 0);
 });
 
-// M1 (ADR-011 §8, PO/SA decision 2026-10-16): the version check and the transition are one server operation. Each proof
+// M1 (ADR-011 §2.8, PO/SA decision 2026-10-16): the version check and the transition are one server operation. Each proof
 // runs the real adapter against the contract double, which keeps the record and every applied business effect.
 async function against(options) {
   const double = transitionBackend(options);
@@ -139,7 +139,7 @@ test('M1-B: a stale version is a conflict and nothing is applied', async () => {
   // The advisory re-read already sees the newer version: the adapter refuses without writing.
   const early = await against();
   early.double.record.modified = '2026-10-15 09:09:09.000001';
-  await assert.rejects(early.approve(), (e) => e.code === 'RECORD_CONFLICT');
+  await assert.rejects(early.approve(), (e) => conflict(e));
   assert.deepEqual([early.writes().length, early.double.effects, early.double.record.workflow_state], [0, [], 'Pending Review']);
   // The server is the authority: a stale version that reaches it is refused there with a conflict, nothing applied.
   const late = await against({ beforeMutation: ({ record }) => { record.modified = '2026-10-15 09:09:09.000001'; } });
@@ -181,7 +181,7 @@ test('M1-E: the same idempotent command retried has one business effect and retu
   assert.deepEqual(writes().map((c) => c.headers['X-Idempotency-Key']), ['op-m1-0001', 'op-m1-0001']);
   // A later retry of the same command finds the record already moved on: refused before any write, no second effect;
   // the caller reconciles from the server, which shows the first result.
-  await assert.rejects(approve(), (e) => e.code === 'RECORD_CONFLICT');
+  await assert.rejects(approve(), (e) => conflict(e));
   assert.equal(writes().length, 2);
   assert.equal((await adapter.workflow.getState({ recordType: 'inspection', id: 'INS-0001' })).stateKey, 'approved');
   // The key cannot be reused for a different command: the server refuses it and applies nothing.
@@ -203,7 +203,7 @@ test('M1 fail-safe: a backend without the atomic method fails the transition and
   assert.deepEqual([absent.writes().length, absent.double.effects, absent.double.record.workflow_state], [1, [], 'Pending Review']);
   noStockApply(absent.double);
   // Whatever an absent or misrouted method answers (not found, a proxy page, a bare document), nothing else is sent.
-  for (const reply of [json(404, { exc_type: 'DoesNotExistError' }), { status: 404, raw: '<html>not found</html>' }, json(200, { message: { ...DOC, workflow_state: 'Approved' } }), json(200, { message: { record: { ...DOC, name: 'INS-0002', workflow_state: 'Approved' } } })]) {
+  for (const reply of [json(404, { exc_type: 'DoesNotExistError' }), { status: 404, raw: '<html>not found</html>' }, json(200, { message: { ...DOC, workflow_state: 'Approved' } }), json(200, { message: { record: { ...DOC, name: 'INS-0002', workflow_state: 'Approved' } } }), json(200, { message: { record: { ...DOC, workflow_state: 'Approved' } } })]) {
     const { adapter, backend } = makeAdapter([...signedIn, X.compatible, READ(), TRANSITIONS(), { request: APPLY().request, response: reply }]);
     await adapter.session.check();
     await assert.rejects(adapter.workflow.transition('inspection', { recordId: 'INS-0001', actionId: 'approve', concurrency: TOKEN, idempotencyKey: 'op-m1-0003' }), (e) => typeof e.code === 'string' && !e.retryable);

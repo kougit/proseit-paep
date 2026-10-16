@@ -44,7 +44,8 @@
         "rejects": {
           "code": "WORKFLOW_ACTION_NOT_ALLOWED",
           "category": "authorization",
-          "retryable": false
+          "retryable": false,
+          "correlationId": "$correlation"
         }
       }
     }

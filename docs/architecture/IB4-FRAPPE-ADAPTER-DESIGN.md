@@ -112,19 +112,27 @@ call) and otherwise reject with `BACKEND_INCOMPATIBLE` or the retryable `BACKEND
 
 ### 4.1 The atomic transition method (ADR-011 §2.8, PO/SA M1 decision 2026-10-16)
 
-`pmra.api.v1.apply_transition` performs, as one backend operation inside one database transaction, with the record row
-locked (`SELECT ... FOR UPDATE`, for example `frappe.get_doc(doctype, name, for_update=True)`) from the version read to
-the commit:
+`pmra.api.v1.apply_transition` performs, as one backend operation inside one database transaction, in this order:
 
 1. authenticate the session and check the CSRF token (Frappe's request handling);
 2. accept only a DocType the ProSEIT backend exposes to PAEP (no arbitrary DocType), and resolve the record;
-3. check the actor's permission on the record;
-4. if the idempotency key was already used by the same user for the same command, return the stored result without
-   applying anything; the same key with a different command is refused (`ValidationError`);
-5. compare the record's current `modified` with `expected_version`; if they differ, apply nothing;
-6. revalidate the action against the transitions allowed now for this user and state;
-7. apply the transition (standard Frappe workflow semantics may be invoked here, on the locked document), store the
-   idempotency result with the key, and return the new record.
+3. lock the record row (`SELECT ... FOR UPDATE`, for example `frappe.get_doc(doctype, name, for_update=True)`) and
+   hold the lock until the commit; every later step runs under it, so two requests for the same record, with the same
+   key or not, are serialised;
+4. check the actor's permission on the record;
+5. look up the idempotency key. The key is scoped to the authenticated user; the command it identifies is
+   (DocType, record name, action, `expected_version`). A stored result for the same user, key and command is returned
+   as it was, with nothing applied; the same user and key with a different command is refused (`ValidationError`). A
+   key is kept at least 24 hours after its first use;
+6. compare the record's current `modified` with `expected_version`; if they differ, apply nothing and raise
+   `TimestampMismatchError` with HTTP status 409 (the adapter classifies by `exc_type`, so Frappe's default 417 for that
+   class is also read as a conflict);
+7. revalidate the action against the transitions allowed now for this user and state;
+8. apply the transition (standard Frappe workflow semantics may be invoked here, on the locked document), store the
+   result with the key in the same transaction, and return the new record. An applied result always has a `modified`
+   newer than `expected_version`; the adapter rejects a success that reports the caller's version unchanged.
+
+A failure at any step rolls the transaction back: no transition and no stored key.
 
 | Outcome | HTTP status, `exc_type` | Adapter `PaepError` |
 | --- | --- | --- |
@@ -136,14 +144,18 @@ the commit:
 | key reused for another command, invalid input | 417, `ValidationError` | `VALIDATION_FAILED` |
 | method absent (stock Frappe: unknown command) | 417 `ValidationError`, or 404 | `VALIDATION_FAILED` / `NOT_FOUND`: the transition fails, nothing else is sent |
 
-Error responses never reach callers as text (§3). The method name and these wire shapes stay in
+Key reuse and an absent method both read as `VALIDATION_FAILED`; the caller's response is the same in both cases (the
+command was not applied; reconcile with `getState`), so the adapter does not distinguish them. Error responses never
+reach callers as text (§3). The method name and these wire shapes stay in
 `@proseit/frappe-sdk`; `@proseit/paep-contracts` is unchanged.
 
 **Backend-adoption obligation (PAEP-IB4-BACKEND-ATOMIC-TRANSITION, OPEN).** The production ProSEIT backend lives
 outside this repository and is not changed by Generation 6. Workflow writes must not be enabled in a product pilot or
 in production until the target backend implements this method and validates it against this definition (the six cases
 of §6 at least). Until then a transition fails safe: it is reported as failed and never falls back to stock
-`apply_workflow`.
+`apply_workflow`. The compatibility check does not detect a backend that reports `pmra-api-v1` without the method;
+the technical control for that case is this fail-safe (every transition fails, nothing is applied), and the
+governance control is this obligation.
 
 ## 5. Resource map (AC-IB4-03)
 

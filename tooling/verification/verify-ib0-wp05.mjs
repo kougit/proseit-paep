@@ -184,6 +184,11 @@ const APPROVED_CLAUDE_AMENDMENTS = {
     '- Do not implement analytics/reporting UI, offline queues, the enterprise shell, or domain kits.',
     '- Do not implement analytics/reporting UI, offline queues, or domain kits. Do not implement the enterprise shell, except under the PO/SA-authorised work package `IB3-ENTERPRISE-SHELL` (PO/SA authorisation 2026-10-06), within its `WORK_PACKAGE.md`, `ACCEPTANCE.md` and the Generation 5 `authorisedScope`; this exception grants no permission for any later milestone, for self-acceptance, or for baseline promotion.',
   ],
+  // IB4 authorisation D1 (PO/SA, 2026-10-15).
+  'IB4-FRAPPE-ADAPTER': [
+    '- Do not implement Frappe/ERPNext integration in this work package.',
+    '- Do not implement Frappe/ERPNext integration, except under the PO/SA-authorised work package `IB4-FRAPPE-ADAPTER` (PO/SA authorisation 2026-10-15), within its `WORK_PACKAGE.md`, `ACCEPTANCE.md` and the Generation 6 `authorisedScope`; this exception grants no permission for any later milestone, for self-acceptance, or for baseline promotion.',
+  ],
 };
 
 // W02: controlled sources (PACK_MANIFEST fingerprints) and CLAUDE.md unchanged.
@@ -396,10 +401,16 @@ const IB3_REQUIRED_JOBS = {
   // Three-way split (PO/SA, 2026-10-07): part c of the WP05 negative suite, beside part a (negative-ci) and part b.
   'negative-ci-c': { name: 'PAEP / negative-ci-c', commands: ['npm run qa:ib0-wp05:negative -- --part c'] },
 };
+// IB4-FRAPPE-ADAPTER (authorising instruction §14, ACCEPTANCE AC-IB4-16): the frappe-adapter job is mandatory, keeps these
+// commands and its 20-minute timeout, and the IB4 suites run only in it.
+const IB4_REQUIRED_JOBS = {
+  'frappe-adapter': { name: 'PAEP / frappe-adapter', commands: ['npm run qa:frappe', 'npm run qa:integration', 'npm run qa:ib4:ci-negative'] },
+};
+const IB4_SUITES = ['npm run qa:frappe', 'npm run qa:integration', 'npm run qa:ib4:ci-negative'];
 /** The CI-control jobs that each run one part of the WP05 negative suite; each keeps the 20-minute timeout (RR14). */
 const CI_CONTROL_PARTS = { 'negative-ci': 'a', 'negative-ci-b': 'b', 'negative-ci-c': 'c' };
 /** WP05 negative-suite case count pinned here as well as in the harness, so lowering both the harness pin and its case list fails W11. */
-const WP05_NEGATIVE_CASES = 104;
+const WP05_NEGATIVE_CASES = 105;
 const IB3_NEGATIVES = ['npm run qa:enterprise:negative', 'npm run qa:shell:negative', 'npm run qa:ib3:ci-negative'];
 // IB2 CI-performance split (PO/SA, 2026-09-28; RR14): the accepted negative-ci command `npm run qa:ib0-wp05:negative`
 // may be replaced only by exactly its two halves, part a in negative-ci (keeping every other accepted command in order)
@@ -425,9 +436,14 @@ function acceptedPolicyFloor() {
     if (!c || c.name !== r.name) jobs.push(`IB3 mandatory job ${id} removed or renamed`);
     for (const cmd of r.commands) if (!(policy.requiredCommands?.[id] || []).includes(cmd)) jobs.push(`IB3 command "${cmd}" dropped from ${id}`);
   }
+  for (const [id, r] of Object.entries(IB4_REQUIRED_JOBS)) {
+    const c = policy.mandatoryJobs?.find((x) => x.id === id);
+    if (!c || c.name !== r.name) jobs.push(`IB4 mandatory job ${id} removed or renamed`);
+    for (const cmd of r.commands) if (!(policy.requiredCommands?.[id] || []).includes(cmd)) jobs.push(`IB4 command "${cmd}" dropped from ${id}`);
+  }
   for (const [id, cmds] of Object.entries(policy.requiredCommands || {})) {
-    if (IB3_REQUIRED_JOBS[id]) continue;
-    for (const cmd of cmds) if (IB3_NEGATIVES.some((n) => cmd.startsWith(n))) jobs.push(`IB3 negative "${cmd}" outside the IB3 jobs (${id})`);
+    if (!IB3_REQUIRED_JOBS[id]) for (const cmd of cmds) if (IB3_NEGATIVES.some((n) => cmd.startsWith(n))) jobs.push(`IB3 negative "${cmd}" outside the IB3 jobs (${id})`);
+    if (!IB4_REQUIRED_JOBS[id]) for (const cmd of cmds) if (IB4_SUITES.some((n) => cmd.startsWith(n))) jobs.push(`IB4 suite "${cmd}" outside the IB4 job (${id})`);
   }
   if (!BASE) return { jobs: [...jobs, noBase], other: [noBase] };
   let a = null;
@@ -461,6 +477,8 @@ if (want('W11') && wf) {
     if (!Number.isInteger(j['timeout-minutes']) || j['timeout-minutes'] < 1 || j['timeout-minutes'] > 30) p.push(`${mj.id} timeout-minutes ${j['timeout-minutes']}`);
     // RR14 (accepted LOW): the CI-control jobs keep their 20-minute timeout (PO/SA 2026-10-07: three parts, no increase).
     if (CI_CONTROL_PARTS[mj.id] && j['timeout-minutes'] !== 20) p.push(`${mj.id} timeout-minutes ${j['timeout-minutes']} (RR14 fixes it at 20)`);
+    // IB4 §14: the frappe-adapter job keeps the 20-minute maximum.
+    if (IB4_REQUIRED_JOBS[mj.id] && j['timeout-minutes'] !== 20) p.push(`${mj.id} timeout-minutes ${j['timeout-minutes']} (IB4 fixes it at 20)`);
     const steps = Array.isArray(j.steps) ? j.steps : [];
     const [co, su, ...rest] = steps;
     const up = rest.pop();
@@ -647,7 +665,9 @@ const pkgFinding = (key) => [/^(package\.json scripts differ from baseline \+ th
 // IB2-FOUNDATION-COMPONENTS adds the foundation and components entry points under the same bound, and
 // IB3-ENTERPRISE-SHELL the i18n, observability and enterprise entry points.
 const IB1_FILLED_ENTRIES = ['packages/contracts/src/index.ts', 'packages/platform/src/index.ts', 'packages/foundation/src/index.ts', 'packages/components/src/index.ts',
-  'packages/i18n/src/index.ts', 'packages/observability/src/index.ts', 'packages/enterprise/src/index.ts'];
+  'packages/i18n/src/index.ts', 'packages/observability/src/index.ts', 'packages/enterprise/src/index.ts',
+  // IB4-FRAPPE-ADAPTER (D9): the adapter entry point.
+  'packages/frappe-sdk/src/index.ts'];
 const filledEntry = (key) => (f) => IB1_FILLED_ENTRIES.includes(f) && since(key)(f);
 
 // IB3-ENTERPRISE-SHELL: the WP03 V13 / WP04 V18 integrity finding is accepted only when CLAUDE.md is the one controlled

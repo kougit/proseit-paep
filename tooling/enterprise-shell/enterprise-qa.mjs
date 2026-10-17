@@ -14,6 +14,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { FORBIDDEN_TERMS } from '../design-system/design-system-qa.mjs';
+import { covers } from '../governance/baseline-governance.mjs';
 
 const args = process.argv.slice(2);
 const root = args.includes('--root') ? path.resolve(args[args.indexOf('--root') + 1]) : path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -36,12 +37,23 @@ export const SUPPORT_VALUES = [
 const ENT_IMPORTS = ['@angular/core', '@angular/common', '@angular/router', '@proseit/paep-components', '@proseit/paep-foundation', '@proseit/paep-contracts', '@proseit/paep-i18n', '@proseit/paep-observability', '@proseit/paep-platform'];
 const SPEC_IMPORTS = ['@angular/core/testing', 'vitest', 'vitest/browser'];
 const APP_IMPORTS = ['@angular/core', '@angular/router', '@angular/platform-browser', '@proseit/paep-enterprise', '@proseit/paep-components', '@proseit/paep-foundation', '@proseit/paep-contracts', '@proseit/paep-platform'];
+/** Packages the reference app may load only lazily, through a dynamic import() or a type-only import (IB4 D7, D9). */
+const APP_LAZY_IMPORTS = ['@proseit/frappe-sdk'];
 /** Reference-app routes (§15): workspace, the locked and error demonstrations, not found, and optional diagnostics. */
 const APP_ROUTES = ['', 'workspace', 'locked/:reason', 'error-demo', 'diagnostics', '**'];
 /** Paths IB3 may not change (§6, AC-IB3-22/23). */
 const FROZEN = [/^packages\/(analytics|offline|frappe-sdk|contracts|domain-[^/]+)\//, /^config\/runtime-config\.schema\.json$/, /^package-lock\.json$/];
+/**
+ * Frozen paths a CANDIDATE may change, and only those its authorisedScope covers (IB4 D9): the adapter source and README
+ * and the contracts source. Every other frozen path, and these outside the candidate scope, stay frozen.
+ */
+const ADMITTABLE = [/^packages\/frappe-sdk\/src\//, /^packages\/frappe-sdk\/README\.md$/, /^packages\/contracts\/src\//];
 const CLAUDE_OLD = '- Do not implement analytics/reporting UI, offline queues, the enterprise shell, or domain kits.';
-const CLAUDE_NEW = '- Do not implement analytics/reporting UI, offline queues, or domain kits. Do not implement the enterprise shell, except under the PO/SA-authorised work package `IB3-ENTERPRISE-SHELL` (PO/SA authorisation 2026-10-06), within its `WORK_PACKAGE.md`, `ACCEPTANCE.md` and the Generation 5 `authorisedScope`; this exception grants no permission for any later milestone, for self-acceptance, or for baseline promotion.';
+export const CLAUDE_NEW = '- Do not implement analytics/reporting UI, offline queues, or domain kits. Do not implement the enterprise shell, except under the PO/SA-authorised work package `IB3-ENTERPRISE-SHELL` (PO/SA authorisation 2026-10-06), within its `WORK_PACKAGE.md`, `ACCEPTANCE.md` and the Generation 5 `authorisedScope`; this exception grants no permission for any later milestone, for self-acceptance, or for baseline promotion.';
+const FRAPPE_OLD = '- Do not implement Frappe/ERPNext integration in this work package.';
+export const FRAPPE_NEW = '- Do not implement Frappe/ERPNext integration, except under the PO/SA-authorised work package `IB4-FRAPPE-ADAPTER` (PO/SA authorisation 2026-10-15), within its `WORK_PACKAGE.md`, `ACCEPTANCE.md` and the Generation 6 `authorisedScope`; this exception grants no permission for any later milestone, for self-acceptance, or for baseline promotion.';
+/** The approved CLAUDE.md amendments, [baseline line, amended line], in the order they were authorised (IB3 §7, IB4 D1). */
+const CLAUDE_AMENDMENTS = [[CLAUDE_OLD, CLAUDE_NEW], [FRAPPE_OLD, FRAPPE_NEW]];
 /** 121 HOF-IB3-001 content keys plus the 2 the PO/SA added on 2026-10-07 (DDR-IB3-06, remediated to conformance). */
 const MESSAGE_COUNT = 123;
 const DDR06_KEYS = ['paep.shell.notifications.item.unread', 'paep.shell.account.button.named'];
@@ -68,6 +80,11 @@ const git = (...a) => spawnSync('git', a, { cwd: root, encoding: 'utf8', maxBuff
 const isSpec = (f) => /\.spec\.ts$/.test(f) || f.includes('/lib/testing/');
 const stripComments = (s) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`])\/\/[^\n]*/g, '$1');
 const importsOf = (s) => [...s.matchAll(/(?:^|\n)\s*(?:import|export)\s[^'"`;]*?from\s*['"]([^'"]+)['"]|(?:^|\n)\s*import\s*['"]([^'"]+)['"]|import\(\s*['"]([^'"]+)['"]\s*\)/g)].map((m) => m[1] || m[2] || m[3]);
+
+/** Static imports and re-exports that bring in values (not `import type` / `export type`), including side-effect imports. */
+const staticValueImportsOf = (s) => [...s.matchAll(/(?:^|\n)\s*(?:import|export)\s+(?!type\s)([^'"`;]*?)from\s*['"]([^'"]+)['"]|(?:^|\n)\s*import\s*['"]([^'"]+)['"]/g)]
+  .filter((m) => m[3] || !/^\{\s*(?:type\s+[A-Za-z0-9_$]+(?:\s+as\s+[A-Za-z0-9_$]+)?\s*,?\s*)+\}\s*$/.test(m[1].trim()))
+  .map((m) => m[2] || m[3]);
 
 const checks = [];
 const check = (id, name, findings, detail = '') => checks.push({ id, name, pass: findings.length === 0, detail: findings.length ? findings.slice(0, 12).join('; ') + (findings.length > 12 ? `; … ${findings.length - 12} more` : '') : detail });
@@ -100,8 +117,12 @@ const appFiles = walk(APP).filter((f) => /\.(ts|html)$/.test(f));
         if (!target.startsWith(`${APP}/`)) f.push(`${file}: relative import leaves the app (${spec})`);
         continue;
       }
+      if (APP_LAZY_IMPORTS.includes(spec)) continue;
       if (!APP_IMPORTS.includes(spec)) f.push(`${file}: ${spec}`);
     }
+    const s = stripComments(read(file));
+    for (const spec of staticValueImportsOf(s)) if (APP_LAZY_IMPORTS.includes(spec)) f.push(`${file}: ${spec} must be imported lazily (dynamic import() or import type only)`);
+    if (/\bimport\s*\(\s*(?!['"][^'"]+['"]\s*\))/.test(s)) f.push(`${file}: dynamic import() with a non-literal specifier`);
   }
   check('E01', 'Enterprise imports only its permitted packages through their single public entry points (no store framework, no deep import); the reference app composes only permitted packages', f, `${entFiles.length} enterprise and ${appFiles.length} app files`);
 }
@@ -211,24 +232,31 @@ const appFiles = walk(APP).filter((f) => /\.(ts|html)$/.test(f));
 
 // E09 milestone scope and dependencies against the accepted baseline (AC-IB3-22/23).
 let base = null;
+let candidateScope = [];
 {
   const f = [];
   try {
     const reg = JSON.parse(read('tooling/governance/baseline-registry.json'));
-    base = [...reg.generations].reverse().find((g) => g.status === 'ACCEPTED')?.acceptedCommit ?? null;
+    const active = [...reg.generations].reverse().find((g) => g.status === 'ACCEPTED');
+    base = active?.acceptedCommit ?? null;
+    // The one CANDIDATE that succeeds the active generation, with a well-formed scope; anything else admits nothing.
+    const candidates = reg.generations.filter((g) => g.status === 'CANDIDATE');
+    const c = candidates.length === 1 ? candidates[0] : null;
+    if (c && active && c.predecessorGeneration === active.generation && Array.isArray(c.authorisedScope) && c.authorisedScope.every((e) => typeof e === 'string')) candidateScope = c.authorisedScope;
   } catch { /* reported below */ }
+  const admitted = (p) => ADMITTABLE.some((re) => re.test(p)) && candidateScope.some((e) => covers(e, p));
   if (!base || git('cat-file', '-e', `${base}^{commit}`).status !== 0) f.push(`accepted baseline commit not available (${base})`);
   else {
-    const changed = git('diff', '--name-only', base, '--').stdout.split('\n').filter(Boolean);
+    const changed = git('diff', '--name-only', '--no-renames', base, '--').stdout.split('\n').filter(Boolean);
     const untracked = git('ls-files', '--others', '--exclude-standard').stdout.split('\n').filter(Boolean);
-    for (const p of [...changed, ...untracked]) if (FROZEN.some((re) => re.test(p))) f.push(`changed: ${p}`);
+    for (const p of [...changed, ...untracked]) if (FROZEN.some((re) => re.test(p)) && !admitted(p)) f.push(`changed: ${p}`);
     const was = JSON.parse(git('show', `${base}:package.json`).stdout || '{}');
     const now = JSON.parse(read('package.json'));
     for (const k of ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies', 'overrides', 'workspaces', 'engines', 'packageManager']) {
       if (JSON.stringify(was[k] ?? null) !== JSON.stringify(now[k] ?? null)) f.push(`package.json ${k} changed`);
     }
   }
-  check('E09', 'Milestone scope: package-lock.json, dependencies, runtime-config schema, paep-contracts, analytics, offline, frappe-sdk and domain packages unchanged since the accepted baseline', f, base ? `baseline ${base.slice(0, 12)}` : '');
+  check('E09', 'Milestone scope: package-lock.json, dependencies, runtime-config schema, paep-contracts, analytics, offline, frappe-sdk and domain packages unchanged since the accepted baseline, except the frappe-sdk and contracts sources the CANDIDATE scope authorises', f, base ? `baseline ${base.slice(0, 12)}; ${candidateScope.length ? 'candidate scope admits frappe-sdk/contracts source in scope' : 'no candidate scope'}` : '');
 }
 
 // E10 narrow CLAUDE.md amendment (§7).
@@ -237,19 +265,25 @@ let base = null;
   if (base && git('cat-file', '-e', `${base}^{commit}`).status === 0) {
     const was = git('show', `${base}:CLAUDE.md`).stdout.split('\n');
     const now = exists('CLAUDE.md') ? read('CLAUDE.md').split('\n') : [];
-    const i = was.indexOf(CLAUDE_OLD);
-    // Once Generation 5 is promoted, the accepted baseline already carries the amendment: CLAUDE.md must then equal it.
-    const promoted = i < 0 && was.includes(CLAUDE_NEW);
-    if (i < 0 && !promoted) f.push('baseline CLAUDE.md lacks the amended line');
-    else {
-      const expected = promoted ? was : [...was.slice(0, i), CLAUDE_NEW, ...was.slice(i + 1)];
+    // Baseline inspection decides each amendment's state: pending (the baseline still has its original line) or promoted
+    // (the baseline already carries it). At most one amendment may be pending; CLAUDE.md must equal the baseline with the
+    // pending one applied, or the baseline itself once every amendment is promoted.
+    const pending = [];
+    for (const [old, line] of CLAUDE_AMENDMENTS) {
+      const i = was.indexOf(old);
+      if (i >= 0 && !was.includes(line)) pending.push([i, line]);
+      else if (i < 0 && !was.includes(line)) f.push('baseline CLAUDE.md lacks the amended line');
+    }
+    if (pending.length > 1) f.push(`baseline CLAUDE.md has ${pending.length} pending amendments (at most one may be pending)`);
+    if (!f.length) {
+      const expected = pending.length ? [...was.slice(0, pending[0][0]), pending[0][1], ...was.slice(pending[0][0] + 1)] : was;
       if (JSON.stringify(now) !== JSON.stringify(expected)) {
         const diff = now.findIndex((l, k) => l !== expected[k]);
         f.push(`CLAUDE.md differs from the baseline plus the one approved amendment (first difference at line ${diff < 0 ? Math.min(now.length, expected.length) + 1 : diff + 1})`);
       }
     }
   } else f.push('accepted baseline commit not available');
-  check('E10', 'CLAUDE.md differs from the accepted baseline only by the one approved IB3-ENTERPRISE-SHELL exception line', f);
+  check('E10', 'CLAUDE.md differs from the accepted baseline only by the one pending approved exception line (IB3-ENTERPRISE-SHELL, IB4-FRAPPE-ADAPTER), and equals it once that is promoted', f);
 }
 
 // E11 clean-room scan of enterprise and the reference app (AC-IB3-19), extending design-system S06.

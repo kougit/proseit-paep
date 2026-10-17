@@ -1,15 +1,27 @@
 // Positive contract fixtures (PAEP-IB-01 Appendix D shapes). Compiled by tooling/test-utils/contracts-qa.mjs with the
 // contracts compiler options; every value must `satisfies` its contract with zero diagnostics and survive a JSON round trip.
 import type {
+  BlockedCompatibility,
+  CapabilitySet,
+  CompatibilityCheckResult,
   DatasetDescriptor,
   ExportJob,
+  FileAccessRequest,
+  FreshnessBatch,
+  FreshnessPollRequest,
   MoneyValue,
   OfflineCommandEnvelope,
   PaepError,
+  RecordDetail,
+  RecordListRequest,
+  RecordListResult,
   ReportQuery,
   ReportResult,
   SessionOutcome,
-  WorkflowTransitionRequest
+  SignInRequest,
+  SignOutResult,
+  WorkflowTransitionRequest,
+  WorkflowTransitionResult
 } from '@proseit/paep-contracts';
 
 export const datasetDescriptor = {
@@ -117,3 +129,64 @@ export const workflowTransition = {
 } satisfies WorkflowTransitionRequest;
 
 export const moneyValue = { amount: '1234.50', currency: 'EUR' } satisfies MoneyValue;
+
+// ---- IB4 (D5, ADR-011) product-neutral operation-port shapes ----------------------------------------------------
+
+export const recordListRequest = {
+  recordType: 'inspection',
+  query: { page: { limit: 20 }, sort: [{ field: 'modifiedAt', direction: 'desc' }], filters: [{ field: 'status', operator: 'in', value: ['open', 'review'] }] }
+} satisfies RecordListRequest;
+
+export const recordListResult = {
+  items: [
+    { recordType: 'inspection', id: 'rec-0001', fields: { title: 'Site A', status: 'open', score: 7, fee: { amount: '12.50', currency: 'EUR' }, tags: ['a', 'b'] }, modifiedAt: '2026-10-15T09:00:00Z', concurrency: { serverVersion: '2026-10-15T09:00:00Z' } },
+    { recordType: 'inspection', id: 'rec-0002', fields: { title: 'Site B', status: 'review', score: null } }
+  ],
+  nextCursor: 'cursor-20',
+  correlationId: 'corr-0101'
+} satisfies RecordListResult;
+
+export const recordDetail = {
+  recordType: 'inspection',
+  id: 'rec-0001',
+  fields: { title: 'Site A', status: 'open', approved: false },
+  concurrency: { serverVersion: '2026-10-15T09:00:00Z' },
+  createdAt: '2026-10-01T08:00:00Z',
+  modifiedAt: '2026-10-15T09:00:00Z',
+  correlationId: 'corr-0102'
+} satisfies RecordDetail;
+
+export const signInRequest = { returnPath: '/workspace' } satisfies SignInRequest;
+
+export const signOutResult = { outcome: { status: 'unauthenticated' }, correlationId: 'corr-0103' } satisfies SignOutResult;
+
+export const workflowTransitionResult = {
+  state: { stateKey: 'approved', labelKey: 'workflow.approved', allowedActions: [] },
+  concurrency: { serverVersion: '2026-10-15T09:05:00Z' },
+  correlationId: 'corr-0104'
+} satisfies WorkflowTransitionResult;
+
+export const fileAccessRequest = { owner: { recordType: 'inspection', id: 'rec-0001' }, fileId: 'file-0001' } satisfies FileAccessRequest;
+
+export const capabilitySet = {
+  capabilities: [{ id: 'inspection.create', enabled: true }, { id: 'inspection.delete', enabled: false, reasonKey: 'capabilities.locked' }],
+  evaluatedAt: '2026-10-15T09:00:00Z'
+} satisfies CapabilitySet;
+
+export const freshnessPollRequest = { scopes: [{ kind: 'record-type', recordType: 'inspection' }, { kind: 'record', recordType: 'inspection', id: 'rec-0001' }], cursor: 'c-1' } satisfies FreshnessPollRequest;
+
+export const freshnessBatch = {
+  signals: [
+    { scope: { kind: 'record', recordType: 'inspection', id: 'rec-0001' }, reason: 'changed', observedAt: '2026-10-15T09:06:00Z' },
+    { scope: { kind: 'record-type', recordType: 'inspection' }, reason: 'resync', observedAt: '2026-10-15T09:06:00Z' }
+  ],
+  cursor: 'c-2'
+} satisfies FreshnessBatch;
+
+export const compatibilityCompatible = {
+  status: 'compatible', schemaVersion: '1.0', apiContract: 'pmra-api-v1', paepVersion: '1.1', minimumPaep: '1.1', maximumPaep: null
+} satisfies CompatibilityCheckResult;
+
+export const compatibilityIncompatible = { status: 'incompatible', apiContract: 'pmra-api-v1', code: 'BACKEND_INCOMPATIBLE', correlationId: 'corr-0105' } satisfies BlockedCompatibility;
+
+export const compatibilityBlockedUnknown = { status: 'unknown', apiContract: 'pmra-api-v1', code: 'BACKEND_COMPATIBILITY_UNKNOWN' } satisfies CompatibilityCheckResult;

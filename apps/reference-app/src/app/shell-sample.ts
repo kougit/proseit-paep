@@ -155,16 +155,25 @@ const hooks: PaepShellHostHooks = {
   ],
 };
 
-/** Shell options of the reference application. */
-export function referenceShellOptions(store: RuntimeConfigStore): PaepShellOptions {
+/** The sample access rules, also used by the Frappe binding while the backend is not blocked. */
+export const referenceAvailability = (id: string): PaepShellAvailability => access.availability(id);
+
+/**
+ * Shell options of the reference application. With a Frappe binding (IB4, outside the development profile) the
+ * session and access ports come from the backend; every other input stays sample data.
+ */
+export function referenceShellOptions(
+  store: RuntimeConfigStore,
+  backend?: { readonly session: PaepShellSession; readonly access: PaepShellAccessInfo },
+): PaepShellOptions {
   return {
     runtimeConfig: store,
     navigation: REFERENCE_NAVIGATION,
-    access,
+    access: backend?.access ?? access,
     counts,
     commands,
     context: sampleContext(),
-    session: sampleSession(),
+    session: backend?.session ?? sampleSession(),
     notifications: sampleNotifications(),
     hooks,
   };

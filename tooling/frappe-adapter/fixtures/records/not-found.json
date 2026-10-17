@@ -1,0 +1,61 @@
+{
+  "id": "records.not-found",
+  "profile": "pmra-api-v1/frappe-15",
+  "kind": "error",
+  "description": "Unknown record: NOT_FOUND validation error.",
+  "steps": [
+    {
+      "call": {
+        "port": "records",
+        "method": "get",
+        "args": [
+          {
+            "recordType": "inspection",
+            "id": "INS-9999"
+          }
+        ]
+      },
+      "expect": {
+        "rejects": {
+          "code": "NOT_FOUND",
+          "category": "validation",
+          "retryable": false,
+          "correlationId": "$correlation"
+        }
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/pmra.api.v1.get_compatibility"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": {
+            "api_contract": "pmra-api-v1",
+            "minimum_paep": "1.0",
+            "maximum_paep": null
+          }
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/resource/PMRA%20Inspection/INS-9999"
+      },
+      "response": {
+        "status": 404,
+        "body": {
+          "exc_type": "DoesNotExistError",
+          "exception": "frappe.exceptions.DoesNotExistError: synthetic internal detail",
+          "exc": "[\"Traceback (most recent call last): synthetic\"]",
+          "_server_messages": "[\"{\\\"message\\\": \\\"synthetic server prose\\\"}\"]"
+        }
+      }
+    }
+  ]
+}

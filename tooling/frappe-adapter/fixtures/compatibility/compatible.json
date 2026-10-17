@@ -1,0 +1,43 @@
+{
+  "id": "compatibility.compatible",
+  "profile": "pmra-api-v1/frappe-15",
+  "kind": "conformance",
+  "description": "Backend publishes pmra-api-v1 for PAEP 1.0 and later: compatible.",
+  "steps": [
+    {
+      "call": {
+        "port": "compatibility",
+        "method": "check",
+        "args": []
+      },
+      "expect": {
+        "resolves": {
+          "status": "compatible",
+          "schemaVersion": "1.0",
+          "apiContract": "pmra-api-v1",
+          "paepVersion": "1.1",
+          "minimumPaep": "1.0",
+          "maximumPaep": null
+        }
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/pmra.api.v1.get_compatibility"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": {
+            "api_contract": "pmra-api-v1",
+            "minimum_paep": "1.0",
+            "maximum_paep": null
+          }
+        }
+      }
+    }
+  ]
+}

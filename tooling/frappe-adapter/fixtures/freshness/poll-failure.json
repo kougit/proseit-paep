@@ -1,0 +1,81 @@
+{
+  "id": "freshness.poll-failure",
+  "profile": "pmra-api-v1/frappe-15",
+  "kind": "error",
+  "description": "A failed poll rejects with a retryable PaepError (the poller then backs off and resyncs).",
+  "steps": [
+    {
+      "call": {
+        "port": "freshness",
+        "method": "poll",
+        "args": [
+          {
+            "scopes": [
+              {
+                "kind": "record",
+                "recordType": "inspection",
+                "id": "INS-0001"
+              }
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "rejects": {
+          "code": "SERVICE_UNAVAILABLE",
+          "category": "service-failure",
+          "retryable": true,
+          "correlationId": "$correlation"
+        }
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/pmra.api.v1.get_compatibility"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": {
+            "api_contract": "pmra-api-v1",
+            "minimum_paep": "1.0",
+            "maximum_paep": null
+          }
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/resource/PMRA%20Inspection"
+      },
+      "response": {
+        "status": 503,
+        "body": {}
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/resource/PMRA%20Inspection"
+      },
+      "response": {
+        "status": 503,
+        "body": {}
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/resource/PMRA%20Inspection"
+      },
+      "response": {
+        "status": 503,
+        "body": {}
+      }
+    }
+  ]
+}

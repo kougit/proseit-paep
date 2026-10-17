@@ -1,0 +1,322 @@
+{
+  "fixtureSetVersion": "1.1.0",
+  "compatibilityContract": "pmra-api-v1",
+  "provenance": {
+    "source": "synthetic",
+    "authoredBy": "Claude Code for ProSEIT (IB4-FRAPPE-ADAPTER)",
+    "basis": "Hand-authored from the public Frappe REST, session and CSRF documentation and the pmra-api-v1 definition in ADR-011. No captured production data, cookie value, CSRF token or credential; identities are generated placeholders."
+  },
+  "profiles": [
+    {
+      "id": "pmra-api-v1/frappe-15",
+      "apiContract": "pmra-api-v1",
+      "frappe": "15.x",
+      "paepRange": {
+        "minimum": "1.0",
+        "maximum": null
+      },
+      "expect": "compatible"
+    },
+    {
+      "id": "pmra-api-v2/frappe-15",
+      "apiContract": "pmra-api-v2",
+      "frappe": "15.x",
+      "paepRange": {
+        "minimum": "1.0",
+        "maximum": null
+      },
+      "expect": "incompatible"
+    },
+    {
+      "id": "pmra-api-v1/paep-2-only",
+      "apiContract": "pmra-api-v1",
+      "frappe": "15.x",
+      "paepRange": {
+        "minimum": "2.0",
+        "maximum": null
+      },
+      "expect": "incompatible"
+    },
+    {
+      "id": "unknown",
+      "apiContract": null,
+      "frappe": null,
+      "paepRange": null,
+      "expect": "unknown"
+    }
+  ],
+  "files": [
+    {
+      "path": "capabilities/discover.json",
+      "id": "capabilities.discover",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "conformance",
+      "sha256": "394955350ae3d56efee1d999da6384ff838e52f1df7fe229b326324c8cae27ff"
+    },
+    {
+      "path": "compatibility/compatible.json",
+      "id": "compatibility.compatible",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "conformance",
+      "sha256": "477e6ca7082fffc2d8a9e148d38a2133cb0e16021f46f995965c6a495c3eb04b"
+    },
+    {
+      "path": "compatibility/incompatible-contract.json",
+      "id": "compatibility.incompatible-contract",
+      "profile": "pmra-api-v2/frappe-15",
+      "kind": "error",
+      "sha256": "e63c86cb553575f059c0ac160032f61293eee5b87e19e4c770b164975cf7ec0f"
+    },
+    {
+      "path": "compatibility/incompatible-range.json",
+      "id": "compatibility.incompatible-range",
+      "profile": "pmra-api-v1/paep-2-only",
+      "kind": "error",
+      "sha256": "8c58e66874419fe2af15fc8d016b0789bc3c5bd9392616cc1c02423a72e93f97"
+    },
+    {
+      "path": "compatibility/unknown-malformed.json",
+      "id": "compatibility.unknown-malformed",
+      "profile": "unknown",
+      "kind": "malformed",
+      "sha256": "bff5a25299154aa7387c898f713f76f78b58e1e8c48e8622eef842a7498cbbab"
+    },
+    {
+      "path": "compatibility/unknown-missing-method.json",
+      "id": "compatibility.unknown-missing-method",
+      "profile": "unknown",
+      "kind": "error",
+      "sha256": "9225c3fa7730fd0b92246b9cbd794490247336e5a717e7811ce5f7669301a2d3"
+    },
+    {
+      "path": "files/access-foreign-origin.json",
+      "id": "files.access-foreign-origin",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "security",
+      "sha256": "a9b0f6e4a082b3c7402b2e5f6abf24abcc69d4fc7df1f9d194e65f85e4a18a86"
+    },
+    {
+      "path": "files/access-other-record.json",
+      "id": "files.access-other-record",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "security",
+      "sha256": "4d842aaab70c369de028c4dd5b8229fb97d50b7c90ee551613a0eed089d82d1e"
+    },
+    {
+      "path": "files/access-private.json",
+      "id": "files.access-private",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "conformance",
+      "sha256": "fb1ecde715eba444b59d3d28a9442bc11d3da52773775e13b6ee2e8e91743f86"
+    },
+    {
+      "path": "files/access-protocol-relative.json",
+      "id": "files.access-protocol-relative",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "security",
+      "sha256": "6dd351d70974ad9dbe66c3c32cbf892fd62bd1ba20afc50bebaf25b84755381b"
+    },
+    {
+      "path": "files/access-script.json",
+      "id": "files.access-script",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "security",
+      "sha256": "474476b08857def787d4fdc56b9e156f7cf9e4118b74b27ddd9da8bcb8f46199"
+    },
+    {
+      "path": "files/access-traversal.json",
+      "id": "files.access-traversal",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "security",
+      "sha256": "71f05250eed769d0a0de5cd0e8982a388a63cba022597db24ea72fb33bf4bd8b"
+    },
+    {
+      "path": "files/list.json",
+      "id": "files.list",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "conformance",
+      "sha256": "b0e80175b19d0c9d642f4f7b5f2163888d0956d5b0fd281eff637d31b07b8cef"
+    },
+    {
+      "path": "freshness/poll-changed.json",
+      "id": "freshness.poll-changed",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "conformance",
+      "sha256": "56db4a12d50d5d279048a420991d1f479d0d86ccd707d92267f7fed064ca4c31"
+    },
+    {
+      "path": "freshness/poll-deleted.json",
+      "id": "freshness.poll-deleted",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "conformance",
+      "sha256": "b5a2162ab703bfd62c890247a5e58ba8a3acbebb4c8e73fb1106951e28e7fb4f"
+    },
+    {
+      "path": "freshness/poll-failure.json",
+      "id": "freshness.poll-failure",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "error",
+      "sha256": "fe0c33d5e6a97a451375ed32c37ad45223c4aa4bb297d21da35fd393817c8949"
+    },
+    {
+      "path": "records/detail.json",
+      "id": "records.detail",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "conformance",
+      "sha256": "4135be9ebffa6bd1fac3a47f40be4c94af9d1b5c2f9a8f054d828f1b03a81dac"
+    },
+    {
+      "path": "records/list-last-page.json",
+      "id": "records.list-last-page",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "conformance",
+      "sha256": "8d855669651cb693a94292da11bded354b218d9c60436bde9b8cad18200e3b0c"
+    },
+    {
+      "path": "records/list-page.json",
+      "id": "records.list-page",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "conformance",
+      "sha256": "b8aa0956870c9b311b57db78eb075166af121cca8068a51a8755a907609951b8"
+    },
+    {
+      "path": "records/malformed-list.json",
+      "id": "records.malformed-list",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "malformed",
+      "sha256": "cfa87b1b79b05d2ab1b5014e8b79c69f4957ae82aa5abf6d6fbbb642a0c9552d"
+    },
+    {
+      "path": "records/not-found.json",
+      "id": "records.not-found",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "error",
+      "sha256": "479a504aefbab44895d05db998739b2297f8fae55e8609641158addbe58dd0a9"
+    },
+    {
+      "path": "records/permission-denied.json",
+      "id": "records.permission-denied",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "error",
+      "sha256": "5f6e862dbab619e8ce57323499a00209e4d87982fb7fa9f547a240f166df4708"
+    },
+    {
+      "path": "records/rate-limited.json",
+      "id": "records.rate-limited",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "error",
+      "sha256": "a3bc527ce926d4094591884703ae9fd7e30fd5f1e939b280d24215fd391982b1"
+    },
+    {
+      "path": "records/unknown-resource.json",
+      "id": "records.unknown-resource",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "security",
+      "sha256": "f5990836d2506abaf6f0f87301c7234c03c9428d1e3762a6509a853e225e3495"
+    },
+    {
+      "path": "session/authenticated.json",
+      "id": "session.authenticated",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "conformance",
+      "sha256": "5d0241a99b62e8f0f96108ba1b2cc6273e417ff973cc77e77e091e8e8416a29c"
+    },
+    {
+      "path": "session/csrf-rejected.json",
+      "id": "session.csrf-rejected",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "security",
+      "sha256": "435891894e524f553ccbd7e0ebae9fe36377881bdda6641ae425e12c72045c7b"
+    },
+    {
+      "path": "session/expired.json",
+      "id": "session.expired",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "error",
+      "sha256": "241f3ac6e609baac7d3861236497c891646a716a6af6dc51bb84e1d089d1d016"
+    },
+    {
+      "path": "session/guest.json",
+      "id": "session.guest",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "conformance",
+      "sha256": "a93d1c85e6436bf0fcc2cea97686475c8c53f15ab461f6d56f51c83729ce84f8"
+    },
+    {
+      "path": "session/invalid-payload.json",
+      "id": "session.invalid-payload",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "security",
+      "sha256": "779c69ff31ff7687d456b8843eab54c2a88fbb89e1e75d3d692b4d291525799d"
+    },
+    {
+      "path": "session/sign-out.json",
+      "id": "session.sign-out",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "conformance",
+      "sha256": "75b9d04be6855d75045adefd5e2b028d1e81ff77c9409df374dad7c681859eaa"
+    },
+    {
+      "path": "workflow/action-not-offered.json",
+      "id": "workflow.action-not-offered",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "security",
+      "sha256": "3b33765334640dc4619692796eb5e6e046ba5dd3cd6d03cab44812db852f374f"
+    },
+    {
+      "path": "workflow/state.json",
+      "id": "workflow.state",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "conformance",
+      "sha256": "c607b60f9bb51bb03f97b27c403b02769dc00c4616d1c0e8a2a3bcbb2aa8bfe2"
+    },
+    {
+      "path": "workflow/transition-approve.json",
+      "id": "workflow.transition-approve",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "conformance",
+      "sha256": "d476b5a037eca3e46cdea427921dd6a84bdb2b04b083fbad9bccc7202e508550"
+    },
+    {
+      "path": "workflow/transition-denied.json",
+      "id": "workflow.transition-denied",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "error",
+      "sha256": "19cdb432ed64934365c82f796bbfb49233230ca9001ecf812f30a46329ef6663"
+    },
+    {
+      "path": "workflow/transition-method-absent.json",
+      "id": "workflow.transition-method-absent",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "error",
+      "sha256": "1afde00f8692e1cef9cf219596802eac2bc7e41db4750e05ca6f431af6d51d07"
+    },
+    {
+      "path": "workflow/transition-permission-denied.json",
+      "id": "workflow.transition-permission-denied",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "error",
+      "sha256": "d0ce7897d165e121539f711a6a6d0152f29c2dd5033617ce6efa64750a1a4b4c"
+    },
+    {
+      "path": "workflow/transition-server-conflict.json",
+      "id": "workflow.transition-server-conflict",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "error",
+      "sha256": "56c766372837fb80dfc5c2b18ab2df7508fca79b80884b4d82ccc90c7ba52079"
+    },
+    {
+      "path": "workflow/transition-stale.json",
+      "id": "workflow.transition-stale",
+      "profile": "pmra-api-v1/frappe-15",
+      "kind": "error",
+      "sha256": "1c429459922f8564b527ca1d66ed7a74f24da17188f567157bad5f588f4000e1"
+    }
+  ],
+  "kinds": [
+    "conformance",
+    "error",
+    "malformed",
+    "security"
+  ]
+}

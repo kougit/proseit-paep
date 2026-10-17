@@ -1,0 +1,106 @@
+{
+  "id": "workflow.state",
+  "profile": "pmra-api-v1/frappe-15",
+  "kind": "conformance",
+  "description": "Workflow state and the server-allowed actions, filtered to the approved vocabulary.",
+  "steps": [
+    {
+      "call": {
+        "port": "workflow",
+        "method": "getState",
+        "args": [
+          {
+            "recordType": "inspection",
+            "id": "INS-0001"
+          }
+        ]
+      },
+      "expect": {
+        "resolves": {
+          "stateKey": "review",
+          "labelKey": "inspection.state.review",
+          "allowedActions": [
+            {
+              "id": "approve",
+              "labelKey": "inspection.action.approve"
+            },
+            {
+              "id": "reject",
+              "labelKey": "inspection.action.reject"
+            }
+          ],
+          "concurrency": {
+            "serverVersion": "2026-10-15 09:00:00.000001"
+          }
+        }
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/pmra.api.v1.get_compatibility"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": {
+            "api_contract": "pmra-api-v1",
+            "minimum_paep": "1.0",
+            "maximum_paep": null
+          }
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/resource/PMRA%20Inspection/INS-0001"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "data": {
+            "name": "INS-0001",
+            "modified": "2026-10-15 09:00:00.000001",
+            "title": "Site A",
+            "status": "Open",
+            "score": 7,
+            "site_code": "S-01",
+            "workflow_state": "Pending Review",
+            "docstatus": 0
+          }
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/frappe.model.workflow.get_transitions"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": [
+            {
+              "action": "Approve",
+              "next_state": "Approved",
+              "allowed": "Reviewer"
+            },
+            {
+              "action": "Reject",
+              "next_state": "Draft",
+              "allowed": "Reviewer"
+            },
+            {
+              "action": "Escalate To Admin",
+              "next_state": "Admin",
+              "allowed": "All"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

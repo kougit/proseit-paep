@@ -17,9 +17,9 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const GATE = path.join(root, 'tooling/enterprise-shell/enterprise-qa.mjs');
 const SKIP = new Set(['node_modules', 'dist', '.angular', 'tmp', '.vitest-attachments']);
-const EXPECTED_CASES = 39;
-/** P00 plus the two E10 baseline-aware positives P01 and P02. */
-const CONTROLS = 3;
+const EXPECTED_CASES = 55;
+/** P00, the IB3 E10 positives P01-P02 and the IB4 rescoping positives P03-P07 (E10, E09, E01). */
+const CONTROLS = 8;
 const ENT = 'packages/enterprise/src';
 const NAV = `${ENT}/lib/nav/nav.ts`;
 const SHELL = `${ENT}/lib/shell/shell.ts`;
@@ -57,10 +57,11 @@ const summary = (report) => (report?.checks || []).map((c) => `${c.id}:${c.pass 
   results.push({ id: 'P00', name: 'control: the unmutated copy reproduces the gate result on the repository', pass, detail: `${summary(there.report)} (exit ${there.status})` });
 }
 
-function negative(id, name, edits, target, finding, expectPass = false) {
+function negative(id, name, edits, target, finding, expectPass = false, { setup, teardown } = {}) {
   const saved = new Map();
   let r;
   try {
+    setup?.();
     for (const [file, fn] of edits) {
       const p = path.join(copy, file);
       const before = fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : null;
@@ -77,6 +78,7 @@ function negative(id, name, edits, target, finding, expectPass = false) {
       if (before === null) fs.rmSync(p, { force: true });
       else fs.writeFileSync(p, before);
     }
+    teardown?.();
   }
   const c = r.report?.checks.find((x) => x.id === target);
   const pass = expectPass ? Boolean(c) && c.pass : r.status === 1 && Boolean(c) && !c.pass && finding.test(c.detail);
@@ -110,7 +112,9 @@ negative('N22', 'permission guard exported by enterprise', [[NAV, append("import
 negative('N23', '/login route in the reference app', [[ROUTES, replace("path: 'workspace',", "path: 'login',")]], 'E08', /unapproved route "login"/);
 negative('N24', 'package-lock.json changed', [['package-lock.json', (t) => t.replace(/\n$/, '\n\n')]], 'E09', /changed: package-lock\.json/);
 negative('N25', 'new devDependency', [['package.json', (t) => { const p = JSON.parse(t); p.devDependencies = { ...p.devDependencies, 'left-pad': '1.3.0' }; return JSON.stringify(p, null, 2) + '\n'; }]], 'E09', /package\.json devDependencies changed/);
-negative('N26', 'paep-contracts changed', [['packages/contracts/src/index.ts', append('// probe')]], 'E09', /changed: packages\/contracts\/src\/index\.ts/);
+// N26 (IB4 D9): the contracts source is admitted inside the Generation 6 scope, so the frozen-contracts case targets the
+// contracts manifest, which stays frozen in every generation.
+negative('N26', 'paep-contracts manifest changed', [['packages/contracts/package.json', (t) => t.replace(/\n$/, '\n\n')]], 'E09', /changed: packages\/contracts\/package\.json/);
 negative('N27', 'CLAUDE.md widened beyond the one approved line', [['CLAUDE.md', append('- Claude may accept its own work packages.')]], 'E10', /differs from the baseline plus the one approved amendment/);
 negative('N28', 'commercial-template term in an enterprise stylesheet', [[`${ENT}/lib/shell/shell.css`, append('/* adapted from primeng layout */')]], 'E11', /shell\.css: forbidden term \/primeng\/i/);
 negative('N29', 'Angular favicon.ico back in the reference app', [['apps/reference-app/public/favicon.ico', () => 'ico']], 'E11', /favicon\.ico \(Angular logo\) still present/);
@@ -160,6 +164,49 @@ negative('P02', 'control: E10 passes when the baseline already carries the amend
 negative('N37', 'E10 baseline with the amendment: CLAUDE.md differs from it', [atBaseline(postBase), ['CLAUDE.md', drift]], 'E10', /differs from the baseline plus the one approved amendment/);
 negative('N38', 'E10 baseline with the amendment: CLAUDE.md reverts to the pre-amendment line', [atBaseline(postBase), ['CLAUDE.md', () => withoutAmendment]], 'E10', /differs from the baseline plus the one approved amendment/);
 negative('N39', 'E10 fails closed when the baseline has neither the original nor the approved line', [atBaseline(baselineCommit(withNeither))], 'E10', /baseline CLAUDE\.md lacks the amended line/);
+
+// IB4 rescoping (PO/SA authorisation 2026-10-15, D9). The same synthetic-baseline technique proves E10 for the IB4 line
+// before and after Generation 6 promotion, and E09 / E01 for the admitted adapter and contracts sources.
+const FRAPPE_OLD = '- Do not implement Frappe/ERPNext integration in this work package.';
+const FRAPPE_NEW_PREFIX = '- Do not implement Frappe/ERPNext integration, except under';
+const frappeLine = claudeNow.split('\n').find((l) => l.startsWith(FRAPPE_NEW_PREFIX));
+if (!frappeLine) throw new Error('CLAUDE.md carries no approved IB4 amendment line');
+const frappePending = claudeNow.replace(frappeLine, FRAPPE_OLD);
+const frappePre = baselineCommit(frappePending);
+const broadened = (t) => t.replace(frappeLine, frappeLine.replace('the PO/SA-authorised work package `IB4-FRAPPE-ADAPTER`', 'the PO/SA-authorised work packages `IB4-FRAPPE-ADAPTER` and its successors'));
+negative('P03', 'control: E10 passes when the baseline lacks the IB4 amendment and CLAUDE.md adds exactly the approved IB4 line', [atBaseline(frappePre)], 'E10', null, true);
+negative('N40', 'E10 before G6 promotion: CLAUDE.md lacks the approved IB4 line', [atBaseline(frappePre), ['CLAUDE.md', () => frappePending]], 'E10', /differs from the baseline plus the one approved amendment/);
+negative('N41', 'E10 before G6 promotion: the IB4 line is broadened', [atBaseline(frappePre), ['CLAUDE.md', broadened]], 'E10', /differs from the baseline plus the one approved amendment/);
+negative('N42', 'E10 before G6 promotion: the IB4 line is removed', [atBaseline(frappePre), ['CLAUDE.md', (t) => t.replace(`${frappeLine}\n`, '')]], 'E10', /differs from the baseline plus the one approved amendment/);
+negative('P04', 'control: E10 passes after G6 promotion when CLAUDE.md equals the promoted baseline', [atBaseline(postBase)], 'E10', null, true);
+negative('N43', 'E10 after G6 promotion: CLAUDE.md reverts to the pre-IB4 line', [atBaseline(postBase), ['CLAUDE.md', () => frappePending]], 'E10', /differs from the baseline plus the one approved amendment/);
+negative('N44', 'E10 after G6 promotion: the IB4 line is broadened', [atBaseline(postBase), ['CLAUDE.md', broadened]], 'E10', /differs from the baseline plus the one approved amendment/);
+negative('N45', 'E10 fails closed when two amendments are pending at once', [atBaseline(baselineCommit(withoutAmendment.replace(frappeLine, FRAPPE_OLD)))], 'E10', /2 pending amendments/);
+negative('N46', 'E10 fails closed when the baseline has neither the original nor the approved IB4 line', [atBaseline(baselineCommit(claudeNow.replace(`${frappeLine}\n`, '')))], 'E10', /baseline CLAUDE\.md lacks the amended line/);
+
+const SDK = 'packages/frappe-sdk/src/index.ts';
+const regEdit = (fn) => [REGISTRY, (t) => { const reg = JSON.parse(t); fn(reg); return `${JSON.stringify(reg, null, 2)}\n`; }];
+const candidateOf = (reg) => reg.generations.find((g) => g.status === 'CANDIDATE');
+// "Promoted": the candidate becomes the active ACCEPTED generation at a synthetic commit equal to the copy's tree.
+const promotedAt = (commit) => regEdit((reg) => { const c = candidateOf(reg); c.status = 'ACCEPTED'; c.acceptedCommit = commit; });
+negative('N47', 'E09: frappe-sdk manifest changed (outside the admitted sources)', [['packages/frappe-sdk/package.json', (t) => t.replace(/\n$/, '\n\n')]], 'E09', /changed: packages\/frappe-sdk\/package\.json/);
+negative('N48', 'E09: candidate scope widened to analytics, analytics source changed', [regEdit((reg) => { candidateOf(reg).authorisedScope.push('packages/analytics/src/'); }), ['packages/analytics/src/index.ts', append('// probe')]], 'E09', /changed: packages\/analytics\/src\/index\.ts/);
+negative('N49', 'E09: contracts source changed with no candidate in the registry', [regEdit((reg) => { reg.generations = reg.generations.filter((g) => g.status !== 'CANDIDATE'); }), ['packages/contracts/src/index.ts', append('// probe')]], 'E09', /changed: packages\/contracts\/src\/index\.ts/);
+negative('N50', 'E09: frappe-sdk source changed while the candidate scope omits it', [regEdit((reg) => { const c = candidateOf(reg); c.authorisedScope = c.authorisedScope.filter((e) => e !== 'packages/frappe-sdk/src/'); }), [SDK, append('// probe')]], 'E09', /changed: packages\/frappe-sdk\/src\/index\.ts/);
+negative('N51', 'E09: a frozen file moved into the admitted adapter source (rename detection off)', [], 'E09', /changed: packages\/offline\/src\/index\.ts/, false, {
+  setup: () => gitIn(['mv', 'packages/offline/src/index.ts', 'packages/frappe-sdk/src/moved.ts']),
+  teardown: () => gitIn(['mv', 'packages/frappe-sdk/src/moved.ts', 'packages/offline/src/index.ts']),
+});
+negative('P05', 'control: E09 admits an in-scope frappe-sdk source change while the G6 candidate is open', [[SDK, append('// probe')]], 'E09', null, true);
+const promotedBase = baselineCommit(claudeNow);
+negative('P06', 'control: E09 passes after G6 promotion when nothing changed since the promoted baseline', [promotedAt(promotedBase)], 'E09', null, true);
+negative('N52', 'E09 after G6 promotion: a frappe-sdk source change is frozen again (no candidate)', [promotedAt(promotedBase), [SDK, append('// probe')]], 'E09', /changed: packages\/frappe-sdk\/src\/index\.ts/);
+
+const lazyApp = "import type { FrappeAdapter } from '@proseit/frappe-sdk';\nexport const loadAdapter = (): Promise<FrappeAdapter> => import('@proseit/frappe-sdk').then((m) => m.createFrappeAdapter);";
+negative('N53', 'E01: reference app value-imports frappe-sdk statically (eager)', [[APP_TS, (t) => `import { createFrappeAdapter } from '@proseit/frappe-sdk';\n${t}`]], 'E01', /app\.ts: @proseit\/frappe-sdk must be imported lazily/);
+negative('N54', 'E01: reference app dynamic import with a non-literal specifier', [[APP_TS, append("const sdk = '@proseit/frappe-sdk';\nexport const loadAny = () => import(sdk);")]], 'E01', /app\.ts: dynamic import\(\) with a non-literal specifier/);
+negative('N56', 'E01: reference app deep-imports frappe-sdk lazily', [[APP_TS, append("export const loadDeep = () => import('@proseit/frappe-sdk/src/lib/transport');")]], 'E01', /app\.ts: @proseit\/frappe-sdk\/src\/lib\/transport/);
+negative('P07', 'control: E01 passes when the reference app imports frappe-sdk only lazily and type-only', [[APP_TS, append(lazyApp)]], 'E01', null, true);
 
 fs.rmSync(scratch, { recursive: true, force: true });
 const coverage = [];

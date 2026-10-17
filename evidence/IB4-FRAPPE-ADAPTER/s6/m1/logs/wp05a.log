@@ -1,0 +1,30 @@
+PASS G00 control: every mandatory job succeeded — exit 0
+PASS G02 mandatory job provenance failed — exit 1
+PASS G05 mandatory job negative-architecture failed — exit 1
+PASS G07 mandatory job regression failed — exit 1
+PASS GJ10 mandatory job runtime-config-negative failed — exit 1
+PASS GJ14 mandatory job build-reference-app failed — exit 1
+PASS GJ17 mandatory job shell-browser failed — exit 1
+PASS GJ19 mandatory job frappe-adapter failed — exit 1
+PASS G11 mandatory job skipped (architecture) — exit 1
+PASS G14 unexpected extra job in needs — exit 1
+PASS G18 unknown result value (neutral) — exit 1
+PASS A02 (xii) prohibited change: domain-quality -> domain-fiscal (same category, not allowlisted) fails qa:architecture — exit 1
+PASS A04 (xii) prohibited change: nested package.json boundary fails the governance gate — exit 1
+PASS S01 (ii) TypeScript strict violation (implicit any, null to string) fails qa:types — exit 1
+PASS S03 (ii) strictTemplates false fails the strictness gate — exit 1
+PASS H02 (iv) checker that stops reporting cycles makes WP04 negative cases fail, failing the negative-architecture gate — exit 1
+PASS L00 control: npm ci --dry-run accepts the committed manifests — exit 0
+PASS T02 (vi) running Node differs from a consistent pin (all pins 24.20.0) fails the toolchain gate — exit 1
+PASS I02 (viii) install script allowed (esbuild: true) fails the provenance gate — exit 1
+PASS I04 (viii) npm install with scripts enabled in a workflow step fails the provenance gate — exit 1
+PASS F01 (ix) one byte changed in a controlled source fails the governance gate — exit 1
+PASS F02 (ix) CLAUDE.md changed fails the governance gate — exit 1
+PASS F04 (ix) accepted WP04 record moved into work-packages/IB0-WP05 (committed rename) fails the governance gate — exit 1
+PASS P17 (xi) escaped "${{" (\x24) in a double-quoted value fails the provenance gate — exit 1
+PASS P22 (viii) continue-on-error on the setup npm ci step fails the provenance gate — exit 1
+PASS K05 accepted regression command weakened in the policy and the workflow together fails the provenance gate — exit 1
+
+part a: ran 26 of 105 declared cases; the other 79 run in part b: C06 G01 G03 G06 G09 GJ12 GJ15 G10 G13 G16 G17 C03 C07 C08 A01 S02 S04 L01 L02 L03 T01 I03 X01 X04 P16 P18 P19 P21 P20 N02 N03 K07; part c: G04 G08 GJ11 GJ13 GJ16 GJ18 G12 G15 C01 C02 C04 C05 A03 B01 H01 T03 T04 T05 T06 I01 F03 X02 X03 P01 P02 P03 P04 P05 P06 P07 P08 P09 P10 P11 P12 P13 P14 P15 P23 P24 N01 K01 K02 K03 K08 K04 K06
+
+IB0-WP05 negative CI-control tests (part a): PASS (26/26; 2 controls, 24 negatives)

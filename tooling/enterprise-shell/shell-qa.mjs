@@ -115,7 +115,12 @@ export function serveStrict(dir = DIST, { nonce = 'fresh', policy = (d) => d, ht
     res.writeHead(200, headers);
     res.end(body);
   });
-  return new Promise((resolve) => server.listen(0, '127.0.0.1', () => resolve({ url: `http://127.0.0.1:${server.address().port}`, dir, close: () => new Promise((r) => server.close(r)) })));
+  return new Promise((resolve) => server.listen(0, '127.0.0.1', () => resolve({ url: `http://127.0.0.1:${server.address().port}`, dir, close: () => new Promise((r) => {
+    // Stop listening, then drop the browser's keep-alive connections: server.close() alone waits for every open
+    // connection, which a still-open browser context can hold indefinitely (seen as a hung CI job).
+    server.close(r);
+    server.closeAllConnections();
+  }) })));
 }
 
 const settle = (page, ms = 250) => page.waitForTimeout(ms);

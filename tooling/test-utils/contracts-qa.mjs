@@ -162,12 +162,15 @@ for (const f of contractFiles) {
 
 // ---- S4 neutrality ------------------------------------------------------------------------------------------------
 section('S4', 'neutrality');
-const FORBIDDEN = ['frappe', 'doctype', 'angular', 'rxjs', 'observable', 'echarts', 'powerbi', 'power-bi', 'chart.js', 'highcharts', 'sql', 'select ', 'jdbc', 'window', 'document', 'htmlelement'];
+const FORBIDDEN = ['frappe', 'doctype', 'angular', 'rxjs', 'observable', 'echarts', 'powerbi', 'power-bi', 'chart.js', 'highcharts', 'sql', 'select ', 'jdbc', 'window', 'document', 'htmlelement',
+  // IB4 D3/D4 (ADR-011): no transport, socket or credential vocabulary in the product-neutral contracts.
+  'socket', 'engine.io', 'eventsource', 'xmlhttprequest', 'csrf', 'cookie', 'bearer'];
 /** Controlled exceptions to the vocabulary rule. Each names the declaration, the literal and the controlled source that requires it. */
 const VOCABULARY_ALLOWLIST = [
   { owner: 'IdentityMode', text: 'frappe-session', source: 'PAEP-IB-01 §9.1/§9.3 identity.mode value "frappe-session" (runtime-config schema 1.0); an opaque mode identifier, not a Frappe type' }
 ];
-const RECORD_ALLOWLIST = ['PaepError.fieldErrors', 'FeaturesConfig.uiHints', 'ReportQuery.parameters', 'ReportRow', 'ReportResult.totals', 'DrillRequest.sourceContext'];
+// IB4 D5 (ADR-011): RecordSummary.fields / RecordDetail.fields are keyed by the record type's own semantic field keys.
+const RECORD_ALLOWLIST = ['PaepError.fieldErrors', 'FeaturesConfig.uiHints', 'ReportQuery.parameters', 'ReportRow', 'ReportResult.totals', 'DrillRequest.sourceContext', 'RecordSummary.fields', 'RecordDetail.fields'];
 const hasMod = (n, k) => !!n.modifiers?.some((m) => m.kind === k);
 const ownerPath = (n) => {
   let prop; let decl;
@@ -266,7 +269,12 @@ const DOM_FIXTURES = {
   Response: 'export interface Probe { readonly response: Response }',
   document: 'export type Probe = typeof document;',
   window: 'export type Probe = typeof window;',
-  HTMLElement: 'export interface Probe { readonly host: HTMLElement }'
+  HTMLElement: 'export interface Probe { readonly host: HTMLElement }',
+  // IB4 D4: browser transport types never cross the contract boundary.
+  WebSocket: 'export interface Probe { readonly socket: WebSocket }',
+  EventSource: 'export interface Probe { readonly stream: EventSource }',
+  Headers: 'export interface Probe { readonly headers: Headers }',
+  RequestInit: 'export interface Probe { readonly init: RequestInit }'
 };
 for (const [name, text] of Object.entries(DOM_FIXTURES)) {
   const d = diagnosticsOf(program(contractFiles, contractsOptions, { [FIXTURE]: `import type { MoneyValue } from './index.js';\nexport type Uses = MoneyValue;\n${text}\n` }));
@@ -290,7 +298,13 @@ const INJECTIONS = {
   'function-typed property': `${indexText}\nexport interface Injected { readonly cb: () => void }\n`,
   'vendor string literal': `${indexText}\nexport type Injected = 'echarts-option';\n`,
   'SQL string literal': `${indexText}\nexport type Injected = 'select * from t';\n`,
-  'DocType identifier': `${indexText}\nexport interface InjectedDocType { readonly name: string }\n`
+  'DocType identifier': `${indexText}\nexport interface InjectedDocType { readonly name: string }\n`,
+  // IB4 D4/D5 forbidden imports and shapes: a Socket.IO client type, a transport-named port, a callback subscription.
+  'import from socket.io-client': `import type { Socket } from 'socket.io-client';\nexport type Injected = Socket;\n${indexText}`,
+  'import from @proseit/frappe-sdk': `import type { X } from '@proseit/frappe-sdk';\nexport type Injected = X;\n${indexText}`,
+  'socket-named port': `${indexText}\nexport interface InjectedSocketGateway { poll(): Promise<string> }\n`,
+  'callback subscription in a Gateway': `${indexText}\nexport interface InjectedFreshnessGateway { subscribe(listener: (scope: string) => void): Promise<void> }\n`,
+  'CSRF field': `${indexText}\nexport interface Injected { readonly csrfToken: string }\n`
 };
 for (const [name, text] of Object.entries(INJECTIONS)) {
   const { violations } = neutrality(parse(CONTRACTS_INDEX, text));
@@ -335,7 +349,9 @@ const posSf = parse(POSITIVE, positiveText);
 const satisfiesCount = (() => { let c = 0; const w = (n) => { if (ts.isSatisfiesExpression(n)) c += 1; ts.forEachChild(n, w); }; w(posSf); return c; })();
 const positiveImports = posSf.statements.filter(ts.isImportDeclaration).map((s) => [s.moduleSpecifier.text, s.importClause?.isTypeOnly]);
 check('fixtures import only the public entry, type-only', positiveImports.length === 1 && positiveImports[0][0] === '@proseit/paep-contracts' && positiveImports[0][1] === true);
-const REQUIRED_POSITIVE = ['ib01RuntimeConfigExample', 'reportResult', 'exportJob', 'paepError', 'offlineCommand', 'sessionAuthenticated', 'workflowTransition', 'moneyValue'];
+const REQUIRED_POSITIVE = ['ib01RuntimeConfigExample', 'reportResult', 'exportJob', 'paepError', 'offlineCommand', 'sessionAuthenticated', 'workflowTransition', 'moneyValue',
+  // IB4 D5 additions
+  'recordListResult', 'recordDetail', 'signOutResult', 'workflowTransitionResult', 'fileAccessRequest', 'capabilitySet', 'freshnessBatch', 'compatibilityBlockedUnknown', 'compatibilityIncompatible'];
 const posJs = ts.transpileModule(positiveText, { compilerOptions: { module: ts.ModuleKind.ES2022, target: ts.ScriptTarget.ES2022, verbatimModuleSyntax: true } }).outputText;
 const posModulePath = path.join(work, 'positive-fixtures.mjs');
 fs.writeFileSync(posModulePath, posJs, 'utf8');
@@ -362,7 +378,17 @@ const NEGATIVE = [
   ['write through a readonly record map', 'PaepError', `declare const e: PaepError;\nif (e.fieldErrors) e.fieldErrors['a'] = [];`, [2542]],
   ['ReportRow value as an arbitrary object (only scalars or MoneyValue)', 'ReportRow', `const r: ReportRow = { a: { nested: 1 } };`, [2353]],
   ['ReportRow money cell without a currency', 'ReportRow', `const r: ReportRow = { a: { amount: '1.00' } };`, [2322, 2741]],
-  ['record-map read is possibly undefined (noUncheckedIndexedAccess)', 'ReportRow', `declare const r: ReportRow;\nconst s: string | number | boolean | null = r['a'];`, [2322]]
+  ['record-map read is possibly undefined (noUncheckedIndexedAccess)', 'ReportRow', `declare const r: ReportRow;\nconst s: string | number | boolean | null = r['a'];`, [2322]],
+  // IB4 D3/D4/D5/D10 additions
+  ['InvalidationSignal carrying record data', 'InvalidationSignal', `const s: InvalidationSignal = { scope: { kind: 'record', recordType: 'a', id: '1' }, reason: 'changed', observedAt: '2026-10-15T00:00:00Z', fields: { a: 1 } };`, [2353]],
+  ["InvalidationReason 'push'", 'InvalidationReason', `const r: InvalidationReason = 'push';`, [2322]],
+  ["FreshnessScope kind 'socket-room'", 'FreshnessScope', `const s: FreshnessScope = { kind: 'socket-room', recordType: 'a' };`, [2322]],
+  ["BlockedCompatibility status 'compatible'", 'BlockedCompatibility', `const b: BlockedCompatibility = { status: 'compatible', apiContract: 'pmra-api-v1', code: 'X' };`, [2322, 2820]],
+  ['RecordDetail without a concurrency token', 'RecordDetail', `const d: RecordDetail = { recordType: 'a', id: '1', fields: {} };`, [2741]],
+  ['write through RecordDetail.fields', 'RecordDetail', `declare const d: RecordDetail;\nd.fields['a'] = 1;`, [2542]],
+  ['RecordSummary field as an arbitrary object', 'RecordSummary', `const r: RecordSummary = { recordType: 'a', id: '1', fields: { a: { nested: 1 } } };`, [2322, 2353]],
+  ['FileAccessRequest with a client-built path', 'FileAccessRequest', `const f: FileAccessRequest = { owner: { recordType: 'a', id: '1' }, fileId: 'f', path: '/private/files/x' };`, [2353]],
+  ['SignOutResult without an outcome', 'SignOutResult', `const r: SignOutResult = {};`, [2741]]
 ];
 const NEG = R('tooling/test-utils/fixtures/__negative__.ts'); // virtual only
 for (const [name, type, body, expected] of NEGATIVE) {

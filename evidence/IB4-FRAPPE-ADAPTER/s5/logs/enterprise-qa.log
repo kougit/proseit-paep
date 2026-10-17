@@ -1,0 +1,14 @@
+PASS E01 Enterprise imports only its permitted packages through their single public entry points (no store framework, no deep import); the reference app composes only permitted packages — 40 enterprise and 12 app files
+PASS E02 Public-API census: the entry point exports exactly the 15 approved shell symbols and the 15 provider, token and message values — 30 value exports
+PASS E03 No generic primitive reimplemented in enterprise: shell selectors only, native dialogs only on PaepModalBase, no popover="manual" or private positioning
+PASS E04 Shell messages: exactly 123 approved paep.shell.* keys (121 HOF + 2 DDR-IB3-06) with English defaults; every key the shell names exists — 123 keys
+PASS E05 No unsafe HTML, script evaluation, window.open or location redirects in enterprise or the reference app
+PASS E06 No browser storage, cookies, cache storage or service worker in enterprise or the reference app (session-only preferences)
+PASS E07 No permission-granting route guard in enterprise or the reference app (the server decides)
+PASS E08 Reference-app routes are exactly the approved set: workspace, locked and error demonstrations, not found (optional diagnostics); no /login, /analytics* or /offline-demo — "", "workspace", "locked/:reason", "error-demo", "**"
+PASS E09 Milestone scope: package-lock.json, dependencies, runtime-config schema, paep-contracts, analytics, offline, frappe-sdk and domain packages unchanged since the accepted baseline, except the frappe-sdk and contracts sources the CANDIDATE scope authorises — baseline 10462434ebb9; candidate scope admits frappe-sdk/contracts source in scope
+PASS E10 CLAUDE.md differs from the accepted baseline only by the one pending approved exception line (IB3-ENTERPRISE-SHELL, IB4-FRAPPE-ADAPTER), and equals it once that is promoted
+PASS E11 Clean-room: no Ultima, PrimeNG, SAP Fiori/UI5, Angular Material/CDK or commercial-theme terms in enterprise or the reference app; the reference-app favicon is the approved placeholder mark — 72 files scanned
+PASS E12 The approved HOF-IB3-001 v1.0 handoff is retained verbatim: approved manifest hash and status, every listed file matches its sha256, no unlisted file — manifest 645dd2e9bb42…; 577/577 files intact
+
+PAEP enterprise-shell QA: PASS (12/12)

@@ -1,0 +1,38 @@
+PASS P00 control: the unmutated copy reproduces the gate result on the repository — F01:PASS F02:PASS F03:PASS F04:PASS F05:PASS F06:PASS F07:PASS F08:PASS F09:PASS (exit 0)
+PASS N01 adapter imports the components package (UI) — F01 FAIL: packages/frappe-sdk/src/lib/probe.ts: @proseit/paep-components not permitted
+PASS N02 adapter imports the foundation package (UI) — F01 FAIL: packages/frappe-sdk/src/lib/probe.ts: @proseit/paep-foundation not permitted
+PASS N03 adapter imports the i18n package — F01 FAIL: packages/frappe-sdk/src/lib/probe.ts: @proseit/paep-i18n not permitted
+PASS N04 adapter imports Angular HttpClient — F01 FAIL: packages/frappe-sdk/src/lib/probe.ts: @angular/common/http not permitted
+PASS N05 adapter imports a socket client (new runtime dependency) — F01 FAIL: packages/frappe-sdk/src/lib/probe.ts: socket.io-client not permitted
+PASS N06 relative import that leaves the adapter package — F01 FAIL: packages/frappe-sdk/src/lib/probe.ts: relative import leaves the package (../../../enterprise/src/index)
+PASS N07 test file inside the adapter source — F01 FAIL: packages/frappe-sdk/src/lib/probe.spec.ts: test file in the adapter source (tests live in tooling/frappe-adapter/)
+PASS N08 a Frappe wire type exported publicly — F02 FAIL: unapproved export FrappeWire
+PASS N09 export * in the adapter entry point — F02 FAIL: export * in the entry point
+PASS N10 enterprise imports the adapter — F03 FAIL: packages/enterprise/src/lib/probe.ts: imports or names @proseit/frappe-sdk (only applications compose the adapter)
+PASS N11 components imports the adapter — F03 FAIL: packages/components/src/lib/probe.ts: imports or names @proseit/frappe-sdk (only applications compose the adapter)
+PASS N12 a domain package imports the adapter — F03 FAIL: packages/domain-quality/src/probe.ts: imports or names @proseit/frappe-sdk (only applications compose the adapter)
+PASS N13 analytics imports the adapter — F03 FAIL: packages/analytics/src/probe.ts: imports or names @proseit/frappe-sdk (only applications compose the adapter)
+PASS N14 the UI laboratory imports the adapter — F03 FAIL: apps/ui-lab/src/app/probe.ts: imports or names @proseit/frappe-sdk (only applications compose the adapter)
+PASS N15 adapter reads the session cookie — F04 FAIL: packages/frappe-sdk/src/lib/probe.ts: document\.cookie
+PASS N16 adapter persists CSRF material in localStorage — F04 FAIL: packages/frappe-sdk/src/lib/probe.ts: \blocalStorage\b
+PASS N17 adapter persists CSRF material in sessionStorage — F04 FAIL: packages/frappe-sdk/src/lib/probe.ts: \bsessionStorage\b
+PASS N18 adapter persists credential material in IndexedDB — F04 FAIL: packages/frappe-sdk/src/lib/probe.ts: \bindexedDB\b
+PASS N19 adapter sends a bearer token — F04 FAIL: packages/frappe-sdk/src/lib/probe.ts: \bAuthorization\b; packages/frappe-sdk/src/lib/probe.ts: \bBearer\b
+PASS N20 adapter logs to the console — F04 FAIL: packages/frappe-sdk/src/lib/probe.ts: \bconsole\.
+PASS N21 a resource path built outside the approved resource map (arbitrary DocType access) — F05 FAIL: packages/frappe-sdk/src/lib/probe.ts: \/api\/resource\/ outside lib/resources.ts
+PASS N22 raw server messages read outside the error normaliser — F05 FAIL: packages/frappe-sdk/src/lib/probe.ts: _server_messages|\bexc_type\b|['"]exception['"]|['"]exc['"] outside lib/errors.ts
+PASS N23 the CSRF header set outside the session module — F05 FAIL: packages/frappe-sdk/src/lib/probe.ts: X-Frappe-CSRF-Token outside lib/session.ts
+PASS N24 a location redirect outside the approved login redirect — F05 FAIL: packages/frappe-sdk/src/lib/probe.ts: \blocation\b outside lib/login-redirect.ts
+PASS N25 an unlisted fixture — F06 FAIL: unlisted fixture tooling/frappe-adapter/fixtures/session/extra.json
+PASS N26 fixture provenance claims captured data — F06 FAIL: provenance.source is not "synthetic"
+PASS N27 a session cookie value in a fixture — F07 FAIL: tooling/frappe-adapter/fixtures/session/leak.json: secret signature \bsid=(?!synthetic)[A-Za-z0-9]{12,}
+PASS N28 a CSRF token value in an adapter test — F07 FAIL: tooling/frappe-adapter/test/unit/leak.test.mjs: secret signature X-Frappe-CSRF-Token['"]?\s*[:=]\s*['"]?(
+PASS N29 an API key pair in the adapter — F07 FAIL: packages/frappe-sdk/src/lib/probe.ts: secret signature \btoken\s+[a-f0-9]{15}:[a-f0-9]{15}\b
+PASS N30 wildcard connect-src in the deployment CSP — F08 FAIL: apps/reference-app/deployment/csp-strict.json: connect-src https: (wildcard, scheme-only or insecure source)
+PASS N31 insecure non-loopback HTTP backend in the runtime-config example — F08 FAIL: apps/reference-app/public/config/runtime-config.json: insecure endpoint backend.apiBaseUrl http://api.example.test
+PASS N32 a secret added to the runtime-config example — F08 FAIL: apps/reference-app/public/config/runtime-config.json: secret-named key identity.csrfToken
+PASS N33 DOM markup created in the adapter — F09 FAIL: packages/frappe-sdk/src/lib/probe.ts: DOM or markup in the adapter
+PASS N34 markup in an adapter template literal — F09 FAIL: packages/frappe-sdk/src/lib/probe.ts: DOM or markup in the adapter
+PASS N35 markup string assigned through insertAdjacentHTML — F09 FAIL: packages/frappe-sdk/src/lib/probe.ts: DOM or markup in the adapter
+
+PAEP Frappe adapter static QA negatives: PASS (36/36; 35 seeded negatives + 1 control)

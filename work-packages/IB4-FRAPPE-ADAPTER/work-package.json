@@ -1,0 +1,83 @@
+{
+  "id": "IB4-FRAPPE-ADAPTER",
+  "title": "IB4: Frappe adapter",
+  "milestone": "IB4",
+  "eqp_wave": "W5",
+  "design_classification": "No new user-visible screen, dialog, component or copy (D6); no HOF-IB4 handoff required",
+  "status": "ACCEPTED",
+  "acceptance": {
+    "status": "ACCEPTED",
+    "authority": "Product Owner / Solutions Architect",
+    "date": "2026-10-17",
+    "approver": "Dr Kamulegeya Grace B (PhD)",
+    "accepted_candidate_head": "3a3f1d15b9c70ef190625ed34595525f5e53b084",
+    "last_code_change": "1b1e5a15c3c1b52ec41a8780d50d7dffb96ade28",
+    "criterion": "AC-IB4-22 PASS - PO/SA ACCEPTED",
+    "evidence": "full local regression 20/20 PASS (1b1e5a1); exact-head CI 3a3f1d1 run 38973929929 20/20 green, PAEP / gate PASS (1b1e5a1 run 38972620462 likewise); independent QA final state HIGH 0 / MEDIUM 0; M1 CLOSED - REMEDIATED (atomic pmra.api.v1.apply_transition, no fallback); ADR-011 amended within the M1 boundary and ACCEPTED; public PAEP contracts unchanged",
+    "carried_obligations_open": [
+      "PAEP-LOC-AR-PILOT",
+      "PAEP-LOC-HE-PILOT",
+      "PAEP-A11Y-AT-PILOT",
+      "PAEP-IB4-BACKEND-ATOMIC-TRANSITION"
+    ],
+    "not_authorised": [
+      "merge of PR #14",
+      "Generation 6 promotion",
+      "Generation 6 closeout",
+      "IB5 implementation"
+    ]
+  },
+  "predecessor": {
+    "id": "IB3-ENTERPRISE-SHELL",
+    "status": "ACCEPTED",
+    "baseline_commit": "1046243",
+    "promotion_merge": "a501200"
+  },
+  "baseline_registry": "tooling/governance/baseline-registry.json",
+  "baseline_generation": {
+    "active_accepted": 5,
+    "candidate": 6,
+    "candidate_status": "CANDIDATE"
+  },
+  "new_dependencies": [],
+  "evidence_path": "evidence/IB4-FRAPPE-ADAPTER/",
+  "human_acceptance_required": true,
+  "claude_md_disposition": "PROTECTED GOVERNED ARTIFACT: narrow amendment permitting IB4-FRAPPE-ADAPTER only (policyChange)",
+  "adr": "ADR-011",
+  "compatibility_contract": "pmra-api-v1",
+  "frappe_adapter": "ACCEPTED",
+  "po_sa_decisions": {
+    "D1": "APPROVED",
+    "D2": "APPROVED",
+    "D3": "APPROVED",
+    "D4": "APPROVED",
+    "D5": "APPROVED",
+    "D6": "APPROVED",
+    "D7": "APPROVED",
+    "D8": "APPROVED",
+    "D9": "APPROVED",
+    "D10": "APPROVED",
+    "M1": "APPROVED - ADD METHOD (2026-10-16)",
+    "IB4_ACCEPTANCE": "ACCEPTED (2026-10-17)"
+  },
+  "carried_obligations_open": [
+    "PAEP-LOC-AR-PILOT",
+    "PAEP-LOC-HE-PILOT",
+    "PAEP-A11Y-AT-PILOT"
+  ],
+  "findings_open": {
+    "high": 0,
+    "medium": 0,
+    "note": "M1 closed (independent QA pass 6 on 1b1e5a1; evidence/IB4-FRAPPE-ADAPTER/s6/qa/findings-disposition.md)"
+  },
+  "backend_adoption_obligations_open": [
+    {
+      "id": "PAEP-IB4-BACKEND-ATOMIC-TRANSITION",
+      "status": "OPEN",
+      "recorded": "PO/SA final acceptance decision 2026-10-17",
+      "rule": "The real ProSEIT backend must implement and validate pmra.api.v1.apply_transition with the concurrency, authorization, workflow-validation, conflict and idempotency semantics proven by IB4 (ADR-011 §2.8, §4; design §4.1). Until satisfied for a target backend: workflow writes MUST remain disabled for product pilot and production; the adapter MUST fail closed when the method is unavailable; there MUST be no fallback to the unsafe two-step sequence or to stock apply_workflow.",
+      "blocks": "enabling workflow writes against a real product backend until that backend is qualified",
+      "does_not_block": "IB4 platform acceptance (the adapter contract is proven against the approved deterministic reference backend model)"
+    }
+  ]
+}

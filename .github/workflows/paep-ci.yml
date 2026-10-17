@@ -614,6 +614,44 @@ jobs:
           if-no-files-found: warn
           retention-days: 30
 
+  frappe-adapter:
+    name: PAEP / frappe-adapter
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out (full history for baseline comparisons)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: PAEP setup
+        uses: ./.github/actions/paep-setup
+
+      - name: IB4 Frappe adapter suite - unit, session/CSRF, records, workflow, files, errors, concurrency, compatibility, freshness, security negatives (qa:frappe)
+        run: |
+          set -euo pipefail
+          npm run qa:frappe 2>&1 | tee "$PAEP_EVIDENCE_DIR/frappe-adapter-1.log"
+
+      - name: IB4 fixture conformance against the recorded pmra-api-v1 backend (qa:integration)
+        run: |
+          set -euo pipefail
+          npm run qa:integration 2>&1 | tee "$PAEP_EVIDENCE_DIR/frappe-adapter-2.log"
+
+      - name: IB4 CI-governance negative suite - frappe-adapter job mandatory (qa:ib4:ci-negative)
+        run: |
+          set -euo pipefail
+          npm run qa:ib4:ci-negative 2>&1 | tee "$PAEP_EVIDENCE_DIR/frappe-adapter-3.log"
+
+      - name: Upload evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: paep-frappe-adapter-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/paep-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
   gate:
     name: PAEP / gate
     if: ${{ always() }}
@@ -636,6 +674,7 @@ jobs:
       - enterprise-shell
       - shell-browser
       - negative-ci-c
+      - frappe-adapter
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions: {}
@@ -643,7 +682,7 @@ jobs:
       - name: Evaluate every mandatory job result
         env:
           NEEDS_JSON: ${{ toJSON(needs) }}
-          MANDATORY_JOBS: governance provenance architecture strictness negative-architecture negative-ci regression contracts runtime-config runtime-config-negative components accessibility negative-ci-b build-reference-app build-ui-lab enterprise-shell shell-browser negative-ci-c
+          MANDATORY_JOBS: governance provenance architecture strictness negative-architecture negative-ci regression contracts runtime-config runtime-config-negative components accessibility negative-ci-b build-reference-app build-ui-lab enterprise-shell shell-browser negative-ci-c frappe-adapter
         run: |
           set -euo pipefail
           fail=0

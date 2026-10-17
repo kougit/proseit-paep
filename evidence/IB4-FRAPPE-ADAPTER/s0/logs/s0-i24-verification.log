@@ -1,0 +1,9 @@
+PASS V1 WP05 suite declares exactly 105 cases: run-time declared 105, pinned 105, EXPECTED_CASES 105, WP05_NEGATIVE_CASES 105; IB0-WP05 negative-suite partition: PASS (part a 26, part b 32, part c 47; 105 cases)
+PASS V2 the only added case is GJ19, the frappe-adapter mandatory-job case: base 104 cases / 18 jobs; added cases [GJ19], jobs [frappe-adapter] at position 19; removed []; static caseRun declarations unchanged true
+PASS V3 I24 expectation matches the weakened harness (105 declared, part b 32): exit 1; FAIL part b ran 1 of 105 declared cases; expected exactly its 32
+PASS V4 I24 fails closed on an incorrect declared total or part-b count: the old 104 expectation and 103/106, 31/33 variants do not match
+PASS V5 only I24 changed in the design-system file, exactly the approved delta: 1	1	tooling/design-system/ci-governance-negative.mjs
+PASS V6 package-lock.json and the dependency set unchanged: lock diff "", root deps/engines equal true, workspace manifests changed ""
+PASS V7 S0 scope frozen at 21 paths including the approved file; no change outside it: 26 changed paths; outside []
+
+S0 I24 scope-decision verification: PASS (7/7)

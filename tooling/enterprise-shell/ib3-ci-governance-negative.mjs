@@ -99,10 +99,10 @@ const cases = [
   ['J13', 'negative-ci-c dropped from the gate needs and MANDATORY_JOBS', [[WORKFLOW, dropNeed('negative-ci-c')]], 'provenance', [/FAIL W12/]],
   ['J14', 'negative-ci-c timeout raised from 20 to 25 minutes', [[WORKFLOW, timeoutOf('negative-ci-c', 25)]], 'provenance', [/FAIL W11/, /negative-ci-c timeout-minutes 25 \(RR14 fixes it at 20\)/]],
   ['J15', 'a WP05 negative case left unassigned in the partition', [[WP05_HARNESS, replace("'P15', 'P23', 'P24'", "'P15', 'P24'")]], 'provenance', [/FAIL W11/, /partition: unassigned cases P23/]],
-  ['J16', 'a WP05 negative case dropped from the pinned list and the partition together', [[WP05_HARNESS, (t) => replace("'P15', 'P23', 'P24'", "'P15', 'P24'")(replace("'P22', 'P23', 'P24', 'P20'", "'P22', 'P24', 'P20'")(t))]], 'provenance', [/FAIL W11/, /partition: 103 declared and 103 assigned cases; expected 104/]],
+  ['J16', 'a WP05 negative case dropped from the pinned list and the partition together', [[WP05_HARNESS, (t) => replace("'P15', 'P23', 'P24'", "'P15', 'P24'")(replace("'P22', 'P23', 'P24', 'P20'", "'P22', 'P24', 'P20'")(t))]], 'provenance', [/FAIL W11/, /partition: 104 declared and 104 assigned cases; expected 105/]],
   ['J17', 'a WP05 negative case placed in two parts', [[WP05_HARNESS, replace("    'L00', 'T02',", "    'L00', 'P23', 'T02',")]], 'provenance', [/FAIL W11/, /partition: cases in more than one part P23/]],
   ['J18', 'negative-ci (part a) dropped from the gate needs and MANDATORY_JOBS', [[WORKFLOW, dropNeed('negative-ci')]], 'provenance', [/FAIL W12/]],
-  ['J19', 'a WP05 negative case dropped with the harness pin lowered to match', [[WP05_HARNESS, (t) => replace('const EXPECTED_CASES = 104;', 'const EXPECTED_CASES = 103;')(replace("'P15', 'P23', 'P24'", "'P15', 'P24'")(replace("'P22', 'P23', 'P24', 'P20'", "'P22', 'P24', 'P20'")(t)))]], 'provenance', [/FAIL W11/, /partition covers 103 cases; W11 pins 104/]],
+  ['J19', 'a WP05 negative case dropped with the harness pin lowered to match', [[WP05_HARNESS, (t) => replace('const EXPECTED_CASES = 105;', 'const EXPECTED_CASES = 104;')(replace("'P15', 'P23', 'P24'", "'P15', 'P24'")(replace("'P22', 'P23', 'P24', 'P20'", "'P22', 'P24', 'P20'")(t)))]], 'provenance', [/FAIL W11/, /partition covers 104 cases; W11 pins 105/]],
 ];
 
 /** Pinned case count (AC-IB3-17): 19 seeded negatives (J01-J19) and 1 positive control (P00). */

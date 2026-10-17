@@ -1,0 +1,24 @@
+PASS B1 Initial bundle budget: raw 520162 bytes (520.16 kB; target 500.00 kB exceeded, hard maximum 525.00 kB), transfer 122363 bytes (122.36 kB; hard maximum 150.00 kB) — styles-J65SLB5I.css, chunk-DJVAsKa_.js, chunk-DbwHdBEg.js, main-TPTRE4EW.js
+PASS H H1-H5 shell states: 124 state × viewport × direction combinations (axe at 1440, 834, 640 and 320)
+PASS N1 Never-hidden set (incl. notifications with count, account with sign-out, the current tenant context and the offline and unknown connectivity rows) present and inside the viewport at 320 and 320×256 (LTR and RTL)
+PASS T1 Shell targets at least 24 × 24 CSS px at 1440 and 320 (chrome, sheet, palette, notification panel, account menu)
+PASS A1 Label in name (WCAG 2.5.3): controls named by aria-label include their visible text (1440, 834, 320; chrome, sheet, notifications, account and language menus)
+PASS C1 Strict CSP: per-response nonce in header and page, profile policy, no inline content without the nonce, Angular styles nonced, blocked probes (inline script, wrong nonce, inline style, eval, HTML sink)
+PASS K1 Skip link is the first Tab stop, visible when focused, and moves focus to main (1440, 320)
+PASS K1b Skip link at 320
+PASS K2 Ctrl+K opens the palette with focus in the combobox; Escape returns focus to the trigger
+PASS K3 Navigation sheet takes focus and returns it to Open navigation on Escape (834)
+PASS K4 A route change focuses the new page h1
+PASS K5 No keyboard trap over the chrome and page (1440)
+PASS F1 Focused chrome controls show a focus indicator of at least 2 px (1440, 834)
+PASS F1b Focus indicator at 834
+PASS M1 Reduced motion: motion tokens 0 ms; the sheet and the palette open without animation (834)
+PASS R1 RTL mirroring: navigation at the inline start, sheet on the right edge, directional icon mirrored
+PASS K6 Account menu: Enter opens on the first item, End reaches Sign out, Escape returns to the button; 16 px inside the viewport (1440)
+PASS K6b Account menu at 320
+PASS K7 Notification panel: opens on its heading, at most 24 rem and 16 px inside the viewport, Escape returns to the bell (1440)
+PASS K7b Notification panel at 320
+PASS L1 200 % text keeps the workspace free of horizontal scroll (1440)
+PASS L1b 200 % text at 640 (400 % zoom is covered by the 320 px states)
+
+PAEP enterprise-shell browser QA: PASS (22/22; 140s)

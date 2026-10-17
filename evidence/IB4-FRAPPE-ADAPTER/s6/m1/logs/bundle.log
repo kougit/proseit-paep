@@ -1,0 +1,25 @@
+PASS C1 No UI-lab, tooling, analytics, offline, Frappe SDK or domain-package source in the initial bundle
+PASS C2 No spec or test-double source
+PASS C3 Third-party code only from @angular/*, rxjs and tslib — @angular/core, rxjs, tslib, @angular/common, @angular/platform-browser, @angular/router
+PASS C4 No PAEP source included twice (deep, node_modules or workspace paths)
+PASS C5 No component selector defined twice; one popover positioning implementation — 48 component definitions; positioning in packages/components/src/lib/popover/popover.ts
+PASS C6 Production configuration: optimisation and AOT on, no source maps, no named chunks — optimization=default (on), aot=default (on), sourceMap=false, namedChunks=false
+PASS C7 This build has the production initial files and a raw total within 1 % of it — production 520162 bytes, source-mapped 522448 bytes
+
+Composition of the initial bundle (520162 bytes raw, 122308 bytes transfer):
+   137.4 kB  @angular/core
+     110 kB  packages/enterprise
+      96 kB  packages/components
+    75.6 kB  @angular/router
+    31.1 kB  packages/platform
+    15.8 kB  rxjs
+    11.9 kB  @angular/platform-browser
+     7.9 kB  packages/foundation
+     7.3 kB  apps/reference-app
+     6.9 kB  @angular/common
+     1.9 kB  tslib
+     1.3 kB  packages/i18n
+     0.8 kB  packages/observability
+     0.2 kB  k8-fastbuild-ST-fdfa778d11ba/bin
+
+PAEP reference-app bundle composition: PASS (7/7)

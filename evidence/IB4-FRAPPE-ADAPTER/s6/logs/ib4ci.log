@@ -1,0 +1,20 @@
+PASS P00 positive control: unmutated copy passes the provenance gate (gate provenance, exit 0)
+PASS Q01 frappe-adapter dropped from the gate needs (gate provenance, exit 1)
+    FAIL W12 Aggregate gate "PAEP / gate" (gate, workflow and action policy byte-identical to the accepted baseline): needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the manda
+PASS Q02 frappe-adapter dropped from the gate needs and MANDATORY_JOBS (gate provenance, exit 1)
+    FAIL W12 Aggregate gate "PAEP / gate" (gate, workflow and action policy byte-identical to the accepted baseline): needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the manda
+PASS Q03 frappe-adapter removed from the policy, the workflow and the gate together (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS Q04 the Frappe adapter suite replaced by a no-op in the workflow (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS Q05 the fixture conformance suite removed from the policy and the workflow together (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS Q06 frappe-adapter silently skipped (if: false on the job) (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+    FAIL W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — workflow.jobs.frappe-adapter.if: expression
+PASS Q07 frappe-adapter timeout raised from 20 to 25 minutes (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS Q08 the Frappe adapter suite moved into PAEP / regression (policy and workflow together) (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+
+PAEP IB4 CI-governance negative suite: PASS (9/9; 8 seeded negatives + 1 control)

@@ -1,0 +1,110 @@
+{
+  "id": "freshness.poll-deleted",
+  "profile": "pmra-api-v1/frappe-15",
+  "kind": "conformance",
+  "description": "The record disappears: changed signal for reconciliation.",
+  "steps": [
+    {
+      "call": {
+        "port": "freshness",
+        "method": "poll",
+        "args": [
+          {
+            "scopes": [
+              {
+                "kind": "record",
+                "recordType": "inspection",
+                "id": "INS-0001"
+              }
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "resolvesMatch": {
+          "signals": []
+        }
+      }
+    },
+    {
+      "call": {
+        "port": "freshness",
+        "method": "poll",
+        "args": [
+          {
+            "scopes": [
+              {
+                "kind": "record",
+                "recordType": "inspection",
+                "id": "INS-0001"
+              }
+            ],
+            "cursor": "$cursor"
+          }
+        ]
+      },
+      "expect": {
+        "resolvesMatch": {
+          "signals": [
+            {
+              "scope": {
+                "kind": "record",
+                "recordType": "inspection",
+                "id": "INS-0001"
+              },
+              "reason": "changed",
+              "observedAt": "2026-10-15T09:00:00.000Z"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/pmra.api.v1.get_compatibility"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": {
+            "api_contract": "pmra-api-v1",
+            "minimum_paep": "1.0",
+            "maximum_paep": null
+          }
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/resource/PMRA%20Inspection"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "data": [
+            {
+              "name": "INS-0001",
+              "modified": "2026-10-15 09:00:00.000001"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/resource/PMRA%20Inspection"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "data": []
+        }
+      }
+    }
+  ]
+}

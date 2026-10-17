@@ -1,0 +1,43 @@
+PASS P00 positive control: unmutated copy passes the provenance gate (gate provenance, exit 0)
+PASS J01 enterprise-shell dropped from the gate needs (gate provenance, exit 1)
+    FAIL W12 Aggregate gate "PAEP / gate" (gate, workflow and action policy byte-identical to the accepted baseline): needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the manda
+PASS J02 shell-browser dropped from the gate needs and MANDATORY_JOBS (gate provenance, exit 1)
+    FAIL W12 Aggregate gate "PAEP / gate" (gate, workflow and action policy byte-identical to the accepted baseline): needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the manda
+PASS J03 enterprise behaviour tests replaced by a no-op in the workflow (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS J04 shell browser gate replaced by a no-op in the workflow (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS J05 enterprise-shell removed from the policy, the workflow and the gate together (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS J06 shell browser negative suite removed from the policy and the workflow together (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS J07 IB3 CI-governance negative removed from the policy and the workflow together (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS J08 enterprise-shell silently skipped (if: false on the job) (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+    FAIL W13 No secrets, no credential inputs, no persisted checkout credentials, no expression inside any run script, and only allowlisted expressions (no untrusted PR metadata) — workflow.jobs.enterprise-shell.if: expressi
+PASS J09 shell-browser timeout raised above the 30-minute ceiling (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS J10 an IB3 negative suite moved into PAEP / regression (policy and workflow together) (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS J11 a WP04 edge-count control that names an edge it does not inject fails the negative-architecture gate (gate negative-architecture, exit 1)
+    FAIL W17 Strict configuration: WP04 static verifier passes V04-V07 (strict, noImplicitAny, strictTemplates, noCheck and suppression protection, aliases, entry points) and every other static check; V07 reports only entry 
+    FAIL W18 WP04 negative architecture/strictness suite: every case passes except positive control C3, which fails only V16/V17 (and V07 for entry points filled in scope, V18 for an in-scope CLAUDE.md change) with accepted-
+PASS J12 negative-ci-c removed from the policy, the workflow and the gate together (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS J13 negative-ci-c dropped from the gate needs and MANDATORY_JOBS (gate provenance, exit 1)
+    FAIL W12 Aggregate gate "PAEP / gate" (gate, workflow and action policy byte-identical to the accepted baseline): needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the manda
+PASS J14 negative-ci-c timeout raised from 20 to 25 minutes (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS J15 a WP05 negative case left unassigned in the partition (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS J16 a WP05 negative case dropped from the pinned list and the partition together (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS J17 a WP05 negative case placed in two parts (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+PASS J18 negative-ci (part a) dropped from the gate needs and MANDATORY_JOBS (gate provenance, exit 1)
+    FAIL W12 Aggregate gate "PAEP / gate" (gate, workflow and action policy byte-identical to the accepted baseline): needs every mandatory job, runs always(), holds no permissions, and fails unless its needs equal the manda
+PASS J19 a WP05 negative case dropped with the harness pin lowered to match (gate provenance, exit 1)
+    FAIL W11 Every mandatory job in the CI policy (a superset of the accepted baseline policy, whose jobs and commands are unchanged) runs in parallel (no needs, no if, no continue-on-error), each from a clean full checkout 
+
+PAEP IB3 CI-governance negative suite: PASS (20/20; 19 seeded negatives + 1 control)

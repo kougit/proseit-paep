@@ -1,0 +1,3 @@
+PASS integration/conformance.test.mjs: 37/37 passed, 0 failed/skipped/todo
+
+PAEP Frappe adapter integration tests: PASS (37/37 node:test tests in 1 files; adapter compiled strictly with 0 diagnostics)

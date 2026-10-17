@@ -1,0 +1,76 @@
+{
+  "id": "session.invalid-payload",
+  "profile": "pmra-api-v1/frappe-15",
+  "kind": "security",
+  "description": "Session method returns a token with forbidden characters: invalid, no token kept.",
+  "steps": [
+    {
+      "call": {
+        "port": "session",
+        "method": "check",
+        "args": []
+      },
+      "expect": {
+        "resolves": {
+          "status": "invalid",
+          "error": {
+            "code": "MALFORMED_RESPONSE",
+            "category": "service-failure",
+            "messageKey": "paep.errors.service-failure",
+            "retryable": false,
+            "correlationId": "$correlation"
+          }
+        }
+      }
+    },
+    {
+      "call": {
+        "port": "session",
+        "method": "signOut",
+        "args": []
+      },
+      "expect": {
+        "rejects": {
+          "code": "CSRF_TOKEN_MISSING",
+          "category": "authentication",
+          "retryable": false,
+          "correlationId": "$correlation"
+        }
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/frappe.auth.get_logged_user"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": "inspector@example.test"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/method/pmra.api.v1.get_session"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": {
+            "user": "inspector@example.test",
+            "full_name": "Example Inspector",
+            "tenant": {
+              "id": "tenant-01",
+              "name": "Example Tenant"
+            },
+            "csrf_token": "x\"; path=/"
+          }
+        }
+      }
+    }
+  ]
+}

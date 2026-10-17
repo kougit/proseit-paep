@@ -18,9 +18,19 @@
       "declaration": "export interface BackendConfig{readonly apiBaseUrl:string;readonly realtimeUrl?:string|null;readonly fileBaseUrl?:string|null;readonly compatibility:BackendCompatibility;}"
     },
     {
+      "name": "BlockedCompatibility",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface BlockedCompatibility{readonly status:'incompatible'|'unknown';readonly apiContract:string;readonly code:PaepErrorCode;readonly correlationId?:CorrelationId;}"
+    },
+    {
       "name": "BusinessTimeContext",
       "kind": "InterfaceDeclaration",
       "declaration": "export interface BusinessTimeContext{readonly timeZone:TimeZoneId;}"
+    },
+    {
+      "name": "CapabilitiesGateway",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface CapabilitiesGateway{discover(scope?:string):Promise<CapabilitySet>;}"
     },
     {
       "name": "Capability",
@@ -38,6 +48,11 @@
       "declaration": "export type CapabilityId=string;"
     },
     {
+      "name": "CapabilitySet",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface CapabilitySet{readonly capabilities:readonly Capability[];readonly evaluatedAt:IsoDateTime;}"
+    },
+    {
       "name": "CommandConflict",
       "kind": "InterfaceDeclaration",
       "declaration": "export interface CommandConflict<TPayload,TServerState>{readonly attempted:OfflineCommandEnvelope<TPayload>;readonly serverState:TServerState;readonly serverConcurrency?:ConcurrencyMetadata;readonly correlationId?:CorrelationId;}"
@@ -51,6 +66,16 @@
       "name": "CommandSyncState",
       "kind": "TypeAliasDeclaration",
       "declaration": "export type CommandSyncState='local-draft'|'queued'|'synced'|'conflict'|'failed';"
+    },
+    {
+      "name": "CompatibilityCheckResult",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type CompatibilityCheckResult=CompatibilityReport|BlockedCompatibility;"
+    },
+    {
+      "name": "CompatibilityGateway",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface CompatibilityGateway{check():Promise<CompatibilityCheckResult>;}"
     },
     {
       "name": "CompatibilityReport",
@@ -178,6 +203,11 @@
       "declaration": "export interface FileAccess{readonly fileId:EntityId;readonly url:string;readonly expiresAt?:IsoDateTime;}"
     },
     {
+      "name": "FileAccessRequest",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface FileAccessRequest{readonly owner:RecordRef;readonly fileId:EntityId;}"
+    },
+    {
       "name": "FileChecksum",
       "kind": "InterfaceDeclaration",
       "declaration": "export interface FileChecksum{readonly algorithm:string;readonly value:string;}"
@@ -198,6 +228,11 @@
       "declaration": "export interface FileUploadStatus{readonly state:FileUploadState;readonly progress?:number;readonly file?:FileMetadata;readonly error?:PaepError;}"
     },
     {
+      "name": "FilesGateway",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface FilesGateway{list(owner:RecordRef):Promise<readonly FileMetadata[]>;requestAccess(request:FileAccessRequest):Promise<FileAccess>;}"
+    },
+    {
       "name": "FilterOperator",
       "kind": "TypeAliasDeclaration",
       "declaration": "export type FilterOperator='eq'|'neq'|'in'|'notIn'|'gt'|'gte'|'lt'|'lte'|'between'|'contains'|'startsWith'|'isNull'|'isNotNull';"
@@ -208,9 +243,34 @@
       "declaration": "export type FilterValue=ScalarValue|readonly ScalarValue[];"
     },
     {
+      "name": "FreshnessBatch",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface FreshnessBatch{readonly signals:readonly InvalidationSignal[];readonly cursor:FreshnessCursor;}"
+    },
+    {
+      "name": "FreshnessCursor",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type FreshnessCursor=string;"
+    },
+    {
+      "name": "FreshnessGateway",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface FreshnessGateway{poll(request:FreshnessPollRequest):Promise<FreshnessBatch>;}"
+    },
+    {
       "name": "FreshnessPolicy",
       "kind": "InterfaceDeclaration",
       "declaration": "export interface FreshnessPolicy{readonly targetSeconds?:number;readonly displayedToUser?:boolean;}"
+    },
+    {
+      "name": "FreshnessPollRequest",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface FreshnessPollRequest{readonly scopes:readonly FreshnessScope[];readonly cursor?:FreshnessCursor;}"
+    },
+    {
+      "name": "FreshnessScope",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface FreshnessScope{readonly kind:'record-type'|'record';readonly recordType:string;readonly id?:EntityId;}"
     },
     {
       "name": "IdempotencyKey",
@@ -231,6 +291,16 @@
       "name": "IdentityMode",
       "kind": "TypeAliasDeclaration",
       "declaration": "export type IdentityMode='frappe-session'|'oidc'|'sso-proxy';"
+    },
+    {
+      "name": "InvalidationReason",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type InvalidationReason='changed'|'resync';"
+    },
+    {
+      "name": "InvalidationSignal",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface InvalidationSignal{readonly scope:FreshnessScope;readonly reason:InvalidationReason;readonly observedAt:IsoDateTime;}"
     },
     {
       "name": "IsoDate",
@@ -348,6 +418,46 @@
       "declaration": "export interface PwaConfig{readonly enabled:boolean;readonly offlineProfile:OfflineProfile;}"
     },
     {
+      "name": "RecordDetail",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface RecordDetail{readonly recordType:RecordTypeKey;readonly id:EntityId;readonly fields:Readonly<Record<string,RecordFieldValue>>;readonly concurrency:ConcurrencyMetadata;readonly createdAt?:IsoDateTime;readonly modifiedAt?:IsoDateTime;readonly correlationId?:CorrelationId;}"
+    },
+    {
+      "name": "RecordFieldValue",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type RecordFieldValue=ScalarValue|MoneyValue|readonly ScalarValue[];"
+    },
+    {
+      "name": "RecordListRequest",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface RecordListRequest{readonly recordType:RecordTypeKey;readonly query?:ListQuery;}"
+    },
+    {
+      "name": "RecordListResult",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface RecordListResult extends PageResult<RecordSummary>{readonly correlationId?:CorrelationId;}"
+    },
+    {
+      "name": "RecordRef",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface RecordRef{readonly recordType:RecordTypeKey;readonly id:EntityId;}"
+    },
+    {
+      "name": "RecordSummary",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface RecordSummary{readonly recordType:RecordTypeKey;readonly id:EntityId;readonly fields:Readonly<Record<string,RecordFieldValue>>;readonly modifiedAt?:IsoDateTime;readonly concurrency?:ConcurrencyMetadata;}"
+    },
+    {
+      "name": "RecordTypeKey",
+      "kind": "TypeAliasDeclaration",
+      "declaration": "export type RecordTypeKey=string;"
+    },
+    {
+      "name": "RecordsGateway",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface RecordsGateway{list(request:RecordListRequest):Promise<RecordListResult>;get(ref:RecordRef):Promise<RecordDetail>;}"
+    },
+    {
       "name": "ReportCellValue",
       "kind": "TypeAliasDeclaration",
       "declaration": "export type ReportCellValue=ScalarValue|MoneyValue;"
@@ -448,9 +558,24 @@
       "declaration": "export interface SecurityConfig{readonly trustedTypesPolicyName?:string;readonly cspProfile?:CspProfile;}"
     },
     {
+      "name": "SessionGateway",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface SessionGateway{check():Promise<SessionOutcome>;signOut():Promise<SignOutResult>;beginSignIn(request:SignInRequest):Promise<void>;}"
+    },
+    {
       "name": "SessionOutcome",
       "kind": "TypeAliasDeclaration",
       "declaration": "export type SessionOutcome={readonly status:'authenticated';readonly identity:IdentityContext;readonly expiresAt?:IsoDateTime;}|{readonly status:'unauthenticated';}|{readonly status:'expired';}|{readonly status:'invalid';readonly error?:PaepError;};"
+    },
+    {
+      "name": "SignInRequest",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface SignInRequest{readonly returnPath?:string;}"
+    },
+    {
+      "name": "SignOutResult",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface SignOutResult{readonly outcome:SessionOutcome;readonly correlationId?:CorrelationId;}"
     },
     {
       "name": "SortDirection",
@@ -498,6 +623,11 @@
       "declaration": "export interface WorkflowAction{readonly id:string;readonly labelKey:MessageKey;readonly requiresReason?:boolean;readonly requiresEvidence?:boolean;}"
     },
     {
+      "name": "WorkflowGateway",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface WorkflowGateway{getState(ref:RecordRef):Promise<WorkflowState>;transition(recordType:RecordTypeKey,request:WorkflowTransitionRequest):Promise<WorkflowTransitionResult>;}"
+    },
+    {
       "name": "WorkflowState",
       "kind": "InterfaceDeclaration",
       "declaration": "export interface WorkflowState{readonly stateKey:string;readonly labelKey:MessageKey;readonly allowedActions:readonly WorkflowAction[];readonly concurrency?:ConcurrencyMetadata;}"
@@ -506,6 +636,11 @@
       "name": "WorkflowTransitionRequest",
       "kind": "InterfaceDeclaration",
       "declaration": "export interface WorkflowTransitionRequest{readonly recordId:EntityId;readonly actionId:string;readonly reason?:string;readonly evidenceFileIds?:readonly EntityId[];readonly concurrency:ConcurrencyMetadata;readonly idempotencyKey?:IdempotencyKey;}"
+    },
+    {
+      "name": "WorkflowTransitionResult",
+      "kind": "InterfaceDeclaration",
+      "declaration": "export interface WorkflowTransitionResult{readonly state:WorkflowState;readonly concurrency:ConcurrencyMetadata;readonly correlationId?:CorrelationId;}"
     }
   ]
 }

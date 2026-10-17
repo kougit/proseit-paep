@@ -186,7 +186,10 @@ negative('N46', 'E10 fails closed when the baseline has neither the original nor
 
 const SDK = 'packages/frappe-sdk/src/index.ts';
 const regEdit = (fn) => [REGISTRY, (t) => { const reg = JSON.parse(t); fn(reg); return `${JSON.stringify(reg, null, 2)}\n`; }];
-const candidateOf = (reg) => reg.generations.find((g) => g.status === 'CANDIDATE');
+// The G6 cases model the open candidate. Once generation 6 is promoted, its CANDIDATE form is rebuilt in the copy (as
+// negative-baseline-governance does for generation 2), so the cases keep testing the same rule.
+const reopenG6 = (reg) => Object.assign(reg.generations.find((g) => g.generation === 6), { status: 'CANDIDATE', acceptedCommit: null, acceptedTree: null, acceptance: null, fingerprints: null });
+const candidateOf = (reg) => reg.generations.find((g) => g.status === 'CANDIDATE') ?? reopenG6(reg);
 // "Promoted": the candidate becomes the active ACCEPTED generation at a synthetic commit equal to the copy's tree.
 const promotedAt = (commit) => regEdit((reg) => { const c = candidateOf(reg); c.status = 'ACCEPTED'; c.acceptedCommit = commit; });
 negative('N47', 'E09: frappe-sdk manifest changed (outside the admitted sources)', [['packages/frappe-sdk/package.json', (t) => t.replace(/\n$/, '\n\n')]], 'E09', /changed: packages\/frappe-sdk\/package\.json/);
@@ -197,7 +200,7 @@ negative('N51', 'E09: a frozen file moved into the admitted adapter source (rena
   setup: () => gitIn(['mv', 'packages/offline/src/index.ts', 'packages/frappe-sdk/src/moved.ts']),
   teardown: () => gitIn(['mv', 'packages/frappe-sdk/src/moved.ts', 'packages/offline/src/index.ts']),
 });
-negative('P05', 'control: E09 admits an in-scope frappe-sdk source change while the G6 candidate is open', [[SDK, append('// probe')]], 'E09', null, true);
+negative('P05', 'control: E09 admits an in-scope frappe-sdk source change while the G6 candidate is open', [regEdit((reg) => { candidateOf(reg); }), [SDK, append('// probe')]], 'E09', null, true);
 const promotedBase = baselineCommit(claudeNow);
 negative('P06', 'control: E09 passes after G6 promotion when nothing changed since the promoted baseline', [promotedAt(promotedBase)], 'E09', null, true);
 negative('N52', 'E09 after G6 promotion: a frappe-sdk source change is frozen again (no candidate)', [promotedAt(promotedBase), [SDK, append('// probe')]], 'E09', /changed: packages\/frappe-sdk\/src\/index\.ts/);

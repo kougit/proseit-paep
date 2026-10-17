@@ -9,6 +9,9 @@
  * A negative case passes only when the command exits non-zero AND its output names the expected rule (for
  * example "FAIL B11" with the offending path). A positive case passes only on exit 0 with the expected output.
  *
+ * Section I rebuilds the Generation 6 promotion from its controlled record and checks the PAEP-G6-PRR-01 exception
+ * admits exactly the pinned remediation and nothing else.
+ *
  * The promotion cases (section E) simulate, in the scratch copy only, what happens after PO/SA acceptance: the
  * acceptance record is committed, the branch is merged with --no-ff into a simulated mainline and the scratch
  * refs/remotes/origin/main is moved to that merge. Nothing outside the scratch copy is touched.
@@ -21,6 +24,8 @@ import os from 'node:os';
 import path from 'node:path';
 import process from 'node:process';
 import { spawnSync } from 'node:child_process';
+import { pathToFileURL } from 'node:url';
+import { G6_PROMOTION_REMEDIATION, g6RemediationSelfHash } from './baseline-governance.mjs';
 
 const root = process.cwd();
 const REG = 'tooling/governance/baseline-registry.json';
@@ -452,6 +457,60 @@ try {
   });
   git('update-ref', 'refs/remotes/origin/main', mainBefore);
   git('checkout', '-q', '--detach', SNAP);
+
+  // ---- I: PAEP-G6-PRR-01, the Generation 6 promotion-readiness remediation ---------------------------------------
+  // Rebuilt in the copy from the controlled G6 record: the G6 accepted merge, its registry with generation 6 as
+  // promoted, and the remediation at its pinned content (this module: the version whose self-hash matches the pin).
+  {
+    const R = G6_PROMOTION_REMEDIATION;
+    const rootGit = (...a) => spawnSync('git', a, { cwd: root, encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 });
+    const pinned = (f, blob) => {
+      const s = rootGit('cat-file', 'blob', blob);
+      if (s.status === 0) return s.stdout;
+      if (rootGit('hash-object', '--', f).stdout.trim() !== blob) throw new Error(`${f}: pinned blob ${blob} not found`);
+      return fs.readFileSync(path.join(root, f), 'utf8');
+    };
+    const selfText = [fs.readFileSync(path.join(root, R.self), 'utf8'), ...rootGit('log', '--format=%H', '--', R.self).stdout.split('\n').filter(Boolean).map((c) => rootGit('show', `${c}:${R.self}`).stdout)]
+      .find((t) => g6RemediationSelfHash(t) === R.selfSha256);
+    if (selfText === undefined) throw new Error(`no version of ${R.self} matches the ${R.id} pin`);
+    const atG6 = JSON.parse(git('show', `${R.acceptedCommit}:${REG}`).out);
+    const promotedG6 = JSON.parse(fs.readFileSync(path.join(root, REG), 'utf8')).generations.find((x) => x.generation === R.generation);
+    git('checkout', '-q', '-f', '--detach', R.acceptedCommit);
+    git('clean', '-q', '-f', '-d');
+    git('update-ref', 'refs/remotes/origin/main', R.acceptedCommit);
+    fs.writeFileSync(P(REG), canon({ ...atG6, generations: atG6.generations.map((x) => (x.generation === R.generation ? promotedG6 : x)) }));
+    for (const [f, b] of Object.entries(R.blobs)) fs.writeFileSync(P(f), pinned(f, b));
+    fs.writeFileSync(P(R.self), selfText);
+    const HARNESS = 'tooling/enterprise-shell/enterprise-qa-negative.mjs';
+    const NEGBG = 'tooling/governance/negative-baseline-governance.mjs';
+    const atBase = (f) => [f, () => git('show', `${R.acceptedCommit}:${f}`).out];
+    const extra = (f) => [f, (t) => `${t}// unrelated\n`];
+    pos('I01', 'g6-remediation', 'G6 promotion with the exact pinned remediation validates (B11 names it)', [], [/PAEP baseline governance: PASS \(13\/13\); active G6 0d2f05e/, /PASS B11 .*all registry promotion; PAEP-G6-PRR-01 pinned remediation: tooling\/enterprise-shell\/enterprise-qa-negative\.mjs, tooling\/governance\/baseline-governance\.mjs, tooling\/governance\/negative-baseline-governance\.mjs/]);
+    pos('I02', 'g6-remediation', 'registry-only G6 promotion still validates (no remediation, original rule)', [atBase(HARNESS), atBase(NEGBG), atBase(R.self)], [/PAEP baseline governance: PASS \(13\/13\); active G6/, /PASS B11 .* — 1 changed paths since 0d2f05e, all registry promotion$/m]);
+    pos('I03', 'g6-remediation', 'registry promotion with the rule alone validates (harness and tests unchanged)', [atBase(HARNESS), atBase(NEGBG)], [/PAEP baseline governance: PASS \(13\/13\)/, /PAEP-G6-PRR-01 pinned remediation: tooling\/governance\/baseline-governance\.mjs$/m]);
+    neg('I04', 'g6-remediation', 'another enterprise-shell tooling file changed', [extra('tooling/enterprise-shell/enterprise-qa.mjs')], [/FAIL B11 .*unauthorised change: tooling\/enterprise-shell\/enterprise-qa\.mjs/]);
+    neg('I05', 'g6-remediation', 'an unrelated change in the authorised harness file', [extra(HARNESS)], [/FAIL B11 .*unauthorised change: tooling\/enterprise-shell\/enterprise-qa-negative\.mjs/]);
+    neg('I06', 'g6-remediation', 'an unrelated change in the governance tests', [extra(NEGBG)], [/FAIL B11 .*unauthorised change: tooling\/governance\/negative-baseline-governance\.mjs/]);
+    neg('I07', 'g6-remediation', 'an unrelated change in the governance rule itself', [extra(R.self)], [/FAIL B11 .*unauthorised change: tooling\/governance\/baseline-governance\.mjs/]);
+    neg('I08', 'g6-remediation', 'a production-code change', [extra('packages/frappe-sdk/src/index.ts')], [/FAIL B11 .*unauthorised change: packages\/frappe-sdk\/src\/index\.ts/]);
+    neg('I09', 'g6-remediation', 'a dependency and lockfile change', [['package-lock.json', (t) => `${t}\n`], ['package.json', (t) => t.replace('"devDependencies": {', '"devDependencies": {\n    "left-pad": "1.3.0",')]], [/FAIL B11 .*unauthorised change: package-lock\.json/, /unauthorised change: package\.json/]);
+    neg('I10', 'g6-remediation', 'scope widening: a new tooling file beside the remediation', [['tooling/governance/extra-rule.mjs', () => 'export {};\n']], [/FAIL B11 .*unauthorised change: tooling\/governance\/extra-rule\.mjs/]);
+    neg('I11', 'g6-remediation', 'scope widening: the promoted G6 record gains a scope entry', [regEdit((o) => { g(o, 6).authorisedScope = [...g(o, 6).authorisedScope, 'packages/analytics/src/'].sort(); })], [/FAIL B09 .*generation 6 was changed while being promoted/]);
+    const g7 = regEdit((o) => { o.generations.push({ generation: 7, name: 'next', milestone: 'IB5', workPackages: ['IB5-SIM'], status: 'CANDIDATE', predecessorGeneration: 6, authorisation: { authority: 'Product Owner / Solutions Architect', date: '2026-10-18', reference: 'work-packages/IB5-SIM/WORK_PACKAGE.md' }, policyChange: false, authorisedScope: ['evidence/IB5-SIM/', REG, 'work-packages/IB5-SIM/'], protectedRecords: ['evidence/IB5-SIM/', 'work-packages/IB5-SIM/'], acceptedCommit: null, acceptedTree: null, acceptance: null, fingerprints: null, notes: 'simulation' }); });
+    const g7Record = ['work-packages/IB5-SIM/WORK_PACKAGE.md', () => '# simulated\n'];
+    pos('I12', 'g6-remediation', 'a later CANDIDATE sees the remediation only as the pinned G6 delta', [g7, g7Record], [/PAEP baseline governance: PASS \(13\/13\)/, /candidate G7 IB5-SIM/]);
+    neg('I13', 'g6-remediation', 'a later CANDIDATE gets no exception: a further harness change outside its scope fails', [g7, g7Record, extra(HARNESS)], [/FAIL B11 .*unauthorised change: tooling\/enterprise-shell\/enterprise-qa-negative\.mjs/]);
+    const mod = await import(pathToFileURL(P(R.self)).href);
+    custom('I14', 'g6-remediation', 'future generations do not inherit: another active generation or accepted commit admits nothing', 'admitted only for active G6 at its accepted commit', () => {
+      const paths = [HARNESS, NEGBG, R.self];
+      const asG6 = paths.filter((f) => mod.g6RemediationAdmits(copy, { generation: 6, acceptedCommit: R.acceptedCommit }, f));
+      const other = [{ generation: 7, acceptedCommit: R.acceptedCommit }, { generation: 7, acceptedCommit: gitOut('rev-parse', 'HEAD') }, { generation: 6, acceptedCommit: atG6.generations[4].acceptedCommit }, null]
+        .flatMap((a) => paths.filter((f) => mod.g6RemediationAdmits(copy, a, f)));
+      return { r: { status: other.length ? 1 : 0, out: `admitted for G6: ${asG6.join(', ')}; admitted otherwise: ${other.join(', ') || 'none'}` }, pass: asG6.length === 3 && other.length === 0 };
+    });
+    git('checkout', '-q', '-f', '--detach', SNAP);
+    git('clean', '-q', '-f', '-d');
+  }
 } finally {
   fs.rmSync(scratch, { recursive: true, force: true });
 }

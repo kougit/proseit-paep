@@ -88,6 +88,10 @@ E10 (enterprise-shell gate) and W02 (IB0-WP05) enforce it: before promotion CLAU
 
 One new mandatory job, `PAEP / frappe-adapter` (20-minute timeout), runs `npm run qa:frappe` and `npm run qa:ib4:ci-negative`. It is registered in the gate `needs`, `MANDATORY_JOBS`, the WP05 CI policy and the WP05 gate-case partition. No other job's timeout changes. A seeded negative proves that removing the job from the gate fails closed.
 
+**PO/SA M1 decision 2026-10-16 (Dr Kamulegeya Grace B (PhD)).** APPROVED — ADD METHOD: workflow writes only through the atomic `pmra.api.v1.apply_transition` method; ADR-011 amended within that boundary and still ACCEPTED.
+
+**PO/SA final acceptance 2026-10-17 (Dr Kamulegeya Grace B (PhD)).** IB4-FRAPPE-ADAPTER ACCEPTED; AC-IB4-22 PASS — PO/SA ACCEPTED. Accepted candidate head `3a3f1d15b9c70ef190625ed34595525f5e53b084`. New OPEN obligation PAEP-IB4-BACKEND-ATOMIC-TRANSITION (workflow writes stay disabled for pilot and production until the target backend implements and validates the method; fail closed; no fallback). PAEP-LOC-AR-PILOT, PAEP-LOC-HE-PILOT and PAEP-A11Y-AT-PILOT remain OPEN. This acceptance does not authorise merging PR #14, Generation 6 promotion or closeout, or IB5.
+
 ## 9. Stop rules
 
 Stop and report BLOCKED, with one consolidated decision request, if IB4 would need: a path outside the frozen scope; a new dependency or lockfile change; a runtime-config schema change; a dependency-direction change; a change to an accepted IB0-IB3 control beyond the approved E01/E09/E10/WP05 rescoping; a CI timeout increase; a new screen, dialog, component, copy or interaction intent; the adapter in the initial bundle; a contract that mirrors Frappe internals; a credential, cookie value, token or secret anywhere in source, fixtures, configuration, logs or evidence.

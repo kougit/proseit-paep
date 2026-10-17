@@ -1,19 +1,18 @@
 # IB4-FRAPPE-ADAPTER — Acceptance Report
 
-**Overall technical status: PASS — every mandatory Claude criterion (AC-IB4-01 to AC-IB4-21) is PASS on the candidate head; M1 is closed under the PO/SA M1 decision of 2026-10-16.** Technical PASS is not ACCEPTED; AC-IB4-22 is the PO/SA's decision. Generation 6 stays
-CANDIDATE; nothing is merged or promoted.
+**Status: ACCEPTED by the Product Owner / Solutions Architect (Dr Kamulegeya Grace B (PhD)), 2026-10-17.** AC-IB4-22 PASS — PO/SA ACCEPTED. Accepted candidate head `3a3f1d15b9c70ef190625ed34595525f5e53b084` (exact-head CI run 38973929929, 20/20 green, `PAEP / gate` PASS); last code change `1b1e5a15c3c1b52ec41a8780d50d7dffb96ade28` (CI run 38972620462, 20/20; full local regression 20/20). Independent QA final state HIGH 0 / MEDIUM 0; M1 CLOSED — REMEDIATED. Carried obligations PAEP-LOC-AR-PILOT, PAEP-LOC-HE-PILOT, PAEP-A11Y-AT-PILOT and the new backend-adoption obligation PAEP-IB4-BACKEND-ATOMIC-TRANSITION are OPEN (section 3). This acceptance does not authorise merging PR #14, Generation 6 promotion or closeout, or IB5; Generation 6 stays CANDIDATE. History before acceptance: technical PASS on AC-IB4-01 to AC-IB4-21 on the candidate head, with M1 closed under the PO/SA M1 decision of 2026-10-16.
 
 | Item | Status |
 | --- | --- |
 | Work package | IB4-FRAPPE-ADAPTER (= EQP W5), PO/SA implementation authorisation 2026-10-15 |
-| Generation 6 | CANDIDATE (`tooling/governance/baseline-registry.json`); active accepted baseline Generation 5 (1046243) |
+| Generation 6 | CANDIDATE (`tooling/governance/baseline-registry.json`); IB4 ACCEPTED 2026-10-17; merge and promotion await a separate PO/SA decision; active accepted baseline Generation 5 (1046243) |
 | S0 scope decision | PO/SA 2026-10-15 13:06Z APPROVED WITH BOUNDARY: `tooling/design-system/ci-governance-negative.mjs` I24 104 → 105 only; scope frozen at 21 paths; no later path added (`evidence/IB4-FRAPPE-ADAPTER/s0/`) |
 | Candidate head | implementation 1b1e5a1 (the regression and QA basis) plus this records-only commit; PR #14 (draft) |
 | CI | 1b1e5a1 run 38972620462: 20/20 green, `PAEP / gate` success. CI on the final records head is cited in the readiness pack |
 | Local regression on the candidate head | 20/20 suites PASS on 1b1e5a1, run one at a time, plus types, production build and bundle composition (`evidence/IB4-FRAPPE-ADAPTER/s6/m1/logs/`; the earlier run on 97bb548 is in `s6/logs/`) |
 | Independent QA | Pass 1 (d2f8bdd) H0/M6; pass 2 (fa0887a) H0/M3; pass 3 (53a59b5) H0/M1; M1 closure passes 4 (25a7c53) H0/M1, 5 (bed21bc) H0/M1, **6 (1b1e5a1) H0/M0/L1**. Open HIGH 0, MEDIUM 0 (`evidence/IB4-FRAPPE-ADAPTER/s6/qa/`) |
 | M1 decision | PO/SA 2026-10-16 "PAEP IB4 — M1 DECISION, WORKFLOW CONCURRENCY / ADR-011": APPROVED — ADD METHOD. Implemented: workflow writes only through the atomic `pmra.api.v1.apply_transition` method; ADR-011 amended (§2.8, §2.12, §4) and still ACCEPTED |
-| Backend-adoption obligation | PAEP-IB4-BACKEND-ATOMIC-TRANSITION: OPEN. Workflow writes must not be enabled in a product pilot or production until the target backend implements and validates the method (ADR-011 §4; design §4.1). Until then a transition fails safe |
+| Backend-adoption obligation | PAEP-IB4-BACKEND-ATOMIC-TRANSITION: OPEN (recorded by the PO/SA acceptance decision, section 3) |
 | Carried obligations | PAEP-LOC-AR-PILOT, PAEP-LOC-HE-PILOT, PAEP-A11Y-AT-PILOT: OPEN, unchanged |
 
 ## 1. Criteria
@@ -41,7 +40,7 @@ CANDIDATE; nothing is merged or promoted.
 | AC-IB4-19 | PASS | this report; `TRACEABILITY.csv`; `evidence/IB4-FRAPPE-ADAPTER/` (preflight, s0, s1, s2-s4, s5, s6) |
 | AC-IB4-20 | PASS | carried obligations OPEN in `work-package.json`; no new copy, route, screen, dialog or component (`qa:enterprise` E08, `frappe-qa` F09) |
 | AC-IB4-21 | PASS | M1 closure pass 6 on 1b1e5a1: HIGH 0, MEDIUM 0 (LOW Q6-L1 addressed in design §4.1 in the records commit); M1 CLOSED; passes 4 and 5 MEDIUMs fixed (`s6/qa/independent-qa-4..6`, `findings-disposition.md`) |
-| AC-IB4-22 | PO/SA decision | not a Claude criterion |
+| AC-IB4-22 | PASS — PO/SA ACCEPTED | PO/SA final acceptance decision 2026-10-17 on candidate head 3a3f1d1 |
 
 ## 2. Fixes made during S6
 
@@ -63,3 +62,12 @@ Documented, not changed (LOW/INFO): compatibility method callable signed out; a 
 attachments per record; deployment serves `/files/` as attachments with `nosniff`; a rejected CSRF token on a write is
 kept until the next session check (no automatic refresh); transition results carry no allowed actions; an unmapped well-formed freshness
 scope still fails polls; session expiry between the two startup calls reports instead of redirecting.
+
+## 3. Carried obligations (OPEN)
+
+| ID | Obligation |
+| --- | --- |
+| PAEP-LOC-AR-PILOT | Carried from IB3, unchanged |
+| PAEP-LOC-HE-PILOT | Carried from IB3, unchanged |
+| PAEP-A11Y-AT-PILOT | Carried from IB3, unchanged |
+| PAEP-IB4-BACKEND-ATOMIC-TRANSITION | The real ProSEIT backend must implement and validate `pmra.api.v1.apply_transition` with the concurrency, authorization, workflow-validation, conflict and idempotency semantics proven by IB4 (ADR-011 §2.8, §4; design §4.1). Until that is satisfied for a target backend: workflow writes MUST remain disabled for product pilot and production; the adapter MUST fail closed when the method is unavailable; there MUST be no fallback to the unsafe two-step sequence or to stock `apply_workflow`. It does not block IB4 platform acceptance (the adapter contract is proven against the approved deterministic reference backend model); it does block enabling workflow writes against a real product backend until that backend is qualified. |

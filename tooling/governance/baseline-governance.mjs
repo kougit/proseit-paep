@@ -25,6 +25,7 @@
  * procedure: docs/architecture/BASELINE-ROLLOVER.md.
  */
 
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
@@ -158,6 +159,55 @@ function acceptedMergeOf(git, generation, since, mainline) {
     if (hit) return { commit: c, candidate: g };
   }
   return null;
+}
+
+// ---- PAEP-G6-PRR-01: Generation 6 promotion-readiness remediation -------------------------------------
+// PO/SA decisions of 2026-10-17 (Option B, fix first; M1: add pin record): the Generation 6 promotion may also carry
+// the fix of the enterprise-shell negative harness, this rule and its tests. The controlled record names the exact
+// files and their pinned content; this rule pins the record and validates it. While generation 6, accepted at the
+// recorded commit, is the active baseline, exactly the recorded files and the record itself may also differ from it,
+// each only with its pinned content. Any other path or content, and every other active generation, gets no exception.
+export const G6_PROMOTION_REMEDIATION = Object.freeze({
+  id: 'PAEP-G6-PRR-01',
+  generation: 6,
+  acceptedCommit: '0d2f05e2202e6f5757d82966d299d99ece96c7de',
+  record: 'tooling/governance/g6-promotion-remediation.json',
+  recordBlob: 'da98ee7714c4293d793583c0f2f85b0bf91a229d',
+  files: Object.freeze([
+    ['tooling/enterprise-shell/enterprise-qa-negative.mjs', 'git-blob'],
+    ['tooling/governance/baseline-governance.mjs', 'sha256-self'],
+    ['tooling/governance/negative-baseline-governance.mjs', 'git-blob']
+  ])
+});
+const PRR_KEYS = ['id', 'purpose', 'generation', 'activeBaseline', 'expiry', 'authorisation', 'notAuthorised', 'files'];
+/** SHA-256 of this module's text with its pin of the record blanked (the record pins this module by it). */
+export const g6RemediationSelfHash = (text) => crypto.createHash('sha256').update(text.replace(/(recordBlob: ')[0-9a-f]{40}(')/, '$1$2')).digest('hex');
+const readFile = (root, f) => { try { return fs.lstatSync(path.join(root, f)).isFile() ? fs.readFileSync(path.join(root, f), 'utf8') : null; } catch { return null; } };
+/** The PAEP-G6-PRR-01 record's pins by path, or null when the record is absent, altered or not exactly as required. */
+function g6RemediationRecord(root) {
+  const R = G6_PROMOTION_REMEDIATION;
+  const text = readFile(root, R.record);
+  if (text === null || makeGit(root)('hash-object', '--', R.record).out !== R.recordBlob || asciiProblems(text)) return null;
+  let rec = null;
+  try { rec = JSON.parse(text); } catch { return null; }
+  const ok = text === `${JSON.stringify(rec, null, 2)}\n` && keysEqual(rec, PRR_KEYS) && rec.id === R.id && rec.generation === R.generation && rec.activeBaseline === R.acceptedCommit
+    && ['purpose', 'expiry', 'notAuthorised'].every((k) => typeof rec[k] === 'string' && rec[k].length > 0)
+    && keysEqual(rec.authorisation, AUTH_KEYS) && CONTROLLED_AUTHORITIES.includes(rec.authorisation.authority) && validDate(rec.authorisation.date) && typeof rec.authorisation.reference === 'string'
+    && Array.isArray(rec.files) && rec.files.length === R.files.length
+    && rec.files.every((e, i) => keysEqual(e, ['path', 'pin', 'value']) && e.path === R.files[i][0] && e.pin === R.files[i][1] && typeof e.value === 'string');
+  return ok ? new Map(rec.files.map((e) => [e.path, e])) : null;
+}
+/** True when f, changed since the active baseline, is exactly the recorded Generation 6 remediation. */
+export function g6RemediationAdmits(root, active, f) {
+  const R = G6_PROMOTION_REMEDIATION;
+  if (active?.generation !== R.generation || active.acceptedCommit !== R.acceptedCommit) return false;
+  const pins = g6RemediationRecord(root);
+  if (!pins) return false;
+  if (f === R.record) return true;
+  const e = pins.get(f);
+  const text = e ? readFile(root, f) : null;
+  if (text === null) return false;
+  return e.pin === 'sha256-self' ? g6RemediationSelfHash(text) === e.value : makeGit(root)('hash-object', '--', f).out === e.value;
 }
 
 // ---- core evaluation --------------------------------------------------------------------------------
@@ -477,6 +527,7 @@ export function evaluate(root = process.cwd(), { registryText = null } = {}) {
     `${pol ? pol.immutablePaths.length : 0} immutable paths and ${protectedAll.length} accepted records unchanged`);
 
   // B11: change authorisation
+  const remediation = [];
   if (base) {
     const all = [...new Set([...zlist(git('ls-files', '-z').raw), ...changedPaths])];
     const folded = new Map();
@@ -487,12 +538,13 @@ export function evaluate(root = process.cwd(), { registryText = null } = {}) {
       let st = null;
       try { st = fs.lstatSync(abs(f)); } catch { /* deleted */ }
       if (st && st.isSymbolicLink()) p11.push(`${f} is a symlink`);
+      if (g6RemediationAdmits(root, active, f)) { remediation.push(f); continue; }
       if (candidate ? !inScope(f) : f !== REGISTRY_PATH) p11.push(`unauthorised change: ${f}`);
     }
     for (const l of git('ls-files', '-s', '-z').raw.split('\0').filter(Boolean)) if (l.startsWith('120000 ')) p11.push(`tracked symlink ${l.split('\t')[1]}`);
   } else p11.push('no valid accepted baseline (see B01-B09)');
   add('B11', 'Every path changed since the active accepted baseline is canonical, not a symlink or case variant, and inside the CANDIDATE\'s authorised scope (without a candidate only a promotion of the registry may change)', p11,
-    base ? `${changedPaths.length} changed paths since ${base.slice(0, 7)}, all ${candidate ? `in the G${candidate.generation} scope` : 'registry promotion'}` : '');
+    base ? `${changedPaths.length} changed paths since ${base.slice(0, 7)}, all ${candidate ? `in the G${candidate.generation} scope` : 'registry promotion'}${remediation.length ? `; ${G6_PROMOTION_REMEDIATION.id} pinned remediation: ${remediation.join(', ')}` : ''}` : '');
 
   // B12: acceptance completeness
   const p12 = [];
@@ -562,8 +614,8 @@ export function evaluate(root = process.cwd(), { registryText = null } = {}) {
       return (f, { presence = false } = {}) => {
         if (!hist) return false;
         // A change since the active baseline: inside the CANDIDATE scope, or (no CANDIDATE) only the registry
-        // promotion that B11 permits.
-        if (changedPaths.includes(f)) return !p11.length && (candidate ? inScope(f) : f === REGISTRY_PATH);
+        // promotion that B11 permits; and the pinned Generation 6 remediation that B11 admits.
+        if (changedPaths.includes(f)) return !p11.length && ((candidate ? inScope(f) : f === REGISTRY_PATH) || g6RemediationAdmits(root, active, f));
         return hist.has(f) || (presence && present.has(f));
       };
     };

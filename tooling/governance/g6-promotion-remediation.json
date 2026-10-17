@@ -1,0 +1,30 @@
+{
+  "id": "PAEP-G6-PRR-01",
+  "purpose": "Generation 6 promotion-readiness remediation only: the enterprise-shell negative harness fix for N48, N50, P05, P06 and N52 (the Generation 6 CANDIDATE is rebuilt only in the disposable test copy), the baseline-governance rule that admits it, and the governance proofs of that rule. The underlying rule is not changed or weakened.",
+  "generation": 6,
+  "activeBaseline": "0d2f05e2202e6f5757d82966d299d99ece96c7de",
+  "expiry": "Inactive automatically once generation 6, accepted at 0d2f05e2202e6f5757d82966d299d99ece96c7de, is no longer the active baseline. No later generation inherits it.",
+  "authorisation": {
+    "authority": "Product Owner / Solutions Architect",
+    "date": "2026-10-17",
+    "reference": "PAEP GENERATION 6 - PROMOTION-READINESS REMEDIATION AUTHORISATION (Option B, fix first) and PAEP GENERATION 6 - M1 DECISION (B, add pin record), PR #15"
+  },
+  "notAuthorised": "No production-code, dependency, lockfile, timeout, CLAUDE.md or ADR change is authorised, and no path or content other than the files pinned below and this record.",
+  "files": [
+    {
+      "path": "tooling/enterprise-shell/enterprise-qa-negative.mjs",
+      "pin": "git-blob",
+      "value": "ae166dad53784215bb6b8bcd0fba201868f42d15"
+    },
+    {
+      "path": "tooling/governance/baseline-governance.mjs",
+      "pin": "sha256-self",
+      "value": "d0d48e98d6ef7d3d4e072d0ab1bc33495d24ba5cbcf427cc442884bf84991a98"
+    },
+    {
+      "path": "tooling/governance/negative-baseline-governance.mjs",
+      "pin": "git-blob",
+      "value": "334a26a7310a36962beffc203db4f0d77e6c9c31"
+    }
+  ]
+}

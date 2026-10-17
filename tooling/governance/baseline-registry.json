@@ -436,7 +436,7 @@
       "workPackages": [
         "IB4-FRAPPE-ADAPTER"
       ],
-      "status": "CANDIDATE",
+      "status": "ACCEPTED",
       "predecessorGeneration": 5,
       "authorisation": {
         "authority": "Product Owner / Solutions Architect",
@@ -471,10 +471,41 @@
         "evidence/IB4-FRAPPE-ADAPTER/",
         "work-packages/IB4-FRAPPE-ADAPTER/"
       ],
-      "acceptedCommit": null,
-      "acceptedTree": null,
-      "acceptance": null,
-      "fingerprints": null,
+      "acceptedCommit": "0d2f05e2202e6f5757d82966d299d99ece96c7de",
+      "acceptedTree": "c11a4252948ce43a256297722e5d11fea5f75ddf",
+      "acceptance": {
+        "authority": "Product Owner / Solutions Architect",
+        "date": "2026-10-17",
+        "evidence": [
+          {
+            "path": "work-packages/IB4-FRAPPE-ADAPTER/work-package.json",
+            "blob": "cd28adeb7f73557fb42378e30fec04e898e67c69"
+          }
+        ]
+      },
+      "fingerprints": {
+        ".github/": "476d82c2d4893514bc87b55387dec30d3633a4a7",
+        ".gitignore": "14dd79e40e46517f3ab496db8bfb33e0686650eb",
+        ".npmrc": "3cefa3035c08b733cde4e55a5115bd76afdbd23b",
+        ".nvmrc": "df6ae3370f9f89272d88629c442cf554d6c1f9fb",
+        ".paep-control/": "6ccb81c274dfef6140f8e2bc5e6fb2567a2c1527",
+        "CLAUDE.md": "9c280e24ab8ecb6253da9d15ccc9e255936e880a",
+        "PACK_MANIFEST.json": "65d82fb7f4545d3966c6893c782053662fbee77f",
+        "angular.json": "7b604078d70e195bfd5a941e215c1c07f63d2b62",
+        "docs/adr/": "9f82ee4cc88df2f590477a8dd3b448f35a353350",
+        "docs/architecture/toolchain-version-manifest.json": "cfa9389db7a841639245abbfce4121e965b60b7f",
+        "docs/licences/": "9bf91adeeeea016fc4c5e4863cc8b4a6166bd6c9",
+        "docs/provenance/": "401275c35e53fb05a55bd606ef8af069c9e4ac98",
+        "evidence/IB4-FRAPPE-ADAPTER/": "99904c853a5c4e3ff8999ca23f19c1e926f3c4f4",
+        "package-lock.json": "2c4202ff347ec8c006dc0b1820c3679e172b6b34",
+        "package.json": "872fa323c1e0dc7536f1ef5ae46b958f5d4eba75",
+        "tooling/architecture-boundaries/": "5d7d3191a9be8ae5c2ff7d11505a286b322c3b21",
+        "tooling/governance/": "429b940bc5cafc63eceef7495a84eade52d95ed6",
+        "tooling/verification/": "c790f4707cbf5ed6fd20d8dc2c196e83e25e99a9",
+        "tsconfig.base.json": "994bb1f7acef2319532afe8bb25aa7d3b970c774",
+        "tsconfig.json": "4d88b1ae7992a7335ed3156f2f870f6d2de6d43a",
+        "work-packages/IB4-FRAPPE-ADAPTER/": "dd4eeb1f49d49abe7b8efa262f6ff6ab23e8f17c"
+      },
       "notes": "CANDIDATE only. Prepared by Claude Code under the PO/SA instruction \"PAEP IB4 - IMPLEMENTATION AUTHORISATION, IB4-FRAPPE-ADAPTER / GENERATION 6\" (project timeline, 2026-10-15T09:59Z), which approved pre-flight decisions D1-D10 and authorised IB4-FRAPPE-ADAPTER (EQP W5) on the Generation 5 baseline a50120017fc84f869043be0c2837286a6f598ef3. policyChange is true because IB4 narrowly amends CLAUDE.md for this work package only, adds the mandatory PAEP / frappe-adapter CI job and rescopes the IB3 gates E01, E09 and E10 and the IB0-WP05 filled-entry controls (.github/, CLAUDE.md and tooling/verification/). tooling/design-system/ci-governance-negative.mjs is listed only for the case I24 WP05 declared-case total (104 to 105) that the new mandatory job forces, under the PO/SA S0 scope decision APPROVED WITH BOUNDARY (2026-10-15T13:06Z); no other change in that file is authorised and the S0 authorisedScope is frozen after this addition. No package-lock.json change, no new dependency, no engine change and no runtime-config schema change is authorised. It becomes ACCEPTED only through the promote command after PO/SA acceptance and merge."
     }
   ]
